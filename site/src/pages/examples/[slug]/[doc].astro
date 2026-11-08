@@ -1,0 +1,53 @@
+---
+// 案例取值记录页：examples/<站>/DECISIONS.md 与 FINDINGS.md 的可读渲染
+import { getCollection, render } from 'astro:content'
+import Base from '../../../layouts/Base.astro'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('examples')
+  // 只渲染两份取值记录；需求不在 examples/ 里（在 briefs/），页面走 /briefs/<站>/ 的结构化数据
+  return entries
+    .filter((entry) => /^(decisions|findings)(\.md)?$/i.test(entry.id.split('/')[1] ?? ''))
+    .map((entry) => {
+      const [slug, name] = entry.id.split('/')
+      return {
+        params: { slug, doc: name.toLowerCase() },
+        props: { entry },
+      }
+    })
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+const [slug, name] = entry.id.split('/')
+const isDecisions = name.toLowerCase() === 'decisions'
+const title = `${slug} · ${isDecisions ? 'DECISIONS 取值出处' : 'FINDINGS 缺口记录'}`
+const description = isDecisions
+  ? `${slug} 案例的取值记录：每个数值的值、文件行号出处与用在哪。`
+  : `${slug} 案例的缺口记录：基准规范覆盖不到的量怎么派生。`
+---
+
+<Base title={`${title} · UISpecs`} description={description}>
+  <div class="page">
+    <article id="main" class="article-page">
+      <header class="doc-head">
+        <p class="doc-crumb">
+          <a href="/examples/">设计案例</a> / <a href={`/examples/${slug}/index.html`}>{slug}</a> / {isDecisions ? 'DECISIONS' : 'FINDINGS'}
+        </p>
+        <h1 class="doc-title">{title}</h1>
+        <div class="doc-meta">
+          <a href={`/examples/${slug}/index.html`} target="_blank" rel="noopener noreferrer">打开成品</a>
+          {isDecisions ? (
+            <a href={`/examples/${slug}/findings/`}>FINDINGS</a>
+          ) : (
+            <a href={`/examples/${slug}/decisions/`}>DECISIONS</a>
+          )}
+          <a href={`/examples/${slug}/${isDecisions ? 'DECISIONS' : 'FINDINGS'}.md`}>原始 Markdown</a>
+        </div>
+      </header>
+      <div class="doc-body">
+        <Content />
+      </div>
+    </article>
+  </div>
+</Base>

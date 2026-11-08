@@ -1,0 +1,219 @@
+---
+/**
+ * 本页目录展开面板。
+ *
+ * 触发器在 header 右侧（图标按钮），点击后从 header 下沿展开一块面板，
+ * 列出当前页面的各级小标题，点条目直接跳到对应位置。
+ *
+ * 规范依据：
+ *   - content/a11y/w3c--apg-disclosure.md：触发器用 button + aria-expanded + aria-controls
+ *   - content/patterns/carbon--disclosures-pattern.md：点外面/Esc 关闭，关闭后焦点回到触发器
+ *   - content/patterns/primer--progressive-disclosure.md：图标独立使用，不配长文字
+ *
+ * 目录条目运行时从 DOM 采集，因此首页（分区标题）与文章页（h2/h3 小标题）共用一套逻辑。
+ */
+---
+
+<div class="toc" id="toc" hidden>
+  <button class="toc-backdrop" data-toc-close aria-label="关闭目录"></button>
+  <div class="toc-panel" role="dialog" aria-modal="true" aria-labelledby="toc-title">
+    <div class="toc-head">
+      <span class="toc-title" id="toc-title">本页目录</span>
+      <span class="toc-count" id="toc-count"></span>
+      <button class="toc-close" type="button" data-toc-close aria-label="关闭目录">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg
+        >
+      </button>
+    </div>
+    <nav class="toc-list" id="toc-list" aria-label="本页小标题目录"></nav>
+  </div>
+</div>
+
+<script>
+  const toc = document.getElementById('toc')
+  const tocList = document.getElementById('toc-list')
+  // 宽屏常驻目录（≥1200px 由 CSS 放出）；窄屏仍走 header 里的抽屉
+  const rail = document.getElementById('toc-rail')
+  const tocCount = document.getElementById('toc-count')
+  const tocTitle = document.getElementById('toc-title')
+  const tocBtn = document.getElementById('tocBtn')
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  const motionBehavior: ScrollBehavior = reduceMotion.matches ? 'auto' : 'smooth'
+
+  /** 没有 id 的标题（正文里手写的 HTML 标题）补一个稳定锚点 */
+  function slug(text, i) {
+    const base =
+      text
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 40) || 'section'
+    return `toc-${base}-${i}`
+  }
+
+  function collect() {
+    const main = document.querySelector('#main') ?? document.body
+    const heads = [...main.querySelectorAll('h2, h3')].filter((h) => h.textContent?.trim())
+    const seen = new Map()
+    heads.forEach((h, i) => {
+      if (!h.id) {
+        let id = slug(h.textContent!.trim(), i)
+        let n = 2
+        while (document.getElementById(id)) id = `${slug(h.textContent!.trim(), i)}-${n++}`
+        h.id = id
+      }
+      const key = h.id
+      seen.set(key, (seen.get(key) ?? 0) + 1)
+      if (seen.get(key) > 1) h.id = `${key}-${seen.get(key) - 1}`
+    })
+    return heads
+  }
+
+  function render() {
+    tocList!.replaceChildren()
+
+    // 指南页（设计地图）：目录就是设计地图右侧的设计方向，条目数据复用筛选芯片，只有一份
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('.star-chip-btn')]
+    if (chips.length) {
+      tocTitle!.textContent = '设计方向'
+      tocCount!.textContent = `${chips.length} 个设计场景`
+      const note = document.createElement('p')
+      note.className = 'toc-note'
+      note.textContent = '做设计遇到的任务类型，也就是切入方向。点一个方向，设计地图只留相关设计点。'
+      tocList!.append(note)
+      for (const chip of chips) {
+        const id = chip.dataset.taskFilter ?? ''
+        const n = document.querySelectorAll(`.star-unit[data-tasks~="${id}"]`).length
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'toc-item toc-task' + (chip.getAttribute('aria-pressed') === 'true' ? ' is-on' : '')
+        const name = document.createElement('span')
+        name.className = 'name'
+        name.textContent = chip.dataset.taskName ?? chip.textContent!.trim()
+        const count = document.createElement('span')
+        count.className = 'n'
+        count.textContent = `${n} 点`
+        btn.append(name, count)
+        btn.addEventListener('click', () => {
+          chip.click() // 复用筛选芯片的切换逻辑，数据与行为只有一份
+          close()
+          document.querySelector('.star-map-wrap')?.scrollIntoView({ behavior: motionBehavior, block: 'start' })
+        })
+        tocList!.append(btn)
+      }
+      return
+    }
+
+    const heads = collect()
+    if (!heads.length) {
+      const empty = document.createElement('p')
+      empty.className = 'toc-empty'
+      empty.textContent = '本页没有小标题'
+      tocList!.append(empty)
+      tocCount!.textContent = ''
+      return
+    }
+    tocCount!.textContent = `${heads.length} 项`
+    heads.forEach((h) => {
+      const a = document.createElement('a')
+      a.className = 'toc-item' + (h.tagName === 'H3' ? ' is-sub' : '')
+      a.href = `#${h.id}`
+      a.textContent = h.textContent!.trim()
+      tocList!.append(a)
+    })
+  }
+
+  function open() {
+    render()
+    toc!.hidden = false
+    tocBtn?.setAttribute('aria-expanded', 'true')
+    tocList?.querySelector('a')?.focus()
+  }
+
+  function close() {
+    toc!.hidden = true
+    tocBtn?.setAttribute('aria-expanded', 'false')
+    tocBtn?.focus()
+  }
+
+  tocBtn?.addEventListener('click', () => {
+    toc!.hidden ? open() : close()
+  })
+
+  toc?.querySelectorAll('[data-toc-close]').forEach((el) => el.addEventListener('click', close))
+
+  tocList?.addEventListener('click', (e) => {
+    const a = e.target.closest('a')
+    if (!a) return
+    e.preventDefault()
+    const id = a.getAttribute('href')!.slice(1)
+    const target = document.getElementById(id)
+    close()
+    if (!target) return
+    target.scrollIntoView({ behavior: motionBehavior, block: 'start' })
+    history.replaceState(null, '', `#${id}`)
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (toc!.hidden) return
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      close()
+      return
+    }
+    if (e.key !== 'Tab') return
+    // aria-modal 声明了模态，Tab 要圈在面板里
+    const panel = toc!.querySelector('.toc-panel')
+    if (!panel) return
+    const focusables = Array.from(
+      panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+    ).filter((el) => el.offsetParent !== null)
+    if (!focusables.length) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    const current = document.activeElement as HTMLElement | null
+    if (!current || !panel.contains(current)) {
+      e.preventDefault()
+      first.focus()
+      return
+    }
+    if (e.shiftKey && current === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && current === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  })
+
+  /**
+   * 宽屏右栏目录：与抽屉共用一次采集结果，链接直接克隆，不重复采集。
+   * 设计地图页的目录是筛选芯片（button），右栏不复制交互，保持隐藏。
+   */
+  function renderRail() {
+    if (!rail) return
+    render()
+    const links = [...tocList!.querySelectorAll('a')]
+    // 只有 1 条时右栏没有导航价值，留白不如收起（首页只有「按分区读」一个 h2）
+    if (links.length < 2) {
+      rail.hidden = true
+      rail.replaceChildren()
+      return
+    }
+    const label = document.createElement('p')
+    label.className = 'rail-label'
+    label.textContent = '本页'
+    const list = document.createElement('ul')
+    for (const a of links) list.append(a.cloneNode(true))
+    rail.replaceChildren(label, list)
+    rail.hidden = false
+  }
+
+  renderRail()
+</script>

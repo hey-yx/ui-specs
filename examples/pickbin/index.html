@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PickBin · 临时文件快递柜</title>
+<style>
+/* ── token：数值全部来自 TDesign（见 DECISIONS.md 取值记录） ── */
+:root{
+  --bg:#ffffff;
+  --surface:#f3f3f3;        /* gray1 */
+  --surface-2:#e8e8e8;      /* gray3 */
+  --line:#dddddd;           /* gray4，装饰性发丝线，1px derived */
+  --line-strong:#8b8b8b;    /* gray7，控件边界 3.41:1 */
+  --text-1:rgba(0,0,0,.9);  /* font-gy1 */
+  --text-2:rgba(0,0,0,.6);  /* font-gy2，5.74:1 */
+  --text-3:rgba(0,0,0,.4);  /* font-gy3，仅禁用态 */
+  --brand:#0052d9;          /* blue-7 */
+  --brand-hover:#003cab;    /* blue-8：blue-6 实测 4.47:1 不达 AA，同族深一档 */
+  --brand-active:#002a7c;   /* blue-9 */
+  --brand-weak:#f2f3ff;     /* blue-1 */
+  --success:#008858;        /* green-6，4.50:1 */
+  --danger:#ad352f;         /* red-7，文字用；red-6 仅 4.32:1 不可当小字 */
+  --danger-line:#d54941;    /* red-6，非文本边界 4.32:1 */
+
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px; --s-9:80px;
+
+  --r-1:4px; --r-2:8px;     /* derived：整站两档 */
+
+  --d-base:200ms;           /* desktop-base 微观变换 */
+  --d-mod:240ms;            /* desktop-moderate 选项卡/列表点击 */
+  --d-slow:280ms;           /* desktop-slow 消息通知 */
+  --ease:cubic-bezier(.38,0,.24,1);
+  --ease-out:cubic-bezier(0,0,.15,1);
+  --ease-in:cubic-bezier(.82,0,1,.9);
+
+  --wrap:960px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+
+/* 行高公式：每个元素按自身字号算（零特异性，任何局部规则可覆盖） */
+:where(body, body *){line-height:calc(1em + 8px)}
+
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-1);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+  font-size:16px;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,p,ol,ul,dl,dd,figure{margin:0}
+ol,ul{padding:0;list-style:none}
+a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+a:hover{color:var(--brand-active)}
+img,svg{display:block}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* 焦点环：2px 实线 + 2px 偏移（derived，WCAG 2.2 兜底档） */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+
+.demo-banner{
+  background:var(--surface);border-bottom:1px solid var(--line);
+}
+.demo-banner p{
+  display:flex;align-items:center;gap:var(--s-2);
+  padding:var(--s-2) 0;font-size:14px;color:var(--text-2);text-wrap:pretty;
+}
+.demo-banner svg{flex:none;color:var(--text-2)}
+
+.skip{
+  position:absolute;left:var(--s-4);top:-100px;z-index:20;
+  display:inline-flex;align-items:center;min-height:44px;
+  padding:0 var(--s-4);background:var(--brand);color:#fff;
+  border-radius:var(--r-1);text-decoration:none;
+  transition:top var(--d-base) var(--ease);
+}
+.skip:focus{top:var(--s-2);color:#fff}
+
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding-inline:var(--s-5)}
+@media (min-width:768px){.wrap{padding-inline:var(--s-6)}}
+@media (min-width:992px){.wrap{padding-inline:var(--s-7)}}
+
+/* ── 页头 ── */
+.site-header{
+  position:sticky;top:0;z-index:10;
+  background:var(--bg);border-bottom:1px solid var(--line);
+}
+.header-in{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);height:64px}
+.brand{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  color:var(--text-1);text-decoration:none;font-size:16px;font-weight:600;
+  min-height:44px;
+}
+.brand svg{color:var(--brand)}
+.site-nav{display:flex;align-items:center;gap:var(--s-5)}
+.site-nav a{
+  display:inline-flex;align-items:center;min-height:44px;
+  color:var(--text-2);text-decoration:none;font-size:14px;
+  transition:color var(--d-base) var(--ease);
+}
+.site-nav a:hover{color:var(--text-1);text-decoration:underline}
+@media (max-width:479px){.site-nav a:first-child{display:none}}
+
+/* ── 首屏 ── */
+.intro{padding-top:var(--s-6);padding-bottom:var(--s-4)}
+@media (min-width:768px){.intro{padding-top:var(--s-7);padding-bottom:var(--s-6)}}
+.intro h1{font-size:28px;font-weight:600;max-width:22em;text-wrap:balance}
+.intro p{
+  margin-top:var(--s-3);max-width:34em;font-size:16px;color:var(--text-2);
+  text-wrap:pretty;
+}
+
+/* ── 三步 ── */
+.how{margin-top:var(--s-8);border-top:1px solid var(--line);padding-top:var(--s-6)}
+.how .step-strip{margin-top:var(--s-5)}
+.step-strip{display:grid;gap:var(--s-5)}
+@media (min-width:768px){
+  .step-strip{grid-template-columns:repeat(3,1fr);gap:var(--s-6)}
+}
+.step-strip li{display:grid;grid-template-columns:auto 1fr;gap:var(--s-3);align-items:start}
+.step-n{
+  font-size:14px;font-variant-numeric:tabular-nums;
+  color:var(--text-2);padding-top:1px;
+}
+.step-strip h3{font-size:16px;font-weight:600}
+.step-strip p{font-size:14px;color:var(--text-2);margin-top:var(--s-1)}
+
+/* ── 柜面：投柜 + 取件 ── */
+.bench{display:grid;gap:var(--s-5);align-items:start}
+@media (min-width:992px){
+  .bench{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s-6)}
+}
+.panel{
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-2);
+  padding:var(--s-5);
+}
+@media (min-width:768px){.panel{padding:var(--s-6)}}
+@media (min-width:992px){.panel-get{position:sticky;top:88px}}
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);border-bottom:1px solid var(--line);padding-bottom:var(--s-4)}
+.panel-head h2{font-size:20px;font-weight:600}
+
+/* 进度条（步骤） */
+.stepper{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-4);margin-top:var(--s-4)}
+.stepper li{display:flex;align-items:center;gap:var(--s-2);font-size:14px;color:var(--text-2)}
+.stepper .dot{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:50%;
+  border:1px solid var(--line-strong);font-size:12px;
+  font-variant-numeric:tabular-nums;
+  transition:background-color var(--d-base) var(--ease),color var(--d-base) var(--ease),border-color var(--d-base) var(--ease);
+}
+.stepper li[aria-current="step"]{color:var(--text-1);font-weight:600}
+.stepper li[aria-current="step"] .dot{border-color:var(--brand);color:var(--brand)}
+.stepper li.is-done .dot{background:var(--brand);border-color:var(--brand);color:#fff}
+.stepper li.is-done .dot .num{display:none}
+.stepper li.is-done .dot::after{content:"✓";font-size:11px}
+
+/* 表单块 */
+.field{margin-top:var(--s-5)}
+.field-label{display:block;font-size:16px;font-weight:600}
+.field-hint{font-size:14px;color:var(--text-2);margin-top:var(--s-1)}
+
+/* 拖放区 */
+.dz{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s-1);
+  width:100%;min-height:96px;margin-top:var(--s-3);
+  padding:var(--s-4);
+  background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--r-2);
+  font:inherit;color:var(--text-1);cursor:pointer;text-align:center;
+  transition:background-color var(--d-base) var(--ease),border-color var(--d-base) var(--ease);
+}
+.dz:hover{background:var(--surface-2)}
+.dz.is-drag{border-color:var(--brand);background:var(--brand-weak)}
+.dz svg{color:var(--text-2);margin-bottom:var(--s-1)}
+.dz-strong{font-size:16px}
+.dz-sub{font-size:14px;color:var(--text-2)}
+
+/* 已选文件 */
+.file-row{
+  display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-3);
+  padding:var(--s-3) var(--s-4);border:1px solid var(--line);border-radius:var(--r-1);
+  background:var(--surface);
+}
+.file-row svg{flex:none;color:var(--text-2)}
+.file-meta{min-width:0;flex:1}
+.file-name{
+  display:block;font-size:14px;font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.file-size{display:block;font-size:14px;color:var(--text-2);font-variant-numeric:tabular-nums}
+
+/* 单选组 */
+.settings{margin-top:var(--s-5);display:grid;gap:var(--s-3)}
+.setting{display:grid;grid-template-columns:5.5em minmax(0,1fr);align-items:center;gap:var(--s-4)}
+.setting-label{font-size:14px;color:var(--text-2)}
+@media (max-width:479px){.setting{grid-template-columns:minmax(0,1fr);gap:var(--s-1)}}
+.choice-row{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.choice{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  min-height:44px;padding:0 var(--s-3);
+  border:1px solid var(--line-strong);border-radius:var(--r-1);
+  background:var(--bg);font-size:14px;cursor:pointer;
+  transition:background-color var(--d-base) var(--ease),border-color var(--d-base) var(--ease);
+}
+.choice:hover{background:var(--surface)}
+.choice:has(input:checked){border-color:var(--brand);background:var(--brand-weak);box-shadow:inset 0 0 0 1px var(--brand)}
+.choice input{accent-color:var(--brand);width:16px;height:16px;margin:0;flex:none}
+
+/* 按钮 */
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-3);margin-top:var(--s-6)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  min-height:44px;padding:0 var(--s-5);border-radius:var(--r-1);
+  border:1px solid transparent;font:inherit;font-size:16px;font-weight:600;
+  cursor:pointer;
+  transition:background-color var(--d-base) var(--ease),border-color var(--d-base) var(--ease),color var(--d-base) var(--ease);
+}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-hover)}
+.btn-primary:active{background:var(--brand-active)}
+.btn-secondary{background:var(--bg);color:var(--text-1);border-color:var(--line-strong)}
+.btn-secondary:hover{background:var(--surface);border-color:var(--text-3)}
+.btn-text{background:none;border:0;font:inherit;cursor:pointer;color:var(--text-1);text-decoration:underline;text-underline-offset:3px;padding:0 var(--s-1)}
+.code-inline{font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.btn-inline{display:inline;min-height:24px;padding:0;font-size:14px;vertical-align:baseline}
+.btn-text:hover{color:var(--brand)}
+.btn:disabled{background:var(--surface);color:var(--text-3);border-color:var(--line);cursor:not-allowed}
+
+/* 错误 */
+.err{
+  display:flex;gap:var(--s-2);margin-top:var(--s-2);padding-left:var(--s-3);
+  border-left:3px solid var(--danger-line);
+  font-size:14px;color:var(--danger);
+}
+.err:empty{display:none}
+.is-invalid{border-color:var(--danger-line) !important;box-shadow:inset 0 0 0 1px var(--danger-line)}
+
+/* 取件码输入 */
+.code-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-top:var(--s-3)}
+.code-input{
+  width:100%;flex:1 1 8em;min-width:0;max-width:none;min-height:44px;
+  padding:0 var(--s-3);
+  border:1px solid var(--line-strong);border-radius:var(--r-1);
+  background:var(--bg);color:var(--text-1);
+  font-family:inherit;font-size:20px;letter-spacing:.18em;text-transform:uppercase;
+  font-variant-numeric:tabular-nums;
+  transition:border-color var(--d-base) var(--ease);
+}
+.code-input::placeholder{color:var(--text-2);letter-spacing:.06em;font-size:16px;text-transform:none}
+
+/* 上传进度 */
+.progress{margin-top:var(--s-5)}
+.progress-head{display:flex;justify-content:space-between;gap:var(--s-3);font-size:14px;color:var(--text-2)}
+.progress-head b{font-weight:400;color:var(--text-1);font-variant-numeric:tabular-nums}
+.bar{height:4px;margin-top:var(--s-2);background:var(--surface-2);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--brand);transition:width var(--d-base) linear}
+
+/* 结果块 */
+.result{margin-top:var(--s-5);padding-top:var(--s-5);border-top:1px solid var(--line)}
+.result-head{display:flex;align-items:center;gap:var(--s-2);font-size:14px;color:var(--success)}
+.code{
+  margin-top:var(--s-2);font-size:36px;font-weight:600;letter-spacing:.14em;
+  font-variant-numeric:tabular-nums;
+}
+.result-meta{
+  display:grid;grid-template-columns:auto 1fr;gap:var(--s-1) var(--s-4);
+  margin-top:var(--s-3);font-size:14px;color:var(--text-2);
+}
+.result-meta dt{color:var(--text-2)}
+.result-meta dd{color:var(--text-1);font-variant-numeric:tabular-nums}
+.copy-ok{font-size:14px;color:var(--success)}
+.pick-file{display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-3)}
+.result .actions + .actions{margin-top:var(--s-4)}
+
+/* ── 使用限制 ── */
+.limits{margin-top:var(--s-8);border-top:1px solid var(--line);padding-top:var(--s-6)}
+@media (min-width:992px){.limits{margin-top:var(--s-9)}}
+.limits h2{font-size:20px;font-weight:600}
+.limits p.lede2{margin-top:var(--s-2);font-size:14px;color:var(--text-2);max-width:38em}
+.limit-list{margin-top:var(--s-5);display:grid;gap:0}
+@media (min-width:768px){.limit-list{grid-template-columns:1fr 1fr;column-gap:var(--s-8)}}
+.limit-list > div{
+  display:grid;grid-template-columns:8em 1fr;gap:var(--s-4);
+  padding:var(--s-3) 0;border-top:1px solid var(--line);
+}
+.limit-list dt{font-size:14px;color:var(--text-2)}
+.limit-list dd{font-size:16px}
+
+/* ── 页脚 ── */
+.site-footer{
+  margin-top:var(--s-8);border-top:1px solid var(--line);
+  padding:var(--s-6) 0 var(--s-7);
+}
+.footer-in{display:grid;gap:var(--s-2)}
+.footer-in p{font-size:14px;color:var(--text-2)}
+.footer-brand{display:flex;align-items:center;gap:var(--s-2);font-size:14px;font-weight:600;color:var(--text-1)}
+.footer-brand svg{color:var(--text-2)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:var(--s-4);margin-top:var(--s-2)}
+.footer-nav a{font-size:14px;display:inline-flex;align-items:center;min-height:44px;color:var(--text-2)}
+.footer-nav a:hover{color:var(--text-1)}
+
+@media (max-width:479px){
+  .stepper{gap:var(--s-2)}
+  .actions .btn-primary,.actions .btn-secondary{width:100%}
+  .choice{padding:0 10px}
+  .intro h1{font-size:24px}
+}
+
+/* 减少动效：直接切换，不做减速 */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    transition-duration:.01ms !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="brand" href="#main">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <path d="M3 10h18M10 10v6M14 10v6"></path>
+      </svg>
+      PickBin
+    </a>
+    <nav class="site-nav" aria-label="页面导航">
+      <a href="#how">三步怎么走</a>
+      <a href="#limits">使用限制</a>
+    </nav>
+  </div>
+</header>
+
+<div class="demo-banner">
+  <div class="wrap">
+    <p>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+      演示版本：文件不上传、不保存，刷新页面即清空。
+    </p>
+  </div>
+</div>
+
+<main id="main">
+  <div class="wrap">
+    <section class="intro">
+      <h1>把文件放进柜子，凭码取走</h1>
+      <p>临时传一份文件，不用注册，也不用装应用。投柜后拿到一个 6 位取件码，发给对方，对方凭码取件。</p>
+    </section>
+
+
+
+    <div class="bench">
+      <!-- 投柜 -->
+      <section class="panel" aria-labelledby="send-title">
+        <div class="panel-head">
+          <h2 id="send-title">投柜</h2>
+        </div>
+
+        <ol class="stepper" id="stepper" aria-label="投柜进度">
+          <li data-step="1" aria-current="step"><span class="dot"><span class="num">1</span></span>选文件</li>
+          <li data-step="2"><span class="dot"><span class="num">2</span></span>定规则</li>
+          <li data-step="3"><span class="dot"><span class="num">3</span></span>取码</li>
+        </ol>
+
+        <!-- 表单 -->
+        <form id="send-form" novalidate>
+          <div class="field">
+            <span class="field-label" id="file-label">选择文件</span>
+            <p class="field-hint" id="file-hint">一次一个文件，最大 2GB。</p>
+            <input type="file" id="file-input" class="sr-only" tabindex="-1" aria-labelledby="file-label">
+            <button type="button" class="dz" id="dropzone" aria-labelledby="file-label" aria-describedby="file-hint">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 16V4M7 9l5-5 5 5"></path>
+                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path>
+              </svg>
+              <span class="dz-strong">拖文件到这里，或点此选择</span>
+              <span class="dz-sub">单个文件，点按钮或直接拖入</span>
+            </button>
+            <div class="file-row" id="file-row" hidden>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+                <path d="M14 3v5h5"></path>
+              </svg>
+              <span class="file-meta">
+                <span class="file-name" id="file-name"></span>
+                <span class="file-size" id="file-size"></span>
+              </span>
+              <button type="button" class="btn btn-text" id="file-remove">移除</button>
+            </div>
+            <p class="err" id="file-err" role="alert"></p>
+          </div>
+
+          <div class="settings">
+            <div class="setting" role="radiogroup" aria-labelledby="expire-label">
+              <span class="setting-label" id="expire-label">到期时间</span>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="expire" value="1">1 小时</label>
+                <label class="choice"><input type="radio" name="expire" value="24" checked>24 小时</label>
+                <label class="choice"><input type="radio" name="expire" value="168">7 天</label>
+              </div>
+            </div>
+            <div class="setting" role="radiogroup" aria-labelledby="quota-label">
+              <span class="setting-label" id="quota-label">可下载次数</span>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="quota" value="1">1 次</label>
+                <label class="choice"><input type="radio" name="quota" value="3" checked>3 次</label>
+                <label class="choice"><input type="radio" name="quota" value="5">5 次</label>
+              </div>
+            </div>
+          </div>
+          <p class="field-hint">到期后文件自动销毁；对方每下载一次，次数减一。</p>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary" id="send-submit">生成取件码</button>
+          </div>
+        </form>
+
+        <!-- 进度 -->
+        <div class="progress" id="progress" hidden>
+          <div class="progress-head">
+            <span id="progress-label">正在投柜</span>
+            <b id="progress-pct">0%</b>
+          </div>
+          <div class="bar" role="progressbar" aria-labelledby="progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="progress-fill"></i></div>
+        </div>
+
+        <!-- 成功 -->
+        <div class="result" id="send-result" hidden>
+          <p class="result-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+            已投柜，把取件码发给对方
+          </p>
+          <p class="code" id="result-code"></p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" id="copy-btn">复制取件码</button>
+            <button type="button" class="btn btn-secondary" id="try-btn">用这个码试取件</button>
+            <span class="copy-ok" id="copy-ok" role="status" aria-live="polite"></span>
+          </div>
+          <dl class="result-meta">
+            <dt>文件</dt><dd id="result-file"></dd>
+            <dt>到期时间</dt><dd id="result-expire"></dd>
+            <dt>可下载</dt><dd id="result-quota"></dd>
+          </dl>
+          <div class="actions">
+            <button type="button" class="btn btn-text" id="again-btn">再传一个</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 取件 -->
+      <section class="panel panel-get" aria-labelledby="get-title">
+        <div class="panel-head">
+          <h2 id="get-title">取件</h2>
+        </div>
+        <form id="get-form" novalidate>
+          <div class="field" id="code-field">
+            <label class="field-label" for="code-input">取件码</label>
+            <p class="field-hint" id="code-hint">6 位字母和数字，不区分大小写。</p>
+            <p class="field-hint">演示版预置了取件码 <b class="code-inline">8F3K2P</b>，<button type="button" class="btn-text btn-inline" id="fill-demo">填入这个码</button></p>
+            <div class="code-row">
+              <input class="code-input" id="code-input" name="code" type="text" inputmode="latin"
+                     autocomplete="off" spellcheck="false" maxlength="12"
+                     placeholder="例如 8F3K2P" aria-describedby="code-hint code-err">
+              <button type="submit" class="btn btn-secondary" id="get-submit">取件</button>
+            </div>
+            <p class="err" id="code-err" role="alert"></p>
+          </div>
+        </form>
+
+        <div class="result" id="get-result" hidden>
+          <p class="result-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+            <span id="get-status">找到了这个文件</span>
+          </p>
+          <div class="pick-file">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+              <path d="M14 3v5h5"></path>
+            </svg>
+            <span class="file-meta">
+              <span class="file-name" id="get-file"></span>
+              <span class="file-size" id="get-size"></span>
+            </span>
+          </div>
+          <dl class="result-meta">
+            <dt>剩余次数</dt><dd id="get-left"></dd>
+            <dt>到期时间</dt><dd id="get-expire"></dd>
+          </dl>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" id="download-btn">下载文件</button>
+            <span class="copy-ok" id="dl-ok" role="status" aria-live="polite"></span>
+          </div>
+          <div class="progress" id="dl-progress" hidden>
+            <div class="progress-head">
+              <span id="dl-label">正在下载</span>
+              <b id="dl-pct">0%</b>
+            </div>
+            <div class="bar" role="progressbar" aria-labelledby="dl-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="dl-fill"></i></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="how" id="how" aria-labelledby="how-title">
+      <h2 id="how-title">三步走完一次传送</h2>
+      <ol class="step-strip">
+        <li>
+          <span class="step-n">01</span>
+          <div>
+            <h3>投柜</h3>
+            <p>选一个文件，定好到期时间和次数。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">02</span>
+          <div>
+            <h3>取码</h3>
+            <p>生成 6 位码，复制发给对方。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">03</span>
+          <div>
+            <h3>取件</h3>
+            <p>对方凭码下载，取一次减一次。</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="limits" id="limits" aria-labelledby="limits-title">
+      <h2 id="limits-title">使用限制</h2>
+      <p class="lede2">这些限制在投柜时就已经确定，取件方无法改动。</p>
+      <dl class="limit-list">
+        <div><dt>单文件大小</dt><dd>最大 2GB，一次只收一个文件，不支持文件夹。</dd></div>
+        <div><dt>保存时长</dt><dd>1 小时、24 小时或 7 天，到期立即销毁。</dd></div>
+        <div><dt>下载次数</dt><dd>投柜时选 1、3 或 5 次，每取一次减一，取完销毁。</dd></div>
+        <div><dt>账号</dt><dd>不需要注册，也没有账号体系，取件码就是凭证。</dd></div>
+        <div><dt>存储</dt><dd>演示版本不存储：文件不上传、不落盘，刷新页面即清空。</dd></div>
+        <div><dt>传输</dt><dd>演示版本在本机完成流程，不产生任何网络请求。</dd></div>
+      </dl>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <p class="footer-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <path d="M3 10h18M10 10v6M14 10v6"></path>
+      </svg>
+      PickBin · 临时文件快递柜
+    </p>
+    <p>演示版本：文件不会离开这台设备，也不会上传到任何服务器。</p>
+    <nav class="footer-nav" aria-label="页脚导航">
+      <a href="#how">三步怎么走</a>
+      <a href="#limits">使用限制</a>
+      <a href="#main">回到顶部</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var MAX_BYTES = 2 * 1024 * 1024 * 1024;
+  var CODE_LEN = 6;
+  var ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+  // 演示数据：一张预置的取件单，方便直接试取件
+  var vault = Object.create(null);
+  vault['8F3K2P'] = {
+    name: '2026-第三季度报价单.pdf',
+    size: 1842688,
+    left: 2,
+    expires: Date.now() + 26 * 60 * 60 * 1000
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var state = {
+    file: null,
+    sending: false,
+    current: null
+  };
+
+  /* ── 工具 ── */
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+  }
+
+  function fmtWhen(ts) {
+    var d = new Date(ts);
+    var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+    var today = new Date();
+    var sameDay = d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
+    var hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    if (sameDay) return '今天 ' + hm;
+    return (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 ' + hm;
+  }
+
+  function makeCode() {
+    var buf = new Uint32Array(CODE_LEN);
+    if (window.crypto && window.crypto.getRandomValues) {
+      window.crypto.getRandomValues(buf);
+    } else {
+      for (var i = 0; i < CODE_LEN; i++) buf[i] = Math.floor(Math.random() * 4294967296);
+    }
+    var out = '';
+    for (var j = 0; j < CODE_LEN; j++) out += ALPHABET[buf[j] % ALPHABET.length];
+    return out;
+  }
+
+  function setStep(n) {
+    var items = $('stepper').children;
+    for (var i = 0; i < items.length; i++) {
+      var li = items[i];
+      var idx = Number(li.getAttribute('data-step'));
+      li.classList.toggle('is-done', idx < n);
+      if (idx === n) li.setAttribute('aria-current', 'step');
+      else li.removeAttribute('aria-current');
+    }
+  }
+
+  /* ── 投柜：选文件 ── */
+  var fileInput = $('file-input');
+  var dropzone = $('dropzone');
+  var fileRow = $('file-row');
+  var fileErr = $('file-err');
+
+  function showFileError(msg) {
+    fileErr.textContent = msg;
+    dropzone.classList.add('is-invalid');
+  }
+  function clearFileError() {
+    fileErr.textContent = '';
+    dropzone.classList.remove('is-invalid');
+  }
+
+  function acceptFile(file) {
+    if (!file) return;
+    if (file.size > MAX_BYTES) {
+      showFileError('文件必须小于 2GB，当前是 ' + fmtSize(file.size) + '。');
+      return;
+    }
+    if (file.size === 0) {
+      showFileError('这个文件是空的，换一个再试。');
+      return;
+    }
+    clearFileError();
+    state.file = file;
+    $('file-name').textContent = file.name;
+    $('file-size').textContent = fmtSize(file.size);
+    fileRow.hidden = false;
+    dropzone.hidden = true;
+    setStep(2);
+  }
+
+  function resetFile() {
+    state.file = null;
+    fileInput.value = '';
+    fileRow.hidden = true;
+    dropzone.hidden = false;
+    clearFileError();
+    setStep(1);
+  }
+
+  dropzone.addEventListener('click', function () { fileInput.click(); });
+  fileInput.addEventListener('change', function () { acceptFile(fileInput.files[0]); });
+  $('file-remove').addEventListener('click', function () {
+    resetFile();
+    dropzone.focus();
+  });
+
+  ['dragenter', 'dragover'].forEach(function (t) {
+    dropzone.addEventListener(t, function (e) {
+      e.preventDefault();
+      dropzone.classList.add('is-drag');
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (t) {
+    dropzone.addEventListener(t, function (e) {
+      e.preventDefault();
+      dropzone.classList.remove('is-drag');
+    });
+  });
+  dropzone.addEventListener('drop', function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    acceptFile(f);
+  });
+
+  /* ── 投柜：提交 ── */
+  var sendForm = $('send-form');
+  var progress = $('progress');
+  var sendResult = $('send-result');
+
+  function expireHours() {
+    var el = sendForm.querySelector('input[name="expire"]:checked');
+    return Number(el ? el.value : 24);
+  }
+  function quotaCount() {
+    var el = sendForm.querySelector('input[name="quota"]:checked');
+    return Number(el ? el.value : 3);
+  }
+
+  sendForm.addEventListener('change', function () {
+    if (state.file) setStep(2);
+  });
+
+  sendForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (state.sending) return;
+
+    if (!state.file) {
+      showFileError('选择一个文件再生成取件码。');
+      dropzone.focus();
+      return;
+    }
+
+    state.sending = true;
+    var submitBtn = $('send-submit');
+    submitBtn.disabled = true;
+    setStep(3);
+    progress.hidden = false;
+
+    var pct = 0;
+    var fill = $('progress-fill');
+    var barEl = progress.querySelector('.bar');
+    var tick = function () {
+      pct = Math.min(100, pct + 12);
+      fill.style.width = pct + '%';
+      $('progress-pct').textContent = pct + '%';
+      barEl.setAttribute('aria-valuenow', String(pct));
+      if (pct < 100) {
+        setTimeout(tick, 110);
+      } else {
+        finishSend();
+      }
+    };
+    setTimeout(tick, 110);
+
+    function finishSend() {
+      var code = makeCode();
+      while (vault[code]) code = makeCode();
+      var hours = expireHours();
+      var quota = quotaCount();
+      var record = {
+        name: state.file.name,
+        size: state.file.size,
+        left: quota,
+        expires: Date.now() + hours * 3600 * 1000
+      };
+      vault[code] = record;
+      state.current = code;
+
+      progress.hidden = true;
+      $('progress-pct').textContent = '0%';
+      fill.style.width = '0%';
+      sendForm.hidden = true;
+      sendResult.hidden = false;
+      $('result-code').textContent = code;
+      $('result-file').textContent = record.name;
+      $('result-expire').textContent = fmtWhen(record.expires);
+      $('result-quota').textContent = quota + ' 次';
+
+      state.sending = false;
+      submitBtn.disabled = false;
+      setStep(4);
+      for (var i = 0; i < $('stepper').children.length; i++) {
+        $('stepper').children[i].classList.add('is-done');
+        $('stepper').children[i].removeAttribute('aria-current');
+      }
+      $('copy-btn').focus();
+    }
+  });
+
+  /* ── 复制 ── */
+  var copyOk = $('copy-ok');
+  var copyTimer = null;
+
+  function copyFeedback(msg) {
+    copyOk.textContent = msg;
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () { copyOk.textContent = ''; }, 2400);
+  }
+
+  function selectCode() {
+    var el = $('result-code');
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  // 同步写剪贴板：无权限弹窗，成功返回 true
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  $('copy-btn').addEventListener('click', function () {
+    var text = $('result-code').textContent;
+
+    if (legacyCopy(text)) {
+      copyFeedback('已复制');
+      return;
+    }
+
+    var manual = function () {
+      selectCode();
+      copyFeedback('没复制成功，取件码已选中，请手动复制');
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      var settled = false;
+      // 异步接口在某些环境既不 resolve 也不 reject，加超时兜底
+      var timer = setTimeout(function () {
+        if (!settled) { settled = true; manual(); }
+      }, 800);
+      navigator.clipboard.writeText(text).then(function () {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        copyFeedback('已复制');
+      }, function () {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        manual();
+      });
+    } else {
+      manual();
+    }
+  });
+
+  /* ── 再传一个 ── */
+  $('again-btn').addEventListener('click', function () {
+    sendResult.hidden = true;
+    sendForm.hidden = false;
+    resetFile();
+    setStep(1);
+    $('send-submit').disabled = false;
+    copyOk.textContent = '';
+    dropzone.focus();
+  });
+
+  /* ── 用这个码试取件 ── */
+  $('try-btn').addEventListener('click', function () {
+    $('code-input').value = $('result-code').textContent;
+    clearCodeError();
+    $('get-result').hidden = true;
+    document.getElementById('get-title').scrollIntoView({ block: 'center' });
+    $('code-input').focus();
+    $('code-input').select();
+  });
+
+  /* ── 填入演示码 ── */
+  var fillDemo = document.getElementById('fill-demo');
+  if (fillDemo) fillDemo.addEventListener('click', function () {
+    var input = $('code-input');
+    input.value = '8F3K2P';
+    clearCodeError();
+    input.focus();
+    input.select();
+  });
+
+  /* ── 取件 ── */
+  var getForm = $('get-form');
+  var codeInput = $('code-input');
+  var codeErr = $('code-err');
+  var getResult = $('get-result');
+  var getRecord = null;
+
+  function showCodeError(msg) {
+    codeErr.textContent = msg;
+    getResult.hidden = true;
+    codeInput.classList.add('is-invalid');
+    codeInput.setAttribute('aria-invalid', 'true');
+  }
+  function clearCodeError() {
+    codeErr.textContent = '';
+    codeInput.classList.remove('is-invalid');
+    codeInput.removeAttribute('aria-invalid');
+  }
+
+  function normalize(raw) {
+    return String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  }
+
+  codeInput.addEventListener('input', function () {
+    if (codeInput.value.trim()) clearCodeError();
+  });
+
+  getForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var raw = codeInput.value;
+    var code = normalize(raw);
+
+    if (!code) {
+      showCodeError('请输入取件码。');
+      codeInput.focus();
+      return;
+    }
+    if (code.length !== CODE_LEN) {
+      showCodeError('取件码是 6 位字母和数字，现在只有 ' + code.length + ' 位。');
+      codeInput.focus();
+      return;
+    }
+
+    var rec = vault[code];
+    if (!rec) {
+      showCodeError('没找到这个取件码，检查一下是否输错了字母或数字。');
+      codeInput.focus();
+      return;
+    }
+    if (rec.expires < Date.now()) {
+      showCodeError('这个取件码已经过期，文件已销毁，请让对方重新投柜。');
+      codeInput.focus();
+      return;
+    }
+    if (rec.left <= 0) {
+      showCodeError('这个取件码的下载次数已经用完，文件已销毁。');
+      codeInput.focus();
+      return;
+    }
+
+    clearCodeError();
+    getRecord = rec;
+    codeInput.value = code;
+    getResult.hidden = false;
+    $('get-file').textContent = rec.name;
+    $('get-size').textContent = fmtSize(rec.size);
+    $('get-left').textContent = rec.left + ' 次';
+    $('get-expire').textContent = fmtWhen(rec.expires);
+    $('get-status').textContent = '找到了这个文件';
+    $('download-btn').disabled = false;
+    $('dl-ok').textContent = '';
+    $('download-btn').focus();
+  });
+
+  $('download-btn').addEventListener('click', function () {
+    if (!getRecord) return;
+    var btn = $('download-btn');
+    btn.disabled = true;
+    var dp = $('dl-progress');
+    dp.hidden = false;
+    var pct = 0;
+    var fill = $('dl-fill');
+    var barEl = dp.querySelector('.bar');
+    var tick = function () {
+      pct = Math.min(100, pct + 20);
+      fill.style.width = pct + '%';
+      $('dl-pct').textContent = pct + '%';
+      barEl.setAttribute('aria-valuenow', String(pct));
+      if (pct < 100) {
+        setTimeout(tick, 90);
+      } else {
+        getRecord.left -= 1;
+        dp.hidden = true;
+        $('dl-pct').textContent = '0%';
+        fill.style.width = '0%';
+        $('get-left').textContent = getRecord.left + ' 次';
+        if (getRecord.left > 0) {
+          $('dl-ok').textContent = '已下载，还剩 ' + getRecord.left + ' 次';
+          btn.disabled = false;
+        } else {
+          $('dl-ok').textContent = '已下载，次数用完，文件已销毁';
+          btn.disabled = true;
+          $('get-status').textContent = '这是最后一次取件';
+        }
+      }
+    };
+    setTimeout(tick, 90);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+---
+title: "GOV.UK · Pattern · National Insurance numbers 国民保险号"
+source: https://design-system.service.gov.uk/patterns/national-insurance-numbers/
+section: patterns
+tag: "规范"
+fetched: 2026-11-01
+status: full
+id: patterns-7
+publisher: "GOV.UK Design System"
+---
+
+# GOV.UK · Pattern · National Insurance numbers 国民保险号
+
+> 来源：[https://design-system.service.gov.uk/patterns/national-insurance-numbers/](https://design-system.service.gov.uk/patterns/national-insurance-numbers/)
+
+> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
+
+---
+
+This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
+
+Ask users to provide their National Insurance number.
+
+**示例：default**
+
+```njk
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{{ govukInput({
+  label: {
+    text: "National Insurance number"
+  },
+  hint: {
+    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
+  },
+  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
+  id: "national-insurance-number",
+  name: "nationalInsuranceNumber",
+  spellcheck: false
+}) }}
+```
+
+## When to use this pattern
+
+Follow this pattern whenever you need to ask for a National Insurance number.
+
+## When not to use this pattern
+
+Never use National Insurance numbers to verify a user’s identity.
+
+If you currently use National Insurance numbers to verify identity, find out how to [protect your service against fraud](https://www.gov.uk/service-manual/technology/protecting-your-service-against-fraud).
+
+## How it works
+
+Use a single [Text input component](https://design-system.service.gov.uk/components/text-input/) labelled ‘National Insurance number’. Write it out in full and never use abbreviations such as ‘NINO’ or ‘NI Number’.
+
+Show a National Insurance number using the format ‘QQ 12 34 56 C’ – the spaces will break up the number to make it easier to read, particularly for screen reader users.
+
+When asking for a National Insurance number:
+
+- allow for 13 characters as National Insurance numbers are spaced in pairs followed by a single letter
+- let users enter upper and lower case letters, additional spaces and punctuation
+- ignore any unwanted characters before validating
+- avoid using ‘AB 12 34 56 C’ as an example because it belongs to a real person and use ‘QQ 12 34 56 C’ instead
+- set the `spellcheck` attribute to `false` so that browsers do not spellcheck the National Insurance number
+
+**示例：default**
+
+```njk
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{{ govukInput({
+  label: {
+    text: "National Insurance number"
+  },
+  hint: {
+    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
+  },
+  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
+  id: "national-insurance-number",
+  name: "nationalInsuranceNumber",
+  spellcheck: false
+}) }}
+```
+
+### Error messages
+
+Error messages should be styled like this:
+
+**示例：error**
+
+```njk
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{{ govukInput({
+  label: {
+    text: "National Insurance number"
+  },
+  hint: {
+    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
+  },
+  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
+  id: "national-insurance-number",
+  name: "nationalInsuranceNumber",
+  value: "12345678",
+  errorMessage: {
+    text: "Enter a National Insurance number in the correct format"
+  },
+  spellcheck: false
+}) }}
+```
+
+Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
+
+#### If the National Insurance number is not in the correct format and there is no example
+
+Say ‘Enter a National Insurance number that is 2 letters, 6 numbers, then A, B, C or D, like QQ 12 34 56 C’.
+
+#### If the National Insurance number is not in the correct format and there is an example
+
+Say ‘Enter a National Insurance number in the correct format’.

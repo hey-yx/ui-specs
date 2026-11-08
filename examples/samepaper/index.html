@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>SamePaper · 文档、讨论、任务写在同一张纸上</title>
+<meta name="description" content="SamePaper 把文档、讨论和任务放在同一张纸面上：光标带名字，评论贴段落，结论一键转任务，权限按项目分开。">
+<style>
+/* =========================================================
+   SamePaper landing · 单文件
+   数值基准规范：TDesign（content/color|type|layout|icons|motion/tdesign.tencent.com--*.md）
+   缺口按 site/dist/ai/guide.md「基准规范缺口与派生」处理，逐条见 DECISIONS.md
+   ========================================================= */
+
+:root{
+  /* 色板：TDesign 官方色板 content/color/tdesign.tencent.com--color.md */
+  --white:#ffffff;              /* color.md:187 */
+  --gray-1:#f3f3f3;             /* color.md:189 */
+  --gray-2:#eeeeee;             /* color.md:191 */
+  --gray-3:#e8e8e8;             /* color.md:193 */
+  --gray-4:#dddddd;             /* color.md:195 */
+  --gray-6:#a6a6a6;             /* color.md:199 */
+  --gray-7:#8b8b8b;             /* color.md:201 */
+  --gray-9:#5e5e5e;             /* color.md:205 */
+  --brand:#0052d9;              /* Blue7 color.md:66 */
+  --brand-hover:#003cab;        /* Blue8 color.md:69（Blue6 #366ef4 白字仅 4.47:1，弃用） */
+  --brand-active:#002a7c;       /* Blue9 color.md:72 */
+  --brand-soft:#f2f3ff;         /* Blue1 color.md:48 */
+  --brand-line:#d9e1ff;         /* Blue2 color.md:51 */
+
+  /* 字色：TDesign 透明度字色 content/type/tdesign.tencent.com--fonts.md:96-102 */
+  --ink:rgba(0,0,0,.9);         /* Font Gy1 */
+  --ink-2:rgba(0,0,0,.6);       /* Font Gy2 */
+  --ink-3:rgba(0,0,0,.4);       /* Font Gy3，仅禁用/装饰 */
+
+  /* 字阶：TDesign 字阶 content/type/tdesign.tencent.com--fonts.md:51-60 */
+  --fs-l:64px; --fs-m:28px; --fs-s:16px;
+  /* 行高为零特异性通配，按元素自身字号算：font size + 8（fonts.md:67-74） */
+  --lh-n:8px;
+
+  /* 间距：TDesign 布局 8px 基数 + 4/12 两档 content/layout/tdesign.tencent.com--layout.md:107 */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+  --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
+
+  /* 派生：圆角两档（库无通用 radius 原文） */
+  --r-1:4px; --r-2:8px;
+
+  /* 动效：TDesign 动效 content/motion/tdesign.tencent.com--motion.md:99-113 */
+  --dur-base:200ms;   /* @duration-desktop-base */
+  --dur-mid:240ms;    /* @duration-desktop-moderate */
+  --dur-slow:280ms;   /* @duration-desktop-slow */
+  --ease-std:cubic-bezier(.38,0,.24,1);   /* @standard easing */
+  --ease-in:cubic-bezier(0,0,.15,1);      /* @ease out（入画） */
+  --ease-out:cubic-bezier(.82,0,1,.9);    /* @ease in（出画） */
+}
+
+*,*::before,*::after{box-sizing:border-box}
+:where(body, body *){line-height:calc(1em + 8px)}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--white);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  font-size:var(--fs-s);font-weight:400;
+}
+/* 只有一个 h1 用大档；每档断点内总量 3 档（64/28/16 → 48/28/16 → 36/24/16） */
+h1,h2,h3{font-size:var(--fs-s);font-weight:600}
+h1,h2,h3,p,figure,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+img,svg{display:block}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:2px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+::selection{background:var(--brand-line);color:var(--ink)}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.wrap{width:100%;max-width:1200px;margin-inline:auto;padding-inline:var(--s-5)}
+@media (min-width:992px){ .wrap{padding-inline:var(--s-6)} }
+
+.skip{
+  position:absolute;left:var(--s-4);top:-100px;z-index:60;
+  background:var(--brand);color:var(--white);padding:var(--s-3) var(--s-4);
+  border-radius:var(--r-1);
+}
+.skip:focus{top:var(--s-3)}
+
+/* ---------- 页头 ---------- */
+.site-header{
+  position:sticky;top:0;z-index:40;background:var(--white);
+  border-bottom:1px solid var(--gray-3);
+}
+.header-inner{display:flex;align-items:center;gap:var(--s-5);min-height:64px}
+.brand{display:inline-flex;align-items:center;gap:var(--s-2);color:var(--ink);font-weight:600;min-height:44px}
+.brand:hover{text-decoration:none}
+.brand svg{width:24px;height:24px;color:var(--brand)}
+.nav{margin-left:auto;display:flex;align-items:center;gap:var(--s-5)}
+.nav a{color:var(--ink-2);min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+.nav a:hover{color:var(--ink);text-decoration:none}
+.header-cta{margin-left:var(--s-2)}
+.menu-btn{display:none}
+
+/* ---------- 按钮 ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  min-height:44px;padding:var(--s-2) var(--s-4);
+  border-radius:var(--r-1);border:1px solid transparent;
+  font-weight:600;cursor:pointer;text-decoration:none;
+  transition:background-color var(--dur-base) var(--ease-std),border-color var(--dur-base) var(--ease-std),color var(--dur-base) var(--ease-std);
+}
+.btn:hover{text-decoration:none}
+.btn-primary{background:var(--brand);color:var(--white)}
+.btn-primary:hover{background:var(--brand-hover)}
+.btn-primary:active{background:var(--brand-active)}
+.btn-secondary{background:var(--white);color:var(--ink);border-color:var(--gray-7)}
+.btn-secondary:hover{background:var(--gray-1)}
+.btn-quiet{background:transparent;color:var(--brand);border-color:var(--gray-4);padding-inline:var(--s-3)}
+.btn-quiet:hover{background:var(--brand-soft);border-color:var(--brand-line)}
+.btn-accent{background:var(--brand-soft);color:var(--brand-hover);border-color:var(--brand)}
+.btn-accent:hover{background:var(--brand-line)}
+.btn[disabled]{cursor:not-allowed;opacity:1;color:var(--ink-3);border-color:var(--gray-4);background:var(--gray-1)}
+.link-btn{
+  background:none;border:0;padding:var(--s-1) 0;min-height:44px;
+  color:var(--brand);cursor:pointer;font-weight:400;text-align:left;
+}
+.link-btn:hover{text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- 首屏 ---------- */
+.hero{padding-block:var(--s-7) var(--s-8);min-height:calc(80vh - 64px);display:flex;align-items:center}
+.hero-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);width:100%;align-items:center}
+.hero-copy{grid-column:span 7;min-width:0}
+.hero-figure{grid-column:span 5;min-width:0;background:var(--gray-1);border:1px solid var(--gray-3);border-radius:var(--r-2);padding:var(--s-4)}
+.hero h1{font-size:var(--fs-l);font-weight:600;letter-spacing:-.01em;max-width:12em}
+.hero-lead{margin-top:var(--s-5);color:var(--ink-2);max-width:34em}
+.nb{white-space:nowrap}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-top:var(--s-6)}
+.hero-meta{margin-top:var(--s-4);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:0}
+.hero-meta > span{white-space:nowrap}
+.meta-sep{padding-inline:var(--s-2);color:var(--gray-7)}
+
+/* 演示用纸面（示意，不承载交互） */
+.sheet{border:1px solid var(--gray-4);border-radius:var(--r-2);background:var(--white);overflow:hidden}
+
+.sheet-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3);background:var(--gray-1)}
+.sheet-doc{font-weight:600}
+.sheet-live{color:var(--ink-2);display:inline-flex;align-items:center;gap:var(--s-2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--brand);display:inline-block}
+.sheet-body{position:relative;padding:var(--s-5)}
+.sheet-body p{max-width:100%}
+.sheet-lead{color:var(--ink)}
+.sheet-lead mark{background:var(--brand-line);color:var(--ink);padding:0 2px}
+.sheet-note{margin-top:var(--s-3);color:var(--ink-2)}
+.presence{
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-1) var(--s-4);
+  padding:var(--s-2) var(--s-4);border-bottom:1px solid var(--gray-3);color:var(--ink-2);
+}
+.pres{white-space:nowrap}
+.presence b{font-weight:400;color:var(--ink);display:inline-flex;align-items:center;gap:var(--s-1)}
+.caret{width:2px;height:16px;background:var(--brand);display:inline-block}
+.comment{
+  margin-top:var(--s-5);border:1px solid var(--gray-3);border-left:2px solid var(--brand);
+  border-radius:var(--r-1);padding:var(--s-3) var(--s-4);background:var(--white);
+  transition:border-color var(--dur-base) var(--ease-std);
+}
+.comment-who{color:var(--ink-2);display:flex;align-items:center;gap:var(--s-2)}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--gray-2);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+.comment p + p{margin-top:var(--s-2)}
+.comment .btn{margin-top:var(--s-3)}
+.task-strip{
+  margin-top:var(--s-4);border-top:1px solid var(--gray-3);padding-top:var(--s-3);
+  display:flex;align-items:center;gap:var(--s-2);color:var(--ink-2);
+}
+.strip-label{color:var(--gray-9)}
+.checkbox{width:16px;height:16px;border:1px solid var(--gray-7);border-radius:2px;flex:none}
+
+/* ---------- 区块通用 ---------- */
+.section{padding-block:var(--s-9)}
+.section + .section{border-top:1px solid var(--gray-3)}
+.band{background:var(--gray-1);border-top:1px solid var(--gray-3)}
+.eyebrow{color:var(--ink-2);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:var(--s-3)}
+.eyebrow::after{content:"";height:1px;background:var(--gray-4);flex:1}
+.h2{font-size:var(--fs-m);font-weight:600;margin-top:var(--s-4);max-width:22em}
+.section-lead{margin-top:var(--s-4);color:var(--ink-2);max-width:38em}
+
+/* ---------- 01 能力 ---------- */
+.feature-list{margin-top:var(--s-8);border-top:1px solid var(--gray-3)}
+.feature{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-3) var(--s-5);
+  padding-block:var(--s-5);border-bottom:1px solid var(--gray-3);
+}
+.feature-title{grid-column:span 4;font-weight:600}
+.feature-title svg{width:24px;height:24px;color:var(--brand);margin-bottom:var(--s-2)}
+.feature-copy{grid-column:span 8;color:var(--ink-2);max-width:38em}
+
+/* ---------- 02 演示 ---------- */
+.demo-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);margin-top:var(--s-7);align-items:stretch}
+.demo-paper{grid-column:span 7;min-width:0}
+.demo-side{grid-column:span 5;min-width:0;display:flex;flex-direction:column}
+.doc-h{font-weight:600;margin-bottom:var(--s-3)}
+.doc-body p + p{margin-top:var(--s-3)}
+.doc-body .mark-line{background:var(--brand-soft);border-left:2px solid var(--brand);padding:var(--s-2) var(--s-3);margin-top:var(--s-4)}
+.comment.done{border-left-color:var(--gray-6)}
+.tasks{border:1px solid var(--gray-4);border-radius:var(--r-2);background:var(--white);display:flex;flex-direction:column;flex:1}
+.tasks-head{display:flex;justify-content:space-between;align-items:center;padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3);background:var(--gray-1);font-weight:600}
+.tasks-head span:last-child{color:var(--ink-2);font-weight:400;font-variant-numeric:tabular-nums}
+.task{display:flex;align-items:flex-start;gap:var(--s-2);padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3)}
+.task:last-of-type{border-bottom:0}
+.task .who{margin-left:auto;color:var(--ink-2);white-space:nowrap;padding-left:var(--s-2)}
+.task-new{background:var(--brand-soft);transition:background-color var(--dur-mid) var(--ease-std)}
+.tasks-note{padding:var(--s-3) var(--s-4);color:var(--ink-2);border-top:1px solid var(--gray-3);margin-top:auto}
+.demo-tools{margin-top:var(--s-1)}
+.demo-tools .link-btn{color:var(--ink-2)}
+
+/* ---------- 03 客户 ---------- */
+.logos{display:flex;flex-wrap:wrap;gap:var(--s-4) var(--s-7);margin-top:var(--s-6);padding-top:var(--s-5);border-top:1px solid var(--gray-3)}
+.logos li{color:var(--ink-2);font-weight:600}
+.quotes{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-6) var(--s-5);margin-top:var(--s-7)}
+.quote-main{grid-column:span 7;min-width:0}
+.quote-side{grid-column:span 5;display:grid;gap:var(--s-5);min-width:0}
+.quote-main blockquote{font-size:var(--fs-m);font-weight:400;max-width:18em}
+.quote-side blockquote{color:var(--ink);max-width:26em}
+.quote figcaption{margin-top:var(--s-3);color:var(--ink-2)}
+.quote-main{border-left:2px solid var(--brand);padding-left:var(--s-5)}
+
+/* ---------- 04 定价 ---------- */
+.billing{display:inline-flex;gap:0;border:1px solid var(--gray-7);border-radius:var(--r-1);padding:2px;margin-top:var(--s-5);background:var(--white)}
+.billing label{position:relative}
+.billing input{position:absolute;opacity:0;width:1px;height:1px}
+.billing span{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s-4);border-radius:2px;cursor:pointer;color:var(--ink-2);transition:background-color var(--dur-base) var(--ease-std),color var(--dur-base) var(--ease-std)}
+.billing input:checked + span{background:var(--brand-soft);color:var(--brand-hover);font-weight:600;box-shadow:inset 0 0 0 1px var(--brand)}
+.billing input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
+.billing input:not(:checked) + span:hover{color:var(--ink)}
+.billing-note{margin-top:var(--s-3);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.plans{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);margin-top:var(--s-7);align-items:stretch}
+.plan{grid-column:span 4;display:flex;flex-direction:column;border:1px solid var(--gray-4);border-radius:var(--r-2);padding:var(--s-5);background:var(--white)}
+.plan-featured{border-color:var(--brand);border-top-width:2px}
+.plan-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-2)}
+.plan-name{font-weight:600}
+.tag{color:var(--brand-hover);background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:var(--r-1);padding:0 var(--s-2);white-space:nowrap}
+.price{display:flex;align-items:baseline;gap:var(--s-1);margin-top:var(--s-4);font-variant-numeric:tabular-nums}
+.price-num{font-size:var(--fs-m);font-weight:600}
+.price-cur,.price-per{color:var(--ink-2)}
+.plan-desc{margin-top:var(--s-2);color:var(--ink-2)}
+.plan ul{margin-top:var(--s-5);display:grid;gap:var(--s-2);color:var(--ink-2)}
+.plan li{display:flex;gap:var(--s-2);align-items:flex-start}
+.plan li svg{width:20px;height:20px;flex:none;color:var(--gray-9);margin-top:2px}
+.plan .btn{margin-top:var(--s-6)}
+.plan-foot{margin-top:var(--s-5);color:var(--ink-2);border-top:1px solid var(--gray-3);padding-top:var(--s-3)}
+
+/* ---------- 05 常见问题 ---------- */
+.faq{margin-top:var(--s-7);border-top:1px solid var(--gray-3)}
+.qa{border-bottom:1px solid var(--gray-3)}
+.qa h3{font-weight:400}
+.qa-btn{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+  background:none;border:0;text-align:left;cursor:pointer;padding:var(--s-4) 0;min-height:44px;
+  font-weight:600;color:var(--ink);
+}
+.qa-btn:hover{color:var(--brand);background:var(--gray-1)}
+.qa-btn{border-radius:var(--r-1)}
+.qa-sign{color:var(--ink-2);flex:none;font-variant-numeric:tabular-nums}
+.qa-panel{padding-bottom:var(--s-5);color:var(--ink-2);max-width:40em}
+
+/* ---------- 06 收束 ---------- */
+.closing{padding-block:var(--s-9);border-top:1px solid var(--gray-3);background:var(--gray-1)}
+.closing-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);align-items:end}
+.closing-copy{grid-column:span 8;min-width:0}
+.closing-action{grid-column:span 4;min-width:0}
+
+/* ---------- 页脚 ---------- */
+.site-footer{padding-block:var(--s-8) var(--s-6);border-top:1px solid var(--gray-3)}
+.footer-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-6) var(--s-5)}
+.footer-brand{grid-column:span 4;min-width:0}
+.footer-col{grid-column:span 2;min-width:0}
+.footer-col h2{font-weight:600;margin-bottom:var(--s-2)}
+.footer-col li + li{margin-top:var(--s-1)}
+.footer-col a{color:var(--ink-2);display:inline-flex;min-height:44px;min-width:44px;align-items:center}
+.footer-col a:hover{color:var(--ink)}
+.footer-legal{grid-column:span 12;margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--gray-3);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5)}
+
+/* ---------- 弹窗 ---------- */
+dialog{
+  width:min(520px,calc(100vw - 48px));padding:0;border:1px solid var(--gray-4);border-radius:var(--r-2);
+  background:var(--white);color:var(--ink);
+  opacity:0;transform:translateY(8px);
+  transition:opacity var(--dur-base) var(--ease-in),transform var(--dur-mid) var(--ease-in),overlay var(--dur-mid) allow-discrete,display var(--dur-mid) allow-discrete;
+}
+dialog[open]{opacity:1;transform:none}
+@starting-style{dialog[open]{opacity:0;transform:translateY(8px)}}
+dialog::backdrop{background:rgba(0,0,0,.45);opacity:0;transition:opacity var(--dur-base) var(--ease-in)}
+dialog[open]::backdrop{opacity:1}
+.dlg-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s-4);padding:var(--s-5) var(--s-5) var(--s-4)}
+.dlg-title{font-weight:600}
+.dlg-sub{color:var(--ink-2);margin-top:var(--s-1)}
+.dlg-close{background:none;border:1px solid var(--gray-4);border-radius:var(--r-1);min-width:44px;min-height:44px;cursor:pointer;color:var(--ink-2)}
+.dlg-close:hover{background:var(--gray-1);color:var(--ink)}
+.dlg-body{padding:0 var(--s-5) var(--s-5)}
+.field + .field{margin-top:var(--s-4)}
+.field label{display:block;font-weight:600;margin-bottom:var(--s-1)}
+.field input{
+  width:100%;min-height:44px;padding:var(--s-2) var(--s-3);
+  border:1px solid var(--gray-7);border-radius:var(--r-1);background:var(--white);
+  transition:border-color var(--dur-base) var(--ease-std);
+}
+.field input:hover{border-color:var(--gray-9)}
+.field input[aria-invalid="true"]{border-color:#d54941;border-width:2px;padding:7px 11px}
+.field-err{color:#ad352f;margin-top:var(--s-1)}
+.field-hint{color:var(--ink-2);margin-top:var(--s-1)}
+.dlg-actions{margin-top:var(--s-5);display:flex;flex-direction:column;gap:var(--s-2)}
+.dlg-actions .btn{width:100%}
+.success{padding:var(--s-5);border-top:1px solid var(--gray-3)}
+.success h3{font-weight:600}
+.success p{color:var(--ink-2);margin-top:var(--s-2)}
+.success .btn{margin-top:var(--s-4)}
+
+/* 轻提示 */
+.toast{
+  position:fixed;left:50%;bottom:var(--s-5);transform:translate(-50%,8px);
+  background:var(--ink);color:var(--white);padding:var(--s-3) var(--s-4);border-radius:var(--r-1);
+  max-width:calc(100vw - 48px);opacity:0;pointer-events:none;z-index:70;
+  transition:opacity var(--dur-base) var(--ease-std),transform var(--dur-base) var(--ease-std);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- 断点：768 / 992（TDesign 断点系统 layout.md:116-119） ---------- */
+@media (max-width:991px){
+  :root{--fs-l:48px;--fs-m:28px;--fs-s:16px}
+  .hero-copy,.hero-figure,.demo-paper,.demo-side,
+  .quote-main,.quote-side,.closing-copy,.closing-action{grid-column:span 12}
+  .plan{grid-column:span 12}
+  .footer-brand{grid-column:span 12}
+  .footer-col{grid-column:span 3}
+  .hero{min-height:0;padding-block:var(--s-7) var(--s-8)}
+  .section{padding-block:var(--s-8)}
+  .feature-title{grid-column:span 12}
+  .feature-copy{grid-column:span 12}
+}
+@media (max-width:767px){
+  :root{--fs-l:36px;--fs-m:24px;--fs-s:16px}
+  .wrap{padding-inline:var(--s-4)}
+  .nav{
+    position:absolute;left:0;right:0;top:100%;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:var(--white);border-bottom:1px solid var(--gray-3);padding:var(--s-2) var(--s-4);
+  }
+  .nav a{min-height:44px}
+  .menu-btn{
+    display:inline-flex;align-items:center;margin-left:auto;
+    min-height:44px;padding:0 var(--s-3);background:var(--white);
+    border:1px solid var(--gray-7);border-radius:var(--r-1);cursor:pointer;
+  }
+  .header-cta{margin-left:0}
+  .header-inner{gap:var(--s-2)}
+  .nav[hidden]{display:none}
+  .billing{width:100%}
+  .billing label{flex:1}
+  .billing span{width:100%;justify-content:center;padding:0 var(--s-2)}
+  .footer-col{grid-column:span 6}
+  .hero h1{max-width:100%}
+}
+@media (max-width:359px){
+  /* 320 档：9 个 36px 字宽放不进 288px 版面，退到字阶 28/20 两档（均在 TDesign 字阶内），
+     不缩小字号就会把「任务」拆开、末行只剩一个字 */
+  :root{--fs-l:28px;--fs-m:20px;--fs-s:16px}
+}
+@media (min-width:768px){
+  .nav[hidden]{display:flex}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;animation-iteration-count:1 !important}
+  dialog{transform:none}
+}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M8 12h8M8 16h5"/>
+      </svg>
+      SamePaper
+    </a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav">菜单</button>
+    <nav class="nav" id="siteNav" aria-label="主导航" hidden>
+      <a href="#features">产品</a>
+      <a href="#demo">演示</a>
+      <a href="#pricing">定价</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <div class="header-cta">
+      <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 首屏 -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1 id="heroTitle">文档、讨论、任务，<br>写在同一张纸上</h1>
+        <p class="hero-lead">SamePaper 把三件事放回同一页：光标带名字，评论贴着它讨论的那一段，<span class="nb">结论一键变成任务</span>。谁在改、改到哪、<span class="nb">下一步做什么</span>，<span class="nb">一屏看得清</span>。</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
+          <a class="btn btn-secondary" href="#demo">看协作演示</a>
+        </div>
+        <p class="hero-meta"><span>不用信用卡</span><span class="meta-sep">·</span><span>3 分钟建好第一张纸</span><span class="meta-sep">·</span><span>免费档不限人数</span></p>
+      </div>
+
+      <figure class="sheet hero-figure" role="img" aria-label="界面示意图：文档里一段话被选中，右侧贴着一条评论，页脚是一条已转成任务的结论，两个人名的光标停在纸上">
+        <div class="sheet-bar">
+          <span class="sheet-doc">9月版本复盘</span>
+          <span class="sheet-live"><span class="dot" aria-hidden="true"></span>3 人在线</span>
+        </div>
+        <div class="presence">
+          <span class="pres"><b><span class="caret" aria-hidden="true"></span>林岚</b> 正在改第 2 段</span>
+          <span class="pres"><b><span class="caret" aria-hidden="true"></span>周敏</b> 正在看评论</span>
+          <span class="pres"><b><span class="caret" aria-hidden="true"></span>陈可</b> 在收尾待办</span>
+        </div>
+        <div class="sheet-body">
+          <p class="sheet-lead">这一版把评论和任务放在同一页：<mark>讨论收敛后不再抄一遍到任务板</mark>，结论直接留在出处旁边。</p>
+          <div class="comment">
+            <p class="comment-who"><span class="avatar" aria-hidden="true">林</span>林岚 · 设计</p>
+            <p>重试逻辑这块没有负责人，建议直接开成任务，别在评论里等。</p>
+            <span class="btn btn-quiet" aria-hidden="true">转为任务</span>
+          </div>
+          <div class="task-strip">
+            <span class="strip-label">刚转成任务</span>
+            <span class="checkbox" aria-hidden="true"></span>
+            <span>补上失败重试 · 林岚 · 周五</span>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 01 能力 -->
+  <section class="section" id="features" aria-labelledby="featuresTitle">
+    <div class="wrap">
+      <p class="eyebrow">01 / 产品</p>
+      <h2 class="h2" id="featuresTitle">一张纸，三件事不用来回切</h2>
+      <p class="section-lead">换工具最贵的不是迁移，是每天在三个窗口之间找同一件事的上下文。SamePaper 把上下文留在它发生的地方。</p>
+
+      <div class="feature-list">
+        <div class="feature">
+          <h3 class="feature-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 6h16v9H9l-5 4z"/><path d="M8 10h8"/></svg>
+            同页协作与评论
+          </h3>
+          <p class="feature-copy">光标和选区带着名字走，评论贴在它对应的段落旁边。翻到文档另一端，讨论不会跟丢，修改记录也按段落排。</p>
+        </div>
+        <div class="feature">
+          <h3 class="feature-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 5h16"/><path d="M8 5v14l4-3 4 3V5"/></svg>
+            结论转任务
+          </h3>
+          <p class="feature-copy">讨论收敛后，任何一条评论都能直接转成任务。负责人、截止时间、来源段落一起写进纸面，任务板上的状态会同步回来。</p>
+        </div>
+        <div class="feature">
+          <h3 class="feature-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><rect x="4" y="10" width="16" height="10"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            按人和项目授权
+          </h3>
+          <p class="feature-copy">每个项目单独设可见范围。给外部伙伴一页只读链接，随时收回；他们看得到该看的那一页，看不到别的项目。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 演示 -->
+  <section class="section band" id="demo" aria-labelledby="demoTitle">
+    <div class="wrap">
+      <p class="eyebrow">02 / 演示</p>
+      <h2 class="h2" id="demoTitle">在一张纸上走完一次讨论</h2>
+      <p class="section-lead">左边是林岚留在这段结论旁的评论。点「转为任务」，它会落到右边的待办里：负责人取评论作者，来源仍是这一段。</p>
+      <p class="demo-tools"><button class="link-btn" type="button" id="resetDemo">重置演示</button></p>
+
+      <div class="demo-grid">
+        <div class="paper demo-paper sheet">
+          <div class="sheet-bar">
+            <span class="sheet-doc">9月版本复盘</span>
+            <span class="sheet-live"><span class="dot" aria-hidden="true"></span>2 人正在看</span>
+          </div>
+          <div class="sheet-body doc-body">
+            <h3 class="doc-h">结论</h3>
+            <p>这一版把「评论」和「任务」放在同一页。讨论收敛之后，不用再抄一遍到任务板，也不用在群里问谁在跟。</p>
+            <p class="mark-line">下一步：把迁移脚本的失败重试补上，再开放给第二批团队。</p>
+            <div class="comment" id="commentCard">
+              <p class="comment-who"><span class="avatar" aria-hidden="true">林</span>林岚 · 设计</p>
+              <p>重试逻辑这块没有负责人，建议直接开成任务，别在评论里等。</p>
+              <button class="btn btn-accent" type="button" id="toTaskBtn">转为任务</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-side">
+          <div class="tasks">
+            <div class="tasks-head"><span>待办</span><span id="taskCount" aria-live="polite">2 项</span></div>
+            <ul id="taskList">
+              <li class="task"><span class="checkbox" aria-hidden="true"></span><span>补上第二批团队的邀请名单</span><span class="who">周敏</span></li>
+              <li class="task"><span class="checkbox" aria-hidden="true"></span><span>确认 9 月版本的发布窗口</span><span class="who">陈可</span></li>
+            </ul>
+            <p class="tasks-note" id="demoNote" aria-live="polite">点左边的「转为任务」试一下。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 客户 -->
+  <section class="section" id="customers" aria-labelledby="customersTitle">
+    <div class="wrap">
+      <p class="eyebrow">03 / 已经在用 · 示例数据</p>
+      <h2 class="h2" id="customersTitle">换过来之后，周会短了半小时</h2>
+
+      <ul class="logos" aria-label="客户（虚构示例）">
+        <li>北辰数据</li><li>澜图设计</li><li>河岸科技</li><li>微光实验室</li><li>三川制造</li><li>岭上教育</li>
+      </ul>
+      <p class="section-lead">客户名、评价与人数都是本稿的虚构占位，上线前换成真实素材。</p>
+
+      <div class="quotes">
+        <figure class="quote quote-main">
+          <blockquote>以前一个需求要开三个窗口：文档、群聊、任务板。现在讨论就贴在段落旁边，结论当场变成任务，周会上不用再对一遍进度。</blockquote>
+          <figcaption>周敏 · 产品负责人 · 北辰数据（48 人）</figcaption>
+        </figure>
+        <div class="quote-side">
+          <figure class="quote">
+            <blockquote>新同事第一天就能看懂一个项目为什么这么定，因为讨论没丢，都在原文旁边。</blockquote>
+            <figcaption>林岚 · 设计负责人 · 澜图设计（12 人）</figcaption>
+          </figure>
+          <figure class="quote">
+            <blockquote>权限按项目分开以后，外包同学只看得到该看的那一页，我们省掉了每次发 PDF 的功夫。</blockquote>
+            <figcaption>陈可 · 研发经理 · 河岸科技（86 人）</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 定价 -->
+  <section class="section band" id="pricing" aria-labelledby="pricingTitle">
+    <div class="wrap">
+      <p class="eyebrow">04 / 定价</p>
+      <h2 class="h2" id="pricingTitle">按人计费，免费档不限期</h2>
+      <p class="section-lead">先用免费档把一个真项目跑通，再决定要不要给整个团队开。</p>
+
+      <fieldset class="billing">
+        <legend class="sr-only">计费周期</legend>
+        <label>
+          <input type="radio" name="billing" value="monthly" checked>
+          <span>月付</span>
+        </label>
+        <label>
+          <input type="radio" name="billing" value="yearly">
+          <span>年付（省 20%）</span>
+        </label>
+      </fieldset>
+      <p class="billing-note" id="billingNote" aria-live="polite">月付 ¥39.00 / 人 / 月；换年付 ¥31.20，每年省 ¥93.60。</p>
+
+      <div class="plans">
+        <article class="plan">
+          <div class="plan-head"><h3 class="plan-name">免费</h3></div>
+          <p class="price"><span class="price-cur">¥</span><span class="price-num" data-monthly="0" data-yearly="0">0.00</span><span class="price-per">/ 人 / 月</span></p>
+          <p class="plan-desc">先在一个真项目上试。</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>3 个项目</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>每页 30 条评论</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>7 天历史版本</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>基础权限</li>
+          </ul>
+          <button class="btn btn-secondary" type="button" data-open data-plan="免费档">免费开始</button>
+          <p class="plan-foot">不限人数，不限时长。</p>
+        </article>
+
+        <article class="plan plan-featured">
+          <div class="plan-head"><h3 class="plan-name">团队</h3><span class="tag">最常选</span></div>
+          <p class="price"><span class="price-cur">¥</span><span class="price-num" data-monthly="39" data-yearly="31.2">39.00</span><span class="price-per">/ 人 / 月</span></p>
+          <p class="plan-desc">让讨论直接长出任务。</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>不限项目与评论数</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>评论转任务与状态同步</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>按项目授权与只读链接</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>1 年历史版本</li>
+          </ul>
+          <button class="btn btn-primary" type="button" data-open data-plan="团队档">免费试用 14 天</button>
+          <p class="plan-foot">14 天后按所选周期扣费，随时可停。</p>
+        </article>
+
+        <article class="plan">
+          <div class="plan-head"><h3 class="plan-name">企业</h3></div>
+          <p class="price"><span class="price-num">定制</span></p>
+          <p class="plan-desc">给要审计和私有部署的团队。</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>SSO 单点登录</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>审计日志与数据导出</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>私有部署</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>专属支持与迁移协助</li>
+          </ul>
+          <button class="btn btn-secondary" type="button" data-open data-plan="企业档">联系我们</button>
+          <p class="plan-foot">按规模报价，含部署与培训。</p>
+        </article>
+      </div>
+      <p class="billing-note">价格为演示数据；年付一次结清，按实际人数结算。</p>
+    </div>
+  </section>
+
+  <!-- 05 常见问题 -->
+  <section class="section" id="faq" aria-labelledby="faqTitle">
+    <div class="wrap">
+      <p class="eyebrow">05 / 常见问题</p>
+      <h2 class="h2" id="faqTitle">换之前，通常会问这几件</h2>
+
+      <div class="faq">
+        <div class="qa">
+          <h3><button class="qa-btn" type="button" id="qa1b" aria-expanded="false" aria-controls="qa1">数据存在哪里？可以私有部署吗？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
+          <div class="qa-panel" id="qa1" role="region" aria-labelledby="qa1b" hidden>
+            <p>默认存在国内多可用区，按项目加密隔离，备份保留 30 天。企业档支持私有部署，跑在你自己的云账号里，升级窗口由我们和你一起排。</p>
+          </div>
+        </div>
+        <div class="qa">
+          <h3><button class="qa-btn" type="button" id="qa2b" aria-expanded="false" aria-controls="qa2">免费档有什么限制？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
+          <div class="qa-panel" id="qa2" role="region" aria-labelledby="qa2b" hidden>
+            <p>3 个项目、每页 30 条评论、历史版本保留 7 天。人数不限，也不限期；超出评论上限时只提示，不删除已有内容。</p>
+          </div>
+        </div>
+        <div class="qa">
+          <h3><button class="qa-btn" type="button" id="qa3b" aria-expanded="false" aria-controls="qa3">从现在的工具迁过来要多久？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
+          <div class="qa-panel" id="qa3" role="region" aria-labelledby="qa3b" hidden>
+            <p>30 人团队通常两天：第一天导文档，第二天把进行中的任务对一遍。支持 Markdown、Word 和常见任务板的导出文件；对不上号的行会单独列出来，不会静默丢掉。</p>
+          </div>
+        </div>
+        <div class="qa">
+          <h3><button class="qa-btn" type="button" id="qa4b" aria-expanded="false" aria-controls="qa4">「转为任务」能和 Jira、飞书对接吗？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
+          <div class="qa-panel" id="qa4" role="region" aria-labelledby="qa4b" hidden>
+            <p>团队档起可以。任务转出后在 SamePaper 里仍然可见，状态双向同步；两边同时改时以最后修改为准，并在纸面上留一条记录。</p>
+          </div>
+        </div>
+        <div class="qa">
+          <h3><button class="qa-btn" type="button" id="qa5b" aria-expanded="false" aria-controls="qa5">团队里有人只用手机怎么办？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
+          <div class="qa-panel" id="qa5" role="region" aria-labelledby="qa5b" hidden>
+            <p>手机浏览器能读、能评论、能勾任务，这条链路是完整的。复杂排版和批量授权建议回桌面端做，窄屏上不做多列表格。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 收束 -->
+  <section class="closing" id="start" aria-labelledby="startTitle">
+    <div class="wrap closing-grid">
+      <div class="closing-copy">
+        <p class="eyebrow">06 / 开始</p>
+        <h2 class="h2" id="startTitle">先建一张纸，再决定要不要换</h2>
+        <p class="section-lead">不用信用卡。建好之后把你们正在做的一个项目搬进来，两天就知道合不合适。</p>
+      </div>
+      <div class="closing-action">
+        <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M8 12h8M8 16h5"/></svg>
+        SamePaper
+      </a>
+      <p class="section-lead">文档、讨论、任务，写在同一张纸上。</p>
+    </div>
+    <div class="footer-col">
+      <h2>产品</h2>
+      <ul>
+        <li><a href="#features">功能</a></li>
+        <li><a href="#demo">演示</a></li>
+        <li><a href="#pricing">定价</a></li>
+        <li><a href="#top" data-todo="更新日志还没写">更新日志</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>资源</h2>
+      <ul>
+        <li><a href="#top" data-todo="帮助中心还没写">帮助中心</a></li>
+        <li><a href="#top" data-todo="迁移指南还没写">迁移指南</a></li>
+        <li><a href="#top" data-todo="开发者文档还没写">开发者</a></li>
+        <li><a href="#faq">常见问题</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>公司</h2>
+      <ul>
+        <li><a href="#top" data-todo="关于页还没写">关于</a></li>
+        <li><a href="#top" data-todo="招聘页还没写">招聘</a></li>
+        <li><a href="#start">联系我们</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2>法律</h2>
+      <ul>
+        <li><a href="#top" data-todo="隐私政策还没写">隐私</a></li>
+        <li><a href="#top" data-todo="服务条款还没写">条款</a></li>
+        <li><a href="#top" data-todo="Cookie 说明还没写">Cookie</a></li>
+      </ul>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 SamePaper</span>
+      <span>本页为 UISpecs 案例演示，客户名与评价均为虚构。</span>
+    </div>
+  </div>
+</footer>
+
+<dialog id="signup" aria-labelledby="dlgTitle">
+  <div class="dlg-head">
+    <div>
+      <h2 class="dlg-title" id="dlgTitle">创建你的第一张纸</h2>
+      <p class="dlg-sub" id="dlgPlan">从「免费档」开始</p>
+    </div>
+    <button class="dlg-close" type="button" id="dlgClose" aria-label="关闭">关闭</button>
+  </div>
+  <div class="dlg-body">
+    <form id="signupForm" novalidate>
+      <div class="field">
+        <label for="teamName">团队名称</label>
+        <input id="teamName" name="teamName" type="text" autocomplete="organization" aria-describedby="teamNameErr" placeholder="例如：北辰数据 · 产品组">
+        <p class="field-err" id="teamNameErr" hidden></p>
+      </div>
+      <div class="field">
+        <label for="email">工作邮箱</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="emailErr emailHint" placeholder="you@company.com">
+        <p class="field-hint" id="emailHint">用来接收邀请，演示环境不会真的发信。</p>
+        <p class="field-err" id="emailErr" hidden></p>
+      </div>
+      <div class="dlg-actions">
+        <button class="btn btn-primary" type="submit">创建并进入</button>
+        <button class="btn btn-secondary" type="button" id="dlgCancel">先看看别的</button>
+      </div>
+    </form>
+    <div class="success" id="signupSuccess" hidden>
+      <h3 id="successTitle">纸面已经建好</h3>
+      <p>这是演示环境：没有真的创建账号，也没有发邮件。真实流程里，下一步是邀请同事并导入第一个项目。</p>
+      <button class="btn btn-secondary" type="button" id="successClose">回到页面</button>
+    </div>
+  </div>
+</dialog>
+
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* ---------- 移动导航 ---------- */
+  var menuBtn = $('#menuBtn'), nav = $('#siteNav');
+  function closeMenu() {
+    if (!menuBtn) return;
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.textContent = '菜单';
+    nav.hidden = true;
+  }
+  if (menuBtn && nav) {
+    menuBtn.addEventListener('click', function () {
+      var open = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!open));
+      menuBtn.textContent = open ? '菜单' : '收起';
+      nav.hidden = open;
+    });
+    $$('a', nav).forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width: 767px)').matches) closeMenu();
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        menuBtn.focus();
+      }
+    });
+  }
+
+  /* ---------- 轻提示 ---------- */
+  var toast = $('#toast'), toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3000);
+  }
+  $$('[data-todo]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      showToast(a.getAttribute('data-todo') + '：这是演示页面，本稿只包含首页。');
+    });
+  });
+
+  /* ---------- 定价周期 ---------- */
+  var note = $('#billingNote');
+  function currentCycle() {
+    var checked = $('input[name="billing"]:checked');
+    return checked ? checked.value : 'monthly';
+  }
+  function renderBilling() {
+    var yearly = currentCycle() === 'yearly';
+    $$('.price-num[data-monthly]').forEach(function (el) {
+      var v = parseFloat(yearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly'));
+      el.textContent = v.toFixed(2);
+    });
+    note.textContent = yearly
+      ? '年付：¥374.40 / 人 / 年，比月付省 ¥93.60。'
+      : '月付 ¥39.00 / 人 / 月；换年付 ¥31.20，每年省 ¥93.60。';
+  }
+  $$('input[name="billing"]').forEach(function (r) { r.addEventListener('change', renderBilling); });
+
+  /* ---------- 评论转任务 ---------- */
+  var toTask = $('#toTaskBtn'), taskList = $('#taskList'), taskCount = $('#taskCount'),
+      demoNote = $('#demoNote'), resetDemo = $('#resetDemo'), commentCard = $('#commentCard');
+  var baseCount = taskList ? taskList.children.length : 0;
+  if (toTask) {
+    toTask.addEventListener('click', function () {
+      if (toTask.disabled) return;
+      var li = document.createElement('li');
+      li.className = 'task task-new';
+      li.innerHTML = '<span class="checkbox" aria-hidden="true"></span><span>把迁移脚本的失败重试补上</span><span class="who">林岚</span>';
+      taskList.appendChild(li);
+      taskCount.textContent = taskList.children.length + ' 项';
+      commentCard.classList.add('done');
+      toTask.disabled = true;
+      toTask.textContent = '已转为任务';
+      demoNote.textContent = '已写入待办：把迁移脚本的失败重试补上。负责人林岚（评论作者），来源是这一段。';
+    });
+    resetDemo.addEventListener('click', function () {
+      $$('.task-new', taskList).forEach(function (n) { n.remove(); });
+      taskCount.textContent = taskList.children.length + ' 项';
+      commentCard.classList.remove('done');
+      toTask.disabled = false;
+      toTask.textContent = '转为任务';
+      demoNote.textContent = '点左边的「转为任务」试一下。';
+    });
+  }
+
+  /* ---------- 常见问题 ---------- */
+  $$('.qa-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+      btn.querySelector('.qa-sign').textContent = open ? '+' : '−';
+    });
+  });
+
+  /* ---------- 弹窗与表单三态 ---------- */
+  var dlg = $('#signup'), form = $('#signupForm'), success = $('#signupSuccess'),
+      dlgPlan = $('#dlgPlan'), successTitle = $('#successTitle');
+  var lastTrigger = null;
+
+  function openDialog(trigger) {
+    lastTrigger = trigger || null;
+    var plan = trigger && trigger.getAttribute('data-plan');
+    dlgPlan.textContent = plan ? '从「' + plan + '」开始' : '从「免费档」开始';
+    resetForm();
+    dlg.showModal();
+    $('#teamName').focus();
+  }
+  function resetForm() {
+    form.hidden = false;
+    success.hidden = true;
+    form.reset();
+    $('#emailHint').hidden = false;
+    [['#teamName', '#teamNameErr'], ['#email', '#emailErr']].forEach(function (pair) {
+      var input = $(pair[0]), err = $(pair[1]);
+      input.removeAttribute('aria-invalid');
+      err.hidden = true;
+      err.textContent = '';
+    });
+  }
+  function setError(input, err, msg) {
+    input.setAttribute('aria-invalid', 'true');
+    err.textContent = msg;
+    err.hidden = false;
+    /* 报错时收起说明文字，避免同一字段下面同时挂两条提示 */
+    if (input.id === 'email') $('#emailHint').hidden = true;
+  }
+
+  $$('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () { openDialog(b); });
+  });
+  $('#dlgClose').addEventListener('click', function () { dlg.close(); });
+  $('#dlgCancel').addEventListener('click', function () { dlg.close(); });
+  $('#successClose').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('close', function () {
+    var trigger = lastTrigger;
+    if (trigger && document.contains(trigger)) {
+      /* 原生 dialog 关闭后会把焦点还给打开前的元素，这里延后一帧再还给触发按钮 */
+      requestAnimationFrame(function () { trigger.focus(); });
+    }
+  });
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg) dlg.close();
+  });
+
+  ['teamName', 'email'].forEach(function (id) {
+    var input = document.getElementById(id);
+    input.addEventListener('input', function () {
+      input.removeAttribute('aria-invalid');
+      var err = document.getElementById(id + 'Err');
+      err.hidden = true;
+      err.textContent = '';
+      if (id === 'email') $('#emailHint').hidden = false;
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = $('#teamName'), email = $('#email'),
+        nameErr = $('#teamNameErr'), emailErr = $('#emailErr'), errors = 0;
+
+    name.removeAttribute('aria-invalid'); nameErr.hidden = true;
+    email.removeAttribute('aria-invalid'); emailErr.hidden = true;
+
+    if (!name.value.trim()) {
+      setError(name, nameErr, '请填写团队名称，之后可以改。');
+      errors++;
+    }
+    var v = email.value.trim();
+    if (!v) {
+      setError(email, emailErr, '请填写工作邮箱。');
+      errors++;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+      setError(email, emailErr, '邮箱格式不完整，检查一下 @ 后面的域名。');
+      errors++;
+    }
+
+    if (errors) {
+      (name.getAttribute('aria-invalid') ? name : email).focus();
+      return;
+    }
+
+    form.hidden = true;
+    success.hidden = false;
+    successTitle.textContent = name.value.trim() + '的纸面已经建好';
+    $('#successClose').focus();
+  });
+
+  renderBilling();
+})();
+</script>
+</body>
+</html>

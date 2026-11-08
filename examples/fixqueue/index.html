@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工单队列 · FixQueue</title>
+<style>
+/* Hallmark · macrostructure: Workbench（列表工作台） · tone: utilitarian · anchor hue: 214（腾讯蓝）
+ * Hallmark · pre-emit critique: P5 H4 E4 S5 R4 V4
+ * 数值基准规范：TDesign（中文产品 UI / 中后台）；结构与防模板化检查：hallmark；取值出处见 DECISIONS.md
+ */
+:root{
+  /* 色板：TDesign 官方色板（content/color/tdesign.tencent.com--color.md:32-215） */
+  --color-brand:#0052d9;          /* Blue7 品牌色 :66 */
+  --color-brand-hover:#003cab;    /* Blue8 :69，蓝6 #366ef4 上白字 4.47 不达 AA，同族换档 */
+  --color-brand-active:#002a7c;   /* Blue9 :72 */
+  --color-brand-tint:#f2f3ff;     /* Blue1 :48 */
+  --color-text-1:rgba(0,0,0,.9);  /* Font Gy1 */
+  --color-text-2:rgba(0,0,0,.6);  /* Font Gy2 */
+  --color-text-3:rgba(0,0,0,.4);  /* Font Gy3，只给禁用与装饰 */
+  --color-surface:#ffffff;
+  --color-surface-1:#f3f3f3;      /* Gray1 :189 */
+  --color-surface-2:#e8e8e8;      /* Gray3 :193 */
+  --color-line:#e8e8e8;           /* 装饰分隔线，不承担控件边界 */
+  --color-line-strong:#8b8b8b;    /* Gray7 :201，控件边界按非文本 3:1 另取 */
+  --color-error:#881f1c;          /* Red8 :104 */
+  --color-error-bg:#fff0ed;       /* Red1 :83 */
+  --color-warn:#713300;           /* Orange8 :139 */
+  --color-warn-bg:#fff1e9;        /* Orange1 :118 */
+  --color-attn:#654900;           /* Yellow8 :450 */
+  --color-attn-bg:#fff5e4;        /* Yellow1 :429 */
+  --color-ok:#006c45;             /* Green7 :171 */
+  --color-ok-bg:#e3f9e9;          /* Green1 :153 */
+  --color-neutral-fg:#4b4b4b;     /* Gray10 :207 */
+  --color-focus:#003cab;          /* 焦点环，白底 9.40:1 */
+
+  /* 间距：TDesign 8 倍数 + 4、12 两档小间距（content/layout/tdesign.tencent.com--layout.md:107） */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px;
+  /* 圆角：库无通用 radius 规范，整站两档派生（brief 回源表「圆角」条） */
+  --radius-1:4px; --radius-2:8px;
+  /* 动效：桌面端 token（content/motion/tdesign.tencent.com--motion.md:99-101、111-113） */
+  --dur-fast:200ms; --dur-mid:240ms; --dur-slow:280ms;
+  --ease-standard:cubic-bezier(.38,0,.24,1);
+  --ease-in:cubic-bezier(.82,0,1,.9);
+  --ease-out:cubic-bezier(0,0,.15,1);
+  /* 尺寸 */
+  --appbar-h:56px; --sider-w:232px; --sider-w-collapsed:64px; --control-h:32px;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--color-surface);color:var(--color-text-1);
+  font-family:var(--font-sans);font-size:14px;font-weight:400;
+  min-height:100vh;
+}
+/* 行高 = 字号 + 8：零特异性通配，逐元素按自身字号计算（brief 数值纪律） */
+:where(body, body *){line-height:calc(1em + 8px)}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--color-brand)}
+svg{display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
+[hidden]{display:none !important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{
+  position:absolute;left:var(--space-3);top:calc(var(--space-2) * -8);z-index:60;
+  background:var(--color-brand);color:#fff;padding:var(--space-2) var(--space-4);border-radius:var(--radius-1);
+  text-decoration:none;transition:top var(--dur-fast) var(--ease-out);
+}
+.skip:focus{top:var(--space-2)}
+
+/* 顶栏 */
+.appbar{
+  position:sticky;top:0;z-index:40;height:var(--appbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  padding:0 var(--space-5);background:var(--color-surface);
+  border-bottom:1px solid var(--color-line);
+}
+.brand{display:flex;align-items:center;gap:var(--space-2);min-width:0}
+.brand-mark{width:24px;height:24px;color:var(--color-brand);flex:0 0 auto}
+.brand-name{font-size:14px;font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.env{
+  font-size:12px;color:var(--color-text-2);border:1px solid var(--color-line-strong);
+  border-radius:var(--radius-1);padding:0 var(--space-1);white-space:nowrap;
+}
+.who{display:flex;align-items:center;gap:var(--space-3);font-size:12px;color:var(--color-text-2);min-width:0}
+.who b{font-weight:600;color:var(--color-text-1)}
+.who .shift{white-space:nowrap}
+@media (max-width:767px){
+  .appbar{padding:0 var(--space-3)}
+  .who .shift{display:none}
+  .env{display:none}
+}
+
+/* 外壳 */
+.shell{display:flex;align-items:flex-start;min-height:calc(100vh - var(--appbar-h))}
+.sider{
+  position:sticky;top:var(--appbar-h);flex:0 0 var(--sider-w);width:var(--sider-w);
+  height:calc(100vh - var(--appbar-h));padding:var(--space-3) var(--space-2);
+  border-right:1px solid var(--color-line);background:var(--color-surface);
+  display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-4);
+}
+.navlist{display:flex;flex-direction:column;gap:var(--space-1)}
+.navitem{
+  display:flex;align-items:center;gap:var(--space-2);height:40px;padding:0 var(--space-3);
+  border-radius:var(--radius-1);color:var(--color-text-1);text-decoration:none;font-size:14px;
+  border:1px solid transparent;
+  transition:background-color var(--dur-fast) var(--ease-standard);
+}
+.navitem svg{width:20px;height:20px;flex:0 0 auto;color:var(--color-text-2)}
+.navitem:hover{background:var(--color-surface-1)}
+.navitem[aria-current="page"]{background:var(--color-brand-tint);color:var(--color-brand);font-weight:600}
+.navitem[aria-current="page"] svg{color:var(--color-brand)}
+.navitem[aria-current="page"] .dot{background:var(--color-brand)}
+.sider-foot{border-top:1px solid var(--color-line);padding-top:var(--space-3)}
+.queue-meta{font-size:12px;color:var(--color-text-2);padding:0 var(--space-3)}
+.queue-meta span{display:block}
+.queue-meta b{color:var(--color-text-1);font-weight:600}
+
+.main{flex:1 1 auto;min-width:0;padding:var(--space-5);max-width:1440px}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap}
+h1{font-size:20px;font-weight:600;letter-spacing:.01em}
+.head-sub{font-size:12px;color:var(--color-text-2);margin-top:var(--space-1)}
+.head-actions{display:flex;gap:var(--space-2);flex-wrap:wrap}
+
+/* 按钮 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--space-1);
+  height:var(--control-h);padding:0 var(--space-3);border-radius:var(--radius-1);
+  border:1px solid var(--color-line-strong);background:var(--color-surface);color:var(--color-text-1);
+  font-size:14px;white-space:nowrap;cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard);
+}
+.btn svg{width:16px;height:16px}
+.btn:hover{background:var(--color-surface-1)}
+.btn:active{background:var(--color-surface-2)}
+.btn-primary{background:var(--color-brand);border-color:var(--color-brand);color:#fff}
+.btn-primary:hover{background:var(--color-brand-hover);border-color:var(--color-brand-hover)}
+.btn-primary:active{background:var(--color-brand-active);border-color:var(--color-brand-active)}
+.btn-danger{color:var(--color-error)}
+.btn-ghost{border-color:transparent;background:transparent;color:var(--color-text-2)}
+.btn-ghost:hover{background:var(--color-surface-1);color:var(--color-text-1)}
+.btn:disabled,.btn[aria-disabled="true"]{
+  background:var(--color-surface-1);border-color:var(--color-line);color:var(--color-line-strong);
+  cursor:not-allowed;
+}
+.btn:disabled:hover{background:var(--color-surface-1)}
+.btn-icon{width:var(--control-h);padding:0;border-color:transparent;background:transparent}
+.btn-icon:hover{background:var(--color-surface-1)}
+
+/* 工具条 */
+.toolbar{margin-top:var(--space-5);display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+.seg{display:flex;flex-wrap:wrap;gap:var(--space-1);border:1px solid var(--color-line);border-radius:var(--radius-1);padding:var(--space-1);background:var(--color-surface)}
+.seg,.navlist{scrollbar-width:thin;scrollbar-color:var(--color-line-strong) transparent}
+.seg::-webkit-scrollbar,.navlist::-webkit-scrollbar{height:4px}
+.seg::-webkit-scrollbar-thumb,.navlist::-webkit-scrollbar-thumb{background:var(--color-line-strong);border-radius:2px}
+.seg button{
+  display:inline-flex;align-items:center;gap:var(--space-1);
+  height:28px;padding:0 var(--space-3);border:1px solid transparent;border-radius:var(--radius-1);
+  background:transparent;color:var(--color-text-1);font-size:14px;cursor:pointer;white-space:nowrap;
+  transition:background-color var(--dur-mid) var(--ease-standard);
+}
+.seg button:hover{background:var(--color-surface-1)}
+.seg button[aria-pressed="true"]{background:var(--color-brand-tint);color:var(--color-brand);border-color:var(--color-brand);font-weight:600}
+.seg .n{font-size:12px;color:var(--color-text-2);font-variant-numeric:tabular-nums}
+.seg button[aria-pressed="true"] .n{color:var(--color-brand)}
+.search{position:relative;display:flex;align-items:center;flex:1 1 220px;min-width:0;max-width:360px}
+.search svg{position:absolute;left:var(--space-2);width:16px;height:16px;color:var(--color-text-2);pointer-events:none}
+.search input{
+  width:100%;height:var(--control-h);padding:0 var(--space-2) 0 32px;
+  border:1px solid var(--color-line-strong);border-radius:var(--radius-1);background:var(--color-surface);
+}
+.search input::placeholder{color:var(--color-text-2)}
+.field{display:flex;align-items:center;gap:var(--space-2);font-size:12px;color:var(--color-text-2)}
+.field select{
+  height:var(--control-h);padding:0 var(--space-2);border:1px solid var(--color-line-strong);
+  border-radius:var(--radius-1);background:var(--color-surface);font-size:14px;color:var(--color-text-1);
+}
+.linkbtn{
+  background:none;border:0;padding:var(--space-1);color:var(--color-brand);font-size:14px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:2px;
+}
+.linkbtn:hover{color:var(--color-brand-hover)}
+
+/* 批量条：TDesign 表格批量操作 A「所见即所得」，未选中时按钮禁用常驻 */
+.bulkbar{
+  margin-top:var(--space-4);display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);
+  padding:var(--space-2) var(--space-3);background:var(--color-surface-1);
+  border:1px solid var(--color-line);border-radius:var(--radius-1);
+}
+.bulkbar .count{font-size:14px;font-variant-numeric:tabular-nums}
+.bulkbar .count b{font-weight:600}
+.bulkbar .grow{flex:1 1 auto}
+.bulkbar select{
+  height:var(--control-h);padding:0 var(--space-2);border:1px solid var(--color-line-strong);
+  border-radius:var(--radius-1);background:var(--color-surface);font-size:14px;
+}
+.bulk-err{flex-basis:100%;display:none;font-size:12px;color:var(--color-error)}
+.bulk-err[data-on="1"]{display:block}
+.bulkbar[data-invalid="1"] select{border-color:var(--color-error);outline:1px solid var(--color-error)}
+
+/* 结果行 + 表格 */
+.result-line{margin-top:var(--space-4);display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:baseline;font-size:12px;color:var(--color-text-2)}
+.result-line b{color:var(--color-text-1);font-weight:600;font-variant-numeric:tabular-nums}
+.tablewrap{margin-top:var(--space-2);border:1px solid var(--color-line);border-radius:var(--radius-2);overflow:hidden}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+caption{text-align:left}
+thead th{
+  background:var(--color-surface-1);text-align:left;font-size:12px;font-weight:600;color:var(--color-text-2);
+  padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--color-line);white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid var(--color-line);transition:background-color var(--dur-mid) var(--ease-standard)}
+tbody tr:last-child{border-bottom:0}
+tbody tr:hover{background:var(--color-surface-1)}
+tbody tr[data-selected="1"]{background:var(--color-brand-tint)}
+tbody td{padding:var(--space-2) var(--space-3);vertical-align:middle;height:48px}
+.c-check{width:44px;padding:0 !important;text-align:center}
+.cbwrap{display:flex;align-items:center;justify-content:center;width:44px;height:48px;cursor:pointer}
+thead .cbwrap{height:auto;padding:var(--space-2) 0}
+.c-status{width:100px}
+.c-prio{width:88px}
+.c-owner{width:96px}
+.c-time{width:112px}
+.cell-ticket{display:flex;align-items:center;gap:var(--space-2);min-width:0}
+.no-btn{
+  background:none;border:0;padding:0;cursor:pointer;font-size:14px;font-weight:600;
+  color:var(--color-brand);font-variant-numeric:tabular-nums;white-space:nowrap;
+  text-decoration:underline;text-underline-offset:2px;
+}
+.no-btn:hover{color:var(--color-brand-hover)}
+.t-title{color:var(--color-text-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.t-meta{font-size:12px;color:var(--color-text-2);white-space:nowrap}
+.t-meta::before{content:"·";margin-right:var(--space-1);color:var(--color-line-strong)}
+.owner{font-size:14px;color:var(--color-text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.owner[data-unassigned="1"]{color:var(--color-text-2)}
+.time{font-size:12px;color:var(--color-text-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 标签：状态用浅底深字（GOV.UK tag 反复验证深底白字会被当成按钮） */
+.tag{
+  display:inline-flex;align-items:center;gap:var(--space-1);
+  padding:0 var(--space-2);border-radius:var(--radius-1);font-size:12px;white-space:nowrap;
+  border:1px solid transparent;
+}
+.tag[data-s="待处理"]{background:var(--color-brand-tint);color:#003cab;border-color:#d9e1ff}
+.tag[data-s="处理中"]{background:var(--color-warn-bg);color:var(--color-warn);border-color:#ffd9c2}
+.tag[data-s="待确认"]{background:var(--color-attn-bg);color:var(--color-attn);border-color:#ffe7b5}
+.tag[data-s="已关闭"]{background:var(--color-surface-1);color:var(--color-neutral-fg);border-color:var(--color-line)}
+.prio{display:inline-flex;align-items:center;gap:var(--space-1);font-size:12px;color:var(--color-text-1);white-space:nowrap}
+.prio i{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:var(--color-line-strong)}
+/* 圆点是非文本指示，按 3:1 取同族深档：#d54941 3.90 / #e37318 2.81 不达标，换 Red7 / Orange7；低用空心保留区分 */
+.prio[data-p="紧急"] i{background:#ad352f}
+.prio[data-p="高"] i{background:#954500}
+.prio[data-p="中"] i{background:#8b8b8b}
+.prio[data-p="低"] i{background:transparent;box-shadow:inset 0 0 0 2px #8b8b8b}
+
+/* 复选框 */
+input[type="checkbox"].cb{
+  appearance:none;-webkit-appearance:none;margin:0;width:16px;height:16px;flex:0 0 auto;
+  border:1px solid var(--color-line-strong);border-radius:2px;background:var(--color-surface);
+  cursor:pointer;position:relative;
+}
+input[type="checkbox"].cb:checked{background:var(--color-brand);border-color:var(--color-brand)}
+input[type="checkbox"].cb:checked::after{
+  content:"";position:absolute;left:4px;top:1px;width:6px;height:10px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+input[type="checkbox"].cb:indeterminate{background:var(--color-brand);border-color:var(--color-brand)}
+input[type="checkbox"].cb:indeterminate::after{
+  content:"";position:absolute;left:3px;top:6px;width:8px;height:2px;background:#fff;
+}
+
+/* 空状态 */
+.empty{margin-top:var(--space-2);border:1px solid var(--color-line);border-radius:var(--radius-2);padding:var(--space-6) var(--space-4);text-align:center}
+.empty svg{width:32px;height:32px;margin:0 auto var(--space-3);color:var(--color-line-strong)}
+.empty h2{font-size:14px;font-weight:600}
+.empty p{font-size:12px;color:var(--color-text-2);margin-top:var(--space-1)}
+.empty .btn{margin-top:var(--space-3)}
+
+/* 分页 */
+.pager{margin-top:var(--space-4);display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap}
+.pages{display:flex;align-items:center;gap:var(--space-1);flex-wrap:wrap}
+.pages button{
+  min-width:32px;height:32px;padding:0 var(--space-1);border:1px solid transparent;border-radius:var(--radius-1);
+  background:transparent;color:var(--color-text-1);font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums;
+  transition:background-color var(--dur-fast) var(--ease-standard);
+}
+.pages button:hover{background:var(--color-surface-1)}
+.pages button[aria-current="page"]{background:var(--color-brand-tint);border-color:var(--color-brand);color:var(--color-brand);font-weight:600}
+.pages .gap{color:var(--color-text-2);padding:0 var(--space-1);font-size:12px}
+.pages .step{display:inline-flex;align-items:center;gap:var(--space-1);padding:0 var(--space-2);border-color:var(--color-line-strong);background:var(--color-surface)}
+.pages .step svg{width:16px;height:16px}
+.perpage{font-size:12px;color:var(--color-text-2);display:flex;align-items:center;gap:var(--space-2)}
+.perpage select{height:28px;border:1px solid var(--color-line-strong);border-radius:var(--radius-1);background:var(--color-surface);font-size:12px;color:var(--color-text-1)}
+
+/* 抽屉 */
+.overlay{
+  position:fixed;inset:var(--appbar-h) 0 0 0;background:rgba(0,0,0,.45);z-index:45;
+  opacity:0;pointer-events:none;transition:opacity var(--dur-slow) var(--ease-out);
+}
+.overlay[data-open="1"]{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:var(--appbar-h);right:0;bottom:0;z-index:50;
+  width:min(46vw,620px);background:var(--color-surface);border-left:1px solid var(--color-line);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform var(--dur-slow) var(--ease-out),box-shadow var(--dur-slow) var(--ease-standard);
+}
+.drawer[data-open="1"]{transform:translateX(0);box-shadow:0 0 0 1px rgba(0,0,0,.04)}
+#drawerTitle:focus{outline:none}      /* 抽屉打开时的初始焦点落点，非交互元素，不加环 */
+.drawer-head{
+  display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4) var(--space-5);
+  border-bottom:1px solid var(--color-line);
+}
+.drawer-head h2{font-size:20px;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.drawer-head .meta{font-size:12px;color:var(--color-text-2);margin-top:var(--space-1);display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}
+.drawer-body{padding:var(--space-4) var(--space-5) var(--space-5);overflow:auto;flex:1 1 auto}
+.drawer-foot{
+  display:flex;gap:var(--space-2);justify-content:flex-end;flex-wrap:wrap;
+  padding:var(--space-3) var(--space-5);border-top:1px solid var(--color-line);background:var(--color-surface);
+}
+.copy{display:inline-flex;align-items:center;gap:var(--space-1);background:none;border:0;padding:0;color:var(--color-text-2);font-size:12px;cursor:pointer}
+.copy svg{width:14px;height:14px}
+.copy[data-copied="1"]{color:var(--color-ok)}
+.dl{display:grid;grid-template-columns:88px 1fr;gap:var(--space-2) var(--space-3);font-size:14px}
+.dl dt{font-size:12px;color:var(--color-text-2)}
+.dl dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.sec{margin-top:var(--space-5)}
+.sec h3{font-size:12px;font-weight:600;color:var(--color-text-2);letter-spacing:.04em}
+.sec .body-text{margin-top:var(--space-2);font-size:14px;color:var(--color-text-1);max-width:40em}
+.flow{display:flex;gap:var(--space-2);margin-top:var(--space-2);flex-wrap:wrap;align-items:center}
+.flow select{height:var(--control-h);padding:0 var(--space-2);border:1px solid var(--color-line-strong);border-radius:var(--radius-1);background:var(--color-surface);font-size:14px}
+.timeline{margin-top:var(--space-3);border-left:1px solid var(--color-line);padding-left:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3)}
+.timeline li{position:relative}
+.timeline li::before{content:"";position:absolute;left:calc(-1 * var(--space-4) - 4px);top:6px;width:8px;height:8px;border-radius:50%;background:var(--color-line-strong)}
+.timeline .t{font-size:12px;color:var(--color-text-2);font-variant-numeric:tabular-nums}
+.timeline .d{font-size:14px}
+.note-form{margin-top:var(--space-4)}
+.note-form label{display:block;font-size:12px;color:var(--color-text-2)}
+.note-form textarea{
+  margin-top:var(--space-2);width:100%;min-height:72px;padding:var(--space-2);
+  border:1px solid var(--color-line-strong);border-radius:var(--radius-1);background:var(--color-surface);resize:vertical;
+}
+.note-form textarea[aria-invalid="true"]{border-color:var(--color-error);outline:1px solid var(--color-error)}
+.note-err{margin-top:var(--space-2);font-size:12px;color:var(--color-error);display:none}
+.note-err[data-on="1"]{display:block}
+.note-actions{margin-top:var(--space-2);display:flex;justify-content:flex-end}
+
+/* 提示条 */
+.toast{
+  position:fixed;left:var(--space-5);bottom:var(--space-5);z-index:60;
+  display:flex;align-items:center;gap:var(--space-3);max-width:calc(100vw - var(--space-6));
+  padding:var(--space-2) var(--space-3);border-radius:var(--radius-2);
+  background:#1a1a1a;color:#fff;font-size:14px;pointer-events:none;
+  opacity:0;transform:translateY(8px);
+  transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out);
+}
+.toast[data-open="1"]{opacity:1;transform:translateY(0);pointer-events:auto}
+.toast svg{width:16px;height:16px;color:#92dab2;flex:0 0 auto}
+.toast .undo{background:none;border:0;padding:0;color:#b5c7ff;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+@media (max-width:1199px){
+  .c-time{display:none}
+  .main{padding:var(--space-5) var(--space-4)}
+}
+@media (max-width:991px){
+  .sider{flex-basis:var(--sider-w-collapsed);width:var(--sider-w-collapsed);padding:var(--space-3) var(--space-1);align-items:center}
+  .navitem{justify-content:center;padding:0;width:40px}
+  .navitem .label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .queue-meta{display:none}
+}
+@media (max-width:767px){
+  .main{padding:var(--space-4) var(--space-3) var(--space-6)}
+  .shell{display:block}
+  .sider{
+    position:sticky;top:var(--appbar-h);z-index:20;width:100%;height:auto;flex:none;
+    border-right:0;border-bottom:1px solid var(--color-line);background:var(--color-surface);
+    padding:var(--space-1) var(--space-3);display:block;
+  }
+  .navlist{flex-direction:row;gap:var(--space-1);overflow-x:auto}
+  .navitem{height:36px;padding:0 var(--space-2);width:auto;flex:0 0 auto}
+  .navitem .label{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:nowrap}
+  .navitem svg{display:none}
+  .sider-foot{display:none}
+  .c-owner{display:none}
+  .c-prio{width:76px}
+  .c-status{width:92px}
+  .toolbar{gap:var(--space-2)}
+  .seg{width:100%;flex-wrap:nowrap;overflow-x:auto}
+  .seg button{flex:0 0 auto;padding:0 var(--space-2)}
+  .search{max-width:none;flex-basis:100%}
+  .cell-ticket{flex-wrap:nowrap}
+  .t-meta{display:none}
+  tbody td{padding:var(--space-2)}
+  thead th{padding:var(--space-2)}
+  .drawer{width:100%;top:0}
+  .overlay{inset:0}
+  .toast{left:var(--space-3);right:var(--space-3);bottom:var(--space-3);max-width:none}
+}
+@media (max-width:767px){
+  /* 触控目标：基准规范无尺寸规范，按 WCAG 2.2 稳妥取 44px（标 derived） */
+  .btn,.seg button,.pages button,.pages .step,.search input,.field select,.bulkbar select,.perpage select{height:44px;min-height:44px}
+  .cbwrap{height:56px}
+  thead .cbwrap{height:44px}
+  tbody td{height:56px}
+  .drawer-head,.drawer-body{padding-left:var(--space-3);padding-right:var(--space-3)}
+  .drawer-foot{padding-left:var(--space-3);padding-right:var(--space-3)}
+  .drawer-head{padding-top:var(--space-3);padding-bottom:var(--space-3)}
+  .cell-ticket{gap:var(--space-1)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:1ms !important;animation-duration:1ms !important}
+  .drawer{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到工单列表</a>
+
+<header class="appbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M9 6v3M9 15v3"/></svg>
+    <span class="brand-name">FixQueue</span>
+    <span class="env">生产</span>
+  </div>
+  <div class="who">
+    <span class="shift">班次 08:00–16:00</span>
+    <span>值班 <b>陈默</b></span>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sider" aria-label="主导航">
+    <ul class="navlist">
+      <li><a class="navitem" href="#main" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/></svg>
+        <span class="label">工单队列</span></a></li>
+      <li><a class="navitem" href="#main">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+        <span class="label">我的工单</span></a></li>
+      <li><a class="navitem" href="#main">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 13h4"/></svg>
+        <span class="label">资产取值记录</span></a></li>
+      <li><a class="navitem" href="#main">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h7v14H4zM13 5h7v9h-7z"/></svg>
+        <span class="label">值班报表</span></a></li>
+    </ul>
+    <div class="sider-foot">
+      <p class="queue-meta">
+        <span>队列 <b>数据中心 · 二级支持</b></span>
+        <span>积压 <b id="navBacklog">—</b></span>
+      </p>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <div class="page-head">
+      <div>
+        <h1>工单队列</h1>
+        <p class="head-sub">按状态与关键字筛查，批量指派或关闭；点工单号看详情。</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn" type="button" id="refreshBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></svg>
+          刷新队列
+        </button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="按状态筛选">
+        <button type="button" data-status="全部" aria-pressed="true">全部 <span class="n" data-count="全部">0</span></button>
+        <button type="button" data-status="待处理" aria-pressed="false">待处理 <span class="n" data-count="待处理">0</span></button>
+        <button type="button" data-status="处理中" aria-pressed="false">处理中 <span class="n" data-count="处理中">0</span></button>
+        <button type="button" data-status="待确认" aria-pressed="false">待确认 <span class="n" data-count="待确认">0</span></button>
+        <button type="button" data-status="已关闭" aria-pressed="false">已关闭 <span class="n" data-count="已关闭">0</span></button>
+      </div>
+
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+        <label class="sr-only" for="q">关键字</label>
+        <input id="q" type="search" placeholder="搜索工单号、标题或报修人" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="prio">优先级</label>
+        <select id="prio">
+          <option value="全部">全部</option>
+          <option value="紧急">紧急</option>
+          <option value="高">高</option>
+          <option value="中">中</option>
+          <option value="低">低</option>
+        </select>
+      </div>
+
+      <button class="linkbtn" type="button" id="resetBtn" hidden>重置筛选</button>
+    </div>
+
+    <div class="bulkbar" id="bulkbar" data-invalid="0">
+      <span class="count" id="selCount">已选 <b>0</b> 条</span>
+      <label class="sr-only" for="assignee">指派给</label>
+      <select id="assignee">
+        <option value="">选择处理人</option>
+        <option value="张伟">张伟</option>
+        <option value="李静">李静</option>
+        <option value="陈默">陈默</option>
+        <option value="王倩">王倩</option>
+      </select>
+      <button class="btn btn-primary" type="button" id="assignBtn" disabled>批量指派</button>
+      <button class="btn btn-danger" type="button" id="closeBtn" disabled>批量关闭</button>
+      <span class="grow"></span>
+      <button class="btn btn-ghost" type="button" id="clearSelBtn" disabled>取消选择</button>
+      <p class="bulk-err" id="bulkErr" role="alert">请先选择处理人，再执行批量指派。</p>
+    </div>
+
+    <p class="result-line" id="resultLine" role="status" aria-live="polite">正在载入…</p>
+
+    <div class="tablewrap" id="tablewrap">
+      <table>
+        <caption class="sr-only">工单队列，可按状态、关键字与优先级筛选</caption>
+        <thead>
+          <tr>
+            <th class="c-check" scope="col"><label class="cbwrap"><input class="cb" type="checkbox" id="selAll" aria-label="选择本页全部工单"></label></th>
+            <th scope="col">工单</th>
+            <th class="c-status" scope="col">状态</th>
+            <th class="c-prio" scope="col">优先级</th>
+            <th class="c-owner" scope="col">处理人</th>
+            <th class="c-time" scope="col">更新时间</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="empty" id="empty" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>
+      <h2>没有符合条件的工单</h2>
+      <p>当前状态、优先级与关键字组合下没有结果。换一个关键字，或重置筛选。</p>
+      <button class="btn" type="button" id="emptyReset">重置筛选</button>
+    </div>
+
+    <nav class="pager" id="pager" aria-label="分页">
+      <div class="pages" id="pages"></div>
+      <div class="perpage">
+        <label for="perpage">每页</label>
+        <select id="perpage">
+          <option value="12" selected>12 条</option>
+          <option value="24">24 条</option>
+        </select>
+      </div>
+    </nav>
+  </main>
+</div>
+
+<div class="overlay" id="overlay" data-open="0"></div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" data-open="0" hidden>
+  <div class="drawer-head">
+    <div style="min-width:0;flex:1 1 auto">
+      <h2 id="drawerTitle" tabindex="-1">工单详情</h2>
+      <p class="meta">
+        <span id="dNo">—</span>
+        <button class="copy" type="button" id="copyBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span id="copyLabel">复制工单号</span>
+        </button>
+      </p>
+    </div>
+    <button class="btn btn-icon" type="button" id="drawerClose" aria-label="关闭详情">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <dl class="dl">
+      <dt>状态</dt><dd><span class="tag" id="dStatus" data-s="待处理">待处理</span></dd>
+      <dt>优先级</dt><dd><span class="prio" id="dPrio" data-p="中"><i></i>中</span></dd>
+      <dt>处理人</dt><dd id="dOwner">未分配</dd>
+      <dt>报修人</dt><dd id="dRequester">—</dd>
+      <dt>部门</dt><dd id="dDept">—</dd>
+      <dt>资产编号</dt><dd id="dAsset">—</dd>
+      <dt>最近更新</dt><dd id="dUpdated">—</dd>
+    </dl>
+
+    <section class="sec">
+      <h3>问题描述</h3>
+      <p class="body-text" id="dDesc">—</p>
+    </section>
+
+    <section class="sec">
+      <h3>状态流转</h3>
+      <div class="flow">
+        <label class="sr-only" for="dFlow">变更状态</label>
+        <select id="dFlow">
+          <option>待处理</option><option>处理中</option><option>待确认</option><option>已关闭</option>
+        </select>
+        <button class="btn" type="button" id="flowApply">应用</button>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h3>处理记录</h3>
+      <ol class="timeline" id="timeline"></ol>
+      <form class="note-form" id="noteForm" novalidate>
+        <label for="note">添加处理备注</label>
+        <textarea id="note" placeholder="写清已做的排查动作与结果" aria-describedby="noteErr"></textarea>
+        <p class="note-err" id="noteErr" role="alert">请先填写备注内容，再提交记录。</p>
+        <div class="note-actions">
+          <button class="btn" type="submit" id="noteSubmit">记录备注</button>
+        </div>
+      </form>
+    </section>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn" type="button" id="takeBtn">指派给我</button>
+    <button class="btn btn-primary" type="button" id="closeTicketBtn">关闭工单</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite" data-open="0" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4 10-10"/></svg>
+  <span id="toastMsg"></span>
+  <button class="undo" type="button" id="toastUndo">撤销</button>
+</div>
+
+<script>
+"use strict";
+/* [{"id":"tc-0008","no":"TC-2026-0428","title":"OA 报销审批流卡在部门经理节点","cat":"应用","status":"待确认","prio":"中","assignee":"张伟","requester":"钱进","dept":"财务部","asset":"—","updated":"11-07 17:31","desc":"OA 报销审批流卡在部门经理节点。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0005","no":"TC-2026-0425","title":"域账号连续被锁，登录提示凭据错误","cat":"账号","status":"处理中","prio":"紧急","assignee":"张伟","requester":"林芳","dept":"人力资源部","asset":"—","updated":"11-07 16:52","desc":"域账号连续被锁，登录提示凭据错误。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0012","no":"TC-2026-0432","title":"显示器右下角闪烁，外接屏同样现象","cat":"硬件","status":"处理中","prio":"低","assignee":"王倩","requester":"马超","dept":"运营部","asset":"MON-DELL-27","updated":"11-07 15:23","desc":"显示器右下角闪烁，外接屏同样现象。影响范围：运营部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0002","no":"TC-2026-0422","title":"Outlook 收不到外部邮件，垃圾邮件箱为空","cat":"邮件","status":"已关闭","prio":"紧急","assignee":"王倩","requester":"陈立","dept":"市场部","asset":"LT-2023-1142","updated":"11-07 15:13","desc":"Outlook 收不到外部邮件，垃圾邮件箱为空。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0009","no":"TC-2026-0429","title":"新员工入职账号与邮箱开通（11 月批次 3 人）","cat":"账号","status":"待处理","prio":"高","assignee":"未分配","requester":"刘洋","dept":"人力资源部","asset":"—","updated":"11-07 14:44","desc":"新员工入职账号与邮箱开通（11 月批次 3 人）。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0006","no":"TC-2026-0426","title":"会议室 3B 投影无信号，HDMI 无输出","cat":"会议设备","status":"待处理","prio":"中","assignee":"未分配","requester":"赵磊","dept":"销售部","asset":"PROJ-EPSON-3B","updated":"11-07 13:05","desc":"会议室 3B 投影无信号，HDMI 无输出。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0003","no":"TC-2026-0423","title":"财务共享盘权限申请（只读）","cat":"权限","status":"待处理","prio":"高","assignee":"未分配","requester":"吴倩","dept":"财务部","asset":"—","updated":"11-07 12:26","desc":"财务共享盘权限申请（只读）。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0010","no":"TC-2026-0430","title":"无线网络频繁掉线，5GHz 信号弱","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"何静","dept":"客服中心","asset":"—","updated":"11-07 11:57","desc":"无线网络频繁掉线，5GHz 信号弱。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0007","no":"TC-2026-0427","title":"笔记本电池鼓包，机身变形","cat":"硬件","status":"处理中","prio":"中","assignee":"陈默","requester":"孙楠","dept":"研发中心","asset":"LT-2022-0455","updated":"11-07 10:18","desc":"笔记本电池鼓包，机身变形。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0004","no":"TC-2026-0424","title":"三楼东侧打印机卡纸，面板报 E3","cat":"打印","status":"待处理","prio":"中","assignee":"未分配","requester":"黄伟","dept":"行政部","asset":"PRN-HP-406","updated":"11-07 09:39","desc":"三楼东侧打印机卡纸，面板报 E3。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0011","no":"TC-2026-0431","title":"Visio 安装申请，需专业版授权","cat":"软件","status":"待处理","prio":"紧急","assignee":"未分配","requester":"郑凯","dept":"研发中心","asset":"LT-2024-0301","updated":"11-07 08:10","desc":"Visio 安装申请，需专业版授权。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0001","no":"TC-2026-0421","title":"VPN 客户端连接超时，远程无法接入","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"周敏","dept":"财务部","asset":"LT-2024-0817","updated":"11-07 08:00","desc":"VPN 客户端连接超时，远程无法接入。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0018","no":"TC-2026-0438","title":"单点登录异常，跳转后回到登录页","cat":"应用","status":"处理中","prio":"中","assignee":"李静","requester":"彭博","dept":"销售部","asset":"—","updated":"11-06 17:41","desc":"单点登录异常，跳转后回到登录页。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0015","no":"TC-2026-0435","title":"申请创建跨部门邮件群组（30 人）","cat":"邮件","status":"待处理","prio":"中","assignee":"未分配","requester":"冯磊","dept":"项目管理办公室","asset":"—","updated":"11-06 16:02","desc":"申请创建跨部门邮件群组（30 人）。影响范围：项目管理办公室。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0022","no":"TC-2026-0442","title":"C 盘空间不足，临时文件占用 42GB","cat":"硬件","status":"处理中","prio":"高","assignee":"李静","requester":"范琳","dept":"财务部","asset":"LT-2024-0098","updated":"11-06 15:33","desc":"C 盘空间不足，临时文件占用 42GB。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0019","no":"TC-2026-0439","title":"共享打印机驱动安装（Windows 11）","cat":"打印","status":"待处理","prio":"中","assignee":"未分配","requester":"苏晴","dept":"法务部","asset":"PRN-CANON-712","updated":"11-06 14:54","desc":"共享打印机驱动安装（Windows 11）。影响范围：法务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0016","no":"TC-2026-0436","title":"电脑开机蓝屏，错误码 0x0000007B","cat":"硬件","status":"处理中","prio":"低","assignee":"王倩","requester":"邓丽","dept":"质量管理部","asset":"LT-2021-0922","updated":"11-06 13:15","desc":"电脑开机蓝屏，错误码 0x0000007B。影响范围：质量管理部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0023","no":"TC-2026-0443","title":"加密软件频繁弹窗，影响文档保存","cat":"软件","status":"处理中","prio":"中","assignee":"陈默","requester":"董强","dept":"研发中心","asset":"LT-2023-0512","updated":"11-06 12:46","desc":"加密软件频繁弹窗，影响文档保存。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0013","no":"TC-2026-0433","title":"离职员工账号回收与设备归还登记","cat":"账号","status":"待处理","prio":"紧急","assignee":"未分配","requester":"刘洋","dept":"人力资源部","asset":"—","updated":"11-06 12:36","desc":"离职员工账号回收与设备归还登记。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0020","no":"TC-2026-0440","title":"会议室预约系统时间冲突，无法改期","cat":"应用","status":"处理中","prio":"中","assignee":"王倩","requester":"韩雪","dept":"行政部","asset":"—","updated":"11-06 11:07","desc":"会议室预约系统时间冲突，无法改期。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0017","no":"TC-2026-0437","title":"系统更新后鼠标与键盘失灵","cat":"硬件","status":"待处理","prio":"高","assignee":"未分配","requester":"曹阳","dept":"研发中心","asset":"LT-2023-0771","updated":"11-06 10:28","desc":"系统更新后鼠标与键盘失灵。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0024","no":"TC-2026-0444","title":"外接摄像头无法识别，会议软件黑屏","cat":"外设","status":"待处理","prio":"低","assignee":"未分配","requester":"袁媛","dept":"市场部","asset":"CAM-LOGI-C920","updated":"11-06 09:59","desc":"外接摄像头无法识别，会议软件黑屏。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0014","no":"TC-2026-0434","title":"电话分机无声，摘机无拨号音","cat":"电话","status":"已关闭","prio":"高","assignee":"王倩","requester":"徐婷","dept":"行政部","asset":"IP-PHONE-221","updated":"11-06 09:49","desc":"电话分机无声，摘机无拨号音。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0021","no":"TC-2026-0441","title":"VPN 账号到期，需续期 90 天","cat":"网络","status":"已关闭","prio":"低","assignee":"陈默","requester":"唐宇","dept":"海外业务部","asset":"—","updated":"11-06 08:20","desc":"VPN 账号到期，需续期 90 天。影响范围：海外业务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0028","no":"TC-2026-0448","title":"显示器支架损坏，需更换","cat":"硬件","status":"待处理","prio":"中","assignee":"未分配","requester":"蔡颖","dept":"设计部","asset":"MON-LG-24","updated":"11-05 17:51","desc":"显示器支架损坏，需更换。影响范围：设计部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0035","no":"TC-2026-0455","title":"打印扫描件发送到邮箱失败","cat":"打印","status":"待确认","prio":"高","assignee":"王倩","requester":"吴倩","dept":"财务部","asset":"PRN-HP-406","updated":"11-05 16:22","desc":"打印扫描件发送到邮箱失败。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0025","no":"TC-2026-0445","title":"门禁卡失效，无法进入 12 层办公区","cat":"门禁","status":"待处理","prio":"中","assignee":"未分配","requester":"蒋涛","dept":"行政部","asset":"CARD-1187","updated":"11-05 16:12","desc":"门禁卡失效，无法进入 12 层办公区。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0032","no":"TC-2026-0452","title":"邮箱签名模板统一更新（全部门）","cat":"邮件","status":"处理中","prio":"高","assignee":"王倩","requester":"陈立","dept":"市场部","asset":"—","updated":"11-05 15:43","desc":"邮箱签名模板统一更新（全部门）。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0029","no":"TC-2026-0449","title":"申请开通生产数据库只读账号","cat":"权限","status":"处理中","prio":"中","assignee":"张伟","requester":"章明","dept":"研发中心","asset":"—","updated":"11-05 14:04","desc":"申请开通生产数据库只读账号。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0036","no":"TC-2026-0456","title":"VPN 连接后内网 DNS 解析失败","cat":"网络","status":"已关闭","prio":"中","assignee":"李静","requester":"周敏","dept":"财务部","asset":"—","updated":"11-05 13:35","desc":"VPN 连接后内网 DNS 解析失败。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0026","no":"TC-2026-0446","title":"邮箱容量已满，无法接收新邮件","cat":"邮件","status":"处理中","prio":"中","assignee":"李静","requester":"沈梦","dept":"客服中心","asset":"—","updated":"11-05 13:25","desc":"邮箱容量已满，无法接收新邮件。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0033","no":"TC-2026-0453","title":"OA 移动端无法登录，提示证书错误","cat":"应用","status":"已关闭","prio":"紧急","assignee":"陈默","requester":"谢婷","dept":"行政部","asset":"—","updated":"11-05 12:56","desc":"OA 移动端无法登录，提示证书错误。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0030","no":"TC-2026-0450","title":"会议室电视无法投屏，AirPlay 搜索不到","cat":"会议设备","status":"处理中","prio":"高","assignee":"李静","requester":"罗琳","dept":"销售部","asset":"TV-SAMSUNG-5A","updated":"11-05 11:17","desc":"会议室电视无法投屏，AirPlay 搜索不到。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0027","no":"TC-2026-0447","title":"共享盘映射断开，重启后仍无法访问","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"卢伟","dept":"供应链部","asset":"—","updated":"11-05 10:38","desc":"共享盘映射断开，重启后仍无法访问。影响范围：供应链部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0034","no":"TC-2026-0454","title":"新采购 20 台笔记本的资产入库登记","cat":"资产","status":"已关闭","prio":"低","assignee":"王倩","requester":"黄伟","dept":"行政部","asset":"—","updated":"11-05 09:09","desc":"新采购 20 台笔记本的资产入库登记。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0031","no":"TC-2026-0451","title":"笔记本风扇异响，温度过高自动关机","cat":"硬件","status":"已关闭","prio":"高","assignee":"张伟","requester":"高峰","dept":"研发中心","asset":"LT-2022-0613","updated":"11-05 08:30","desc":"笔记本风扇异响，温度过高自动关机。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0048","no":"TC-2026-0468","title":"申请会议室 3B 长期固定设备调试权限","cat":"会议设备","status":"待确认","prio":"中","assignee":"张伟","requester":"赵磊","dept":"销售部","asset":"PROJ-EPSON-3B","updated":"11-04 17:11","desc":"申请会议室 3B 长期固定设备调试权限。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0038","no":"TC-2026-0458","title":"显示器色彩偏黄，设计稿比对失真","cat":"硬件","status":"待处理","prio":"高","assignee":"未分配","requester":"蔡颖","dept":"设计部","asset":"MON-LG-24","updated":"11-04 17:01","desc":"显示器色彩偏黄，设计稿比对失真。影响范围：设计部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0045","no":"TC-2026-0465","title":"企业微信消息延迟超过 5 分钟","cat":"应用","status":"处理中","prio":"中","assignee":"张伟","requester":"沈梦","dept":"客服中心","asset":"—","updated":"11-04 16:32","desc":"企业微信消息延迟超过 5 分钟。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0042","no":"TC-2026-0462","title":"申请安装 Python 3.12 与虚拟环境","cat":"软件","status":"待确认","prio":"低","assignee":"陈默","requester":"章明","dept":"研发中心","asset":"LT-2024-0302","updated":"11-04 15:53","desc":"申请安装 Python 3.12 与虚拟环境。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0039","no":"TC-2026-0459","title":"域策略导致 U 盘无法写入","cat":"账号","status":"待处理","prio":"高","assignee":"未分配","requester":"董强","dept":"研发中心","asset":"LT-2023-0512","updated":"11-04 14:14","desc":"域策略导致 U 盘无法写入。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0046","no":"TC-2026-0466","title":"财务系统打印凭证格式错位","cat":"应用","status":"处理中","prio":"中","assignee":"李静","requester":"钱进","dept":"财务部","asset":"—","updated":"11-04 13:45","desc":"财务系统打印凭证格式错位。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0043","no":"TC-2026-0463","title":"邮件误判为垃圾邮件，需加白名单","cat":"邮件","status":"待处理","prio":"高","assignee":"未分配","requester":"冯磊","dept":"项目管理办公室","asset":"—","updated":"11-04 12:06","desc":"邮件误判为垃圾邮件，需加白名单。影响范围：项目管理办公室。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0040","no":"TC-2026-0460","title":"会议录音笔文件无法上传到共享盘","cat":"应用","status":"待处理","prio":"中","assignee":"未分配","requester":"袁媛","dept":"市场部","asset":"—","updated":"11-04 11:27","desc":"会议录音笔文件无法上传到共享盘。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0047","no":"TC-2026-0467","title":"外接硬盘无法挂载，磁盘工具报错","cat":"外设","status":"已关闭","prio":"低","assignee":"张伟","requester":"卢伟","dept":"供应链部","asset":"DISK-WD-2T","updated":"11-04 10:58","desc":"外接硬盘无法挂载，磁盘工具报错。影响范围：供应链部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0037","no":"TC-2026-0457","title":"访客网络账号申请（下周客户来访）","cat":"网络","status":"待确认","prio":"紧急","assignee":"李静","requester":"韩雪","dept":"行政部","asset":"—","updated":"11-04 10:48","desc":"访客网络账号申请（下周客户来访）。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0044","no":"TC-2026-0464","title":"机房 UPS 告警，蜂鸣持续","cat":"基础设施","status":"待处理","prio":"中","assignee":"未分配","requester":"蒋涛","dept":"行政部","asset":"UPS-A2","updated":"11-04 09:19","desc":"机房 UPS 告警，蜂鸣持续。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0041","no":"TC-2026-0461","title":"笔记本键盘部分按键失灵","cat":"硬件","status":"待处理","prio":"低","assignee":"未分配","requester":"苏晴","dept":"法务部","asset":"LT-2023-1188","updated":"11-04 08:40","desc":"笔记本键盘部分按键失灵。影响范围：法务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"}] */
+const TICKETS = [{"id":"tc-0008","no":"TC-2026-0428","title":"OA 报销审批流卡在部门经理节点","cat":"应用","status":"待确认","prio":"中","assignee":"张伟","requester":"钱进","dept":"财务部","asset":"—","updated":"11-07 17:31","desc":"OA 报销审批流卡在部门经理节点。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0005","no":"TC-2026-0425","title":"域账号连续被锁，登录提示凭据错误","cat":"账号","status":"处理中","prio":"紧急","assignee":"张伟","requester":"林芳","dept":"人力资源部","asset":"—","updated":"11-07 16:52","desc":"域账号连续被锁，登录提示凭据错误。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0012","no":"TC-2026-0432","title":"显示器右下角闪烁，外接屏同样现象","cat":"硬件","status":"处理中","prio":"低","assignee":"王倩","requester":"马超","dept":"运营部","asset":"MON-DELL-27","updated":"11-07 15:23","desc":"显示器右下角闪烁，外接屏同样现象。影响范围：运营部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0002","no":"TC-2026-0422","title":"Outlook 收不到外部邮件，垃圾邮件箱为空","cat":"邮件","status":"已关闭","prio":"紧急","assignee":"王倩","requester":"陈立","dept":"市场部","asset":"LT-2023-1142","updated":"11-07 15:13","desc":"Outlook 收不到外部邮件，垃圾邮件箱为空。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0009","no":"TC-2026-0429","title":"新员工入职账号与邮箱开通（11 月批次 3 人）","cat":"账号","status":"待处理","prio":"高","assignee":"未分配","requester":"刘洋","dept":"人力资源部","asset":"—","updated":"11-07 14:44","desc":"新员工入职账号与邮箱开通（11 月批次 3 人）。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0006","no":"TC-2026-0426","title":"会议室 3B 投影无信号，HDMI 无输出","cat":"会议设备","status":"待处理","prio":"中","assignee":"未分配","requester":"赵磊","dept":"销售部","asset":"PROJ-EPSON-3B","updated":"11-07 13:05","desc":"会议室 3B 投影无信号，HDMI 无输出。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0003","no":"TC-2026-0423","title":"财务共享盘权限申请（只读）","cat":"权限","status":"待处理","prio":"高","assignee":"未分配","requester":"吴倩","dept":"财务部","asset":"—","updated":"11-07 12:26","desc":"财务共享盘权限申请（只读）。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0010","no":"TC-2026-0430","title":"无线网络频繁掉线，5GHz 信号弱","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"何静","dept":"客服中心","asset":"—","updated":"11-07 11:57","desc":"无线网络频繁掉线，5GHz 信号弱。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0007","no":"TC-2026-0427","title":"笔记本电池鼓包，机身变形","cat":"硬件","status":"处理中","prio":"中","assignee":"陈默","requester":"孙楠","dept":"研发中心","asset":"LT-2022-0455","updated":"11-07 10:18","desc":"笔记本电池鼓包，机身变形。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0004","no":"TC-2026-0424","title":"三楼东侧打印机卡纸，面板报 E3","cat":"打印","status":"待处理","prio":"中","assignee":"未分配","requester":"黄伟","dept":"行政部","asset":"PRN-HP-406","updated":"11-07 09:39","desc":"三楼东侧打印机卡纸，面板报 E3。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0011","no":"TC-2026-0431","title":"Visio 安装申请，需专业版授权","cat":"软件","status":"待处理","prio":"紧急","assignee":"未分配","requester":"郑凯","dept":"研发中心","asset":"LT-2024-0301","updated":"11-07 08:10","desc":"Visio 安装申请，需专业版授权。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0001","no":"TC-2026-0421","title":"VPN 客户端连接超时，远程无法接入","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"周敏","dept":"财务部","asset":"LT-2024-0817","updated":"11-07 08:00","desc":"VPN 客户端连接超时，远程无法接入。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0018","no":"TC-2026-0438","title":"单点登录异常，跳转后回到登录页","cat":"应用","status":"处理中","prio":"中","assignee":"李静","requester":"彭博","dept":"销售部","asset":"—","updated":"11-06 17:41","desc":"单点登录异常，跳转后回到登录页。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0015","no":"TC-2026-0435","title":"申请创建跨部门邮件群组（30 人）","cat":"邮件","status":"待处理","prio":"中","assignee":"未分配","requester":"冯磊","dept":"项目管理办公室","asset":"—","updated":"11-06 16:02","desc":"申请创建跨部门邮件群组（30 人）。影响范围：项目管理办公室。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0022","no":"TC-2026-0442","title":"C 盘空间不足，临时文件占用 42GB","cat":"硬件","status":"处理中","prio":"高","assignee":"李静","requester":"范琳","dept":"财务部","asset":"LT-2024-0098","updated":"11-06 15:33","desc":"C 盘空间不足，临时文件占用 42GB。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0019","no":"TC-2026-0439","title":"共享打印机驱动安装（Windows 11）","cat":"打印","status":"待处理","prio":"中","assignee":"未分配","requester":"苏晴","dept":"法务部","asset":"PRN-CANON-712","updated":"11-06 14:54","desc":"共享打印机驱动安装（Windows 11）。影响范围：法务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0016","no":"TC-2026-0436","title":"电脑开机蓝屏，错误码 0x0000007B","cat":"硬件","status":"处理中","prio":"低","assignee":"王倩","requester":"邓丽","dept":"质量管理部","asset":"LT-2021-0922","updated":"11-06 13:15","desc":"电脑开机蓝屏，错误码 0x0000007B。影响范围：质量管理部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0023","no":"TC-2026-0443","title":"加密软件频繁弹窗，影响文档保存","cat":"软件","status":"处理中","prio":"中","assignee":"陈默","requester":"董强","dept":"研发中心","asset":"LT-2023-0512","updated":"11-06 12:46","desc":"加密软件频繁弹窗，影响文档保存。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0013","no":"TC-2026-0433","title":"离职员工账号回收与设备归还登记","cat":"账号","status":"待处理","prio":"紧急","assignee":"未分配","requester":"刘洋","dept":"人力资源部","asset":"—","updated":"11-06 12:36","desc":"离职员工账号回收与设备归还登记。影响范围：人力资源部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0020","no":"TC-2026-0440","title":"会议室预约系统时间冲突，无法改期","cat":"应用","status":"处理中","prio":"中","assignee":"王倩","requester":"韩雪","dept":"行政部","asset":"—","updated":"11-06 11:07","desc":"会议室预约系统时间冲突，无法改期。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0017","no":"TC-2026-0437","title":"系统更新后鼠标与键盘失灵","cat":"硬件","status":"待处理","prio":"高","assignee":"未分配","requester":"曹阳","dept":"研发中心","asset":"LT-2023-0771","updated":"11-06 10:28","desc":"系统更新后鼠标与键盘失灵。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0024","no":"TC-2026-0444","title":"外接摄像头无法识别，会议软件黑屏","cat":"外设","status":"待处理","prio":"低","assignee":"未分配","requester":"袁媛","dept":"市场部","asset":"CAM-LOGI-C920","updated":"11-06 09:59","desc":"外接摄像头无法识别，会议软件黑屏。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0014","no":"TC-2026-0434","title":"电话分机无声，摘机无拨号音","cat":"电话","status":"已关闭","prio":"高","assignee":"王倩","requester":"徐婷","dept":"行政部","asset":"IP-PHONE-221","updated":"11-06 09:49","desc":"电话分机无声，摘机无拨号音。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0021","no":"TC-2026-0441","title":"VPN 账号到期，需续期 90 天","cat":"网络","status":"已关闭","prio":"低","assignee":"陈默","requester":"唐宇","dept":"海外业务部","asset":"—","updated":"11-06 08:20","desc":"VPN 账号到期，需续期 90 天。影响范围：海外业务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0028","no":"TC-2026-0448","title":"显示器支架损坏，需更换","cat":"硬件","status":"待处理","prio":"中","assignee":"未分配","requester":"蔡颖","dept":"设计部","asset":"MON-LG-24","updated":"11-05 17:51","desc":"显示器支架损坏，需更换。影响范围：设计部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0035","no":"TC-2026-0455","title":"打印扫描件发送到邮箱失败","cat":"打印","status":"待确认","prio":"高","assignee":"王倩","requester":"吴倩","dept":"财务部","asset":"PRN-HP-406","updated":"11-05 16:22","desc":"打印扫描件发送到邮箱失败。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0025","no":"TC-2026-0445","title":"门禁卡失效，无法进入 12 层办公区","cat":"门禁","status":"待处理","prio":"中","assignee":"未分配","requester":"蒋涛","dept":"行政部","asset":"CARD-1187","updated":"11-05 16:12","desc":"门禁卡失效，无法进入 12 层办公区。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0032","no":"TC-2026-0452","title":"邮箱签名模板统一更新（全部门）","cat":"邮件","status":"处理中","prio":"高","assignee":"王倩","requester":"陈立","dept":"市场部","asset":"—","updated":"11-05 15:43","desc":"邮箱签名模板统一更新（全部门）。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0029","no":"TC-2026-0449","title":"申请开通生产数据库只读账号","cat":"权限","status":"处理中","prio":"中","assignee":"张伟","requester":"章明","dept":"研发中心","asset":"—","updated":"11-05 14:04","desc":"申请开通生产数据库只读账号。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0036","no":"TC-2026-0456","title":"VPN 连接后内网 DNS 解析失败","cat":"网络","status":"已关闭","prio":"中","assignee":"李静","requester":"周敏","dept":"财务部","asset":"—","updated":"11-05 13:35","desc":"VPN 连接后内网 DNS 解析失败。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0026","no":"TC-2026-0446","title":"邮箱容量已满，无法接收新邮件","cat":"邮件","status":"处理中","prio":"中","assignee":"李静","requester":"沈梦","dept":"客服中心","asset":"—","updated":"11-05 13:25","desc":"邮箱容量已满，无法接收新邮件。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0033","no":"TC-2026-0453","title":"OA 移动端无法登录，提示证书错误","cat":"应用","status":"已关闭","prio":"紧急","assignee":"陈默","requester":"谢婷","dept":"行政部","asset":"—","updated":"11-05 12:56","desc":"OA 移动端无法登录，提示证书错误。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0030","no":"TC-2026-0450","title":"会议室电视无法投屏，AirPlay 搜索不到","cat":"会议设备","status":"处理中","prio":"高","assignee":"李静","requester":"罗琳","dept":"销售部","asset":"TV-SAMSUNG-5A","updated":"11-05 11:17","desc":"会议室电视无法投屏，AirPlay 搜索不到。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0027","no":"TC-2026-0447","title":"共享盘映射断开，重启后仍无法访问","cat":"网络","status":"待处理","prio":"中","assignee":"未分配","requester":"卢伟","dept":"供应链部","asset":"—","updated":"11-05 10:38","desc":"共享盘映射断开，重启后仍无法访问。影响范围：供应链部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0034","no":"TC-2026-0454","title":"新采购 20 台笔记本的资产入库登记","cat":"资产","status":"已关闭","prio":"低","assignee":"王倩","requester":"黄伟","dept":"行政部","asset":"—","updated":"11-05 09:09","desc":"新采购 20 台笔记本的资产入库登记。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0031","no":"TC-2026-0451","title":"笔记本风扇异响，温度过高自动关机","cat":"硬件","status":"已关闭","prio":"高","assignee":"张伟","requester":"高峰","dept":"研发中心","asset":"LT-2022-0613","updated":"11-05 08:30","desc":"笔记本风扇异响，温度过高自动关机。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0048","no":"TC-2026-0468","title":"申请会议室 3B 长期固定设备调试权限","cat":"会议设备","status":"待确认","prio":"中","assignee":"张伟","requester":"赵磊","dept":"销售部","asset":"PROJ-EPSON-3B","updated":"11-04 17:11","desc":"申请会议室 3B 长期固定设备调试权限。影响范围：销售部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0038","no":"TC-2026-0458","title":"显示器色彩偏黄，设计稿比对失真","cat":"硬件","status":"待处理","prio":"高","assignee":"未分配","requester":"蔡颖","dept":"设计部","asset":"MON-LG-24","updated":"11-04 17:01","desc":"显示器色彩偏黄，设计稿比对失真。影响范围：设计部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0045","no":"TC-2026-0465","title":"企业微信消息延迟超过 5 分钟","cat":"应用","status":"处理中","prio":"中","assignee":"张伟","requester":"沈梦","dept":"客服中心","asset":"—","updated":"11-04 16:32","desc":"企业微信消息延迟超过 5 分钟。影响范围：客服中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0042","no":"TC-2026-0462","title":"申请安装 Python 3.12 与虚拟环境","cat":"软件","status":"待确认","prio":"低","assignee":"陈默","requester":"章明","dept":"研发中心","asset":"LT-2024-0302","updated":"11-04 15:53","desc":"申请安装 Python 3.12 与虚拟环境。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0039","no":"TC-2026-0459","title":"域策略导致 U 盘无法写入","cat":"账号","status":"待处理","prio":"高","assignee":"未分配","requester":"董强","dept":"研发中心","asset":"LT-2023-0512","updated":"11-04 14:14","desc":"域策略导致 U 盘无法写入。影响范围：研发中心。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0046","no":"TC-2026-0466","title":"财务系统打印凭证格式错位","cat":"应用","status":"处理中","prio":"中","assignee":"李静","requester":"钱进","dept":"财务部","asset":"—","updated":"11-04 13:45","desc":"财务系统打印凭证格式错位。影响范围：财务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0043","no":"TC-2026-0463","title":"邮件误判为垃圾邮件，需加白名单","cat":"邮件","status":"待处理","prio":"高","assignee":"未分配","requester":"冯磊","dept":"项目管理办公室","asset":"—","updated":"11-04 12:06","desc":"邮件误判为垃圾邮件，需加白名单。影响范围：项目管理办公室。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0040","no":"TC-2026-0460","title":"会议录音笔文件无法上传到共享盘","cat":"应用","status":"待处理","prio":"中","assignee":"未分配","requester":"袁媛","dept":"市场部","asset":"—","updated":"11-04 11:27","desc":"会议录音笔文件无法上传到共享盘。影响范围：市场部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0047","no":"TC-2026-0467","title":"外接硬盘无法挂载，磁盘工具报错","cat":"外设","status":"已关闭","prio":"低","assignee":"张伟","requester":"卢伟","dept":"供应链部","asset":"DISK-WD-2T","updated":"11-04 10:58","desc":"外接硬盘无法挂载，磁盘工具报错。影响范围：供应链部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0037","no":"TC-2026-0457","title":"访客网络账号申请（下周客户来访）","cat":"网络","status":"待确认","prio":"紧急","assignee":"李静","requester":"韩雪","dept":"行政部","asset":"—","updated":"11-04 10:48","desc":"访客网络账号申请（下周客户来访）。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0044","no":"TC-2026-0464","title":"机房 UPS 告警，蜂鸣持续","cat":"基础设施","status":"待处理","prio":"中","assignee":"未分配","requester":"蒋涛","dept":"行政部","asset":"UPS-A2","updated":"11-04 09:19","desc":"机房 UPS 告警，蜂鸣持续。影响范围：行政部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"},{"id":"tc-0041","no":"TC-2026-0461","title":"笔记本键盘部分按键失灵","cat":"硬件","status":"待处理","prio":"低","assignee":"未分配","requester":"苏晴","dept":"法务部","asset":"LT-2023-1188","updated":"11-04 08:40","desc":"笔记本键盘部分按键失灵。影响范围：法务部。已尝试重启与重新登录，问题仍存在，需现场或远程协助处理。"}];
+const STATUSES = ["待处理","处理中","待确认","已关闭"];
+const state = {status:"全部", q:"", prio:"全部", page:1, perPage:12, selected:new Set()};
+let currentId = null;
+let lastTrigger = null;
+let undoSnapshot = null;
+let copyTimer = null;
+let hideTimer = null;
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId = (id) => TICKETS.find(t => t.id === id);
+/* 强制一次回流再切到入场态：不依赖 rAF（后台标签页会被节流），过渡仍然生效 */
+function reveal(el){
+  el.dataset.open = "0";
+  void el.offsetWidth;
+  el.dataset.open = "1";
+}
+
+function baseFiltered(){
+  const q = state.q.trim().toLowerCase();
+  return TICKETS.filter(t => {
+    if (state.prio !== "全部" && t.prio !== state.prio) return false;
+    if (!q) return true;
+    return (t.no + " " + t.title + " " + t.requester + " " + t.dept + " " + t.cat).toLowerCase().includes(q);
+  });
+}
+function filtered(){
+  const base = baseFiltered();
+  return state.status === "全部" ? base : base.filter(t => t.status === state.status);
+}
+function counts(){
+  const base = baseFiltered();
+  const c = {"全部": base.length, "待处理":0, "处理中":0, "待确认":0, "已关闭":0};
+  base.forEach(t => { c[t.status] = (c[t.status]||0) + 1; });
+  return c;
+}
+
+function statusTag(s){ return `<span class="tag" data-s="${esc(s)}">${esc(s)}</span>`; }
+function prioTag(p){ return `<span class="prio" data-p="${esc(p)}"><i></i>${esc(p)}</span>`; }
+
+function render(){
+  const rows = filtered();
+  const c = counts();
+  $$("[data-count]").forEach(el => { el.textContent = c[el.dataset.count] ?? 0; });
+  const backlog = TICKETS.filter(t => t.status === "待处理").length;
+  $("#navBacklog").textContent = backlog + " 条";
+
+  const pages = Math.max(1, Math.ceil(rows.length / state.perPage));
+  if (state.page > pages) state.page = pages;
+  const start = (state.page - 1) * state.perPage;
+  const pageRows = rows.slice(start, start + state.perPage);
+
+  $("#tbody").innerHTML = pageRows.map(t => `
+    <tr data-id="${t.id}" data-selected="${state.selected.has(t.id) ? 1 : 0}">
+      <td class="c-check"><label class="cbwrap"><input class="cb rowchk" type="checkbox" data-id="${t.id}"
+        aria-label="选择 ${esc(t.no)}" ${state.selected.has(t.id) ? "checked" : ""}></label></td>
+      <td>
+        <span class="cell-ticket">
+          <button class="no-btn" type="button" data-open="${t.id}">${esc(t.no)}</button>
+          <span class="t-title" title="${esc(t.title)}">${esc(t.title)}</span>
+          <span class="t-meta">${esc(t.cat)}</span>
+        </span>
+      </td>
+      <td>${statusTag(t.status)}</td>
+      <td>${prioTag(t.prio)}</td>
+      <td class="c-owner"><span class="owner" data-unassigned="${t.assignee === "未分配" ? 1 : 0}">${esc(t.assignee)}</span></td>
+      <td class="c-time"><span class="time">${esc(t.updated)}</span></td>
+    </tr>`).join("");
+
+  $("#empty").hidden = rows.length !== 0;
+  $("#tablewrap").hidden = rows.length === 0;
+
+  const from = rows.length ? start + 1 : 0;
+  const to = Math.min(start + state.perPage, rows.length);
+  $("#resultLine").innerHTML = rows.length
+    ? `显示 <b>${from}–${to}</b> 条，共 <b>${rows.length}</b> 条` +
+      (rows.length !== TICKETS.length ? `（全队列 ${TICKETS.length} 条）` : "")
+    : `共 <b>0</b> 条结果`;
+
+  $("#resetBtn").hidden = !(state.q || state.prio !== "全部" || state.status !== "全部");
+
+  renderPager(pages);
+  renderBulk();
+  const all = $("#selAll");
+  const ids = pageRows.map(t => t.id);
+  const selOnPage = ids.filter(id => state.selected.has(id)).length;
+  all.checked = ids.length > 0 && selOnPage === ids.length;
+  all.indeterminate = selOnPage > 0 && selOnPage < ids.length;
+  all.disabled = ids.length === 0;
+}
+
+function renderPager(pages){
+  const box = $("#pages");
+  $("#pager").hidden = pages <= 1;
+  if (pages <= 1) { box.innerHTML = ""; return; }
+  const items = [];
+  const cur = state.page;
+  const nums = new Set([1, pages, cur, cur - 1, cur + 1]);
+  const list = Array.from(nums).filter(n => n >= 1 && n <= pages).sort((a,b) => a-b);
+  if (cur > 1) items.push(`<button class="step" type="button" data-page="${cur-1}" aria-label="上一页">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>上一页</button>`);
+  let prev = 0;
+  list.forEach(n => {
+    if (prev && n - prev > 1) items.push(`<span class="gap">…</span>`);
+    items.push(`<button type="button" data-page="${n}" ${n === cur ? 'aria-current="page"' : ""} aria-label="第 ${n} 页">${n}</button>`);
+    prev = n;
+  });
+  if (cur < pages) items.push(`<button class="step" type="button" data-page="${cur+1}" aria-label="下一页">下一页
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>`);
+  box.innerHTML = items.join("");
+}
+
+function renderBulk(){
+  $("#selCount").innerHTML = `已选 <b>${state.selected.size}</b> 条`;
+  const none = state.selected.size === 0;
+  $("#assignBtn").disabled = none;
+  $("#closeBtn").disabled = none;
+  $("#clearSelBtn").disabled = none;
+}
+
+function setStatus(s){
+  state.status = s;
+  state.page = 1;
+  state.selected.clear();
+  $$(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === s)));
+  render();
+}
+
+/* 状态筛选 */
+$$(".seg button").forEach(b => b.addEventListener("click", () => setStatus(b.dataset.status)));
+
+/* 关键字：立即生效（TDesign 中后台任务 B） */
+let qTimer = null;
+$("#q").addEventListener("input", e => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => {
+    state.q = e.target.value;
+    state.page = 1;
+    state.selected.clear();
+    render();
+  }, 120);
+});
+
+$("#prio").addEventListener("change", e => {
+  state.prio = e.target.value;
+  state.page = 1;
+  state.selected.clear();
+  render();
+});
+
+function resetFilters(){
+  state.q = ""; state.prio = "全部"; state.status = "全部"; state.page = 1;
+  state.selected.clear();
+  $("#q").value = ""; $("#prio").value = "全部";
+  $$(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === "全部")));
+  render();
+}
+$("#resetBtn").addEventListener("click", resetFilters);
+$("#emptyReset").addEventListener("click", resetFilters);
+
+$("#perpage").addEventListener("change", e => {
+  state.perPage = Number(e.target.value);
+  state.page = 1;
+  render();
+});
+
+/* 分页 */
+$("#pages").addEventListener("click", e => {
+  const b = e.target.closest("button[data-page]");
+  if (!b) return;
+  state.page = Number(b.dataset.page);
+  render();
+  $("#tablewrap").scrollIntoView({block:"nearest"});
+});
+
+/* 选择 */
+$("#tbody").addEventListener("change", e => {
+  const cb = e.target.closest("input.rowchk");
+  if (!cb) return;
+  if (cb.checked) state.selected.add(cb.dataset.id);
+  else state.selected.delete(cb.dataset.id);
+  render();
+});
+$("#selAll").addEventListener("change", e => {
+  const rows = filtered().slice((state.page - 1) * state.perPage, (state.page - 1) * state.perPage + state.perPage);
+  rows.forEach(t => { e.target.checked ? state.selected.add(t.id) : state.selected.delete(t.id); });
+  render();
+});
+$("#clearSelBtn").addEventListener("click", () => { state.selected.clear(); render(); });
+
+/* 批量指派 */
+function showBulkError(on){
+  $("#bulkbar").dataset.invalid = on ? "1" : "0";
+  $("#bulkErr").dataset.on = on ? "1" : "0";
+  $("#assignee").setAttribute("aria-invalid", on ? "true" : "false");
+}
+$("#assignee").addEventListener("change", () => { if ($("#assignee").value) showBulkError(false); });
+
+$("#assignBtn").addEventListener("click", () => {
+  const who = $("#assignee").value;
+  if (!who) { showBulkError(true); $("#assignee").focus(); return; }
+  showBulkError(false);
+  undoSnapshot = TICKETS.map(t => ({...t}));
+  const n = state.selected.size;
+  TICKETS.forEach(t => { if (state.selected.has(t.id)) { t.assignee = who; t.updated = stamp(); } });
+  state.selected.clear();
+  render();
+  toast(`已把 ${n} 条工单指派给${who}`, true);
+});
+
+$("#closeBtn").addEventListener("click", () => {
+  undoSnapshot = TICKETS.map(t => ({...t}));
+  const n = state.selected.size;
+  TICKETS.forEach(t => { if (state.selected.has(t.id)) { t.status = "已关闭"; t.updated = stamp(); } });
+  state.selected.clear();
+  render();
+  toast(`已关闭 ${n} 条工单`, true);
+});
+
+function stamp(){
+  const d = new Date();
+  const p = n => String(n).padStart(2,"0");
+  return `11-07 ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/* 提示条 */
+let toastTimer = null;
+function toast(msg, undoable){
+  const el = $("#toast");
+  $("#toastMsg").textContent = msg;
+  $("#toastUndo").hidden = !undoable;
+  clearTimeout(toastTimer);
+  clearTimeout(hideTimer);
+  el.hidden = false;
+  reveal(el);
+  toastTimer = setTimeout(hideToast, 6000);
+}
+function hideToast(){
+  const el = $("#toast");
+  el.dataset.open = "0";
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => { if (el.dataset.open === "0") el.hidden = true; }, 320);
+}
+$("#toastUndo").addEventListener("click", () => {
+  if (undoSnapshot){
+    undoSnapshot.forEach(s => Object.assign(byId(s.id), s));
+    undoSnapshot = null;
+    render();
+    hideToast();
+    toast("已撤销上一步", false);
+  }
+});
+
+/* 抽屉 */
+function openDrawer(id, trigger){
+  const t = byId(id);
+  if (!t) return;
+  currentId = id;
+  lastTrigger = trigger || document.activeElement;
+  $("#drawerTitle").textContent = t.title;
+  $("#dNo").textContent = t.no;
+  const st = $("#dStatus"); st.textContent = t.status; st.dataset.s = t.status;
+  const pr = $("#dPrio"); pr.dataset.p = t.prio; pr.innerHTML = `<i></i>${esc(t.prio)}`;
+  $("#dOwner").textContent = t.assignee;
+  $("#dRequester").textContent = t.requester;
+  $("#dDept").textContent = t.dept;
+  $("#dAsset").textContent = t.asset;
+  $("#dUpdated").textContent = t.updated;
+  $("#dDesc").textContent = t.desc;
+  $("#dFlow").value = t.status;
+  $("#copyLabel").textContent = "复制工单号";
+  $("#copyBtn").dataset.copied = "0";
+  $("#note").value = "";
+  $("#note").setAttribute("aria-invalid", "false");
+  $("#noteErr").dataset.on = "0";
+  $("#timeline").innerHTML = timelineFor(t).map(e => `<li><p class="t">${esc(e.t)}</p><p class="d">${esc(e.d)}</p></li>`).join("");
+  $("#drawer").hidden = false;
+  $("#overlay").dataset.open = "1";
+  $("#overlay").hidden = false;
+  reveal($("#drawer"));
+  $("#drawerTitle").focus();
+  document.body.style.overflow = "hidden";
+}
+function timelineFor(t){
+  const ev = [{t:`${t.updated} · 最近更新`, d:`当前处理人 ${t.assignee}，状态 ${t.status}`}];
+  if (t.status !== "待处理") ev.push({t:"11-06 09:40 · 受理", d:`${t.assignee} 受理，开始远程排查`});
+  ev.push({t:"11-06 09:12 · 创建", d:`${t.requester}（${t.dept}）提交报修，分类 ${t.cat}`});
+  return ev;
+}
+function closeDrawer(){
+  $("#drawer").dataset.open = "0";
+  $("#overlay").dataset.open = "0";
+  document.body.style.overflow = "";
+  setTimeout(() => {
+    if ($("#drawer").dataset.open === "0"){ $("#drawer").hidden = true; $("#overlay").hidden = true; }
+  }, 300);
+  if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+  currentId = null;
+}
+$("#tbody").addEventListener("click", e => {
+  const b = e.target.closest("[data-open]");
+  if (b) { openDrawer(b.dataset.open, b); return; }
+  const tr = e.target.closest("tr[data-id]");
+  if (tr && !e.target.closest("input")) openDrawer(tr.dataset.id, tr.querySelector("[data-open]"));
+});
+$("#drawerClose").addEventListener("click", closeDrawer);
+$("#overlay").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#drawer").dataset.open === "1") { e.preventDefault(); closeDrawer(); }
+  if (e.key === "Tab" && $("#drawer").dataset.open === "1"){
+    const f = $$('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])', $("#drawer"))
+      .filter(el => el.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
+
+/* 复制：file:// 下 navigator.clipboard 会挂起等权限，改用 textarea + execCommand 的同步路径 */
+function legacyCopy(text){
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly","");
+    ta.style.position = "fixed"; ta.style.top = "-1000px"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch (e) { return false; }
+}
+function markCopied(ok){
+  $("#copyLabel").textContent = ok ? "已复制" : "复制失败，请手动选择";
+  $("#copyBtn").dataset.copied = ok ? "1" : "0";
+  clearTimeout(copyTimer);
+  copyTimer = setTimeout(() => { $("#copyLabel").textContent = "复制工单号"; $("#copyBtn").dataset.copied = "0"; }, 2000);
+}
+$("#copyBtn").addEventListener("click", async () => {
+  const t = byId(currentId); if (!t) return;
+  if (legacyCopy(t.no)) { markCopied(true); return; }
+  if (navigator.clipboard && window.isSecureContext){
+    try {
+      const ok = await Promise.race([
+        navigator.clipboard.writeText(t.no).then(() => true),
+        new Promise(res => setTimeout(() => res(false), 1000))
+      ]);
+      markCopied(ok);
+      return;
+    } catch (e) { /* 落到失败态 */ }
+  }
+  markCopied(false);
+});
+
+$("#noteForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const t = byId(currentId); if (!t) return;
+  const v = $("#note").value.trim();
+  if (!v){
+    $("#note").setAttribute("aria-invalid","true");
+    $("#noteErr").dataset.on = "1";
+    $("#note").focus();
+    return;
+  }
+  $("#note").setAttribute("aria-invalid","false");
+  $("#noteErr").dataset.on = "0";
+  $("#timeline").insertAdjacentHTML("afterbegin",
+    `<li><p class="t">${esc(stamp())} · 备注</p><p class="d">${esc(v)}</p></li>`);
+  $("#note").value = "";
+  toast("处理备注已记录", false);
+});
+
+$("#flowApply").addEventListener("click", () => {
+  const t = byId(currentId); if (!t) return;
+  const next = $("#dFlow").value;
+  if (next === t.status) { toast("状态未变化", false); return; }
+  undoSnapshot = TICKETS.map(x => ({...x}));
+  t.status = next; t.updated = stamp();
+  $("#dStatus").textContent = next; $("#dStatus").dataset.s = next;
+  $("#dUpdated").textContent = t.updated;
+  render();
+  toast(`工单 ${t.no} 已转为${next}`, true);
+});
+
+$("#takeBtn").addEventListener("click", () => {
+  const t = byId(currentId); if (!t) return;
+  undoSnapshot = TICKETS.map(x => ({...x}));
+  t.assignee = "陈默"; t.updated = stamp();
+  $("#dOwner").textContent = "陈默"; $("#dUpdated").textContent = t.updated;
+  render();
+  toast(`工单 ${t.no} 已指派给陈默`, true);
+});
+
+$("#closeTicketBtn").addEventListener("click", () => {
+  const t = byId(currentId); if (!t) return;
+  undoSnapshot = TICKETS.map(x => ({...x}));
+  t.status = "已关闭"; t.updated = stamp();
+  $("#dStatus").textContent = "已关闭"; $("#dStatus").dataset.s = "已关闭";
+  $("#dFlow").value = "已关闭"; $("#dUpdated").textContent = t.updated;
+  render();
+  toast(`工单 ${t.no} 已关闭`, true);
+});
+
+$("#refreshBtn").addEventListener("click", () => {
+  const rows = filtered();
+  toast(`队列已刷新，当前 ${rows.length} 条`, false);
+});
+
+render();
+</script>
+</body>
+</html>

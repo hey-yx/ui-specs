@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../../../layouts/Base.astro'
+import FootLine from '../../../components/FootLine.astro'
+import ItemRow from '../../../components/ItemRow.astro'
+import { buildModel, SECTIONS } from '../../../lib/model'
+
+export function getStaticPaths() {
+  return SECTIONS.map((s) => ({ params: { section: s.key } }))
+}
+
+const { section: sectionKey } = Astro.params
+const specs = await getCollection('specs')
+const model = buildModel(specs)
+const section = model.bySection.get(sectionKey!)
+if (!section) throw new Error(`未知分区：${sectionKey}`)
+
+const description = `${section.title}：${section.purpose}`
+const path = `/s/${section.key}/`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${section.title} · UISpecs`,
+  description,
+  inLanguage: 'zh-CN',
+  url: new URL(path, Astro.site ?? 'http://localhost:4321').href,
+  numberOfItems: section.items.length,
+}
+---
+
+<Base title={`${section.title} · UISpecs`} description={description} path={path} jsonLd={jsonLd}>
+  <div class="page">
+    <div id="main">
+      <div class="doc-head">
+        <h1 class="doc-title">{section.title}</h1>
+        <p class="sec-note">{section.note}</p>
+        <div class="doc-meta">
+          <span>{section.items.length} 篇</span>
+          <span>{section.purpose}</span>
+        </div>
+      </div>
+
+      <section class="sec" aria-label={section.title}>
+        <div>
+          {
+            section.items.map((spec, i) => (
+              <ItemRow
+                spec={spec}
+                sectionTitle={section.title}
+                step={section.step ? i + 1 : undefined}
+              />
+            ))
+          }
+        </div>
+      </section>
+
+      <FootLine>
+        <span>UI 设计规范指南</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span><b>{model.total}</b> 篇全文</span>
+      </FootLine>
+    </div>
+  </div>
+</Base>

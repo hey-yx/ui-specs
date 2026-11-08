@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EpDeck · 今晚看什么</title>
+<meta name="description" content="EpDeck：今晚主推、正在热播、本周热榜与片库筛选，看到一半的剧可以接着上次继续看。">
+<style>
+/* Hallmark · macrostructure: Catalogue Index + Feature Band · tone: atmospheric（夜间） · anchor hue: blue 232°
+ * 结构：整幅主推带 → 继续观看横列 → 热播网格 → 热榜序号表 → 片库筛选索引 → 页脚
+ * 数值来源：TDesign（基准规范，content/color|type|layout|motion|icons/tdesign.tencent.com--*.md）
+ */
+:root{
+  /* 色板：TDesign 中性色 + 深色模式色阶 */
+  --bg:#181818;            /* Gray14 L8 */
+  --surface:#242424;       /* Gray13 L14 */
+  --surface-2:#2c2c2c;     /* Gray12 L18 */
+  --line:#393939;          /* Gray11 L24 装饰发丝线 */
+  --line-ctl:#777777;      /* Gray8 L50 控件边界（非文本 3.99:1） */
+  --t1:rgba(255,255,255,.90);
+  --t2:rgba(255,255,255,.60);
+  --t3:rgba(255,255,255,.40);
+  --t-dis:rgba(255,255,255,.26);
+  --rate:#d29e08;          /* Yellow6（深色色板） */
+  --brand:#2174ff;         /* Blue6 深色品牌色 */
+  --brand-ink:#0957d9;     /* Blue5 实填按钮底 */
+  --brand-ink-h:#084dcd;   /* Blue4 hover（降亮度） */
+  --brand-ink-a:#073ab5;   /* Blue3 active */
+  --brand-text:#478dff;    /* Blue7 链接文字 5.55:1 */
+  --brand-tint:rgba(33,116,255,.14);
+  --focus:#478dff;
+  --scrim:rgba(0,0,0,.45);
+
+  /* 间距：TDesign 8 倍数 + 4/12 两档 */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s6:24px; --s8:32px; --s12:48px;
+  /* 圆角：库无通用规范，整站派生两档 */
+  --r4:4px; --r8:8px;
+  /* 动效：TDesign 桌面端 token + 定值缓动 */
+  --d-base:200ms; --d-mid:240ms; --d-slow:280ms;
+  --ease-std:cubic-bezier(.38,0,.24,1);   /* 画面内运动 */
+  --ease-enter:cubic-bezier(0,0,.15,1);   /* 入画 */
+  --ease-exit:cubic-bezier(.82,0,1,.9);   /* 出画 */
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--t1);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+  font-size:14px;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+/* 行高公式：每个元素按自身字号算 line-height = 字号 + 8 */
+:where(body, body *){line-height:calc(1em + 8px)}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+img,svg{display:block}
+button{font-family:inherit;font-size:inherit;font-weight:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+::selection{background:rgba(71,141,255,.32)}
+:target{scroll-margin-top:80px}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--s6)}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* 跳转链接 */
+.skip{position:absolute;left:var(--s4);top:-64px;z-index:80;background:var(--brand-ink);color:#fff;padding:11px 16px;border-radius:var(--r4)}
+.skip:focus{top:var(--s3)}
+
+/* ── 顶部导航 ───────────────────────────── */
+.hdr{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.hdr-in{display:flex;align-items:center;gap:var(--s6);height:64px}
+.brand{display:inline-flex;align-items:center;gap:var(--s2);min-height:44px;font-size:16px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.brand svg{color:var(--brand-text)}
+.nav{display:flex;align-items:center;gap:var(--s6);flex:1}
+.nav a{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--t2);transition:color var(--d-base) var(--ease-std)}
+.nav a:hover{color:var(--t1)}
+.nav a[aria-current="page"]{color:var(--t1)}
+.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:2px;background:var(--brand);border-radius:2px}
+.n{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--surface-2);color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums}
+.tools{display:flex;align-items:center;gap:var(--s1)}
+.icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:var(--r8);color:var(--t2);transition:color var(--d-base) var(--ease-std),background-color var(--d-base) var(--ease-std)}
+.icon-btn:hover{color:var(--t1);background:var(--surface)}
+.icon-btn.has-news::after{content:"";position:absolute;top:11px;right:11px;width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 2px var(--bg)}
+.icon-btn[aria-expanded="true"]{color:var(--t1);background:var(--surface)}
+.menu-btn{display:none}
+
+/* ── 主推带 ─────────────────────────────── */
+.hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(90% 120% at 88% 8%,rgba(30,44,96,.95),transparent 62%),
+  radial-gradient(70% 90% at 6% 96%,rgba(69,25,129,.42),transparent 58%);
+  pointer-events:none}
+.hero-in{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--s4);align-items:center;padding:var(--s12) var(--s6)}
+.hero-copy{grid-column:1 / span 7;min-width:0}
+.hero-art{grid-column:8 / span 5;min-width:0;display:flex;justify-content:flex-end}
+.kicker{display:inline-flex;align-items:center;gap:var(--s2);color:var(--brand-text);font-size:12px;margin-bottom:var(--s4)}
+.kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.hero h1{font-size:48px;font-weight:600;letter-spacing:.01em;overflow-wrap:anywhere;margin-bottom:var(--s3)}
+.hero-meta{color:var(--t2);font-size:14px;margin-bottom:var(--s4)}
+.nb{white-space:nowrap}
+.hero-lead{max-width:34em;color:var(--t2);font-size:16px;margin-bottom:var(--s8)}
+.hero-act{display:flex;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s6)}
+.hero-fact{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s4);color:var(--t2);font-size:12px}
+.hero-fact b{display:inline-block;color:var(--rate);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums}
+.hero-fact .sep{width:1px;height:16px;background:var(--line-ctl)}
+.hero-poster{width:min(100%,280px)}
+
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;padding:0 var(--s6);border-radius:var(--r8);font-size:16px;font-weight:400;transition:background-color var(--d-base) var(--ease-std),border-color var(--d-base) var(--ease-std),color var(--d-base) var(--ease-std)}
+.btn-primary{background:var(--brand-ink);color:#fff}
+.btn-primary:hover{background:var(--brand-ink-h)}
+.btn-primary:active{background:var(--brand-ink-a)}
+.btn-ghost{border:1px solid var(--line-ctl);color:var(--t1)}
+.btn-ghost:hover{background:var(--surface)}
+.btn-ghost:active{background:var(--surface-2)}
+.btn-quiet{color:var(--brand-text);padding:0 var(--s3)}
+.btn-quiet:hover{background:var(--brand-tint)}
+.btn[aria-pressed="true"]{border-color:var(--brand);color:var(--t1);background:var(--brand-tint)}
+.btn[disabled],.ep[disabled]{cursor:not-allowed}
+.btn[disabled]{color:var(--t-dis);border-color:var(--line)}
+.btn-line{display:inline-flex;align-items:center;min-height:44px;color:var(--brand-text);font-size:14px}
+.btn-line:hover{text-decoration:underline}
+
+/* ── 区块通用 ───────────────────────────── */
+.sec{padding:var(--s12) 0}
+.sec + .sec{border-top:1px solid var(--line)}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s4);margin-bottom:var(--s6)}
+.sec-h h2{font-size:28px;font-weight:600;letter-spacing:.01em}
+.sec-sub{color:var(--t2);font-size:12px}
+
+/* 卡片与封面 */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4)}
+.card{position:relative;min-width:0}
+.card-t{font-size:16px;font-weight:600;margin-top:var(--s3);overflow-wrap:anywhere}
+.card-t a::after{content:"";position:absolute;inset:0;border-radius:var(--r8)}
+.card:focus-within .poster{box-shadow:0 0 0 2px var(--focus)}
+.card-m{color:var(--t2);font-size:12px;margin-top:var(--s1)}
+.poster{position:relative;display:flex;flex-direction:column;justify-content:space-between;aspect-ratio:2/3;padding:var(--s3);border-radius:var(--r8);
+  background:linear-gradient(158deg,var(--p1),var(--p2) 72%);
+  background-color:var(--p2);overflow:hidden;transition:box-shadow var(--d-base) var(--ease-std)}
+.poster::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 1px,transparent 1px 9px),
+  radial-gradient(120% 70% at 82% -4%,rgba(255,255,255,.14),transparent 62%)}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(24,24,24,.72) 100%)}
+.poster-g{position:absolute;right:-.04em;bottom:-.12em;z-index:0;font-size:64px;font-weight:600;color:rgba(255,255,255,.12);pointer-events:none}
+.poster-t{position:relative;z-index:1;font-size:16px;font-weight:600;color:var(--t1);overflow-wrap:anywhere;max-width:12em}
+.poster-r{position:relative;z-index:1;align-self:flex-end;background:rgba(24,24,24,.78);color:var(--rate);font-size:12px;font-variant-numeric:tabular-nums;padding:2px 6px;border-radius:var(--r4)}
+.poster-b{position:relative;z-index:1;color:var(--t2);font-size:12px}
+.card:hover .poster{box-shadow:0 0 0 1px var(--line-ctl)}
+
+/* 继续观看 */
+.rail{display:flex;gap:var(--s4);overflow-x:auto;padding-bottom:var(--s2);scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.cw{flex:0 0 min(260px,72vw);scroll-snap-align:start}
+.cw-art{position:relative;display:flex;flex-direction:column;justify-content:space-between;aspect-ratio:16/9;padding:var(--s3);border-radius:var(--r8);background:linear-gradient(140deg,var(--p1),var(--p2) 78%);overflow:hidden}
+.cw-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(24,24,24,.78))}
+.cw-ep{position:relative;z-index:1;align-self:flex-end;background:rgba(24,24,24,.8);padding:2px 6px;border-radius:var(--r4);font-size:12px;color:var(--t1)}
+.cw-t{position:relative;z-index:1;font-size:16px;font-weight:600}
+.cw-bar{display:block;height:3px;border-radius:2px;background:var(--surface-2);margin-top:var(--s2);overflow:hidden}
+.cw-bar > span{display:block;height:100%;background:var(--brand);border-radius:2px}
+.cw-m{color:var(--t2);font-size:12px;margin-top:var(--s2)}
+.cw a:focus-visible .cw-art{box-shadow:0 0 0 2px var(--focus)}
+.cw a{display:block;border-radius:var(--r8)}
+
+/* 热榜 */
+.rank{display:grid;gap:2px}
+.rk-row{display:flex;align-items:center;gap:var(--s4);padding:var(--s3) var(--s2);border-radius:var(--r4);transition:background-color var(--d-base) var(--ease-std)}
+.rk-row:hover{background:var(--surface)}
+.rk{flex:0 0 32px;color:var(--t2);font-size:16px;font-variant-numeric:tabular-nums}
+.rk-m{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.rk-t{font-size:16px;font-weight:600;overflow-wrap:anywhere}
+.rk-g{color:var(--t2);font-size:12px}
+.rk-n{color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+
+/* 片库筛选 */
+.lib-bar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);margin-bottom:var(--s4)}
+.field{display:flex;align-items:center;gap:var(--s2);min-height:44px;padding:0 var(--s3);background:var(--surface);border:1px solid var(--line-ctl);border-radius:var(--r4);flex:1 1 240px;min-width:0;transition:border-color var(--d-base) var(--ease-std)}
+.field:focus-within{border-color:var(--brand-text)}
+.field svg{color:var(--t2);flex:none}
+.field input{flex:1;min-width:0;background:none;border:0;height:42px;color:var(--t1);outline:none}
+.field input::placeholder{color:var(--t2);opacity:1}
+.sel{display:flex;align-items:center;gap:var(--s2);min-height:44px;color:var(--t2);font-size:12px}
+.sel select{min-height:36px;padding:0 var(--s2);background:var(--surface);color:var(--t1);border:1px solid var(--line-ctl);border-radius:var(--r4)}
+.chips,.seg{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s3)}
+.chip,.seg button{min-height:44px;padding:0 var(--s4);border:1px solid var(--line);border-radius:var(--r4);color:var(--t2);transition:background-color var(--d-mid) var(--ease-std),border-color var(--d-mid) var(--ease-std),color var(--d-mid) var(--ease-std)}
+.chip:hover,.seg button:hover{color:var(--t1);border-color:var(--line-ctl)}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"]{color:var(--t1);border-color:var(--brand);background:var(--brand-tint)}
+.lib-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3);margin:var(--s4) 0}
+.count{color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums}
+.empty{padding:var(--s12) var(--s4);border:1px dashed var(--line-ctl);border-radius:var(--r8);text-align:center}
+.empty h3{font-size:16px;font-weight:600;margin-bottom:var(--s2)}
+.empty p{color:var(--t2);font-size:14px;margin-bottom:var(--s6)}
+.empty-act{display:flex;justify-content:center;gap:var(--s3);flex-wrap:wrap}
+
+/* ── 详情 ───────────────────────────────── */
+.back{display:inline-flex;align-items:center;gap:var(--s2);min-height:44px;color:var(--t2);margin:var(--s6) 0 var(--s4)}
+.back:hover{color:var(--t1)}
+.dt{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--s8);align-items:start;padding-bottom:var(--s12)}
+.dt-left{grid-column:1 / span 7;min-width:0}
+.dt-right{grid-column:8 / span 5;min-width:0}
+.player{border-radius:var(--r8);overflow:hidden;background:var(--surface);border:1px solid var(--line)}
+.stage{position:relative;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,var(--p1),var(--p2) 76%)}
+.stage::after{content:"";position:absolute;inset:0;background:var(--scrim)}
+.stage-t{position:absolute;left:var(--s4);bottom:var(--s4);z-index:2;font-size:16px;font-weight:600}
+.stage-ep{position:absolute;right:var(--s4);top:var(--s4);z-index:2;font-size:12px;color:var(--t2)}
+.playbtn{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:var(--brand-ink);color:#fff;transition:background-color var(--d-base) var(--ease-std),transform var(--d-base) var(--ease-std)}
+.playbtn:hover{background:var(--brand-ink-h)}
+.playbtn:active{transform:scale(.96)}
+.bar{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);background:var(--surface)}
+.time{color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.track{flex:1;height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden;min-width:0}
+.track > span{display:block;height:100%;width:0;background:var(--brand);border-radius:2px}
+.note{color:var(--t2);font-size:12px;margin-top:var(--s2)}
+.dt h1{font-size:36px;font-weight:600;overflow-wrap:anywhere;margin-bottom:var(--s2)}
+.dt h1:focus-visible{outline:none} /* 进入详情时把阅读位置交给标题，但不画焦点框：标题不可操作 */
+.dt-meta{color:var(--t2);font-size:14px;margin-bottom:var(--s4)}
+.dt-lead{font-size:16px;color:var(--t1);max-width:34em;margin-bottom:var(--s6)}
+.dt-dl{display:grid;grid-template-columns:auto 1fr;gap:var(--s2) var(--s4);font-size:14px;margin-bottom:var(--s8)}
+.dt-dl dt{color:var(--t2)}
+.dt-dl dd{color:var(--t1);min-width:0;overflow-wrap:anywhere}
+.dt-act{display:flex;flex-wrap:wrap;gap:var(--s3)}
+.dt-sec{padding:var(--s12) 0;border-top:1px solid var(--line)}
+.dt-sec h2{font-size:28px;font-weight:600;margin-bottom:var(--s2)}
+.dt-sec .sec-sub{margin-bottom:var(--s6);display:block}
+.eps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2)}
+.ep{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--line);border-radius:var(--r4);color:var(--t2);font-variant-numeric:tabular-nums;transition:background-color var(--d-base) var(--ease-std),border-color var(--d-base) var(--ease-std),color var(--d-base) var(--ease-std)}
+.ep:hover:not([disabled]){color:var(--t1);border-color:var(--line-ctl)}
+.ep[aria-pressed="true"]{color:var(--t1);border-color:var(--brand);background:var(--brand-tint)}
+.ep[disabled]{color:var(--t3);border-color:var(--line);background:none}
+
+/* ── 页脚 ───────────────────────────────── */
+.ft{border-top:1px solid var(--line);padding:var(--s12) 0;background:var(--bg)}
+.ft-in{display:grid;grid-template-columns:1.4fr 1fr 1.6fr;gap:var(--s8)}
+.ft-brand p{color:var(--t2);font-size:14px;margin-top:var(--s2);max-width:24em}
+.ft-nav{display:flex;flex-direction:column;gap:var(--s1);align-content:start}
+.ft-nav a,.ft-legal button{display:inline-flex;align-items:center;min-height:44px;color:var(--t2);font-size:14px;text-align:left}
+.ft-nav a:hover,.ft-legal button:hover{color:var(--t1)}
+.ft-legal{display:flex;flex-wrap:wrap;gap:0 var(--s6)}
+.ft-legal p{flex:1 1 100%;color:var(--t2);font-size:12px;margin-top:var(--s2)}
+
+/* ── 遮罩与侧栏 ─────────────────────────── */
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);opacity:0;transition:opacity var(--d-slow) var(--ease-std)}
+.panel{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(380px,100%);display:flex;flex-direction:column;background:var(--surface);border-left:1px solid var(--line);transform:translateX(100%);transition:transform var(--d-slow) var(--ease-enter)}
+.panel:not(.in){transition:transform var(--d-base) var(--ease-exit)}
+.scrim.in{opacity:1}
+.panel.in{transform:translateX(0)}
+.panel-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding:var(--s4) var(--s4) var(--s4) var(--s6);border-bottom:1px solid var(--line)}
+.panel-h h2{font-size:16px;font-weight:600}
+.panel-b{padding:var(--s3) var(--s6);overflow-y:auto;color:var(--t1);font-size:14px}
+.panel-b p + p{margin-top:var(--s4)}
+.panel-f{padding:var(--s4) var(--s6);border-top:1px solid var(--line);display:flex;gap:var(--s3)}
+.news li{border-bottom:1px solid var(--line)}
+.news li:last-child{border-bottom:0}
+.news a{display:block;padding:var(--s4) 0;min-height:44px}
+.news .nt{display:block;font-size:14px}
+.news .nm{display:block;color:var(--t2);font-size:12px;margin-top:2px}
+.news li.read .nt{color:var(--t2)}
+.menu-link{display:flex;align-items:center;gap:var(--s2);min-height:44px;color:var(--t1);border-bottom:1px solid var(--line)}
+.menu-link:last-child{border-bottom:0}
+
+/* ── 断点：TDesign sm 768 / md 992 / lg 1200 ── */
+@media (min-width:768px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .eps{grid-template-columns:repeat(8,minmax(0,1fr))}
+  .hero-in{min-height:calc(85vh - 64px)}
+}
+@media (min-width:992px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (min-width:1200px){
+  .grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .lib-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .eps{grid-template-columns:repeat(12,minmax(0,1fr))}
+}
+@media (max-width:991px){
+  .dt{grid-template-columns:repeat(1,minmax(0,1fr));gap:var(--s6)}
+  .dt-left,.dt-right{grid-column:auto}
+}
+@media (max-width:767px){
+  .wrap{padding:0 var(--s4)}
+  .nav{display:none}
+  .menu-btn{display:inline-flex}
+  .hdr-in{gap:var(--s3)}
+  .brand{margin-right:auto}
+  .hero-in{grid-template-columns:repeat(1,minmax(0,1fr));gap:var(--s6);padding:var(--s8) var(--s4)}
+  .hero-copy,.hero-art{grid-column:auto}
+  .hero-art{justify-content:flex-start}
+  .hero-poster{width:min(100%,180px)}
+  .hero h1{font-size:28px}
+  .hero-lead{font-size:14px;margin-bottom:var(--s6)}
+  .hero-fact b{font-size:24px}
+  .sec{padding:var(--s8) 0}
+  .sec-h h2{font-size:24px}
+  .sec-h{flex-wrap:wrap;gap:var(--s1)}
+  .dt h1{font-size:28px}
+  .dt-sec h2{font-size:24px}
+  .ft-in{grid-template-columns:1fr;gap:var(--s4)}
+  .ft-nav{flex-direction:row;flex-wrap:wrap;gap:0 var(--s6)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:1ms !important;animation-duration:1ms !important;animation-iteration-count:1 !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="#/" data-goto="top" aria-label="EpDeck 首页">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" stroke-opacity=".45"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+      EpDeck
+    </a>
+    <nav class="nav" id="navMain" aria-label="主导航">
+      <a href="#/" data-goto="top" aria-current="page">首页</a>
+      <a href="#library" data-goto="library">剧库</a>
+      <a href="#rank" data-goto="rank">榜单</a>
+      <a href="#library" data-goto="library" id="navFollow">我的追剧 <span class="n followCount">3</span></a>
+    </nav>
+    <div class="tools">
+      <button class="icon-btn" id="searchJump" aria-label="前往片库搜索">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+      </button>
+      <button class="icon-btn has-news" id="newsBtn" aria-label="通知，3 条未读" aria-expanded="false" aria-controls="newsPanel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 15V10a6 6 0 10-12 0v5l-2 3h16z"/><path d="M9.5 21h5"/></svg>
+      </button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false" aria-controls="menuPanel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 首页 -->
+  <div id="homeView">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <p class="kicker"><span class="dot" aria-hidden="true"></span>今晚 20:00 更新第 25 集</p>
+          <h1 id="heroTitle">长夜将明</h1>
+          <p class="hero-meta">悬疑 · 2026 · 全 36 集 · 主演 陈默 / 林知远 / 苏禾</p>
+          <p class="hero-lead">临江发生连环失踪案，刑警顾行舟在第七个夜里发现，所有线索都指向自己<span class="nb">二十年前</span>住过的那条街。</p>
+          <div class="hero-act">
+            <a class="btn btn-primary" href="#/show/changye">继续观看 第 24 集</a>
+            <a class="btn btn-ghost" href="#/show/changye">查看详情</a>
+          </div>
+          <div class="hero-fact">
+            <span><b>9.1</b> 分</span>
+            <span class="sep" aria-hidden="true"></span>
+            <span>追剧 128.4 万人</span>
+            <span class="sep" aria-hidden="true"></span>
+            <span>本周新增追剧 4.2 万</span>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="hero-poster">
+            <div class="poster" style="--p1:#1E2C60;--p2:#062E9A">
+              <span class="poster-g" aria-hidden="true">长</span>
+              <span class="poster-r">9.1</span>
+              <span class="poster-t">长夜将明</span>
+              <span class="poster-b">更新至 24 集 · 每周三、周六</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="cwTitle">
+      <div class="wrap">
+        <div class="sec-h">
+          <h2 id="cwTitle">接着看</h2>
+          <p class="sec-sub">按上次观看时间排序</p>
+        </div>
+        <ul class="rail" id="cwRail"></ul>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="hotTitle">
+      <div class="wrap">
+        <div class="sec-h">
+          <h2 id="hotTitle">正在热播</h2>
+          <p class="sec-sub">按站内播放量排序，每周一更新</p>
+        </div>
+        <ul class="grid" id="hotGrid"></ul>
+      </div>
+    </section>
+
+    <section class="sec" id="rank" aria-labelledby="rankTitle">
+      <div class="wrap">
+        <div class="sec-h">
+          <h2 id="rankTitle">本周热榜</h2>
+          <p class="sec-sub">按本周播放与追剧人数加权</p>
+        </div>
+        <ol class="rank" id="rankList"></ol>
+      </div>
+    </section>
+
+    <section class="sec" id="library" aria-labelledby="libTitle">
+      <div class="wrap">
+        <div class="sec-h">
+          <h2 id="libTitle">片库</h2>
+          <p class="sec-sub">共 12 部，含 7 部更新中</p>
+        </div>
+
+        <div class="lib-bar">
+          <div class="field">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+            <label class="sr" for="q">搜索剧名或主演</label>
+            <input id="q" type="search" placeholder="搜索剧名或主演，例如「陈默」" autocomplete="off">
+          </div>
+          <div class="sel">
+            <label for="sort">排序</label>
+            <select id="sort">
+              <option value="heat">按热度</option>
+              <option value="rating">按评分</option>
+              <option value="update">按最近更新</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chips" role="group" aria-label="按类型筛选" id="genreChips"></div>
+        <div class="seg" role="group" aria-label="按更新状态筛选" id="statusSeg">
+          <button type="button" data-status="全部" aria-pressed="true">全部</button>
+          <button type="button" data-status="airing" aria-pressed="false">更新中</button>
+          <button type="button" data-status="done" aria-pressed="false">已完结</button>
+        </div>
+
+        <div class="lib-foot">
+          <p class="count" id="libCount" role="status" aria-live="polite">共 12 部</p>
+          <button class="btn-line" id="onlyFollow" aria-pressed="false">只看我的追剧</button>
+        </div>
+
+        <ul class="grid lib-grid" id="libGrid"></ul>
+
+        <div class="empty" id="empty" hidden>
+          <h3>没有符合条件的剧集</h3>
+          <p>换个类型、清空搜索词，或者把更新状态改成「全部」。</p>
+          <div class="empty-act">
+            <button class="btn btn-ghost" id="clearBtn">清空筛选</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 详情 -->
+  <div id="detailView" hidden>
+    <div class="wrap">
+      <a class="back" href="#/">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
+        返回首页
+      </a>
+      <div class="dt">
+        <div class="dt-left">
+          <div class="player">
+            <div class="stage" id="stage">
+              <span class="stage-ep" id="stageEp">第 24 集</span>
+              <button class="playbtn" id="playBtn" aria-label="播放">
+                <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l12 7-12 7z"/></svg>
+              </button>
+              <span class="stage-t" id="stageT">长夜将明</span>
+            </div>
+            <div class="bar">
+              <span class="time" id="time">12:40 / 45:00</span>
+              <div class="track" aria-hidden="true"><span id="fill"></span></div>
+              <button class="btn-line" id="restart">从头看</button>
+            </div>
+          </div>
+          <p class="note">播放器为界面模拟，不加载视频文件；进度按 1 秒一跳推进。</p>
+        </div>
+        <div class="dt-right">
+          <h1 id="dtTitle" tabindex="-1">长夜将明</h1>
+          <p class="dt-meta" id="dtMeta"></p>
+          <p class="dt-lead" id="dtLead"></p>
+          <dl class="dt-dl">
+            <dt>主演</dt><dd id="dtCast"></dd>
+            <dt>类型</dt><dd id="dtGenre"></dd>
+            <dt>追剧</dt><dd id="dtFans"></dd>
+            <dt>更新</dt><dd id="dtUpd"></dd>
+          </dl>
+          <div class="dt-act">
+            <button class="btn btn-primary" id="dtResume">继续观看</button>
+            <button class="btn btn-ghost" id="dtFollow" aria-pressed="false">追剧</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="dt-sec" aria-labelledby="epsTitle">
+        <h2 id="epsTitle">选集</h2>
+        <span class="sec-sub" id="epsSub"></span>
+        <div class="eps" id="eps" role="group" aria-label="选集"></div>
+      </section>
+
+      <section class="dt-sec" aria-labelledby="likeTitle">
+        <h2 id="likeTitle">猜你喜欢</h2>
+        <span class="sec-sub">同类型、追剧人数接近的剧</span>
+        <ul class="grid" id="likeGrid"></ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div class="ft-brand">
+      <span class="brand">EpDeck</span>
+      <p>夜间找剧、追更、接着上次继续看。演示站点：剧集、评分与播放数据均为虚构。</p>
+    </div>
+    <nav class="ft-nav" aria-label="页脚导航">
+      <a href="#/" data-goto="top">首页</a>
+      <a href="#library" data-goto="library">片库</a>
+      <a href="#rank" data-goto="rank">本周热榜</a>
+    </nav>
+    <div class="ft-legal">
+      <button type="button" data-info="privacy">隐私说明</button>
+      <button type="button" data-info="a11y">无障碍</button>
+      <button type="button" data-info="contact">联系我们</button>
+      <p>© 2026 EpDeck · 设计规范演示，无登录、无支付、无真实视频。</p>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="panel" id="newsPanel" role="dialog" aria-modal="true" aria-labelledby="newsTitle" hidden>
+  <div class="panel-h">
+    <h2 id="newsTitle">通知</h2>
+    <button class="icon-btn" data-close aria-label="关闭通知">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-b">
+    <ul class="news" id="newsList">
+      <li><a href="#/show/changye">
+        <span class="nt">《长夜将明》第 24 集已更新</span>
+        <span class="nm">2 小时前 · 你看到 12:40，还剩 32 分钟</span>
+      </a></li>
+      <li><a href="#/show/chaoxi">
+        <span class="nt">《潮汐之间》完结，特别篇已上线</span>
+        <span class="nm">昨天 21:10</span>
+      </a></li>
+      <li><a href="#/show/beifang">
+        <span class="nt">《北方来信》开播提醒：今晚 20:00 首更 2 集</span>
+        <span class="nm">昨天 18:00</span>
+      </a></li>
+    </ul>
+  </div>
+  <div class="panel-f">
+    <button class="btn btn-ghost" id="readAll" style="flex:1">全部标为已读</button>
+  </div>
+</aside>
+
+<aside class="panel" id="menuPanel" role="dialog" aria-modal="true" aria-labelledby="menuTitle" hidden>
+  <div class="panel-h">
+    <h2 id="menuTitle">菜单</h2>
+    <button class="icon-btn" data-close aria-label="关闭菜单">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-b">
+    <a class="menu-link" href="#/" data-goto="top">首页</a>
+    <a class="menu-link" href="#library" data-goto="library">剧库</a>
+    <a class="menu-link" href="#rank" data-goto="rank">本周热榜</a>
+    <a class="menu-link" href="#library" data-goto="library" id="menuFollow">我的追剧 <span class="n followCount">3</span></a>
+  </div>
+</aside>
+
+<aside class="panel" id="infoPanel" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+  <div class="panel-h">
+    <h2 id="infoTitle">说明</h2>
+    <button class="icon-btn" data-close aria-label="关闭">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-b" id="infoBody"></div>
+</aside>
+
+<script>
+const SHOWS = [
+  {id:'changye', title:'长夜将明', genre:'悬疑', status:'airing', eps:36, up:24, rating:9.1, cast:['陈默','林知远','苏禾'], year:2026, heat:4820, fans:128.4, upd:'11-06', hue:['#1E2C60','#062E9A'],
+   syn:'临江发生连环失踪案，刑警顾行舟在第七个夜里发现，所有线索都指向自己二十年前住过的那条街。'},
+  {id:'shanhai', title:'山海拾遗', genre:'古装', status:'airing', eps:40, up:18, rating:8.7, cast:['白鹿川','沈砚','顾青'], year:2026, heat:3960, fans:102.6, upd:'11-05', hue:['#451981','#5A2D96'],
+   syn:'修书人沈砚替人抄录残卷，抄到第三卷时，书里的山海异兽开始在城中出现。'},
+  {id:'chaoxi', title:'潮汐之间', genre:'都市', status:'done', eps:32, up:32, rating:8.4, cast:['周晏','许南'], year:2025, heat:3410, fans:88.1, upd:'10-28', hue:['#05437D','#06579E'],
+   syn:'一对分居两地十年的夫妻，因为一套要拆迁的老房子重新住回同一屋檐下。'},
+  {id:'richu', title:'第六次日出', genre:'科幻', status:'airing', eps:24, up:12, rating:9.0, cast:['江野','陈默'], year:2026, heat:3120, fans:94.7, upd:'11-07', hue:['#730524','#960627'],
+   syn:'空间站每天重启一次，唯一记得前五次循环的，是负责舱外维修的工程师江野。'},
+  {id:'mianguan', title:'巷口面馆', genre:'生活', status:'done', eps:24, up:24, rating:8.9, cast:['赵德海','李葵'], year:2025, heat:2980, fans:71.3, upd:'10-20', hue:['#692204','#873105'],
+   syn:'一家开了三十年的面馆，老板记得每个老客的口味，也记得他们没说出口的事。'},
+  {id:'xuexian', title:'雪线以上', genre:'悬疑', status:'airing', eps:16, up:8, rating:8.2, cast:['秦戈','苏禾'], year:2026, heat:2340, fans:63.8, upd:'11-07', hue:['#05437D','#086CC0'],
+   syn:'高山救援队在雪崩后搜救，却发现遇险者名单里有一个三年前已经遇难的人。'},
+  {id:'xiatian', title:'我们的夏天', genre:'青春', status:'done', eps:28, up:28, rating:8.0, cast:['夏栀','林一'], year:2025, heat:2210, fans:58.2, upd:'09-30', hue:['#5E3B04','#754E05'],
+   syn:'高三最后一学期，五个同学约定，把没做完的事在毕业前做完。'},
+  {id:'jingzhong', title:'镜中人', genre:'悬疑', status:'done', eps:30, up:30, rating:8.6, cast:['何岸','温宁'], year:2025, heat:4320, fans:112.5, upd:'10-12', hue:['#5A2D96','#7141AC'],
+   syn:'整形医生在镜子里看见了不属于自己的表情，随后病人开始一个接一个失踪。'},
+  {id:'beifang', title:'北方来信', genre:'年代', status:'airing', eps:30, up:6, rating:8.8, cast:['隋原','顾青'], year:2026, heat:1870, fans:47.9, upd:'11-02', hue:['#034116','#035428'],
+   syn:'1978 年，知青隋原每月收到一封没有署名的信，信里写着他从未告诉别人的事。'},
+  {id:'linghao', title:'零号实验室', genre:'科幻', status:'airing', eps:36, up:20, rating:8.5, cast:['陈默','纪岚'], year:2026, heat:2750, fans:79.4, upd:'11-04', hue:['#073AB5','#1E2C60'],
+   syn:'一场失败的意识上传实验，让研究员的记忆被复制进了三台机器。'},
+  {id:'chunfeng', title:'春风不识字', genre:'古装', status:'done', eps:40, up:40, rating:8.3, cast:['沈砚','白鹿川'], year:2025, heat:2610, fans:66.5, upd:'09-18', hue:['#7B0554','#9B066D'],
+   syn:'寒门书生误入王府做西席，教书之外，还要替王府里每个人保守秘密。'},
+  {id:'yeban', title:'夜班便利店', genre:'都市', status:'airing', eps:20, up:14, rating:8.1, cast:['李葵','周晏'], year:2026, heat:1980, fans:51.2, upd:'11-03', hue:['#873105','#A24006'],
+   syn:'凌晨两点的便利店，店员李葵见过这座城市最不想被人看见的样子。'}
+];
+
+const PROGRESS = {
+  changye:{ep:24, t:760, dur:2700},
+  richu:{ep:11, t:192, dur:2700},
+  chaoxi:{ep:30, t:1910, dur:2700},
+  xuexian:{ep:7, t:485, dur:2700}
+};
+
+const GENRES = ['全部','悬疑','古装','科幻','都市','青春','生活','年代'];
+const byId = id => SHOWS.find(s => s.id === id);
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+const state = {
+  genre:'全部', status:'全部', sort:'heat', q:'', onlyFollow:false,
+  following:new Set(['chaoxi','mianguan','jingzhong']),
+  view:'home', current:null, ep:1, pos:0, dur:2700, playing:false
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const fmt = s => String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
+
+/* ── 渲染 ─────────────────────────────── */
+function poster(s){
+  const b = s.status === 'done' ? '全 ' + s.eps + ' 集' : '更新至 ' + s.up + ' 集';
+  return '<div class="poster" style="--p1:' + s.hue[0] + ';--p2:' + s.hue[1] + '" aria-hidden="true">' +
+    '<span class="poster-g" aria-hidden="true">' + s.title.charAt(0) + '</span>' +
+    '<span class="poster-r">' + s.rating.toFixed(1) + '</span>' +
+    '<span class="poster-t">' + s.title + '</span>' +
+    '<span class="poster-b">' + b + '</span></div>';
+}
+function card(s){
+  const st = s.status === 'done' ? '已完结' : '更新中';
+  return '<li class="card">' + poster(s) +
+    '<h3 class="card-t"><a href="#/show/' + s.id + '">' + s.title + '</a></h3>' +
+    '<p class="card-m">' + s.genre + ' · ' + st + ' · ' + s.rating.toFixed(1) + ' 分</p></li>';
+}
+function renderContinue(){
+  $('#cwRail').innerHTML = Object.keys(PROGRESS).map(id => {
+    const s = byId(id), p = PROGRESS[id];
+    const pct = Math.round(p.t / p.dur * 100);
+    return '<li class="cw"><a href="#/show/' + id + '">' +
+      '<span class="cw-art" style="--p1:' + s.hue[0] + ';--p2:' + s.hue[1] + '">' +
+        '<span class="cw-ep">第 ' + p.ep + ' 集</span>' +
+        '<span class="cw-t">' + s.title + '</span></span>' +
+      '<span class="cw-bar"><span style="width:' + pct + '%"></span></span>' +
+      '<span class="cw-m">看到 ' + fmt(p.t) + ' · 剩余 ' + Math.round((p.dur - p.t) / 60) + ' 分钟</span>' +
+      '</a></li>';
+  }).join('');
+}
+function renderHot(){
+  $('#hotGrid').innerHTML = SHOWS.slice().sort((a,b) => b.heat - a.heat).slice(0,6).map(card).join('');
+}
+function renderRank(){
+  $('#rankList').innerHTML = SHOWS.slice().sort((a,b) => b.heat - a.heat).slice(0,8).map((s,i) =>
+    '<li><a class="rk-row" href="#/show/' + s.id + '">' +
+      '<span class="rk">' + String(i + 1).padStart(2,'0') + '</span>' +
+      '<span class="rk-m"><span class="rk-t">' + s.title + '</span>' +
+        '<span class="rk-g">' + s.genre + ' · ' + (s.status === 'done' ? '已完结' : '更新至 ' + s.up + ' 集') + '</span></span>' +
+      '<span class="rk-n">' + s.heat + ' 万</span></a></li>'
+  ).join('');
+}
+function renderChips(){
+  $('#genreChips').innerHTML = GENRES.map(g =>
+    '<button type="button" class="chip" data-genre="' + g + '" aria-pressed="' + (state.genre === g) + '">' + g + '</button>'
+  ).join('');
+}
+function filteredShows(){
+  let list = SHOWS.filter(s =>
+    (state.genre === '全部' || s.genre === state.genre) &&
+    (state.status === '全部' || s.status === state.status) &&
+    (!state.q || s.title.indexOf(state.q) > -1 || s.cast.some(c => c.indexOf(state.q) > -1)) &&
+    (!state.onlyFollow || state.following.has(s.id))
+  );
+  const by = {
+    heat:(a,b) => b.heat - a.heat,
+    rating:(a,b) => b.rating - a.rating,
+    update:(a,b) => (a.upd < b.upd ? 1 : a.upd > b.upd ? -1 : 0)
+  };
+  return list.sort(by[state.sort]);
+}
+function renderLibrary(){
+  const list = filteredShows();
+  $('#libGrid').innerHTML = list.map(card).join('');
+  $('#libGrid').hidden = list.length === 0;
+  $('#empty').hidden = list.length > 0;
+  const tail = state.onlyFollow ? '（只看追剧）' : '';
+  $('#libCount').textContent = '共 ' + list.length + ' 部' + tail;
+  $$('#genreChips .chip').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.genre === state.genre)));
+  $$('#statusSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.status === state.status)));
+  $('#onlyFollow').setAttribute('aria-pressed', String(state.onlyFollow));
+}
+function renderFollow(){
+  $$('.followCount').forEach(el => el.textContent = String(state.following.size));
+  if (state.current){
+    const on = state.following.has(state.current.id);
+    $('#dtFollow').setAttribute('aria-pressed', String(on));
+  }
+}
+
+/* ── 片库交互 ─────────────────────────── */
+function resetFilters(){
+  state.genre = '全部'; state.status = '全部'; state.q = ''; state.onlyFollow = false; state.sort = 'heat';
+  $('#q').value = ''; $('#sort').value = 'heat';
+  renderLibrary();
+}
+
+/* ── 详情 ─────────────────────────────── */
+function openDetail(s){
+  state.view = 'detail'; state.current = s;
+  const p = PROGRESS[s.id];
+  state.ep = p ? p.ep : 1;
+  state.pos = p ? p.t : 0;
+  state.dur = p ? p.dur : 2700;
+  state.playing = false;
+
+  $('#homeView').hidden = true;
+  $('#detailView').hidden = false;
+
+  $('#dtTitle').textContent = s.title;
+  $('#dtMeta').textContent = s.rating.toFixed(1) + ' 分 · ' + s.genre + ' · ' + s.year + ' · 全 ' + s.eps + ' 集 · ' +
+    (s.status === 'done' ? '已完结' : '更新至 ' + s.up + ' 集');
+  $('#dtLead').textContent = s.syn;
+  $('#dtCast').textContent = s.cast.join(' / ');
+  $('#dtGenre').textContent = s.genre;
+  $('#dtFans').textContent = s.fans + ' 万人追剧';
+  $('#dtUpd').textContent = s.status === 'done' ? '已完结，共 ' + s.eps + ' 集' : '每周三、周六 20:00，已更新 ' + s.up + ' 集';
+
+  $('#stage').style.setProperty('--p1', s.hue[0]);
+  $('#stage').style.setProperty('--p2', s.hue[1]);
+  $('#stageT').textContent = s.title;
+  $('#stageEp').textContent = '第 ' + state.ep + ' 集';
+  $('#dtResume').textContent = p ? '继续观看 第 ' + p.ep + ' 集' : '从第 1 集开始';
+
+  $('#epsSub').textContent = s.status === 'done' ? '共 ' + s.eps + ' 集，已完结' : '已上线 ' + s.up + ' 集，共 ' + s.eps + ' 集';
+  $('#eps').innerHTML = Array.from({length:s.eps}, (_,i) => {
+    const n = i + 1, locked = n > s.up;
+    return '<button type="button" class="ep" data-ep="' + n + '" aria-pressed="' + (n === state.ep) + '"' +
+      (locked ? ' disabled aria-label="第 ' + n + ' 集，未更新"' : ' aria-label="第 ' + n + ' 集"') + '>' + n + '</button>';
+  }).join('');
+
+  const like = SHOWS.filter(x => x.id !== s.id).sort((a,b) =>
+    (b.genre === s.genre) - (a.genre === s.genre) || Math.abs(a.fans - s.fans) - Math.abs(b.fans - s.fans)
+  ).slice(0,3);
+  $('#likeGrid').innerHTML = like.map(card).join('');
+
+  document.title = s.title + ' · EpDeck';
+  renderFollow();
+  paint();
+  window.scrollTo(0,0);
+  $('#dtTitle').focus({preventScroll:true});
+}
+function showHome(){
+  const wasDetail = state.view === 'detail';
+  state.view = 'home';
+  $('#detailView').hidden = true;
+  $('#homeView').hidden = false;
+  document.title = 'EpDeck · 今晚看什么';
+  if (state.playing) pause();
+  if (wasDetail){
+    const t = state.lastTrigger;
+    if (t && t.isConnected && t.offsetParent !== null) t.focus({preventScroll:true});
+  }
+}
+function route(){
+  const m = location.hash.match(/^#\/show\/([\w-]+)$/);
+  const s = m && byId(m[1]);
+  if (s){
+    const a = document.activeElement;
+    state.lastTrigger = (a && a.matches && a.matches('a[href^="#/show/"]')) ? a : null;
+    openDetail(s);
+  } else showHome();
+}
+
+/* 播放器模拟 */
+function paint(){
+  $('#time').textContent = fmt(state.pos) + ' / ' + fmt(state.dur);
+  $('#fill').style.width = (state.pos / state.dur * 100) + '%';
+  $('#stageEp').textContent = '第 ' + state.ep + ' 集';
+  const b = $('#playBtn');
+  b.setAttribute('aria-label', state.playing ? '暂停' : '播放');
+  b.innerHTML = state.playing
+    ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'
+    : '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l12 7-12 7z"/></svg>';
+  $$('#eps .ep').forEach(e => e.setAttribute('aria-pressed', String(Number(e.dataset.ep) === state.ep)));
+}
+function play(){
+  if (state.pos >= state.dur) state.pos = 0;
+  state.playing = true;
+  state.basePos = state.pos;
+  state.startedAt = Date.now();
+  clearInterval(window.__t);
+  window.__t = setInterval(() => {
+    // 按真实经过时间推进，后台标签页计时器被节流时也能对上账
+    state.pos = Math.min(state.basePos + Math.round((Date.now() - state.startedAt) / 1000), state.dur);
+    paint();
+    if (state.pos >= state.dur) pause();
+  }, 250);
+  paint();
+}
+function pause(){
+  state.playing = false;
+  clearInterval(window.__t);
+  paint();
+}
+
+/* ── 侧栏 ─────────────────────────────── */
+let openPanelEl = null, panelReturn = null;
+function openPanel(el, trigger){
+  panelReturn = trigger || document.activeElement;
+  openPanelEl = el;
+  el.hidden = false; $('#scrim').hidden = false;
+  document.body.style.overflow = 'hidden';
+  void el.offsetWidth;               // 强制回流，保证进场过渡的起始态已计算
+  el.classList.add('in'); $('#scrim').classList.add('in');
+  const f = el.querySelector('button, a[href]');
+  if (f) f.focus();
+  if (trigger) trigger.setAttribute('aria-expanded','true');
+}
+function closePanel(){
+  if (!openPanelEl) return;
+  const el = openPanelEl, back = panelReturn;
+  el.classList.remove('in'); $('#scrim').classList.remove('in');
+  let fired = false;
+  const done = () => {
+    if (fired) return;
+    fired = true;
+    el.hidden = true; $('#scrim').hidden = true; document.body.style.overflow = '';
+  };
+  if (reduceMotion.matches) done();
+  else {
+    el.addEventListener('transitionend', done, {once:true});
+    setTimeout(done, 340);
+  }
+  $$('[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded','false'));
+  openPanelEl = null; panelReturn = null;
+  if (back && back.focus) back.focus();
+}
+function trapTab(e){
+  const f = $$('a[href], button:not([disabled]), input, select, [tabindex]:not([tabindex="-1"])', openPanelEl)
+    .filter(x => x.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+}
+
+const INFO = {
+  privacy:{t:'隐私说明', b:'<p>这是一个设计规范演示站点。页面不收集个人信息，不设置 Cookie，不加载第三方脚本、字体或图片，全部样式与图标都内联在同一个文件里。</p><p>没有登录，也没有账号体系；「追剧」状态只存在当前页面内存中，刷新即清空。</p>'},
+  a11y:{t:'无障碍', b:'<p>已做的处理：页面第一个可聚焦元素是「跳到主要内容」；所有操作可用键盘完成；焦点环为 2px 实线加 2px 偏移；正文文字对比度不低于 4.5:1；动画尊重系统的「减少动效」设置。</p><p>剧集、评分与播放数据都是虚构的演示内容。</p>'},
+  contact:{t:'联系我们', b:'<p>演示站点没有客服团队。内容纠错与设计问题请走项目仓库的 issue；播放器为界面模拟，不提供片源，也不处理版权请求。</p>'}
+};
+
+/* ── 事件 ─────────────────────────────── */
+$('#genreChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  state.genre = b.dataset.genre; renderLibrary();
+});
+$('#statusSeg').addEventListener('click', e => {
+  const b = e.target.closest('button[data-status]'); if (!b) return;
+  state.status = b.dataset.status; renderLibrary();
+});
+$('#q').addEventListener('input', e => { state.q = e.target.value.trim(); renderLibrary(); });
+$('#sort').addEventListener('change', e => { state.sort = e.target.value; renderLibrary(); });
+$('#onlyFollow').addEventListener('click', () => { state.onlyFollow = !state.onlyFollow; renderLibrary(); });
+$('#clearBtn').addEventListener('click', () => { resetFilters(); $('#q').focus(); });
+$('#searchJump').addEventListener('click', () => {
+  if (state.view !== 'home'){ location.hash = '#/'; }
+  const lib = $('#library');
+  lib.scrollIntoView({block:'start'});
+  $('#q').focus({preventScroll:true});
+});
+
+$$('[data-goto]').forEach(a => a.addEventListener('click', e => {
+  if (e.target.closest('#navFollow, #menuFollow')) return;
+  e.preventDefault();
+  closePanel();
+  if (state.view !== 'home'){ showHome(); if (location.hash) location.hash = '#/'; }
+  const id = a.dataset.goto;
+  const el = id === 'top' ? document.documentElement : document.getElementById(id);
+  requestAnimationFrame(() => el.scrollIntoView({block:'start'}));
+}));
+
+$$('#navFollow, #menuFollow').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  closePanel();
+  if (state.view !== 'home'){ showHome(); }
+  state.onlyFollow = true;
+  renderLibrary();
+  requestAnimationFrame(() => $('#library').scrollIntoView({block:'start'}));
+}));
+
+$('#newsBtn').addEventListener('click', e => openPanel($('#newsPanel'), e.currentTarget));
+$('#menuBtn').addEventListener('click', e => openPanel($('#menuPanel'), e.currentTarget));
+$('#scrim').addEventListener('click', closePanel);
+$$('[data-close]').forEach(b => b.addEventListener('click', closePanel));
+$('#readAll').addEventListener('click', e => {
+  $$('#newsList li').forEach(li => li.classList.add('read'));
+  const b = e.currentTarget;
+  b.disabled = true; b.textContent = '已全部读完';
+  $('#newsBtn').classList.remove('has-news');
+  $('#newsBtn').setAttribute('aria-label','通知，0 条未读');
+  const li = document.createElement('p');
+  li.textContent = '0 条未读';
+  li.className = 'sr';
+  b.parentNode.appendChild(li);
+});
+
+$$('[data-info]').forEach(b => b.addEventListener('click', () => {
+  const d = INFO[b.dataset.info];
+  $('#infoTitle').textContent = d.t;
+  $('#infoBody').innerHTML = d.b;
+  openPanel($('#infoPanel'), b);
+}));
+
+document.addEventListener('keydown', e => {
+  if (!openPanelEl) return;
+  if (e.key === 'Escape'){ e.preventDefault(); closePanel(); }
+  else if (e.key === 'Tab'){ trapTab(e); }
+});
+
+$('#playBtn').addEventListener('click', () => state.playing ? pause() : play());
+$('#restart').addEventListener('click', () => { state.pos = 0; paint(); });
+$('#dtResume').addEventListener('click', () => { const p = PROGRESS[state.current.id]; if (p){ state.ep = p.ep; state.pos = p.t; state.dur = p.dur; } play(); });
+$('#dtFollow').addEventListener('click', () => {
+  const id = state.current.id;
+  if (state.following.has(id)) state.following.delete(id); else state.following.add(id);
+  renderFollow(); renderLibrary();
+});
+$('#eps').addEventListener('click', e => {
+  const b = e.target.closest('.ep'); if (!b || b.disabled) return;
+  state.ep = Number(b.dataset.ep);
+  const p = PROGRESS[state.current.id];
+  state.pos = (p && p.ep === state.ep) ? p.t : 0;
+  pause();
+});
+
+window.addEventListener('hashchange', route);
+
+/* ── 首屏 ─────────────────────────────── */
+renderChips();
+renderContinue();
+renderHot();
+renderRank();
+renderLibrary();
+renderFollow();
+route();
+</script>
+</body>
+</html>

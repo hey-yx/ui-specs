@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PayloadDeck API — Quickstart and reference</title>
+<style>
+/* Hallmark · macrostructure: Long Document (three-rail docs) · tone: utilitarian-technical · anchor hue: purple
+ * pre-emit critique: P5 H4 E5 S4 R5 V4 · UISpecs owns the numbers, Hallmark keeps structure + slop gates
+ */
+:root{
+  /* palette: GOV.UK colour, one whole set (gap-fill 色值) */
+  --paper:#ffffff;      /* content/color/govuk--colour.md:476 */
+  --canvas:#f3f3f3;     /* content/color/govuk--colour.md:470 */
+  --tint:#f6f5fa;       /* content/color/govuk--colour.md:302 */
+  --ink:#0b0c0c;        /* content/color/govuk--colour.md:454 */
+  --muted:#484949;      /* content/color/govuk--colour.md:458 */
+  --subtle:#858686;     /* content/color/govuk--colour.md:462 */
+  --hair:#cecece;       /* content/color/govuk--colour.md:466 */
+  --accent:#54319f;     /* content/color/govuk--colour.md:286 */
+  --accent-hover:#3f2577;/* content/color/govuk--colour.md:306 */
+  --success:#0f7a52;    /* content/color/govuk--colour.md:222 */
+  --danger:#ca3535;     /* content/color/govuk--colour.md:346 */
+  --warnbg:#fffdf2;     /* content/color/govuk--colour.md:422 */
+  --warnline:#ffdd00;   /* content/color/govuk--colour.md:406 */
+  --on-accent:#ffffff;  /* content/color/govuk--colour.md:476 */
+  /* spacing: Atlassian 8px base, one whole scale (gap-fill 间距) */
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  /* type: three sizes from GOV.UK type scale (gap-fill 字阶) */
+  --t-1:16px; --t-2:19px; --t-3:24px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  /* radius: derived, two steps */
+  --r-sm:4px; --r-lg:8px;
+  /* motion: NN/g durations, W3C + Atlassian curves (gap-fill 动效) */
+  --dur-micro:100ms; --dur-out:200ms; --dur-in:300ms;
+  --e-in:cubic-bezier(0.42, 0, 1, 1);
+  --e-out:cubic-bezier(0, 0, 0.58, 1);
+  --e-panel:cubic-bezier(0, 0.4, 0, 1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+[hidden]{display:none !important}
+/* brief hard rule: line-height = font-size + 8, per element, zero specificity */
+:where(body, body *){line-height:calc(1em + 8px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1);font-weight:400}
+a{color:var(--accent)}
+a:hover{color:var(--accent-hover)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-weight:600;margin:0 0 var(--sp-4);overflow-wrap:anywhere;min-width:0}
+h1{font-size:var(--t-3)}
+h2{font-size:var(--t-2)}
+h3{font-size:var(--t-1);margin-top:var(--sp-8)}
+p,ul,ol,dl{margin:0 0 var(--sp-4)}
+p,li,dd,dt,th,td{overflow-wrap:anywhere}
+.prose,.lede{max-width:80ch}
+.muted{color:var(--muted)}
+.mono,code,kbd,pre{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.skip{position:absolute;left:-9999px;top:0;background:var(--paper);padding:var(--sp-2) var(--sp-4);z-index:60}
+.skip:focus{left:var(--sp-2);top:var(--sp-2)}
+
+/* header — static, scrolls with the page (Primer layout:141) */
+.topbar{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;padding:var(--sp-4);border-bottom:1px solid var(--hair)}
+.brand{display:inline-flex;align-items:center;gap:var(--sp-2);text-decoration:none;color:var(--ink);font-weight:600;min-height:32px}
+.brand svg{width:24px;height:24px;flex:none}
+.brand-sep{color:var(--muted)}
+.top-tag{color:var(--muted)}
+.ver-chip{margin-left:auto;background:var(--accent);color:var(--on-accent);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);font-variant-numeric:tabular-nums}
+
+/* shell — Primer split page: left pane / content / right pane */
+.shell{max-width:1280px;margin:0 auto;padding:var(--sp-8) var(--sp-4) var(--sp-16);display:grid;gap:var(--sp-8);grid-template-columns:minmax(0,1fr)}
+.main{min-width:0}
+.main section{margin:0 0 var(--sp-12);scroll-margin-top:var(--sp-4)}
+.sidebar,.toc-aside{min-width:0}
+.sidebar{align-self:start;position:sticky;top:var(--sp-4);max-height:calc(100vh - 32px);overflow-y:auto}
+.toc-aside{display:none}
+.rail-title{font-weight:600;margin:0 0 var(--sp-2)}
+.rail{list-style:none;margin:0;padding:0}
+.rail li{margin:0}
+.rail a{display:block;padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-3);color:var(--muted);text-decoration:none;border-left:2px solid transparent;min-height:32px}
+.rail a:hover{background:var(--canvas);color:var(--ink)}
+.rail a[aria-current="location"],.rail a[aria-current="true"]{border-left-color:var(--accent);background:var(--tint);color:var(--accent);font-weight:600}
+.rail a.sub{padding-left:var(--sp-8)}
+.toc-narrow{display:none}
+.toc-narrow summary{cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:var(--sp-2) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);list-style:none}
+.toc-narrow summary::-webkit-details-marker{display:none}
+.toc-narrow summary::after{content:"+"}
+.toc-narrow[open] summary::after{content:"\2212"}
+
+/* tables */
+.table-wrap{max-width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px}
+caption{text-align:left;font-weight:600;padding:0 0 var(--sp-2)}
+th,td{text-align:left;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--hair);vertical-align:top}
+thead th{border-bottom:1px solid var(--subtle);font-weight:600;white-space:nowrap}
+tbody tr:hover{background:var(--canvas)}
+td .req{color:var(--muted)}
+
+/* code sample */
+.code{background:var(--canvas);border:1px solid var(--subtle);border-radius:var(--r-lg);overflow:hidden}
+.code-head{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--hair)}
+.code-label{color:var(--muted)}
+.tabs{display:flex;gap:var(--sp-1);flex-wrap:wrap}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:var(--sp-1) var(--sp-2);min-height:32px;color:var(--muted);cursor:pointer;font-family:var(--font);font-size:var(--t-1)}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.code-actions{margin-left:auto;display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap}
+.copied{color:var(--success);display:inline-flex;align-items:center;gap:var(--sp-1);font-weight:600}
+.copied svg{width:16px;height:16px;flex:none}
+pre{margin:0;padding:var(--sp-4);max-width:100%;font-size:var(--t-1);white-space:pre-wrap;overflow-wrap:break-word;color:var(--ink)}
+
+/* buttons + fields */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:32px;padding:var(--sp-1) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1);cursor:pointer;transition:background-color var(--dur-micro) var(--e-out),color var(--dur-micro) var(--e-out)}
+.btn svg{width:16px;height:16px;flex:none}
+.btn:hover{background:var(--canvas)}
+.btn:disabled{color:var(--subtle);background:var(--canvas);cursor:not-allowed}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+.chapters-btn,.drawer-close{display:none}
+label{display:block;font-weight:600;margin:0 0 var(--sp-1)}
+input[type=search],input[type=text]{width:100%;max-width:360px;min-height:40px;padding:var(--sp-2) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1)}
+input[aria-invalid="true"]{border-color:var(--danger)}
+.field{margin:0 0 var(--sp-4)}
+.field-error{color:var(--danger);margin:var(--sp-1) 0 0}
+.error-summary{border-left:3px solid var(--danger);background:var(--canvas);padding:var(--sp-3) var(--sp-4);margin:0 0 var(--sp-4)}
+.error-summary h3{margin:0 0 var(--sp-2);color:var(--danger)}
+.error-summary ul{margin:0;padding-left:var(--sp-4)}
+.note{border-left:3px solid var(--warnline);background:var(--warnbg);padding:var(--sp-3) var(--sp-4)}
+.result-ok{color:var(--success);font-weight:600}
+.live-count{color:var(--muted)}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-2) var(--sp-4);max-width:80ch}
+.facts dt{font-weight:600;color:var(--muted)}
+.facts dd{margin:0}
+.steps{padding-left:var(--sp-4);max-width:80ch}
+.steps li{margin:0 0 var(--sp-2)}
+.filters{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;margin:0 0 var(--sp-2)}
+.form-actions{display:flex;gap:var(--sp-2);flex-wrap:wrap}
+
+/* footer */
+.foot{border-top:1px solid var(--hair);padding:var(--sp-4) var(--sp-6);color:var(--muted);display:flex;flex-wrap:wrap;gap:var(--sp-2);justify-content:space-between}
+
+/* narrow drawer + scrim (derived overlay, single tier) */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:25}
+@media (min-width:768px){
+  .shell{grid-template-columns:200px minmax(0,1fr)}
+}
+@media (min-width:1012px){
+  .shell{grid-template-columns:208px minmax(0,1fr) 220px;gap:var(--sp-8)}
+  .toc-aside{display:block;align-self:start;position:sticky;top:var(--sp-4);max-height:calc(100vh - 32px);overflow-y:auto}
+}
+@media (max-width:543px){
+  .facts{grid-template-columns:minmax(0,1fr);gap:var(--sp-1)}
+  .facts dt{margin-top:var(--sp-2)}
+  .facts dd{margin-bottom:var(--sp-2)}
+}
+@media (min-width:1280px){
+  .shell{padding-left:var(--sp-6);padding-right:var(--sp-6)}
+}
+@media (max-width:767px){
+  .shell{padding:var(--sp-6) var(--sp-4) var(--sp-12)}
+  .chapters-btn{display:inline-flex;width:100%;justify-content:space-between;margin:0 0 var(--sp-4)}
+  .drawer-close{display:inline-flex;margin:0 0 var(--sp-4)}
+  .toc-narrow{display:block;margin:0 0 var(--sp-6)}
+  .toc-narrow .rail{padding:var(--sp-2) 0 0}
+  .toc-aside{display:none}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:min(86vw,300px);max-height:none;z-index:30;background:var(--paper);border-right:1px solid var(--subtle);padding:var(--sp-4);transform:translateX(-100%);visibility:hidden;transition:transform var(--dur-out) var(--e-in)}
+  .sidebar.open{transform:none;visibility:visible;transition:transform var(--dur-in) var(--e-panel)}
+  .sidebar.closing{transform:translateX(-100%);visibility:visible;transition:transform var(--dur-out) var(--e-in)}
+  .rail a,.btn,.tab{min-height:44px}
+  .foot{padding:var(--sp-4)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0ms !important;animation-duration:0ms !important}
+}
+@media (forced-colors:active){
+  .rail a[aria-current]{border-left-color:Highlight}
+  :focus-visible{outline-color:Highlight}
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+  var baseTitle=document.title;
+
+  /* in-page TOC collected from real headings, both rails */
+  var heads=$$('#main h2, #main h3').filter(function(h){return h.id && !h.closest('#error-summary');});
+  ['#toc-list','#toc-list-narrow'].forEach(function(sel){
+    var ul=document.querySelector(sel); if(!ul)return;
+    heads.forEach(function(h){
+      var li=document.createElement('li'), a=document.createElement('a');
+      a.href='#'+h.id; a.textContent=h.textContent;
+      if(h.tagName==='H3')a.className='sub';
+      li.appendChild(a); ul.appendChild(li);
+    });
+  });
+
+  /* active section tracking: rect-based; scroll fires in browsers, timer is the fallback */
+  function syncActive(){
+    var heads=$$('#main section > h2, #main section > h3');
+    if(!heads.length)return;
+    var curHead=heads[0];
+    heads.forEach(function(h){if(h.getBoundingClientRect().top<=120)curHead=h;});
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2)curHead=heads[heads.length-1];
+    var sec=curHead.closest('section');
+    $$('#chapters-list a').forEach(function(a){
+      if(a.getAttribute('href')==='#'+sec.id)a.setAttribute('aria-current','location');
+      else a.removeAttribute('aria-current');
+    });
+    $$('.toc a').forEach(function(a){
+      if(a.getAttribute('href')==='#'+curHead.id)a.setAttribute('aria-current','true');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('scroll',syncActive,{passive:true});
+  window.addEventListener('resize',syncActive);
+  setInterval(syncActive,250);
+  syncActive();
+
+  /* code language tabs */
+  var tabs=$$('[role=tab]'), panels=$$('[role=tabpanel]');
+  function activate(i,focus){
+    tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i?'true':'false');t.tabIndex=k===i?0:-1;});
+    panels.forEach(function(p,k){p.hidden=k!==i;});
+    if(focus)tabs[i].focus();
+    window.__activeTab=i;
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){activate(i,false);});
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight')n=(i+1)%tabs.length;
+      else if(e.key==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home')n=0;
+      else if(e.key==='End')n=tabs.length-1;
+      if(n!==null){e.preventDefault();activate(n,true);}
+    });
+  });
+  activate(0,false);
+
+  /* copy with graceful fallback for file:// clipboard restrictions */
+  function copyText(text){
+    try{
+      if(navigator.clipboard&&window.isSecureContext){
+        return navigator.clipboard.writeText(text).then(function(){return 'clipboard';},function(){return legacy(text);});
+      }
+    }catch(e){}
+    return Promise.resolve(legacy(text));
+  }
+  function legacy(text){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='-1000px';
+      document.body.appendChild(ta);ta.select();
+      var ok=document.execCommand('copy');ta.remove();return ok?'execCommand':null;
+    }catch(e){return null;}
+  }
+  $$('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var wrap=btn.closest('.code');
+      var visible=wrap.querySelector('[role=tabpanel]:not([hidden]) pre');
+      var pre=visible||wrap.querySelector('pre');
+      copyText(pre?pre.textContent:'').then(function(method){
+        window.__lastCopyMethod=method;
+        var badge=wrap.querySelector('.copied');
+        if(method&&badge){
+          badge.hidden=false;clearTimeout(badge._t);
+          badge._t=setTimeout(function(){badge.hidden=true;},2000);
+        }
+      });
+    });
+  });
+
+  /* live filter on error codes */
+  var f=document.getElementById('filter'), rows=$$('#error-table tbody tr');
+  var count=document.getElementById('filter-count'), empty=document.getElementById('filter-empty');
+  window.__visibleRows=rows.length;
+  function applyFilter(){
+    var q=f.value.trim().toLowerCase(),n=0;
+    rows.forEach(function(r){var hit=!q||r.textContent.toLowerCase().indexOf(q)!==-1;r.hidden=!hit;if(hit)n++;});
+    count.textContent='Showing '+n+' of '+rows.length;
+    empty.hidden=n!==0;
+    window.__visibleRows=n;
+  }
+  f.addEventListener('input',applyFilter);
+  document.getElementById('filter-clear').addEventListener('click',function(){f.value='';applyFilter();f.focus();});
+
+  /* three-state form validation */
+  var form=document.getElementById('try-form'), summary=document.getElementById('error-summary');
+  var sumList=document.getElementById('error-list'), keyI=document.getElementById('api-key');
+  var lineI=document.getElementById('log-line'), result=document.getElementById('try-result');
+  window.__formErrors=0;window.__resultVisible=false;
+  function clearErr(){
+    $$('.field-error').forEach(function(e){e.hidden=true;e.textContent='';});
+    [keyI,lineI].forEach(function(i){i.removeAttribute('aria-invalid');i.removeAttribute('aria-describedby');});
+    summary.hidden=true;sumList.innerHTML='';
+  }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();clearErr();
+    var errs=[];
+    if(!keyI.value.trim())errs.push([keyI,'key','Enter your API key']);
+    if(!lineI.value.trim())errs.push([lineI,'line','Enter a log line']);
+    if(errs.length){
+      document.title='Error: '+baseTitle;
+      errs.forEach(function(row){
+        var li=document.createElement('li'),a=document.createElement('a');
+        a.href='#'+row[0].id;a.textContent=row[2];li.appendChild(a);sumList.appendChild(li);
+        var msg=document.getElementById('err-'+row[1]);msg.textContent=row[2];msg.hidden=false;
+        row[0].setAttribute('aria-invalid','true');row[0].setAttribute('aria-describedby','err-'+row[1]);
+      });
+      summary.hidden=false;summary.focus();
+      result.hidden=true;
+    }else{
+      document.title=baseTitle;
+      result.hidden=false;
+      document.getElementById('try-echo').textContent=keyI.value.trim().slice(0,4)+'\u2026'+keyI.value.trim().slice(-4);
+    }
+    window.__formErrors=errs.length;window.__resultVisible=!result.hidden;
+  });
+  form.addEventListener('reset',function(){
+    clearErr();result.hidden=true;document.title=baseTitle;
+    window.__formErrors=0;window.__resultVisible=false;
+  });
+
+  /* narrow-viewport chapter drawer */
+  var sb=document.getElementById('sidebar'), openBtn=document.getElementById('chapters-btn');
+  var closeBtn=document.getElementById('drawer-close'), scrim=document.getElementById('scrim');
+  window.__drawerOpen=false;
+  function setDrawer(open){
+    clearTimeout(sb._closeT);
+    sb.classList.toggle('open',open);
+    if(open){sb.classList.remove('closing');}
+    else if(sb.classList.contains('closing')===false){
+      sb.classList.add('closing');
+      sb._closeT=setTimeout(function(){sb.classList.remove('closing');},220);
+    }
+    openBtn.setAttribute('aria-expanded',String(open));
+    scrim.hidden=!open;
+    if(window.matchMedia('(max-width:767px)').matches)sb.setAttribute('aria-hidden',String(!open));
+    else sb.removeAttribute('aria-hidden');
+    if(open)closeBtn.focus();else if(window.matchMedia('(max-width:767px)').matches)openBtn.focus();
+    window.__drawerOpen=open;
+  }
+  openBtn.addEventListener('click',function(){setDrawer(true);});
+  closeBtn.addEventListener('click',function(){setDrawer(false);});
+  scrim.addEventListener('click',function(){setDrawer(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sb.classList.contains('open'))setDrawer(false);});
+  var mqNarrow=window.matchMedia('(max-width:767px)');
+  function syncDrawerMode(){
+    if(!mqNarrow.matches){
+      sb.classList.remove('open','closing');
+      clearTimeout(sb._closeT);
+      scrim.hidden=true;
+      openBtn.setAttribute('aria-expanded','false');
+      sb.removeAttribute('aria-hidden');
+      if(document.activeElement===closeBtn){var firstLink=document.querySelector('#chapters-list a');if(firstLink)firstLink.focus();}
+      window.__drawerOpen=false;
+    }else{
+      sb.setAttribute('aria-hidden',String(!sb.classList.contains('open')));
+    }
+  }
+  if(mqNarrow.addEventListener)mqNarrow.addEventListener('change',syncDrawerMode);
+  else if(mqNarrow.addListener)mqNarrow.addListener(syncDrawerMode);
+  window.addEventListener('resize',syncDrawerMode);
+  syncDrawerMode();
+  window.__setDrawer=setDrawer;
+});
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="#overview" aria-label="PayloadDeck API docs, back to overview">
+    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <rect x="1" y="1" width="18" height="18" rx="4" fill="#54319f"/>
+      <path d="M5 6h10M5 10h7M5 14h4" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M15 10l-4 5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    PayloadDeck
+  </a>
+  <span class="brand-sep" aria-hidden="true">/</span>
+  <span class="top-tag">API docs</span>
+  <span class="ver-chip">v2.4</span>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Chapters">
+    <button class="btn drawer-close" id="drawer-close" type="button">Close chapters</button>
+    <p class="rail-title">Reference</p>
+    <ul class="rail" id="chapters-list">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#quickstart">Quickstart</a></li>
+      <li><a href="#request-fields">Request fields</a></li>
+      <li><a href="#response">Response</a></li>
+      <li><a href="#error-codes">Error codes</a></li>
+      <li><a href="#try-it">Try a request</a></li>
+      <li><a href="#version">Version &amp; build</a></li>
+    </ul>
+  </nav>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <main class="main" id="main">
+    <button class="btn chapters-btn" id="chapters-btn" type="button" aria-controls="sidebar" aria-expanded="false">Chapters <span aria-hidden="true">&#9776;</span></button>
+    <details class="toc-narrow">
+      <summary>On this page</summary>
+      <ul class="rail toc" id="toc-list-narrow"></ul>
+    </details>
+
+    <section id="overview">
+      <h1>PayloadDeck API</h1>
+      <p class="lede">Send a raw log line, get structured fields back. This page takes you from an empty terminal to a working request, then gives you the field and error tables to check against.</p>
+      <dl class="facts">
+        <dt>Base URL</dt><dd class="mono">https://api.logreap.dev</dd>
+        <dt>Parse endpoint</dt><dd class="mono">POST /v2/parse</dd>
+        <dt>Authentication</dt><dd>Bearer token in the <code>Authorization</code> header</dd>
+        <dt>Payload</dt><dd>JSON, UTF-8, 256 KB maximum</dd>
+        <dt>Rate limit</dt><dd class="mono">600 requests / minute</dd>
+      </dl>
+    </section>
+
+    <section id="quickstart">
+      <h2 id="h-quickstart">Quickstart</h2>
+      <p class="prose">Four steps, about two minutes. Everything below is a static example: this page never sends a request to the API.</p>
+      <ol class="steps">
+        <li>Create a service key in your PayloadDeck workspace.</li>
+        <li>Pick a parser, or omit <code>parser</code> and let the API auto-detect the format.</li>
+        <li>Send one log line to <code>POST /v2/parse</code>.</li>
+        <li>Read the returned fields and check any error code against the table below.</li>
+      </ol>
+
+      <h3 id="h-send">Send the request</h3>
+      <div class="code" id="code-request">
+        <div class="code-head">
+          <div class="tabs" role="tablist" aria-label="Request example language">
+            <button class="tab" type="button" role="tab" id="tab-curl" aria-controls="panel-curl" aria-selected="true" tabindex="0">cURL</button>
+            <button class="tab" type="button" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="false" tabindex="-1">Node.js</button>
+            <button class="tab" type="button" role="tab" id="tab-python" aria-controls="panel-python" aria-selected="false" tabindex="-1">Python</button>
+          </div>
+          <div class="code-actions">
+            <span class="copied" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l3.5 3.5L14 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied</span>
+            <button class="btn copy-btn" type="button" aria-label="Copy request example"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3H4a1 1 0 00-1 1v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy</button>
+          </div>
+        </div>
+        <div role="tabpanel" id="panel-curl" aria-labelledby="tab-curl"><pre>curl -X POST https://api.logreap.dev/v2/parse \
+  -H "Authorization: Bearer $LOGREAP_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "line": "127.0.0.1 - [07/Nov:09:12:44] \"GET /v2/health\"",
+    "parser": "nginx"
+  }'</pre></div>
+        <div role="tabpanel" id="panel-node" aria-labelledby="tab-node" hidden><pre>const res = await fetch("https://api.logreap.dev/v2/parse", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.LOGREAP_KEY}`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    line: '127.0.0.1 - [07/Nov:09:12:44] "GET /v2/health"',
+    parser: "nginx"
+  })
+});
+const data = await res.json();</pre></div>
+        <div role="tabpanel" id="panel-python" aria-labelledby="tab-python" hidden><pre>import os, requests
+
+res = requests.post(
+    "https://api.logreap.dev/v2/parse",
+    headers={"Authorization": f"Bearer {os.environ['LOGREAP_KEY']}"},
+    json={
+        "line": '127.0.0.1 - [07/Nov:09:12:44] "GET /v2/health"',
+        "parser": "nginx",
+    },
+)
+data = res.json()</pre></div>
+      </div>
+
+      <h3 id="h-read">Read the response</h3>
+      <div class="code" id="code-response">
+        <div class="code-head">
+          <span class="code-label mono">200 OK &middot; application/json</span>
+          <div class="code-actions">
+            <span class="copied" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l3.5 3.5L14 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied</span>
+            <button class="btn copy-btn" type="button" aria-label="Copy response example"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3H4a1 1 0 00-1 1v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy</button>
+          </div>
+        </div>
+        <div><pre>{
+  "id": "prs_8f2c41ad",
+  "parser": "nginx",
+  "confidence": 0.98,
+  "fields": {
+    "remote_addr": "127.0.0.1",
+    "time": "2026-11-07T09:12:44Z",
+    "method": "GET",
+    "path": "/v2/health",
+    "status": 200,
+    "bytes": 34
+  },
+  "request_id": "req_31be7c",
+  "duration_ms": 4.2
+}</pre></div>
+      </div>
+      <p class="note">This response is a fixed example. No network request is made by the page.</p>
+    </section>
+
+    <section id="request-fields">
+      <h2 id="h-fields">Request fields</h2>
+      <p class="prose">All fields go in the JSON body. Only <code>line</code> is required.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Body fields for POST /v2/parse</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Required</th><th scope="col">Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>line</code></td><td>string</td><td>yes</td><td>Raw log line to parse.</td></tr>
+            <tr><td><code>parser</code></td><td>string</td><td class="req">no</td><td>Named parser: <code>nginx</code>, <code>syslog</code>, <code>json</code>. Omit to auto-detect.</td></tr>
+            <tr><td><code>timestamp_format</code></td><td>string</td><td class="req">no</td><td>Override for the inferred timestamp layout.</td></tr>
+            <tr><td><code>timezone</code></td><td>string</td><td class="req">no</td><td>IANA zone used when the line has no offset. Defaults to UTC.</td></tr>
+            <tr><td><code>include_raw</code></td><td>boolean</td><td class="req">no</td><td>Echo the original line in the response. Defaults to false.</td></tr>
+            <tr><td><code>fields</code></td><td>array</td><td class="req">no</td><td>Restrict the returned field set.</td></tr>
+            <tr><td><code>request_id</code></td><td>string</td><td class="req">no</td><td>Your correlation id, echoed back unchanged.</td></tr>
+            <tr><td><code>strict</code></td><td>boolean</td><td class="req">no</td><td>Reject partially matched lines. Defaults to false.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="response">
+      <h2 id="h-response">Response</h2>
+      <p class="prose">A successful parse returns the detected parser, a confidence score, and a flat field map.</p>
+      <dl class="facts">
+        <dt>id</dt><dd>Unique id for this parse result.</dd>
+        <dt>parser</dt><dd>The parser that matched, or the one you requested.</dd>
+        <dt>confidence</dt><dd class="mono">0.0&ndash;1.0</dd>
+        <dt>fields</dt><dd>Extracted key/value pairs; keys depend on the parser.</dd>
+        <dt>request_id</dt><dd>Your correlation id, if supplied.</dd>
+        <dt>duration_ms</dt><dd>Server-side parse time in milliseconds.</dd>
+      </dl>
+    </section>
+
+    <section id="error-codes">
+      <h2 id="h-errors">Error codes</h2>
+      <p class="prose">Errors use the HTTP status plus a machine-readable <code>code</code>. Search the table as you read.</p>
+      <div class="filters">
+        <label for="filter" style="margin:0">Filter error codes</label>
+        <input type="search" id="filter" placeholder="e.g. parser or 429" autocomplete="off">
+        <button class="btn" type="button" id="filter-clear">Clear filter</button>
+      </div>
+      <p class="live-count" id="filter-count" aria-live="polite">Showing 9 of 9</p>
+      <p id="filter-empty" hidden>No codes match that search. Try a shorter term.</p>
+      <div class="table-wrap">
+        <table id="error-table">
+          <caption>Error codes returned by /v2/parse</caption>
+          <thead><tr><th scope="col">HTTP</th><th scope="col">Code</th><th scope="col">Kind</th><th scope="col">Meaning</th><th scope="col">What to do</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">400</td><td><code>invalid_json</code></td><td>Client error</td><td>The body is not valid JSON.</td><td>Validate the body before sending.</td></tr>
+            <tr><td class="mono">401</td><td><code>missing_key</code></td><td>Client error</td><td>No API key was supplied.</td><td>Add the Authorization header.</td></tr>
+            <tr><td class="mono">403</td><td><code>key_revoked</code></td><td>Client error</td><td>The API key has been revoked.</td><td>Issue a new service key.</td></tr>
+            <tr><td class="mono">413</td><td><code>payload_too_large</code></td><td>Client error</td><td>Body exceeds 256 KB.</td><td>Split the batch.</td></tr>
+            <tr><td class="mono">422</td><td><code>unparseable_line</code></td><td>Client error</td><td>No parser matched the log line.</td><td>Set a parser explicitly.</td></tr>
+            <tr><td class="mono">429</td><td><code>rate_limited</code></td><td>Client error</td><td>Too many requests this minute.</td><td>Back off and retry.</td></tr>
+            <tr><td class="mono">500</td><td><code>internal_error</code></td><td>Server error</td><td>Unexpected server error.</td><td>Retry with the same request id.</td></tr>
+            <tr><td class="mono">503</td><td><code>parser_unavailable</code></td><td>Server error</td><td>The requested parser is offline.</td><td>Omit parser to auto-detect.</td></tr>
+            <tr><td class="mono">504</td><td><code>upstream_timeout</code></td><td>Server error</td><td>The parser timed out.</td><td>Retry once, then report it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="try-it">
+      <h2 id="h-try">Try a request</h2>
+      <p class="prose">Check a request locally before you wire up the SDK. The form only validates your input and shows the fixed example response; it never contacts the API.</p>
+      <form id="try-form" novalidate>
+        <div class="error-summary" id="error-summary" role="alert" tabindex="-1" hidden>
+          <h3>There is a problem</h3>
+          <ul id="error-list"></ul>
+        </div>
+        <div class="field">
+          <label for="api-key">API key</label>
+          <input type="text" id="api-key" autocomplete="off" placeholder="lr_live_...">
+          <p class="field-error" id="err-key" hidden></p>
+        </div>
+        <div class="field">
+          <label for="log-line">Log line</label>
+          <input type="text" id="log-line" autocomplete="off" placeholder="127.0.0.1 - - [07/Nov/2026:09:12:44 +0000]">
+          <p class="field-error" id="err-line" hidden></p>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Validate request</button>
+          <button class="btn" type="reset">Clear</button>
+        </div>
+      </form>
+      <div id="try-result" hidden>
+        <p class="result-ok">Request validated for key <span class="mono" id="try-echo"></span>.</p>
+        <div class="code">
+          <div class="code-head"><span class="code-label mono">Example response (static)</span></div>
+          <div><pre>{
+  "id": "prs_8f2c41ad",
+  "status": "ok",
+  "fields": { "method": "GET", "path": "/v2/health", "status": 200 }
+}</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="version">
+      <h2 id="h-version">Version &amp; build</h2>
+      <dl class="facts">
+        <dt>API version</dt><dd class="mono">v2.4.1</dd>
+        <dt>Docs build</dt><dd class="mono">2026-11-07</dd>
+        <dt>Schema revision</dt><dd class="mono">2026-09-18</dd>
+        <dt>Bundle</dt><dd class="mono">a1b2c3d</dd>
+        <dt>Renderer</dt><dd>Static HTML, no live requests</dd>
+      </dl>
+      <p><button class="btn" type="button" disabled>Download OpenAPI spec (unavailable in this static example)</button></p>
+    </section>
+  </main>
+
+  <aside class="toc-aside" aria-label="On this page">
+    <p class="rail-title">On this page</p>
+    <ul class="rail toc" id="toc-list"></ul>
+  </aside>
+</div>
+
+<footer class="foot">
+  <span>PayloadDeck API &middot; v2.4.1 &middot; docs build 2026-11-07 &middot; static examples, no live requests</span>
+  <a href="#overview">Back to top</a>
+</footer>
+</body>
+</html>

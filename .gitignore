@@ -1,0 +1,23 @@
+node_modules/
+.serena/
+.zcode/
+.hallmark/
+
+# Python
+__pycache__/
+.DS_Store
+.worktrees/
+
+# 过程产物与无关文件（不入库）
+/docs/
+/research/
+/img/
+/notes/
+
+# 旧 llms 端点遗留守卫（端点已删，防误提交），勿入库
+llms-full.txt
+
+# Astro 构建产物与类型缓存
+dist/
+.astro/
+

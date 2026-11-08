@@ -1,0 +1,195 @@
+---
+/**
+ * ⌘K 搜索面板。
+ *
+ * 索引在构建期生成（/search-index.json，倒排索引约 1.6MB），客户端直接查，
+ * 不像旧站那样在浏览器里现拉全部正文建索引（旧站首搜要等十几秒）。
+ *
+ * 检索逻辑与 header 内联搜索框共用 lib/client-search.ts。
+ */
+---
+
+<div class="cmdk" id="cmdk" hidden>
+  <button class="cmdk-backdrop" data-close aria-label="关闭搜索"></button>
+  <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="搜索文章">
+    <div class="cmdk-field">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.8-3.8" /></svg
+      >
+      <input
+        id="cmdk-input"
+        type="text"
+        placeholder="搜索全文：标题 / 来源 / 标签 / 分区"
+        autocomplete="off"
+        spellcheck="false"
+        role="combobox"
+        aria-label="搜索全文"
+        aria-controls="cmdk-results"
+        aria-autocomplete="list"
+        aria-expanded="false"
+      />
+      <kbd>esc</kbd>
+    </div>
+    <div class="cmdk-results" id="cmdk-results" role="listbox" aria-label="搜索结果"></div>
+    <div class="cmdk-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+      <span><kbd>↵</kbd> 打开</span>
+      <span><kbd>esc</kbd> 关闭</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { loadIndex, query } from '../lib/client-search'
+
+  const cmdk = document.getElementById('cmdk')
+  const input = document.getElementById('cmdk-input')
+  const results = document.getElementById('cmdk-results')
+  let active = 0
+  let hits = []
+  let index = null
+
+  /** 结果全部用 DOM API 拼，不走 innerHTML：字段来自正文文件，虽是构建期生成，仍按不可信输入处理。 */
+  function render(list, groupLabel) {
+    results.replaceChildren()
+    if (!list.length) {
+      const empty = document.createElement('div')
+      empty.className = 'cmdk-empty'
+      empty.textContent = '没有匹配的文章'
+      results.append(empty)
+      input.removeAttribute('aria-activedescendant')
+      return
+    }
+    if (groupLabel) {
+      const head = document.createElement('div')
+      head.className = 'cmdk-group'
+      head.textContent = groupLabel
+      results.append(head)
+    }
+    list.forEach((r, i) => {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'cmdk-item' + (i === active ? ' is-active' : '')
+      btn.id = `cmdk-opt-${i}`
+      btn.dataset.path = r.path
+      btn.setAttribute('role', 'option')
+      btn.setAttribute('aria-selected', i === active ? 'true' : 'false')
+      const t = document.createElement('span')
+      t.className = 't'
+      t.textContent = r.title
+      const m = document.createElement('span')
+      m.className = 'm'
+      m.textContent = r.publisher + ' · ' + r.sectionTitle
+      btn.append(t, m)
+      results.append(btn)
+    })
+    if (list.length && active >= 0) input.setAttribute('aria-activedescendant', `cmdk-opt-${active}`)
+  }
+
+  function setActive(i) {
+    active = Math.max(0, Math.min(hits.length - 1, i))
+    const items = results.querySelectorAll('.cmdk-item')
+    items.forEach((el, idx) => {
+      el.classList.toggle('is-active', idx === active)
+      el.setAttribute('aria-selected', idx === active ? 'true' : 'false')
+    })
+    items[active]?.scrollIntoView({ block: 'nearest' })
+    input.setAttribute('aria-activedescendant', `cmdk-opt-${active}`)
+  }
+
+  async function open() {
+    cmdk.hidden = false
+    input.setAttribute('aria-expanded', 'true')
+    input.focus()
+    input.value = ''
+    if (!index) {
+      const pending = document.createElement('div')
+      pending.className = 'cmdk-empty'
+      pending.textContent = '载入索引…'
+      results.replaceChildren(pending)
+      index = await loadIndex()
+    }
+    hits = index.rows.slice(0, 8)
+    active = 0
+    render(hits, '快速跳转')
+  }
+
+  function close() {
+    cmdk.hidden = true
+    input.setAttribute('aria-expanded', 'false')
+    input.removeAttribute('aria-activedescendant')
+    document.getElementById('searchToggle')?.focus()
+  }
+
+  input?.addEventListener('input', async () => {
+    const q = input.value.trim()
+    if (!index) index = await loadIndex()
+    if (!q) {
+      hits = index.rows.slice(0, 8)
+      active = 0
+      render(hits, '快速跳转')
+      return
+    }
+    hits = query(index, q)
+    active = 0
+    render(hits, hits.length ? hits.length + ' 条结果' : '')
+  })
+
+  results?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.cmdk-item')
+    if (btn) location.href = btn.dataset.path
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault()
+      cmdk.hidden ? open() : close()
+      return
+    }
+    if (cmdk.hidden) return
+    if (e.key === 'Tab') {
+      const panel = cmdk.querySelector('.cmdk-panel')
+      if (!panel) return
+      const focusables = Array.from(
+        panel.querySelectorAll<HTMLElement>('input, button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'),
+      ).filter((el) => el.offsetParent !== null)
+      if (!focusables.length) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      const current = document.activeElement as HTMLElement | null
+      if (!current || !panel.contains(current)) {
+        e.preventDefault()
+        first.focus()
+        return
+      }
+      if (e.shiftKey && current === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && current === last) {
+        e.preventDefault()
+        first.focus()
+      }
+      return
+    }
+    if (e.key === 'Escape') close()
+    else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActive(active + 1)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActive(active - 1)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (hits[active]) location.href = hits[active].path
+    }
+  })
+
+  // header 搜索框在窄屏下把搜索请求转交给这里
+  window.addEventListener('ui-specs:open-search', open)
+  cmdk?.querySelector('[data-close]')?.addEventListener('click', close)
+</script>

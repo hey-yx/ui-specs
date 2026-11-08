@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content'
+import Base from '../../../layouts/Base.astro'
+import FootLine from '../../../components/FootLine.astro'
+import { buildModel, specPath } from '../../../lib/model'
+
+export async function getStaticPaths() {
+  const specs = await getCollection('specs')
+  return specs.map((spec) => ({
+    params: {
+      section: spec.data.section,
+      stem: spec.data.file.replace(/^[^/]+\//, '').replace(/\.md$/, ''),
+    },
+    props: { spec },
+  }))
+}
+
+const { spec } = Astro.props
+const { Content } = await render(spec)
+const model = buildModel(await getCollection('specs'))
+const section = model.bySection.get(spec.data.section)!
+
+const description = `${spec.data.title}（${spec.data.publisher}）· ${section.title}分区全文`
+const path = specPath(spec)
+const site = Astro.site ?? new URL('http://localhost:4321')
+const canonical = new URL(path, site).href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: spec.data.title,
+  description,
+  inLanguage: 'zh-CN',
+  url: canonical,
+  dateModified: spec.data.fetched,
+  articleSection: section.title,
+  keywords: [spec.data.tag, spec.data.publisher, section.title].filter(Boolean),
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'UISpecs',
+    url: site.href,
+  },
+  citation: spec.data.source,
+}
+---
+
+<Base title={`${spec.data.title} · UISpecs`} description={description} path={path} jsonLd={jsonLd}>
+  <div class="page">
+    <article id="main" class="article-page">
+      <header class="doc-head">
+        <h1 class="doc-title">{spec.data.title}</h1>
+        <div class="doc-meta">
+          <span>{spec.data.publisher}</span>
+          <span>{spec.data.chars >= 10000 ? Math.round(spec.data.chars / 1000) + 'k 字' : spec.data.chars + ' 字'}</span>
+        </div>
+      </header>
+
+      <Content />
+
+      <p class="doc-source">
+        来源：<a href={spec.data.source} rel="nofollow noopener">{spec.data.source}</a>
+        · <a href={`/md/${spec.data.file}`}>原文 Markdown</a>
+        · <a href={`/api/${spec.data.file.replace(/\.md$/, '.json')}`}>JSON</a>
+        · 采集于 {spec.data.fetched}
+      </p>
+    </article>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{model.total}</b> 篇全文</span>
+    </FootLine>
+  </div>
+</Base>

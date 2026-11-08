@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import FootLine from '../components/FootLine.astro'
+import { buildModel } from '../lib/model'
+import { countSources } from '../lib/sources'
+import starData from '../data/star-points.json'
+import { CASES } from '../data/examples'
+
+const specs = await getCollection('specs')
+const model = buildModel(specs)
+
+const sources = countSources(model.all.map((s) => ({ publisher: s.data.publisher, source: s.data.source })))
+const pointCount = Object.keys(starData.points).length
+const taskCount = Object.keys(starData.tasks).length
+const caseCount = CASES.length
+
+const description = `全文收录的 UI 设计规范库：${model.total} 篇，按 ${model.sections.length} 个分区组织，覆盖 Apple HIG、Polaris、Primer、Carbon、GOV.UK、Ant Design 等官方规范。`
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'UISpecs',
+  description,
+  inLanguage: 'zh-CN',
+  url: Astro.site?.href ?? 'http://localhost:4321',
+}
+---
+
+<Base title="UI 设计规范全文库 · UISpecs" description={description} jsonLd={jsonLd}>
+  <div class="page">
+    <div id="main">
+      <section class="home-intro" aria-labelledby="home-title">
+        <h1 class="home-title" id="home-title">UISpecs</h1>
+        <p class="home-lede">
+          官方规范全文收录，按分区组织。每条规范都标着文件和行号，按场景能查到该读的原文。
+        </p>
+        <p class="home-links">
+          <a href="/starmap/">设计地图</a>
+          <a href="/briefs/">建站需求</a>
+          <a href="/examples/">案例站</a>
+        </p>
+        <p class="home-stats">
+          <b>{model.total}</b> 篇全文 · <b>{model.sections.length}</b> 分区 · <b>{pointCount}</b> 设计点 · <b>{taskCount}</b> 设计场景 · <b>{caseCount}</b> 案例站
+        </p>
+      </section>
+
+      <section class="home-index" aria-labelledby="index-title">
+        <h2 class="home-index-head" id="index-title">按分区读</h2>
+        <ul class="index-list">
+          {
+            model.sections.map((section) => (
+              <li>
+                <a class="index-row" href={`/s/${section.key}/`}>
+                  <span class="index-name">{section.title}</span>
+                  <span class="index-note">{section.note}</span>
+                  <span class="index-count">{section.items.length} 篇</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+
+    <FootLine>
+      <span><b>{model.total}</b> 篇全文</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{sources.length} 个官方来源，原文链接逐篇可查</span>
+    </FootLine>
+  </div>
+</Base>

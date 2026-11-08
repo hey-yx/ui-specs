@@ -1,0 +1,7 @@
+{
+  "name": "FixQueue",
+  "tagline": "企业 IT 工单台：筛选、分页、批量指派与详情抽屉",
+  "accent": "Blue7 #0052d9",
+  "structure": "Workbench · 侧栏 / 队列页脚",
+  "layout": "列表工作台"
+}

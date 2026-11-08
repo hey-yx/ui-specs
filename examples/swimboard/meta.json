@@ -1,0 +1,7 @@
+{
+  "name": "SwimBoard",
+  "tagline": "团队任务看板工作台：四列冲刺、任务卡、新建弹窗",
+  "accent": "Blue7 #0052d9",
+  "structure": "应用骨架 · 侧栏导航 / 署名条",
+  "layout": "固定侧栏 + 看板"
+}

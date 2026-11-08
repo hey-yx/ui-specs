@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TallyLane · 本月账本</title>
+<meta name="description" content="TallyLane 个人记账单页：十秒记一笔，看本月分类支出与预算进度。">
+<style>
+/* Hallmark · macrostructure: Ledger Column · tone: utilitarian · anchor hue: TDesign Blue7 #0052d9
+ * nav: N9 edge-aligned toolbar (single screen, no destinations) · footer: Ft5 statement
+ * theme: TDesign (main source, hex kept as-is — no OKLCH conversion)
+ * Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V4
+ */
+:root{
+  color-scheme: light;
+
+  /* 色彩 · 基准规范 TDesign */
+  --c-bg:#f3f3f3;
+  --c-surface:#ffffff;
+  --c-text:rgba(0,0,0,.9);
+  --c-text-2:rgba(0,0,0,.6);
+  --c-text-dis:rgba(0,0,0,.26);
+  --c-brand:#0052d9;
+  /* hover / active 不用原文 token 映射的 Blue6：白字压 Blue6 实测 4.47:1 不达 AA，
+     按 GAP_RULES 同族加一档（Blue8 / Blue9），并照 learnui 的「hover 用更深的变体」 */
+  --c-brand-hover:#003cab;
+  --c-brand-active:#002a7c;
+  --c-brand-weak:#f2f3ff;
+  --c-danger:#d54941;
+  --c-danger-text:#ad352f;
+  --c-danger-weak:#fff0ed;
+  --c-warn:#e37318;
+  --c-warn-text:#954500;
+  --c-warn-weak:#fff1e9;
+  --c-success:#2ba471;
+  --c-success-text:#006c45;
+  --c-line:#dddddd;
+  --c-line-strong:#8b8b8b;
+  --c-track:#e8e8e8;
+  --c-on-brand:#ffffff;
+
+  /* 字体 · TDesign 字阶 14 / 16 / 28，字重 400 / 600 */
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  --fs-body:14px;
+  --fs-sub:16px;
+  --fs-display:28px;
+  --fw-regular:400;
+  --fw-semibold:600;
+
+  /* 间距 · TDesign 8 基数 + 4 / 12 两档 */
+  --sp-1:4px;
+  --sp-2:8px;
+  --sp-3:12px;
+  --sp-4:16px;
+  --sp-6:24px;
+  --sp-8:32px;
+  --sp-12:48px;
+
+  /* 圆角 · derived 4 / 8 */
+  --r-sm:4px;
+  --r-md:8px;
+
+  /* 动效 · TDesign 移动端三档 + 三条定值曲线 */
+  --d-micro:100ms;
+  --d-mid:120ms;
+  --d-slow:140ms;
+  --ease-standard:cubic-bezier(.38,0,.24,1);
+  --ease-enter:cubic-bezier(0,0,.15,1);
+  --ease-exit:cubic-bezier(0.82,0,1,.9);
+
+  /* derived 兜底档 */
+  --mask:rgba(0,0,0,.45);
+  --target:44px;
+  --measure:640px;
+  --shell:960px;
+  --ring:2px solid var(--c-brand);
+  --ring-offset:2px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+:where(body,body *){line-height:calc(1em + 8px)}
+[hidden]{display:none !important}
+
+html,body{overflow-x:clip}
+body{
+  margin:0;
+  background:var(--c-bg);
+  color:var(--c-text);
+  font-family:var(--font-sans);
+  font-size:var(--fs-body);
+  font-weight:var(--fw-regular);
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,p,ul,ol,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+button{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+svg{display:block}
+
+:where(a,button,input,[tabindex]):focus-visible{
+  outline:var(--ring);
+  outline-offset:var(--ring-offset);
+  border-radius:var(--r-sm);
+}
+:where(button,input){-webkit-tap-highlight-color:transparent}
+
+.skip{
+  position:absolute;left:var(--sp-4);top:calc(-1 * var(--sp-12));
+  z-index:60;background:var(--c-surface);color:var(--c-brand);
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);
+  text-decoration:underline;
+}
+.skip:focus{top:var(--sp-2)}
+
+/* 顶部工具条 */
+.topbar{
+  position:relative;
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
+  max-width:var(--shell);margin:0 auto;
+  padding:var(--sp-4) var(--sp-4);
+}
+/* 分隔线画在内边距内侧，和下面卡片的左右边缘对齐，不靠 border 撑满整个壳 */
+.topbar::after{
+  content:"";position:absolute;left:var(--sp-4);right:var(--sp-4);bottom:0;
+  height:1px;background:var(--c-line);
+}
+.brand{display:flex;align-items:center;gap:var(--sp-2);font-weight:var(--fw-semibold);font-size:var(--fs-sub)}
+.brand svg{width:20px;height:20px;flex:none}
+.month{color:var(--c-text-2);font-size:var(--fs-body)}
+
+/* 版面 */
+.page{
+  max-width:var(--shell);margin:0 auto;
+  padding:var(--sp-4) var(--sp-4) var(--sp-12);
+}
+.page > h1{
+  font-size:var(--fs-display);font-weight:var(--fw-semibold);
+  margin-bottom:var(--sp-2);
+}
+.page > h1 .num{font-variant-numeric:tabular-nums}
+.lede{display:flex;flex-wrap:wrap;gap:var(--sp-2);color:var(--c-text-2);margin-bottom:var(--sp-4);text-wrap:pretty}
+.lede span{white-space:nowrap}
+.lede span:not(:last-child)::after{content:"·";margin-left:var(--sp-1);color:var(--c-line-strong)}
+.nb{white-space:nowrap}
+
+.layout{display:grid;gap:var(--sp-4);margin-top:var(--sp-4)}
+.col{display:grid;gap:var(--sp-4);align-content:start;min-width:0}
+
+/* 卡片 */
+.card{
+  background:var(--c-surface);
+  border-radius:var(--r-md);
+  padding:var(--sp-4);
+  min-width:0;
+}
+.card__head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-3)}
+.card__head h2{font-size:var(--fs-sub);font-weight:var(--fw-semibold)}
+.card__meta{color:var(--c-text-2)}
+
+/* 按钮 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  min-height:var(--target);padding:0 var(--sp-4);
+  border:1px solid transparent;border-radius:var(--r-sm);
+  background:transparent;cursor:pointer;
+  font-size:var(--fs-body);font-weight:var(--fw-semibold);
+  transition:background-color var(--d-micro) var(--ease-standard),
+             border-color var(--d-micro) var(--ease-standard),
+             color var(--d-micro) var(--ease-standard);
+}
+.btn--primary{background:var(--c-brand);color:var(--c-on-brand);min-width:120px}
+.btn--primary:hover{background:var(--c-brand-hover)}
+.btn--primary:active{background:var(--c-brand-active)}
+.btn--secondary{background:var(--c-surface);border-color:var(--c-line-strong);color:var(--c-text)}
+.btn--secondary:hover{background:var(--c-bg)}
+.btn--text{color:var(--c-text-2);padding:0 var(--sp-2)}
+.btn--text:hover{color:var(--c-text)}
+.btn[disabled]{cursor:not-allowed;color:var(--c-text-dis);background:var(--c-bg);border-color:var(--c-line)}
+
+/* 表单 */
+.form{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-4)}
+.field{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-2);border:0;padding:0;margin:0;min-width:0}
+.field > label,.field > legend{
+  font-size:var(--fs-body);font-weight:var(--fw-semibold);padding:0;
+}
+.amount-wrap{
+  display:flex;align-items:center;gap:var(--sp-2);min-width:0;
+  border:1px solid var(--c-line-strong);border-radius:var(--r-sm);
+  padding:0 var(--sp-3);min-height:56px;background:var(--c-surface);
+  transition:border-color var(--d-micro) var(--ease-standard);
+}
+.amount-wrap:focus-within{border-color:var(--c-brand)}
+.amount-wrap .cur{font-size:var(--fs-sub);color:var(--c-text-2);font-variant-numeric:tabular-nums}
+.amount-wrap input{
+  flex:1 1 0%;width:100%;min-width:0;border:0;background:transparent;
+  font-family:inherit;font-size:var(--fs-display);font-weight:var(--fw-semibold);
+  color:var(--c-text);font-variant-numeric:tabular-nums;padding:var(--sp-2) 0;
+}
+.amount-wrap input:focus{outline:none}
+.amount-wrap input::placeholder{color:var(--c-text-2);font-weight:var(--fw-regular)}
+.field.is-error .amount-wrap,.field.is-error input[type=text]{
+  border:2px solid var(--c-danger);
+}
+.hint{color:var(--c-text-2);text-wrap:pretty}
+.banner p,.empty,.foot p{text-wrap:pretty}
+.field > input[type=text]::placeholder{color:var(--c-text-2)}
+.field > input[type=text]{
+  width:100%;min-height:var(--target);padding:0 var(--sp-3);
+  border:1px solid var(--c-line-strong);border-radius:var(--r-sm);
+  font-family:inherit;font-size:var(--fs-body);color:var(--c-text);
+  background:var(--c-surface);
+}
+.field-error{
+  color:var(--c-danger-text);font-weight:var(--fw-semibold);
+  display:flex;gap:var(--sp-2);align-items:flex-start;
+}
+.field-error svg{width:16px;height:16px;flex:none;margin-top:3px}
+
+/* 分类 / 筛选 chips（radio 与 aria-pressed 共用外观） */
+.chips{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+/* 分类 5 项固定 3 列排布：320 与 375 下都是 3+2，不会出现 4+1 的孤行 */
+#cat-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.chips label,.chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:var(--target);padding:0 var(--sp-3);
+  border:1px solid var(--c-line-strong);border-radius:var(--r-sm);
+  background:var(--c-surface);color:var(--c-text);
+  font-size:var(--fs-body);cursor:pointer;
+  transition:border-color var(--d-micro) var(--ease-standard),
+             background-color var(--d-micro) var(--ease-standard),
+             color var(--d-micro) var(--ease-standard);
+}
+.chips label:hover,.chip:hover{background:var(--c-bg)}
+.chips input{
+  position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;
+}
+.chips label:has(input:checked),
+.chip[aria-pressed="true"]{
+  border-color:var(--c-brand);background:var(--c-brand-weak);color:var(--c-brand);
+  font-weight:var(--fw-semibold);
+}
+.chips label:has(input:focus-visible){outline:var(--ring);outline-offset:var(--ring-offset)}
+
+.form__actions{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
+
+/* 错误汇总 */
+.error-summary{
+  border:2px solid var(--c-danger);border-radius:var(--r-md);
+  background:var(--c-danger-weak);
+  padding:var(--sp-4);margin-bottom:var(--sp-4);
+}
+.error-summary__h{font-size:var(--fs-sub);font-weight:var(--fw-semibold);color:var(--c-danger-text);margin-bottom:var(--sp-2)}
+.error-summary__list{display:grid;gap:var(--sp-1)}
+.error-summary__list a{color:var(--c-danger-text);text-decoration:underline;text-underline-offset:2px}
+.error-summary:focus-visible{outline:var(--ring);outline-offset:var(--ring-offset)}
+
+/* 预算提醒带 */
+.banner{
+  display:flex;gap:var(--sp-3);align-items:flex-start;
+  padding:var(--sp-3) var(--sp-4);border-radius:var(--r-md);
+  background:var(--c-warn-weak);border:1px solid var(--c-warn);
+  color:var(--c-warn-text);
+}
+.banner svg{width:20px;height:20px;flex:none;margin-top:2px}
+.banner--calm{background:var(--c-brand-weak);border-color:var(--c-brand);color:var(--c-text)}
+.banner--over{background:var(--c-danger-weak);border-color:var(--c-danger);color:var(--c-danger-text)}
+.banner strong{font-weight:var(--fw-semibold);font-variant-numeric:tabular-nums}
+
+/* 预算进度 */
+.budget__left{display:flex;align-items:baseline;gap:var(--sp-2);flex-wrap:wrap}
+.budget__left .num{font-size:var(--fs-sub);font-weight:var(--fw-semibold);font-variant-numeric:tabular-nums}
+.progress{
+  height:8px;background:var(--c-track);border-radius:var(--r-sm);overflow:hidden;
+  margin-block:var(--sp-3);
+}
+.progress__fill{
+  display:block;height:100%;width:0;background:var(--c-brand);border-radius:var(--r-sm);
+  transition:width var(--d-slow) var(--ease-standard),background-color var(--d-micro) var(--ease-standard);
+}
+.progress__fill.is-warn{background:var(--c-warn)}
+.progress__fill.is-over{background:var(--c-danger)}
+.budget__row{display:flex;justify-content:space-between;gap:var(--sp-3);color:var(--c-text-2)}
+.budget__row .num{font-variant-numeric:tabular-nums}
+
+/* 分类支出条 */
+.cats{display:grid;gap:var(--sp-3)}
+.cat{
+  display:grid;
+  grid-template-columns:4.5em minmax(0,1fr) auto;
+  align-items:center;gap:var(--sp-2);
+}
+.cat__name{color:var(--c-text-2)}
+.cat__bar{height:8px;background:var(--c-track);border-radius:var(--r-sm);overflow:hidden}
+.cat__fill{
+  display:block;height:100%;background:var(--c-brand);border-radius:var(--r-sm);
+  transition:width var(--d-slow) var(--ease-standard);
+}
+.cat__amt{font-weight:var(--fw-semibold);font-variant-numeric:tabular-nums;text-align:right}
+.cats__foot{display:flex;justify-content:space-between;gap:var(--sp-3);color:var(--c-text-2);margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--c-line)}
+.cats__foot .num{font-variant-numeric:tabular-nums;font-weight:var(--fw-semibold);color:var(--c-text)}
+
+/* 周期切换 */
+.seg{display:inline-flex;border:1px solid var(--c-line-strong);border-radius:var(--r-sm);overflow:hidden}
+.seg button{
+  min-height:36px;padding:0 var(--sp-3);border:0;background:var(--c-surface);
+  cursor:pointer;color:var(--c-text-2);
+  transition:background-color var(--d-micro) var(--ease-standard),color var(--d-micro) var(--ease-standard);
+}
+.seg button + button{border-left:1px solid var(--c-line-strong)}
+.seg button[aria-pressed="true"]{background:var(--c-brand-weak);color:var(--c-brand);font-weight:var(--fw-semibold)}
+
+/* 流水 */
+.ledger{display:grid}
+.ledger li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);
+  padding-block:var(--sp-3);border-top:1px solid var(--c-line);
+}
+.ledger li:first-child{border-top:0}
+.ledger__main{display:flex;align-items:baseline;gap:var(--sp-2);flex-wrap:wrap;min-width:0}
+.tag{
+  flex:none;padding:0 var(--sp-2);border-radius:var(--r-sm);
+  background:var(--c-bg);color:var(--c-text-2);
+}
+.ledger__note{min-width:0;overflow-wrap:anywhere}
+.ledger__side{display:flex;align-items:baseline;gap:var(--sp-2);flex:none}
+.ledger__amt{font-weight:var(--fw-semibold);font-variant-numeric:tabular-nums}
+.ledger__date{color:var(--c-text-2);font-variant-numeric:tabular-nums}
+.empty{color:var(--c-text-2);display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-3);padding-block:var(--sp-3)}
+.empty button{min-height:var(--target)}
+
+/* 抽屉 */
+.scrim{
+  position:fixed;inset:0;background:var(--mask);z-index:40;
+  opacity:0;transition:opacity var(--d-slow) var(--ease-standard);
+}
+.scrim.is-open{opacity:1}
+.drawer{
+  position:fixed;left:50%;bottom:0;z-index:50;
+  width:100%;max-width:480px;
+  transform:translate(-50%,100%);
+  background:var(--c-surface);
+  border-radius:var(--r-md) var(--r-md) 0 0;
+  padding:var(--sp-6) var(--sp-4) var(--sp-4);
+  transition:transform var(--d-slow) var(--ease-enter);
+}
+.drawer.is-open{transform:translate(-50%,0)}
+.drawer h2{font-size:var(--fs-sub);font-weight:var(--fw-semibold);margin-bottom:var(--sp-4)}
+.drawer .form__actions{margin-top:var(--sp-6)}
+
+/* 页脚 */
+.foot{
+  position:relative;
+  max-width:var(--shell);margin:0 auto;
+  padding:var(--sp-6) var(--sp-4) var(--sp-8);
+  color:var(--c-text-2);display:grid;gap:var(--sp-1);
+}
+.foot::before{
+  content:"";position:absolute;left:var(--sp-4);right:var(--sp-4);top:0;
+  height:1px;background:var(--c-line);
+}
+.foot p:first-child{color:var(--c-text);font-weight:var(--fw-semibold)}
+
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* 断点 · TDesign sm 768 / md 992 */
+@media (min-width:768px){
+  .topbar{padding-inline:var(--sp-6)}
+  .topbar::after,.foot::before{left:var(--sp-6);right:var(--sp-6)}
+  .page{padding:var(--sp-6) var(--sp-6) var(--sp-12)}
+  .foot{padding-inline:var(--sp-6)}
+  .card{padding:var(--sp-6)}
+  .lede{margin-bottom:var(--sp-6)}
+  .layout{gap:var(--sp-6);margin-top:var(--sp-6)}
+  .col{gap:var(--sp-6)}
+}
+/* 768–991 单栏：整块收在 640 的行长里，右边缘不参差 */
+@media (min-width:768px) and (max-width:991px){
+  .page > h1,.page > .lede,.page > .banner,.page > .layout,.page > .error-summary{
+    max-width:var(--measure);margin-inline:auto;
+  }
+  .lede{margin-bottom:var(--sp-6)}
+}
+@media (min-width:992px){
+  .layout{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:start}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    transition-duration:1ms !important;
+    animation-duration:1ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="topbar">
+  <p class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path>
+    </svg>
+    TallyLane
+  </p>
+  <p class="month">2026 年 11 月</p>
+</header>
+
+<main id="main" class="page">
+
+  <div class="error-summary" id="error-summary" role="alert" tabindex="-1" hidden>
+    <h2 class="error-summary__h">这笔还没记上</h2>
+    <ul class="error-summary__list" id="error-list"></ul>
+  </div>
+
+  <h1 id="page-title">本月还剩 <span class="num" id="left-num">713.50</span> 元</h1>
+  <p class="lede" id="lede"><span id="lede-budget">预算 4,000.00 元</span><span id="lede-pct">已用 82%</span><span id="lede-count">已记 14 笔</span></p>
+
+  <div class="banner" id="banner" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3.5L21 19.5H3L12 3.5z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path>
+    </svg>
+    <p id="banner-text">本月已用 82%，还剩 <strong>713.50</strong> 元。想留点余地，接下来每天最好别超过 30 元。</p>
+  </div>
+
+  <div class="layout">
+
+    <div class="col">
+
+      <section class="card" aria-labelledby="entry-h">
+        <div class="card__head">
+          <h2 id="entry-h">记一笔</h2>
+          <span class="card__meta">今天</span>
+        </div>
+
+        <form class="form" id="entry" novalidate>
+          <div class="field" id="amount-field">
+            <label for="amount">金额</label>
+            <div class="amount-wrap">
+              <span class="cur" aria-hidden="true">¥</span>
+              <input id="amount" name="amount" type="text" inputmode="decimal"
+                     autocomplete="off" placeholder="0.00"
+                     aria-describedby="amount-hint amount-err" maxlength="12">
+            </div>
+            <p class="hint" id="amount-hint">只填数字，最多两位小数。</p>
+            <p class="field-error" id="amount-err" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+              <span></span>
+            </p>
+          </div>
+
+          <fieldset class="field" id="cat-field" aria-describedby="cat-err">
+            <legend>分类</legend>
+            <div class="chips" id="cat-chips">
+              <label><input type="radio" name="cat" value="餐饮"><span>餐饮</span></label>
+              <label><input type="radio" name="cat" value="交通"><span>交通</span></label>
+              <label><input type="radio" name="cat" value="购物"><span>购物</span></label>
+              <label><input type="radio" name="cat" value="居住"><span>居住</span></label>
+              <label><input type="radio" name="cat" value="娱乐"><span>娱乐</span></label>
+            </div>
+            <p class="field-error" id="cat-err" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+              <span></span>
+            </p>
+          </fieldset>
+
+          <div class="field" id="note-field">
+            <label for="note">备注（选填）</label>
+            <input id="note" name="note" type="text" autocomplete="off"
+                   placeholder="花在哪了，例如：午餐 · 牛肉面" maxlength="30"
+                   aria-describedby="note-hint">
+            <p class="hint" id="note-hint">最多 30 个字，写清楚下次才想得起来。</p>
+          </div>
+
+          <div class="form__actions">
+            <button type="reset" class="btn btn--text" id="reset-btn">清空</button>
+            <button type="submit" class="btn btn--primary" id="save-btn">保存这笔</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="budget-h">
+        <div class="card__head">
+          <h2 id="budget-h">本月预算</h2>
+          <button type="button" class="btn btn--text" id="budget-open" aria-haspopup="dialog" aria-expanded="false">调整</button>
+        </div>
+        <div class="progress" id="progress" role="progressbar"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="82"
+             aria-label="本月预算已用 82%">
+          <span class="progress__fill is-warn" id="progress-fill" style="width:82.16%"></span>
+        </div>
+        <div class="budget__row">
+          <p>已用 <span class="num" id="used-num">3,286.50</span> / <span class="num" id="budget-num">4,000.00</span></p>
+          <p><span class="num" id="pct-num">82%</span></p>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="col">
+
+      <section class="card" aria-labelledby="cats-h">
+        <div class="card__head">
+          <h2 id="cats-h">分类支出</h2>
+          <div class="seg" role="group" aria-label="切换统计周期">
+            <button type="button" id="seg-m" aria-pressed="true">本月</button>
+            <button type="button" id="seg-p" aria-pressed="false">上月</button>
+          </div>
+        </div>
+        <ul class="cats" id="cats"></ul>
+        <div class="cats__foot">
+          <p id="cats-total-label">11 月合计</p>
+          <p><span class="num" id="cats-total">3,286.50</span> 元</p>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="recent-h">
+        <div class="card__head">
+          <h2 id="recent-h">最近记录</h2>
+          <span class="card__meta" id="recent-count">6 条</span>
+        </div>
+
+        <div class="chips" role="group" aria-label="按分类筛选记录" id="filters">
+          <button type="button" class="chip" data-cat="全部" aria-pressed="true">全部</button>
+          <button type="button" class="chip" data-cat="餐饮" aria-pressed="false">餐饮</button>
+          <button type="button" class="chip" data-cat="交通" aria-pressed="false">交通</button>
+          <button type="button" class="chip" data-cat="购物" aria-pressed="false">购物</button>
+          <button type="button" class="chip" data-cat="居住" aria-pressed="false">居住</button>
+          <button type="button" class="chip" data-cat="娱乐" aria-pressed="false">娱乐</button>
+        </div>
+
+        <ul class="ledger" id="ledger"></ul>
+        <p class="empty" id="ledger-empty" hidden>这里还没有记录。<button type="button" class="btn btn--secondary" id="empty-reset">看全部</button></p>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <p>TallyLane · 一个人的记账本</p>
+  <p>这是单文件演示页：数据只存在当前这次页面会话里，刷新即回初始值。不做多账户、不做账单导入、不做云同步。</p>
+  <p>字号、间距、颜色取自 TDesign 色彩与字体规范；金额一律两位小数、千分位、负数在币种符号前。</p>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-h" hidden>
+  <h2 id="drawer-h">调整本月预算</h2>
+  <form class="form" id="budget-form" novalidate>
+    <div class="field" id="budget-field">
+      <label for="budget-input">预算金额</label>
+      <div class="amount-wrap">
+        <span class="cur" aria-hidden="true">¥</span>
+        <input id="budget-input" name="budget" type="text" inputmode="decimal"
+               autocomplete="off" aria-describedby="budget-hint budget-err" maxlength="12">
+      </div>
+      <p class="hint" id="budget-hint">改了以后进度条和提醒会跟着算。</p>
+      <p class="field-error" id="budget-err" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+        <span></span>
+      </p>
+    </div>
+    <div class="form__actions">
+      <button type="button" class="btn btn--secondary" id="budget-cancel">取消</button>
+      <button type="submit" class="btn btn--primary">保存预算</button>
+    </div>
+  </form>
+</div>
+
+<p class="visually-hidden" id="live" role="status" aria-live="polite"></p>
+
+<script>
+(function () {
+  'use strict';
+
+  var CATS = ['餐饮', '交通', '购物', '居住', '娱乐'];
+
+  var state = {
+    period: 'm',
+    filter: '全部',
+    budget: 4000,
+    count: 14,
+    cats: {
+      m: { 餐饮: 1286.00, 居住: 900.00, 购物: 512.50, 交通: 368.00, 娱乐: 220.00 },
+      p: { 餐饮: 1102.00, 居住: 900.00, 购物: 402.20, 交通: 300.00, 娱乐: 210.00 }
+    },
+    records: [
+      { date: '11-07', cat: '餐饮', note: '午餐 · 牛肉面', amount: 32.00 },
+      { date: '11-07', cat: '交通', note: '地铁通勤', amount: 6.00 },
+      { date: '11-06', cat: '购物', note: '洗衣液补货', amount: 49.90 },
+      { date: '11-06', cat: '餐饮', note: '晚饭 · 小炒', amount: 45.50 },
+      { date: '11-05', cat: '交通', note: '打车加班回家', amount: 38.00 },
+      { date: '11-05', cat: '娱乐', note: '电影票', amount: 45.00 }
+    ]
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    leftNum: $('left-num'), lede: $('lede'),
+    banner: $('banner'), bannerText: $('banner-text'),
+    progress: $('progress'), fill: $('progress-fill'),
+    usedNum: $('used-num'), budgetNum: $('budget-num'), pctNum: $('pct-num'),
+    cats: $('cats'), catsTotal: $('cats-total'), catsLabel: $('cats-total-label'),
+    ledger: $('ledger'), ledgerEmpty: $('ledger-empty'), recentCount: $('recent-count'),
+    filters: $('filters'),
+    form: $('entry'), amount: $('amount'), note: $('note'),
+    amountField: $('amount-field'), amountErr: $('amount-err'),
+    catField: $('cat-field'), catErr: $('cat-err'),
+    summary: $('error-summary'), summaryList: $('error-list'),
+    live: $('live'),
+    drawer: $('drawer'), scrim: $('scrim'), budgetForm: $('budget-form'),
+    budgetInput: $('budget-input'), budgetField: $('budget-field'), budgetErr: $('budget-err')
+  };
+
+  function fmt(n) {
+    return n.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  // 备注与分类来自用户输入，拼进模板前先转义，避免把标签当 HTML 渲染
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function sum(obj) {
+    return CATS.reduce(function (a, k) { return a + (obj[k] || 0); }, 0);
+  }
+  function pctOf(used, budget) {
+    return budget > 0 ? (used / budget) * 100 : 0;
+  }
+  function announce(msg) {
+    el.live.textContent = '';
+    window.setTimeout(function () { el.live.textContent = msg; }, 30);
+  }
+
+  /* ---------- 渲染 ---------- */
+
+  function renderBudget() {
+    var used = sum(state.cats.m);
+    var left = state.budget - used;
+    var p = pctOf(used, state.budget);
+
+    if (left >= 0) {
+      $('page-title').innerHTML = '本月还剩 <span class="num" id="left-num">' + fmt(left) + '</span> 元';
+    } else {
+      $('page-title').innerHTML = '本月超支 <span class="num" id="left-num">' + fmt(-left) + '</span> 元';
+    }
+
+    $('lede-budget').textContent = '预算 ' + fmt(state.budget) + ' 元';
+    $('lede-pct').textContent = '已用 ' + Math.round(p) + '%';
+    $('lede-count').textContent = '已记 ' + state.count + ' 笔';
+
+    el.usedNum.textContent = fmt(used);
+    el.budgetNum.textContent = fmt(state.budget);
+    el.pctNum.textContent = Math.round(p) + '%';
+
+    var w = Math.min(p, 100);
+    el.fill.style.width = w.toFixed(2) + '%';
+    el.fill.className = 'progress__fill' + (p >= 100 ? ' is-over' : (p >= 80 ? ' is-warn' : ''));
+    // aria-valuenow 必须在 min/max 之间：超支时夹到 100，把「已超支」写进口头
+    el.progress.setAttribute('aria-valuenow', String(Math.min(100, Math.round(p))));
+    el.progress.setAttribute('aria-label', '本月预算已用 ' + Math.round(p) + '%' + (p >= 100 ? '，已超支' : ''));
+
+    // 金额和「元」包在一个 nowrap 里：窄屏断行时不会只剩一个「元」字
+    var money = function (n) {
+      return '<span class="nb"><strong>' + fmt(n) + '</strong> 元</span>';
+    };
+    if (p >= 100) {
+      el.banner.className = 'banner banner--over';
+      el.banner.setAttribute('role', 'alert');
+      el.bannerText.innerHTML = '已经超支 ' + money(-left) + '。先把购物车放一放，剩下的日子按最低档走。';
+    } else if (p >= 80) {
+      el.banner.className = 'banner';
+      el.banner.setAttribute('role', 'status');
+      var daysLeft = 23;
+      el.bannerText.innerHTML = '本月已用 <strong>' + Math.round(p) + '%</strong>，还剩 ' + money(left) +
+        '。想留点余地，接下来每天最好别超过 ' +
+        '<span class="nb"><strong>' + Math.max(1, Math.round(left / daysLeft)) + '</strong> 元</span>。';
+    } else {
+      el.banner.className = 'banner banner--calm';
+      el.banner.setAttribute('role', 'status');
+      el.bannerText.innerHTML = '本月已用 <strong>' + Math.round(p) + '%</strong>，还剩 ' + money(left) + '，节奏正常。';
+    }
+  }
+
+  function renderCats() {
+    var data = state.cats[state.period];
+    // 比大小按金额降序排：同一条基线、同一色，看图先看最大的那笔钱去哪了
+    var keys = CATS.slice().sort(function (a, b) { return (data[b] || 0) - (data[a] || 0); });
+    var max = Math.max.apply(null, CATS.map(function (k) { return data[k] || 0; })) || 1;
+    el.cats.innerHTML = keys.map(function (k) {
+      var v = data[k] || 0;
+      return '<li class="cat">' +
+        '<span class="cat__name">' + k + '</span>' +
+        '<span class="cat__bar" aria-hidden="true"><span class="cat__fill" style="width:' +
+          ((v / max) * 100).toFixed(1) + '%"></span></span>' +
+        '<span class="cat__amt">' + fmt(v) + '</span>' +
+      '</li>';
+    }).join('');
+    el.catsLabel.textContent = state.period === 'm' ? '11 月合计' : '10 月合计';
+    el.catsTotal.textContent = fmt(sum(data));
+  }
+
+  function renderLedger() {
+    var list = state.records.filter(function (r) {
+      return state.filter === '全部' || r.cat === state.filter;
+    });
+    el.ledger.innerHTML = list.map(function (r) {
+      return '<li>' +
+        '<span class="ledger__main"><span class="tag">' + esc(r.cat) + '</span>' +
+          '<span class="ledger__note">' + esc(r.note) + '</span></span>' +
+        '<span class="ledger__side"><span class="ledger__amt">-¥' + fmt(r.amount) + '</span>' +
+          '<span class="ledger__date">' + r.date + '</span></span>' +
+      '</li>';
+    }).join('');
+    el.recentCount.textContent = list.length + ' 条';
+    el.ledgerEmpty.hidden = list.length !== 0;
+    el.ledger.hidden = list.length === 0;
+  }
+
+  function renderAll() {
+    renderBudget();
+    renderCats();
+    renderLedger();
+  }
+
+  /* ---------- 校验 ---------- */
+
+  function parseAmount(raw) {
+    return Number(String(raw).replace(/[,，\s]/g, ''));
+  }
+
+  function setFieldError(field, errNode, msg) {
+    var span = errNode.querySelector('span');
+    if (msg) {
+      field.classList.add('is-error');
+      span.textContent = '错误：' + msg;
+      errNode.hidden = false;
+    } else {
+      field.classList.remove('is-error');
+      span.textContent = '';
+      errNode.hidden = true;
+    }
+  }
+
+  function validateEntry() {
+    var errs = [];
+    var raw = el.amount.value.trim();
+    var amount = parseAmount(raw);
+
+    if (raw === '') {
+      errs.push({ id: 'amount', msg: '请输入这笔的金额' });
+    } else if (!isFinite(amount) || isNaN(amount)) {
+      errs.push({ id: 'amount', msg: '金额只能填数字，例如 32.50' });
+    } else if (amount <= 0) {
+      errs.push({ id: 'amount', msg: '金额要大于 0' });
+    } else if (amount > 100000) {
+      errs.push({ id: 'amount', msg: '单笔金额需小于 100,000 元' });
+    } else if (!/^\d+([.,]\d{1,2})?$/.test(raw.replace(/\s/g, ''))) {
+      errs.push({ id: 'amount', msg: '金额最多两位小数' });
+    }
+
+    var cat = document.querySelector('input[name="cat"]:checked');
+    if (!cat) {
+      errs.push({ id: 'cat-chips', msg: '请选择这笔的分类' });
+    }
+
+    return { errs: errs, amount: amount, cat: cat ? cat.value : null };
+  }
+
+  function showErrors(errs) {
+    el.summaryList.innerHTML = errs.map(function (e) {
+      return '<li><a href="#' + e.id + '">' + e.msg + '</a></li>';
+    }).join('');
+    el.summary.hidden = false;
+
+    var amountMsg = '';
+    var catMsg = '';
+    errs.forEach(function (e) {
+      if (e.id === 'amount') { amountMsg = e.msg; }
+      if (e.id === 'cat-chips') { catMsg = e.msg; }
+    });
+    setFieldError(el.amountField, el.amountErr, amountMsg);
+    setFieldError(el.catField, el.catErr, catMsg);
+    el.amount.setAttribute('aria-invalid', amountMsg ? 'true' : 'false');
+    el.catField.setAttribute('aria-invalid', catMsg ? 'true' : 'false');
+
+    el.summary.focus();
+  }
+
+  function clearErrors() {
+    el.summary.hidden = true;
+    el.summaryList.innerHTML = '';
+    setFieldError(el.amountField, el.amountErr, '');
+    setFieldError(el.catField, el.catErr, '');
+    el.amount.setAttribute('aria-invalid', 'false');
+    el.catField.setAttribute('aria-invalid', 'false');
+  }
+
+  /* ---------- 提交 ---------- */
+
+  el.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = validateEntry();
+    if (v.errs.length) { showErrors(v.errs); return; }
+
+    clearErrors();
+    state.records.unshift({
+      date: '11-07',
+      cat: v.cat,
+      note: el.note.value.trim() || '未写备注',
+      amount: v.amount
+    });
+    state.cats.m[v.cat] = (state.cats.m[v.cat] || 0) + v.amount;
+    state.count += 1;
+
+    if (state.filter !== '全部' && state.filter !== v.cat) {
+      state.filter = '全部';
+      syncFilters();
+    }
+
+    renderAll();
+    announce('已记下 ' + v.cat + ' ' + fmt(v.amount) + ' 元');
+
+    el.form.reset();
+    el.amount.focus();
+  });
+
+  el.form.addEventListener('reset', function () {
+    clearErrors();
+    window.setTimeout(function () { el.amount.focus(); }, 0);
+  });
+
+  // 字段一旦改过就撤掉自身的错误提示，但不提前校验（GOV.UK：不离开字段就校验）
+  el.amount.addEventListener('input', function () {
+    if (el.amountField.classList.contains('is-error')) {
+      setFieldError(el.amountField, el.amountErr, '');
+      el.amount.setAttribute('aria-invalid', 'false');
+      if (!el.summaryList.querySelector('li')) { el.summary.hidden = true; }
+    }
+  });
+
+  /* ---------- 周期切换 ---------- */
+
+  function setPeriod(p) {
+    state.period = p;
+    $('seg-m').setAttribute('aria-pressed', String(p === 'm'));
+    $('seg-p').setAttribute('aria-pressed', String(p === 'p'));
+    renderCats();
+    announce((p === 'm' ? '本月' : '上月') + '分类合计 ' + fmt(sum(state.cats[p])) + ' 元');
+  }
+  $('seg-m').addEventListener('click', function () { setPeriod('m'); });
+  $('seg-p').addEventListener('click', function () { setPeriod('p'); });
+
+  /* ---------- 筛选 ---------- */
+
+  function syncFilters() {
+    Array.prototype.forEach.call(el.filters.querySelectorAll('.chip'), function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.cat === state.filter));
+    });
+  }
+
+  el.filters.addEventListener('click', function (e) {
+    var btn = e.target.closest('.chip');
+    if (!btn) { return; }
+    state.filter = btn.dataset.cat;
+    syncFilters();
+    renderLedger();
+    announce(state.filter + ' ' + el.recentCount.textContent);
+  });
+
+  $('empty-reset').addEventListener('click', function () {
+    state.filter = '全部';
+    syncFilters();
+    renderLedger();
+    announce('全部 ' + el.recentCount.textContent);
+  });
+
+  /* ---------- 预算抽屉 ---------- */
+
+  var lastFocus = null;
+
+  function openDrawer() {
+    lastFocus = document.activeElement;
+    el.budgetInput.value = String(state.budget);
+    setFieldError(el.budgetField, el.budgetErr, '');
+    el.drawer.inert = false;
+    el.scrim.hidden = false;
+    el.drawer.hidden = false;
+    // 同步取一次布局再上类名，不靠 rAF：后台标签页里 rAF 会被节流，抽屉会卡在屏外
+    void el.drawer.offsetWidth;
+    el.scrim.classList.add('is-open');
+    el.drawer.classList.add('is-open');
+    $('budget-open').setAttribute('aria-expanded', 'true');
+    el.budgetInput.focus();
+    el.budgetInput.select();
+  }
+
+  // 关闭不做退场动画：立刻移出焦点与读屏，比滑出好看重要
+  function closeDrawer() {
+    el.scrim.classList.remove('is-open');
+    el.drawer.classList.remove('is-open');
+    el.scrim.hidden = true;
+    el.drawer.hidden = true;
+    el.drawer.inert = true;
+    $('budget-open').setAttribute('aria-expanded', 'false');
+    if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
+  }
+
+  $('budget-open').addEventListener('click', openDrawer);
+  $('budget-cancel').addEventListener('click', closeDrawer);
+  el.scrim.addEventListener('click', closeDrawer);
+
+  document.addEventListener('keydown', function (e) {
+    if (el.drawer.hidden) { return; }
+    if (e.key === 'Escape') { e.preventDefault(); closeDrawer(); return; }
+    if (e.key !== 'Tab') { return; }
+    var f = el.drawer.querySelectorAll('button, input, [href]');
+    if (!f.length) { return; }
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  el.budgetForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var raw = el.budgetInput.value.trim();
+    var v = parseAmount(raw);
+    var msg = '';
+    if (raw === '') { msg = '请输入预算金额'; }
+    else if (!isFinite(v) || isNaN(v)) { msg = '预算只能填数字，例如 4000'; }
+    else if (v <= 0) { msg = '预算要大于 0'; }
+    else if (v > 999999) { msg = '预算需小于 1,000,000 元'; }
+
+    if (msg) {
+      setFieldError(el.budgetField, el.budgetErr, msg);
+      el.budgetErr.querySelector('span').textContent = '错误：' + msg;
+      el.budgetInput.focus();
+      return;
+    }
+    state.budget = v;
+    renderBudget();
+    closeDrawer();
+    announce('本月预算已改成 ' + fmt(v) + ' 元');
+  });
+
+  /* ---------- 启动 ---------- */
+  renderAll();
+})();
+</script>
+</body>
+</html>

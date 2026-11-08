@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WeekDeck · 第 45 周</title>
+<style>
+/* Hallmark · macrostructure: Long Document · tone: utilitarian-editorial · anchor hue: blue
+ * Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V4
+ * theme: UISpecs/TDesign（中文产品 UI）· nav: N6 Newspaper masthead · footer: Ft2 Inline single line
+ * 本页为单文件示例：CSS/JS 全内联，零外部请求；数值按 UISpecs 基准规范 TDesign 取，取值记录见 DECISIONS.md
+ */
+:root{
+  /* 色彩 token —— 基准规范 content/color/tdesign.tencent.com--color.md */
+  --paper:#ffffff;        /* :186-187 White */
+  --paper-2:#f3f3f3;      /* :188-189 Gray1 L96 */
+  --paper-3:#eeeeee;      /* :190-191 Gray2 L94 */
+  --line:#e8e8e8;         /* :192-193 Gray3 L92 */
+  --line-strong:#8b8b8b;  /* :200-201 Gray7 L58 */
+  --ink:#242424;          /* :212-213 Gray13 L14 */
+  --ink-2:#5e5e5e;        /* :204-205 Gray9 L40 */
+  --accent:#0052d9;       /* :44-45 Blue7 品牌色 */
+  --accent-hover:#003cab; /* :68-69 Blue8（Blue6 #366ef4 承白字仅 4.47:1，同族换深一档，见 DECISIONS §3） */
+  --accent-active:#002a7c;/* :71-72 Blue9 */
+  --accent-soft:#f2f3ff;  /* :47-48 Blue1 */
+  --danger:#ad352f;       /* :100-101 Red7 */
+  --danger-soft:#fff0ed;  /* :82-83 Red1 */
+  --success:#006c45;      /* :170-171 Green7 */
+  --success-soft:#e3f9e9; /* :152-153 Green1 */
+  --series-2:#00668e;     /* :380-381 Cyan7（扩展色，用于数据可视化） */
+
+  /* 字体 —— content/type/tdesign.tencent.com--fonts.md:34 */
+  --font:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+
+  /* 间距 —— content/layout/tdesign.tencent.com--layout.md:65 网格基数 8px、:107 增 4/12 两档小间距 */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+
+  /* 圆角 —— 派生（库无通用 radius 原文）：4 / 8 两档 */
+  --radius-1:4px;
+  --radius-2:8px;
+
+  /* 动效 —— content/motion/tdesign.tencent.com--motion.md:96-101 时长、:111-113 缓动 */
+  --dur-fast:100ms;
+  --dur-base:200ms;
+  --dur-slow:240ms;
+  --ease-standard:cubic-bezier(.38,0,.24,1);
+  --ease-out:cubic-bezier(0,0,.15,1);
+  --ease-in:cubic-bezier(0.82,0,1,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+/* 行高：每个元素按自身字号算，零特异性，不被继承值覆盖 —— 公式 content/type/tdesign.tencent.com--fonts.md:67 */
+:where(body, body *){line-height:calc(1em + 8px)}
+
+html{overflow-x:clip}
+body{
+  margin:0;
+  overflow-x:clip;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:14px;
+  font-weight:400;
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,h3,p,ul,li,figure,dl,dd,dt{margin:0;padding:0}
+ul{list-style:none}
+button{font:inherit;color:inherit;margin:0}
+[hidden]{display:none !important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+:where(a){color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* 焦点环：2px 实线 + 2px 偏移（WCAG 2.2 2.4.13 / content/a11y/w3c--wcag-2.2.md:789-792） */
+:where(a,button,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+  border-radius:var(--radius-1);
+}
+
+.skip{
+  position:absolute;left:var(--space-2);top:var(--space-2);
+  z-index:20;
+  padding:var(--space-2) var(--space-3);
+  background:var(--paper);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-1);
+  clip-path:inset(50%);width:1px;height:1px;overflow:hidden;
+}
+.skip:focus{clip-path:none;width:auto;height:auto;overflow:visible;display:inline-flex;align-items:center;min-height:44px}
+
+.wrap{
+  max-width:45em;              /* 派生：中文 35–45 字 × 14px（GAP_RULES「正文行长」） */
+  margin-inline:auto;
+  padding-inline:var(--space-4);
+}
+@media (min-width:768px){        /* 断点 content/layout/tdesign.tencent.com--layout.md:117 */
+  .wrap{padding-inline:var(--space-5)}
+}
+
+/* ---------- 页头：N6 报头 ---------- */
+.masthead{padding-top:var(--space-6)}
+.issue{
+  text-align:center;
+  color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
+}
+.brand{
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;
+  gap:var(--space-3);
+  margin-top:var(--space-1);
+}
+.brand-cn{font-size:36px;font-weight:600;letter-spacing:.02em}
+.brand-en{color:var(--ink-2)}
+.rules{display:grid;gap:var(--space-1);margin-top:var(--space-3)}
+.rules span{display:block;height:1px;background:var(--line-strong)}
+.rules span:last-child{background:var(--line)}
+.toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:var(--space-3);
+  padding-block:var(--space-3);
+}
+.seg{display:flex;gap:var(--space-2)}
+.seg button{
+  min-height:44px;
+  padding:var(--space-2) var(--space-4);
+  background:var(--paper);
+  color:var(--ink-2);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-1);
+  font-weight:400;
+  cursor:pointer;
+  transition:color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard),background-color var(--dur-fast) var(--ease-standard);
+}
+.seg button:hover{color:var(--ink);border-color:var(--ink-2);background:var(--paper-2)}
+.seg button[aria-pressed="true"]{
+  color:var(--accent);
+  border-color:var(--accent);
+  background:var(--accent-soft);
+  font-weight:600;               /* 字位由字重与描边表达，不靠字号升档 */
+}
+.updated{color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ---------- 主体 ---------- */
+main{padding-bottom:var(--space-7)}
+section{margin-top:var(--space-7)}
+h2{font-size:20px;font-weight:600;margin-bottom:var(--space-3)}
+.section-note{color:var(--ink-2);max-width:38em}
+
+.lede{font-size:14px;color:var(--ink)}
+
+/* KPI 主数字：全页唯一最大数据元素 */
+.kpi{margin-top:var(--space-4)}
+.kpi-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--space-2)}
+.kpi-num{
+  font-size:36px;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.01em;
+}
+.kpi-of{font-size:20px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.kpi-note{margin-top:var(--space-2);color:var(--ink-2);max-width:38em}
+.kpi-note b{color:var(--ink);font-weight:600}
+
+/* ---------- 燃尽图 ---------- */
+.figure{background:none}
+figcaption{margin-bottom:var(--space-3)}
+.chart{display:grid;grid-template-columns:2.75em minmax(0,1fr);grid-template-rows:200px auto;column-gap:var(--space-2);row-gap:var(--space-2)}
+.chart-y{position:relative;height:200px}
+.chart-y span{
+  position:absolute;right:0;transform:translateY(-50%);
+  color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.chart-plot{position:relative;height:200px}
+.grid{position:absolute;inset:0}
+.grid i{position:absolute;left:0;right:0;height:1px;background:var(--line)}
+.grid i.top{background:var(--line-strong);opacity:.55}
+.chart-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.chart-x{grid-column:2;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:0}
+.chart-x span{text-align:center;color:var(--ink-2)}
+.dot{
+  position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;
+  border-radius:50%;
+  background:var(--accent);
+  border:2px solid var(--paper);
+  pointer-events:none;
+}
+.dot.plan{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;background:transparent;border:2px solid var(--series-2)}
+.crosshair{position:absolute;top:0;bottom:0;width:1px;background:var(--line-strong);pointer-events:none}
+.tip{
+  position:absolute;top:-2px;
+  padding:var(--space-1) var(--space-2);
+  background:var(--paper);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-1);
+  color:var(--ink);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin-top:var(--space-4)}
+.legend button{
+  display:inline-flex;align-items:center;gap:var(--space-2);
+  min-height:44px;
+  padding:var(--space-1) var(--space-2);
+  background:none;border:1px solid transparent;border-radius:var(--radius-1);
+  color:var(--ink);cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard),opacity var(--dur-fast) var(--ease-standard);
+}
+.legend button:hover{background:var(--paper-2)}
+.legend .swatch{display:block;width:20px;height:3px;border-radius:2px;background:var(--accent)}
+.legend .swatch.plan{background:repeating-linear-gradient(90deg,var(--series-2) 0 5px,transparent 5px 9px)}
+.legend button[aria-pressed="true"]{border-color:var(--line-strong);background:var(--paper-2)}
+.legend button[data-dim="true"]{opacity:.45}
+.datatable{margin-top:var(--space-1)}
+.datatable summary{cursor:pointer;color:var(--ink-2);display:inline-block;padding:var(--space-2) 0;min-height:44px}
+table{border-collapse:collapse;width:100%;margin-top:var(--space-2);font-variant-numeric:tabular-nums}
+caption{text-align:left;color:var(--ink-2);padding-bottom:var(--space-2)}
+th,td{text-align:left;padding:var(--space-2) 0;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2)}
+td.num,th.num{text-align:right}
+
+/* ---------- 成员周报 ---------- */
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
+.chip{
+  min-height:44px;
+  padding:var(--space-2) var(--space-3);
+  background:var(--paper);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-1);
+  color:var(--ink-2);
+  cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard);
+}
+.chip:hover{background:var(--paper-2);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.filter-count{margin-left:auto;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.members{border-top:1px solid var(--line)}
+.member{border-bottom:1px solid var(--line);padding-block:var(--space-3)}
+.member-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--space-1) var(--space-3)}
+.member-top h3{font-size:14px;font-weight:400}
+.member-btn{
+  display:inline-flex;align-items:center;gap:var(--space-2);
+  min-height:44px;
+  padding:var(--space-1) var(--space-2) var(--space-1) 0;
+  background:none;border:1px solid transparent;border-radius:var(--radius-1);
+  font-weight:600;cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard);
+}
+.member-btn:hover{background:var(--paper-2)}
+.chev{display:block;width:8px;height:8px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(-45deg);transition:transform var(--dur-base) var(--ease-standard)}
+.member-btn[aria-expanded="true"] .chev{transform:rotate(45deg)}
+.member-meta{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tag{color:var(--ink-2)}
+.tag.blocked{color:var(--danger);font-weight:600}
+.member-panel{padding-top:var(--space-2);padding-left:var(--space-1)}
+.member-panel dl{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:var(--space-2) var(--space-3)}
+.member-panel dt{color:var(--ink-2)}
+.member-panel dd{color:var(--ink)}
+.empty{padding:var(--space-5) 0;color:var(--ink-2);border-bottom:1px solid var(--line)}
+
+/* ---------- 生成周报 ---------- */
+.btn-primary,.btn-secondary{
+  min-height:44px;
+  padding:var(--space-2) var(--space-5);
+  border-radius:var(--radius-1);
+  cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard);
+}
+.btn-primary{
+  background:var(--accent);color:#ffffff;border:1px solid var(--accent);font-weight:600;
+}
+.btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn-primary:active{background:var(--accent-active);border-color:var(--accent-active)}
+.btn-primary[disabled]{
+  background:var(--paper-3);color:var(--ink-2);border-color:var(--line);
+  cursor:not-allowed;
+}
+.btn-secondary{
+  background:var(--paper);color:var(--ink);border:1px solid var(--line-strong);font-weight:400;
+}
+.btn-secondary:hover{background:var(--paper-2);border-color:var(--ink-2)}
+.progress{margin-top:var(--space-4)}
+.bar{height:4px;background:var(--paper-3);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--dur-slow) var(--ease-standard)}
+.progress-text{margin-top:var(--space-2);color:var(--ink-2)}
+.success{
+  display:flex;align-items:center;gap:var(--space-2);
+  margin-top:var(--space-4);
+  padding:var(--space-2) var(--space-3);
+  background:var(--success-soft);
+  border-radius:var(--radius-1);
+  color:var(--success);
+  font-weight:600;
+}
+.success svg{flex:none}
+.summary-box{margin-top:var(--space-3);padding:var(--space-4);background:var(--paper-2);border-radius:var(--radius-2)}
+.summary{white-space:pre-wrap;color:var(--ink);max-width:38em}
+.copy-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);margin-top:var(--space-3)}
+#copyState{color:var(--ink-2)}
+#copyState.ok{color:var(--success);font-weight:600}
+#copyState.bad{color:var(--danger);font-weight:600}
+
+/* ---------- 页脚：Ft2 单行 ---------- */
+footer{border-top:1px solid var(--line);padding-block:var(--space-4) var(--space-6)}
+.foot{color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ---------- 周报抽屉（派生尺寸，见 DECISIONS §5） ---------- */
+.scrim{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45)}
+body.drawer-open{overflow:hidden}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:31;
+  width:min(100%,520px);
+  display:flex;flex-direction:column;
+  background:var(--paper);
+  border-left:1px solid var(--line);
+  overflow-y:auto;
+}
+.drawer-head{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  padding:var(--space-4);
+  border-bottom:1px solid var(--line);
+}
+.drawer-head h2{margin:0}
+.drawer-body{padding:var(--space-4)}
+.icon-btn{
+  width:44px;height:44px;flex:none;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:none;border:1px solid transparent;border-radius:var(--radius-1);cursor:pointer;
+  transition:background-color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard);
+}
+.icon-btn:hover{background:var(--paper-2);border-color:var(--line)}
+.field{margin-top:var(--space-4)}
+.field label{display:block;color:var(--ink-2);margin-bottom:var(--space-1)}
+.field input{
+  width:100%;min-height:44px;
+  padding:var(--space-2) var(--space-3);
+  font:inherit;color:var(--ink);
+  background:var(--paper);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-1);
+  transition:border-color var(--dur-fast) var(--ease-standard),background-color var(--dur-fast) var(--ease-standard);
+}
+.field input[aria-invalid="true"]{border-color:var(--danger);background:var(--danger-soft)}
+.hint{color:var(--ink-2);margin-top:var(--space-1)}
+.msg{margin-top:var(--space-1)}
+.msg.bad{color:var(--danger);font-weight:600}
+.msg.ok{color:var(--success);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important}
+  .chev{transition:none !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到本周内容</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="issue" id="issueLine">第 45 周 · 11 月 2 日 — 11 月 6 日</p>
+    <p class="brand"><span class="brand-cn">WeekDeck</span></p>
+    <div class="rules" aria-hidden="true"><span></span><span></span></div>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="选择周期">
+        <button type="button" id="btnThis" aria-pressed="true" data-week="this">本周</button>
+        <button type="button" id="btnLast" aria-pressed="false" data-week="last">上周</button>
+      </div>
+      <p class="updated" id="updatedLine">更新于 11 月 6 日 17:40</p>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section aria-labelledby="ledeHead" style="margin-top:var(--space-5)">
+      <h1 id="ledeHead" class="sr-only">第 45 周团队周报</h1>
+      <p class="lede" id="lede">这一周的重心是导出链路：队列重写落地，权限接口开始灰度；测试环境占用拖慢了回归，已约运维在下周一释放。</p>
+    </section>
+
+    <section aria-labelledby="kpiHead">
+      <h2 id="kpiHead">本周完成</h2>
+      <div class="kpi">
+        <p class="kpi-line">
+          <span class="kpi-num" id="kpiNum">18</span>
+          <span class="kpi-of" id="kpiOf">/ 24 项</span>
+        </p>
+        <p class="kpi-note" id="kpiNote">完成率 <b>75%</b>，剩 <b>6</b> 项顺延到下周；上周同期完成 15 项。</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="burnHead">
+      <h2 id="burnHead">燃尽</h2>
+      <figure class="figure" aria-labelledby="chartTitle" aria-describedby="chartDesc">
+        <figcaption>
+          <p id="chartTitle">剩余待办从 24 项降到 6 项，周四落后计划 3 项</p>
+          <p id="chartDesc" class="section-note" style="margin-top:var(--space-1)">纵轴为剩余待办（项），从 0 项起算、未截断；横轴为本周 5 个工作日。</p>
+        </figcaption>
+
+        <div class="chart">
+          <div class="chart-y" aria-hidden="true">
+            <span style="top:0%">24</span>
+            <span style="top:25%">18</span>
+            <span style="top:50%">12</span>
+            <span style="top:75%">6</span>
+            <span style="top:100%">0</span>
+          </div>
+          <div class="chart-plot" id="plot">
+            <div class="grid" aria-hidden="true">
+              <i class="top" style="top:0"></i>
+              <i style="top:25%"></i>
+              <i style="top:50%"></i>
+              <i style="top:75%"></i>
+              <i style="top:100%"></i>
+            </div>
+            <svg class="chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <polyline id="linePlan" fill="none" stroke="var(--series-2)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" vector-effect="non-scaling-stroke" points=""></polyline>
+              <polyline id="lineActual" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke" points=""></polyline>
+            </svg>
+            <div id="dots"></div>
+            <div class="crosshair" id="crosshair" hidden></div>
+            <p class="tip" id="tip" hidden></p>
+          </div>
+          <div class="chart-x" aria-hidden="true" id="chartX"></div>
+        </div>
+
+        <div class="legend" role="group" aria-label="图例：悬停高亮，点击只看一条">
+          <button type="button" id="lgActual" aria-pressed="false" data-series="actual"><span class="swatch" aria-hidden="true"></span>实际剩余</button>
+          <button type="button" id="lgPlan" aria-pressed="false" data-series="plan"><span class="swatch plan" aria-hidden="true"></span>计划剩余</button>
+        </div>
+
+        <details class="datatable">
+          <summary>查看数据表</summary>
+          <table>
+            <caption id="tableCap">第 45 周燃尽数据（单位：项）</caption>
+            <thead><tr><th scope="col">日期</th><th scope="col" class="num">实际剩余</th><th scope="col" class="num">计划剩余</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </details>
+      </figure>
+    </section>
+
+    <section aria-labelledby="memberHead">
+      <h2 id="memberHead">成员周报</h2>
+      <div class="filters" role="group" aria-label="按提交状态筛选">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">全部</button>
+        <button type="button" class="chip" data-filter="submitted" aria-pressed="false">已提交</button>
+        <button type="button" class="chip" data-filter="pending" aria-pressed="false">待提交</button>
+        <button type="button" class="chip" data-filter="blocked" aria-pressed="false">有阻塞</button>
+        <p class="filter-count" id="filterCount" role="status" aria-live="polite">共 5 条</p>
+      </div>
+      <ul class="members" id="memberList"></ul>
+    </section>
+
+    <section aria-labelledby="genHead">
+      <h2 id="genHead">本周周报摘要</h2>
+      <p class="section-note">把 5 份成员周报和上面的数字合成一段可直接发的摘要。不改任何已有数据，只做汇总。</p>
+      <p style="margin-top:var(--space-3)">
+        <button type="button" class="btn-primary" id="genBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="drawer">一键生成本周周报</button>
+      </p>
+
+      <p class="hint">生成后在侧栏预览摘要；可以先改标题，再复制发给团队。</p>
+    </section>
+
+  </div>
+</main>
+
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+  <div class="drawer-head">
+    <h2 id="drawerTitle">本周周报</h2>
+    <button type="button" class="icon-btn" id="closeBtn" aria-label="关闭周报面板">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="progress" id="progress" hidden>
+      <div class="bar" role="progressbar" aria-label="生成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar"><span id="barFill"></span></div>
+      <p class="progress-text" id="progressText">正在读取 5 份周报…</p>
+    </div>
+
+    <div id="result" hidden>
+      <p class="success" id="successLine">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8.5 6 12.5 14 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span id="successText">本周周报已生成</span>
+      </p>
+
+      <div class="field">
+        <label for="draftTitle">周报标题</label>
+        <input type="text" id="draftTitle" value="第 45 周团队周报" autocomplete="off" aria-describedby="titleHint titleMsg">
+        <p class="hint" id="titleHint">不超过 24 字；保存后随摘要一起发。</p>
+        <p class="msg" id="titleMsg" role="status" aria-live="polite"></p>
+        <p style="margin-top:var(--space-2)"><button type="button" class="btn-secondary" id="saveTitle">保存标题</button></p>
+      </div>
+
+      <div class="summary-box">
+        <p class="summary" id="summaryText"></p>
+        <div class="copy-row">
+          <button type="button" class="btn-primary" id="copyBtn">复制摘要</button>
+          <span id="copyState" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<footer>
+  <div class="wrap">
+    <p class="foot">WeekDeck · 演示数据，非真实团队记录 · 单文件示例，零外部请求</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var DATA = {
+    "this": {
+      key: "this",
+      issue: "第 45 周 · 11 月 2 日 — 11 月 6 日",
+      updated: "更新于 11 月 6 日 17:40",
+      lede: "这一周的重心是导出链路：队列重写落地，权限接口开始灰度；测试环境占用拖慢了回归，已约运维在下周一释放。",
+      done: 18, planned: 24, carried: 6, rate: "75%", prevDone: 15,
+      days: [
+        {label:"周一", plan:24, actual:24},
+        {label:"周二", plan:18, actual:21},
+        {label:"周三", plan:12, actual:16},
+        {label:"周四", plan:6,  actual:9},
+        {label:"周五", plan:0,  actual:6}
+      ],
+      members: [
+        {name:"陈默", role:"前端", done:6, status:"submitted", blocked:false,
+         progress:"重写导出队列，失败重试从固定 3 次改成按退避重试；把批量导出拆成独立接口。",
+         next:"给导出补进度回调，联调 200 MB 大文件场景。",
+         risk:"无"},
+        {name:"林一", role:"后端", done:5, status:"submitted", blocked:false,
+         progress:"权限接口收口到统一网关，灰度 2 个租户；清理 4 个旧白名单。",
+         next:"灰度扩到 10 个租户，补一套监控看板。",
+         risk:"无"},
+        {name:"周冉", role:"设计", done:3, status:"submitted", blocked:false,
+         progress:"完成周报页两版线框，定下单栏骨架；补齐空态与加载态。",
+         next:"出高保真，按 320 与 768 两档联调。",
+         risk:"无"},
+        {name:"何畅", role:"测试", done:2, status:"submitted", blocked:true,
+         progress:"回归第 1、2 批共 46 条用例，发现 3 个缺陷已提单。",
+         next:"第 3 批回归，重点覆盖导出重试。",
+         risk:"预发环境被占用，第 3 批卡住，已约运维在 11 月 9 日释放。"},
+        {name:"苏晚", role:"产品", done:2, status:"pending", blocked:false,
+         progress:"对齐下周优先级，砍掉 2 个非必要需求；写完成本口径。",
+         next:"周会前把需求池按投入产出排序。",
+         risk:"无"}
+      ]
+    },
+    "last": {
+      key: "last",
+      issue: "第 44 周 · 10 月 26 日 — 10 月 30 日",
+      updated: "更新于 10 月 30 日 18:05",
+      lede: "上一周在收权限与登录的尾巴：把三个旧入口并进统一网关，登录失败提示重写；导出队列只做了调研。",
+      done: 15, planned: 22, carried: 7, rate: "68%", prevDone: 13,
+      days: [
+        {label:"周一", plan:22, actual:22},
+        {label:"周二", plan:16, actual:18},
+        {label:"周三", plan:11, actual:12},
+        {label:"周四", plan:6,  actual:8},
+        {label:"周五", plan:0,  actual:7}
+      ],
+      members: [
+        {name:"陈默", role:"前端", done:5, status:"submitted", blocked:false,
+         progress:"登录失败提示重写，区分账号、密码、验证码三类；补 6 条前端用例。",
+         next:"接手导出队列调研，输出拆分方案。",
+         risk:"无"},
+        {name:"林一", role:"后端", done:4, status:"submitted", blocked:true,
+         progress:"统一网关接入 3 个旧入口，灰度 1 个租户。",
+         next:"补网关限流与熔断。",
+         risk:"网关限流阈值等安全组评审，评审排在 11 月 6 日，本周无法上量。"},
+        {name:"周冉", role:"设计", done:3, status:"submitted", blocked:false,
+         progress:"出登录三态的视觉稿，补了错误提示的位置规则。",
+         next:"排周报页的信息层级，先出线框。",
+         risk:"无"},
+        {name:"何畅", role:"测试", done:1, status:"submitted", blocked:true,
+         progress:"回归登录相关 28 条用例，发现 2 个缺陷。",
+         next:"等网关灰度扩量后补权限回归。",
+         risk:"测试账号权限被回收，只能借他人账号，效率低；已提工单。"},
+        {name:"苏晚", role:"产品", done:2, status:"submitted", blocked:false,
+         progress:"定下周目标，收敛到导出与权限两条线；砍掉 3 个临时需求。",
+         next:"把周报模板定下来，固定 4 个字段。",
+         risk:"无"}
+      ]
+    }
+  };
+
+  var state = {week:"this", filter:"all", isolated:null};
+
+  var $ = function(id){return document.getElementById(id)};
+
+  /* ---------- 渲染 ---------- */
+  function fmtWeek(w){return DATA[w]}
+
+  function renderHeader(w){
+    $("issueLine").textContent = w.issue;
+    $("updatedLine").textContent = w.updated;
+    $("lede").textContent = w.lede;
+    document.title = "WeekDeck · " + w.issue.split(" · ")[0];
+  }
+
+  function renderKpi(w){
+    $("kpiNum").textContent = String(w.done);
+    $("kpiOf").textContent = "/ " + w.planned + " 项";
+    $("kpiNote").innerHTML = "完成率 <b>" + w.rate + "</b>，剩 <b>" + w.carried +
+      "</b> 项顺延到下周；上周同期完成 " + w.prevDone + " 项。";
+  }
+
+  function maxOf(days){
+    var m = 0;
+    days.forEach(function(d){ m = Math.max(m, d.plan, d.actual); });
+    return m || 1;
+  }
+
+  function pctY(v, maxVal){
+    /* 绘图区 y 轴：0 在底部 100%，maxVal 在顶部 0% */
+    return (100 - (v / maxVal) * 100).toFixed(2);
+  }
+
+  function renderChart(w){
+    var days = w.days, maxVal = maxOf(days);
+    var n = days.length;
+    var xs = days.map(function(_,i){ return (i / (n - 1)) * 100; });
+
+    var planPts = days.map(function(d,i){ return xs[i].toFixed(2) + "," + pctY(d.plan, maxVal); }).join(" ");
+    var actPts  = days.map(function(d,i){ return xs[i].toFixed(2) + "," + pctY(d.actual, maxVal); }).join(" ");
+    $("linePlan").setAttribute("points", planPts);
+    $("lineActual").setAttribute("points", actPts);
+
+    /* y 轴刻度：0 / 1/4 / 1/2 / 3/4 / max */
+    var yLabels = document.querySelectorAll(".chart-y span");
+    var ticks = [maxVal, maxVal * .75, maxVal * .5, maxVal * .25, 0];
+    ticks.forEach(function(v,i){ if(yLabels[i]) yLabels[i].textContent = String(Math.round(v)); });
+
+    /* 数据点 */
+    var dots = $("dots");
+    dots.textContent = "";
+    days.forEach(function(d,i){
+      var dot = document.createElement("span");
+      dot.className = "dot";
+      dot.style.left = xs[i].toFixed(2) + "%";
+      dot.style.top = pctY(d.actual, maxVal) + "%";
+      dot.setAttribute("data-i", String(i));
+      dots.appendChild(dot);
+      var pd = document.createElement("span");
+      pd.className = "dot plan";
+      pd.style.left = xs[i].toFixed(2) + "%";
+      pd.style.top = pctY(d.plan, maxVal) + "%";
+      pd.setAttribute("data-plan", "1");
+      dots.appendChild(pd);
+    });
+
+    /* x 轴标签 */
+    var ax = $("chartX");
+    ax.textContent = "";
+    days.forEach(function(d){
+      var s = document.createElement("span");
+      s.textContent = d.label;
+      ax.appendChild(s);
+    });
+
+    /* 数据表 */
+    var tb = $("tableBody");
+    tb.textContent = "";
+    days.forEach(function(d){
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + d.label + "</td><td class='num'>" + d.actual + "</td><td class='num'>" + d.plan + "</td>";
+      tb.appendChild(tr);
+    });
+    $("tableCap").textContent = w.issue.split(" · ")[0] + "燃尽数据（单位：项）";
+    $("chartTitle").textContent = "剩余待办从 " + days[0].actual + " 项降到 " + days[n-1].actual + " 项，周四落后计划 3 项";
+
+    hideTip();
+    state.isolated = null;
+    $("lgActual").setAttribute("aria-pressed","false");
+    $("lgPlan").setAttribute("aria-pressed","false");
+    applyIsolation();
+  }
+
+  function renderMembers(w){
+    var list = $("memberList");
+    list.textContent = "";
+    var shown = 0;
+    w.members.forEach(function(m, idx){
+      var pass = state.filter === "all"
+        || (state.filter === "submitted" && m.status === "submitted")
+        || (state.filter === "pending" && m.status === "pending")
+        || (state.filter === "blocked" && m.blocked);
+      if(!pass) { return; }
+      shown++;
+
+      var li = document.createElement("li");
+      li.className = "member";
+
+      var top = document.createElement("div");
+      top.className = "member-top";
+
+      var h3 = document.createElement("h3");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "member-btn";
+      btn.setAttribute("aria-expanded", "false");
+      var panelId = "panel-" + w.key + "-" + idx;
+      btn.setAttribute("aria-controls", panelId);
+      btn.innerHTML = "<span>" + m.name + "</span><span class='chev' aria-hidden='true'></span>";
+      h3.appendChild(btn);
+
+      var meta = document.createElement("p");
+      meta.className = "member-meta";
+      var tagTxt = m.status === "submitted" ? "已提交" : "待提交";
+      meta.innerHTML = m.role + " · 完成 " + m.done + " 项 · <span class='tag" + (m.blocked ? " blocked" : "") + "'>" + tagTxt + (m.blocked ? " · 有阻塞" : "") + "</span>";
+
+      top.appendChild(h3);
+      top.appendChild(meta);
+
+      var panel = document.createElement("div");
+      panel.className = "member-panel";
+      panel.id = panelId;
+      panel.hidden = true;
+      panel.innerHTML =
+        "<dl>" +
+          "<dt>本周进展</dt><dd>" + m.progress + "</dd>" +
+          "<dt>下周计划</dt><dd>" + m.next + "</dd>" +
+          "<dt>阻塞</dt><dd>" + m.risk + "</dd>" +
+        "</dl>";
+
+      btn.addEventListener("click", function(){
+        var open = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+        panel.hidden = open;
+      });
+
+      li.appendChild(top);
+      li.appendChild(panel);
+      list.appendChild(li);
+    });
+
+    if(shown === 0){
+      var li = document.createElement("li");
+      li.className = "member";
+      li.innerHTML = "<p class='empty'>这个周期没有符合条件的周报。点上面的「全部」看回全部 5 份，或切到另一个周期。</p>";
+      list.appendChild(li);
+    }
+
+    $("filterCount").textContent = shown === 0
+      ? "共 0 条"
+      : "共 " + shown + " 条";
+  }
+
+  function applyIsolation(){
+    var iso = state.isolated;
+    var linePlan = $("linePlan"), lineActual = $("lineActual");
+    var planDots = document.querySelectorAll("#dots .dot.plan");
+    var actDots = document.querySelectorAll("#dots .dot:not(.plan)");
+    var planOn = !iso || iso === "plan";
+    var actOn = !iso || iso === "actual";
+    linePlan.style.opacity = planOn ? "1" : "0.3";
+    lineActual.style.opacity = actOn ? "1" : "0.3";
+    planDots.forEach(function(d){ d.style.opacity = planOn ? "1" : "0.3"; });
+    actDots.forEach(function(d){ d.style.opacity = actOn ? "1" : "0.3"; });
+  }
+
+  function renderAll(){
+    var w = fmtWeek(state.week);
+    renderHeader(w);
+    renderKpi(w);
+    renderChart(w);
+    renderMembers(w);
+    resetGenerate();
+  }
+
+  /* ---------- 图例交互 ---------- */
+  function bindLegend(){
+    [["lgActual","actual"],["lgPlan","plan"]].forEach(function(pair){
+      var el = $(pair[0]), key = pair[1];
+      el.addEventListener("click", function(){
+        var on = el.getAttribute("aria-pressed") === "true";
+        el.setAttribute("aria-pressed", on ? "false" : "true");
+        if(on){ state.isolated = null; }
+        else {
+          /* 点击只看一条：另一条置灰 */
+          state.isolated = key;
+          var other = key === "actual" ? "lgPlan" : "lgActual";
+          $(other).setAttribute("aria-pressed","false");
+        }
+        applyIsolation();
+      });
+      el.addEventListener("mouseenter", function(){
+        if(state.isolated) return;
+        var other = key === "actual" ? $("lgPlan") : $("lgActual");
+        other.setAttribute("data-dim","true");
+        (key === "actual" ? $("linePlan") : $("lineActual")).style.opacity = "0.3";
+      });
+      el.addEventListener("mouseleave", function(){
+        if(state.isolated) return;
+        var other = key === "actual" ? $("lgPlan") : $("lgActual");
+        other.removeAttribute("data-dim");
+        (key === "actual" ? $("linePlan") : $("lineActual")).style.opacity = "1";
+      });
+    });
+  }
+
+  /* ---------- 图例悬停 / 数据点提示 ---------- */
+  function hideTip(){
+    $("tip").hidden = true;
+    $("crosshair").hidden = true;
+  }
+
+  function showTip(i){
+    var w = fmtWeek(state.week);
+    var d = w.days[i];
+    var n = w.days.length;
+    var left = (i / (n - 1)) * 100;
+    var tip = $("tip");
+    tip.textContent = d.label + " · 实际 " + d.actual + " 项 · 计划 " + d.plan + " 项";
+    tip.hidden = false;
+    /* 定位：先量宽再夹在绘图区内，窄屏悬停末端也不溢出（派生规则，见 FINDINGS） */
+    var plotW = $("plot").clientWidth, tipW = tip.offsetWidth;
+    var x = (left / 100) * plotW - tipW / 2;
+    x = Math.max(0, Math.min(plotW - tipW, x));
+    tip.style.left = Math.round(x) + "px";
+    tip.style.right = "auto";
+    tip.style.transform = "none";
+    var ch = $("crosshair");
+    ch.hidden = false;
+    ch.style.left = left + "%";
+  }
+
+  function bindPlot(){
+    var plot = $("plot");
+    plot.addEventListener("mouseleave", hideTip);
+    plot.addEventListener("mousemove", function(ev){
+      var box = plot.getBoundingClientRect();
+      var n = fmtWeek(state.week).days.length;
+      var ratio = (ev.clientX - box.left) / box.width;
+      var i = Math.round(ratio * (n - 1));
+      i = Math.max(0, Math.min(n - 1, i));
+      showTip(i);
+    });
+  }
+
+  /* ---------- 筛选 ---------- */
+  function bindFilters(){
+    document.querySelectorAll(".chip").forEach(function(chip){
+      chip.addEventListener("click", function(){
+        document.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed","false"); });
+        chip.setAttribute("aria-pressed","true");
+        state.filter = chip.getAttribute("data-filter");
+        renderMembers(fmtWeek(state.week));
+      });
+    });
+  }
+
+  /* ---------- 周期切换 ---------- */
+  function bindPeriod(){
+    [["btnThis","this"],["btnLast","last"]].forEach(function(pair){
+      $(pair[0]).addEventListener("click", function(){
+        if(state.week === pair[1]) return;
+        state.week = pair[1];
+        $("btnThis").setAttribute("aria-pressed", state.week === "this" ? "true" : "false");
+        $("btnLast").setAttribute("aria-pressed", state.week === "last" ? "true" : "false");
+        renderAll();
+      });
+    });
+  }
+
+  /* ---------- 抽屉开合 ---------- */
+  var lastFocus = null;
+  function baseTitle(){ return "WeekDeck · " + fmtWeek(state.week).issue.split(" · ")[0]; }
+
+  function openDrawer(){
+    lastFocus = $("genBtn");
+    $("scrim").hidden = false;
+    $("drawer").hidden = false;
+    document.body.classList.add("drawer-open");
+    $("genBtn").setAttribute("aria-expanded", "true");
+    $("closeBtn").focus();
+  }
+
+  function closeDrawer(){
+    clearTimers();
+    $("drawer").hidden = true;
+    $("scrim").hidden = true;
+    document.body.classList.remove("drawer-open");
+    $("genBtn").setAttribute("aria-expanded", "false");
+    $("genBtn").disabled = false;
+    $("genBtn").textContent = "一键生成本周周报";
+    if(lastFocus && typeof lastFocus.focus === "function"){ lastFocus.focus(); }
+  }
+
+  function trapFocus(e){
+    if(e.key !== "Tab") return;
+    var f = $("drawer").querySelectorAll("button, input, [href], summary");
+    if(!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  /* ---------- 生成周报 ---------- */
+  var genTimers = [];
+  function clearTimers(){ genTimers.forEach(clearTimeout); genTimers = []; }
+
+  function resetGenerate(){
+    clearTimers();
+    $("progress").hidden = true;
+    $("result").hidden = true;
+    $("barFill").style.width = "0";
+    $("bar").setAttribute("aria-valuenow","0");
+    $("progressText").textContent = "正在读取 5 份周报…";
+    $("genBtn").disabled = false;
+    $("genBtn").textContent = "一键生成本周周报";
+    $("copyState").textContent = "";
+    $("copyState").className = "";
+    $("titleMsg").textContent = "";
+    $("titleMsg").className = "msg";
+    $("draftTitle").setAttribute("aria-invalid","false");
+    $("draftTitle").value = fmtWeek(state.week).issue.split(" · ")[0] + "团队周报";
+  }
+
+  function buildSummary(w){
+    var sorted = w.members.slice().sort(function(a,b){ return b.done - a.done; });
+    var blocked = w.members.filter(function(m){ return m.blocked; });
+    var delta = w.done - w.prevDone;
+    var deltaTxt = delta === 0 ? "与上周持平" : (delta > 0 ? "比上周多完成 " + delta + " 项" : "比上周少完成 " + (0 - delta) + " 项");
+    var blockedTxt = blocked.length
+      ? blocked.length + " 项阻塞需要跟进：" + blocked.map(function(m){ return m.name + "（" + m.risk + "）"; }).join("；") + "。"
+      : "本周没有阻塞项。";
+
+    var lines = [];
+    lines.push(w.issue.split(" · ")[0] + "（" + w.issue.split(" · ")[1] + "）团队计划 " + w.planned + " 项，完成 " + w.done + " 项，完成率 " + w.rate + "，" + deltaTxt + "。");
+    lines.push("燃尽曲线在周四落后计划 3 项，周五收在剩余 " + w.carried + " 项，顺延到下周。");
+    lines.push("个人完成：" + sorted.map(function(m){ return m.name + " " + m.done + " 项"; }).join("，") + "。");
+    lines.push(blockedTxt);
+    lines.push("下周优先：" + w.members[0].next + w.members[1].next);
+    return lines.join("\n");
+  }
+
+  function runGenerate(){
+    var w = fmtWeek(state.week);
+    clearTimers();
+    $("genBtn").disabled = true;
+    $("genBtn").textContent = "正在生成…";
+    $("result").hidden = true;
+    $("progress").hidden = false;
+    $("copyState").textContent = "";
+    $("copyState").className = "";
+
+    var steps = [
+      {t:0,   pct:0,  text:"正在读取 " + w.members.length + " 份周报…"},
+      {t:220, pct:34, text:"正在归并阻塞项…"},
+      {t:440, pct:67, text:"正在核对完成数与燃尽曲线…"},
+      {t:660, pct:100,text:"正在润色摘要…"}
+    ];
+    steps.forEach(function(s){
+      genTimers.push(setTimeout(function(){
+        $("barFill").style.width = s.pct + "%";
+        $("bar").setAttribute("aria-valuenow", String(s.pct));
+        $("progressText").textContent = s.text;
+      }, s.t));
+    });
+
+    genTimers.push(setTimeout(function(){
+      var text = buildSummary(w);
+      $("summaryText").textContent = text;
+      $("successText").textContent = "本周周报已生成，共 " + text.length + " 字";
+      $("progress").hidden = true;
+      $("result").hidden = false;
+      $("genBtn").disabled = false;
+      $("genBtn").textContent = "重新生成";
+      window.__lastSummary = text;
+    }, 880));
+  }
+
+  function copyText(text, done){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ok = false;
+      try{
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly","");
+        ta.style.position = "fixed";
+        ta.style.top = "-1000px";
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+      }catch(e){ ok = false; }
+      done(ok);
+    }
+  }
+
+  function validateTitle(){
+    var inp = $("draftTitle"), msg = $("titleMsg");
+    var v = inp.value.trim();
+    if(v === ""){
+      inp.setAttribute("aria-invalid","true");
+      msg.className = "msg bad";
+      msg.textContent = "请填写周报标题，发送前必须有一个名字。";
+      document.title = "Error: " + baseTitle();
+      return false;
+    }
+    if(v.length > 24){
+      inp.setAttribute("aria-invalid","true");
+      msg.className = "msg bad";
+      msg.textContent = "标题请控制在 24 字以内，当前 " + v.length + " 字。";
+      document.title = "Error: " + baseTitle();
+      return false;
+    }
+    inp.setAttribute("aria-invalid","false");
+    msg.className = "msg ok";
+    msg.textContent = "标题已保存，可以复制摘要了。";
+    document.title = baseTitle();
+    return true;
+  }
+
+  function bindGenerate(){
+    $("genBtn").addEventListener("click", function(){
+      openDrawer();
+      runGenerate();
+    });
+    $("closeBtn").addEventListener("click", closeDrawer);
+    $("scrim").addEventListener("click", closeDrawer);
+    $("drawer").addEventListener("keydown", trapFocus);
+    $("saveTitle").addEventListener("click", validateTitle);
+    $("copyBtn").addEventListener("click", function(){
+      var text = window.__lastSummary || "";
+      if(!text) return;
+      copyText(text, function(ok){
+        var s = $("copyState");
+        if(ok){ s.textContent = "已复制 " + text.length + " 字"; s.className = "ok"; }
+        else { s.textContent = "复制失败，请手动选中摘要文本"; s.className = "bad"; }
+      });
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape" && !$("drawer").hidden){ closeDrawer(); }
+    });
+  }
+
+  /* ---------- 启动 ---------- */
+  bindPeriod();
+  bindFilters();
+  bindLegend();
+  bindPlot();
+  bindGenerate();
+  renderAll();
+
+  /* 供自验脚本读取的真实状态（不参与渲染） */
+  window.__probe = function(){
+    return {
+      week: state.week,
+      filter: state.filter,
+      isolated: state.isolated,
+      kpi: $("kpiNum").textContent,
+      memberRows: document.querySelectorAll("#memberList .member-btn").length,
+      expanded: document.querySelectorAll("#memberList .member-btn[aria-expanded='true']").length,
+      genDisabled: $("genBtn").disabled,
+      progressHidden: $("progress").hidden,
+      resultHidden: $("result").hidden,
+      summaryLen: ($("summaryText").textContent || "").length
+    };
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuillDeck · AI 写作助手，从提纲到定稿</title>
+<meta name="description" content="QuillDeck 从你给的提纲起手：展开成稿、续写、改写、润色，按一套风格模板走完；判断、事实和署名仍归写作者。">
+<style>
+/* Hallmark · macrostructure: Narrative Workflow · tone: utilitarian-editorial · anchor hue: 216
+ * theme: TDesign（UISpecs 基准规范，无 catalog 轮换）· nav: N1b SaaS three-section · footer: Ft2 inline single line
+ * F4 step knobs: numbering=1.0/2.0, layout=vertical stack, connector=rule · F3 spec knobs: columns=3, rules=every row, nums=tabular
+ * Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5
+ */
+
+/* ---------- tokens：数值全部来自 TDesign 基准规范，出处见 DECISIONS.md ---------- */
+:root{
+  /* 色板 content/color/tdesign.tencent.com--color.md */
+  --paper:#ffffff;              /* :187 */
+  --paper-2:#f3f3f3;            /* Gray1 :189 */
+  --tint:#f2f3ff;               /* Blue1 :48 */
+  --ink:rgba(0,0,0,.9);         /* fonts.md:96 Font Gy1 */
+  --ink-2:rgba(0,0,0,.6);       /* fonts.md:98 Font Gy2 */
+  --ink-3:rgba(0,0,0,.4);       /* fonts.md:100 Font Gy3 — 仅禁用/装饰 */
+  --line:#e8e8e8;               /* Gray3 :193 装饰分隔线 */
+  --line-2:#8b8b8b;             /* Gray7 :201 控件边界，3.41:1 */
+  --accent:#0052d9;             /* Blue7 :45 品牌色 */
+  --accent-strong:#003cab;      /* Blue8 :69 hover 加深一档 */
+  --accent-soft:#f2f3ff;        /* Blue1 :48 选中底 */
+  --danger:#ad352f;             /* Red7 :101 文字用深档，6.31:1 */
+  --success:#006c45;            /* Green7 :171 文字用深档，6.50:1 */
+
+  /* 字体 content/type/tdesign.tencent.com--fonts.md */
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; /* :34 */
+
+  /* 字阶 fonts.md:49-60 */
+  --text-display:48px;
+  --text-display-s:36px;
+  --text-h:28px;
+  --text-body:16px;
+  --text-label:14px;
+
+  /* 间距：8 的倍数 + 4/12 两档（layout.md:65 :107），整套派生 */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+
+  /* 圆角：库无通用规范，4/8 两档派生 */
+  --r1:4px; --r2:8px;
+
+  /* 栅格 content/layout/tdesign.tencent.com--layout.md */
+  --container:1200px;           /* :119 lg 断点 */
+  --gutter:24px;                /* :81 安全边距 */
+  --gutter-s:16px;              /* :77 槽 */
+
+  /* 动效 content/motion/tdesign.tencent.com--motion.md */
+  --dur-1:200ms;                /* :99 desktop-base */
+  --dur-2:240ms;                /* :100 desktop-moderate */
+  --dur-3:280ms;                /* :101 desktop-slow */
+  --ease-std:cubic-bezier(.38,0,.24,1);  /* :111 */
+  --ease-out:cubic-bezier(0,0,.15,1);    /* :112 */
+}
+
+/* 行高：每个元素按自身字号算，零特异性 */
+:where(body, body *){line-height:calc(1em + 8px)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip}
+body{
+  overflow-x:clip;
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-ui);
+  font-size:var(--text-body);
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+h1,h2,h3,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r1)}
+::selection{background:var(--tint);color:var(--ink)}
+
+.wrap{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:var(--s4);top:-100px;z-index:50;padding:0 var(--s4);min-height:44px;display:inline-flex;align-items:center;background:var(--accent);color:#fff;border-radius:var(--r1);font-size:var(--text-label)}
+.skip:focus{top:var(--s3)}
+
+/* ---------- 按钮 / 控件 ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
+  min-height:44px;padding:0 var(--s5);border-radius:var(--r1);
+  border:1px solid transparent;background:transparent;color:var(--ink);
+  font-family:inherit;font-size:var(--text-body);font-weight:400;
+  cursor:pointer;transition:background-color var(--dur-1) var(--ease-std),color var(--dur-1) var(--ease-std),border-color var(--dur-1) var(--ease-std)
+}
+.btn--primary{background:var(--accent);color:#fff;font-weight:600}
+.btn--primary:hover{background:var(--accent-strong);color:#fff}
+.btn--primary:active{background:var(--accent-strong)}
+.btn--outline{border-color:var(--line-2);color:var(--ink)}
+.btn--outline:hover{border-color:var(--ink);color:var(--ink);background:var(--paper-2)}
+.btn--ghost{color:var(--ink);border-color:transparent;padding-inline:var(--s3)}
+.btn--ghost:hover{color:var(--accent-strong);background:var(--paper-2)}
+.btn--sm{font-size:var(--text-label);padding:0 var(--s4)}
+.btn[disabled]{color:var(--ink-3);border-color:var(--line);cursor:not-allowed;background:transparent}
+.btn[disabled]:hover{background:transparent;color:var(--ink-3);border-color:var(--line)}
+.btn svg{flex:none}
+
+/* ---------- 导航 N1b ---------- */
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);border-bottom:1px solid transparent;transition:border-color var(--dur-2) var(--ease-std),background-color var(--dur-2) var(--ease-std)}
+.nav.is-stuck{border-bottom-color:var(--line);background:rgba(255,255,255,.88);backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4)}
+.nav__inner{display:flex;align-items:center;gap:var(--s5);min-height:64px;padding-block:var(--s2)}
+.wordmark{display:inline-flex;align-items:center;min-height:44px;font-size:var(--text-body);font-weight:600;letter-spacing:.01em;color:var(--ink)}
+.wordmark:hover{color:var(--ink);text-decoration:none}
+.nav__links{display:flex;align-items:center;gap:var(--s1);margin-inline-start:var(--s6)}
+.nav__links a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);border-radius:var(--r1);color:var(--ink-2);font-size:var(--text-label)}
+.nav__links a:hover{color:var(--ink);background:var(--paper-2);text-decoration:none}
+.nav__cta{margin-inline-start:auto}
+.nav__toggle{display:none;margin-inline-start:auto}
+.nav__panel{display:none;border-top:1px solid var(--line);padding-block:var(--s3)}
+.nav__panel ul{display:grid;gap:var(--s1)}
+.nav__panel a{display:flex;align-items:center;min-height:44px;padding:0 var(--s2);color:var(--ink);font-size:var(--text-body)}
+
+/* ---------- hero ---------- */
+.hero{padding-block:var(--s7) var(--s8)}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:var(--s8);align-items:start}
+.hero__copy{padding-block-start:var(--s5)}
+.eyebrow{font-size:var(--text-label);color:var(--ink-2);margin-block-end:var(--s4)}
+h1{font-size:var(--text-display);font-weight:600;letter-spacing:-.01em;max-width:14em}
+.hero__lede{margin-block-start:var(--s5);font-size:var(--text-body);color:var(--ink-2);max-width:30em}
+.hero__cta{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s6)}
+.hero__note{margin-block-start:var(--s5);font-size:var(--text-label);color:var(--ink-2);max-width:32em}
+
+/* 演示稿：文档面，无浏览器假 chrome */
+.demo{border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);padding:var(--s5);min-width:0}
+.demo__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--s2)}
+.demo__title{font-size:var(--text-label);font-weight:600}
+.demo__meta{font-size:var(--text-label);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.demo__outline{margin-block-start:var(--s4);padding-inline-start:var(--s4);border-inline-start:2px solid var(--line);display:grid;gap:var(--s1)}
+.demo__outline li{font-size:var(--text-label);color:var(--ink-2)}
+.demo__text{margin-block-start:var(--s4);font-size:var(--text-body);color:var(--ink);min-height:6.5em}
+.demo__acts{display:flex;flex-wrap:wrap;gap:var(--s2);margin-block-start:var(--s4);padding-block-start:var(--s4);border-top:1px solid var(--line)}
+.chip-demo{min-height:44px;padding:0 var(--s3);border:1px solid var(--line-2);border-radius:var(--r1);background:transparent;color:var(--ink);font-family:inherit;font-size:var(--text-label);cursor:pointer;transition:background-color var(--dur-1) var(--ease-std),border-color var(--dur-1) var(--ease-std),color var(--dur-1) var(--ease-std)}
+.chip-demo:hover{background:var(--paper-2);border-color:var(--ink)}
+.chip-demo[disabled]{color:var(--ink-3);border-color:var(--line);cursor:not-allowed;background:transparent}
+.demo__status{margin-block-start:var(--s3);font-size:var(--text-label);color:var(--ink-2);min-height:1.6em}
+
+/* ---------- 区块外壳 ---------- */
+.section{padding-block:var(--s8);border-top:1px solid var(--line)}
+.section__head{max-width:42em}
+h2{font-size:var(--text-h);font-weight:600;letter-spacing:-.005em}
+.section__lede{margin-block-start:var(--s3);font-size:var(--text-body);color:var(--ink-2)}
+
+/* ---------- 能力矩阵 ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:var(--s2);margin-block-start:var(--s5)}
+.chip{display:inline-flex;align-items:center;gap:var(--s2);min-height:44px;padding:0 var(--s4);border:1px solid var(--line-2);border-radius:var(--r1);background:var(--paper);color:var(--ink);font-family:inherit;font-size:var(--text-label);cursor:pointer;transition:background-color var(--dur-1) var(--ease-std),border-color var(--dur-1) var(--ease-std),color var(--dur-1) var(--ease-std)}
+.chip:hover{background:var(--paper-2);border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--tint);border-color:var(--accent);color:var(--accent-strong);font-weight:600}
+.chip__n{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.chip[aria-pressed="true"] .chip__n{color:var(--accent-strong)}
+.filter-status{margin-block-start:var(--s4);font-size:var(--text-label);color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+.spec{width:100%;margin-block-start:var(--s4);border-collapse:collapse;text-align:start}
+.spec caption{text-align:start;font-size:var(--text-label);color:var(--ink-2);padding-block-end:var(--s3)}
+.spec th,.spec td{padding:var(--s4) var(--s4) var(--s4) 0;border-top:1px solid var(--line);vertical-align:top;font-weight:400;text-align:start}
+.spec thead th{font-size:var(--text-label);color:var(--ink-2);border-top:0;padding-block-end:var(--s2)}
+.spec tbody th{font-size:var(--text-body);font-weight:600;width:16%}
+.spec tbody td{font-size:var(--text-body);color:var(--ink-2);width:46%}
+.spec tbody td:last-child{color:var(--ink);width:38%}
+.spec tbody tr[hidden]{display:none}
+@media (min-width:768px) and (max-width:991px){
+  .spec tbody th{width:14%}
+  .spec tbody td{width:43%}
+  .spec tbody td:last-child{width:43%}
+}
+
+/* ---------- 工作流 ---------- */
+.stages{margin-block-start:var(--s6);display:grid;gap:0}
+.stage{display:grid;grid-template-columns:minmax(0,7em) minmax(0,1fr);gap:var(--s5);padding-block:var(--s5);border-top:1px solid var(--line)}
+.stage:first-child{border-top:2px solid var(--ink)}
+.stage__no{font-size:var(--text-label);font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stage__body h3{font-size:var(--text-body);font-weight:600}
+.stage__body p{margin-block-start:var(--s2);color:var(--ink-2);font-size:var(--text-body);max-width:34em}
+.sample{margin-block-start:var(--s4);background:var(--paper-2);border-radius:var(--r2);padding:var(--s4);display:grid;gap:var(--s2);max-width:38em}
+.sample__row{display:grid;grid-template-columns:minmax(0,4.5em) minmax(0,1fr);gap:var(--s3);font-size:var(--text-label)}
+.sample__k{color:var(--ink-2)}
+.sample__v{color:var(--ink)}
+
+/* ---------- 定价 ---------- */
+.billing{display:inline-flex;gap:var(--s1);margin-block-start:var(--s5);padding:var(--s1);border:1px solid var(--line);border-radius:var(--r1);background:var(--paper-2)}
+.seg{min-height:44px;padding:0 var(--s4);border:1px solid transparent;border-radius:var(--r1);background:transparent;color:var(--ink-2);font-family:inherit;font-size:var(--text-label);cursor:pointer;transition:background-color var(--dur-1) var(--ease-std),color var(--dur-1) var(--ease-std)}
+.seg:hover{color:var(--ink)}
+.seg[aria-pressed="true"]{background:var(--paper);border-color:var(--line-2);color:var(--accent-strong);font-weight:600}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s5);margin-block-start:var(--s6);align-items:start}
+.plan{border:1px solid var(--line);border-radius:var(--r2);padding:var(--s5);background:var(--paper);position:relative}
+.plan--pick{border-color:var(--accent);border-width:2px}
+.plan__badge{position:absolute;top:calc(var(--s5) * -1);left:var(--s5);background:var(--accent);color:#fff;font-size:var(--text-label);font-weight:600;padding:var(--s1) var(--s3);border-radius:var(--r1)}
+.plan__name{font-size:var(--text-body);font-weight:600}
+.plan__for{margin-block-start:var(--s1);font-size:var(--text-label);color:var(--ink-2)}
+.plan__price{margin-block-start:var(--s5);display:flex;align-items:baseline;gap:var(--s1);font-weight:600;font-size:var(--text-h);font-variant-numeric:tabular-nums}
+.plan__per{font-size:var(--text-label);font-weight:400;color:var(--ink-2)}
+.plan__note{margin-block-start:var(--s2);font-size:var(--text-label);color:var(--ink-2);min-height:3em}
+.plan__list{margin-block-start:var(--s4);display:grid;gap:var(--s2)}
+.plan__list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s2);font-size:var(--text-label);color:var(--ink)}
+.plan__list svg{margin-block-start:.35em;color:var(--accent)}
+.plan .btn{width:100%;margin-block-start:var(--s5)}
+
+/* ---------- 常见问题 ---------- */
+.faq{max-width:52em;margin-block-start:var(--s5);border-top:1px solid var(--line)}
+.faq__item{border-bottom:1px solid var(--line)}
+.faq__item summary{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s4);min-height:44px;padding-block:var(--s4);font-size:var(--text-body);font-weight:600;cursor:pointer;list-style:none}
+.faq__item summary::-webkit-details-marker{display:none}
+.faq__item summary::after{content:"+";flex:none;color:var(--ink-2);font-weight:400;transition:transform var(--dur-2) var(--ease-std);transform-origin:50% 50%}
+.faq__item[open] summary::after{transform:rotate(45deg)}
+.faq__item p{padding-block-end:var(--s4);color:var(--ink-2);font-size:var(--text-body);max-width:38em}
+
+/* ---------- 试用 ---------- */
+.try{padding-block:var(--s8);border-top:1px solid var(--line);background:var(--paper-2)}
+.try__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s8);align-items:start}
+.signup{display:grid;gap:var(--s2);max-width:32em}
+.signup label{font-size:var(--text-label);color:var(--ink)}
+.signup__row{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.signup input{flex:1 1 14em;min-width:0;min-height:44px;padding:0 var(--s3);border:1px solid var(--line-2);border-radius:var(--r1);font-family:inherit;font-size:var(--text-body);color:var(--ink);background:var(--paper)}
+.signup input::placeholder{color:var(--ink-2)}
+.signup input:hover{border-color:var(--ink)}
+.signup__msg{font-size:var(--text-label);color:var(--ink-2);min-height:1.6em}
+.signup.is-error input{border-color:var(--danger);border-width:2px;padding-inline:calc(var(--s3) - 1px)}
+.signup.is-error .signup__msg{color:var(--danger)}
+.signup.is-ok .signup__msg{color:var(--success)}
+.try__meta{margin-block-start:var(--s5);font-size:var(--text-label);color:var(--ink-2);display:grid;gap:var(--s2);max-width:30em}
+
+/* ---------- 页脚 Ft2 ---------- */
+.foot{padding-block:var(--s5)}
+.foot__inner{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s4);font-size:var(--text-label);color:var(--ink-2);border-top:1px solid var(--line);padding-block-start:var(--s4)}
+.foot__links{display:flex;flex-wrap:wrap;gap:var(--s1);margin-inline-start:auto}
+.foot__links a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s2);color:var(--ink-2);font-size:var(--text-label)}
+.foot__links a:hover{color:var(--ink);text-decoration:none}
+.sep{color:var(--ink-2)}
+
+/* ---------- 断点：768 / 992 / 1200（layout.md:117-119） ---------- */
+@media (min-width:992px){
+  .stage{grid-template-columns:minmax(0,7em) minmax(0,1fr)}
+  .stage__body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);column-gap:var(--s6);align-items:start}
+  .stage__body h3{grid-column:1/-1}
+  .stage__body p{grid-column:1;grid-row:2}
+  .stage__body .sample{grid-column:2;grid-row:2;margin-block-start:0;max-width:none}
+}
+@media (max-width:1199px){
+  .hero__grid{gap:var(--s7)}
+}
+@media (max-width:991px){
+  .hero{padding-block:var(--s6) var(--s7)}
+  .hero__grid{grid-template-columns:minmax(0,1fr);gap:var(--s6)}
+  h1{font-size:var(--text-display-s)}
+  .section,.try{padding-block:var(--s7)}
+  .plans{grid-template-columns:minmax(0,1fr);gap:var(--s6)}
+  .plan--pick{order:-1}
+  .try__grid{grid-template-columns:minmax(0,1fr);gap:var(--s6)}
+  .nav__links{display:none}
+  .nav__cta{display:none}
+  .nav__toggle{display:inline-flex}
+  .nav__panel.is-open{display:block}
+  .stage{grid-template-columns:minmax(0,1fr);gap:var(--s2)}
+}
+@media (max-width:767px){
+  :root{--gutter:16px}
+  .wrap{padding-inline:var(--gutter)}
+  h1{font-size:var(--text-display-s)}
+  .spec thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .spec tbody tr{display:block;padding-block:var(--s4);border-top:1px solid var(--line)}
+  .spec tbody tr:first-child{border-top:2px solid var(--ink)}
+  .spec tbody th,.spec tbody td{display:block;width:auto;padding:0}
+  .spec tbody td{margin-block-start:var(--s2);padding-inline-start:0}
+  .spec tbody td::before{content:attr(data-label) "：";color:var(--ink-2)}
+  .spec tbody td:last-child::before{color:var(--ink-2)}
+  .sample__row{grid-template-columns:minmax(0,1fr);gap:var(--s1)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:1ms !important;animation-duration:1ms !important}
+  .faq__item summary::after{transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="nav" id="top">
+  <div class="wrap nav__inner">
+    <a class="wordmark" href="#top" aria-label="QuillDeck 首页">QuillDeck</a>
+    <nav class="nav__links" aria-label="主导航">
+      <a href="#capability">能力</a>
+      <a href="#workflow">工作流</a>
+      <a href="#pricing">定价</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="btn btn--primary btn--sm nav__cta" href="#try">申请试用</a>
+    <button class="btn btn--outline btn--sm nav__toggle" type="button" aria-expanded="false" aria-controls="nav-panel">菜单</button>
+  </div>
+  <div class="wrap nav__panel" id="nav-panel">
+    <ul>
+      <li><a href="#capability">能力</a></li>
+      <li><a href="#workflow">工作流</a></li>
+      <li><a href="#pricing">定价</a></li>
+      <li><a href="#faq">常见问题</a></li>
+      <li><a href="#try">申请试用</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">AI 写作助手 · 中文稿与英文稿都接</p>
+        <h1 id="hero-h">提纲之后，交给它</h1>
+        <p class="hero__lede">QuillDeck 从你给的提纲起手：展开成稿、续写、改写、润色，按一套风格模板走完。判断、事实和署名仍归写作者。</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#try">申请试用</a>
+          <a class="btn btn--ghost" href="#workflow">看一稿怎么被改
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="square"/></svg>
+          </a>
+        </div>
+        <p class="hero__note">演示区那份样例稿的文字是页面内置的，按钮改的是本地文本，不连模型。</p>
+      </div>
+
+      <figure class="demo" aria-labelledby="demo-title">
+        <div class="demo__head">
+          <p class="demo__title" id="demo-title">演示稿 · 渠道复盘备忘</p>
+          <p class="demo__meta"><span id="demo-count">0</span> 字 · 第 <span id="demo-step">1</span> 稿</p>
+        </div>
+        <ol class="demo__outline" aria-label="提纲">
+          <li>一、这个月的钱落在哪几个渠道</li>
+          <li>二、哪个渠道的复购没跟上</li>
+          <li>三、下个月挪哪一笔预算</li>
+        </ol>
+        <p class="demo__text" id="demo-text">这个月的钱主要落在三个渠道：搜索、信息流、社群。搜索的点击成本涨了，信息流的量上来了转化没动，社群花得最少，复购最好。</p>
+        <div class="demo__acts" role="group" aria-label="对演示稿动手">
+          <button class="chip-demo" type="button" data-act="continue">续写</button>
+          <button class="chip-demo" type="button" data-act="rewrite">改写</button>
+          <button class="chip-demo" type="button" data-act="polish">润色</button>
+          <button class="chip-demo" type="button" data-act="undo" disabled>撤销</button>
+          <button class="chip-demo" type="button" data-act="copy">复制这段</button>
+        </div>
+        <p class="demo__status" id="demo-status" role="status" aria-live="polite">样例稿已就位，试一个动作看看。</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="capability" aria-labelledby="cap-h">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 id="cap-h">它接手的五件事</h2>
+        <p class="section__lede">每一件都从你现有的稿子接着做，不另起一份文件。按你动笔的阶段筛一遍，看哪几步值得交出去。</p>
+      </div>
+
+      <div class="filters" role="group" aria-label="按写作阶段筛选能力">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">全部 <span class="chip__n">5</span></button>
+        <button class="chip" type="button" data-filter="pre" aria-pressed="false">动笔前 <span class="chip__n">2</span></button>
+        <button class="chip" type="button" data-filter="draft" aria-pressed="false">成稿中 <span class="chip__n">2</span></button>
+        <button class="chip" type="button" data-filter="final" aria-pressed="false">定稿前 <span class="chip__n">1</span></button>
+      </div>
+      <p class="filter-status" id="filter-status" role="status" aria-live="polite">显示 5 项</p>
+
+      <table class="spec">
+        <caption>能力矩阵：它接手什么，你留着什么</caption>
+        <thead>
+          <tr><th scope="col">能力</th><th scope="col">它接手的动作</th><th scope="col">你留着的事</th></tr>
+        </thead>
+        <tbody>
+          <tr data-stage="pre">
+            <th scope="row">提纲成稿</th>
+            <td data-label="它接手的动作">把 3 到 5 条提纲展开成能读的初稿，段落顺序照提纲走，不自己加论点。</td>
+            <td data-label="你留着的事">提纲本身，也就是写哪几条、先写哪条，属于你的判断。</td>
+          </tr>
+          <tr data-stage="draft">
+            <th scope="row">续写</th>
+            <td data-label="它接手的动作">在光标处往下写一段，接住上一段的语气和称呼，一次一段，方便你在段尾停手。</td>
+            <td data-label="你留着的事">这一段的观点从哪来，以及要不要留着。</td>
+          </tr>
+          <tr data-stage="draft">
+            <th scope="row">改写</th>
+            <td data-label="它接手的动作">同一段事实换一种说法：拆短句、换叙述顺序、把被动改主动，事实和数字不动。</td>
+            <td data-label="你留着的事">哪些事实不能动，以及哪一版更像你。</td>
+          </tr>
+          <tr data-stage="final">
+            <th scope="row">润色</th>
+            <td data-label="它接手的动作">查重复句、错别字和称呼不一致，标出改动位置，逐条给你过。</td>
+            <td data-label="你留着的事">哪些改动接受、哪些改回去，最后一遍通读。</td>
+          </tr>
+          <tr data-stage="pre">
+            <th scope="row">模板出稿</th>
+            <td data-label="它接手的动作">按一套风格模板出稿：称呼、句长、禁用词、固定结尾都照模板走。</td>
+            <td data-label="你留着的事">这套模板长什么样，以及什么时候换一套。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="workflow" aria-labelledby="wf-h">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 id="wf-h">一稿的正常流程</h2>
+        <p class="section__lede">1.0 到 4.0，四步都能停在任意一步，把稿子拿回来自己写。每步下面是这步的输入和它交回的东西。</p>
+      </div>
+
+      <div class="stages">
+        <article class="stage">
+          <p class="stage__no">1.0</p>
+          <div class="stage__body">
+            <h3>拆提纲</h3>
+            <p>给一段需求，它拆成能写的条目，每条一句话，能删能换。拆得不对就重拆一次，不用它继续往下写。</p>
+            <div class="sample">
+              <div class="sample__row"><span class="sample__k">输入</span><span class="sample__v">「双十一之后做个渠道复盘，给市场部晨会用」</span></div>
+              <div class="sample__row"><span class="sample__k">交回</span><span class="sample__v">三条提纲：钱落在哪、复购跟没跟上、下月挪哪笔预算。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <p class="stage__no">2.0</p>
+          <div class="stage__body">
+            <h3>出初稿</h3>
+            <p>每条提纲展开成一段，段落顺序照提纲，称呼按你选的对象走。初稿允许难看，它只负责把骨架填上肉。</p>
+            <div class="sample">
+              <div class="sample__row"><span class="sample__k">输入</span><span class="sample__v">第一条提纲 + 三个渠道的成本与复购数字。</span></div>
+              <div class="sample__row"><span class="sample__k">交回</span><span class="sample__v">四段初稿，数字原样引用，不做四舍五入。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <p class="stage__no">3.0</p>
+          <div class="stage__body">
+            <h3>重写成调性</h3>
+            <p>换风格模板重写：内部备忘、对外稿、公众号，三种模板各自约束称呼和句长。事实不变，语气变。</p>
+            <div class="sample">
+              <div class="sample__row"><span class="sample__k">输入</span><span class="sample__v">初稿 + 「对外稿」模板（不用「我们」，句长不超 40 字）。</span></div>
+              <div class="sample__row"><span class="sample__k">交回</span><span class="sample__v">同一份事实的对外版本，称呼改完，数字没动。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <p class="stage__no">4.0</p>
+          <div class="stage__body">
+            <h3>收尾校一遍</h3>
+            <p>查出重复句、错别字、称呼前后不一致，逐条标位置给你过。它不替你决定改不改，只把可疑的地方摆出来。</p>
+            <div class="sample">
+              <div class="sample__row"><span class="sample__k">输入</span><span class="sample__v">定稿前一版，全文 2400 字。</span></div>
+              <div class="sample__row"><span class="sample__k">交回</span><span class="sample__v">改动清单：3 处重复、1 处称呼混用、2 个错字，逐条带位置。</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing" aria-labelledby="price-h">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 id="price-h">按你一个月写多少字选</h2>
+        <p class="section__lede">字数按生成的字算，改回去的不计。超上限只暂停新的生成，不断你正在写的稿。</p>
+      </div>
+
+      <div class="billing" role="group" aria-label="计费周期">
+        <button class="seg" type="button" data-billing="month" aria-pressed="true">按月</button>
+        <button class="seg" type="button" data-billing="year" aria-pressed="false">按年 · 一次结清</button>
+      </div>
+
+      <div class="plans">
+        <article class="plan">
+          <h3 class="plan__name">单篇</h3>
+          <p class="plan__for">一个人写，一周几篇</p>
+          <p class="plan__price"><span class="plan__num" data-month="39.00" data-year="31.00">39.00</span><span class="plan__per">元 / 月</span></p>
+          <p class="plan__note" data-month="按月开票，随时停。" data-year="¥372.00 一次结清，比月付省 ¥96.00。">按月开票，随时停。</p>
+          <ul class="plan__list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>每月 3 万字</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>1 套风格模板</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>续写与润色</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>改稿记录留 7 天</li>
+          </ul>
+          <a class="btn btn--outline" href="#try">选这一档</a>
+        </article>
+
+        <article class="plan plan--pick">
+          <p class="plan__badge">团队从这档起</p>
+          <h3 class="plan__name">团队</h3>
+          <p class="plan__for">三五个人共用一个模板库</p>
+          <p class="plan__price"><span class="plan__num" data-month="99.00" data-year="79.00">99.00</span><span class="plan__per">元 / 月</span></p>
+          <p class="plan__note" data-month="按月开票，随时停。" data-year="¥948.00 一次结清，比月付省 ¥240.00。">按月开票，随时停。</p>
+          <ul class="plan__list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>每月 10 万字</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>全部风格模板</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>3 个席位，模板共享</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>改稿记录留 90 天</li>
+          </ul>
+          <a class="btn btn--primary" href="#try">选这一档</a>
+        </article>
+
+        <article class="plan">
+          <h3 class="plan__name">机构</h3>
+          <p class="plan__for">内容团队有自己的一套规范</p>
+          <p class="plan__price"><span class="plan__num" data-month="299.00" data-year="239.00">299.00</span><span class="plan__per">元 / 月</span></p>
+          <p class="plan__note" data-month="按月开票，随时停。" data-year="¥2,868.00 一次结清，比月付省 ¥720.00。">按月开票，随时停。</p>
+          <ul class="plan__list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>不限字数</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>品牌模板库</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>5 个席位，模板分权限</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 13l5 5L20 7" stroke-linecap="square"/></svg>改稿记录留 1 年</li>
+          </ul>
+          <a class="btn btn--outline" href="#try">选这一档</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 id="faq-h">常见问题</h2>
+        <p class="section__lede">六个问得最多的，按原话答。</p>
+      </div>
+
+      <div class="faq">
+        <details class="faq__item">
+          <summary>它会不会把所有稿子写成同一个腔调？</summary>
+          <p>腔调由模板决定，模板只约束三类东西：称呼、句长、禁用词。同一份稿子换一套模板出来就是另一种说法，原稿一直留着，不满意就换回来。</p>
+        </details>
+        <details class="faq__item">
+          <summary>我的稿子和数据怎么处理？</summary>
+          <p>这一版页面不接模型，演示区的文字全在本页内置，点按钮改的也是本地文本。真正接入后的数据规则会写在试用协议正文里，不会只藏在常见问题里。</p>
+        </details>
+        <details class="faq__item">
+          <summary>能按我们品牌的模板出稿吗？</summary>
+          <p>机构档可以建一套自己的模板：称呼、句长上限、禁用词、固定结尾。模板之间互不影响，切换一次只换一套，不会把两套规则混着用。</p>
+        </details>
+        <details class="faq__item">
+          <summary>长文能不能一次续写到底？</summary>
+          <p>不能，续写按段走，一次一段。整篇一次生成没法逐段判断，写到最后你还得从头读一遍，反而更慢。</p>
+        </details>
+        <details class="faq__item">
+          <summary>字数是怎么算的？</summary>
+          <p>按生成的字数算，你删掉或改回去的部分不计入。到上限只暂停新的生成，正在写的稿不受影响，下个月自动恢复。</p>
+        </details>
+        <details class="faq__item">
+          <summary>现在能直接开始用吗？</summary>
+          <p>先是试用名单。下面留个邮箱，入口开放时按这个地址联系你；这一版表单只记邮箱，不自动发信。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="try" id="try" aria-labelledby="try-h">
+    <div class="wrap try__grid">
+      <div>
+        <h2 id="try-h">从一份提纲开始</h2>
+        <p class="section__lede">留个工作邮箱，入口开放时我们按这个地址联系你。</p>
+        <p class="try__meta">
+          <span>这一版表单只把邮箱记在页面里，不发送到任何服务器。</span>
+          <span>演示按钮改的是本页样例文本。</span>
+        </p>
+      </div>
+      <form class="signup" id="signup" novalidate>
+        <label for="email">工作邮箱</label>
+        <div class="signup__row">
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@company.com" aria-describedby="signup-msg">
+          <button class="btn btn--primary" type="submit">记下邮箱</button>
+        </div>
+        <p class="signup__msg" id="signup-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <span>QuillDeck · 写作者的助手</span>
+    <span class="sep" aria-hidden="true">·</span>
+    <span>© 2026 QuillDeck</span>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="#pricing">定价</a>
+      <a href="#faq">常见问题</a>
+      <a href="#try">试用</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- 演示稿：本地文本变换 ---------- */
+  var textEl = document.getElementById('demo-text');
+  var countEl = document.getElementById('demo-count');
+  var stepEl = document.getElementById('demo-step');
+  var statusEl = document.getElementById('demo-status');
+  var undoBtn = document.querySelector('[data-act="undo"]');
+  var copyBtn = document.querySelector('[data-act="copy"]');
+  var steps = 1;
+  var history = [];
+
+  var tails = [
+    '把三条并成一张表看，问题不在总花费，而在花钱的地方和复购对不上。',
+    '下个月先挪信息流三成预算到社群，两周后只看复购这一个数。'
+  ];
+  var rewritten = '搜索：点击成本涨了。信息流：量上来了，转化没动。社群：花得最少，复购最好。钱不是花多了，是花错了地方。';
+  var polished = '钱落在三个渠道：搜索、信息流、社群。搜索点击成本上涨，信息流有量无转化，社群投入最少、复购最高。';
+
+  function charCount(t){ return t.replace(/\s/g,'').length; }
+  function syncCount(){ countEl.textContent = charCount(textEl.textContent); }
+  function say(msg){ statusEl.textContent = msg; }
+  function pushHistory(label){
+    history.push({ text: textEl.textContent, steps: steps, label: label });
+    undoBtn.disabled = false;
+  }
+  function bumpStep(){ steps += 1; stepEl.textContent = steps; }
+
+  function act(name){
+    var cur = textEl.textContent;
+    if (name === 'continue'){
+      var used = Number(textEl.dataset.continued || 0);
+      if (used >= tails.length){
+        say('样例只备了两段续写，到这里为止，换「改写」或「润色」试试。');
+        return;
+      }
+      pushHistory('续写');
+      textEl.textContent = cur + tails[used];
+      textEl.dataset.continued = used + 1;
+      bumpStep();
+      syncCount();
+      say('续写：在段末加了一句，接住上一段的语气。');
+    } else if (name === 'rewrite'){
+      if (cur === rewritten){ say('已经是短句版了，事实没动。'); return; }
+      pushHistory('改写');
+      textEl.textContent = rewritten;
+      bumpStep();
+      syncCount();
+      say('改写：拆成短句，事实和数字没动。');
+    } else if (name === 'polish'){
+      if (cur === polished){ say('已经是润色后的版本了。'); return; }
+      pushHistory('润色');
+      textEl.textContent = polished;
+      bumpStep();
+      syncCount();
+      say('润色：两句并成一句，删掉重复的「涨了」。');
+    } else if (name === 'undo'){
+      var last = history.pop();
+      if (!last) { say('没有可撤销的步骤。'); undoBtn.disabled = true; return; }
+      textEl.textContent = last.text;
+      steps = last.steps;
+      stepEl.textContent = steps;
+      if (last.label === '续写'){
+        textEl.dataset.continued = Math.max(0, Number(textEl.dataset.continued || 1) - 1);
+      }
+      undoBtn.disabled = history.length === 0;
+      syncCount();
+      say('撤销了「' + last.label + '」，回到上一版。');
+    } else if (name === 'copy'){
+      var text = textEl.textContent;
+      var done = function(ok){
+        if (ok){
+          copyBtn.textContent = '已复制';
+          say('这段文字已复制到剪贴板。');
+          setTimeout(function(){ copyBtn.textContent = '复制这段'; }, 1600);
+        } else {
+          say('浏览器拦下了剪贴板访问，选中文字手动复制即可。');
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(false); });
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          done(ok);
+        } catch(e){ done(false); }
+      }
+    }
+  }
+
+  document.querySelectorAll('.chip-demo[data-act]').forEach(function(btn){
+    btn.addEventListener('click', function(){ act(btn.dataset.act); });
+  });
+  syncCount();
+
+  /* ---------- 能力筛选 ---------- */
+  var chips = document.querySelectorAll('.chip[data-filter]');
+  var rows = document.querySelectorAll('.spec tbody tr');
+  var filterStatus = document.getElementById('filter-status');
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      var key = chip.dataset.filter;
+      chips.forEach(function(c){ c.setAttribute('aria-pressed', String(c === chip)); });
+      var shown = 0;
+      rows.forEach(function(row){
+        var hit = key === 'all' || row.dataset.stage === key;
+        row.hidden = !hit;
+        if (hit) shown += 1;
+      });
+      filterStatus.textContent = '显示 ' + shown + ' 项';
+    });
+  });
+
+  /* ---------- 计费周期 ---------- */
+  var segs = document.querySelectorAll('.seg[data-billing]');
+  var nums = document.querySelectorAll('.plan__num');
+  var notes = document.querySelectorAll('.plan__note');
+
+  segs.forEach(function(seg){
+    seg.addEventListener('click', function(){
+      var period = seg.dataset.billing;
+      segs.forEach(function(s){ s.setAttribute('aria-pressed', String(s === seg)); });
+      nums.forEach(function(n){ n.textContent = n.dataset[period]; });
+      notes.forEach(function(n){ n.textContent = n.dataset[period]; });
+    });
+  });
+
+  /* ---------- 导航 ---------- */
+  var nav = document.querySelector('.nav');
+  var toggle = document.querySelector('.nav__toggle');
+  var panel = document.getElementById('nav-panel');
+
+  function onScroll(){
+    nav.classList.toggle('is-stuck', window.scrollY > 8);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if (toggle && panel){
+    toggle.addEventListener('click', function(){
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('is-open', !open);
+    });
+    panel.addEventListener('click', function(e){
+      if (e.target.closest('a')){
+        toggle.setAttribute('aria-expanded','false');
+        panel.classList.remove('is-open');
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true'){
+        toggle.setAttribute('aria-expanded','false');
+        panel.classList.remove('is-open');
+        toggle.focus();
+      }
+    });
+  }
+
+  /* ---------- 试用表单三态 ---------- */
+  var form = document.getElementById('signup');
+  var email = document.getElementById('email');
+  var msg = document.getElementById('signup-msg');
+  var re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function setState(state, text){
+    form.classList.remove('is-error','is-ok');
+    if (state) form.classList.add(state);
+    msg.textContent = text;
+    email.setAttribute('aria-invalid', state === 'is-error' ? 'true' : 'false');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var value = email.value.trim();
+    if (!value){ setState('is-error','先填一个邮箱再提交。'); email.focus(); return; }
+    if (!re.test(value)){ setState('is-error','这个地址缺个 @ 或域名，检查一下再提交。'); email.focus(); return; }
+    setState('is-ok','已记下 ' + value + '，入口开放时按这个地址联系你。');
+    form.reset();
+  });
+
+  email.addEventListener('input', function(){
+    if (form.classList.contains('is-error')) setState(null,'');
+  });
+})();
+</script>
+</body>
+</html>

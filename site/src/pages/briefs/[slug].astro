@@ -1,0 +1,72 @@
+---
+// 单个站的建站需求：数据来自 briefs/sites.json，页面不读 Markdown（原文在 /briefs/<slug>.md）
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { SITE_BRIEFS } from '../../data/case-briefs'
+
+export function getStaticPaths() {
+  return SITE_BRIEFS.map((brief) => ({
+    params: { slug: brief.slug },
+    props: { brief },
+  }))
+}
+
+const { brief } = Astro.props
+const title = `建站需求 · ${brief.name}`
+const description = `${brief.name} 的建站需求：产品、受众、核心任务、页面必备内容与边界。`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: title,
+  description,
+  inLanguage: 'zh-CN',
+  about: brief.product,
+}
+---
+
+<Base title={`${title} · UISpecs`} description={description} jsonLd={jsonLd} path={`/briefs/${brief.slug}/`}>
+  <div class="page">
+    <article id="main" class="article-page">
+      <header class="doc-head">
+        <p class="doc-crumb">
+          <a href="/briefs/">建站需求</a> / <span>{brief.category}</span> / 详情
+        </p>
+        <h1 class="doc-title">{title}</h1>
+        <div class="doc-meta">
+          <a href={`/examples/${brief.slug}/index.html`} target="_blank" rel="noopener noreferrer">打开成品</a>
+          <a href={`/examples/${brief.slug}/decisions/`}>DECISIONS</a>
+          <a href={`/examples/${brief.slug}/findings/`}>FINDINGS</a>
+          <a href={`/briefs/${brief.slug}.md`}>原始 Markdown</a>
+          <a href="/briefs/sites.json">sites.json</a>
+        </div>
+      </header>
+
+      <div class="doc-body">
+        <p class="brief-lead">{brief.product}</p>
+
+        <dl class="brief-fields">
+          <div><dt>语言</dt><dd>{brief.lang}</dd></div>
+          <div><dt>受众</dt><dd>{brief.audience}</dd></div>
+          <div><dt>核心任务</dt><dd>{brief.coreTask}</dd></div>
+          <div><dt>语气</dt><dd>{brief.tone}</dd></div>
+          <div><dt>差异化约束</dt><dd>{brief.direction}</dd></div>
+          <div><dt>分类</dt><dd>{brief.category}</dd></div>
+          <div><dt>边界</dt><dd>{brief.outOfScope}</dd></div>
+        </dl>
+
+        <h2>页面必备内容</h2>
+        <ol class="brief-list">
+          {brief.mustHave.map((item) => <li>{item}</li>)}
+        </ol>
+      </div>
+    </article>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{brief.slug}</b> 的建站需求</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><a href="/briefs/">全部需求</a></span>
+    </FootLine>
+  </div>
+</Base>

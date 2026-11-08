@@ -1,0 +1,238 @@
+---
+title: "设计创新｜QQ主题美化体验升级"
+source: https://isux.tencent.com/articles/qqtheme-updata.html
+section: cases
+tag: "案例库"
+fetched: 2026-10-26
+status: full
+id: cases-23
+publisher: "腾讯 ISUX"
+---
+
+# 设计创新｜QQ主题美化体验升级
+
+> 来源：[https://isux.tencent.com/articles/qqtheme-updata.html](https://isux.tencent.com/articles/qqtheme-updata.html)
+>
+> 作者：马bei ｜ 2021-01-14
+
+---
+
+### 01 主题方案的变革
+
+**产品问题&用户调研**
+
+我们对QQ主题进行了两轮用户体验反馈和调研，发现：目前的外网主题存在机型适配效果差、素材制作质量差、缺少全局美化等体验问题；而同时，用户调研的结果表明我们的用户希望体验到更好更高品质更全面个性化的主题。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/yqoriaX5LGO8KrjWxorNbUJmsAjPjKTGXhIGPKptBPp.gif)
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/QIhPBI43iwCYpauLoDyeTQK1pPeG9boBET5LQdy7I2h.gif)
+
+### 项目设计目标
+
+基于现网产品问题和用户调研结果，对优化方向进行了归纳分类,最终确定QQ主题体验升级的项目设计目标：**增加主题覆盖范围 ，提升主题的美化质量 ，提升主题的可用性。**
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/FVvRxsKeSHon5yZY3IbjKtEvl1Wh4v44OxF9L6tNydd.png)
+
+### 探索解决方案
+
+为了达成上面的三个目标，一开始我们根据QQ主题的实现逻辑制定了初步的优化方案：**通过新增素材增加主题覆盖范围，通过修改旧素材提升主题可用性和质量。**
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/H8y4maOb5ADM6Vjo5A5Dua0SBzbL1STTLMCU0E3saUt.png)
+
+但在进行执行评审的时候，我们意识到，这样的方案虽然可行，但落地成本非常的巨大，需要每个主题包内新增两端共1800多张切图，花耗多家cp公司至少四个月的时间和人力。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/qCrKgi6OVG9QvEBpycWuvhfJS3REQDKI3ZZSsvYbXdw.png)
+
+我们不得不推倒开始的方案，开始思考：**是否有更好的解决方案？**
+
+在对主题制作流程、客户端呈现逻辑、日常运营维护工作等问题进行深入的溯源挖掘后发现：**QQ主题目前实现个性化的方案是后台下发素材包替换本地客户端资源实现个性化**。而这就导致了素材包本身是固定的内容，只能被动的接受版本更新带来的种种问题。
+
+在这样的情况下，即使我们按照一开始的方案执行落地，多个版本后我们仍需大量的人力去进行维护和更新才能保证用户的体验。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/Sdu2aIJVLAWfC85iuu95Twu5byDFOw6OM6CGhufPhwJ.png)
+
+所以，我们必须打破旧方案带来的弊端，要**让素材活起来**。
+
+在综合设计思维，开发思维，运营思维去思考问题后，我们提出了一个崭新的实现方案：**终端染色（使用Color-filter,对png进行染色的技术）+分色映射（将资源与色值进行映射，用一套有限色板去管理无限资源的概念）。**
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/tFGxCGed9iWew3AOaqcnhNrS3CixLsBiThfI2xaej7I.png)
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/j4e08ep8elsYNa6Gjstz93Uo0mGYsz6TzFpAlSSA1gL.png)
+
+在这套新的个性化实现方案支持下，设计师简单的对色板进行配色，就能够对QQ客户端的全局颜色进行变化。而当版本更新发生资源变更时，仅需维护通用的线上映射关系，资源即可自动适配到应有的颜色。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/Yt9aHJmLkBaTlNWQ4jB2w4ovl6O3hWzKr2RcmlCidMC.gif)
+
+### 评估解决方案
+
+针对主题方案的变革新方案，分别从优点、变化、难点3个维度进行综合评估：
+
+- 优点：
+
+（1） 整体学习，制作，运营，维护的成本降低
+
+（2） 美化范围变大，下载资源变小，用户体验得到改善
+
+（3） 效率得到优化，难度降低，设计师有更多时间提升主题质量
+
+- 变化：
+
+（1） CP学习新的制作方式
+
+（2） 产品运营省去了过往定期维护素材的工作
+
+（3） 设计师在版本迭代时候进行新资源的分色映射关系
+
+（4） 开发人员进行统一的分色映射表维护管理
+
+- 缺点：
+
+（1） 方案工作量大，多达120+的界面检验，上千个客户端资源，大量的代码需要修改。
+
+（2） 方案执行难度大，包括如何用有限的色板兼容更多的设计需求，资源如何在不同场景得到更有效的复用，设计与开发未来如何进行映射表的对接，以及版本的上下兼容。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/GxoLaI7xScHd9y6W1U34vSYlek1uLjNgohP8Qlk65aD.png)
+
+### 推动落地
+
+设计师提出“终端染色+分色映射”的新方案后，通过积极拉动会议，向主题业务相关的多角色进行新旧方案的优劣讨论，方案得到一致认同后，多方联动形成项目组。
+
+其次进行可行性评估，与开发结对紧密协作，共同讨论难点攻克新方案落地要点。
+
+最后基于前期可行性评估，以及难点预研，项目组规划出阶段性的落地方案。
+
+方案的落地主要为三部分工作：**梳理标记->归纳转化->编译覆盖。**
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/aIJ3MZ38qCdv33zAEwrAiOShQwRGENone4oxPHVeHMl.png)
+
+**梳理标记：**
+
+前端开发逐个查找界面的资源和代码并标记，交付给设计师进行资源色值的规划
+
+**归纳转化：**
+
+设计师根据ui的配色规则以及个性场景需要，进行ui色板的构建及资源的颜色映射分配。
+
+在这一过程使用腾讯文档进行设计语言与开发代码的转化。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/I2wt4N3ot3kOOlHUgUEH46xcRBWSxi5h9CBj07hs5RR.png)
+
+**编译覆盖：**
+
+修改代码，让资源支持个性化需要的染色和素材替换、录入分色映射的腾讯文档并进行实机的染色编译并和设计师共同检验效果。
+
+而在上述工作中，设计师的任务难点就在于色板的设计和染色规则的构建。
+
+首先设计师根据QQ的ui规范，建立初步的色板；下一步，创建界面demo，模拟资源与色板的映射关系；然后替换多个不同的色板检验主题染色后多场景下的效果，再对色板和染色规则进行反复的调整；最后在效果符合预期的时候，再输出色板和染色规则并最终在真机上进行验证。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/9KdgYEVqhRjDQ29y4JYDnZkrtzLi07rC3MHn1877zun.gif)
+
+### 第一阶段成果
+
+QQ旧主题：仅**覆盖6个界面、素材包内涵400+切图**、日常需要花费巨大成本维护1000多套主题。
+
+主题新方案落地后：覆盖范围从**6个界面扩展到60+界面**、素材切图降低至48张、600多个资源得到梳理优化、60+个旧主题存在的可用性问题得到解决、维护成本得到大大降低。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/wVnUO7xyqbepzqNSMaO9aITYnNejP7SkRS4665lFd2i.gif)
+
+### 02 主题智能编辑器的诞生
+
+主题新方案落地后，考虑到旧主题**制作时间长，难度大，设计费用高**的问题，产品侧希望设计师能配合新的染色方案去优化主题制作、上架、验收的流程。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/O3sYYMSmMPVLAkQgnLrLVdkzo1mcYN597e6BkrHYiRR.png)
+
+### 确定设计目标
+
+根据旧流程里各个角色反馈的问题点，第2阶段的目标可提炼为：**提升制作效率、打包效率、验收效率**。考虑到旧流程中效率低、出错率高的步骤大多是人工操作部分，我们计划设计一个智能化的主题编辑器来实现工业化的主题生产。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/JP333lqsXyEidIxnob1mmlx6jiBakajQ9CL6ioY1xt4.png)
+
+### 探索解决方案
+
+以提升效率为目标，首先深入制作流程勘察，挖掘制作流程的关键核心点，并提炼关键触点、痛点问题；基于各个触点关键问题，逐一给出解决方案，并全局的回顾整个流程，从全局去统领优化方案；继而以落地为导向，明确问题解决的优先级，稳步前进规划方案落地。在解决方案中，本地编译体验已实现，其他能力落地优先级如下：
+
+- 首先解决智能切图和智能配色，优先级最高
+
+- 其次解决规范优化和多界面预览，优先级居中
+
+- 最后是直连后台，运营做审核，优先级最低
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/1JKjEEKIu9Sw9rtINahwMDvWtxcJZn2rNBWPMqKqwVf.png)
+
+### 方案落地
+
+传统的主题制作中往往最费时间和最易出错的就是切图，在这里我们使用了**双重保险**。
+
+保险1:编辑器将内置一套智能化的切图合成处理方案，设计师仅需上传极少量的必须切图。编辑器还会对上传的切图会进行命名、尺寸、格式的检测。
+
+保险2:官方设计师预设主题的PSD/SKETCH设计模板,附带切图命名尺寸格式等，画完后一键即可导出全套切图资源。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/N9XZmMdqKL5yCNNUNmuzOXG8t2tqhKOaaJc1a51gses.png)
+
+新主题的染色规则中，色板存在21个颜色需要配色。对CP来说，即使有设计规范进行学习，也存在着出错的可能。为了让制作通过率达到最高，我们计划通过编辑器内置的智能配色，将复杂的配色操作简化为2步操作，达到快速稳定地输出合格的配色的效果。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/JeghfEn4oBK5GsxhMtFtagw31uJEBBCiDEaI2IPAI6H.png)
+
+新主题色板中，颜色可分为主色系和背景色系，两大色系下的色值再各有不同的色值要求。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/CqAjIoAm5Ch44j271A4p7vt6kS1KNWNq5nkJA7oddR3.png)
+
+从设计师的理想角度来看，如果只进行主色和背景色的选择，即可输出实现21个颜色的话，无疑效率和通过率都会得到大大提升。
+
+为了实现理想效果，我们设计了一套方案：
+
+在选择主色、背景色后，首先对它们进行一个检测，在这里我们引入了*WCAG2.0*的标准，检测主色元素在背景色元素上的显示是否符合大众的阅读要求。其次我们再把QQ设计规范中，对21个颜色的不同微小要求，通过HSB颜色模型转换为数据化的代码条件并内置在编辑器中。
+
+这样，CP选择的两个颜色，通过颜色检测、颜色模型转换、预设条件的微调，就变成了符合我们视觉层级规范要求和可用性要求的21个颜色。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/bqVPFs3Ot5e7ja4D2jZCIJmEj6v7IQGUS6i2P73mycY.gif)
+
+在实现了智能切图、智能配色、导入设计稿、在线预览、结构化打包、手机实际预览等能力后，编辑器的能力基本得到满足，我们接下来对编辑器进行框架设计，在多方案权衡后，最终采用了元素作导航，右边区域保持全局预览的交互框架，并设计了编辑器的ui界面。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/QoKomRaTuGtCSvhI3Nr3pOVjJFNEA9MNERFae5W3ayN.png)
+
+### 第二阶段项目成果
+
+使用编辑器前：从制作到上架需要约4周时间，每月上架主题平均为12个。
+
+接入编辑器后：**仅需一天即可完成素材的制作到上架**，并且得益于制作难度的降低，可制作主题的CP得到了扩充，目前**每月上架主题稳定在2000+个**。
+
+### 03 主题适配规范网站的搭建
+
+在完成了主题效果优化、主题制作优化后，我们把注意力放在了制作上架之后的流程-适配维护。
+
+旧的主题适配维护涉及到cp/设计师/运营/开发四个角色的大量人力成本。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/GKAhgEAq5SczYOW2YaKJ1PyVdfY39jKM8BORb9nEmWJ.png)
+
+而新主题优化后，仅需要设计师&开发工程师两位角色进行低成本的操作。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/k9LEZ3BtAIC03mg7FeCQY4LfTzzuaS3DGL4pS0EDGnR.png)
+
+但在实际工作中，版本中的不同更新都是由不同的设计师&开发负责的，适配工作往往很难执行。所以为了保证适配的效果，除了在产品的工作流程中增加适配规定外，我们还希望能**帮助到不同业务方降低适配的成本**。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/ekpTyAkr3FBUA0Me5xS0kusgdT0fHsSYzRSGHUNdLD2.png)
+
+新适配流程中，设计师其实仅仅需要根据染色规则对新增资源去定映射关系，而实际映射的写入是开发操作的。那如果两个角色的工作能合并，并且省去学习新适配规则以及沟通的成本呢？
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/cxLtjCLlEIhyIzXEtQW2WqnqA5Pob5LVTN2yivQQTMh.png)
+
+从帮助开发去理解分色染色的层面，我们把资源元素和颜色进行了场景化的匹配应对，并且把规则关系整理成了目录，搭建了Q-Element适配规范网站；开发同学在进行适配时候仅需根据设计稿的新增部分，寻找对应目录下的规则关系，即可对元素进行适配。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/75bU56GBHaXWcN9vl4yMPvjZzudPom6QaQTiZg6bFFw.png)
+
+### 第三阶段项目成果
+
+优化前：主题的版本适配需要设计开发产品的多方配合，花费数天时间去完成适配。
+
+优化后：仅需**开发1个小时的时间即可完成适配和验证**。
+
+### 总结
+
+通过3个阶段的努力，QQ主题美化初步完成了主题效果、主题制化、主题维护成本的三大优化。**上线半年后，目前QQ新主题已经达到1万八千个，并且借助QQ美化平台完成了外部创作人、QQ、QQ用户三者之间的生态搭建，正源源不断的提供给用户更多更好的个性化主题**。我们也会进一步努力，由QQ主题开始对个性化进行新一轮的优化，带给用户更好的体验。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/WbA5neGHsXyNJD4afKYCHlWz0Cq8YOcWspzUMVn6MqS.gif)
+
+**最后，广大设计师的机会来了！**如果您擅长插画或者动画，点此链接[***https://ycg.qq.com/qcc***](https://ycg.qq.com/qcc)，报名参与我们的原创空间和QQ美化平台项目。按照页面引导提交作品审核，经原创馆审核后，就可以获得创作权限。 您的原创作品将被QQ及QQ空间数亿用户付费使用，并获得相应比例分成。
+
+![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/GGSfAuKHf6N8G355RRJxYEH8tuNmbIK24Vq65PjzhYG.png)

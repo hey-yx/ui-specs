@@ -1,0 +1,518 @@
+---
+// 设计地图（设计点选用图）：节点=设计点，每个点连着它牵出的设计场景与该读的文章。
+// 数据在 site/src/data/star-points.json（手工维护，构建期校验引用）。
+// 星位与连线在构建期算好（纯确定性布局），对话框数据来自构建期序列化的 JSON 岛（#star-data）。
+import { getCollection } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { buildModel } from '../../lib/model'
+import { SECTIONS } from '../../data/sections.ts'
+import starData from '../../data/star-points.json'
+import { AI_PROMPT, USAGE_STEPS } from '../../data/guide.ts'
+import { buildProjectPoints } from '../../data/project-points.ts'
+
+interface StarPoint {
+  id: string
+  name: string
+  domain: string
+  /** 可选：设计地图分区名，覆盖默认的分区标题（项目选型方案用） */
+  group?: string
+  select: string
+  value_notes?: string
+  checks?: { q: string; a: string; cite: string }[]
+  tasks: string[]
+  articles: string[]
+}
+
+const TASKS = starData.tasks as Record<string, { name: string; short: string }>
+const taskIds = Object.keys(TASKS)
+const taskCount = taskIds.length
+const PROJECT_POINTS = buildProjectPoints()
+const POINTS = [...starData.points, ...PROJECT_POINTS] as StarPoint[]
+
+const specs = await getCollection('specs')
+const model = buildModel(specs)
+const byFile = new Map(specs.map((s) => [s.data.file, s]))
+const sectionTitle = new Map(SECTIONS.map((s) => [s.key, s.title]))
+
+function articleInfo(file: string) {
+  const spec = byFile.get(file)
+  if (!spec) return null
+  return {
+    title: spec.data.title,
+    publisher: spec.data.publisher,
+    sectionTitle: sectionTitle.get(spec.data.section) ?? spec.data.section,
+    url: `/a/${file.replace(/\.md$/, '')}/`,
+    source: spec.data.source as string,
+  }
+}
+
+// 自测题出处：content/<分区>/<文件>.md:<行号> → 站内文章链接 + 文件:行号 展示
+function citeInfo(cite: string) {
+  const m = /^(.+)\.md:(\d+)$/.exec(cite)
+  if (!m) return { label: cite, url: '' }
+  const path = m[1].replace(/^content\//, '')
+  return {
+    label: `${path.split('/').pop()}.md:${m[2]}`,
+    url: `/a/${path}/`,
+  }
+}
+
+// 任务轨标签宽度：按字符估宽（CJK 10px、ASCII 6px、空格 3.5px）加 20px 内边距，纯确定性
+function tagWidth(label: string) {
+  let w = 0
+  for (const ch of label) w += /[\u2e80-\u9fff\u3000-\u303f\uf900-\ufaff\uff00-\uffef]/.test(ch) ? 10 : ch === ' ' ? 3.5 : 6
+  return Math.round(w + 20)
+}
+
+const points = POINTS.map((p) => ({
+  ...p,
+  checks: (p.checks ?? []).map((c) => ({ ...c, ...citeInfo(c.cite) })),
+  articles: p.articles.map(articleInfo).filter((a): a is NonNullable<typeof a> => a !== null),
+}))
+
+// 相关点：共享任务的其他点，按共享任务数取前 5
+const byTask = new Map<string, string[]>()
+for (const p of points) for (const t of p.tasks) byTask.set(t, [...(byTask.get(t) ?? []), p.id])
+const related = new Map<string, { id: string; name: string }[]>()
+for (const p of points) {
+  const shared = new Map<string, number>()
+  for (const t of p.tasks) {
+    for (const id of byTask.get(t) ?? []) {
+      if (id !== p.id) shared.set(id, (shared.get(id) ?? 0) + 1)
+    }
+  }
+  related.set(
+    p.id,
+    [...shared.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 5)
+      .map(([id]) => ({ id, name: points.find((q) => q.id === id)?.name ?? id })),
+  )
+}
+
+// ── 设计地图布局：按分区聚成分组，右侧任务轨，每个点一条发丝线连到主任务 ──
+const CELL_W = 124
+const ROW_H = 44
+const PER_ROW = 6
+const LABEL_H = 30
+const GROUP_GAP = 20
+const MAIN_X = 20
+const RAIL_X = 826
+
+const groups: { key: string; title: string; items: typeof points }[] = []
+for (const s of SECTIONS) {
+  const items = points.filter((p) => !p.group && p.domain === s.key)
+  if (items.length) groups.push({ key: s.key, title: s.title, items })
+}
+const customGroups = new Map<string, { key: string; title: string; items: typeof points }>()
+for (const p of points) {
+  if (!p.group) continue
+  const key = `group:${p.group}`
+  if (!customGroups.has(key)) customGroups.set(key, { key, title: p.group, items: [] })
+  customGroups.get(key)!.items.push(p)
+}
+groups.push(...customGroups.values())
+
+// 左侧分组跟着场景序变换：组内点最常挂的场景（主场景）在新场景序里的位置；同位保持分区配置顺序
+const taskRank = new Map(taskIds.map((id, i) => [id, i]))
+function dominantRank(items: typeof points) {
+  const tally = new Map<string, number>()
+  for (const p of items) for (const t of p.tasks) tally.set(t, (tally.get(t) ?? 0) + 1)
+  let best = Number.MAX_SAFE_INTEGER
+  let bestN = -1
+  for (const [t, n] of tally) {
+    const r = taskRank.get(t) ?? Number.MAX_SAFE_INTEGER
+    if (n > bestN || (n === bestN && r < best)) {
+      best = r
+      bestN = n
+    }
+  }
+  return best
+}
+groups.sort((a, b) => dominantRank(a.items) - dominantRank(b.items))
+
+let cursor = 24
+const starPos = new Map<string, { x: number; y: number }>()
+const groupLabelY: number[] = []
+for (const g of groups) {
+  groupLabelY.push(cursor + 16)
+  cursor += LABEL_H
+  g.items.forEach((p, i) => {
+    starPos.set(p.id, {
+      x: MAIN_X + (i % PER_ROW) * CELL_W + 8,
+      y: cursor + Math.floor(i / PER_ROW) * ROW_H + ROW_H / 2,
+    })
+  })
+  cursor += Math.ceil(g.items.length / PER_ROW) * ROW_H + GROUP_GAP
+}
+const H = Math.max(cursor, 520)
+
+const taskY = new Map(taskIds.map((id, j) => [id, 40 + (j * (H - 80)) / (taskIds.length - 1)]))
+
+const stars = points.map((p) => {
+  const pos = starPos.get(p.id)!
+  return {
+    ...p,
+    x: pos.x,
+    y: pos.y,
+    lineY: taskY.get(p.tasks[0]) ?? 40,
+    related: related.get(p.id) ?? [],
+    taskLabels: p.tasks.map((t) => TASKS[t]?.name ?? t),
+  }
+})
+
+// 弹窗数据岛：对话框的唯一数据源（构建期从同一份数据序列化；列表删除后详情只在弹窗里）
+const dialogData = stars.map((p) => ({
+  id: p.id,
+  name: p.name,
+  select: p.select,
+  value_notes: p.value_notes,
+  checks: p.checks,
+  taskLabels: p.taskLabels,
+  articles: p.articles,
+  related: p.related,
+}))
+
+const description = `设计地图：设计点选用图：${points.length} 个设计点，点开看选点标准、取值示意、牵出的设计场景与该读的文章。`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '设计地图 · UISpecs',
+  description,
+  inLanguage: 'zh-CN',
+  url: new URL('/starmap/', Astro.site ?? 'http://localhost:4321').href,
+  isPartOf: { '@type': 'WebSite', name: 'UISpecs', url: Astro.site?.href ?? 'http://localhost:4321' },
+}
+---
+
+<Base title="指南 · UISpecs" description={description} jsonLd={jsonLd}>
+  <div class="page">
+    <div id="main">
+      <section class="sec">
+        <div class="sec-head">
+          <h1 class="sec-title">指南 · 设计地图</h1>
+          <span class="sec-count">{points.length} 个设计点</span>
+        </div>
+        <p class="sec-note">
+          带着设计问题进来：这个点怎么取值、牵出哪些任务、该读哪几篇。每个点连到它主场景在右侧任务轨的位置，点开看详情。
+        </p>
+
+        <section class="prompt-block" aria-labelledby="prompt-title">
+          <div class="prompt-head">
+            <h2 class="map-flow-title" id="prompt-title">把这段提示词发给 AI</h2>
+            <button class="prompt-copy" id="promptCopy" type="button">复制提示词</button>
+          </div>
+          <p class="sec-note">内容是下面<a href="#flow">七步流程</a>的完整版，站点地址已自动填为当前站点，复制即可用。</p>
+          <details class="prompt-details">
+            <summary>展开提示词全文</summary>
+            <pre class="ai-prompt"><code>{AI_PROMPT}</code></pre>
+          </details>
+        </section>
+
+        <section class="map-flow" id="flow" aria-labelledby="flow-title">
+          <div class="sec-head">
+            <h2 class="sec-title" id="flow-title">七步流程</h2>
+            <span class="sec-count">7 步 · 1 个端点</span>
+          </div>
+          <p class="sec-note">
+            拿到任务到验收的固定路径。任务轨最右的「项目选型」是第 5 步。照着图走就行，提示词里写的是同一套步骤。
+          </p>
+          <ol class="flow">
+            {USAGE_STEPS.map((s, i) => (
+              <>
+                <li class="flow-step">
+                  <div class="flow-num" aria-hidden="true">{s.n}</div>
+                  <div class="flow-card">
+                    <h3 class="flow-title">{s.title}</h3>
+                    <p class="flow-desc">{s.desc}</p>
+                    {s.branch && (
+                      <div class="flow-branch">
+                        <div class="flow-branch-item">
+                          <h3 class="flow-branch-title">{s.branch[0].title}</h3>
+                          <p class="flow-desc">{s.branch[0].desc}</p>
+                        </div>
+                        <div class="flow-or">或</div>
+                        <div class="flow-branch-item">
+                          <h3 class="flow-branch-title">{s.branch[1].title}</h3>
+                          <p class="flow-desc">{s.branch[1].desc}</p>
+                        </div>
+                      </div>
+                    )}
+                    <p class="flow-gate"><b>判据</b>：{s.gate}</p>
+                  </div>
+                </li>
+                {i < USAGE_STEPS.length - 1 && <li class="flow-arrow" aria-hidden="true">↓</li>}
+              </>
+            ))}
+          </ol>
+
+          <div class="flow-panels">
+            <div class="flow-card">
+              <h3 class="flow-title">指南包里有什么</h3>
+              <dl class="flow-fields">
+                <dt>usage</dt><dd>使用规则：core 核心规则、protocols 五类信息用法协议（规范值 / 场景模式 / 版型 / 品牌语言 / 案例）、type_by_domain 归类表</dd>
+                <dt>guide</dt><dd>指南精简版（任务→文章表在 /ai/guide.md 全文版里）：设计场景路由 + 项目选型方案</dd>
+                <dt>method_required</dt><dd>方法层必读：界面配色框架、视觉层级、布局模式</dd>
+                <dt>tasks</dt><dd>{taskCount} 个设计场景，场景名与短名</dd>
+                <dt>points_by_task</dt><dd>场景 → 设计点 id 反查索引</dd>
+                <dt>points</dt><dd>设计点：select 选点标准、value_notes 取值示意、checks 自测题、牵出的任务与该读文章（原文 /md/&lt;path&gt;）</dd>
+              </dl>
+            </div>
+            <div class="flow-card">
+              <h3 class="flow-title">两边各管什么</h3>
+              <dl class="flow-fields">
+                <dt>hallmark</dt><dd>宏观结构、导航与页脚选型、防模板化检查、8 态与响应式验收</dd>
+                <dt>UISpecs</dt><dd>颜色 / 字号 / 间距 / 动效数值、可访问性底线、有出处的研究结论</dd>
+              </dl>
+              <p class="flow-desc" style="margin-top: var(--space-md)">
+                冲突时：结构听 hallmark，数值听基准规范，可访问性底线压过两者。
+              </p>
+            </div>
+          </div>
+        </section>
+
+
+        <div class="star-filter" role="group" aria-label="按设计场景筛选">
+          {
+            taskIds.map((id) => (
+              <button class="star-chip-btn" type="button" data-task-filter={id} data-task-name={TASKS[id].name} aria-pressed="false">
+                {TASKS[id].short}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="star-map-wrap">
+          <svg class="star-map" viewBox={`0 0 1000 ${H}`} role="group" aria-label="设计地图：设计点选用图">
+            <g class="star-tasks" aria-hidden="true">
+              {
+                taskIds.map((id) => {
+                  const y = taskY.get(id) ?? 0
+                  return (
+                    <Fragment>
+                      <rect class="star-task-marker" x={RAIL_X - 3} y={y - 3} width="6" height="6" rx="1.5" />
+                      <rect class="star-task-pill" x={RAIL_X + 6} y={y - 10} width={tagWidth(TASKS[id].short)} height="20" rx="6" />
+                      <text class="star-task-label" x={RAIL_X + 16} y={y + 3.5}>
+                        {TASKS[id].short}
+                      </text>
+                    </Fragment>
+                  )
+                })
+              }
+            </g>
+            {
+              groups.map((g, gi) => (
+                <text class="star-domain-label" x={MAIN_X} y={groupLabelY[gi]}>
+                  {g.title}（{g.items.length}）
+                </text>
+              ))
+            }
+            <g class="star-points">
+              {
+                stars.map((p) => (
+                  <g class="star-unit" data-tasks={p.tasks.join(' ')}>
+                    <line class="star-line" x1={p.x} y1={p.y} x2={RAIL_X - 6} y2={p.lineY} />
+                    <a class="star-link" href={`#point-${p.id}`} data-star={p.id} aria-label={`设计点：${p.name}`}>
+                      <circle class="star-dot" cx={p.x} cy={p.y} r="3.5" />
+                      <text class="star-label" x={p.x + 9} y={p.y + 4}>
+                        {p.name}
+                      </text>
+                    </a>
+                  </g>
+                ))
+              }
+            </g>
+          </svg>
+        </div>
+
+      </section>
+    </div>
+
+    <dialog class="star-dialog" id="starDialog" aria-labelledby="starDialogTitle">
+      <div class="star-dialog-head">
+        <h2 id="starDialogTitle"></h2>
+        <button class="star-dialog-close" id="starDialogClose" aria-label="关闭">✕</button>
+      </div>
+      <div class="star-dialog-body" id="starDialogBody"></div>
+    </dialog>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{model.total}</b> 篇全文</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>来源为各官方站点与公开文章，原文链接逐篇可查</span>
+    </FootLine>
+  </div>
+
+
+  <script is:inline type="application/json" id="star-data" set:html={JSON.stringify(dialogData).replace(/</g, '\\u003c')}></script>
+  <script>
+    // 点开节点/相关点 → 大对话框；详情渲染自 #star-data 数据岛，无脚本时设计地图只显示点名。
+    const dlg = document.getElementById('starDialog') as HTMLDialogElement
+    const titleEl = document.getElementById('starDialogTitle') as HTMLElement
+    const bodyEl = document.getElementById('starDialogBody') as HTMLElement
+    let trigger: HTMLElement | null = null
+
+    interface DialogPoint {
+      id: string
+      name: string
+      select: string
+      value_notes?: string
+      checks?: { q: string; a: string; cite: string; label: string; url: string }[]
+      taskLabels: string[]
+      articles: { title: string; publisher: string; sectionTitle: string; url: string; source: string }[]
+      related: { id: string; name: string }[]
+    }
+    const starData = new Map<string, DialogPoint>(
+      (JSON.parse(document.getElementById('star-data')?.textContent ?? '[]') as DialogPoint[]).map((p) => [p.id, p]),
+    )
+
+    function el(tag: string, cls?: string, text?: string): HTMLElement {
+      const node = document.createElement(tag)
+      if (cls) node.className = cls
+      if (text !== undefined) node.textContent = text
+      return node
+    }
+
+    function renderDetail(p: DialogPoint): HTMLElement {
+      const wrap = el('div', 'star-detail')
+      wrap.append(el('p', 'star-blurb', p.select))
+      if (p.value_notes) wrap.append(el('p', 'star-blurb star-value-notes', '取值示意：' + p.value_notes))
+      if (p.checks?.length) {
+        const box = el('div', 'star-checks')
+        box.append(el('p', 'star-checks-head', '自测题 · 出稿前逐题自查，答不出回原文'))
+        const list = el('ol', 'star-checks-list')
+        for (const c of p.checks) {
+          const li = el('li', 'star-check')
+          li.append(el('p', 'star-check-q', c.q), el('p', 'star-check-a', c.a))
+          const cite = el(c.url ? 'a' : 'span', 'star-check-cite', c.label)
+          if (c.url) {
+            ;(cite as HTMLAnchorElement).href = c.url
+            cite.title = c.cite
+          }
+          li.append(cite)
+          list.append(li)
+        }
+        box.append(list)
+        wrap.append(box)
+      }
+      const tasks = el('p', 'star-tasks')
+      for (const label of p.taskLabels) tasks.append(el('span', 'star-chip', label))
+      wrap.append(tasks)
+      const arts = el('ul', 'star-articles')
+      for (const a of p.articles) {
+        const li = el('li')
+        const link = el('a', '', a.title) as HTMLAnchorElement
+        link.href = a.url
+        const meta = el('span', 'star-art-meta', a.publisher + ' · ' + a.sectionTitle)
+        const ext = el('a', 'star-ext', '原文') as HTMLAnchorElement
+        ext.href = a.source
+        ext.target = '_blank'
+        ext.rel = 'noopener noreferrer'
+        li.append(link, meta, ext)
+        arts.append(li)
+      }
+      wrap.append(arts)
+      if (p.related.length) {
+        const rel = el('p', 'star-related')
+        rel.append('相关点：')
+        p.related.forEach((r, i) => {
+          if (i > 0) rel.append('、')
+          const a = el('a', '', r.name) as HTMLAnchorElement
+          a.href = '#point-' + r.id
+          a.dataset.star = r.id
+          rel.append(a)
+        })
+        wrap.append(rel)
+      }
+      return wrap
+    }
+
+    function openPoint(id: string) {
+      const p = starData.get(id)
+      if (!p) return
+      titleEl.textContent = p.name
+      bodyEl.replaceChildren(renderDetail(p))
+      bodyEl.scrollTop = 0
+      if (!dlg.open) dlg.showModal()
+    }
+
+    // 直接带 #point-<id> 锚点进来时也开弹窗
+    const hashId = location.hash.match(/^#point-(.+)$/)?.[1]
+    if (hashId) openPoint(hashId)
+
+    document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest('a[data-star]') as HTMLAnchorElement | null
+      if (!link || !link.dataset.star) return
+      e.preventDefault()
+      trigger = link
+      openPoint(link.dataset.star)
+    })
+
+    document.getElementById('starDialogClose')?.addEventListener('click', () => dlg.close())
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close()
+    })
+    dlg.addEventListener('close', () => {
+      trigger?.focus({ preventScroll: true })
+      trigger = null
+    })
+
+    // 提示词里的 <站点地址> 用当前站点实址替换，复制即可用
+    const promptCode = document.querySelector('.ai-prompt code')
+    if (promptCode?.textContent?.includes('<站点地址>')) {
+      promptCode.textContent = promptCode.textContent.replaceAll('<站点地址>', location.origin)
+    }
+
+    // 提示词复制：一键拷进剪贴板；剪贴板被禁或挂起时自动选中全文，⌘C 也能走
+    const copyBtn = document.getElementById('promptCopy')
+    copyBtn?.addEventListener('click', async () => {
+      const code = document.querySelector('.ai-prompt code')
+      if (!code) return
+      const done = (msg: string) => {
+        copyBtn.textContent = msg
+        setTimeout(() => (copyBtn.textContent = '复制提示词'), 2000)
+      }
+      try {
+        await Promise.race([
+          navigator.clipboard.writeText(code.textContent ?? ''),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1200)),
+        ])
+        done('已复制')
+      } catch {
+        const range = document.createRange()
+        range.selectNodeContents(code)
+        const sel = getSelection()
+        sel?.removeAllRanges()
+        sel?.addRange(range)
+        done('复制受限，已选中，⌘C 复制')
+      }
+    })
+
+    // 设计场景筛选：选中场景后设计地图只留相关节点，再点一次取消
+    let activeTask = ''
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.star-chip-btn'))
+    function applyFilter() {
+      for (const el of document.querySelectorAll<SVGElement>('.star-unit')) {
+        const tasks = el.dataset.tasks?.split(' ') ?? []
+        const dim = !!activeTask && !tasks.includes(activeTask)
+        el.classList.toggle('is-dim', dim)
+        // 淡出态同时移出 Tab 序与无障碍树，避免「看不见但能聚焦」
+        const link = el.querySelector<SVGElement>('.star-link')
+        if (link) {
+          link.setAttribute('tabindex', dim ? '-1' : '0')
+          link.setAttribute('aria-hidden', String(dim))
+        }
+      }
+      for (const c of chips) c.setAttribute('aria-pressed', String(c.dataset.taskFilter === activeTask))
+    }
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        activeTask = chip.dataset.taskFilter === activeTask ? '' : (chip.dataset.taskFilter ?? '')
+        applyFilter()
+      })
+    }
+  </script>
+</Base>
