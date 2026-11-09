@@ -6,7 +6,7 @@
 - 只收文章全文，不收导读卡、链接目录页、纯图库；规范类优先 GitHub 同源 Markdown，不爬网页。
 - 一个项目只选一个基准规范，跨源数值冲突按规则裁决。
 - 只引用规范、不照抄布局，用库的项目不能搬走本站版式。
-- 出稿分工：结构归 hallmark（版式三件从它的 macrostructure / nav / footer 库选，写件名与理由），数值归本库（一个项目一个基准规范）。营销页与后台页不许共用一套默认骨架。
+- 出稿分工：Hallmark 介入定版式（三件从它的 macrostructure / nav / footer 库选，写件名与理由），本库给版型原型与数值，两边共同作用；数值归本库（一个项目一个基准规范）。营销页与后台页不许共用一套默认骨架。
 - 跑批先分版式与配色：需求不写配色，开批前把每站的 macrostructure / nav / footer 与强调色写进 `briefs/rotation.json`，跑 `node scripts/check-rotation.mjs` 通过再开批。
 - 要能测出 AI 学没学会：从全文抽事实题盲答，重点补场景级依据。
-- 验收：README 分开教 AI 与人怎么看；AI 与人进来都正确选择该用什么知识（场景/设计点 → 该读文章），而不是只收集零碎的知识。StarMap（/starmap/）承载设计点选择。AI 每次用规范拉 `/ai/design-points.json` 实时路由；与 hallmark 融合：hallmark 管结构与防模板化，本库管数值。
+- 验收：README 分开教 AI 与人怎么看；AI 与人进来都正确选择该用什么知识（场景/设计点 → 该读文章），而不是只收集零碎的知识。StarMap（/starmap/）承载设计点选择。AI 每次用规范拉 `/ai/design-points.json` 实时路由；与 hallmark 融合：hallmark 介入定版式与防模板化，本库给版型原型与数值，两边共同作用。
