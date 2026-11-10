@@ -1,11 +1,12 @@
 ---
-// 建站需求总览：数据来自 briefs/sites.json（经 src/data/case-briefs.ts 读取）
+// 建站需求总览：真源是仓库根 briefs/*.md（经 src/data/case-briefs.ts 读取），没有额外配置
 import Base from '../../layouts/Base.astro'
 import FootLine from '../../components/FootLine.astro'
-import { BRIEFS_NOTE, BRIEFS_UPDATED, SITE_BRIEFS } from '../../data/case-briefs'
+import { loadBriefs } from '../../data/case-briefs'
 
+const { briefs } = await loadBriefs()
 const description =
-  '建站需求：产品是什么、给谁用、核心任务、语气与一个差异化约束、页面必备内容与边界。具体数值与完整版式不在需求里，由指南七步在生成时定。'
+  '建站需求：产品是什么、给谁用。配色由 hallmark 定，数值由基准规范定，页面区块与版式都在生成时定，不写进需求。'
 ---
 
 <Base title="建站需求 · UISpecs" description={description} path="/briefs/">
@@ -14,15 +15,15 @@ const description =
       <section class="sec">
         <div class="sec-head">
           <h1 class="sec-title">建站需求</h1>
-          <span class="sec-count">{SITE_BRIEFS.length} 份</span>
+          <span class="sec-count">{briefs.length} 份</span>
         </div>
-        <p class="sec-note">
-          {BRIEFS_NOTE}数据在 <a href="/briefs/sites.json">briefs/sites.json</a>，整份可直接下载。最后更新 {BRIEFS_UPDATED}。
+        <p class="brief-lead">
+          这里列出 {briefs.length} 份建站需求：每份写产品是什么、给谁用、核心动作。
         </p>
 
-        <ol class="brief-list">
+        <ol class="brief-list brief-index">
           {
-            SITE_BRIEFS.map((b) => (
+            briefs.map((b) => (
               <li class="brief-row">
                 <a class="brief-head" href={`/briefs/${b.slug}/`}>
                   <span class="brief-id">
@@ -41,7 +42,7 @@ const description =
     <FootLine>
       <span>UI 设计规范指南</span>
       <span class="sep" aria-hidden="true">·</span>
-      <span><b>{SITE_BRIEFS.length}</b> 份建站需求</span>
+      <span><b>{briefs.length}</b> 份建站需求</span>
       <span class="sep" aria-hidden="true">·</span>
       <span>结构化数据，可直接引用</span>
     </FootLine>

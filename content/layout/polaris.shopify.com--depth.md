@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Depth 深度"
+title: "Polaris · Foundation · Depth 深度"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/depth/index.mdx
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-31
 publisher: "Shopify Polaris"
 ---
 
-# Polaris · Depth 深度
+# Polaris · Foundation · Depth 深度
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/depth/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/depth/index.mdx)
 

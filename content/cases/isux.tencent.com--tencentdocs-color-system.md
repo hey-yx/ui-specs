@@ -3,7 +3,7 @@ title: "腾讯文档-构建科学有效的色彩系统"
 source: https://isux.tencent.com/articles/tencentdocs-colors.html
 section: cases
 tag: "案例库"
-fetched: 2026-10-26
+fetched: 2026-11-09
 status: full
 id: cases-24
 publisher: "腾讯 ISUX"
@@ -12,14 +12,16 @@ publisher: "腾讯 ISUX"
 # 腾讯文档-构建科学有效的色彩系统
 
 > 来源：[https://isux.tencent.com/articles/tencentdocs-colors.html](https://isux.tencent.com/articles/tencentdocs-colors.html)
->
-> 作者：文酱 ｜ 2021-04-13
 
 ---
+
+> Meet more beautiful colors.
 
 *“色彩是我们感知世界的重要媒介，对于信息传达有着重要的作用，能使人们能够更有效的感知设计的意图和内涵，使传达更高效。且人对色彩的视觉感知与想象能力，能够指导人做出预测、理解和决策。”*
 
 *-- lyft kevyn arnott*
+
+**
 
 随着世界的数字化转型进程大爆发，科技把每一张有形的办公桌移到了云端，用户沉浸在数字构建的世界中。腾讯文档作为先进的生产力工具，产品生态越来越多元丰富，多品类多终端的复杂环境展现在我们面前，开始真正的朝复杂庞大的大规模设计迈进。我们希望能以更加专业、高效的设计姿态迎接腾讯文档的未来挑战。
 
@@ -27,25 +29,25 @@ publisher: "腾讯 ISUX"
 
 腾讯文档在色彩上也进行了一些深入的挖掘和沉淀，一方面希望带给用户全新的品牌印象和认知，另一方面构建科学有效的色彩系统，为产品的发展提供优质高效的设计系统基础。本文将聚焦于色彩系统的构建。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/nlmYy8I1fA3tWNzyFMwRSLcSnsYxSq6P5uw8yRzgM2I.jpeg)
+![](/img/isux/1b5484ba2173.webp)
 
-### 品牌标准色进化
+品牌标准色进化
 
 腾讯文档代表着效率协作的先进生产力，从云端创作到云端协作，打破了办公空间的实体界限。我们希望，新的品牌色，能够为腾讯文档塑造更加有未来科技感及智慧感的视觉感受和认知。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/8bbHpACCWl9R31FTuJ7RVTdXMhM6MT2e1Qj34OzL1ox.png)
+![](/img/isux/e7b9c8902eff.webp)
 
 我们将标准色由平静的天蓝色，升级为更加生动、进取、科技、可靠的明亮清澈的钴蓝色。这种蓝色具有更多的电子意味，蕴含了更多的活力和想象力，承载了腾讯文档对未来数字世界新挑战的态度和形象的进化。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/fTMohkqQjGYbVFaSUBhWNjydFCokbYWc2iYHCIujFmA.png)
+![](/img/isux/ef03d6028a35.webp)
 
 同时我们认为灰色在腾讯文档的色彩系统中起着至关重要的作用，为产品界面创造结构、表达边界、建立信息层次。我们将灰色赋予了统一的品牌认知感受，将蓝色加入到中性灰色里，生成了腾讯文档特有的蓝灰色。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/mukggmxc73UUH6fmDNLD5hovHqKttCJeoHTNmXSMUYV.jpeg)
+![](/img/isux/a79f7070ad85.webp)
 
 至此，腾讯文档标准色进化升级，它体现了腾讯文档对可靠稳定的技术、产品体验的追求，以及对未来智能的数字世界的不断创新和进取，蕴藏着无限的可能性。
 
-### 丰富多元的辅助色
+丰富多元的辅助色
 
 在一个科学有效的色彩系统里，往往包含至少两种色彩：主色+辅助色，两者互相搭配组合成产品体系的整体色彩感受，减少用户在产品体验中对反复出现的主色的视觉疲劳。
 
@@ -55,11 +57,11 @@ publisher: "腾讯 ISUX"
 
 **1、 创建色相色板，保持相同明度、相同饱和度**
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/wi2s8UJNFKioPcFIuBLFmBdK5wmMRDmFajqV35CgRzp.jpeg)
+![](/img/isux/51aa1acc1138.webp)
 
 我们以腾讯文档标准色#1E6FFF（H 218 S 88 B 100) 为起始点，S（饱和度）、B（明度）保持不变，H（色相）以218°为起点，以15°为增量或减量标准，生成24色色板。这个色板是我们选取辅助色的重要依据。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/trOWwEinkpNWrozcaHSUb5m8bpo44QR8Fnnnx3iaTYl.png)
+![](/img/isux/15fe13f8a861.webp)
 
 **2、 以邻近色、互补色、对比色为原则选择丰富的辅助色彩**
 
@@ -73,9 +75,9 @@ publisher: "腾讯 ISUX"
 
 总的原则是利用邻近色构建有质感、品牌感的色彩家族，利用对比色及互补色扩展色相，以制造更强烈的色彩对比，满足一些冲突性场景。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/k7IXEwEvGnEKF28noGvmwHXAUmMqR1NNS8m13pdurik.png)
+![](/img/isux/d0f8024be5dc.webp)
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/33sV3kltsLiaFHnFxAFo23HkbwY8zJeAan89n5eHkGc.png)
+![](/img/isux/ba9b2c7ed3aa.webp)
 
 **3、 校正辅助色**
 
@@ -93,13 +95,13 @@ publisher: "腾讯 ISUX"
 
 校正后我们得到了清澈明亮、清晰易分辨的腾讯文档的主色+辅助色。并且针对视障群体进行了色彩测试。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/qb635daZb1tVkM71sXv4W2xCDfcP1P831nLC6rntG4y.png)
+![](/img/isux/7ea947f25f6f.webp)
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/0cgA4SfhfhktevUHS878Klqb7iJWcIdAMdlOmplNGtq.jpg)
+![](/img/isux/7dae67f771f2.webp)
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/FerwBbWgQDX9niycRFWl1rJ8taVHSWIaeB6oRaesh9q.png)
+![](/img/isux/531827b029da.webp)
 
-### 易用的中性灰色
+易用的中性灰色
 
 灰色是产品体验设计中至关重要的一节，工具型产品大部分是由各种各样的容器、面板、列表组成。灰色为产品界面创造结构、表达边界、建立信息层次，保持舒适的对比度是提高可读性和吸引用户注意力的关键。
 
@@ -111,23 +113,23 @@ publisher: "腾讯 ISUX"
 
 **腾讯文档蓝灰色相扩展：**
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/nrct6ZZWNXg4exXEnzmGl94mS5Gavea7OYtgSs8LQd8.jpeg)
+![](/img/isux/c0d6210fe161.jpeg)
 
 **中性灰色色相扩展：**
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/GghrzCJe2GWnfhTOiG8dmIHabOqrIw5dwFgd5n4G9s6.jpeg)
+![](/img/isux/99e80b76d324.jpeg)
 
 为构建一个高效易用的灰色调色板，我们将蓝灰色彩作为Y轴，有透明度的中性灰色作为X轴，两者透明度保持一致，建立起腾讯文档有梯度的、丰富的灰色调色板。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/Xy2wpSJmuTcFSORNhR1bThPcGq2OJTnEMyL7MU7oYYw.jpeg)
+![](/img/isux/bb487fd79747.webp)
 
 对比度是否合理是阅读体验是否舒适的重要评价维度，过高或者过低的对比度都会影响阅读体验及识别度。下图是对比度的钟型曲线图，随着对比度的增加，舒适度和识别度都在上升，但一旦超过一个界点，对比度越增加，识别度和友好度亦会逐步下降。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/XdU5tfPukIlq5kX8C5xFHKX8O0C2R7RRPrnK3rwWe3E.png)
+![](/img/isux/ad16dbe8ffc5.webp)
 
 为保证视障用户的使用，保证足够的对比度，遵守 WCAG 2.0 的标准，我们对调色板灰色的对比度进行了可用性测试，以指导腾讯文档体验设计中灰色调色板的使用。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/cnGrXhl4g2NqSh3DwkewbGERcTEQuhLteEhjYWAvaOk.jpeg)
+![](/img/isux/3c63495066cd.webp)
 
 *是：对比度在AA标准以上，符合W3C标准，可以使用。*
 
@@ -135,7 +137,7 @@ publisher: "腾讯 ISUX"
 
 *否：对比度在AA标准以下，不符合W3C标准，不可使用。*
 
-### 高效易用的调色板
+高效易用的调色板
 
 定义好文档的主色、辅助色以及中性色后，我们需建立完整的调色板来满足不同场景下颜色的使用。以传达品牌精神，建立色彩层级，或传达信息，或强化界面层级。
 
@@ -143,32 +145,36 @@ publisher: "腾讯 ISUX"
 
 Tencentdocs_blue：
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/ywsXBmurM3vehkprKh9LR3Wgj4jSTIHRV7CT1gD5ZG7.png)
+![](/img/isux/d5e3eab9c49a.png)
 
 **生成主色-蓝色色阶：**
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/vKkJsQXwAjUGM5zkTSep3OEdJdvcwcuJXeeP7y22dcA.jpeg)
+![](/img/isux/38e2fdf5a4d3.jpeg)
 
 **用同样的方法将辅助色生成色阶：**
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/Ec2qjdm7aasBHFfvJi4r822NW2AiOA9I7a9L8MuFQWl.png)
+![](/img/isux/27ff05ea7468.png)
 
 现在，我们有一个梯度丰富，能够支持腾讯文档设计系统的调色板了～
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/D3hcycW3FnggZsv1xB11WaYcJoTwpdLppv4G9EFr60k.jpeg)
+![](/img/isux/0f6b2bce3f53.webp)
 
 **实际案例**
 
 实践才是硬道理，我们尝试以这个调色板为指导来调整优化腾讯文档链接色的优化调整。
 
-![](https://isuxdesign-1251263993.file.myqcloud.com/upload/detail/6IwHePflpkE44M9GhWH5jK67MgrQzsiHI5L5X4aapiU.png)
+![](/img/isux/41eca42ec3b3.webp)
 
 为保证用户阅读体验的舒适度，链接之类的彩色文本，要求颜色在背景下可以达到4.5:1对比度以上，以使它能够清晰的从灰色文本、背景中脱颖而出。于是，我们放弃了品牌蓝_1E6FFF，选择了品牌蓝70_175CEB 作为链接色。
 
 以后，选择颜色，so easy～
 
-### 结束语
+结束语
 
 这个长长的制作调色板的故事就要结束了，我在这项工作中，重新审视过去设计中的设计决策方法，在其中学到了很多东西，希望本文对您也有所帮助。
 
 我们经常快速的动手，依靠主观情感去选择颜色，在刚开始可能没遇到什么特别的问题，但随着产品的壮大和发展，往往会越来越凌乱。抽丝剥茧的搭建色彩系统，真正让色彩为设计服务，简化团队的工作，相信您会有更愉快的工作体验～
+
+以下是腾讯文档APP和小程序二维码链接，欢迎大家扫码体验！
+
+![](/img/isux/9da755a4c604.png)

@@ -15,28 +15,7 @@ publisher: "IBM Carbon"
 
 ---
 
-
-
-
-
 > Tabs are used to organize related content. They allow the user to navigate between groups of information that appear within the same context.
-
-
-
-Live demo
-Overview
-Formatting
-Content
-Universal behaviors
-Line tabs
-Contained tabs
-Vertical tabs
-Modifiers
-Related
-References
-Feedback
-
-
 
 ## Live demo
 
@@ -46,13 +25,7 @@ Tabs are used to group different but related content, allowing users to navigate
 views without leaving the page. Tabs can be used on full page layouts or in
 components such as modals, cards, or side panels.
 
-
-
-
-![An example of tabs being used.](images/tab-usage-1.png)
-
-
-
+![An example of tabs being used.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-1.png)
 
 ### When to use
 
@@ -61,13 +34,7 @@ different categories. Tabs can be used to organize content such as forms,
 settings, and dashboards so a user does not have to navigate away from their
 workflow to complete their task.
 
-
-
-
-![tab thumbnail.](images/tab-usage-2.png)
-
-
-
+![tab thumbnail.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-2.png)
 
 ### When not to use
 
@@ -99,18 +66,10 @@ complete a task.
 | [Contained](#contained-tabs) | An emphasized tab that is commonly used for defined content areas.                                                                                                                        |
 | [Vertical](#Vertical-tabs)   | A tablist with a vertical orientation to browse through content.                                                                                                                          |
 
-
-
-
-![Examples of line tabs (top), contained tabs (middle), and vertical tabs (bottom)](images/tab-usage-3.png)
-
-
-
-
+![Examples of line tabs (top), contained tabs (middle), and vertical tabs (bottom)](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-3.png)
 
   Examples of line tabs (top), contained tabs (middle), and vertical tabs
   (bottom)
-
 
 ## Formatting
 
@@ -121,16 +80,7 @@ optional.
 
 ### Anatomy of line tabs
 
-
-
-
-![Anatomy of line tabs](images/tab-usage-4.png)
-
-
-
-
-
-
+![Anatomy of line tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-4.png)
 
 #### 1. Line tabs
 
@@ -140,28 +90,13 @@ A. Label <br /> C. Indicator <br /> D. Scroll button
 
 A. Label <br /> C. Indicator <br /> E. Icon <br /> F. Tab panel
 
-
-
-
 #### 2. Icon-only line tabs
 
 C. Indicator <br /> E. Icon
 
-
-
-
 ### Anatomy of contained tabs
 
-
-
-
-![Anatomy of contained tabs](images/tab-usage-5.png)
-
-
-
-
-
-
+![Anatomy of contained tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-5.png)
 
 #### 1. Contained tabs
 
@@ -172,25 +107,13 @@ A. Label <br /> C. Indicator <br /> D. Scroll button
 A. Label <br /> B. Secondary label (optional) <br /> C. Indicator <br /> E. Icon
 (optional) <br /> F. Tab panel
 
-
-
-
 #### 2. Icon-only contained tabs
 
 C. Indicator <br /> E. Icon
 
-
-
-
 ### Anatomy of vertical tabs
 
-
-
-
-![Anatomy of vertical tabs](images/tab-usage-20.png)
-
-
-
+![Anatomy of vertical tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-20.png)
 
 #### Vertical tabs
 
@@ -211,13 +134,7 @@ but will have consistent padding on each side of the label. The first label,
 selected by default, should align to the grid. Where the tabs end will vary and
 may not end on the grid.
 
-
-
-
-![Example of line tabs using auto-width alignment](images/tab-usage-7.png)
-
-
-
+![Example of line tabs using auto-width alignment](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-7.png)
 
 Example of line tabs using auto-width alignment
 
@@ -247,13 +164,7 @@ Use grid aware contained tabs when:
 - Labels are short and concise
 - When other elements on the page can align to the tablist
 
-
-
-
-![Example of contained tabs using grid aware alignment](images/tab-usage-8.png)
-
-
-
+![Example of contained tabs using grid aware alignment](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-8.png)
 
 Example of contained tabs using grid aware alignment
 
@@ -269,18 +180,16 @@ inside the component and align the label with text in the component. Vertical
 tab labels also align with the grid, so all labels in a tablist will align on
 the same grid column.
 
-
   
 
-![Do align tab labels with the grid](images/tab-usage-6-do.png)
+![Do align tab labels with the grid](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-6-do.png)
 
   
   
 
-![Do not align tab container with the grid](images/tab-usage-6-dont.png)
+![Do not align tab container with the grid](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-6-dont.png)
 
   
-
 
 #### Alignment within a component
 
@@ -291,13 +200,7 @@ depending on the container's margins. A trailing rule may be added from the end
 of the last tab to the edge of the content area to add hierarchical clarity and
 balance the tabs with the other content.
 
-
-
-
-![Contained tabs within a component](images/tab-usage-9.png)
-
-
-
+![Contained tabs within a component](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-9.png)
 
 Aligning tabs within a component
 
@@ -328,18 +231,10 @@ two lines and then truncates with an ellipsis. By mouse, the full title is
 disclosed in a browser tooltip on hover. By keyboard, the full title is
 disclosed on focus in a tooltip.
 
-
-
-
-![Overflow content within vertical tabs](images/tab-usage-10.png)
-
-
-
-
+![Overflow content within vertical tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-10.png)
 
   On hover, full title is disclosed in a browser tooltip (left) and on focus,
   full title is disclosed in Carbon tooltip (right)
-
 
 ### Further guidance
 
@@ -374,17 +269,9 @@ When your page requires more tabs that can fit or needs to adapt to a new
 browser size, line and contained tabs should become scrollable. Left and right
 arrows appear to help navigate the user through tabs that might be off-page.
 
-
-
-
-![Example of line and contained tabs that scroll](images/tab-usage-11.png)
-
-
-
-
+![Example of line and contained tabs that scroll](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-11.png)
 
   Example of scrolling in line tabs (top) and contained tabs (bottom)
-
 
 ### Interactions
 
@@ -450,13 +337,7 @@ selected tab, a line can be used that extends from the tablist to the end of the
 panel. This is currently not part of the Carbon line tabs component and must be
 added by teams if desired.
 
-
-
-
-![Examples of tabs with icons](images/tab-usage-13.png)
-
-
-
+![Examples of tabs with icons](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-13.png)
 
 ## Contained tabs
 
@@ -469,13 +350,7 @@ into content more easily. Because of the layering model, be mindful of the
 layers used within the tabs so the content does not get too visually
 complicated, especially within smaller areas.
 
-
-
-
-![Examples of contained tabs](images/tab-usage-14.png)
-
-
-
+![Examples of contained tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-14.png)
 
 ## Vertical tabs
 
@@ -497,13 +372,7 @@ columns of the 16-column grid. At the medium breakpoint, the vertical tablist
 spans 2 columns. At the small breakpoint, the vertical tablist uses scrolling
 contained tabs.
 
-
-
-
-![Example of vertical tabs in a get started pattern](images/tab-usage-21.png)
-
-
-
+![Example of vertical tabs in a get started pattern](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-21.png)
 
 Example of Vertical tabs in a get started pattern
 
@@ -515,13 +384,7 @@ You may use icons in either line or contained tabs. Icons are always pinned to
 the right of the tab and do not appear above, below, or to the left of the
 label.
 
-
-
-
-![Examples of contained tabs with icons](images/tab-usage-15.png)
-
-
-
+![Examples of contained tabs with icons](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-15.png)
 
 Example of contained tabs with icons.
 
@@ -532,13 +395,7 @@ easily recognized and globally accepted. These work best in small, defined
 spaces and in components. Always use a tooltip for an icon description on hover
 and focus to add clarity.
 
-
-
-
-![Example of icon-only tabs within a side panel](images/tab-usage-16.png)
-
-
-
+![Example of icon-only tabs within a side panel](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-16.png)
 
 Example of icon-only tabs within a side panel.
 
@@ -547,13 +404,7 @@ Example of icon-only tabs within a side panel.
 Contained tabs that align with the grid allow for a secondary label. Do not use
 secondary labels with line tabs, auto-width contained tabs, or vertical tabs.
 
-
-
-
-![Example of contained tabs with a secondary labe and icon](images/tab-usage-17.png)
-
-
-
+![Example of contained tabs with a secondary labe and icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-17.png)
 
 Example of contained tabs with a secondary label and icon.
 
@@ -564,17 +415,9 @@ experience. Users can add or remove contained or line tabs as needed,
 accommodating future content additions or modifications without drastically
 changing the overall layout or structure.
 
-
-
-
-![Dismissible tabs](images/tab-usage-18.png)
-
-
-
-
+![Dismissible tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-18.png)
 
   Example of dismissible line tabs (top) and dismissible contained tabs (bottom)
-
 
 #### When to use
 
@@ -614,17 +457,9 @@ tabs once the tabs are gone. Provide visual cues, such as a container or
 placeholder tab, so the user clearly understands that the trigger button is
 creating a new tab in a place they expect.
 
-
-
-
-![Dismissible tabs](images/tab-usage-19.png)
-
-
-
-
+![Dismissible tabs](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/tabs/images/tab-usage-19.png)
 
   Example of dismissible tabs within a UI utilizing a button to add a tab
-
 
 ## Related
 

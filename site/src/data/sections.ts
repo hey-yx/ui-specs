@@ -42,11 +42,11 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: 'tokens',
-    title: '设计 Token（DTCG）',
-    note: '搭设计系统前先定 token 结构、命名与分组。',
+    title: '设计 Token',
+    note: '搭设计系统前先定 token 结构；要对具体取值时看官方快照。',
     purpose:
-      'W3C Design Tokens 社区组（DTCG）格式规范：token 定义、文件格式、类型、别名与分组',
-    use_when: '定 token 结构 / 命名 / 别名，生成 tokens.json 或搭设计系统时',
+      'W3C Design Tokens 社区组（DTCG）格式规范，以及 Material 3、Fluent 2、Ant Design 的官方 token 取值快照',
+    use_when: '定 token 结构 / 命名 / 别名，或核对 Material 3、Fluent 2、Ant Design 的官方取值时',
   },
   {
     key: 'standards',
@@ -76,7 +76,7 @@ export const SECTIONS: SectionDef[] = [
     title: '色彩',
     note: '定色板与语义色时只选一个基准规范。',
     purpose:
-      '色彩系统规范：色板结构、语义色、深浅模式（Apple/Polaris/Primer/Carbon/GOV.UK/Spectrum/USWDS/Atlassian/Ant/TDesign）',
+      '色彩系统规范：色板结构、语义色、深浅模式（Apple HIG/Material 3/Fluent 2/Polaris/Primer/Carbon/GOV.UK/Spectrum/USWDS/Atlassian/Ant/TDesign）',
     use_when: '定色板、语义 token、暗色模式时；只选一个基准规范，冲突按 source-rules',
   },
   {
@@ -84,7 +84,7 @@ export const SECTIONS: SectionDef[] = [
     title: '字体排版',
     note: '定字号阶梯、行高与中文字体栈时对表。',
     purpose:
-      '字体排印规范：字阶、行高、字重、行长、Dynamic Type（Apple/Polaris/Primer/Carbon/Spectrum/USWDS/GOV.UK/NHS/Atlassian/web.dev/Ant/TDesign）',
+      '字体排印规范：字阶、行高、字重、行长、Dynamic Type（Apple HIG/Material 3/Fluent 2/Polaris/Primer/Carbon/Spectrum/USWDS/GOV.UK/NHS/Atlassian/web.dev/Ant/TDesign）',
     use_when: '定字号阶梯、排版层级、行高与行长、中文字体栈时',
   },
   {
@@ -92,7 +92,7 @@ export const SECTIONS: SectionDef[] = [
     title: '布局与间距',
     note: '间距、栅格、密度拿不准时来核对数值。',
     purpose:
-      '布局与间距：栅格、间距 token、密度、对齐、响应式骨架（Apple/Polaris/Primer/Carbon/Spectrum/USWDS/GOV.UK/NHS/Atlassian/Ant + Every Layout 模式）',
+      '布局与间距：栅格、间距 token、密度、对齐、响应式骨架（Apple HIG/Material 3/Fluent 2/Polaris/Primer/Carbon/Spectrum/USWDS/GOV.UK/NHS/Atlassian/Ant + Every Layout 模式）',
     use_when: '定间距 token、栅格断点、页面骨架、信息密度时',
   },
   {
@@ -100,7 +100,7 @@ export const SECTIONS: SectionDef[] = [
     title: '动效',
     note: '动效时长与缓动取官方值，别随手写。',
     purpose:
-      '动效规范：时长阶梯、缓动、转场语义（Apple/Polaris/Carbon/Atlassian/Spectrum/web.dev/Ant；另收 NN/g 动效研究与 MDN/W3C 实现规范）',
+      '动效规范：时长阶梯、缓动、转场语义（Apple HIG/Material 3/Fluent 2/Polaris/Carbon/Atlassian/Spectrum/web.dev/Ant；另收 NN/g 动效研究与 MDN/W3C 实现规范）',
     use_when: '定动效时长、缓动、转场语义时；验收动效别用「感觉差不多」',
   },
   {
@@ -116,7 +116,7 @@ export const SECTIONS: SectionDef[] = [
     title: '组件设计',
     note: '做组件前看官方规范怎么定状态与行为。',
     purpose:
-      '组件规范：按钮/表单/表格/弹窗/标签页等组件的状态、行为与可访问性要求（Apple/Polaris/Primer/Carbon/Spectrum/GOV.UK/Ant/TDesign）',
+      '组件规范：按钮/表单/表格/弹窗/标签页等组件的状态、行为与可访问性要求（Apple HIG/Material 3/Fluent 2/Polaris/Primer/Carbon/Spectrum/GOV.UK/Ant/TDesign）',
     use_when: '设计或评审具体组件：按钮、表单、表格、弹窗、标签页',
   },
   {

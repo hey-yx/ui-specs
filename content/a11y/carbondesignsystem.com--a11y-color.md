@@ -15,17 +15,7 @@ publisher: "IBM Carbon"
 
 ---
 
-
 > Visual impairments can include low vision, color blindness, and complete blindness. Carbon components are designed to accommodate the entire spectrum of visual impairment, though designers still need to exercise diligence to ensure that the components are used correctly.
-
-
-
-Color contrast
-Low vision
-Tools
-Resources
-
-
 
 ## Color contrast
 
@@ -69,69 +59,18 @@ might help to use a color-blind simulator to review visibility of content. If
 you're working in Figma, we recommend the
 [Stark](https://www.figma.com/community/plugin/732603254453395948/Stark) plugin.
 
-
-
-
-![rainbow palette showing relationship between colors for users with color blindness](images/color-accessibility-1.png)
-
-
-
+![rainbow palette showing relationship between colors for users with color blindness](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/color-accessibility-1.png)
 
 ## Tools
 
-
-
 - [链接](https://chrome.google.com/webstore/detail/high-contrast/djcfdncoelnlbldjfhinnjlhdjlikmph/related?hl=en)
 
-![high-contrast icon](images/high-contrast.png)
-
-
-
+![high-contrast icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/high-contrast.png)
 
 - [链接](https://www.figma.com/community/plugin/732603254453395948/Stark)
 
-![Stark logo](images/stark.png)
-
-
-
+![Stark logo](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/stark.png)
 
 - [链接](https://marijohannessen.github.io/color-contrast-checker/)
 
-![color contrast icon](images/color-contrast-icon.png)
-
-
-
-
-
-## Resources
-
-
-
-- [链接](https://www.ibm.com/able/toolkit/tools/)
-
-![IBM bee icon](images/bee.svg)
-
-
-
-
-- [链接](https://www.ibm.com/able/requirements/requirements/)
-
-![IBM bee icon](images/bee.svg)
-
-
-
-
-- [链接](https://www.w3.org/TR/WCAG21/)
-
-![IBM bee icon](images/bee.svg)
-
-
-
-
-- [链接](https://www.w3.org/TR/low-vision-needs/)
-
-![IBM bee icon](images/bee.svg)
-
-
-
-
+![color contrast icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/color-contrast-icon.png)

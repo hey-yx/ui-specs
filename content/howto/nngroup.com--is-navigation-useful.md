@@ -30,8 +30,6 @@ Recently, my findings have been confirmed in independent studies by several othe
   * if a page does not appear relevant to the user's current goals, then the user will ruthlessly click the Back button after two to three seconds
   * if users don't understand a certain design element, they don't spend time learning it - instead, they ignore it and continue the hunt for their own goal
 
-
-
 Some analysts conclude that navigation is useless and that navigation elements should be removed from Web pages. Don't try teaching users the site structure, don't try showing them where they are, don't try telling them where else they can go. Instead, just show people content. _I don't fully agree with this analysis._
 
 **Navigation is overdone on many sites**. In particular, the so-called spoke design where every page is linked to every other page leads to reduced usability. Similarly, many sites have overblown footers that link to too many meta-features (say, "about the company" or a privacy statement).
@@ -52,8 +50,6 @@ Instead, provide links to all levels of the hierarchy above the current location
   * the context of the current page (how it is nested) allows users to interpret the page better (you don't just know that you are looking at product 354, you also know that it belongs to the widget product family)
   * the links allow users to go directly to a higher level of the site in case the current page is not what they wanted, but they do want something similar
 
-
-
 True, users will often ignore the structural links, but sometimes they will notice them, especially when they are interested in understanding a page better. **Without structural links, pages become orphans** that are not contextualized. And since users often arrive at pages through search or other means that bypass the higher-level navigation pages, it is necessary to provide a path back to these higher levels. In particular, it is useful to link to a page that provides an overview of the current subsite or region.
 
 ## Local Navigation
@@ -72,8 +68,6 @@ Link to:
   * a message board or other discussion about the current topic
   * news about the current topic (but not all news)
 
-
-
 ## Structure _Can_ Help
 
 Hypertext research from the 1980s showed that structure does help users navigate. **Structure has been under-valued** on the Web for four reasons:****
@@ -82,8 +76,6 @@ Hypertext research from the 1980s showed that structure does help users navigate
   * Most page designs have **hidden the important structural information** among a flood of irrelevant information (say, links to all possible other options), preventing users from identifying the structure.
   * All Web **browsers have neglected the need to visualize** structural information. Pre-Web hypertext systems often did this, and the research showed that good structural visualizations ([not whizzy 3D](http://www.nngroup.com/articles/2d-is-better-than-3d/ "Alertbox: 2D is better than 3D") views) helped substantially.
   * Users are so impatient on the Web that they **don't take time to learn about any individual website** and its structure — instead, they proceed to the next site.
-
-
 
 Only the last of these four reasons is fundamental. Websites can be designed better. And I predict that Internet Explorer version 8.0 will be the first good Web browser that actually helps users navigate.
 

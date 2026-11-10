@@ -30,9 +30,7 @@ If you don't specify a line length, browsers will wrap lines of text at the edge
 
 But just because text fits on a screen doesn't mean it's comfortable to read. Good typography is all about presenting your text in an appropriate way. There's more to typography than choosing suitable fonts to use. You need to consider the user's preferences, the size of the text, line length, and the distance between the lines of text.
 
-
 You may even need to consider the primary language of your user, as you may need to leave room for accents and other special characters. Learn more about this in the [internationalization](/learn/design/internationalization) module.
-
 
 ## Text size
 
@@ -72,10 +70,6 @@ You can use media queries to change the `font-size` property as the screen size 
 }
 ```
 
-
-
-
-
 ## Scaling text
 
 Switching between fixed text sizes at specific breakpoints is quite jumpy. A more responsive approach is to let the user's device width influence the text size.
@@ -85,19 +79,13 @@ The `vw` unit in CSS stands for “viewport width.” Connecting font sizes to t
 
 It's important that you don't use the `vw` by itself in a font-size declaration.
 
-
-
 ```css
 html {
   font-size: 2.5vw;
 }
 ```
 
-
-
 If you do, the user won't be able to resize the text. The text will be resizable if you mix in a relative unit—like `em`, `rem` or `ch`. The CSS [`calc()`](https://developer.mozilla.org/docs/Web/CSS/calc()) function is perfect for this.
-
-
 
 ```css
 html {
@@ -105,13 +93,7 @@ html {
 }
 ```
 
-
-
 Let the browser do the math. This makes it difficult to predict exactly what the text size will be at any specific width, but you know that the text size will be in the right range. The user's browser takes care of figuring out the exact text size calculations.
-
-
-
-
 
 But now there's a possibility that the text will get *too* small on narrow screens and *too* big on wide screens.
 
@@ -127,11 +109,7 @@ html {
 }
 ```
 
-
-
 Now the text size shrinks and grows in proportion to the user's screen but the text size will never go below `1rem` or above `2rem`.
-
-
 
 ## Line length
 
@@ -145,17 +123,11 @@ You can't set a line length directly in CSS. There is no `line-length` property.
 
 Don't set your line-lengths with a fixed unit like `px`. Users can scale their font size up and down and your line lengths should adjust accordingly. Use a [relative unit](/learn/css/sizing/#relative-lengths) like `rem` or `ch`.
 
-
-
 ```css
 article {
   max-inline-size: 700px;
 }
 ```
-
-
-
-
 
 ```css
 article {
@@ -163,13 +135,7 @@ article {
 }
 ```
 
-
-
 Using `ch` units for width will cause new lines to wrap at the 66th character at that font size.
-
-
-
-
 
 ## Line height
 
@@ -188,27 +154,15 @@ blockquote {
 }
 ```
 
-
-
-
-
 Use unitless values for your `line-height` declarations. This ensures that the line height is relative to the `font-size`.
-
-
 
 ```css
 line-height: 24px;
 ```
 
-
-
-
-
 ```css
 line-height: 1.5;
 ```
-
-
 
 ## Combinations and scale
 
@@ -245,9 +199,7 @@ You need to include the `crossorigin` attribute even if you are hosting the font
 
 Use the CSS [`font-display`](https://developer.mozilla.org/docs/Web/CSS/@font-face/font-display) property to tell the browser how to manage the switchover from a system font to a web font. You could choose to show no text at all until the web font is loaded. You could choose to display the system font immediately and then switch over to the web font once it loads. Both strategies have their downsides. If you wait until the web font is downloaded before showing any text, users may find themselves staring at a blank page for a frustratingly long time. If you show the text in a system font first and then switch over to the web font, users may experience a jarring shifting of content on the page.
 
-
 You can mitigate the jarring effect of text shifting around by using [`size-adjust`](/css-size-adjust/) in your `@font-face` rule.
-
 
 A good compromise is to wait for a short while before displaying any text. If the web font loads before that time is up, the text is displayed using the web font with no content shifts. If the web font still hasn't loaded after the time is up, the text is displayed using the system font so at least the user can read the content.
 
@@ -275,17 +227,10 @@ If you are using lots of different weights or styles of the same typeface, you m
 
 [Variable fonts](/variable-fonts/) solve this problem by using one file. Instead of having separate files for regular, bold, extra bold, and so on, a variable font file is responsive. It contains all the information it needs to be displayed across a spectrum of weights or styles.
 
-
-
-
 This means that a single variable font file is larger than a single regular font file, but a single variable font file will probably be smaller than multiple regular font files. If you're using lots of different weights, a variable font could give you a big performance gain.
-
 
 If you're styling elements using the `system-ui` value for `font-face` property, you might get all the benefits of variable fonts without downloading any font files. [More and more system fonts are now variable fonts](/more-variable-font-options-in-chromium-83/).
 
- 
 Good typography on the web isn't just about the type choices that you make as a designer. Responsive typography is also about respecting the user's device and network connection. The end result is a design that feels right no matter how it's being viewed.
 
 Now that you've mastered responsive text, it's time to dive into [responsive images](/learn/design/responsive-images).
-
-

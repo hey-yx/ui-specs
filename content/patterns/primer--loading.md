@@ -1,19 +1,21 @@
 ---
-title: "GitHub Primer · UI Pattern · Loading 加载态"
+title: "GitHub Primer · Pattern · Loading 加载态"
 source: https://primer.style/ui-patterns/loading/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-31
 publisher: "GitHub Primer"
 ---
 
-# GitHub Primer · UI Pattern · Loading 加载态
+# GitHub Primer · Pattern · Loading 加载态
 
 > 来源：[https://primer.style/ui-patterns/loading/](https://primer.style/ui-patterns/loading/)
 
 ---
+
+How to use loading states to help users stay informed and engaged while waiting.
 
 Performance is a priority at GitHub, and the first approach is to improve the speed of our processes. However, there are times when we can't avoid making users wait. In these cases, maintaining [visibility of system status](https://www.nngroup.com/articles/visibility-system-status/) through loading states can help users feel stable and in control.
 
@@ -21,50 +23,53 @@ Without indicating that something is loading, users may think a process has sile
 
 Some of our components already have loading states built in. Rely on component-specific patterns before designing your own loading experiences.
 
-For example:
+Examples:
 
-- [Data table](https://primer.style/react/storybook/?path=/story/components-datatable-features--with-loading)
-- [Select panel](https://primer.style/components/selectpanel#loading)
-- [Tree view](https://primer.style/components/tree-view#asynchronously-loading-child-nodes)
+  - [DataTable](https://primer.style/product/components/data-table/#in-a-loading-state)
+  - [SelectPanel](https://primer.style/product/components/select-panel/#loading)
+  - [TreeView](https://primer.style/product/components/tree-view/#asynchronously-loading-child-nodes)
 
+## Loading indicators
 Loading indicators reassure users that their request is actively being executed, and can sometimes be used to set an expectation for how long they'll be waiting. They may even reduce the users' perception of time.
 
-Animation in loading indicators helps reassure the user that the process is active and the system isn't frozen. However, animation can become distracting or overwhelming. Loading indicators' animation should be subtle, and we should avoid letting a page get overtaken by too many of them.
+Animation in loading indicators helps reassure the user that the process is active and the system isn't frozen. However, animation can become distracting or overwhelming. Loading indicators' animation should be subtle and used sparingly.
 
+### Determinate loading indicators
 Determinate loading indicators may be used when the progress or duration of a process is known or can be estimated. This type of loading gives the user an idea of how much longer they'll have to wait.
 
 Determinate loading indicators work best for processes that are likely to take longer (approximately 3 or more seconds). Shorter waiting times don't give the user enough time to process the information conveyed by a determinate loading indicator.
 
-![A progress bar with % completed text](https://github.com/primer/design/assets/2313998/973ab0ca-4f5c-4e06-98f2-e66fdf706943)
+![A ProgressBar with % completed text](https://github.com/primer/design/assets/2313998/973ab0ca-4f5c-4e06-98f2-e66fdf706943)
 
+### Indeterminate loading indicators
 Indeterminate loading indicators may be used when the progress or duration of a process is variable or unknown.
 
 This type of loading gives the user a sense that something is happening, but not how long it will take.
 
-A [spinner](https://primer.style/ui-packages/spinner) is the most versatile indeterminate loading indicator. It may be used in place of content that is loading, or adjacent to a loading message
+#### Spinner
+A [Spinner](https://primer.style/product/components/spinner/) is the most versatile indeterminate loading indicator. It may be used in place of content that is loading, or adjacent to a loading message
 
-![PR status checks being replaced by a spinner](https://github.com/primer/design/assets/2313998/4f4e897e-bbda-4cbc-bd0f-962450c6b5b6)
+![PR status checks being replaced by a Spinner](https://github.com/primer/design/assets/2313998/4f4e897e-bbda-4cbc-bd0f-962450c6b5b6)
 
+#### Content skeleton
 For large areas of loading content, the loading content may be replaced by a vague representation of the content. This shows users the general shape of the page and could make them perceive the real content as loading faster.
 
-Skeleton loaders may be used when we can approximate the visual shape the loaded content will create on the page.
+Examples:
 
-This kind of loading indicator can be rendered using the following components:
-- [Skeleton avatar](https://primer.style/components/skeleton-avatar)
-- [Skeleton text](https://primer.style/components/skeleton-text)
-- [Skeleton box](https://primer.style/components/skeleton-box)
+     - [SkeletonText](https://primer.style/product/components/skeleton-loaders/#skeletontext)
+     - [SkeletonAvatar](https://primer.style/product/components/skeleton-loaders/#skeletonavatar)
+     - [SkeletonBox](https://primer.style/product/components/skeleton-loaders/#skeletonbox)
 
-[动画示例](https://github.com/primer/react/assets/2313998/4bb7b7b6-482f-46c8-97d8-4b560066d287)
-
+#### Animated icon or illustration
 An animated icon or illustration may be used as a "branding moment" for special loading states. This should be used sparingly.
 
-[动画示例](https://github.com/primer/react/assets/2313998/d5a49e2d-315c-4d55-b929-ef2e6a648712)
-
+#### Loading text
 Text may accompany any of the above loading indicators to give the user more context about the process.
 
+## Adapting to different wait times
 The following is meant as general guidance since we can't accurately predict how long a process will take. It's difficult to give even a rough estimate of how long a process will take due to unknown variables such as network speed, device performance, and server load.
 
-![3 images: 1. crossed out loader; 2. spinner; 3. progress bar with text;](https://github.com/primer/design/assets/2313998/7b42b9aa-c517-4620-833a-d12b7e6084bd)
+![3 images: 1. crossed out loader; 2. Spinner; 3. ProgressBar with text;](https://github.com/primer/design/assets/2313998/7b42b9aa-c517-4620-833a-d12b7e6084bd)
 
 **Less than 1 second:** Don't show a loading state. Seeing a loading indicator flash on the screen could be distracting and make the product feel slower than it is.
 
@@ -74,7 +79,8 @@ The following is meant as general guidance since we can't accurately predict how
 
 **More than 10 seconds:** Use a determinate loading state and avoid blocking other interactions by treating the process as a background task if possible. This reduces the interruption caused by a lengthy process, and could make wait times feel shorter if a user can shift their focus to other tasks. For example, the user can still interact with a pull request while they're waiting for CI actions to run.
 
-![4 images: 1. explicitly excluded loading indicator; 2. button in loading state; 3. success banner; 4. error banner](https://github.com/primer/design/assets/2313998/91f1ecd4-78e3-4178-a505-749ab05f3efa)
+## Lifecycle of a loading state
+![4 images: 1. explicitly excluded loading indicator; 2. Button in loading state; 3. success banner; 4. error banner](https://github.com/primer/design/assets/2313998/91f1ecd4-78e3-4178-a505-749ab05f3efa)
 
 **Process initiated:** The moment just before loading begins. Usually initiated by a user action such as clicking a button or submitting a form
 
@@ -84,109 +90,83 @@ The following is meant as general guidance since we can't accurately predict how
 
 **Process failed:** There was an error, and the process could not be completed. This step should include an error message that explains what went wrong and what the user's next time may be. For example, if the user can retry the process, include a button to do so.
 
+## Incremental loading
 Whenever possible, show each item in a collection as soon as it loads. Don't wait for every item in the collection to load before showing the items.
-
-**Do**
-
-[动画示例](https://github.com/primer/design/assets/2313998/6e7f87df-0d3e-4a58-a001-dd09e4510cc3)
-
-*Show content as soon as it's loaded.*
-
-**Don't**
-
-[动画示例](https://github.com/primer/design/assets/2313998/a06a4ee2-cbe6-4ec0-8551-16381c7bee49)
-
-*Don't wait for all content in a collection to be loaded before showing it.*
 
 Whenever possible, prioritize the most important pieces of data to load first. This shows the user the most important content first and gives them a chance to interact with things sooner. This could be especially helpful for somebody on a slow network.
 
 ![4 images of a repo card from the feed loading: 1. Skeleton; 2. Text; 3. Actions; 4. Images](https://github.com/primer/design/assets/2313998/ea5725c7-bec2-43a0-8cd9-43fba1a27a51)
 
+## Scoping loading indicators to page content
 A loading indicator should be placed nearest to the content they are standing in for. Avoid creating a jarring layout shift when the loaded content replaces the loading indicator.
 
 Replace loading indicators with loaded content or error feedback as soon as possible to avoid burdening users with unnecessarily long wait times.
 
-[动画示例](https://github.com/primer/design/assets/2313998/b5cc3e34-cac1-408f-bf9c-58a8d1655cc7)
-
+### Interstitial loading screen
 Some processes navigate you to a new page once they've completed, and use an interstitial loading page as a transition. This should be done sparingly because loading a new page is a bigger interuption than showing a loading indicator in context on the page.
 
 Interstitial loading screens are useful for:
 
-- processes that take a longer time (approximately 3 seconds or more) and result in a significant change such as the creation of a new repo
-- blocking the UI to prevent interruptions or changes to data
+  - processes that take a longer time (approximately 3 seconds or more) and result in a significant change such as the creation of a new repo
+  - blocking the UI to prevent interruptions or changes to data
 
+### Large areas
 ![3 images: 1. Spinner replacing status check box; 2. Spinner replacing PR/issues sidebar sections; 3. Spinner replacing modal content](https://github.com/primer/design/assets/2313998/9347a9a1-088b-4bf0-829a-a38ba1644525)
 
 Position your loading state in the center of the region, but ensure it's still visible within the viewport.
 
+### Small areas
 To avoid information overload and visual noise, consider replacing a series of adjacent loading indicators with a single loading indicator.
 
-**Do**
-
-[动画示例](https://github.com/primer/design/assets/2313998/eed9b892-39a1-45d4-b22b-5c92a4842c1d)
-
-*Reduce the number of loading indicators shown on a page.*
-
-**Don't**
-
-[动画示例](https://github.com/primer/design/assets/2313998/95960988-aab0-4c63-9a4e-441cde558ef4)
-
-*Don't show a loading indicator for every piece of loading content on the page.*
-
+## Accessibility
+### Conveying loading indicators
 Loading indicators are visual and need to be accessible to assistive technologies. This can be done with a text element we associate using `aria-labelledby`, or attributes such as `alt` (on an `img` element) and `title` (on a `svg` element). The loading text element may be visually hidden.
 
-You may default to a generic label such as "loading", but try to be specific when possible. For example, when a spinner replaces status checks in a pull request, it could have the label "loading status checks".
+You may default to a generic label such as "loading", but try to be specific when possible. For example, when a Spinner replaces status checks in a pull request, it could have the label "loading status checks".
 
+### Avoid over-announcing loading states
 If you're using multiple loading indicators to convey a cluster of loading content, be mindful about how many announcements will be read aloud to screen reader users.
 
-Since we discourage showing too many loading indicators on the page at once, this problem is most likely to happen when using a [content skeleton](#content-skeleton) loading indicator.
+Since we discourage showing too many loading indicators on the page at once, this problem is most likely to happen when using a [content skeleton](https://primer.style/ui-patterns/loading/#content-skeleton) loading indicator.
 
-**Do**
+![](https://github.com/primer/design/assets/2313998/70905325-7561-417d-9fcd-2aae7c910bc8)
 
-![Have a single loading announcement for a collection of skeleton loaders](https://github.com/primer/design/assets/2313998/70905325-7561-417d-9fcd-2aae7c910bc8)
+![](https://github.com/primer/design/assets/2313998/52e5ee70-9e14-4fa8-92d6-c03ac64dcddd)
 
-**Don't**
-
-![Don't have a loading announcement for every piece of loading content](https://github.com/primer/design/assets/2313998/52e5ee70-9e14-4fa8-92d6-c03ac64dcddd)
-
+### Conveying status
 Communicate when a process has been initiated, when it's in progress, and when it has been completed or if it has failed.
 
 There are many cases where it will be obvious that a process has completed or failed, and we won't need an additional announcement. For example, a page load or a new element getting focused.
 
 For other cases, the status will need to be manually conveyed to assistive technologies. Use a `role="status"` message or put content in an `aria-live` element that communicates the status of a process.
 
+#### Filter results
 If the user needs to wait for filtering to complete, a screen reader should announce how many results were returned from filtering. For example: "No items match the filter", or "5 items match the filter".
 
 To ensure that assistive technology is informed about the filter update, put the message in an element that has a `role` of `"status"`. The element with `role="status"` must always be rendered, not just when the message should be announced.
 
 Implementations of this pattern can be seen in the following examples:
-- [Lookbook - Autocomplete](https://primer.style/view-components/lookbook/inspect/primer/alpha/auto_complete/playground)
-- [Storybook - ActionList](https://primer.style/react/storybook/?path=/story/components-actionlist-examples--async-list-with-spinner)
 
-![Filter results](https://github.com/primer/design/assets/2313998/61171c17-274d-416b-81a7-825a610fdd24)
+    - [Lookbook - Autocomplete](https://primer.style/view-components/lookbook/inspect/primer/alpha/auto_complete/playground)
+    - [Storybook - ActionList](https://primer.style/react/storybook/?path=/story/components-actionlist-examples--async-list-with-spinner)
+![](https://github.com/primer/design/assets/2313998/61171c17-274d-416b-81a7-825a610fdd24)
 
+### Preventing partially loaded content from being announced
 If an `aria-live` region of a page is being updated, set `aria-busy="true"` on the live region until the updates are complete. Then, set `aria-busy="false"`. This prevent assistive technologies from announcing updates until the updates are complete.
 
-Follow existing focus patterns. When focus needs to move, it should go to the most logical and predictable. Before implementing your own focus management strategy for a loading state, confirm that the component hasn't already implemented it. For example, when a [dialog](https://primer.style/components/dialog) closes, focus is automatically moved back to the control that opened the dialog.
+### Focus management
+Follow existing focus patterns. When focus needs to move, it should go to the most logical and predictable. Before implementing your own focus management strategy for a loading state, confirm that the component hasn't already implemented it. For example, when a [Dialog](https://primer.style/product/components/dialog/) closes, focus is automatically moved back to the control that opened the Dialog.
 
 If the completed process results in navigating to a new page, just rely on the browser's default focus behavior for new pages.
 
-If the process fails and a validation message is shown, move focus to the first focusable element in the error message. See the [form validation guidelines](https://primer.style/ui-patterns/forms/overview#validation-on-submit) for more info.
+If the process fails and a validation message is shown, move focus to the first focusable element in the error message. See the [form validation guidelines](https://primer.style/product/ui-patterns/forms/#validation-on-submit) for more info.
 
-If the process loads new content, move focus to first focusable element in the newly loaded content. This pattern is also described in the [tree view focus guidelines](https://primer.style/components/tree-view#focus-out).
+If the process loads new content, move focus to first focusable element in the newly loaded content. This pattern is also described in the [TreeView focus guidelines](https://primer.style/product/components/tree-view/#focus-out).
 
+### Disabling controls during loading
 You may disable form controls after the user submits the form to avoid confusion over whether changes that were made during the submission process will be saved.
 
-However, the button that initiates the a loading process may not be semantically disabled using `aria-disabled`. For more information about button loading states, see the [loading section](https://primer.style/components/button#loading) of the button component guidelines.
+However, the button that initiates the a loading process may not be semantically disabled using `aria-disabled`. For more information about button loading states, see the [loading section](https://primer.style/product/components/button/#loading) of the Button component guidelines.
 
-[动画示例](https://github.com/primer/design/assets/2313998/b138567f-3ba8-49ab-9fa1-80a4fe30b034)
-
+### Motion considerations
 Animated loading indicators help reassure the user that the system isn't frozen, and should not be disabled when for users that prefer reduced motion. However, the animation in loading indicators should be kept as subtle as possible. Large, flashy animations would be harmful to users with sensitivity to motion.
-
-- [Graceful degradation](https://primer.style/ui-patterns/degraded-experiences)
-- [Patterns for saving](https://primer.style/ui-patterns/saving)
-- [Progress bar](https://primer.style/components/progress-bar)
-- [Skeleton avatar](https://primer.style/components/skeleton-avatar)
-- [Skeleton box](https://primer.style/components/skeleton-box)
-- [Skeleton text](https://primer.style/components/skeleton-text)
-- [Spinner](https://primer.style/components/spinner)

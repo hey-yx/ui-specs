@@ -1,11 +1,12 @@
 import { defineConfig } from 'astro/config'
-import { readFileSync } from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import sitemap from '@astrojs/sitemap'
 import { satteri } from '@astrojs/markdown-satteri'
 
 import pipeline from './src/integrations/pipeline.mjs'
+import textCharset from './src/integrations/text-charset.mjs'
 
 /**
  * 站点配置。
@@ -16,22 +17,26 @@ import pipeline from './src/integrations/pipeline.mjs'
 const site = process.env.SITE_URL ?? 'http://localhost:4321'
 
 // 建站需求已从 /examples/ 挪到独立的 /briefs/，旧地址留重定向，外链与旧书签不断。
-// 站清单从 briefs/sites.json 读，加站不用改这里。
+// 站名清单直接扫 briefs/ 目录，加站不用改这里，也没有别的配置文件。
 const SITE_ROOT = fileURLToPath(new URL('.', import.meta.url))
-const briefs = JSON.parse(readFileSync(join(SITE_ROOT, '..', 'briefs', 'sites.json'), 'utf8')).sites
+const BRIEFS_DIR = join(SITE_ROOT, '..', 'briefs')
+const BRIEF_MANUALS = new Set(['layouts.md', 'README.md'])
+const briefSlugs = readdirSync(BRIEFS_DIR)
+  .filter((name) => name.endsWith('.md') && !BRIEF_MANUALS.has(name))
+  .map((name) => name.slice(0, -3))
 const briefRedirects = Object.fromEntries([
   ['/examples/briefs', '/briefs/'],
-  ...briefs.map((b) => [`/examples/${b.slug}/brief`, `/briefs/${b.slug}/`]),
+  ...briefSlugs.map((slug) => [`/examples/${slug}/brief`, `/briefs/${slug}/`]),
 ])
 
 export default defineConfig({
   site,
   trailingSlash: 'ignore',
-  // 指南现行页是 /starmap/；/guide 与 /roadmapx 是旧地址，重定向兜底避免外链断掉
+  // 设计地图是 /starmap/；/roadmapx、/flow、/guide 是旧地址，重定向兜底避免外链断掉
   redirects: {
-    '/guide': '/starmap/',
     '/roadmapx': '/starmap/',
-    '/flow': '/starmap/',
+    '/flow': '/',
+    '/guide': '/',
     ...briefRedirects,
   },
   build: {
@@ -45,4 +50,9 @@ export default defineConfig({
     }),
   },
   integrations: [sitemap(), pipeline()],
+  // Vite 直出 public/ 里的 .md、.json 时不带 charset，浏览器按 latin-1 解码成乱码；
+  // 插件只在 dev 与 preview 的响应头上补 charset=utf-8，不改文件字节。
+  vite: {
+    plugins: [textCharset()],
+  },
 })

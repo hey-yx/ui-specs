@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Axes and labels 轴与标签"
+title: "IBM Carbon · Pattern · Axes and labels 轴与标签"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-5
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Axes and labels 轴与标签
+# IBM Carbon · Pattern · Axes and labels 轴与标签
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/index.mdx)
 
@@ -18,11 +18,6 @@ publisher: "IBM Carbon"
 > Axes and labels provide critical context for the information within a chart. Use simple, easy-to-understand descriptors and metrics to label your chart and axes.
 
 **Note:** This guidance is a work in progress. To see our roadmap, make feature requests, or contribute, please go to the carbon-charts [GitHub repository](https://github.com/carbon-design-system/carbon-charts).
-
-- Starting at zero
-- Gap in data
-- Breaks in axes
-- Time series
 
 ## Starting at zero
 
@@ -34,17 +29,17 @@ Always start numerical axes at zero for part-to-whole and comparisons charts, su
 
 **Do**：For bar charts, the numerical axis should start at zero.
 
-![Legends behavior highlight on hover](images/axislabel-zero-a.png)
+![Legends behavior highlight on hover](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-zero-a.png)
 
 **Don't**：When an axis starts at non-zero, percentage differences between bars are exaggerated.
 
-![Legends behavior highlight on hover](images/axislabel-zero-b.png)
+![Legends behavior highlight on hover](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-zero-b.png)
 
 #### When starting at non-zero is good
 
 Line charts and scatter plots are less sensitive to this distortion because they are intended to communicate trends and not the relative size of the difference. In these cases, cropping the Y axis helps users more easily identify the direction of change.
 
-![Gap in data denoted by texture](images/axislabel-zero-c.png)
+![Gap in data denoted by texture](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-zero-c.png)
 
 *For line charts showing stock market activities, the existence of peaks and valleys in trends is more important than the true size of the change.*
 
@@ -52,7 +47,7 @@ Line charts and scatter plots are less sensitive to this distortion because they
 
 Never interpolate between periods when data is unavailable. Always label both the start and end point during which data is not available.
 
-![Gap in data denoted by texture](images/axislabel-gap.png)
+![Gap in data denoted by texture](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-gap.png)
 
 ## Breaks in axes
 
@@ -62,11 +57,11 @@ On the X axis, the break can be fluid with graph area size, with a minimum width
 
 If data is available during an axis break, re-style line segments to use 0.5px stroke and hide circles representing data points.
 
-![Gap in data bar chart](images/axislabel-break-1.png)
+![Gap in data bar chart](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-break-1.png)
 
 If data isn’t available between axis breakpoints, leave the area empty.
 
-![Gap in data denoted by texture](images/axislabel-break-2.png)
+![Gap in data denoted by texture](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-break-2.png)
 
 ## Time series
 
@@ -82,6 +77,6 @@ In time series, X-axis labels reflect the time increment in the data. When possi
 
 Whenever data crosses into a new time cycle, such as a new day, month, or year, semibold the label to make it a “landmark” label to provide additional context for the labels following it.
 
-![Gap in data denoted by texture](images/axislabel-timeseries.png)
+![Gap in data denoted by texture](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/axes-and-labels/images/axislabel-timeseries.png)
 
 *Example of a time series plotted at 15 seconds intervals*

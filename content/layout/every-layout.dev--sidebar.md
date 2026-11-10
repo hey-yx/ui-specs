@@ -3,7 +3,7 @@ title: "Every Layout · The Sidebar 侧栏"
 source: https://every-layout.dev/layouts/sidebar/
 section: layout
 tag: "工程"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: layout-26
 publisher: "Every Layout"
@@ -15,25 +15,23 @@ publisher: "Every Layout"
 
 ---
 
-*   [The problem](#the-problem)
-*   [The solution](#the-solution)
-*   [Use cases](#use-cases)
-*   [The generator](#the-generator)
-*   [The component](#the-component)
+## The Sidebar
 
-When the dimensions and settings of the medium for your visual design are indeterminate, even something simple like _putting things next to other things_ is a quandary. Will there be enough horizontal space? And, even if there is, will the layout make the most of the _vertical_ space?
+## The problem
+
+When the dimensions and settings of the medium for your visual design are indeterminate, even something simple like *putting things next to other things* is a quandary. Will there be enough horizontal space? And, even if there is, will the layout make the most of the *vertical* space?
 
 ![The left example shows the content overflowing where there are too many adjacent elements. The right example shows the unsightly gaps produced when there are adjacent elements of different heights](https://every-layout.dev/images/illustrations/sidebar_gaps.svg)
 
 Where there’s not enough space for two adjacent items, we tend to employ a breakpoint (a width-based `@media` query) to reconfigure the layout, and place the two items one atop the other.
 
-It’s important we use _content_ rather than _device_ based `@media` queries. That is, we should intervene anywhere the content needs reconfiguration, rather than adhering to arbitrary widths like `720px` and `1024px`. The massive proliferation of devices means there’s no real set of standard dimensions to design for.
+It’s important we use *content* rather than *device* based `@media` queries. That is, we should intervene anywhere the content needs reconfiguration, rather than adhering to arbitrary widths like `720px` and `1024px`. The massive proliferation of devices means there’s no real set of standard dimensions to design for.
 
-But even this strategy has a fundamental shortcoming: `@media` queries for width pertain to the _viewport_ width, and have no bearing on the actual available space. A component might appear within a `300px` wide container, or it might appear within a more generous `500px` wide container. But the width of the viewport is the same in either case, so there’s nothing to “respond” to.
+But even this strategy has a fundamental shortcoming: `@media` queries for width pertain to the *viewport* width, and have no bearing on the actual available space. A component might appear within a `300px` wide container, or it might appear within a more generous `500px` wide container. But the width of the viewport is the same in either case, so there’s nothing to “respond” to.
 
 ![Shows two viewports of the same width. In one, the component takes up the whole width, in the next it is constrained by a narrow container](https://every-layout.dev/images/illustrations/sidebar_viewport_constant.svg)
 
-Design systems tend to catalogue components that can appear between different contexts and spaces, so this is a real problem. Only with a capability like the mooted [container queries](https://css-tricks.com/container-query-discussion/) might we teach our component layouts to be fully _context aware_.
+Design systems tend to catalogue components that can appear between different contexts and spaces, so this is a real problem. Only with a capability like the mooted [container queries](https://css-tricks.com/container-query-discussion/) might we teach our component layouts to be fully *context aware*.
 
 In some respects, the CSS Flexbox module, with its provision of `flex-basis`, can already govern its own layout, per context, rather well. Consider the following code:
 
@@ -41,21 +39,33 @@ In some respects, the CSS Flexbox module, with its provision of `flex-basis`, ca
 .parent {  display: flex;  flex-wrap: wrap;}.parent > * {  flex-grow: 1;  flex-shrink: 1;  flex-basis: 30ch;}
 ```
 
-The `flex-basis` value essentially determines an _ideal_ target width for the subject child elements. With growing, shrinking, and wrapping enabled, the available space is used up such that each element is as _close_ to `30ch` wide as possible. In a `> 90ch` wide container, more than three children may appear per row. Between `60ch` and `90ch` only two items can appear, with one item taking up the whole of the final row (if the total number is odd).
+The `flex-basis` value essentially determines an *ideal* target width for the subject child elements. With growing, shrinking, and wrapping enabled, the available space is used up such that each element is as *close* to `30ch` wide as possible. In a `> 90ch` wide container, more than three children may appear per row. Between `60ch` and `90ch` only two items can appear, with one item taking up the whole of the final row (if the total number is odd).
 
 ![At more than 90ch, there are three items per row. At less than 90ch, there are 5 items, with two items per row except the last row, which is taken up entirely by the last item](https://every-layout.dev/images/illustrations/sidebar_wrapping.svg)
 
-Image caption: An item with an odd index, which is also the last item, can be expressed by concatenating two pseudo selectors: `:nth-child(odd):last-child`
+Image caption:
 
-By designing to _ideal_ element dimensions, and tolerating reasonable variance, you can essentially do away with `@media` breakpoints. Your component handles its own layout, intrinsically, and without the need for manual intervention. Many of the layouts we’re covering finesse this basic mechanism to give you more precise control over placement and wrapping.
+An item with an odd index, which is also the last item, can be expressed by concatenating two pseudo selectors:
 
-For instance, we might want to create a classic sidebar layout, wherein one of two adjacent elements has a fixed width, and the other—the _principle_ element, if you will—takes up the rest of the available space. This should be responsive, without `@media` breakpoints, and we should be able to set a _container_ based breakpoint for wrapping the elements into a vertical configuration.
+:nth-child(odd):last-child
 
-The **Sidebar** layout is named for the element that forms the diminutive _sidebar_: the narrower of two adjacent elements. It is a _quantum_ layout, existing simultaneously in one of the two configurations—horizontal and vertical—illustrated below. Which configuration is adopted is not known at the time of conception, and is dependent entirely on the space it is afforded when placed within a parent container.
+By designing to *ideal* element dimensions, and tolerating reasonable variance, you can essentially do away with `@media` breakpoints. Your component handles its own layout, intrinsically, and without the need for manual intervention. Many of the layouts we’re covering finesse this basic mechanism to give you more precise control over placement and wrapping.
+
+For instance, we might want to create a classic sidebar layout, wherein one of two adjacent elements has a fixed width, and the other—the *principle* element, if you will—takes up the rest of the available space. This should be responsive, without `@media` breakpoints, and we should be able to set a *container* based breakpoint for wrapping the elements into a vertical configuration.
+
+## The solution
+
+The **Sidebar** layout is named for the element that forms the diminutive *sidebar*: the narrower of two adjacent elements. It is a *quantum* layout, existing simultaneously in one of the two configurations—horizontal and vertical—illustrated below. Which configuration is adopted is not known at the time of conception, and is dependent entirely on the space it is afforded when placed within a parent container.
 
 ![The left configuration is in a wide context and the elements are next to each other. The right configuration is in a narrow context and the elements are above and below each other.](https://every-layout.dev/images/illustrations/sidebar_quantum.svg)
 
-Where there is enough space, the two elements appear side-by-side. Critically, the sidebar’s width is _fixed_ while the two elements are adjacent, and the non-sidebar takes up the rest of the available space. But when the two elements wrap, _each_ takes up `100%` of the shared container.
+Where there is enough space, the two elements appear side-by-side. Critically, the sidebar’s width is *fixed* while the two elements are adjacent, and the non-sidebar takes up the rest of the available space. But when the two elements wrap, *each* takes up `100%` of the shared container.
+
+### false Equal height
+
+Note the two adjacent elements are the same height, regardless of the content they contain. This is thanks to a default `align-items` value of `stretch`. In most cases, this is desirable (and was very difficult to achieve before the advent of Flexbox). However, you can “switch off” this behavior with `align-items: flex-start`.
+
+![The left example has align-items stretch and the two adjacent elements are the same height despite different heights of content. In the right example, the two elements are at their natural height](https://every-layout.dev/images/illustrations/sidebar_stretch_start.svg)
 
 How to force wrapping at a certain point, we will come to shortly. First, we need to set up the horizontal layout.
 
@@ -63,7 +73,7 @@ How to force wrapping at a certain point, we will come to shortly. First, we nee
 .with-sidebar {  display: flex;  flex-wrap: wrap;}.sidebar {  flex-basis: 20rem;  flex-grow: 1;}.not-sidebar {  flex-basis: 0;  flex-grow: 999;}
 ```
 
-The key thing to understand here is the role of _available space_. Because the `.not-sidebar` element’s `flex-grow` value is so high (`999`), it takes up all the available space. The `flex-basis` value of the `.sidebar` element is not counted as available space and is subtracted from the total, hence the sidebar-like layout. The non-sidebar essentially squashes the sidebar down to its ideal width.
+The key thing to understand here is the role of *available space*. Because the `.not-sidebar` element’s `flex-grow` value is so high (`999`), it takes up all the available space. The `flex-basis` value of the `.sidebar` element is not counted as available space and is subtracted from the total, hence the sidebar-like layout. The non-sidebar essentially squashes the sidebar down to its ideal width.
 
 ![The sidebar width is marked as n. The width of the accompanying element is all of the available space, or space minus n.](https://every-layout.dev/images/illustrations/sidebar_available.svg)
 
@@ -79,7 +89,7 @@ Where `.not-sidebar` is destined to be less than or equal to `50%` of the contai
 
 ### The gutter
 
-So far, we’re treating the two elements as if they’re touching. Instead, we might want to place a gutter/space between them. Since we want that space to appear between the elements regardless of the configuration and we _don’t_ want there to be extraneous margins on the outer edges, we’ll use the `gap` property as we did for the [**Cluster** layout](https://every-layout.dev/layouts/cluster).
+So far, we’re treating the two elements as if they’re touching. Instead, we might want to place a gutter/space between them. Since we want that space to appear between the elements regardless of the configuration and we *don’t* want there to be extraneous margins on the outer edges, we’ll use the `gap` property as we did for the [**Cluster** layout](https://every-layout.dev/layouts/cluster).
 
 For a gutter of `1rem`, the CSS now looks like the following.
 
@@ -89,77 +99,81 @@ For a gutter of `1rem`, the CSS now looks like the following.
 
 diam eget ante malesuada non at quam ultrices ipsum semper enim ac nec egestas vitae nec ipsum feugiat leo morbi orci ultricies ac congue sit varius cras enim orci porttitor nec odio tellus ipsum convallis luctus ligula eget luctus nec non curabitur morbi feugiat neque interdum erat ipsum tincidunt orci eros pretium quam nibh fusce ultricies tempus pellentesque ornare nibh
 
-[Launch (opens new tab)](https://every-layout.dev/demos/sidebar-media-object)
+Launch
 
-So far, we have been prescribing the width of our sidebar element (`flex-basis: 20rem`, in the last example). Instead, we might want to let the sidebar’s _content_ determine its width. Where we do not provide a `flex-basis` value at all, the sidebar’s width is equal to the width of its contents. The wrapping behavior remains the same.
+(opens new tab)
+
+### Intrinsic sidebar width
+
+So far, we have been prescribing the width of our sidebar element (`flex-basis: 20rem`, in the last example). Instead, we might want to let the sidebar’s *content* determine its width. Where we do not provide a `flex-basis` value at all, the sidebar’s width is equal to the width of its contents. The wrapping behavior remains the same.
 
 ![The sidebar is shown to be the width of the image found inside it](https://every-layout.dev/images/illustrations/sidebar_intrinsic.svg)
 
 If we set the width of an image inside of our sidebar to `15rem`, that will be the width of the sidebar in the horizontal configuration. It will grow to `100%` in the vertical configuration.
 
-The **Sidebar** is applicable to all sorts of content. The ubiquitous “media object” (the placing of an item of media next to a description) is a mainstay, but it can also be used to align buttons with form inputs (where the button forms the sidebar and has an _intrinsic_, content-based width).
+### false Intrinsic web design
 
-The following example uses the [component](#the-component) version, defined as a custom element.
+The term *[Intrinsic Web Design](https://noti.st/jensimmons/h0XWcf)* was coined by Jen Simmons, and refers to a recent move towards tools and mechanisms in CSS that are more befitting of the medium. The kind of *algorithmic*, self-governing layouts set out in this series might be considered intrinsic design methods.
+
+The term *intrinsic* connotes introspective processes; calculations made by the layout pattern about itself. My use of 'intrinsic' in this section specifically refers to the inevitable width of an element as determined by its contents. A button's width, unless explicitly set, is the width of what's inside it.
+
+The CSS Box Sizing Module was formerly called the Intrinsic & Extrinsic Sizing Module, because it set out how elements can be sized both intrinsically and extrinsically. Generally, we should err on the side of intrinsic sizing. As covered in [**Axioms**](https://every-layout.dev/rudiments/axioms), we're better allowing the browser to size elements according to their content, and only provide *suggestions*, rather than *prescriptions*, for layout. We are *outsiders*.
+
+## Use cases
+
+The **Sidebar** is applicable to all sorts of content. The ubiquitous “media object” (the placing of an item of media next to a description) is a mainstay, but it can also be used to align buttons with form inputs (where the button forms the sidebar and has an *intrinsic*, content-based width).
+
+The following example uses the [component](https://every-layout.dev/layouts/sidebar/#the-component) version, defined as a custom element.
 
 ```
 <form>  <sidebar-l side="right" space="0" contentMin="66.666%">    <input type="text">    <button>Search</button>  </sidebar-l></form>
 ```
 
+Launch
+
+(opens new tab)
+
+## The generator
+
 Use this tool to generate basic **Sidebar** CSS and HTML.
+
+{
+
+CSS
+
+}
+
+<
+
+HTML
+
+>
+
+```
+
+```
+
+```
+
+```
+
+## The component
 
 A custom element implementation of the **Sidebar** is provided for download. Consult the API and examples to follow for more information.
 
-[Download Sidebar.zip](https://every-layout.dev/downloads/Sidebar.zip)
+Download Sidebar.zip
 
 ### Props API
 
 The following props (attributes) will cause the **Sidebar** component to re-render when altered. They can be altered by hand—in browser developer tools—or as the subjects of inherited application state.
 
-Name
-
-Type
-
-Default
-
-Description
-
-side
-
-`string`
-
-`"left"`
-
-Which element to treat as the sidebar (all values but "left" are considered "right")
-
-sideWidth
-
-`string`
-
-Represents the width of the sidebar _when_ adjacent. If not set (`null`) it defaults to the sidebar's content width
-
-contentMin
-
-`string`
-
-`"50%"`
-
-A CSS **percentage** value. The minimum width of the content element in the horizontal configuration
-
-space
-
-`string`
-
-`"var(--s1)"`
-
-A CSS margin value representing the space between the two elements
-
-noStretch
-
-`boolean`
-
-`false`
-
-Make the adjacent elements adopt their natural height
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| side | string | "left" | Which element to treat as the sidebar (all values but "left" are considered "right") |
+| sideWidth | string |  | Represents the width of the sidebar when adjacent. If not set (null) it defaults to the sidebar's content width |
+| contentMin | string | "50%" | A CSS percentage value. The minimum width of the content element in the horizontal configuration |
+| space | string | "var(--s1)" | A CSS margin value representing the space between the two elements |
+| noStretch | boolean | false | Make the adjacent elements adopt their natural height |
 
 ### Examples
 
@@ -175,7 +189,7 @@ Because the image is a flex child, `noStretch` must be supplied, to stop it dist
 
 #### Switched media object
 
-The same as the last example, except the text _accompanying_ the image is the sidebar (`side="right"`), allowing the image to grow when the layout is in the horizontal configuration. The `<p>` sidebar has a width ([measure](https://en.wikipedia.org/wiki/Line_length)) of `30ch` (approximately 30 characters) in the horizontal configuration.
+The same as the last example, except the text *accompanying* the image is the sidebar (`side="right"`), allowing the image to grow when the layout is in the horizontal configuration. The `<p>` sidebar has a width ([measure](https://en.wikipedia.org/wiki/Line_length)) of `30ch` (approximately 30 characters) in the horizontal configuration.
 
 The image is contained in `<div>`, meaning `noStretch` is not necessary in this case. The image should grow to use up the available space, so the basic CSS for responsive images should be in your global styles (`img { max-width: 100% }`).
 

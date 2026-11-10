@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Confirm a phone number 确认电话号码"
 source: https://design-system.service.gov.uk/patterns/confirm-a-phone-number/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-5
 publisher: "GOV.UK Design System"
@@ -13,40 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/confirm-a-phone-number/](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Check that a user has access to a specific mobile phone number using a security code sent by text message.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-<h1 class="govuk-heading-l">Check your phone</h1>
-
-<p class="govuk-body">We’ve sent you a text message with a security code.</p>
-
-{{ govukInput({
-  label: {
-    text: "Security code"
-  },
-  id: "security-code",
-  name: "securityCode",
-  type: "text",
-  autocomplete: "one-time-code",
-  classes: "govuk-input--width-4 govuk-input--extra-letter-spacing",
-  inputmode: "numeric"
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-
-<p class="govuk-body"><a href="#" class="govuk-link">Not received a text message?</a></p>
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#confirm-a-phone-number-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#confirm-a-phone-number-example-nunjucks)
 
 ## When to use this pattern
 
@@ -60,49 +32,21 @@ You can ask for a security code every time a user signs in or only once per devi
 
 Send and ask the user for the security code when they:
 
-- create an account
-- sign in later
+*   create an account
+*   sign in later
 
 ### When the user creates an account
 
-When the user creates an account, ask for their password and mobile phone number at the same time. Make it clear if you'll only use the mobile number for sending security codes, or if you'll also use it for other purposes.
+When the user creates an account, ask for their password and mobile phone number at the same time. Make it clear if you’ll only use the mobile number for sending security codes, or if you’ll also use it for other purposes.
 
 After saving the user’s password and mobile phone number, verify their mobile phone number by sending them a text message with a 5 digit code in this format:
 
-{% call govukInsetText() %}
 12345 is your [service name] security code
-{% endcall %}
 
 Then ask the user to enter this code:
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-<h1 class="govuk-heading-l">Check your phone</h1>
-
-<p class="govuk-body">We’ve sent you a text message with a security code.</p>
-
-{{ govukInput({
-  label: {
-    text: "Security code"
-  },
-  id: "security-code",
-  name: "securityCode",
-  type: "text",
-  autocomplete: "one-time-code",
-  classes: "govuk-input--width-4 govuk-input--extra-letter-spacing",
-  inputmode: "numeric"
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-
-<p class="govuk-body"><a href="#" class="govuk-link">Not received a text message?</a></p>
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#confirm-a-phone-number-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#confirm-a-phone-number-second-example-nunjucks)
 
 Let the user enter the code in whatever format is familiar to them. Allow additional spaces, hyphens and dashes.
 
@@ -110,48 +54,13 @@ Give a time limit of 15 minutes for the user to enter the code – the code shou
 
 If the user enters an expired code that was sent more than:
 
-- 15 minutes ago, show a ‘code has expired’ error message and send the user a new code
-- 2 hours ago, show an ‘incorrect security code’ message, even if the code was correct
+*   15 minutes ago, show a ‘code has expired’ error message and send the user a new code
+*   2 hours ago, show an ‘incorrect security code’ message, even if the code was correct
 
-If the user follows the ‘Not received a text message?’ link, allow them to check which mobile number they entered, and to change it if necessary. This prevents the user becoming stuck if they entered a mobile number incorrectly. Do not allow the user to change the number when they're signing in.
+If the user follows the ‘Not received a text message?’ link, allow them to check which mobile number they entered, and to change it if necessary. This prevents the user becoming stuck if they entered a mobile number incorrectly. Do not allow the user to change the number when they’re signing in.
 
-**示例：resend-first-time**
-
-```njk
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
-
-{{ govukBackLink({
-  text: "Back",
-  href: "#"
-}) }}
-
-<h1 class="govuk-heading-l">Request a new security code</h1>
-
-<p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can request a new one.</p>
-
-{% call govukDetails({
-  summaryText: "Change where the text message is sent"
-}) %}
-  {{ govukInput({
-    label: {
-      text: "Mobile number"
-    },
-    value: "07700 900000",
-    id: "mobile-number",
-    name: "mobileNumber",
-    type: "tel",
-    autocomplete: "tel",
-    classes: "govuk-input--width-20"
-  }) }}
-{% endcall %}
-
-{{ govukButton({
-  text: "Request a new code"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#request-a-new-security-code-first-time-confirm-a-phone-number-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#request-a-new-security-code-first-time-confirm-a-phone-number-example-nunjucks)
 
 When the user requests a new code, send them a new one. The new code should have its 15 minute time limit. The previous code should remain valid within its original time limit.
 
@@ -159,42 +68,14 @@ When the user requests a new code, send them a new one. The new code should have
 
 When the user returns to your service, verify their password first. Once they have entered this correctly, send a text message to their mobile phone with a 5 digit code in this format:
 
-{% call govukInsetText() %}
 12345 is your [service name] security code
-{% endcall %}
 
 Ask the user to enter this code. Use the same pattern and time limit as when creating an account.
 
 If they follow the ‘Not received a text message?’ link, show them a page allowing them to request a new code. Do not reveal the mobile number you sent it to.
 
-**示例：resend**
-
-```njk
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
-
-{{ govukBackLink({
-  text: "Back",
-  href: "#"
-}) }}
-
-<h1 class="govuk-heading-l">Request a new security code</h1>
-
-<p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can request a new one.</p>
-
-{% call govukDetails({
-  summaryText: "I do not have access to the phone"
-}) %}
-  <p class="govuk-body">
-    If you cannot access the phone number for this account, <a href="#" class="govuk-link">contact the Tax Credits Helpline</a> to get help signing in.
-  </p>
-{% endcall %}
-
-{{ govukButton({
-  text: "Request a new code"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#request-a-new-security-code-confirm-a-phone-number-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#request-a-new-security-code-confirm-a-phone-number-example-nunjucks)
 
 You should tell the user what to do if they no longer have access to the phone used to sign up.
 
@@ -206,90 +87,35 @@ You can also follow the [domain-bound codes](https://developer.apple.com/news/?i
 
 Include the domain of the service on a new line, prefixed with an `@`, followed by a `#` symbol and the code, like this:
 
-{% call govukInsetText() %}
-12345 is your [service name] security code<br><br>@www.example.service.gov.uk #12345
-{% endcall %}
+12345 is your [service name] security code
+
+@www.example.service.gov.uk #12345
 
 ### Error messages
 
 Style error messages like this:
 
-**示例：error-incorrect**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-<h1 class="govuk-heading-l">Check your phone</h1>
-
-<p class="govuk-body">We’ve sent you a text message with a security code.</p>
-
-{{ govukInput({
-  label: {
-    text: "Security code"
-  },
-  errorMessage: {
-    text: "Enter a correct security code"
-  },
-  id: "security-code",
-  name: "securityCode",
-  type: "text",
-  autocomplete: "one-time-code",
-  classes: "govuk-input--width-4 govuk-input--extra-letter-spacing",
-  inputmode: "numeric"
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-
-<p class="govuk-body"><a href="#" class="govuk-link">Not received a text message?</a></p>
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#error-incorrect-security-code-confirm-a-phone-number-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#error-incorrect-security-code-confirm-a-phone-number-example-nunjucks)
 
 If the user does not enter enough digits:
-<br>Say ‘You've not entered enough numbers, the code must be 5 numbers’.
+
+Say ‘You’ve not entered enough numbers, the code must be 5 numbers’.
 
 If the user enters too many digits:
-<br>Say ‘You’ve entered too many numbers, the code must be 5 numbers’.
+
+Say ‘You’ve entered too many numbers, the code must be 5 numbers’.
 
 If the user enters non-numeric characters, other than spaces:
-<br>Say ‘The code must be 5 numbers’.
+
+Say ‘The code must be 5 numbers’.
 
 If the code has expired, show this message:
 
-**示例：error-expired**
+*   [HTML](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#error-security-code-expired-confirm-a-phone-number-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/#error-security-code-expired-confirm-a-phone-number-example-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-<h1 class="govuk-heading-l">Check your phone</h1>
-
-<p class="govuk-body">We’ve sent you a text message with a security code.</p>
-
-{{ govukInput({
-  label: {
-    text: "Security code"
-  },
-  errorMessage: {
-    text: "The security code has expired. New code sent."
-  },
-  id: "security-code",
-  name: "securityCode",
-  type: "text",
-  autocomplete: "one-time-code",
-  classes: "govuk-input--width-4 govuk-input--extra-letter-spacing",
-  inputmode: "numeric"
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-
-<p class="govuk-body"><a href="#" class="govuk-link">Not received a text message?</a></p>
-```
-
-If the code was sent more than 2 hours ago, show the 'incorrect security code' message.
+If the code was sent more than 2 hours ago, show the ‘incorrect security code’ message.
 
 ### Technical security measures
 
@@ -305,17 +131,22 @@ Set up monitoring for potentially malicious behaviour, such as activity from une
 
 This pattern has been used in a number of services, including the following:
 
-**Government Digital Service**<br>
-GOV.UK Notify<br>
+**Government Digital Service**
+
+GOV.UK Notify
+
 GOV.UK Pay
 
-**Department for Work and Pensions**<br>
+**Department for Work and Pensions**
+
 DWP Authenticate
 
-**Home Office**<br>
+**Home Office**
+
 EU Settlement Service
 
-**Office for Product Safety and Standards**<br>
+**Office for Product Safety and Standards**
+
 Product Safety Database
 
 ### Next steps

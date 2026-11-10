@@ -1,11 +1,13 @@
-/** 设计案例清单：构建时扫 examples/ 目录生成，不再手写。
+/** 设计案例清单：扫 examples/ 目录生成，不再手写。
  *
  * 每站放齐四件套加 meta.json 就自动出现在 /examples/ 与首页统计里：
  *   index.html / DECISIONS.md / FINDINGS.md / preview.png / meta.json
  * meta.json 记案例卡要展示的五项（title、tagline、accent、structure、layout），
- * slug 取目录名。顺序跟 briefs/sites.json 的需求顺序；缺件、字段为空、
- * 目录里有站但需求没写，都在构建时直接失败，避免线上出现半个案例。
- * dev 启动时才读这份清单，新增站点要重启 dev 才出现；构建不受影响。
+ * slug 取目录名，顺序按目录名。缺件、字段为空都在构建时直接失败，避免线上出现半个案例；
+ * 「案例有没有对应需求」在 case-briefs.ts 里校验（需求是 briefs/*.md，不在这里读）。
+ *
+ * 构建走 allCases()（严格校验）；页面渲染走 loadCases({ strict: false })，跳过还没放齐
+ * 五件的站，dev 每次请求重扫：删站或补站后刷新就变，不占着空位等重启。
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -30,41 +32,41 @@ function repoFile(...segments: string[]): string {
   return hit
 }
 
-const EXAMPLES_ROOT = repoFile('examples')
-const SITE_ORDER: string[] = (
-  JSON.parse(readFileSync(repoFile('briefs/sites.json'), 'utf8')) as { sites: { slug: string }[] }
-).sites.map((b) => b.slug)
+/** 扫盘生成案例清单。strict（构建用）有问题直接抛错；宽松模式跳过不完整的站 */
+export function loadCases({ strict = true }: { strict?: boolean } = {}): ExampleCase[] {
+  const root = repoFile('examples')
+  const slugs = readdirSync(root)
+    .filter((name) => statSync(join(root, name)).isDirectory())
+    .sort()
 
-const slugs = readdirSync(EXAMPLES_ROOT)
-  .filter((name) => statSync(join(EXAMPLES_ROOT, name)).isDirectory())
-  .sort()
-
-const problems: string[] = []
-for (const slug of slugs) {
-  const dir = join(EXAMPLES_ROOT, slug)
-  for (const file of REQUIRED_FILES) {
-    if (!existsSync(join(dir, file))) problems.push(`examples/${slug} 缺 ${file}`)
-  }
-}
-
-const bySlug = new Map<string, ExampleCase>()
-for (const slug of slugs) {
-  const metaPath = join(EXAMPLES_ROOT, slug, 'meta.json')
-  if (!existsSync(metaPath)) continue
-  const meta = JSON.parse(readFileSync(metaPath, 'utf8')) as Record<string, unknown>
-  for (const field of META_FIELDS) {
-    if (typeof meta[field] !== 'string' || !(meta[field] as string).trim()) {
-      problems.push(`examples/${slug}/meta.json 的 ${field} 为空`)
+  const problems: string[] = []
+  const cases: ExampleCase[] = []
+  for (const slug of slugs) {
+    const dir = join(root, slug)
+    const missing = REQUIRED_FILES.filter((file) => !existsSync(join(dir, file)))
+    if (missing.length) {
+      problems.push(...missing.map((file) => `examples/${slug} 缺 ${file}`))
+      continue
     }
+    const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8')) as Record<string, unknown>
+    const blank = META_FIELDS.filter(
+      (field) => typeof meta[field] !== 'string' || !(meta[field] as string).trim(),
+    )
+    if (blank.length) {
+      problems.push(...blank.map((field) => `examples/${slug}/meta.json 的 ${field} 为空`))
+      continue
+    }
+    cases.push({ slug, ...(meta as unknown as Omit<ExampleCase, 'slug'>) })
   }
-  bySlug.set(slug, { slug, ...(meta as unknown as Omit<ExampleCase, 'slug'>) })
+
+  if (strict && problems.length) throw new Error(`案例目录不完整：\n  - ${problems.join('\n  - ')}`)
+  return cases
 }
-if (problems.length) throw new Error(`案例目录不完整：\n  - ${problems.join('\n  - ')}`)
 
-const unknown = slugs.filter((slug) => !SITE_ORDER.includes(slug))
-if (unknown.length) throw new Error(`examples/ 里有需求里没有的站：${unknown.join(', ')}`)
+let snapshot: ExampleCase[] | undefined
 
-/** 顺序跟 briefs/sites.json，页面排列与需求列表一致；需求里还没成品的不列 */
-export const CASES: ExampleCase[] = SITE_ORDER.filter((slug) => bySlug.has(slug)).map(
-  (slug) => bySlug.get(slug)!,
-)
+/** 构建期快照：第一次取用时严格校验，缺件直接失败。页面渲染不要用它，走 loadCases({ strict: false }) */
+export function allCases(): ExampleCase[] {
+  snapshot ??= loadCases()
+  return snapshot
+}

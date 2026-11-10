@@ -15,7 +15,6 @@ publisher: "Google web.dev"
 
 ---
 
-
 Many people use a keyboard—or other software/hardware that mimics the
 functionality of a keyboard, such as a switch device—as their primary means of
 navigation. People with temporary physical limitations such as sprained wrist
@@ -56,11 +55,9 @@ receive focus, such as non-interactive HTML elements, custom components, or
 elements with [ARIA](/learn/accessibility/glossary/#aria) that overrides the
 natural focus semantics.
 
-
 Your `tab` key moves the keyboard focus up the
 [DOM](https://developer.mozilla.org/docs/Glossary/DOM). `shift + tab` moves the
 focus down the DOM.
-
 
 ### Tabindex
 
@@ -93,8 +90,6 @@ example of what not to do!
 <div class="switcher">
 <figure>
 
-
-
 </figure>
 
 <figure>
@@ -105,12 +100,10 @@ example of what not to do!
 </figure>
 </div>
 
-
 As a general rule, you should avoid positive tabindexes. Giving focus to
 non-interactive elements and disrupting the normal focus order may confuse and
 frustrate your users. It should be rare that a circumstance warrants adding a
 positive tabindex (`tabindex= "1"`) to a non-focusable element.
-
 
 ### Skip links
 
@@ -162,11 +155,9 @@ A [visible focus indicator](https://www.w3.org/WAI/WCAG21/Understanding/focus-vi
 is a vital tool in informing a user about where they are at all times on the
 page. It's especially important for your sighted keyboard-only users.
 
-
 WCAG 2.2's new success criterion,
 [Focus Not Obscured (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html),
 will ensure that the focus indicator is not hidden beneath other components.
-
 
 ### Browser default styling
 
@@ -189,8 +180,6 @@ a:focus {
   outline: none; /* don't do this! */
 }
 ```
-
-
 
 ```css
 a:focus {
@@ -221,7 +210,6 @@ You could change the focus element style based on element type. For example,
 you could use a dotted underline for body links but choose a rounded border for
 a button element.
 
-
 <p>Depending on how the focus indicator is styled, it may also need to meet the
 [minimum color contrast](https://www.w3.org/WAI/WCAG21/Techniques/general/G195)
 requirements against the background.</p>
@@ -229,11 +217,8 @@ requirements against the background.</p>
 indicators. This will meet WCAG 2.2's
 [Focus Appearance (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance-minimum).</p>
 
-
 <div class="switcher">
 <figure>
-
-
 
 </figure>
 
@@ -255,5 +240,4 @@ For a website or app to be considered accessible, everything that can be
 accessed with a mouse must also be accessed with a keyboard. This module
 focused on the visual aspect of keyboard accessibility, in particular, focus
 order and focus indicators.
-
 

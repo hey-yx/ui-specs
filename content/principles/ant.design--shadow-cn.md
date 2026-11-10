@@ -1,5 +1,5 @@
 ---
-title: "Ant Design · 阴影"
+title: "Ant Design · Foundation · Shadow 阴影"
 source: https://raw.githubusercontent.com/ant-design/ant-design/master/docs/spec/shadow.zh-CN.md
 section: principles
 tag: "规范"
@@ -9,12 +9,11 @@ id: principles-5
 publisher: "蚂蚁集团"
 ---
 
-# Ant Design · 阴影
+# Ant Design · Foundation · Shadow 阴影
 
 > 来源：[https://raw.githubusercontent.com/ant-design/ant-design/master/docs/spec/shadow.zh-CN.md](https://raw.githubusercontent.com/ant-design/ant-design/master/docs/spec/shadow.zh-CN.md)
 
 ---
-
 
 阴影来源于现实生活的反映物体与物体之间距离的物理现象。在界面中，我们往往通过模拟元素的投影直截了当的来告诉用户，元素之间的高度距离与层次关系。
 

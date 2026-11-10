@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Interruption pages 中断页"
 source: https://design-system.service.gov.uk/patterns/interruption-pages/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-25
 publisher: "GOV.UK Design System"
@@ -13,52 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/interruption-pages/](https://design-system.service.gov.uk/patterns/interruption-pages/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Use Interruption pages to pause the user’s journey and give them important information.
 
-**示例：default**
-
-```njk
-{% extends "example-wrappers/full-page.njk" %}
-
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
-
-{% block containerStart %}
-  {{ govukBackLink({
-    text: "Back"
-  }) }}
-{% endblock %}
-
-{% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      {% call govukPanel({
-        titleText: "Is your age correct?",
-        classes: "govuk-panel--interruption",
-        actions: {
-          items: [
-            {
-              text: "Yes, this is correct",
-              href: "#",
-              type: "button"
-            }, {
-              text: "No, change my age",
-              href: "#"
-            }
-          ]
-        }
-      }) %}
-        <p class="govuk-body">You entered your age as <strong>109</strong>.</p>
-      {% endcall %}
-    </div>
-  </div>
-{% endblock %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/interruption-pages/#interruption-pages-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/interruption-pages/#interruption-pages-example-nunjucks)
 
 ## When to use this pattern
 
@@ -66,29 +26,29 @@ Think carefully before you choose to use an Interruption page, as doing this mig
 
 Use Interruption pages to warn the user before they:
 
-- do something unusual that’s probably a mistake
-- do something that cannot be undone (so you can ask the user “Are you sure?”)
-- give an answer that conflicts with existing information
+*   do something unusual that’s probably a mistake
+*   do something that cannot be undone (so you can ask the user “Are you sure?”)
+*   give an answer that conflicts with existing information
 
 You can also use Interruption pages:
 
-- instead of Confirmation pages to show more varied journey outcomes (that are different to a straightforward success, rejection or completion)
-- to show the user important information ahead of a task
+*   instead of Confirmation pages to show more varied journey outcomes (that are different to a straightforward success, rejection or completion)
+*   to show the user important information ahead of a task
 
 ## When not to use this pattern
 
-Do not use Interruption pages unless you're confident that both:
+Do not use Interruption pages unless you’re confident that both:
 
-- there’s evidence of a clear need to pause the user journey
-- it's the only way to give the user information and that they’d otherwise miss it
+*   there’s evidence of a clear need to pause the user journey
+*   it’s the only way to give the user information and that they’d otherwise miss it
 
-Read guidance in the Service Manual, particularly to [Map and understand a user's whole problem](https://www.gov.uk/service-manual/design/map-a-users-whole-problem), to find ways to improve the user journey and the organisational processes behind them.
+Read guidance in the Service Manual, particularly to [Map and understand a user’s whole problem](https://www.gov.uk/service-manual/design/map-a-users-whole-problem), to find ways to improve the user journey and the organisational processes behind them.
 
 ## How it works
 
 Interruption pages pause the user journey to show important information. Use Interruption pages sparingly, as they get less effective the more often users see them.
 
-All important information on the page is shown within an [Interruption panel](/components/panel/#interruption-panel), to help ensure the user does not miss it.
+All important information on the page is shown within an [Interruption panel](https://design-system.service.gov.uk/components/panel/#interruption-panel), to help ensure the user does not miss it.
 
 The panel includes a button that the user must interact with to continue their journey. Information within the panel is usually shown as a heading with some description text, possibly with bullet points and numbered steps.
 
@@ -102,15 +62,15 @@ If it’s helpful for users to jump back to another point in the journey, such a
 
 ## Research on this pattern
 
-This pattern was originally contributed by the NHS Design System. We thank the team for working with us to publish the [Interruption panel variant of the Panel component](/components/panel/#interruption-panel) and this pattern.
+This pattern was originally contributed by the NHS Design System. We thank the team for working with us to publish the [Interruption panel variant of the Panel component](https://design-system.service.gov.uk/components/panel/#interruption-panel) and this pattern.
 
 Guidance in this pattern is based on:
 
-- [Interruption page on NHS Design System](https://service-manual.nhs.uk/design-system/patterns/interruption-page)
-- [Interruption card on Ministry of Justice (MOJ) Design System](https://design-patterns.service.justice.gov.uk/components/interruption-card/)
+*   [Interruption page on NHS Design System](https://service-manual.nhs.uk/design-system/patterns/interruption-page)
+*   [Interruption card on Ministry of Justice (MOJ) Design System](https://design-patterns.service.justice.gov.uk/components/interruption-card/)
 
 ### Next steps
 
 We’d like to get more input from service teams to help us further improve this pattern.
 
-See our [‘Interruption card’ discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/6109) to see some of the areas we're interested in learning more about.
+See our [‘Interruption card’ discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/6109) to see some of the areas we’re interested in learning more about.

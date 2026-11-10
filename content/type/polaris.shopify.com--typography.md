@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Typography 字体"
+title: "Polaris · Foundation · Typography 字体"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/typography/index.mdx
 section: type
 tag: "规范"
@@ -9,7 +9,7 @@ id: type-1
 publisher: "Shopify Polaris"
 ---
 
-# Polaris · Typography 字体
+# Polaris · Foundation · Typography 字体
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/typography/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/typography/index.mdx)
 

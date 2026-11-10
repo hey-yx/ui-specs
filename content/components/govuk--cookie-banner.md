@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Cookie banner Cookie 同意横幅"
 source: https://design-system.service.gov.uk/components/cookie-banner/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-17
 publisher: "GOV.UK Design System"
@@ -13,13 +13,50 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/cookie-banner/](https://design-system.service.gov.uk/components/cookie-banner/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+*   [History for](https://design-system.service.gov.uk/components/cookie-banner/history/)
+*   [Use with Nunjucks for](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 Allow users to accept or reject cookies which are not essential to making your service work.
 
-**示例：default**
+[Open this example in a new tab: cookie banner](https://design-system.service.gov.uk/components/cookie-banner/default/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -60,14 +97,14 @@ Use this component if your service sets any cookies on a user’s device.
 
 Remember, you must:
 
-- tell users about the cookies your service sets on their device
-- let users accept or reject any cookies that are not essential to providing your service
+*   tell users about the cookies your service sets on their device
+*   let users accept or reject any cookies that are not essential to providing your service
 
 The term ‘non-essential cookies’ includes:
 
-- HTML5 local storage
-- service workers
-- any other technologies that store files on the user’s device
+*   HTML5 local storage
+*   service workers
+*   any other technologies that store files on the user’s device
 
 This cookie banner and the [Cookies page pattern](https://design-system.service.gov.uk/patterns/cookies-page/) are based on the approach to getting cookie consent used on the GOV.UK website.
 
@@ -79,36 +116,36 @@ This component page shows several options for using a cookie banner, based on th
 
 You must not take the information on this page as legal advice. Your organisation is responsible and accountable for what they do to comply with data protection legislation, such as:
 
-- Privacy and Electronic Communications Regulations (PECR)
-- General Data Protection Regulation (GDPR)
+*   Privacy and Electronic Communications Regulations (PECR)
+*   General Data Protection Regulation (GDPR)
 
-Check with your organisation's privacy expert to see how data protection legislation affects your website and service.
+Check with your organisation’s privacy expert to see how data protection legislation affects your website and service.
 
 ## How it works
 
 Show the cookie banner every time the user accesses your service until they either:
 
-- accept or reject cookies using the buttons in the cookie banner
-- save their cookie preferences on [your service’s Cookies page](https://design-system.service.gov.uk/patterns/cookies-page/)
+*   accept or reject cookies using the buttons in the cookie banner
+*   save their cookie preferences on [your service’s Cookies page](https://design-system.service.gov.uk/patterns/cookies-page/)
 
 Once the user has accepted or rejected cookies, the cookie banner should:
 
-- hide the cookie banner message
-- show a confirmation message – and a 'hide' button to let the user close the banner
-- set a cookie to save the user’s preferences for 1 year
+*   hide the cookie banner message
+*   show a confirmation message – and a ‘hide’ button to let the user close the banner
+*   set a cookie to save the user’s preferences for 1 year
 
 Make sure the cookie banner does not:
 
-- show when the user visits again, once their preferences have been saved
-- set any non-essential cookies unless the user accepted them on a previous visit
+*   show when the user visits again, once their preferences have been saved
+*   set any non-essential cookies unless the user accepted them on a previous visit
 
-Position the cookie banner after the opening `<body>` tag and before the ’skip to main content‘ link. If you're using the Nunjucks page template, use the `bodyStart` block.
+Position the cookie banner after the opening `<body>` tag and before the ’skip to main content‘ link. If you’re using the Nunjucks page template, use the `bodyStart` block.
 
 Do not make the Cookie banner component ‘sticky’ to the top of the page by using `position: fixed` or any other method. This is to make sure it does not cover or obscure any content which has a focus applied. This is to comply with [WCAG 2.2 success criterion 2.4.11 Focus not obscured (minimum)](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html).
 
 ### Option 1: If you’re only using essential cookies
 
-You can choose not to have a cookie banner if the service only sets essential or 'strictly necessary' cookies, as these do not need user consent.
+You can choose not to have a cookie banner if the service only sets essential or ‘strictly necessary’ cookies, as these do not need user consent.
 
 However, you must tell users that you set essential cookies. You can do this with a cookies page – link to this page in the footer.
 
@@ -120,9 +157,45 @@ To get consent from the user, display the cookie banner inside a form that lets 
 
 All users will be able to see the banner as this approach does not rely on JavaScript.
 
-Here's an example of a cookie banner inside a form:
+Here’s an example of a cookie banner inside a form:
 
-**示例：server-side**
+[Open this example in a new tab: server-side implementation –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/server-side/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Accept additional cookies
+      </button>
+      <button type="submit" value="no" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Reject additional cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -163,9 +236,37 @@ Here's an example of a cookie banner inside a form:
 
 Once the user has accepted or rejected cookies and set their cookie preferences, reload the page to show a confirmation message.
 
-Here's an example of a confirmation message inside a form:
+Here’s an example of a confirmation message inside a form:
 
-**示例：server-side-confirmation**
+[Open this example in a new tab: server-side implementation with confirmation –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/server-side-confirmation/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-confirmation-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-confirmation-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[hide]" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -194,7 +295,7 @@ Here's an example of a confirmation message inside a form:
 
 #### Show the same message to all users
 
-In the cookie banner, tell the user about all the cookies you’re using in the service – whether they've enabled JavaScript or not. This way, you will not need to ask the user to give their consent again on their next visit.
+In the cookie banner, tell the user about all the cookies you’re using in the service – whether they’ve enabled JavaScript or not. This way, you will not need to ask the user to give their consent again on their next visit.
 
 #### Help users keep their place using progressive enhancement
 
@@ -204,9 +305,73 @@ To help users running JavaScript on their device, you can write some JavaScript 
 
 Include all possible messages that the user could see in the cookie banner when the page loads. Hide these with the `hidden` HTML attribute where needed.
 
-Here's an example of a progressively enhanced cookie banner that includes all possible messages which are hidden using HTML – the cookie banner message is shown using JavaScript to remove the `hidden` attribute:
+Here’s an example of a progressively enhanced cookie banner that includes all possible messages which are hidden using HTML – the cookie banner message is shown using JavaScript to remove the `hidden` attribute:
 
-**示例：server-side-multiple-messages-question-visible**
+[Open this example in a new tab: server-side implementation with multiple messages and question visible –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/server-side-multiple-messages-question-visible/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-multiple-messages-and-question-visible-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-multiple-messages-and-question-visible-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Accept additional cookies
+      </button>
+      <button type="submit" value="no" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Reject additional cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[hide]" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[hide]" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -277,9 +442,73 @@ Here's an example of a progressively enhanced cookie banner that includes all po
 }) }}
 ```
 
-Here's the same example of a progressively enhanced cookie banner, with the confirmation message shown instead:
+Here’s the same example of a progressively enhanced cookie banner, with the confirmation message shown instead:
 
-**示例：server-side-multiple-messages-confirmation-visible**
+[Open this example in a new tab: server-side implementation with multiple messages and confirmation visible –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/server-side-multiple-messages-confirmation-visible/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-multiple-messages-and-confirmation-visible-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#server-side-implementation-with-multiple-messages-and-confirmation-visible-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Accept additional cookies
+      </button>
+      <button type="submit" value="no" name="cookies[additional]" class="govuk-button" data-module="govuk-button">
+        Reject additional cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[hide]" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected additional cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" value="yes" name="cookies[hide]" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -362,14 +591,78 @@ Use JavaScript to show cookie banner messages to users that have not accepted or
 
 Write your own JavaScript code so that when the user accepts or rejects cookies, the cookie banner will:
 
-- hide the cookie message by adding the hidden attribute
-- show a confirmation message by removing its hidden attribute
-- give the confirmation message the `tabindex="-1"` and `role="alert"` attributes – this will allow the element to be focused so assistive technology can read the message
-- shift focus to the confirmation message
+*   hide the cookie message by adding the hidden attribute
+*   show a confirmation message by removing its hidden attribute
+*   give the confirmation message the `tabindex="-1"` and `role="alert"` attributes – this will allow the element to be focused so assistive technology can read the message
+*   shift focus to the confirmation message
 
 Here’s an example:
 
-**示例：client-side**
+[Open this example in a new tab: client-side implementation –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/client-side/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#client-side-implementation-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#client-side-implementation-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -438,7 +731,71 @@ Here’s an example:
 
 Show a confirmation message confirming that the user has either accepted or rejected cookies by removing the `hidden` attribute.
 
-**示例：client-side-accepted**
+[Open this example in a new tab: accepted replacement message –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/client-side-accepted/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#accepted-replacement-message-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#accepted-replacement-message-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -505,7 +862,71 @@ Show a confirmation message confirming that the user has either accepted or reje
 
 #### When the user has rejected cookies
 
-**示例：client-side-rejected**
+[Open this example in a new tab: rejected replacement message –cookie banner](https://design-system.service.gov.uk/components/cookie-banner/client-side-rejected/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#rejected-replacement-message-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#rejected-replacement-message-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+  <div class="govuk-cookie-banner__message govuk-width-container" role="alert">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Hide cookie message
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -576,8 +997,8 @@ Include the name of the service in the banner heading to help users understand t
 
 You’ll need to change the example cookie banner text if your service:
 
-- allows third parties to set cookies (tell the user that both your organisation and other organisations will be setting cookies)
-- uses cookies for reasons other than collecting analytics information or remembering the user’s settings
+*   allows third parties to set cookies (tell the user that both your organisation and other organisations will be setting cookies)
+*   uses cookies for reasons other than collecting analytics information or remembering the user’s settings
 
 Keep the text as short as possible while making sure it’s an accurate description of how you use cookies. For example, if you use more than one ‘functional’ cookie and there’s not enough space to mention what each of them does, you could ask for permission to set cookies so ‘you can use as many of the service’s features as possible’.
 
@@ -587,7 +1008,43 @@ Keep the text as short as possible while making sure it’s an accurate descript
 
 You can use this example text for a service which sets essential and analytics cookies. Analytics cookies are those set by your organisation to collect information about how people are using your digital service.
 
-**示例：default (second)**
+[Open this example in a new tab: cookie banner second](https://design-system.service.gov.uk/components/cookie-banner/default/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#cookie-banner-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#cookie-banner-second-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -626,11 +1083,47 @@ You can use this example text for a service which sets essential and analytics c
 
 You can use this example text for a service that set:
 
-- essential cookies
-- analytics cookies
-- functional cookies to remember the user’s settings but are not essential
+*   essential cookies
+*   analytics cookies
+*   functional cookies to remember the user’s settings but are not essential
 
-**示例：multiple-cookies**
+[Open this example in a new tab: non-essential cookies – cookie banner](https://design-system.service.gov.uk/components/cookie-banner/multiple-cookies/)
+
+*   [HTML](https://design-system.service.gov.uk/components/cookie-banner/#non-essential-cookies-cookie-banner-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/#non-essential-cookies-cookie-banner-example-nunjucks)
+
+HTML
+
+```html
+<div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on [name of service]">
+  <div class="govuk-cookie-banner__message govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+          Cookies on [name of service]
+        </h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Accept additional cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button">
+        Reject additional cookies
+      </button>
+      <a class="govuk-link" href="#">View cookies</a>
+    </div>
+  </div>
+</div>
+```
+
+Nunjucks
+
+[See options and how to use with Nunjucks](https://design-system.service.gov.uk/components/cookie-banner/nunjucks/)
 
 ```njk
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
@@ -677,14 +1170,24 @@ You should now use the refreshed GOV.UK branding. If your service has updated to
 
 ## Research on this component
 
-When the user accepts or rejects cookies, a confirmation message will display. For example, "Your cookie preferences have been saved." The focus also shifts to this new message.
+When the user accepts or rejects cookies, a confirmation message will display. For example, “Your cookie preferences have been saved.” The focus also shifts to this new message.
 
 However, a visible focus indicator does not display around the confirmation message. This is different from the notification banner, which does display a visible focus indicator.
 
 We decided to remove the visible focus indicator from the confirmation message for a few reasons, as:
 
-- a user cannot interact with it
-- it's the first element, at the very top of the page
-- it displays in place of the cookie message, which is the last thing the user interacted with
+*   a user cannot interact with it
+*   it’s the first element, at the very top of the page
+*   it displays in place of the cookie message, which is the last thing the user interacted with
 
 In this scenario, we assume that a visible focus indicator would be more likely to confuse users than to help them. However, we need more research to prove this.
+
+## Recent changes
+
+| Date | Changed | Description |
+| --- | --- | --- |
+| Aug 2026 | [GOV.UK Frontend v6.5.0](https://github.com/alphagov/govuk-frontend/releases/tag/v6.5.0) | Removed background colours for print. |
+| Feb 2026 | Guidance | Removed guidance about ‘default’ Cookie banner in page template. |
+| Feb 2026 | [GOV.UK Frontend v6.0.0](https://github.com/alphagov/govuk-frontend/releases/tag/v6.0.0) | Removed rebrand feature flag. |
+| Jun 2025 | Guidance | Added guidance on how the GOV.UK brand refresh impacts the Cookie banner component. |
+| May 2025 | [GOV.UK Frontend v4.10.0](https://github.com/alphagov/govuk-frontend/releases/tag/v4.10.0) | Changed background colour from grey to light blue for the GOV.UK brand refresh. |

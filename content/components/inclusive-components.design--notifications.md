@@ -120,7 +120,6 @@ may be a whooshing and clunking sound, but I suspect a visually hidden
 live region stating "product added successfully" (or similar) would be a
 lot clearer.
 
-![A packet of quinoa dog sweets is dragged onto the shopping cart
 symbol, triggering the readout of 'Quinoa dog sweets added to cart' as
 it is added](https://inclusive-components.design/content/images/2018/02/illustration2.svg)
 
@@ -174,7 +173,6 @@ another open tab, not visible to me. The only solution was to close down
 the hidden tab. Not ideal, because I would have liked to switch back and
 forth between them.
 
-![Two browser tabs, with one in the foreground corresponding to the open
 page. The unselected tab has 'bla bla bla' being read
 out.](https://inclusive-components.design/content/images/2018/02/illustration3.svg)
 
@@ -317,7 +315,6 @@ allows you to author pages with headings inside your `<legend>`s: the
 best of both worlds. Here's the sort of structure, we should be going
 for:
 
-![An h1 of settings followed by two sections: Change your password and
 Notifications, each introduced by h2 headings inside legends and grouped
 by fieldset
 containers.](https://inclusive-components.design/content/images/2018/02/illustration5_small.svg)
@@ -343,7 +340,6 @@ inclusively. In this case, the MVP for differentiating messages is
 therefore to preface with terms like "Error:", "Info:",
 "Congratulations:" or whatever is suitable. A bold style is typical.
 
-![Three different message types. A message starting 'congratulations' in
 green, a message starting 'error' in red and a message starting 'info'
 in blue.](https://inclusive-components.design/content/images/2018/02/illustration10.svg)
 
@@ -382,7 +378,6 @@ outline is shown here just to indicate its whereabouts.</figcaption>
 Working as a design consultant, I often see notification messages
 include little "✖️" buttons to dismiss them.
 
-![Notification with a cross symbol/button to its right hand
 side.](https://inclusive-components.design/content/images/2018/02/illustration9.svg)
 
 While I always want to applaud efforts to put users in control of the
@@ -443,7 +438,6 @@ have appeared in the list of active users, or have their status updated.
 For the 'awards' example, the interface should keep track in the user's
 profile page. A chronology of awards is typical.
 
-![List of awards by
 date.](https://inclusive-components.design/content/images/2018/02/illustration7_small.svg)
 
 ## Conclusion

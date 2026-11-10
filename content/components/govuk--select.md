@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Select 下拉选择框"
 source: https://design-system.service.gov.uk/components/select/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-36
 publisher: "GOV.UK Design System"
@@ -13,42 +13,10 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/select/](https://design-system.service.gov.uk/components/select/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
-**示例：default**
-
-```njk
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-
-{{ govukSelect({
-  id: "sort",
-  name: "sort",
-  label: {
-    text: "Sort by"
-  },
-  items: [
-    {
-      value: "published",
-      text: "Recently published"
-    },
-    {
-      value: "updated",
-      text: "Recently updated",
-      selected: true
-    },
-    {
-      value: "views",
-      text: "Most views"
-    },
-    {
-      value: "comments",
-      text: "Most comments"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/select/#select-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/select/#select-example-nunjucks)
 
 ## When to use this component
 
@@ -64,42 +32,12 @@ Asking questions means you’re less likely to need to use the select component,
 
 If you use the component for settings, you can make an option pre-selected by default when users first see it.
 
-If you use the component for questions, you should not pre-select any of the options in case it influences users' answers.
+If you use the component for questions, you should not pre-select any of the options in case it influences users’ answers.
 
-There are 2 ways to use the select component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk), you can use the Nunjucks macro.
+There are 2 ways to use the select component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/), you can use the Nunjucks macro.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-
-{{ govukSelect({
-  id: "sort",
-  name: "sort",
-  label: {
-    text: "Sort by"
-  },
-  items: [
-    {
-      value: "published",
-      text: "Recently published"
-    },
-    {
-      value: "updated",
-      text: "Recently updated",
-      selected: true
-    },
-    {
-      value: "views",
-      text: "Most views"
-    },
-    {
-      value: "comments",
-      text: "Most comments"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/select/#select-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/select/#select-second-example-nunjucks)
 
 ### Select with hint
 
@@ -109,65 +47,8 @@ Keep hint text to a single short sentence, without any full stops.
 
 Do not use links in hint text. While screen readers will read out the link text, they usually do not tell users the text is a link.
 
-**示例：with-hint**
-
-```njk
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-
-{{ govukSelect({
-  id: "location",
-  name: "location",
-  label: {
-    text: "Choose location"
-  },
-  hint: {
-    text: "This can be different to where you went before"
-  },
-  items: [
-    {
-      value: "choose",
-      text: "Choose location",
-      selected: true
-    },
-    {
-      value: "eastmidlands",
-      text: "East Midlands"
-    },
-    {
-      value: "eastofengland",
-      text: "East of England"
-    },
-    {
-      value: "london",
-      text: "London"
-    },
-    {
-      value: "northeast",
-      text: "North East"
-    },
-    {
-      value: "northwest",
-      text: "North West"
-    },
-    {
-      value: "southeast",
-      text: "South East"
-    },
-    {
-      value: "southwest",
-      text: "South West"
-    },
-    {
-      value: "westmidlands",
-      text: "West Midlands"
-    },
-    {
-      value: "yorkshire",
-      text: "Yorkshire and the Humber"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/select/#select-with-hint-select-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/select/#select-with-hint-select-example-nunjucks)
 
 ### Error messages
 
@@ -175,68 +56,8 @@ Display an error message if the user has not selected an option.
 
 Style error messages as shown in the example:
 
-**示例：error**
-
-```njk
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-
-{{ govukSelect({
-  id: "location",
-  name: "location",
-  label: {
-    text: "Choose location"
-  },
-  hint: {
-    text: "This can be different to where you went before"
-  },
-  errorMessage: {
-    text: "Select a location"
-  },
-  items: [
-    {
-      value: "choose",
-      text: "Choose location",
-      selected: true
-    },
-    {
-      value: "eastmidlands",
-      text: "East Midlands"
-    },
-    {
-      value: "eastofengland",
-      text: "East of England"
-    },
-    {
-      value: "london",
-      text: "London"
-    },
-    {
-      value: "northeast",
-      text: "North East"
-    },
-    {
-      value: "northwest",
-      text: "North West"
-    },
-    {
-      value: "southeast",
-      text: "South East"
-    },
-    {
-      value: "southwest",
-      text: "South West"
-    },
-    {
-      value: "westmidlands",
-      text: "West Midlands"
-    },
-    {
-      value: "yorkshire",
-      text: "Yorkshire and the Humber"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/select/#select-with-error-select-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/select/#select-with-error-select-example-nunjucks)
 
 ### Avoid adding functionality to allow selecting multiple options
 
@@ -250,12 +71,22 @@ User research has shown that some users struggle with selects.
 
 Research shows that users can struggle with selects, particularly when users have:
 
-- been unable to close the select
-- tried to type into the select
-- confused focused items with selected items
-- tried to pinch zoom select options on smaller devices
-- not understood that they can scroll down to see more items, or how to
+*   been unable to close the select
+*   tried to type into the select
+*   confused focused items with selected items
+*   tried to pinch zoom select options on smaller devices
+*   not understood that they can scroll down to see more items, or how to
 
 For more detail watch this video with [examples of users struggling with selects](https://www.youtube.com/watch?v=-dH6a6eMdXE).
 
 This blog shows [an example where a text input is used over a select](https://designnotes.blog.gov.uk/2013/12/05/asking-for-a-date-of-birth/) for asking a user for a date.
+
+## Recent changes
+
+| Date | Changed | Description |
+| --- | --- | --- |
+| Mar 2025 | [GOV.UK Frontend v5.9.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.9.0) | The `id` parameter now defaults to match `name` if an `id` is not provided. |
+| Oct 2024 | Guidance | Expanded guidance on writing hint text. |
+| Dec 2023 | [GOV.UK Frontend v5.0.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0) | Updated how the Select Nunjucks macro handles options without a `value` provided. The value would previously be set to an empty string. As of 5.0.0, the HTML attribute is not set and the control’s value is the same as the display text of the option, as is the case with native `<select>` elements. |
+| Aug 2023 | Guidance | Added guidance about error messaging. |
+| Apr 2023 | [GOV.UK Frontend v4.6.0](https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0) | Added `disabled` parameter and updated disabled styles. |

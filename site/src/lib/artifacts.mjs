@@ -8,7 +8,7 @@
  * 条目结构两种都吃：内容集合的 spec.data，或 content.js 里 loadDoc 的扁平对象。
  */
 import { SECTIONS } from '../data/sections.ts'
-import { TYPE_BY_DOMAIN, METHOD_REQUIRED } from '../data/guide.ts'
+import { TYPE_BY_DOMAIN, METHOD_REQUIRED, REQUIRED_RULES, requiredRulesFor } from '../data/guide.ts'
 
 /** 取条目的 frontmatter（兼容 spec.data 与扁平对象两种形态） */
 function fields(item) {
@@ -81,15 +81,15 @@ export function buildMetaJson() {
 /** usage：核心规则 + 按信息类型的用法协议（不同信息给 AI 的导向不同） */
 const USAGE = {
   core: [
-    '拿到设计任务：在 tasks 选设计场景（用 points_by_task 反查）、或按 select 匹配设计点，读它 articles 指的原文（2-5 篇），不要全库扫描。',
+    '拿到设计任务：在 tasks 选设计场景（用 points_by_task 反查）、或按 select 匹配设计点，读该点的 articles（2 到 5 篇，不足就全读），不要全库扫描。',
     '原文端点 /md/<path>（path 即 articles[].path）；场景级路由与「产品语境 → 基准规范」的项目选型方案见 guide 字段。',
-    'select 是选点标准，value_notes 是取值示意，两者都不拥有数值决定权；value_notes 是坐标不是答案，直接抄示意值不读原文算没取到值；数值一律以基准规范原文为准，引用前连 文件:行号 记进取值记录。',
+    'select 是选点标准，不拥有数值决定权；数值一律读 articles 指的原文取，引用前连 文件:行号 记进取值记录。',
     '数值冲突：一个项目只选一个基准规范，基准规范拥有数值决定权，其他来源只取原则与反例；禁止跨源拼数值。标题 32px（howto）与品牌 88px（品牌 DESIGN.md）这类差异不算矛盾，按基准规范定。',
-    '可访问性底线（对比度/焦点/键盘/减少动效）高于任何风格。',
+    '文案写作、状态反馈、无障碍、动效四类出稿场景必选，各至少一个点；评审底线（s16）是验收必选，按评审清单逐条过；可访问性底线（对比度/焦点/键盘/减少动效）高于任何风格。',
     '取值记录引用一律写 content/ 完整路径:行号，缩写不算出处。',
     '站点命名走 NameYouLike 口径（起名提示词与核验：https://github.com/hey-yx/NameYouLike）：英文产品名、绑产品事实、落一次真碰撞检索，命名结果记进取值记录。',
     '方法层必读（method_required）：配色、层级与布局先读方法点定搭配（含纵向间距与多栏余量），再取数值。',
-    '页面结构与防模板化骨架走 hallmark skill，数值与规范依据以本库为准。',
+    '页面结构与防模板化骨架由 Hallmark 介入：macrostructure / nav / footer 三件各选一件并写出件名与理由，批内分配用 /briefs/layouts.md 的速查表；版型原型、设计点与数值由本库给，两边共同作用。',
     '项目里的图表用成熟图表库渲染（ECharts / Chart.js 等）；纯测试页不必用库，内联 SVG 即可。',
     '出稿后真跑交互与行为，行为或 UI 不对就回到设计点与原文重新推，不将就。',
   ],
@@ -109,12 +109,16 @@ const USAGE = {
 
 /** design-points.json：给 AI 的实时指南包（设计地图数据 + 站点指南 + 文章元数据）
  *
- * 每个设计点带选点标准（select）、取值示意（value_notes）与自测题（checks）；
+ * 每个设计点带选点标准（select）与自测题（checks）；
  * 文章只留路由元数据，原文端点统一 /md/<path>；引用的文章不存在时直接抛错，
  * 让构建失败，不发布坏路由。
  */
 export function buildDesignPoints(items, starData, guide) {
   const byFile = new Map(items.map((it) => [fields(it).file, fields(it)]))
+  const requiredByTask = {}
+  for (const r of REQUIRED_RULES) {
+    for (const t of r.tasks) (requiredByTask[t] ??= []).push(r.label)
+  }
   const points = (starData.points ?? []).map((p) => {
     const out = {
       id: p.id,
@@ -136,8 +140,9 @@ export function buildDesignPoints(items, starData, guide) {
         return art
       }),
     }
-    if (p.value_notes) out.value_notes = p.value_notes
     if (p.checks) out.checks = p.checks
+    const required = requiredRulesFor({ id: p.id, tasks: p.tasks ?? [] }).map((r) => r.title)
+    if (required.length) out.required = required
     return out
   })
   // 反查索引：设计场景 → 设计点 id，免得消费方全量扫描过滤
@@ -149,9 +154,17 @@ export function buildDesignPoints(items, starData, guide) {
   }
   return {
     usage: USAGE,
+    selection: {
+      baseline_required: true,
+      baseline_points: 'project-*',
+      rule: '先按产品语境选 project-* 里的一行作为唯一基准；数值只从该行 files 取；不能跨系统拼值。',
+    },
     guide,
+    required: REQUIRED_RULES,
     method_required: METHOD_REQUIRED,
-    tasks: starData.tasks ?? {},
+    tasks: Object.fromEntries(
+      Object.entries(starData.tasks ?? {}).map(([id, t]) => [id, requiredByTask[id] ? { ...t, required: requiredByTask[id] } : t]),
+    ),
     points_by_task: pointsByTask,
     points,
   }

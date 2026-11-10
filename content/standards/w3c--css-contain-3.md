@@ -53,20 +53,18 @@ Thus, although inline-size containment prevents the box’s content from directl
 In general, the relationship between an element’s inline size and it’s block size is unpredictable and non-monotonic, with the block size capable of shifting up and down arbitrarily as the inline size is changed. Infinite cycles are prevented by ensuring that layout does not revert to a previous (known-problematic) state, even if a naive analysis of the constraints would allow for such; in other words, layout always “moves forward”. We believe that current CSS layout specifications incorporate such rules, but to the extent that they don’t, please [inform the CSSWG](https://github.com/w3c/csswg-drafts/issues) so that these errors can be corrected.
 
 Consider this example, where float placement creates a dependency of block sizes on inline sizes: 
-    
-    
+
     <section style="width: 200px; border: solid; display: flow-root;">
       <div style="float: left; width: 50px; height: 80px; background: blue;"></div>
       <div style="float: right; width: 50px; height: 80px; background: blue;"></div>
       <div style="float: left; width: 160px; height: 80px; background: navy;"></div>
-    
+
       <article style="border: solid orangered; display: flow-root; min-width: min-content">
         <div style="background: orange; aspect-ratio: 1/1;">
           Article
         </div>
       </article>
     </section>
-    
 
 The block layout algorithm will first place the floating boxes, with the first two sitting in the left and right corners of the container, and the third, being too wide to fit between, being pushed below them.
 
@@ -89,23 +87,21 @@ While [media queries](https://www.w3.org/TR/mediaqueries-5/#media-query) provide
 By default, all elements are query containers for the purpose of container style queries, and can be established as query containers for container size queries by specifying the additional query types using the container-type property (or the container [shorthand](https://www.w3.org/TR/css-cascade-5/#shorthand-property)). Style rules applying to a query container’s [shadow-including descendants](https://dom.spec.whatwg.org/#concept-shadow-including-descendant) can be conditioned by querying against it, using the @container [conditional group rule](https://www.w3.org/TR/css3-conditional/#conditional-group-rule).
 
 For example, we can define the main content area and sidebar as containers, and then describe a .media-object that changes from vertical to horizontal layout depending on the size of its container: 
-    
-    
+
     main, aside {
       container: my-layout / inline-size;
     }
-    
+
     .media-object {
       display: grid;
       grid-template: 'img' auto 'content' auto / 100%;
     }
-    
+
     @container my-layout (inline-size > 45em) {
       .media-object {
         grid-template: 'img content' auto / auto 1fr;
       }
     }
-    
 
 Media objects in the main and sidebar areas will each respond to their own container context.
 
@@ -127,12 +123,8 @@ It follows that:
 
   * [::placeholder](https://www.w3.org/TR/css-pseudo-4/#selectordef-placeholder) and [::file-selector-button](https://www.w3.org/TR/css-pseudo-4/#selectordef-file-selector-button) can query the input element, but do not expose any internal containers if the input element is implemented using a shadow tree
 
-
-
-
 A ::before selector querying the size of the originating element: 
-    
-    
+
     <style>
       #container {
         width: 100px;
@@ -147,11 +139,9 @@ A ::before selector querying the size of the originating element:
     <div id=container>
       <span id=inner></span>
     </div>
-    
 
 A ::slotted() selector for styling a shadow host child can query a container in the shadow tree: 
-    
-    
+
     <div id=host style="width:200px">
       <template shadowroot=open>
         <style>
@@ -171,7 +161,6 @@ A ::slotted() selector for styling a shadow host child can query a container in 
       </template>
       <span id=slotted>Green</span>
     </div>
-    
 
 ### 4.1.  Creating Query Containers: the container-type property
 
@@ -189,28 +178,25 @@ normal
      The element is not a query container for any container size queries, but remains a query container for container style queries. 
 
 For example, authors can create container-responsive typography, adjusting [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size), [line-height](https://www.w3.org/TR/CSS2/visudet.html#propdef-line-height), and other typographic concerns based on the size of a container: 
-    
-    
+
     aside, main {
       container-type: inline-size;
     }
-    
+
     h2 { font-size: 1.2em; }
-    
+
     @container (width > 40em) {
       h2 { font-size: 1.5em; }
     }
-    
 
 The 40em value used in the query condition is relative to the [computed value](https://www.w3.org/TR/css-cascade-5/#computed-value) of [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) on the relevant query container.
 
 Containers can also expose computed style values for querying. This can be useful for toggling behavior across multiple properties: 
-    
-    
+
     section {
       container-type: style;
     }
-    
+
     @container (--cards: small) {
       article {
         border: thin solid silver;
@@ -218,7 +204,6 @@ Containers can also expose computed style values for querying. This can be usefu
         padding: 1em;
       }
     }
-    
 
 ### 4.2.  Naming Query Containers: the container-name property
 
@@ -230,58 +215,51 @@ none
      Specifies a query container name as an [identifier](https://www.w3.org/TR/css-values-4/#css-css-identifier). The keywords none, and, [not](https://www.w3.org/TR/mediaqueries-5/#valdef-media-not), and or are excluded from this [<custom-ident>](https://www.w3.org/TR/css-values-4/#identifier-value). 
 
 In some cases, we want to query aspects of a specific container, even if it’s not the nearest ancestor container. For example, we might want to query the height of a main content area, and the width of a more nested inline-container. 
-    
-    
+
     main {
       container-type: size;
       container-name: my-page-layout;
     }
-    
+
     .my-component {
       container-type: inline-size;
       container-name: my-component-library;
     }
-    
+
     @container my-page-layout (block-size > 12em) {
       .card { margin-block: 2em; }
     }
-    
+
     @container my-component-library (inline-size > 30em) {
       .card { margin-inline: 2em; }
     }
-    
 
 ### 4.3.  Creating Named Containers: the container shorthand
 
 The container [shorthand property](https://www.w3.org/TR/css-cascade-5/#shorthand-property) sets both container-type and container-name in the same declaration. If <'container-type'> is omitted, it is reset to its [initial value](https://www.w3.org/TR/css-cascade-5/#initial-value).
 
 We can define both a container-type and container-name using the shorthand syntax: 
-    
-    
+
     main {
       container: my-layout / size;
     }
-    
+
     .grid-item {
       container: my-component / inline-size;
     }
-    
 
 ### 4.4.  Container Queries: the @container rule
 
 The @container rule is a [conditional group rule](https://www.w3.org/TR/css3-conditional/#conditional-group-rule) whose condition is a container query, which is a boolean combination of container size queries and/or container style queries. Style declarations within the [<stylesheet>](https://www.w3.org/TR/css-syntax-3/#typedef-stylesheet) block of an @container rule are [filtered](https://www.w3.org/TR/css-cascade-4/#filtering) by its condition to only match when the container query is true for their element’s query container.
 
 The syntax of the @container rule is:
-    
-    
+
     @container [ <container-name> ][?](https://www.w3.org/TR/css-values-4/#mult-opt) <container-condition> {
       [<stylesheet>](https://www.w3.org/TR/css-syntax-3/#typedef-stylesheet)
     }
-    
 
 where:
-    
-    
+
     <container-name> = [<custom-ident>](https://www.w3.org/TR/css-values-4/#identifier-value)
     <container-condition> = not <query-in-parens>
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) <query-in-parens> [ [ and <query-in-parens> ][*](https://www.w3.org/TR/css-values-4/#mult-zero-plus) [|](https://www.w3.org/TR/css-values-4/#comb-one) [ or <query-in-parens> ][*](https://www.w3.org/TR/css-values-4/#mult-zero-plus) ]
@@ -289,14 +267,13 @@ where:
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) ( <size-feature> )
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) style( <style-query> )
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) [<general-enclosed>](https://www.w3.org/TR/mediaqueries-5/#typedef-general-enclosed)
-    
+
     <style-query>         = <style-condition> [|](https://www.w3.org/TR/css-values-4/#comb-one) <style-feature>
     <style-condition>     = not <style-in-parens>
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) <style-in-parens> [ [ and <style-in-parens> ][*](https://www.w3.org/TR/css-values-4/#mult-zero-plus) [|](https://www.w3.org/TR/css-values-4/#comb-one) [ or <style-in-parens> ][*](https://www.w3.org/TR/css-values-4/#mult-zero-plus) ]
     <style-in-parens>     = ( <style-condition> )
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) ( <style-feature> )
                           [|](https://www.w3.org/TR/css-values-4/#comb-one) [<general-enclosed>](https://www.w3.org/TR/mediaqueries-5/#typedef-general-enclosed)
-    
 
 The keywords none, and, [not](https://www.w3.org/TR/mediaqueries-5/#valdef-media-not), and or are excluded from the [<custom-ident>](https://www.w3.org/TR/css-values-4/#identifier-value) above.
 
@@ -305,12 +282,10 @@ For each element, the query container to be queried is selected from among the e
 Once an eligible query container has been selected for an element, each container feature in the <container-condition> is evaluated against that query container. If no ancestor is an eligible query container, then the container query is unknown for that element.
 
 As with [media queries](https://www.w3.org/TR/mediaqueries-5/#media-query), we can string together multiple conditions in a single query list: 
-    
-    
+
     @container card (inline-size > 30em) and style(--responsive: true) {
       /* styles */
     }
-    
 
 The styles above will only be applied if there is an ancestor container named "card" that meets both the inline-size and style conditions.
 
@@ -319,14 +294,12 @@ Style rules defined on an element inside multiple nested container queries apply
 Note: Nested container queries can evaluate in relation to different containers, so it is not always possible to merge the individual <container-condition>s into a single query.
 
 While it is not possible to query multiple containers in a single container query, that can be achieved by nesting multiple queries: 
-    
-    
+
     @container card (inline-size > 30em) {
       @container style(--responsive: true) {
         /* styles */
       }
     }
-    
 
 The styles above will only be applied if there is an ancestor container named "card" that meets the inline-size condition, as well as an ancestor container meeting style condition.
 
@@ -337,25 +310,24 @@ Global, name-defining [at-rules](https://www.w3.org/TR/css-syntax-3/#at-rule) su
 A change in the evaluation of a container query must be part of a [style change event](https://www.w3.org/TR/css-transitions-1/#style-change-event), even when the change occurred because of [animation effects](https://www.w3.org/TR/web-animations-1/#effect-value).
 
 A transition on a sibling element can indirectly affect the size of a container, triggering [style change events](https://www.w3.org/TR/css-transitions-1/#style-change-event) whenever container queries change their evaluation as a result: 
-    
-    
+
     main {
       display: flex;
       width: 300px;
     }
-    
+
     #container {
       container-type: inline-size;
       flex: 1;
     }
-    
+
     /* Resolved width is initially 200px, but changes as the transition
        on #sibling progresses. */
     #inner {
       transition: 1s background-color;
       background-color: tomato;
     }
-    
+
     /* When this container query starts (or stops) applying, a transition
        must start on background-color on #inner. */
     @container (width <= 150px) {
@@ -363,25 +335,22 @@ A transition on a sibling element can indirectly affect the size of a container,
         background-color: skyblue;
       }
     }
-    
+
     #sibling {
       width: 100px;
       transition: width 1s;
     }
-    
+
     #sibling:hover {
       width: 200px;
     }
-    
-    
-    
+
     <main>
       <div id=container>
         <div id=inner>Inner</div>
       </div>
       <div id=sibling>Sibling</div>
     </main>
-    
 
 Changes in [computed values](https://www.w3.org/TR/css-cascade-5/#computed-value) caused by container query length units must also be part of a [style change event](https://www.w3.org/TR/css-transitions-1/#style-change-event).
 
@@ -400,28 +369,23 @@ If the query container does not have a [principal box](https://www.w3.org/TR/css
 Note: This is different from the handling of relative units in [media queries](https://www.w3.org/TR/mediaqueries-5/#media-query).
 
 For example, query containers with different font-sizes will evaluate [em](https://www.w3.org/TR/css-values-4/#em)-based queries relative to their own font sizes: 
-    
-    
+
     aside, main {
       container-type: inline-size;
     }
-    
+
     aside { font-size: 16px; }
     main { font-size: 24px; }
-    
+
     @container (width > 40em) {
       h2 { font-size: 1.5em; }
     }
-    
 
 The 40em value used in the query condition is relative to the [computed value](https://www.w3.org/TR/css-cascade-5/#computed-value) of [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) on the relevant query container:
 
   * For any h2 inside aside, the query condition will be true above 640px.
 
   * For any h2 inside main, the query condition will be true above 960px.
-
-
-
 
 #### 5.1.1.  Width: the width feature
 
@@ -450,7 +414,7 @@ Name: | orientation
 For: | @container  
 Value: | portrait [|](https://www.w3.org/TR/css-values-4/#comb-one) landscape   
 Type: | discrete   
-  
+
 portrait
      The orientation container feature is portrait when the value of the height container feature is greater than or equal to the value of the width container feature. 
 landscape
@@ -479,28 +443,24 @@ Note: In some cases cqi and cqb units on the same element will evaluate in relat
 Child elements do not inherit the relative values as specified for their parent; they inherit the [computed values](https://www.w3.org/TR/css-cascade-5/#computed-value).
 
 Authors can ensure that container query length units have an appropriate query container by applying them inside a container query that relies on the same container-type. Custom fallback values can be defined outside the container query: 
-    
-    
+
     /* The fallback value does not rely on containment */
     h2 { font-size: 1.2em; }
-    
+
     @container (inline-size >= 0px) {
       /* only applies when an inline-size container is available */
       h2 { font-size: calc(1.2em + 1cqi); }
     }
-    
 
 ## 7\. APIs
 
 ### 7.1.  The `CSSContainerRule` interface
 
 The `CSSContainerRule` interface represents a @container rule.
-    
-    
+
     [[Exposed](https://webidl.spec.whatwg.org/#Exposed)=Window]
     interface CSSContainerRule : [CSSConditionRule](https://www.w3.org/TR/css3-conditional/#cssconditionrule) {
     };
-    
 
 `conditionText` of type `CSSOMString` (CSSContainerRule-specific definition for attribute on CSSConditionRule) 
     The `conditionText` attribute (defined on the `CSSConditionRule` parent rule), on getting, must return the condition that was specified, without any logical simplifications, so that the returned condition will evaluate to the same result as the specified condition in any conformant implementation of this specification (including implementations that implement future extensions allowed by the [<general-enclosed>](https://www.w3.org/TR/mediaqueries-5/#typedef-general-enclosed) extensibility mechanism in this specification). In other words, token stream simplifications are allowed (such as reducing whitespace to a single space or omitting it in cases where it is known to be optional), but logical simplifications (such as removal of unneeded parentheses, or simplification based on evaluating results) are not allowed. 
@@ -554,4 +514,3 @@ So that authors can exploit the forward-compatible parsing rules to assign fallb
 Once a specification reaches the Candidate Recommendation stage, non-experimental implementations are possible, and implementors should release an unprefixed implementation of any CR-level feature they can demonstrate to be correctly implemented according to spec. 
 
 To establish and maintain the interoperability of CSS across implementations, the CSS Working Group requests that non-experimental CSS renderers submit an implementation report (and, if necessary, the testcases used for that implementation report) to the W3C before releasing an unprefixed implementation of any CSS features. Testcases submitted to W3C are subject to review and correction by the CSS Working Group.
-

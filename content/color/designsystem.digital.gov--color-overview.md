@@ -1,15 +1,15 @@
 ---
-title: "USWDS · Using color 色彩"
+title: "USWDS · Foundation · Using color 色彩"
 source: https://designsystem.digital.gov/design-tokens/color/overview/
 section: color
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: color-10
 publisher: "USWDS"
 ---
 
-# USWDS · Using color 色彩
+# USWDS · Foundation · Using color 色彩
 
 > 来源：[https://designsystem.digital.gov/design-tokens/color/overview/](https://designsystem.digital.gov/design-tokens/color/overview/)
 
@@ -31,7 +31,7 @@ Throughout our documentation and guidance, we’ll use the terms “color,” �
 
 **Color** is any specific swatch in our [system color token palette](https://designsystem.digital.gov/design-tokens/color/system-tokens/), like `red-50`, `green-cool-10`, or `indigo-warm-60v`.
 
-**Color family** is a group of colors that all have the same hue on a color wheel (refer to [USWDS color wheels](#uswds-color-wheels)). Each contains a number of individual colors, distinguished from each other by the brightness or saturation. A System token’s color family typically has a conventional color name, like `red` or `blue-warm`, and a theme token’s color family has a role-based name, like `primary`.
+**Color family** is a group of colors that all have the same hue on a color wheel (refer to [USWDS color wheels](https://designsystem.digital.gov/design-tokens/color/overview/#uswds-color-wheels)). Each contains a number of individual colors, distinguished from each other by the brightness or saturation. A System token’s color family typically has a conventional color name, like `red` or `blue-warm`, and a theme token’s color family has a role-based name, like `primary`.
 
 **Grade** is a way to express how light or dark a color is. USWDS uses a 100-point scale to communicate a color token’s grade, where 0 is pure white and 100 is pure black. We’ve regularized these grades across color families; a color of grade `50` in one color family should be the same level of lightness as a color of grade `50` in another color family. This feature of USWDS has important color-contrast and accessibility implications, which we discuss in the subsequent sections on accessibility.
 
@@ -46,6 +46,26 @@ Accessibility is not a special case. In the second quarter of 2018, [sites using
 ### Accessible color pairings
 
 USWDS helps teams choose accessible colors with a color-grade system. The following figure represents the `gray` color family in grades 5–90:
+
+5
+
+10
+
+20
+
+30
+
+40
+
+50
+
+60
+
+70
+
+80
+
+90
 
 Each color family has 10 grades, which fall between 5 and 90. Pure `white` is the equivalent of grade 0, and pure `black` is the equivalent of grade 100.
 
@@ -62,93 +82,30 @@ Use magic numbers to choose accessible color combinations from any palette and c
 
 Magic numbers work because each grade conforms to a specific range of values for [relative luminance](https://www.w3.org/WAI/GL/wiki/Relative_luminance). WCAG and Section 508 color contrast is calculated as a ratio of the relative luminances of two colors, so as long as our colors fall between a specific luminance range for each grade, the ratio will conform to contrast requirements. The following table shows each grade and the corresponding luminance minimum and maximum.
 
-grade
-
-minimum luminance
-
-maximum luminance
-
-`0`
-
-`1.000`
-
-`1.000`
-
-`5`
-
-`0.850`
-
-`0.930`
-
-`10`
-
-`0.750`
-
-`0.820`
-
-`20`
-
-`0.500`
-
-`0.650`
-
-`30`
-
-`0.350`
-
-`0.450`
-
-`40`
-
-`0.225`
-
-`0.300`
-
-`50`
-
-`0.175`
-
-`0.183`
-
-`60`
-
-`0.100`
-
-`0.125`
-
-`70`
-
-`0.050`
-
-`0.070`
-
-`80`
-
-`0.020`
-
-`0.040`
-
-`90`
-
-`0.005`
-
-`0.015`
-
-`100`
-
-`0.000`
-
-`0.000`
+| grade | minimum luminance | maximum luminance |
+| --- | --- | --- |
+| `0` | `1.000` | `1.000` |
+| `5` | `0.850` | `0.930` |
+| `10` | `0.750` | `0.820` |
+| `20` | `0.500` | `0.650` |
+| `30` | `0.350` | `0.450` |
+| `40` | `0.225` | `0.300` |
+| `50` | `0.175` | `0.183` |
+| `60` | `0.100` | `0.125` |
+| `70` | `0.050` | `0.070` |
+| `80` | `0.020` | `0.040` |
+| `90` | `0.005` | `0.015` |
+| `100` | `0.000` | `0.000` |
 
 #### Accessible color combination examples
 
 The following two images are examples of accessible color combinations. In this first image, the background color is `gray-90`. To get a magic number of at least 50 and, thus, ensure a Section 508 AA contrast level, the text color must be grade 40 or below. Grades of `50` and below would be acceptable for large text.
 
-![gray color contrast example](https://designsystem.digital.gov/assets/img/design-tokens/gray-example.png)
+![Image 1: gray color contrast example](/img/gov/72b073bc76a9.png)
 
 The color grade system works across color families as shown in this second image.
 
-![indigo color contrast example](https://designsystem.digital.gov/assets/img/design-tokens/indigo-warm-example.png)
+![Image 2: indigo color contrast example](/img/gov/a25a97e0069f.png)
 
 ### Color, contrast, and readability
 
@@ -167,11 +124,11 @@ The following color wheels are a way to visualize the entire [System palette](ht
 
 The following image shows our standard System tokens wheel.
 
-![standard color wheel](https://designsystem.digital.gov/assets/img/design-tokens/uswds-standard-color-wheel-2.6.0.jpg)
+![Image 3: standard color wheel](/img/gov/c9881b58a1f5.jpg)
 
 The following image shows our vivid System tokens wheel.
 
-![vivid color wheel](https://designsystem.digital.gov/assets/img/design-tokens/uswds-vivid-color-wheel-2.6.0.jpg)
+![Image 4: vivid color wheel](/img/gov/a9fa223e830d.jpg)
 
 ## General color guidance
 
@@ -186,17 +143,7 @@ If we use color intentionally, consistently, and sensitively, it can make a big 
 **Ask visual designers.** Your group or agency may have visual designers either on staff or available as contractors. They can be an invaluable resource for building palettes or getting feedback on existing ones. USWDS benefits from the collective experience of visual designers across agencies to build our System palette and provide a range of prebuilt project theme palettes. If you have visual design resources, use them.
 
 **Don’t use color exclusively to convey meaning.** Even Section 508 conformant contrast doesn’t ensure that colors are distinguishable for a significant percentage of your audience. [Approximately 0.5% of adult women and 8% of adult men](https://www.nei.nih.gov/learn-about-eye-health/eye-conditions-and-diseases/color-blindness) have some kind of color insensitivity, especially between red and green. Color should only be used as progressive enhancement — if color is the only signal, that signal won’t get through as intended to everyone.
-
-## Further reading
-
-*   Accessibility: Color and contrast [https://digital.gov/guides/accessibility-for-teams/visual-design#color-and-contrast](https://digital.gov/guides/accessibility-for-teams/visual-design#color-and-contrast)
-*   Color and readability [https://www.w3.org/WAI/RD/2012/text-customization/r11](https://www.w3.org/WAI/RD/2012/text-customization/r11)
-*   Improving accessibility for colorblind users [https://www.smashingmagazine.com/2016/06/improving-color-accessibility-for-color-blind-users/](https://www.smashingmagazine.com/2016/06/improving-color-accessibility-for-color-blind-users/)
-*   Introduction to Irlen Syndrome [https://irlen.com/what-is-irlen-syndrome/](https://irlen.com/what-is-irlen-syndrome/)
-*   Making content accessible for those with dyslexia [https://www.dyslexic.com/blog/quick-guide-making-content-accessible/](https://www.dyslexic.com/blog/quick-guide-making-content-accessible/)
-*   W3C: Contrast levels for readability [https://www.w3.org/WAI/test-evaluate/preliminary/#contrast](https://www.w3.org/WAI/test-evaluate/preliminary/#contrast)
-*   W3C: Gap analysis of the state of accessibility for people with learning disabilities and cognitive disabilities [https://www.w3.org/TR/coga-gap-analysis/](https://www.w3.org/TR/coga-gap-analysis/)
-*   W3C: Low vision needs [https://www.w3.org/TR/low-vision-needs/](https://www.w3.org/TR/low-vision-needs/)
+## Tools
 
 *   USWDS Color Tool from CivicActions: Convert any hex color into its closest USWDS equivalent [https://civicactions.github.io/uswds-color-tool](https://civicactions.github.io/uswds-color-tool)
 
@@ -204,32 +151,7 @@ If we use color intentionally, consistently, and sensitively, it can make a big 
 
 Meaningful code and guidance updates are listed in the following table:
 
-Date
-
-USWDS version
-
-Affects
-
-Breaking
-
-Description
-
-2022-06-03
-
-N/A
-
-*   Guidance
-
-No
-
-**Updated the minimum luminance for color grade 40.** More information: [uswds-site#1631](https://github.com/uswds/uswds-site/pull/1631)
-
-2021-12-29
-
-N/A
-
-*   Guidance
-
-No
-
-**Added tools section.** More information: [uswds-site#1276](https://github.com/uswds/uswds-site/pull/1276)
+| Date | USWDS version | Affects | Breaking | Description |
+| --- | --- | --- | --- | --- |
+| 2022-06-03 | N/A | * Guidance | No | **Updated the minimum luminance for color grade 40.** More information: [uswds-site#1631](https://github.com/uswds/uswds-site/pull/1631) |
+| 2021-12-29 | N/A | * Guidance | No | **Added tools section.** More information: [uswds-site#1276](https://github.com/uswds/uswds-site/pull/1276) |

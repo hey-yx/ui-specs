@@ -18,45 +18,38 @@ publisher: "W3C"
 _This section is not normative._
 
 In 1997, HTML4 [HTML401] defined a mechanism to support media-dependent style sheets, tailored for different media types. For example, a document may use different style sheets for screen and for print. In HTML, this can be written as:
-    
-    
+
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
     <link rel="stylesheet" type="text/css" media="print" href="print.css">
-    
 
 CSS adapted and extended this functionality with its [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media) and [@import](https://www.w3.org/TR/css-cascade-5/#at-ruledef-import) rules, adding the ability to query the value of individual features:
 
 Inside a CSS style sheet, one can declare that sections apply to certain media types: 
-    
-    
+
     @media screen {
       * { font-family: sans-serif }
     }
-    
 
 Similarly, stylesheets can be conditionally imported based on media queries:
-    
-    
+
     @import "print-styles.css" print;
 
 Media queries can be used with HTML, XHTML, XML [xml-stylesheet] and the @import and @media rules of CSS.
 
 Here is the same example written in HTML, XHTML, XML, @import and @media: 
-    
-    
+
     <link media="screen and (color), projection and (color)"
           rel="stylesheet" href="example.css">
-    
+
     <link media="screen and (color), projection and (color)"
           rel="stylesheet" href="example.css" />
-    
+
     <?xml-stylesheet media="screen and (color), projection and (color)"
                      rel="stylesheet" href="example.css" ?>
-    
+
     @import url(example.css) screen and (color), projection and (color);
-    
+
     @media screen and (color), projection and (color) { … }
-    
 
 ### 1.1.  Module interactions
 
@@ -88,21 +81,16 @@ A media query is a logical expression that is either true or false. A media quer
 
   * the media condition is true.
 
-
-
-
 Statements regarding media queries in this section assume the syntax section is followed. Media queries that do not conform to the syntax are discussed in § 3.2 Error Handling. I.e. the syntax takes precedence over requirements in this section.
 
 Here is a simple example written in HTML: 
-    
-    
+
     <link rel="stylesheet" media="screen and (color)" href="example.css" />
 
 This example expresses that a certain style sheet (`example.css`) applies to devices of a certain media type (screen) with certain feature (it must be a color screen).
 
 Here is the same media query written in an @import-rule in CSS:
-    
-    
+
     @import url(example.css) screen and (color);
 
 User agents must re-evaluate media queries in response to changes in the user environment that they’re aware of, for example if the device is tiled from landscape to portrait orientation, and change the behavior of any constructs dependent on those media queries accordingly.
@@ -118,19 +106,15 @@ Several media queries can be combined into a comma-separated media query list.
 A media query list is true if _any_ of its component media queries are true, and false only if _all_ of its component media queries are false.
 
 For example, the following media query list is true if either the media type is screen and it’s a color device, **or** the media type is projection and it’s a color device: 
-    
-    
+
     @media screen and (color), projection and (color) { … }
-    
 
 An empty media query list evaluates to true.
 
 For example, these are equivalent: 
-    
-    
+
     @media all { … }
     @media { … }
-    
 
 ### 2.2.  Media Query Modifiers
 
@@ -141,8 +125,7 @@ A media query may optionally be prefixed by a single media query modifier, which
 An individual media query can have its result negated by prefixing it with the keyword not. If the media query would normally evaluate to true, prefixing it with not makes it evaluate to false, and vice versa.
 
 For example, the following will apply to everything except color-capable screens. Note that the entire media query is negated, not just the media type. 
-    
-    
+
     <link rel="stylesheet" media="not screen and (color)" href="example.css" />
 
 #### 2.2.2.  Hiding a Media Query From Legacy user agents: the only keyword
@@ -154,8 +137,7 @@ Unfortunately, this means that legacy user agents using this error-handling beha
 To hide these media queries from legacy user agents, the media query can be prefixed with the keyword only. The only keyword **has no effect** on the media query’s result, but will cause the media query to be parsed by legacy user agents as specifying the unknown media type “only”, and thus be ignored.
 
 In this example, the stylesheet specified by the `<link>` element will not be used by legacy user agents, even if they would normally match the screen media type. 
-    
-    
+
     <link rel="stylesheet" media="only screen and (color)" href="example.css" />
 
 Note: Note that the only keyword can only be used before a media type. A media query consisting only of media features, or one with another media query modifier like not, will be treated as false by legacy user agents automatically.
@@ -188,8 +170,6 @@ User agents must recognize the following media types as valid, but must make the
   * aural
   * speech
 
-
-
 Note: It is expected that all of the media types will also be deprecated in time, as appropriate media features are defined which capture their important differences.
 
 Tests
@@ -210,16 +190,12 @@ There are, however, several important differences between properties and media f
   * Media features with “range” type can be written in a range context, which uses standard mathematical comparison operators rather than a colon, or have their feature names prefixed with “min-” or “max-”. 
   * Properties sometimes accept complex values, e.g., calculations that involve several other values. Media features only accept single values: one keyword, one number, etc. 
 
-
-
 If a media feature references a concept which does not exist on the device where the UA is running (for example, speech UAs do not have a concept of “width”), the media feature must always evaluate to false.
 
 The media feature device-aspect-ratio only applies to visual devices. On an speech device, expressions involving device-aspect-ratio will therefore always be false: 
-    
-    
+
     <link media="speech and (device-aspect-ratio: 16/9)"
           rel="stylesheet" href="example.css">
-    
 
 #### 2.4.1.  Media Feature Types: “range” and “discrete”
 
@@ -274,24 +250,18 @@ Some media features with a "range" type are said to be false in the negative ran
 Note: If negative values had been rejected at parse time instead, they would be treated as unknown based on the error handling rules. However, in reality, whether a device’s resolution is -300dpi is not unknown, it is known to be false. Similarly, for any visual device, the width of the targeted display area is known to be greater than -200px The above rule reflects that, making intuition match what UAs do.
 
 The following examples result in a green background on all visual devices: 
-    
-    
+
     @media not (width <= -100px) {
       body { background: green; }
     }
-    
-    
-    
+
     @media (height > -100px) {
       body { background: green; }
     }
-    
-    
-    
+
     @media not (resolution: -300dpi) {
       body { background: green; }
     }
-    
 
 This is a behavior change compared to Media Queries Level 3 [MEDIAQUERIES-3], where negative values on these properties caused a syntax error. In level 3, syntax errors—including forbidden values—resulted in the entire media query being false, rather than the unknown treatment defined in this level. Implementations updating from level 3 should make sure to change the handling of negative values for the relevant properties when they add support for the richer syntax defined in § 2.5 Combining Media Features, to avoid introducing unintended semantics. 
 
@@ -306,32 +276,24 @@ This is equivalent to evaluating the feature in a range context, as follows:
   * Using a “min-” prefix on a feature name is equivalent to using the “>=” operator. For example, (min-height: 600px) is equivalent to (height >= 600px). 
   * Using a “max-” prefix on a feature name is equivalent to using the “<=” operator. For example, (max-width: 40em) is equivalent to (width <= 40em). 
 
-
-
 Note: because “min-” and “max-” both equate to range comparisons that **include** the value, they may be limiting in certain situations.
 
 For instance, authors trying to define different styles based on a breakpoint in the viewport width using “min-” and “max-” would generally offset the values they’re comparing, to ensure that both queries don’t evaluate to true simultaneously. Assuming the breakpoint is at 320px, authors would conceptually use: 
-    
-    
+
     @media (max-width: 320px) { /* styles for viewports <= 320px */ }
     @media (min-width: 321px) { /* styles for viewports >= 321px */ }
-    
 
 While this ensures that the two sets of styles don’t apply simultaneously when the viewport width is 320px, it does not take into account the possibility of fractional viewport sizes which can occur as a result of non-integer pixel densities (e.g. on high-dpi displays or as a result of zooming/scaling). Any viewport widths that fall between 320px and 321px will result in none of the styles being applied.
 
 One approach to work around this problem is to increase the precision of the values used for the comparison. Using the example above, changing the second comparison value to 320.01px significantly reduces the chance that a viewport width on a device would fall between the cracks.
-    
-    
+
     @media (max-width: 320px) { /* styles for viewports <= 320px */ }
     @media (min-width: 320.01px) { /* styles for viewports >= 320.01px */ }
-    
 
 However, in these situations, range context queries (which are not limited to “>=” and “<=” comparisons) offer a more appropriate solution:
-    
-    
+
     @media (width <= 320px) { /* styles for viewports <= 320px */ }
     @media (width > 320px) { /* styles for viewports > 320px */ }
-    
 
 “Discrete” type properties do not accept “min-” or “max-” prefixes. Adding such a prefix to a “discrete” type media feature simply results in an unknown feature name.
 
@@ -349,9 +311,6 @@ Multiple media features can be combined together into a media condition using fu
 
   * Media conditions can be grouped by wrapping them in parentheses () which can then be nested within a condition the same as a single media query. For example, (not (color)) or (hover) is true on devices that are monochrome and/or that have hover capabilities. If one instead wanted to query for a device that was monochrome and _didn’t_ have hover capabilities, it must instead be written as not ((color) or (hover)) (or, equivalently, as (not (color)) and (not (hover))).
 
-
-
-
 It is _invalid_ to mix and and or and not at the same “level” of a media query. For example, (color) and (pointer) or (hover) is illegal, as it’s unclear what was meant. Instead, parentheses can be used to group things using a particular joining keyword, yielding either (color) and ((pointer) or (hover)) or ((color) and (pointer)) or (hover). These two have very different meanings: if only (hover) is true, the first one evaluates to false but the second evaluates to true.
 
 Tests
@@ -367,19 +326,18 @@ Note: This explicit definition of <media-query-list> parsing is necessary to mak
 Note: This definition of <media-query-list> parsing intentionally accepts an empty list.
 
 Note: As per [CSS-SYNTAX-3], tokens are [ASCII case-insensitive](https://infra.spec.whatwg.org/#ascii-case-insensitive).
-    
-    
+
     <media-query> = <media-condition>
                  | [ not | only ]? <media-type> [ and <media-condition-without-or> ]?
     <media-type> = [<ident>](https://www.w3.org/TR/css-values-4/#typedef-ident)
-    
+
     <media-condition> = <media-not> | <media-in-parens> [ <media-and>* | <media-or>* ]
     <media-condition-without-or> = <media-not> | <media-in-parens> <media-and>*
     <media-not> = not <media-in-parens>
     <media-and> = and <media-in-parens>
     <media-or> = or <media-in-parens>
     <media-in-parens> = ( <media-condition> ) | <media-feature> | <general-enclosed>
-    
+
     <media-feature> = ( [ <mf-plain> | <mf-boolean> | <mf-range> ] )
     <mf-plain> = <mf-name> : <mf-value>
     <mf-boolean> = <mf-name>
@@ -393,9 +351,8 @@ Note: As per [CSS-SYNTAX-3], tokens are [ASCII case-insensitive](https://infra.s
     <mf-gt> = '>' '='?
     <mf-eq> = '='
     <mf-comparison> = <mf-lt> | <mf-gt> | <mf-eq>
-    
+
     <general-enclosed> = [ [<function-token>](https://www.w3.org/TR/css-syntax-3/#typedef-function-token) [<any-value>](https://www.w3.org/TR/css-syntax-3/#typedef-any-value)? ) ] | [ ( [<any-value>](https://www.w3.org/TR/css-syntax-3/#typedef-any-value)? ) ]
-    
 
 The <media-type> production does not include the keywords only, not, and, or, and layer.
 
@@ -446,19 +403,15 @@ This logic was adopted because <general-enclosed> needs to be assigned a truth v
 A media query that does not match the grammar in the previous section must be replaced by not all during parsing.
 
 Note: Note that a grammar mismatch does **not** wipe out an entire media query list, just the problematic media query. The parsing behavior defined above automatically recovers at the next top-level comma.
-    
-    
+
     @media (example, all,), speech { /* only applicable to speech devices */ }
     @media &test, speech           { /* only applicable to speech devices */ }
-    
 
 Both of the above media query lists are turned into not all, speech during parsing, which has the same truth value as just speech.
 
 Note that error-recovery only happens at the top-level of a media query; anything inside of an invalid parenthesized block will just get turned into not all as a group. For example:
-    
-    
+
     @media (example, speech { /* rules for speech devices */ }
-    
 
 Because the parenthesized block is unclosed, it will contain the entire rest of the stylesheet from that point (unless it happens to encounter an unmatched “)” character somewhere in the stylesheet), and turn the entire thing into a not all media query.
 
@@ -471,13 +424,11 @@ But not unknown is true, as the not negates the false media type.
 Remember that some keywords aren’t allowed as <media-type>s and cause parsing to fail entirely: the media query or and (color) is turned into not all during parsing, rather than just treating the or as an unknown media type. 
 
 An unknown <mf-name> or <mf-value>, or a feature value which does not match the value syntax for that media feature, results in the value “unknown”. A <media-query> whose value is “unknown” must be replaced with not all.
-    
-    
+
     <link media="screen and (max-weight: 3kg) and (color), (color)"rel="stylesheet" href="example.css" />
 
 As max-weight is an unknown media feature, this media query list is turned into not all, (color), which is equivalent to just (color).
-    
-    
+
     @media (min-orientation:portrait) { … }
 
 The orientation feature does not accept prefixes, so this is considered an unknown media feature, and turned into not all.
@@ -485,8 +436,7 @@ The orientation feature does not accept prefixes, so this is considered an unkno
 The media query (color:20example) specifies an unknown value for the color media feature and is therefore turned into not all. 
 
 Note that media queries are also subject to the parsing rules of the host language. For example, take the following CSS snippet: 
-    
-    
+
     @media test;,all { body { background:lime } }
 
 The media query test;,all is, parsed by itself, equivalent to not all, all, which is always true. However, CSS’s parsing rules cause the [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media) rule, and thus the media query, to end at the semicolon. The remainder of the text is treated as a style rule with an invalid selector and contents.
@@ -504,18 +454,15 @@ The width media feature describes the width of the targeted display area of the 
 width is false in the negative range.
 
 For example, this media query expresses that the style sheet is used on printed output wider than 25cm: 
-    
-    
+
     <link rel="stylesheet" media="print and (min-width: 25cm)" href="http://…" />
 
 This media query expresses that the style sheet is used on devices with viewport (the part of the screen/paper where the document is rendered) widths between 400 and 700 pixels: 
-    
-    
+
     @media (400px <= width <= 700px) { … }
 
 This media query expresses that style sheet is used if the width of the viewport is greater than 20em. 
-    
-    
+
     @media (min-width: 20em) { … }
 
 The [em](https://www.w3.org/TR/css-values-4/#em) value is relative to the [initial value](https://www.w3.org/TR/css-cascade-5/#initial-value) of [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size).
@@ -543,15 +490,14 @@ Name: | orientation
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | portrait [|](https://www.w3.org/TR/css-values-4/#comb-one) landscape   
 Type: | discrete   
-  
+
 portrait
     The orientation media feature is portrait when the value of the height media feature is greater than or equal to the value of the width media feature. 
 landscape
     Otherwise orientation is landscape. 
 
 The following media query tests for “portrait” orientation, like a phone held upright. 
-    
-    
+
     @media (orientation:portrait) { … }
 
 ### 4.5.  Block-Axis Overflow: the overflow-block feature
@@ -561,7 +507,7 @@ Name: | overflow-block
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) scroll | paged   
 Type: | discrete   
-  
+
 The overflow-block media feature describes the behavior of the device when content overflows the initial containing block in the [block axis](https://www.w3.org/TR/css-writing-modes-4/#block-axis).
 
 none
@@ -584,7 +530,7 @@ Name: | overflow-inline
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) scroll   
 Type: | discrete   
-  
+
 The overflow-inline media feature describes the behavior of the device when content overflows the initial containing block in the [inline axis](https://www.w3.org/TR/css-writing-modes-4/#inline-axis).
 
 none
@@ -599,7 +545,7 @@ Name: | horizontal-viewport-segments
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | [<integer>](https://www.w3.org/TR/css-values-4/#integer-value)  
 Type: | range   
-  
+
 The horizontal-viewport-segments media feature describes the number of logical segments of the viewport in the horizontal direction.
 
 The horizontal-viewport-segments media feature is false in the negative range.
@@ -611,8 +557,7 @@ The vertical-viewport-segments media feature describes the number of logical seg
 The vertical-viewport-segments media feature is false in the negative range.
 
 This media query detects a viewport that has exactly two segments that are side-by-side. 
-    
-    
+
     @media (horizontal-viewport-segments: 2) and (vertical-viewport-segments: 1) { … }
 
 ### 4.9.  Display Modes: the display-mode media feature
@@ -622,7 +567,7 @@ Name: | display-mode
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | fullscreen [|](https://www.w3.org/TR/css-values-4/#comb-one) standalone | minimal-ui | browser | picture-in-picture   
 Type: | discrete   
-  
+
 The display-mode media feature describes the mode in which the current [browsing context](https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context) is currently being presented to the end user. In child browsing contexts, the [display mode](https://www.w3.org/TR/mediaqueries-5/#display-mode) must match that of the [top-level browsing context](https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-browsing-context).
 
 This feature is primarily used to determine which [display mode](https://www.w3.org/TR/mediaqueries-5/#display-mode) the user agent has applied to an [application context](https://www.w3.org/TR/appmanifest/#dfn-application-context). As such, the values of this feature correspond to the display modes defined in [APPMANIFEST]. However, it can also be used in non-application contexts to determine whether the viewport is in other modes, such as fullscreen or picture-in-picture.
@@ -645,16 +590,13 @@ picture-in-picture
      This mode allows users to continue consuming media while they interact with other sites or applications on their device. The browsing context is displayed in a floating and always-on-top window. A user agent may include other platform specific UI elements, such as "back-to-tab" and "site information" buttons or whatever is customary on the platform and user agent. 
 
 For example, the [application manifest](https://www.w3.org/TR/appmanifest/#dfn-manifest) can request the [standalone](https://www.w3.org/TR/mediaqueries-5/#display-mode-standalone) [display mode](https://www.w3.org/TR/mediaqueries-5/#display-mode) as follows: 
-    
-    
+
     {
       "display": "standalone"
     }
-    
 
 This media query can be used to determine whether the user agent has actually applied the [standalone](https://www.w3.org/TR/mediaqueries-5/#display-mode-standalone) mode:
-    
-    
+
     @media (display-mode: standalone) { … }
 
 The user agent could set display-mode to any of the other values, depending on the actual mode currently in use.
@@ -664,14 +606,12 @@ The [fullscreen](https://www.w3.org/TR/mediaqueries-5/#display-mode-fullscreen) 
 The fullscreen value for display-mode is not directly related to the CSS [:fullscreen](https://www.w3.org/TR/selectors-4/#selectordef-fullscreen) [pseudo-class](https://www.w3.org/TR/selectors-4/#pseudo-class). The :fullscreen pseudo-class matches an element exclusively when that element is put into the fullscreen element stack. However, a side effect of calling the `[requestFullscreen()](https://fullscreen.spec.whatwg.org/#dom-element-requestfullscreen)` method on an element using the Fullscreen API can be that the browser enters a fullscreen mode at the OS-level, in which case both :fullscreen and (display-mode: fullscreen) will match.
 
 On some platforms, it is possible for a user—​or a Web Application Manifest—​to put a web application into fullscreen without invoking the Fullscreen API. When this happens, the [:fullscreen](https://www.w3.org/TR/selectors-4/#selectordef-fullscreen) pseudo-class will not match, but (display-mode: fullscreen) will match. This is exemplified in CSS code below: 
-    
-    
+
     /* applies when the viewport is fullscreen */
     @media (display-mode: fullscreen) { … }
-    
+
     /* applies when an element is fullscreen */
     #game:fullscreen { … }
-    
 
 Note: Additional values for this media feature may be added in the future to match new [display modes](https://www.w3.org/TR/mediaqueries-5/#display-mode) added to [APPMANIFEST].
 
@@ -692,18 +632,15 @@ For printers, this corresponds to the screening resolution (the resolution for p
 For output mediums that have no physical constraints on resolution (such as outputting to vector graphics), this feature must match the infinite value. For the purpose of evaluating this media feature in the range context, infinite must be treated as larger than any possible [<resolution>](https://www.w3.org/TR/css-values-4/#resolution-value). (That is, a query like (resolution > 1000dpi) will be true for an infinite media.)
 
 This media query simply detects “high-resolution” screens (those with a hardware pixel to CSS [px](https://www.w3.org/TR/css-values-4/#px) ratio of at least 2): 
-    
-    
+
     @media (resolution >= 2dppx)
 
 For example, this media query expresses that a style sheet is used on devices with resolution greater than 300 dots per CSS [in](https://www.w3.org/TR/css-values-4/#in): 
-    
-    
+
     @media print and (min-resolution: 300dpi) { … }
 
 This media query is equivalent, but uses the CSS [cm](https://www.w3.org/TR/css-values-4/#cm) unit:
-    
-    
+
     @media print and (min-resolution: 118dpcm) { … }
 
 [<resolution>](https://www.w3.org/TR/css-values-4/#resolution-value) does not refer to the number of device pixels per physical length unit, but the number of device pixels per css unit. This mapping is done by the user agent, so it is always known to the user agent. 
@@ -719,7 +656,7 @@ Name: | scan
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | interlace [|](https://www.w3.org/TR/css-values-4/#comb-one) progressive   
 Type: | discrete   
-  
+
 The scan media feature describes the scanning process of some output devices.
 
 interlace
@@ -733,8 +670,7 @@ progressive
 Most modern screens, and all computer screens, use progressive rendering.
 
 For example, the “feet” of letters in serif fonts are very small features that can provoke “twitter” on interlaced devices. The scan media feature can be used to detect this, and use an alternative font with less chance of “twitter”: 
-    
-    
+
     @media (scan: interlace) { body { font-family: sans-serif; } }
 
 Note: At the time of writing, all known implementations match `scan: progressive` rather than `scan: interlace`.
@@ -748,10 +684,8 @@ The <mq-boolean> value type is an [<integer>](https://www.w3.org/TR/css-values-4
 Note: The <mq-boolean> type exists only for legacy purposes. If this feature were being designed today, it would instead use proper named keywords for its values.
 
 Here is an example that detects a narrow console screen: 
-    
-    
+
     @media (grid) and (max-width: 15em) { … }
-    
 
 Note: At the time of writing, all known implementations match `grid: 0` rather than `grid: 1`.
 
@@ -762,7 +696,7 @@ Name: | update
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) slow | fast   
 Type: | discrete   
-  
+
 The update media feature is used to query the ability of the output device to modify the appearance of content once it has been rendered. It accepts the following values:
 
 none
@@ -773,14 +707,12 @@ fast
      The layout may change dynamically according to the usual rules of CSS, and the output device is not unusually constrained in speed, so regularly-updating things like CSS Animations can be used. Example: computer screens. 
 
 For example, if a page styles its links to only add underlines on hover, it may want to always display underlines when printed: 
-    
-    
+
     @media (update) {
       a { text-decoration: none; }
       a:hover, a:focus { text-decoration: underline; }
     }
     /* In non-updating UAs, the links get their default underline at all times. */
-    
 
 Tests
 
@@ -791,7 +723,7 @@ Name: | environment-blending
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | opaque [|](https://www.w3.org/TR/css-values-4/#comb-one) additive | subtractive   
 Type: | discrete   
-  
+
 The environment-blending media feature is used to query the characteristics of the user’s display so the author can adjust the style of the document. An author might choose to adjust the visuals and/or layout of the page depending on the display technology to increase the appeal or improve legibility.
 
 The following values are valid:
@@ -809,16 +741,14 @@ subtractive
 For example: an LCD display embedded in a bathroom mirror.
 
 Is there a need for the subtractive value?
-    
-    
+
     body { background-color: white; }
     p { color: black; }
-    
+
     @media(environment-blending: additive) {
       body { background-color: black; }
       p { color: white; font-size: 16px; font-weight: 1000; }
     }
-    
 
 ## 6\.  Color Media Features
 
@@ -829,15 +759,12 @@ The color media feature describes the number of bits per color component of the 
 color is false in the negative range.
 
 For example, these two media queries express that a style sheet applies to all color devices: 
-    
-    
+
     @media (color) { … }
     @media (min-color: 1) { … }
-    
 
 This media query expresses that a style sheet applies to color devices with at least 8 bits per color component: 
-    
-    
+
     @media (color >= 8) { … }
 
 If different color components are represented by different number of bits, the smallest number is used.
@@ -855,18 +782,14 @@ The color-index media feature describes the number of entries in the color looku
 color-index is false in the negative range.
 
 For example, here are two ways to express that a style sheet applies to all color index devices: 
-    
-    
+
     @media (color-index) { … }
     @media (color-index >= 1) { … }
-    
 
 This media query expresses that a style sheet applies to a color index device with 256 or more entries: 
-    
-    
+
     <?xml-stylesheet media="(min-color-index: 256)"
       href="http://www.example.com/…" ?>
-    
 
 ### 6.3.  Monochrome Screens: the monochrome feature
 
@@ -875,21 +798,17 @@ The monochrome media feature describes the number of bits per pixel in a monochr
 monochrome is false in the negative range.
 
 For example, this is how to express that a style sheet applies to all monochrome devices: 
-    
-    
+
     @media (monochrome) { … }
 
 Express that a style sheet applies to monochrome devices with more than 2 bits per pixels: 
-    
-    
+
     @media (monochrome >= 2) { … }
 
 Express that there is one style sheet for color pages and another for monochrome: 
-    
-    
+
     <link rel="stylesheet" media="print and (color)" href="http://…" />
     <link rel="stylesheet" media="print and (monochrome)" href="http://…" />
-    
 
 ### 6.4.  Color Display Quality: the color-gamut feature
 
@@ -898,7 +817,7 @@ Name: | color-gamut
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | srgb [|](https://www.w3.org/TR/css-values-4/#comb-one) p3 | rec2020   
 Type: | discrete   
-  
+
 The color-gamut media feature describes the approximate range of colors that are supported by the UA and output device. That is, if the UA receives content with colors in the specified space it can cause the output device to render the appropriate color, or something appropriately close enough.
 
 Note: The query uses approximate ranges for a few reasons. Firstly, there are a lot of differences in display hardware. For example, a device might claim to support "Rec. 2020", but actually renders a significantly lower range of the full gamut. Secondly, there are a lot of different color ranges that different devices support, and enumerating them all would be tedious. In most cases the author does not need to know the exact capabilities of the display, just whether it is better than sRGB, or significantly better than sRGB. That way they can serve appropriate images, tagged with color profiles, to the user.
@@ -927,14 +846,12 @@ xW | yW | xR | yR | xG | yG | xB | yB
 srgb | 0.3127 | 0.3290 | 0.640 | 0.330 | 0.300 | 0.600 | 0.150 | 0.060   
 p3 | 0.3127 | 0.3290 | 0.680 | 0.320 | 0.265 | 0.690 | 0.150 | 0.060   
 rec2020 | 0.3127 | 0.3290 | 0.708 | 0.292 | 0.170 | 0.797 | 0.131 | 0.046   
-  
+
 Note: The table above does not contains enough information to fully describe the color spaces, but is sufficient to determine whether an output device approximately covers their respective gamuts. See [SRGB] for more information on sRGB, [Display-P3] for more information on Display P3, and [ITU-R-BT-2020-2] for more information on ITU-R Recommendation BT.2020.
 
 For example, this media query applies when the display supports colors in the range of Display P3: 
-    
-    
+
     @media (color-gamut: p3) { … }
-    
 
 Note: An output device can return true for multiple values of this media feature, if its full output gamut is large enough, or one gamut is a subset of another supported gamut. As a result, this feature is best used in an "ascending" fashion—​set a base value when (color-gamut: srgb) is true, then override it if (color-gamut: p3) is true, etc.
 
@@ -949,7 +866,7 @@ Name: | dynamic-range
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | standard [|](https://www.w3.org/TR/css-values-4/#comb-one) high   
 Type: | discrete   
-  
+
 dynamic-range represents the combination of max brightness, color depth, and contrast ratio that are supported by the user agent and output device.
 
 high
@@ -983,7 +900,7 @@ Name: | inverted-colors
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) inverted   
 Type: | discrete   
-  
+
 The inverted-colors media feature indicates whether the content is displayed normally, or whether colors have been inverted.
 
 Note: This is an indication that the user agent or underlying operating system has forcibly inverted all colors, not a request to do so. This is sometimes provided as a simple accessibility feature, allowing users to switch between light-on-dark and dark-on-light text. However, this has unpleasant side effects, such as inverting pictures, or turning shadows into highlights, which reduce the readability of the content.
@@ -998,25 +915,21 @@ This value must not match if the user agent has done some kind of content aware 
 Note: This is because the goal of this media feature is to enable authors to mitigate the undesirable effects of the non content aware approach that invert _all_ the pixels. If the author were to take counter measures even in the content-aware cases, their counter measures and the UA’s would be at risk of cancelling each other.
 
 Depending on their style sheet, authors may wish to invert images and videos: 
-    
-    
+
     @media (inverted-colors) {
       img:not(picture > img), picture, video {
         filter: invert(100%);
       }
     }
-    
 
 Authors may also invert images injected via CSS (such as backgrounds), or disable shadows:
-    
-    
+
     @media (inverted-colors) {
       * {
         text-shadow: none !important;
         box-shadow: none !important;
       }
     }
-    
 
 Tests
 
@@ -1030,7 +943,7 @@ Typical examples of devices matching combinations of pointer and hover:
 ---|---|---|---  
 hover: none | keyboard-only controls, sequential/spatial (d-pad) focus navigation | smartphones, touch screens | basic stylus digitizers (Cintiq, Wacom, etc)   
 hover: hover |  | Nintendo Wii controller, Kinect | mouse, touch pad, advanced stylus digitizers (Surface, Samsung Note, Wacom Intuos Pro, etc)   
-  
+
 The pointer and hover features relate to the characteristics of the “primary” pointing device, while any-pointer and any-hover can be used to query the properties of all potentially available pointing devices.
 
 Note: While this specification does not define how user agents should decide what the “primary” pointing device is, the expectation is that user agents should make this determination by combining knowledge about the device/environment they are running on, the number and type of pointing devices available, and a notion of which of these is generally and/or currently being used. In situations where the primary input mechanism for a device is not a pointing device, but there is a secondary – and less frequently used – input that is a pointing devices, the user agent may decide to treat the non-pointing device as the primary (resulting in 'pointer: none'). user agents may also decide to dynamically change what type of pointing device is deemed to be primary, in response to changes in the user environment or in the way the user is interacting with the UA.
@@ -1046,7 +959,7 @@ Name: | pointer
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) coarse | fine   
 Type: | discrete   
-  
+
 The pointer media feature is used to query the presence and accuracy of a pointing device such as a mouse. If multiple pointing devices are present, the pointer media feature must reflect the characteristics of the “primary” pointing device, as determined by the user agent. (To query the capabilities of _any_ available pointing devices, see the any-pointer media feature.)
 
 none
@@ -1061,8 +974,7 @@ Both coarse and fine indicate the presence of a pointing device, but differ in a
 Note: As the UA may provide the user with the ability to zoom, or as secondary pointing devices may have a different accuracy, the user may be able to perform accurate clicks even if the value of this media feature is coarse. This media feature does not indicate that the user will never be able to click accurately, only that it is inconvenient for them to do so. Authors are expected to react to a value of coarse by designing pages that do not rely on accurate clicking to be operated.
 
 For accessibility reasons, even on devices whose pointing device can be described as fine, the UA may give a value of coarse or none to this media query, to indicate that the user has difficulties manipulating the pointing device accurately or at all. In addition, even if the primary pointing device has fine pointing accuracy, there may be additional coarse pointing devices available to the user. Authors may wish to query the any-pointer media feature to take these other coarse potential pointing devices into account.
-    
-    
+
     /* Make radio buttons and check boxes larger if we have an inaccurate primary pointing device */
     @media (pointer:coarse) {
       input[type="checkbox"], input[type="radio"] {
@@ -1071,7 +983,6 @@ For accessibility reasons, even on devices whose pointing device can be describe
         background:transparent;
       }
     }
-    
 
 ### 7.2.  Hover Capability: the hover feature
 
@@ -1080,7 +991,7 @@ Name: | hover
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) hover   
 Type: | discrete   
-  
+
 The hover media feature is used to query the user’s ability to hover over elements on the page with the primary pointing device. If a device has multiple pointing devices, the hover media feature must reflect the characteristics of the “primary” pointing device, as determined by the user agent. (To query the capabilities of _any_ available pointing devices, see the any-hover media feature.)
 
 none
@@ -1096,8 +1007,7 @@ For example, on a touch screen device that can also be controlled by an optional
 However, despite this, the optional mouse does allow users to hover. Authors should therefore be careful not to assume that the [:hover](https://www.w3.org/TR/selectors-4/#hover-pseudo) [pseudo-class](https://www.w3.org/TR/selectors-4/#pseudo-class) will never match on a device where 'hover:none' is true, but they should design layouts that do not depend on hovering to be fully usable.
 
 For accessibility reasons, even on devices that do support hovering, the UA may give a value of hover: none to this media query, to opt into layouts that work well without hovering. Note that even if the primary input mechanism has 'hover: hover' capability, there may be additional input mechanisms available to the user that do not provide hover capabilities.
-    
-    
+
     /* Only use a hover-activated drop down menu on devices that can conveniently hover. */
     @media (hover) {
       .menu > li        {display:inline-block;}
@@ -1105,7 +1015,6 @@ For accessibility reasons, even on devices that do support hovering, the UA may 
       .menu li:hover ul {display:block; list-style:none; padding:0;}
       /* ... */
     }
-    
 
 ### 7.3.  All Available Interaction Capabilities: the any-pointer and any-hover features
 
@@ -1119,7 +1028,7 @@ Name: | any-hover
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) hover   
 Type: | discrete   
-  
+
 The any-pointer and any-hover media features are identical to the pointer and hover media features, but they correspond to the union of capabilities of all the pointing devices available to the user. In the case of any-pointer, more than one of the values can match, if different pointing devices have different characteristics.
 
 any-pointer and any-hover must only match none if _all_ of the pointing devices would match none for the corresponding query, or there are no pointing devices at all.
@@ -1151,7 +1060,7 @@ Name: | nav-controls
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) back   
 Type: | discrete   
-  
+
 The nav-controls media features allows authors to know whether the user agent is providing obviously discoverable navigation controls as part of its user interface.
 
 Note: Traditional browsers typically do provide such controls and web pages typically have not needed to concern themselves with that, but in some contexts, web applications are run through so-called web-views, which do not always feature a full-fledged user interface. It is thus useful for authors to know what is being supplied by the user agent, so that they can consider whether they need to provide an easily discovered alternative.
@@ -1166,8 +1075,7 @@ back
      The user agent provides navigation controls, including at least an obviously discoverable control causing the user agent to move back to the page’s previous [session history entry](https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry) (typically, a “back” button). 
 
 Authors can include a back button in their web application, and then conditionally hide it if the user agent already offers that functionality: 
-    
-    
+
     @media (nav-controls: back) {
       #back-button {
         display: none;
@@ -1175,8 +1083,7 @@ Authors can include a back button in their web application, and then conditional
     }
 
 As this media feature can be used in a boolean context, the same example can be written with shorter syntax:
-    
-    
+
     @media (nav-controls) {
       #back-button {
         display: none;
@@ -1204,7 +1111,7 @@ Name: | video-color-gamut
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | srgb [|](https://www.w3.org/TR/css-values-4/#comb-one) p3 | rec2020   
 Type: | discrete   
-  
+
 The video-color-gamut media feature describes the approximate range of colors that are supported by the UA and output device’s video plane. That is, if the UA receives content with colors in the specified space it can cause the output device to render the appropriate color, or something appropriately close enough.
 
 Value and color space definitions are the same as color-gamut.
@@ -1214,7 +1121,7 @@ Name: | video-dynamic-range
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | standard [|](https://www.w3.org/TR/css-values-4/#comb-one) high   
 Type: | discrete   
-  
+
 video-dynamic-range represents the combination of max brightness, color depth, and contrast ratio that are supported by the UA and output device’s video plane.
 
 Supported values are the same as dynamic-range.
@@ -1228,7 +1135,7 @@ Name: | scripting
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) initial-only | enabled   
 Type: | discrete   
-  
+
 The scripting media feature is used to query whether scripting languages, such as JavaScript, are supported on the current document.
 
 enabled
@@ -1254,41 +1161,33 @@ When designing documents that use media queries, the same media query may be use
 To help ameliorate this, this specification defines a method of defining custom media queries, which are simply-named aliases for longer and more complex media queries. In this way, a media query used in multiple places can instead be assigned to a custom media query, which can be used everywhere, and editing the media query requires touching only one line of code.
 
 A custom media query is defined with the @custom-media rule:
-    
-    
+
     @custom-media = @custom-media [<extension-name>](https://drafts.csswg.org/css-extensions-1/#typedef-extension-name) [ <media-query-list> [|](https://www.w3.org/TR/css-values-4/#comb-one) true [|](https://www.w3.org/TR/css-values-4/#comb-one) false ] ;
-    
 
 Tests
 
 The [<extension-name>](https://drafts.csswg.org/css-extensions-1/#typedef-extension-name) can then be used in a media feature. It **must** be used in a boolean context; using them in a normal or range context is a syntax error. If a <media-query-list> is given, the custom media query evaluates to true if the <media-query-list> it represents evaluates to true, and false otherwise. If true or false is given, the custom media query evaluates to true or false, respectively.
 
 The custom media query is evaluated logically, not treated as a textual substitution. Take the following code snippet for instance: 
-    
-    
+
     /* --modern targets modern devices that support color or hover */
     @custom-media --modern (color), (hover);
-    
+
     @media (--modern) and (width > 1024px) {
       .a { color: green; }
     }
-    
 
 It is equivalent to:
-    
-    
+
     @media ((color) or (hover)) and (width > 1024px) {
       .a { color: green; }
     }
-    
 
 Processing it as if it meant the following would be incorrect:
-    
-    
+
     @media (color), (hover) and (width > 1024px) {
       .a { color: green; }
     }
-    
 
 A @custom-media rule can refer to other custom media queries. However, loops are forbidden, and a custom media query must not be defined in terms of itself or of another custom media query that directly or indirectly refers to it. Any such attempt of defining a custom media query with a circular dependency must cause all the custom media queries in the loop to fail to be defined.
 
@@ -1297,10 +1196,9 @@ If multiple @custom-media rules declare the same [<extension-name>](https://draf
 Note: For error handling purposes, an undefined media feature is different from a media feature that evaluates to false. See [Media Queries 4 § 3.2 Error Handling](https://www.w3.org/TR/mediaqueries-4/#error-handling) for details.
 
 For example, if a responsive site uses a particular breakpoint in several places, it can alias that with a reasonable name: 
-    
-    
+
     @custom-media --narrow-window (max-width: 30em);
-    
+
     @media (--narrow-window) {
       /* narrow window styles */
     }
@@ -1308,13 +1206,11 @@ For example, if a responsive site uses a particular breakpoint in several places
       /* special styles for when script is allowed */
     }
     /* etc */
-    
 
 ### 10.1.  Script-based Custom Media Queries
 
 Define a map of names to values for JS. Values can be either a MediaQueryList object or a boolean, in which case it’s treated identically to the above, or can be a number or a string, in which case it’s treated like a normal MQ, and can use the normal or range context syntax. Like: 
-    
-    
+
     <script>
     CSS.customMedia.set('--foo', 5);
     </script>
@@ -1322,21 +1218,18 @@ Define a map of names to values for JS. Values can be either a MediaQueryList ob
     @media (_foo: 5) { ... }
     @media (_foo < 10) { ... }
     </style>
-    
 
 ## 11\.  CSSOM
 
 The `CSSCustomMediaRule` interface represents a @custom-media rule.
-    
-    
+
     typedef ([MediaList](https://www.w3.org/TR/cssom-1/#medialist) or [boolean](https://webidl.spec.whatwg.org/#idl-boolean)) CustomMediaQuery;
-    
+
     [[Exposed](https://webidl.spec.whatwg.org/#Exposed)=Window]
     interface CSSCustomMediaRule : [CSSRule](https://www.w3.org/TR/cssom-1/#cssrule) {
       readonly attribute [CSSOMString](https://www.w3.org/TR/cssom-1/#cssomstring) name;
       readonly attribute CustomMediaQuery query;
     };
-    
 
 `name`,  of type [CSSOMString](https://www.w3.org/TR/cssom-1/#cssomstring), readonly
      Returns a CSSOMString representing the [<extension-name>](https://drafts.csswg.org/css-extensions-1/#typedef-extension-name) of the @custom-media rule. 
@@ -1346,7 +1239,6 @@ The `CSSCustomMediaRule` interface represents a @custom-media rule.
   * A `[MediaList](https://www.w3.org/TR/cssom-1/#medialist)` object, if the rule was defined with a <media-query-list>. 
   * The boolean true, if the rule was defined with the value true. 
   * The boolean false, if the rule was defined with the value false. 
-
 
 Tests
 
@@ -1359,7 +1251,7 @@ Name: | prefers-reduced-motion
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | no-preference [|](https://www.w3.org/TR/css-values-4/#comb-one) reduce   
 Type: | discrete   
-  
+
 The prefers-reduced-motion media feature is used to detect if the user has requested the system minimize the amount of non-essential motion it uses.
 
 no-preference
@@ -1375,7 +1267,7 @@ Name: | prefers-reduced-transparency
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | no-preference [|](https://www.w3.org/TR/css-values-4/#comb-one) reduce   
 Type: | discrete   
-  
+
 The prefers-reduced-transparency media feature is used to detect if the user has requested the system minimize the amount of transparent or translucent layer effects it uses.
 
 no-preference
@@ -1394,7 +1286,7 @@ Name: | prefers-contrast
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | no-preference [|](https://www.w3.org/TR/css-values-4/#comb-one) less | more | custom   
 Type: | discrete   
-  
+
 The prefers-contrast media feature is used to detect if the user has requested more or less contrast in the page. This could be responded to, for example, by adjusting the contrast ratio between adjacent colors, or by changing how much elements stand out visually, such as by adjusting their borders.
 
 no-preference
@@ -1423,8 +1315,6 @@ Preference for more or less contrast may arise from a variety of different situa
   * Some people with dyslexia find high contrast text hard to read, as they feel that the letters shine / sparkle as if backlit by too bright a light, and find low contrast to be more comfortable. 
   * Environmental factors may also lead a user to prefer more or less contrast. See also § 12.7 Automatic handling of User Preferences. 
 
-
-
 This list should be refined and expanded.
 
 Tests
@@ -1436,7 +1326,7 @@ Name: | forced-colors
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | none [|](https://www.w3.org/TR/css-values-4/#comb-one) active   
 Type: | discrete   
-  
+
 active
      Indicates that [forced colors mode](https://www.w3.org/TR/css-color-adjust-1/#forced-colors-mode) is active: the user agent enforces a user-chosen limited color palette on the page, The UA will provide the color palette to authors through the CSS system color keywords. See [CSS Color Adjustment 1 § 3 Forced Color Palettes](https://www.w3.org/TR/css-color-adjust-1/#forced) for details. 
 
@@ -1460,7 +1350,7 @@ Name: | prefers-color-scheme
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | light [|](https://www.w3.org/TR/css-values-4/#comb-one) dark   
 Type: | discrete   
-  
+
 The prefers-color-scheme media feature reflects the user’s desire that the page use a light or dark color theme.
 
 light
@@ -1499,7 +1389,7 @@ Name: | prefers-reduced-data
 For: | [@media](https://www.w3.org/TR/css-conditional-3/#at-ruledef-media)  
 Value: | no-preference [|](https://www.w3.org/TR/css-values-4/#comb-one) reduce   
 Type: | discrete   
-  
+
 The prefers-reduced-data media feature is used to detect if the user has a preference for being served alternate content that uses less data for the page to be rendered.
 
 no-preference
@@ -1512,19 +1402,17 @@ The method by which the user expresses their preference can vary. It might be a 
 Note: User agents are encouraged to use their own user centered discretion when handling a toggle of this value, whether it’s toggled post page load or during page load. A primary goal could be to not download unnecessary data. Consider, if a page is already loaded with high quality assets and the user changes their preference to reduced, the page could perhaps not update the document right away, instead wait for an explicit page reload invocation from the user. Consider also, if a page is taking a long time to download and a user changes their preference to reduced, this could be a nice point to save the user’s bandwidth and immediately switch to downloading smaller assets. User agents are free to implement logic as they see appropriate for situations like these, and also ought to be aware the situations exist.
 
 For example, a site could honour the preference of a user who has turned on data-saving mode by serving a smaller image. 
-    
-    
+
     .image {
       background-image: url("images/heavy.jpg");
     }
-    
+
     @media (prefers-reduced-data: reduce) {
       /* Save-Data: On */
       .image {
         background-image: url("images/light.jpg");
       }
     }
-    
 
 Tests
 
@@ -1549,17 +1437,14 @@ It is common for website authors to want to respect the user’s system preferen
 This override allows the preference to integrate with various platform features that are affected by these preferences.
 
 ### 13.1.  Extensions to the `[Navigator](https://html.spec.whatwg.org/multipage/system-state.html#navigator)` interface
-    
-    
+
     [[Exposed](https://webidl.spec.whatwg.org/#Exposed)=Window, [SecureContext](https://webidl.spec.whatwg.org/#SecureContext)]
     partial interface [Navigator](https://html.spec.whatwg.org/multipage/system-state.html#navigator) {
     	[[SameObject](https://webidl.spec.whatwg.org/#SameObject)] readonly attribute PreferenceManager preferences;
     };
-    
 
 When getting the `preferences` attribute always return the same instance of the `PreferenceManager` object.
-    
-    
+
     [[Exposed](https://webidl.spec.whatwg.org/#Exposed)=Window, [SecureContext](https://webidl.spec.whatwg.org/#SecureContext)]
     interface PreferenceManager {
     	readonly attribute PreferenceObject colorScheme;
@@ -1568,7 +1453,6 @@ When getting the `preferences` attribute always return the same instance of the 
     	readonly attribute PreferenceObject reducedTransparency;
     	readonly attribute PreferenceObject reducedData;
     };
-    
 
 The `colorScheme` attribute is a `PreferenceObject` used to override the user’s preference for the color scheme of the site. This is modeled after the § 12.5 Detecting the desire for light or dark color schemes: the prefers-color-scheme feature.
 
@@ -1585,9 +1469,6 @@ algorithm, when invoked, must run these steps:
   3. Add dark to validValues.
 
   4. Return validValues.
-
-
-
 
 If an override is set for this preference:
 
@@ -1611,9 +1492,6 @@ algorithm, when invoked, must run these steps:
 
   5. Return validValues.
 
-
-
-
 If an override is set for this preference:
 
 Note: Unlike the media feature this preference is NOT able to be set to custom as this is tightly coupled to the § 12.4 Detecting Forced Colors Mode: the forced-colors feature.
@@ -1633,9 +1511,6 @@ algorithm, when invoked, must run these steps:
   3. Add no-preference to validValues.
 
   4. Return validValues.
-
-
-
 
 If an override is set for this preference:
 
@@ -1657,9 +1532,6 @@ algorithm, when invoked, must run these steps:
 
   4. Return validValues.
 
-
-
-
 If an override is set for this preference:
 
 The `reducedData` attribute is a `PreferenceObject` used to override the user’s preference for reduced data usage on the site. This is modeled after the § 12.6 Detecting the desire for reduced data usage when loading a page: the prefers-reduced-data feature.
@@ -1678,24 +1550,19 @@ algorithm, when invoked, must run these steps:
 
   4. Return validValues.
 
-
-
-
 If an override is set for this preference:
-    
-    
+
     [[Exposed](https://webidl.spec.whatwg.org/#Exposed)=Window, [SecureContext](https://webidl.spec.whatwg.org/#SecureContext)]
     interface PreferenceObject : [EventTarget](https://dom.spec.whatwg.org/#eventtarget) {
     	readonly attribute [DOMString](https://webidl.spec.whatwg.org/#idl-DOMString)? override;
     	readonly attribute [DOMString](https://webidl.spec.whatwg.org/#idl-DOMString) value;
     	readonly attribute [FrozenArray](https://webidl.spec.whatwg.org/#idl-frozen-array)<[DOMString](https://webidl.spec.whatwg.org/#idl-DOMString)> validValues;
-    
+
     	[undefined](https://webidl.spec.whatwg.org/#idl-undefined) clearOverride();
     	[Promise](https://webidl.spec.whatwg.org/#idl-promise)<[undefined](https://webidl.spec.whatwg.org/#idl-undefined)> requestOverride([DOMString](https://webidl.spec.whatwg.org/#idl-DOMString)? value);
-    
+
     	attribute [EventHandler](https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler) onchange;
     };
-    
 
 ##### 13.1.8.1.  `override` attribute
 
@@ -1712,9 +1579,6 @@ attribute, when accessed, must run these steps:
   3. If an override for preference exists, set override to the value of that override.
 
   4. Return override.
-
-
-
 
 ##### 13.1.8.2.  `value` attribute
 
@@ -1733,9 +1597,6 @@ attribute, when accessed, must run these steps:
   4. If value is null, set value to the UA value of the preference.
 
   5. Return value.
-
-
-
 
 ##### 13.1.8.4.  `onchange` event handler attribute
 
@@ -1769,9 +1630,6 @@ method, when invoked, must run these steps:
 
   8. [Fire an event](https://dom.spec.whatwg.org/#concept-event-fire) named `change` at [this](https://webidl.spec.whatwg.org/#this).
 
-
-
-
 Note: The `change` event is fired when the computed value changes, but when an override is cleared it is also fired if the value hasn’t changed.
 
 ##  Appendix A: Deprecated Media Features
@@ -1785,8 +1643,7 @@ To query for the size of the viewport (or the page box on page media), the width
 The device-width media feature describes the width of the rendering surface of the output device. For continuous media, this is the width of the [Web-exposed screen area](https://www.w3.org/TR/cssom-view-1/#web-exposed-screen-area). For paged media, this is the width of the page sheet size.
 
 device-width is false in the negative range.
-    
-    
+
     @media (device-width < 800px) { … }
 
 In the example above, the style sheet will apply only to screens less than 800px in length. The [px](https://www.w3.org/TR/css-values-4/#px) unit is of the logical kind, as described in the Units section.
@@ -1798,8 +1655,7 @@ Note: If a device can be used in multiple orientations, such as portrait and lan
 The device-height media feature describes the height of the rendering surface of the output device. For continuous media, this is the height of the [Web-exposed screen area](https://www.w3.org/TR/cssom-view-1/#web-exposed-screen-area). For paged media, this is the height of the page sheet size.
 
 device-height is false in the negative range.
-    
-    
+
     <link rel="stylesheet" media="(device-height > 600px)" />
 
 In the example above, the style sheet will apply only to screens taller than 600 vertical pixels. Note that the definition of the [px](https://www.w3.org/TR/css-values-4/#px) unit is the same as in other parts of CSS.
@@ -1809,13 +1665,11 @@ In the example above, the style sheet will apply only to screens taller than 600
 The device-aspect-ratio media feature is defined as the ratio of the value of the device-width media feature to the value of the device-height media feature.
 
 For example, if a screen device with square pixels has 1280 horizontal pixels and 720 vertical pixels (commonly referred to as “16:9”), the following media queries will all match the device: 
-    
-    
+
     @media (device-aspect-ratio: 16/9) { … }
     @media (device-aspect-ratio: 32/18) { … }
     @media (device-aspect-ratio: 1280/720) { … }
     @media (device-aspect-ratio: 2560/1440) { … }
-    
 
 Tests
 
@@ -1849,9 +1703,6 @@ In addition to editorial changes and minor clarifications, the following changes
 
   * Defined `CSSCustomMediaRule` interface.
 
-
-
-
 ###  Changes Since the 2020-07-31 Working Draft
 
 In addition to editorial changes and minor clarifications, the following changes and additions were made to this module since the [2020-07-31 Working Draft](https://www.w3.org/TR/2020/WD-mediaqueries-5-20200731/):
@@ -1864,16 +1715,12 @@ The following additions were made to this module since the [2020-07-15 Working D
   * Added the prefers-contrast: forced value. 
   * Removed the `light-level` media feature as it is redundant with prefers-contrast and prefers-color-scheme; add examples of how these media features may be automatically inferred by the user agent based on the same factors `light-level` was expected to respond to. 
 
-
-
 ###  Changes Since the 2020-06-03 Working Draft
 
 The following additions were made to this module since the [2020-06-03 Working Draft](https://www.w3.org/TR/2020/WD-mediaqueries-5-20200603/):
 
   * Merged the content of level 4 into this specification. It previously was maintained as a delta over level 4. 
   * Made a few editorial tweaks. 
-
-
 
 ###  Changes Since the 2020-03-18 Working Draft
 
@@ -1882,15 +1729,11 @@ The following additions were made to this module since the [2020-03-18 Working D
   * Added video-* and dynamic-range media features 
   * Removed 'prefers-color-scheme: no-preference' 
 
-
-
 ###  Changes Since the First Public Working Draft
 
 The following additions were made to this module since the [2020-03-03 First Public Working Draft](https://www.w3.org/TR/2020/WD-mediaqueries-5-20200303/):
 
   * Highlighted some known issues inline in the document. 
-
-
 
 ###  Changes for FPWD (since the Media Queries Level 4)
 
@@ -1909,9 +1752,6 @@ The following additions were made to this module since the [Media Queries Level 
   * Added Custom Media Queries.
 
   * Allowed media features to define their own values that evaluate to false.
-
-
-
 
 ##  Acknowledgments
 
@@ -1937,9 +1777,6 @@ Many media features enable fingerprinting of users based on the display and inte
 
   * Interaction devices: pointer, hover, any-pointer and any-hover.
 
-
-
-
 The environment-blending feature is of particular concern because it suggests _where_ a user may be located, and is likely present in a small set of devices. Uncommon device properties are stronger fingerprinting features because they help segment devices into smaller sets.
 
 Media features that reflect operating system preferences are a fingerprinting risk because such preferences are correlated with characteristics of the user themselves:
@@ -1949,9 +1786,6 @@ Properties dependent on one of the above media queries may be accessed by script
   * Colors and other property values may be directly accessed through computed style, though user agents may elect to return constants for some colors (see, for example, [CSS Color 4](https://drafts.csswg.org/css-color-4/#css-system-colors)).
 
   * Layout affecting properties (such as font size) influence lengths, positions and sizes available to script.
-
-
-
 
 User agents may disable these media features when users have expressed sensitivity to tracking. Alternatively, user agents may limit the combination of features within a single page to reduce the fingerprinting power of the page.
 
@@ -1992,4 +1826,3 @@ Once a specification reaches the Candidate Recommendation stage, non-experimenta
 To establish and maintain the interoperability of CSS across implementations, the CSS Working Group requests that non-experimental CSS renderers submit an implementation report (and, if necessary, the testcases used for that implementation report) to the W3C before releasing an unprefixed implementation of any CSS features. Testcases submitted to W3C are subject to review and correction by the CSS Working Group. 
 
 No properties defined.
-

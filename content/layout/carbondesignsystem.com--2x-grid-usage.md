@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · 2x Grid 用法"
+title: "IBM Carbon · Foundation · 2x Grid 用法"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/usage.mdx
 section: layout
 tag: "规范"
@@ -9,34 +9,17 @@ id: layout-15
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · 2x Grid 用法
+# IBM Carbon · Foundation · 2x Grid 用法
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/usage.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/usage.mdx)
 
 ---
 
-
 > You’ve learned the grid fundamentals, now let’s put them together. A good layout requires careful planning and use of composition, which relies on principles such as hierarchy, scale, proportion, contrast, harmony, rhythm, repetition, and many more.
-
-
 
 Note: Although Carbon is open source, much of our Pattern Asset Library (PAL)
 content is gated—so many of the links below can only be accessed by IBM
 employees.
-
-
-
-
-  UI galleries
-  Fit for purpose
-  Content hierarchy
-  Continuity and contrast
-  Grid influencers
-  Style models
-  Gutter modes
-  Mixing gutter modes
-  Using grids in Figma
-
 
 ## UI galleries
 
@@ -44,13 +27,10 @@ For years, Carbon users have been asking for a gallery of product UI screens for
 reference and inspiration. There are several ongoing initiatives to catalog
 screens and we’ll continue to add to this list as more come online.
 
-
   
   - **Security** [链接](https://pages.github.ibm.com/security/security-design/department/tools-and-resources/visual-libraries/libraries/)
 
   
-
-
 
 ## Fit for purpose
 
@@ -87,13 +67,11 @@ about structural layout modules, check out
 [IBM Product Layouts](https://pages.github.ibm.com/cdai-design/pal/layouts/library/)
 on the Carbon for IBM Products PAL.
 
-![Grid scaffolding illustration](images/usage/01_basic_scaffolding.png)
-
+![Grid scaffolding illustration](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/01_basic_scaffolding.png)
 
   Although gutter width depends on the product, here are some common examples of
   how product designers use a consistent leadspace size with the 2x Grid to
   create four-column layout patterns that repeat throughout their products.
-
 
 ### Four columns
 
@@ -106,7 +84,7 @@ users into denser content.
 Even though there are examples of two- and three-column arrangements in the
 diagrams above, the type within them often still sits on four columns.
 
-![four column ui example](images/usage/02_four_column_UI.png)
+![four column ui example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/02_four_column_UI.png)
 
 ### Denser layouts
 
@@ -118,7 +96,7 @@ visualizations, where content is so dense that fixed spacers (i.e. the
 [mini unit grid](/elements/2x-grid/overview/#mini-unit)) need to be used rather
 than fluid columns.
 
-![denser layout example](images/usage/03_denser_layout_UI.png)
+![denser layout example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/03_denser_layout_UI.png)
 
 ### Layout modules and micro layouts
 
@@ -138,7 +116,7 @@ These modules along with the overarching page scaffolding above, provide a great
 example of how product designers should mix and match repeatable layout patterns
 at both the large and small scales throughout an experience.
 
-![layout modules example](images/usage/04_layout_modules.png)
+![layout modules example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/04_layout_modules.png)
 
 ### Using odd column configurations
 
@@ -152,7 +130,7 @@ the 2x grid, we realize that certain products will choose to keep their three
 column scaffolding. So it’s important to note that this configuration can still
 be achieved with the 2x grid package.
 
-![odd columns example](images/usage/05_odd_columns.png)
+![odd columns example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/05_odd_columns.png)
 
 ## Continuity and contrast
 
@@ -175,12 +153,10 @@ The Cloud team recently did an audit on type alignment in their product
 [leadspaces](<https://www.figma.com/proto/XHddusMshnOcHMWjxtoGrx/Cloud-PAL-Experimental-(Light)?page-id=80%3A124640&node-id=80-131354&viewport=4475%2C1436%2C0.29&scaling=min-zoom&starting-point-node-id=80%3A130876>)
 _(IBMers only)_ in order to streamline their experiences.
 
-![Continuity across screens example](images/usage/06_continuity_across_screens.png)
-
+![Continuity across screens example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/06_continuity_across_screens.png)
 
   Although the leadspace heights are changing, the typographic alignment from
   the World overview page into the product keeps the user oriented.
-
 
 #### Using Aspect ratios
 
@@ -196,25 +172,21 @@ possible for every image or container to be one of these sizes. However it’s
 important to use them to set the foundation of your layouts, especially in the
 case of same size tiles.
 
-![aspect ratio example](images/usage/07_using_aspect_ratios.png)
-
+![aspect ratio example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/07_using_aspect_ratios.png)
 
   An example of using aspect ratios to drive the layout of your dashboards or
   catalogs
-
 
 #### Adaptive aspect ratios
 
 Bear in mind that tile aspect ratios can change adaptively when the breakpoint
 changes.
 
-![Adaptive aspect ratios example](images/usage/08_adaptive_aspect_ratios.png)
-
+![Adaptive aspect ratios example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/08_adaptive_aspect_ratios.png)
 
   When a commonly used aspect ratio is not appropriate for the layout, it’s also
   fine to choose a less common aspect ratio or a{' '}
   <a href="/elements/2x-grid/overview/#scaling-multiple">scaling multiple</a>.
-
 
 ### Contrast
 
@@ -224,26 +196,22 @@ text with images, pairing UI components and elements of different sizes,
 strategic use of the grid, negative space and asymmetry are some of the ways in
 which you can introduce contrast to a layout.
 
-![asymmetrical layouts example](images/usage/09_asymmetrical_layouts.png)
-
+![asymmetrical layouts example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/09_asymmetrical_layouts.png)
 
   Despite the technically “correct” use of the 2x grid below, the content on the
   right becomes overwhelming for the user. By presenting all of the information
   at the same scale, the user has no sense of hierarchy to orient them.
 
-
-
   
 
-![](images/usage/10_Contrast_do_a.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/10_Contrast_do_a.png)
 
   
   
 
-![](images/usage/11_Contrast_dont_a.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/11_Contrast_dont_a.png)
 
   
-
 
 ## Grid influencers
 
@@ -274,8 +242,6 @@ navigation panel the most common example of a grid influencer in our ecosystem.
 When opening and closing the left-hand navigation, the number of columns remains
 the same but responds fluidly to the allotted space.
 
-
-
 #### Slide-in side panels
 
 Slide-in side panels are another example of a grid influencer. Slide-in side
@@ -287,12 +253,10 @@ Products, please visit their site for more in-depth details on
 [side-panel sizes and best practices](https://pages.github.ibm.com/cdai-design/pal/components/side-panel/usage/)
 _(IBMers only)_.
 
-![side panel example](images/usage/13_grid_influencer_side_panel.png)
-
+![side panel example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/13_grid_influencer_side_panel.png)
 
   Introducing a slide-in side panel re-sizes the page content, and reduces the
   number of columns in the grid.
-
 
 ## Style models
 
@@ -329,66 +293,55 @@ ecosystem:
 
 </div>
 
-
   
 
 **2x Grid at Max breakpoint**
 
-
   
 
-![](images/usage/14_2x_grid_max.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/14_2x_grid_max.png)
 
   Once the screen is wider than the max breakpoint, the margins (highlighted in
   dark blue below) can expand, or columns can be added as needed in increments
   of two.
 
-
   
-
 
   
 
 **Editorial model**
 
-
   
 
-![](images/usage/15_editorial_style_model.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/15_editorial_style_model.png)
 
 Max width maintained, grid is centered in the browser
 
   
 
-
   
 
 **Product and docs model**
 
-
   
 
-![](images/usage/16_product_style_model.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/16_product_style_model.png)
 
 Max width maintained, grid is left-aligned in the browser
 
   
 
-
   
 
 **High-density interface model**
 
-
   
 
-![](images/usage/17_hi_density_style_model.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/17_hi_density_style_model.png)
 
 Full width, add columns as needed in increments of 2
 
   
-
 
 ### Style models in IBM.com (editorial)
 
@@ -398,40 +351,35 @@ breakpoints in the appropriate style models. Notice that marketing content on
 IBM.com uses the Editorial style model and that support documentation on IBM.com
 uses the Product and docs style model.
 
-
   
 
-![](images/usage/18_dotcom_editorial_style_model.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/18_dotcom_editorial_style_model.png)
 
 The Editorial model in a marketing page on IBM.com.
 
   
   
 
-![](images/usage/19_dotcom_docs_style_model.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/19_dotcom_docs_style_model.png)
 
   The Product and docs model in the Documentation section of IBM.com.
 
+  
 
   
 
-
-  
-
-![](images/usage/20_dotcom_editorial_footer.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/20_dotcom_editorial_footer.png)
 
 The footer for the Editorial model on IBM.com.
 
   
   
 
-![](images/usage/21_dotcom_docs_footer.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/21_dotcom_docs_footer.png)
 
 The footer for the Product and docs model on IBM.com.
 
   
-
 
 ### Style models in IBM Software (product)
 
@@ -443,26 +391,20 @@ IBM Products can also occasionally use the High-density interface model in order
 to maximize the use of screen space. By far the most prominent example of this
 to date in product is the Cloud Catalog.
 
-
   
 
-![](images/usage/22_product_style_model.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/22_product_style_model.png)
 
   The Product and docs model in context in an IBM product screen.
 
-
   
   
 
-![](images/usage/23_hi-density_style_model.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/23_hi-density_style_model.png)
 
   The High-density interface model in context in the IBM Cloud catalog.
 
-
   
-
 
 ## Gutter modes
 
@@ -474,41 +416,30 @@ components, however, there are three different gutter structures: wide
 alignment by allowing containers and certain components to “hang” into the
 gutter.
 
-
   
 
-![](images/usage/24_wide_gutter_mode.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/24_wide_gutter_mode.png)
 
   Wide mode
   <br /> 32px gutter
 
-
-
   
   
 
-![](images/usage/25_narrow_gutter_mode.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/25_narrow_gutter_mode.png)
 
   Narrow mode
   <br /> 16px gutter
 
-
-
   
   
 
-![](images/usage/26_condensed_gutter_mode.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/26_condensed_gutter_mode.png)
 
   Condensed mode
   <br /> 1px gutter
 
-
-
   
-
 
 ### Wide gutter mode
 
@@ -529,25 +460,21 @@ to use. One overarching rule, (applicable to each gutter mode) is that type
 never hangs into the gutter. So we don’t want to push label type into the gutter
 in order to get field type to align to the columns.
 
-![](images/usage/27_wide_gutter_mode_example.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/27_wide_gutter_mode_example.png)
 
   Note: this page also includes a left-hand navigation panel in implementation,
   but we’ve removed it for the simplicity of the example.
 
-
-
   
 
-![](images/usage/28_wide_gutter_do.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/28_wide_gutter_do.png)
 
   
   
 
-![](images/usage/29_wide_gutter_dont.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/29_wide_gutter_dont.png)
 
   
-
 
 ### Narrow gutter mode
 
@@ -568,20 +495,18 @@ alignment, within and without containers.
 As mentioned above, fixed components with labels, such as input fields and
 dropdowns, should not hang into the gutter.
 
-![](images/usage/30_narrow_gutter_mode_example.png)
-
-
-  
-
-![](images/usage/31_narrow_gutter_do.png)
-
-  
-  
-
-![](images/usage/32_narrow_gutter_dont.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/30_narrow_gutter_mode_example.png)
 
   
 
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/31_narrow_gutter_do.png)
+
+  
+  
+
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/32_narrow_gutter_dont.png)
+
+  
 
 ### Condensed gutter mode
 
@@ -602,20 +527,18 @@ introductory UI. See it in action on the
 As mentioned above, fixed components with labels, such as input fields and
 dropdowns, should never hang into the gutter.
 
-![](images/usage/33_condensed_gutter_mode_example.png)
-
-
-  
-
-![](images/usage/34_condensed_do.png)
-
-  
-  
-
-![](images/usage/35_condensed_dont.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/33_condensed_gutter_mode_example.png)
 
   
 
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/34_condensed_do.png)
+
+  
+  
+
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/35_condensed_dont.png)
+
+  
 
 ## Mixing gutter modes
 
@@ -632,11 +555,9 @@ the subgrid to inherit. Additionally, wrapping subgrids in a column enables you
 to define responsive parameters for the column (sm, md, etc) that the subgrid
 will also inherit and be bound to.
 
-![](images/usage/36_nested_example.png)
-
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/36_nested_example.png)
 
   Nesting grids allows items within a subgrid to be also aligned to the grid.
-
 
 ### Mix and match
 
@@ -650,7 +571,7 @@ mode to accommodate some of our most commonly used components.
 We’ve provided a couple of examples below and will keep adding helpful uses
 cases as we find them.
 
-![](images/usage/37_mixing_modes_example.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/37_mixing_modes_example.png)
 
 ## Using grids in Figma
 
@@ -669,6 +590,6 @@ There are of course, ways to get a lot fancier using Constraints and Auto Layout
 in conjunction with the Screen component, but we won’t get into that level of
 detail here.
 
-![](images/usage/38_grids_in_figma.png)
+![](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/usage/38_grids_in_figma.png)
 
 Screen and Screen + Grid influencers components in Figma

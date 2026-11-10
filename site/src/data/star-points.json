@@ -79,7 +79,6 @@
       "name": "视觉层级",
       "domain": "howto",
       "select": "用大小、字重和颜色深浅拉开主次，字号最多分 3 档，最大的元素控制在 2 个以内。简单设计的配色限 2 个主色加 2 个辅色，相近颜色堆多了层级就糊了。",
-      "value_notes": "字号取值从正文到标题逐级放大，正文用 14 到 16px、副标题用 18 到 22px、标题最大 32px，这一组就撑起整页层级。",
       "checks": [
         {
           "q": "NN/g 建议网页设计里字号最多分几档，各档的范围是多少，为什么要这样分？",
@@ -108,17 +107,16 @@
       "name": "界面美化细则",
       "domain": "howto",
       "select": "留白要舍得给，菜单项和列表的间距宁多勿少，排版密度靠留白拉开节奏。白字压图必须垫深色渐变遮罩或黑色滤镜保证可读，粗体标题可略微收紧字距。",
-      "value_notes": "菜单项上下的留白做到文字高度的 2 倍，12px 字体配 12px 上下 padding，列表标题和下划线之间留 15px。白字压图的遮罩用黑 0% 到 20% 渐变或约 35% 的黑色滤镜，粗体标题可加约 -1% 字距。",
       "checks": [
         {
           "q": "Learn UI Design 的音乐播放器概念稿里，左侧菜单项上下的留白是怎么给的？",
           "a": "菜单项之间的垂直空间是文字高度的整整 2 倍，12px 的字体在上下各配 12px 的 padding。",
-          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-1.md:281"
+          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-1.md:285"
         },
         {
           "q": "白字直接压在整张图上时，Upstart 网站用什么参数的遮罩保证文字可读？",
           "a": "给整张图罩一层 35% 不透明度的黑色滤镜（35% opacity black filter）。",
-          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-2.md:65"
+          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-2.md:69"
         }
       ],
       "tasks": [
@@ -136,7 +134,6 @@
       "name": "界面配色框架",
       "domain": "howto",
       "select": "色相按等间隔取一组，饱和度和亮度先拉满做基准，再靠降亮度、降饱和来表达 hover 和选中状态，而不是乱换色。选中态可以只降亮度，hover 只降饱和，各自只动一个维度。",
-      "value_notes": "取色板时色相按 30° 间隔拉开一组，饱和度和亮度都先拉满 100% 做基准，基准定了状态色才不会跑偏。",
       "checks": [
         {
           "q": "在 Harvest 的界面里，hover 态和选中态是怎么用同一个主题色区分的？",
@@ -163,7 +160,6 @@
       "name": "Bento 网格",
       "domain": "bento",
       "select": "做官网功能区或产品展示想用便当格排布时选它。以基础单位统一间距搭网格，内容块跨度不一就用 dense 流补洞。格子别排太密，选项一多用户决策会变慢。",
-      "value_notes": "以 8px 或 4px 为基础单位定间距，12 列页面网格上一格占 3 列、行高 96 到 104px，格子的尺寸都按这套规格走。",
       "checks": [
         {
           "q": "便当格为什么不建议排得过密？",
@@ -207,11 +203,9 @@
         "s4"
       ],
       "articles": [
-        "principles/ant.design--copywriting-cn.md",
         "markdown/github.com--chinese-copywriting-guidelines.md",
         "markdown/github.com--document-style-guide.md"
-      ],
-      "value_notes": "单句或以逗号分隔的句子构件保持在 20 字以内，超过 40 字任何情况下都不接受；由逗号连成的长句，总长不超过 100 字或正文 3 行。"
+      ]
     },
     {
       "id": "markdown-en-voice",
@@ -234,93 +228,9 @@
         "s13"
       ],
       "articles": [
-        "markdown/learn.microsoft.com--brand-voice-above-all-simple-human.md",
-        "markdown/learn.microsoft.com--top-10-tips-style-voice.md",
         "markdown/google.github.io--best_practices.md",
         "markdown/practicaltypography.com--type-composition.md"
       ]
-    },
-    {
-      "id": "tokens-definition-naming",
-      "name": "定义与命名",
-      "domain": "tokens",
-      "select": "W3C Design Tokens 格式里每个 token 必须有 $value，命名要能看出用途，规则全部带 JSON 示例和 MUST 级措辞。先用术语表分清 token、类型、别名、复合类型，文件格式还支持 media query 这类扩展。",
-      "checks": [
-        {
-          "q": "按 DTCG 格式，什么样的对象才算一个 design token？",
-          "a": "带有 $value 属性的对象就是 token，$value 是规范里的保留字，父对象的键就是 token 的名称。",
-          "cite": "content/tokens/dtcg--design-token.md:38"
-        },
-        {
-          "q": "DTCG 术语表里，什么是复合（Composite）design token？",
-          "a": "取值由多个命名子值构成的 token，用于总是一起应用的紧密相关样式属性，例如一个排版样式由字体名、字号、行高和颜色组成。",
-          "cite": "content/tokens/dtcg--terminology.md:133"
-        }
-      ],
-      "tasks": [
-        "s12",
-        "s6"
-      ],
-      "articles": [
-        "tokens/dtcg--design-token.md",
-        "tokens/dtcg--terminology.md",
-        "tokens/dtcg--file-format.md",
-        "tokens/primer.style--primitives-token-names.md"
-      ]
-    },
-    {
-      "id": "tokens-type-system",
-      "name": "类型系统",
-      "domain": "tokens",
-      "select": "标准 token 类型有色 color、尺寸 dimension、字体 fontFamily、时长 duration 等，取值必须符合对应类型的格式。分组可以嵌套，组上定义的类型由子级继承。",
-      "checks": [
-        {
-          "q": "dimension 类型的 token，取值必须符合什么格式？",
-          "a": "$value 必须是包含数值 value 和单位 unit 的对象，unit 只能是 px 或 rem。",
-          "cite": "content/tokens/dtcg--types.md:37"
-        },
-        {
-          "q": "分组（group）上定义的 $type 怎么作用到子级？",
-          "a": "组的 $type 充当组内未显式声明类型的 token 的默认类型，类型继承适用于嵌套组及其 token，除非被覆盖。",
-          "cite": "content/tokens/dtcg--groups.md:86"
-        }
-      ],
-      "tasks": [
-        "s12",
-        "s6"
-      ],
-      "articles": [
-        "tokens/dtcg--types.md",
-        "tokens/dtcg--groups.md"
-      ],
-      "value_notes": "类型决定取值语法：fontWeight 只能取 1 到 1000 之间的数值或预设别名，400 等同 regular；超出区间、大小写不符的字符串以及未声明类型的 token，工具都必须判为无效。"
-    },
-    {
-      "id": "tokens-alias-resolution",
-      "name": "别名解析",
-      "domain": "tokens",
-      "select": "token 可以不写具体值而引用另一个 token 的取值（别名），引用语法和解析规则定死在规范里，解析到目标 token 的 $value。别名用来去掉重复取值、建立语义关系、保证相关值一致。",
-      "checks": [
-        {
-          "q": "花括号别名语法（例如 {colors.blue}）解析到目标 token 的什么？",
-          "a": "花括号语法专为引用完整的 token 值而设计，总是解析到目标 token 的 $value 属性。",
-          "cite": "content/tokens/dtcg--aliases.md:35"
-        },
-        {
-          "q": "token 别名（引用）主要用来解决什么问题？",
-          "a": "消除 token 文件中取值的重复（DRY），在 token 之间建立语义关系，并保持相关取值一致。",
-          "cite": "content/tokens/dtcg--aliases.md:26"
-        }
-      ],
-      "tasks": [
-        "s12",
-        "s6"
-      ],
-      "articles": [
-        "tokens/dtcg--aliases.md",
-        "tokens/dtcg--groups.md"
-      ],
-      "value_notes": "别名解析只取目标 token 的 $value；属性级引用还能只借字段，base.spacing 的 16 可原样复用、单位换成 rem，也可沿用 px 把数值改成 32。"
     },
     {
       "id": "standards-transition-animation",
@@ -402,15 +312,13 @@
         "standards/w3c--clreq.md",
         "markdown/github.com--chinese-copywriting-guidelines.md",
         "type/uisdc.com--ui-text-design-specification.md"
-      ],
-      "value_notes": "标点挤压按字宽计：两个相邻标点共占 2 个字宽时先压到 1.5 个字宽，部分排版风格可再压到 1 个字宽，行首行尾的空隙调整都以此为基础。"
+      ]
     },
     {
       "id": "brands-design-language",
       "name": "品牌设计语言",
       "domain": "brands",
       "select": "每篇是完整品牌 DESIGN.md，配色字体全带具体值。Claude 奶油底配珊瑚主色加衬线大标题，Linear 近黑底配薰衣草蓝做唯一强调色，Vercel 黑白双色加多彩渐变。做 AI 工具类产品先读这三篇之一定基调。",
-      "value_notes": "Claude 的奶油底 #faf9f5 配珊瑚主色 #cc785c，Linear 的近黑底 #010102 配薰衣草蓝 #5e6ad2，两家的色值都写死在品牌规范里。",
       "tasks": [
         "s11"
       ],
@@ -418,8 +326,7 @@
         "brands/designmd--claude.md",
         "brands/designmd--linear.app.md",
         "brands/designmd--vercel.md",
-        "brands/designmd--x.ai.md",
-        "principles/tdesign.tencent.com--values.md"
+        "brands/designmd--x.ai.md"
       ]
     },
     {
@@ -427,7 +334,6 @@
       "name": "BMW双线语言",
       "domain": "brands",
       "select": "车企官网要给母品牌和性能子品牌分线立语言时选它。母品牌走奶白底加企业蓝的稳健商务风，M 系换近黑底配白色大写标题，靠整车赛道摄影发力，一点装饰色都不用。",
-      "value_notes": "母品牌的奶白底配企业蓝 #1c69d4，这套色值就是稳健商务风的识别色，全站围绕它展开。",
       "tasks": [
         "s11",
         "s2"
@@ -442,7 +348,6 @@
       "name": "超跑黑金气质",
       "domain": "brands",
       "select": "做高端汽车或奢侈品营销页、想用黑暗加摄影当唯一冲击力时选它。Ferrari 近黑底配纯白标题，Lamborghini 用不妥协的纯黑配金黄，Bugatti 在纯黑底上加大写宽字距标题和三套定制字体。",
-      "value_notes": "Ferrari 的近黑底 #181818 配纯白标题，Lamborghini 的纯黑 #000000 配金黄 #ffc000，两套取值都是暗底加高对比前景的思路。",
       "tasks": [
         "s11",
         "s2"
@@ -458,7 +363,6 @@
       "name": "加密交易平台",
       "domain": "brands",
       "select": "做交易、金融或博彩高密度数据界面选它。Binance 深黑底用品牌黄扛所有主按钮，Coinbase 白底把蓝克制到只点主行动上像正规金融服务，Kraken 用紫立专业感且红绿只留给涨跌，1win 近黑底用鲜绿做行动色撑满屏游戏砖与直播投注。",
-      "value_notes": "Binance 深黑底的品牌黄 #FCD535 扛所有主按钮，Coinbase 白底的蓝 #0052ff 只点在主行动，Kraken 的紫 #7132f5 立专业感，1win 的鲜绿 #00b24b 做行动色。",
       "tasks": [
         "s11",
         "s3"
@@ -475,7 +379,6 @@
       "name": "金融品牌质感",
       "domain": "brands",
       "select": "做支付、银行、转账或理财类产品时选它，两种走向：高端年报质感与高数据密度信任感。Mastercard 用像年报纸张的灰奶油底加橙色信号，重要元素一律做成胶囊形；Mercury 在墨紫夜色首页和近白产品页之间切换，全靠一支靛蓝行动胶囊串起两界。Stripe 用深藏蓝墨色配电光靛，每页顶部放渐变雾；Wise 用超重的大标题配亮青柠；NerdWallet 用深绿加薄荷绿梯度撑起高密度对比表格。信任感来自克制的色板和数据密度。",
-      "value_notes": "Mastercard 的灰奶油底 #F3F0EE 加橙色信号，Mercury 的靛蓝行动胶囊取 #5266eb，两支色值各自只出现在信号位上。Stripe 电光靛 #533afd，渐变雾占每页顶部三分之一；Wise 大标题字重 900、字号 64 到 126px、亮青柠 #9fe870；NerdWallet 深绿 #008254。",
       "tasks": [
         "s11",
         "s2"
@@ -494,7 +397,6 @@
       "name": "AI工具暖调",
       "domain": "brands",
       "select": "做面向大众的 AI 工具营销页、想避开冷色深底科技风时选它。Cursor 用暖奶油底配橙色像安静的编辑部，ElevenLabs 在米白底上靠柔和粉彩渐变出印刷杂志感，Lovable 用羊皮纸奶油做出亲和力。",
-      "value_notes": "Cursor 的暖奶油底 #f7f7f4 配橙 #f54e00，ElevenLabs 的米白 #f5f5f5，Lovable 的羊皮纸奶油 #f7f4ed，三套取值都往亲和的暖调方向走，落点是放松感。",
       "tasks": [
         "s11",
         "s2"
@@ -510,7 +412,6 @@
       "name": "开发者产品品牌",
       "domain": "brands",
       "select": "做开发者工具、文档平台或基建产品官网选它，两种走向：工程感与记忆点。Composio 近黑底加一支深电蓝立住 AI 工具集成的工程感；Expo 纯白底加天空蓝渐变晕染做安静的基建品牌；Mintlify 营销页用云插画天空渐变、文档页收成密集的工程排版。Sentry 用深夜紫画布配荧光青柠和手绘插画；PostHog 在暖奶油画布上散手绘刺猬；Supabase 白配近黑加一个祖母绿按钮。产品截图当主视觉，吉祥物或荧光色做记忆点。",
-      "value_notes": "Composio 的近黑 #0f0f0f 底配深电蓝 #0007cd，Expo 纯白底配天空蓝渐变晕染，两套取值都是大面积底色加一支彩色出口。Sentry 荧光青柠的色值是 #c2ef4e；Supabase 祖母绿按钮的色值是 #3ecf8e，两个亮色都只做记忆点。",
       "tasks": [
         "s11",
         "s2"
@@ -529,7 +430,6 @@
       "name": "基础设施工具",
       "domain": "brands",
       "select": "做数据库、云基础设施类工程产品选它。HashiCorp 黑底给各产品一支身份色，Terraform 紫、Vault 黄、Consul 粉当 token 管理不做装饰。ClickHouse 纯黑底用电光黄当品牌电压，统计数字也是黄字。MongoDB 深青黑英雄带配亮绿胶囊按钮、白色文档面双模式。",
-      "value_notes": "ClickHouse 纯黑底的电光黄 #faff69 当品牌电压，MongoDB 英雄带配亮绿 #00ed64 胶囊按钮，两支高亮色都只压在深色底上。",
       "tasks": [
         "s11"
       ],
@@ -546,7 +446,6 @@
       "name": "设计协作工具",
       "domain": "brands",
       "select": "做设计工具、白板协作或建站产品选它。Figma 用纯黑白编辑框加手工裁切粉彩大色块讲故事，Framer 纯黑底把页面当画板、GT Walsheim 负字距大标题配一支只留给超链接的蓝，Miro 用签名明黄 wordmark 和粉彩块带出白板玩心。",
-      "value_notes": "Framer 纯黑底上配的那支蓝取 #0099ff，只留给超链接这一处用，其余部分都保持纯黑白。",
       "tasks": [
         "s11"
       ],
@@ -561,7 +460,6 @@
       "name": "SaaS工作台",
       "domain": "brands",
       "select": "做团队协作、日程或客服类 SaaS、要温和工作台气质时选它。Airtable 白底深墨排版靠珊瑚、深绿、桃色整幅色卡给长滚动页断句，Cal.com 白底黑主按钮加 Cal Sans 展示字、卡片带软圆角，Intercom 奶白底配 Saans 字体、橙色只留给 Fin AI。",
-      "value_notes": "Cal.com 的卡片做软圆角，取值约 12px；Intercom 的橙 #ff5600 只留给 Fin AI 一处用，两支细节都只在小处出现，不往大面积铺。",
       "tasks": [
         "s11",
         "s5"
@@ -577,7 +475,6 @@
       "name": "硬件产品展厅",
       "domain": "brands",
       "select": "做硬件产品营销页、想把产品图当展品时选它。Apple 整幅产品图交替明暗底、SF Pro Display 负字距大标题、交互蓝只用一支。DJI 白底方块瓷砖摆影棚渲染图、按钮统一工程蓝胶囊。HP 白纸底用一支电蓝信号加蓝色人字纹。Dell 1996 反着走复古路，黑色页面框加彩色缎带卡。",
-      "value_notes": "Apple 的交互蓝只用 #0066cc，HP 白纸底的电蓝信号取 #024ad8，两家都把彩色收成一支信号色，其余交给产品图。",
       "tasks": [
         "s11",
         "s2"
@@ -594,7 +491,6 @@
       "name": "大厂企业风",
       "domain": "brands",
       "select": "做企业级产品、大厂品牌面或大型企业与运营商官网、要稳重可信选它。IBM 还原 Carbon：白底炭灰字、IBM 蓝做一支强调、圆角压到平直方角、IBM Plex Sans 细字重撑排版。Meta 白底配整幅产品照，用 Optimistic 可变字体做卖货语气。Oracle 用六级暖灰承担全部表面，红色只留给商标；SAP 白底加两级灰和一根蓝，浅灰导航条像应用框；Vodafone 用编辑部摄影加超大全大写标题，猩红只给按钮。界面退后，品牌色只做信号。",
-      "value_notes": "IBM 蓝取 #0f62fe 只做一支强调，圆角压在 0 到 4px 的平直方角，整套取值都往平直克制的方向走。SAP 一根蓝的色值是 #0057d2，浅灰导航条高 60px 像应用框；Vodafone 按钮猩红的色值是 #e60000。",
       "tasks": [
         "s11",
         "s2"
@@ -626,7 +522,6 @@
       "name": "明快消费风格",
       "domain": "brands",
       "select": "做消费市场或增长类产品、想要明快活泼的配色时选它。Airbnb 白底用 Rausch 红做一支品牌电压扛主按钮和评分点，Clay 白底深藏青按钮加圆润展示字、热粉深青薰衣草桃色整幅色卡给功能区断句，Jobright 用春绿配黑白加淡薄荷色带撑起 AI 求职的活力感。",
-      "value_notes": "Airbnb 的 Rausch 红取 #ff385c 扛主按钮和评分点，Jobright 的春绿取 #00f0a0 配黑白和淡薄荷色带，两支亮色都压在浅色或黑白底上。",
       "tasks": [
         "s11",
         "s2"
@@ -642,7 +537,6 @@
       "name": "AI 开发工具",
       "domain": "brands",
       "select": "做 AI 开发工具或终端产品官网选它。Ollama 把首页当 Markdown README 写，居中大标题配一个黑色胶囊按钮和终端安装命令。OpenCode 全站用 Berkeley Mono 等宽字，暖米画布读起来像一页 manpage。共同点是零装饰，命令行直接露出来建立信任。",
-      "value_notes": "Ollama 首页的居中大标题取 36px，配黑色胶囊按钮和终端安装命令；OpenCode 的暖米画布底色取 #fdfcfc，读感都靠这两组取值撑。",
       "tasks": [
         "s11",
         "s2"
@@ -659,7 +553,6 @@
       "name": "AI 品牌质感",
       "domain": "brands",
       "select": "做大模型、AI 基础设施或算力平台的品牌站与营销页时选它，两种审美走向：高记忆点单色信号与编辑化产品卡。Together AI 只用一条橙紫渐变当品牌装饰，其余近黑加纯白；NVIDIA 让高饱和绿通吃所有 CTA；Runway 干脆把整站拍成电影卷轴，全屏影像就是界面。Cohere 用纯白编辑空间加深绿黑产品带，标题带等宽味；MiniMax 白底黑胶囊按钮给每个模型发一张橙红到蓝的渐变产品卡；Mistral 用芥末橙红的日落渐变加山景照片，每页结尾压一条日落色条。",
-      "value_notes": "NVIDIA 让高饱和绿通吃所有 CTA，该绿的色值是 #76b900，全站其余部分只有近黑和纯白。",
       "tasks": [
         "s11",
         "s2"
@@ -678,7 +571,6 @@
       "name": "效率协作工具",
       "domain": "brands",
       "select": "做效率或协作软件官网时选它。Raycast 把营销页做成放大版产品截图，纯近黑底加细线卡片；Notion 用深藏蓝英雄带配紫色胶囊按钮和便利贴圆点；Slack 是深茄紫配奶紫渐变。产品界面的气质直接搬到营销页。",
-      "value_notes": "Raycast 卡片用 1px 细线勾边；Notion 紫色胶囊按钮色值 #5645d4；Slack 深茄紫色值 #4a154b，配奶紫渐变。",
       "tasks": [
         "s11",
         "s2",
@@ -697,7 +589,6 @@
       "name": "科技媒体风格",
       "domain": "brands",
       "select": "做科技媒体或内容发现页时选它。The Verge 用近黑底配 Manuka 重标题，酸薄荷做电子点缀；Wired 是纯黑白编辑部，窄体定制大字当报头；Pinterest 用大标题加瀑布流网格，暖奶白外壳让照片当主角。",
-      "value_notes": "The Verge 近黑底色值 #131313，Manuka 重标题 107px，酸薄荷点缀色值 #3cffd0；Pinterest 标题 70px。",
       "tasks": [
         "s11"
       ],
@@ -712,7 +603,6 @@
       "name": "娱乐游戏品牌",
       "domain": "brands",
       "select": "做音乐、游戏或娱乐产品页时选它。Spotify 是内容优先的黑，近黑让专辑封面自己发光，荧光绿只做点缀；PlayStation 用黑白蓝三段章节像主机发布片；Nintendo 2001 反着来，拉丝金属板配琥珀发光导航，Y2K 硬件感。",
-      "value_notes": "Spotify 的近黑系 #121212，点缀荧光绿色值 #1ed760；PlayStation 章节蓝色值 #0070d1，黑白蓝三段分章。",
       "tasks": [
         "s11",
         "s2"
@@ -728,7 +618,6 @@
       "name": "运动零售品牌",
       "domain": "brands",
       "select": "做运动、咖啡零售或健康消费品牌时选它。Nike 摄影先行，Futura 全大写标题压大片，购物界面近单色、带黑色胶囊按钮；Starbucks 奶白配围裙绿，取色来自纸巾和咖啡墙；Oura 奶油大地色配高对比衬线，只留一个行动蓝做转化。",
-      "value_notes": "Nike 购物界面用 8px 网格；Starbucks 奶白色值 #f2f0eb、围裙绿色值 #006241；Oura 行动蓝色值 #2a72de。",
       "tasks": [
         "s11",
         "s2"
@@ -744,7 +633,6 @@
       "name": "出行工程品牌",
       "domain": "brands",
       "select": "做汽车、出行或硬核工程品牌页时选它。Tesla 极端做减法，全屏车照当首屏，界面几乎消失；Uber 黑白双色，所有交互件都是全胶囊；SpaceX 纯黑底全幅火箭影像配 D-DIN 全大写紧排。产品本身就是画面。",
-      "value_notes": "Uber 所有交互件的圆角都取 999px，统一做成全胶囊形态，界面只有黑白双色。",
       "tasks": [
         "s11",
         "s2"
@@ -761,7 +649,6 @@
       "name": "电商建站平台",
       "domain": "brands",
       "select": "做电商或建站平台官网时选它。Shopify 双轨制，营销页近黑加全幅商家摄影和超细大标题，产品页转白底卖功能；Webflow 用近黑对大白画布，靠一条五段彩色渐变提亮。黑底大片卖愿景，白底界面卖产品。",
-      "value_notes": "Webflow 的近黑色值是 #080808，与大白画布直接对撞，再靠五段彩色渐变提亮整页。",
       "tasks": [
         "s11",
         "s2"
@@ -769,36 +656,6 @@
       "articles": [
         "brands/designmd--shopify.md",
         "brands/designmd--webflow.md"
-      ]
-    },
-    {
-      "id": "icons-spec",
-      "name": "图标规范",
-      "domain": "icons",
-      "select": "图标集先定视觉语言再动手：Apple、Polaris、Primer Octicons、Ant 各有官方规范，一个项目只跟一个源。网格、尺寸、线宽与端点这些约定成套照抄，别混搭。",
-      "checks": [
-        {
-          "q": "Octicons 规范里，12px 图标在什么情况下才可以创建？",
-          "a": "只在 16px 图标无法使用的特定用例下才创建 12px 图标。",
-          "cite": "content/icons/primer.style--octicons-guidelines.md:53"
-        },
-        {
-          "q": "Polaris 图标规范认为，创建新图标时应该避免依赖哪类隐喻？",
-          "a": "应避免依赖文化特定、小众或过时的隐喻（cultural-specific, niche, or outdated metaphors），它们可能不适合所有用户。",
-          "cite": "content/icons/polaris.shopify.com--iconography.md:74"
-        }
-      ],
-      "tasks": [
-        "s8",
-        "s5"
-      ],
-      "articles": [
-        "icons/developer.apple.com--icons.md",
-        "icons/polaris.shopify.com--iconography.md",
-        "icons/primer.style--octicons-guidelines.md",
-        "icons/ant.design--icon-cn.md",
-        "icons/tdesign.tencent.com--icon.md",
-        "icons/carbondesignsystem.com--iconography.md"
       ]
     },
     {
@@ -826,8 +683,7 @@
         "icons/nngroup.com--icon-usability.md",
         "icons/nngroup.com--how-to-test-digital-icons.md",
         "icons/nngroup.com--classifying-icons.md"
-      ],
-      "value_notes": "图标可用性先用 5 秒规则筛查：超过 5 秒才能想出合适的图标，就说明它难以传达含义；相对尺寸同样影响发现率，汉堡图标在移动端占导航栏宽约 20%，到桌面端只剩总宽 3.5%。"
+      ]
     },
     {
       "id": "icons-unity",
@@ -853,98 +709,8 @@
       "articles": [
         "icons/adobe.design--how-to-design-effective-icons-part-1.md",
         "icons/adobe.design--how-to-design-effective-icons-part-2.md",
-        "icons/smashingmagazine.com--user-interfaces-icons-visual-elements-screen-design.md",
-        "icons/atlassian.design--iconography.md",
-        "icons/spectrum.adobe.com--iconography.md"
-      ],
-      "value_notes": "系统图标统一画在 16px 的盒子里，1.5px 描边为基准线宽；只有 12px 小尺寸用于按钮内箭头、状态提示等次要场景，且由 16px 缩制，不单独重画。"
-    },
-    {
-      "id": "color-semantic-roles",
-      "name": "语义色分工",
-      "domain": "color",
-      "select": "用 primary、success、warning、danger 这类语义角色决定用色，而不是按色值挑颜色；同一角色在深浅主题里换成对应色阶，组件不必知道具体色值。",
-      "checks": [
-        {
-          "q": "在 Carbon 的 Theme、Token、Role、Value 体系里，切换浅色或深色主题时一个 token 的 role 会不会改变？token 和十六进制色值的区别是什么？",
-          "a": "role 不随主题改变（Roles cannot be changed between themes）；token 是基于角色的标识符，不像十六进制色值那样固定不变，可在所有主题间通用，theme 负责为 token 指定具体色值。",
-          "cite": "content/color/carbondesignsystem.com--color.md:120"
-        },
-        {
-          "q": "Polaris 约定红色、绿色、蓝色在 Shopify admin 里分别表示什么含义？把颜色当装饰来用有什么限制？",
-          "a": "red signifies critical errors（红色表示严重错误），green represents success messages（绿色表示成功消息），blue 用于把注意力引向 tips and offers；把颜色当装饰用只允许出现在插画（illustration）里。",
-          "cite": "content/color/polaris.shopify.com--color.md:38"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s12"
-      ],
-      "articles": [
-        "color/primer.style--color.md",
-        "color/polaris.shopify.com--color.md",
-        "color/govuk--colour.md",
-        "color/carbondesignsystem.com--color.md"
-      ],
-      "value_notes": "语义色分工最后由对比度门槛兜底：小于 24px 的小字用于正文与辅助说明，须达 4.5:1；大于 24px 的大字与图形元素降到 3:1，焦点态另按 3:1 校验。"
-    },
-    {
-      "id": "color-contrast-threshold",
-      "name": "对比度达标线",
-      "domain": "color",
-      "select": "文本与背景的对比度按 WCAG AA 卡线。普通文本、大字和焦点态各有达标线，大字按加粗与常规两种字重分别划线，焦点态也不许豁免，必须过线才算达标。",
-      "value_notes": "普通文本 4.5:1；大字指 19px 加粗或 24px 常规以上，线为 3:1；焦点态也必须过 3:1。",
-      "checks": [
-        {
-          "q": "USWDS 引述 Section 508（对齐 WCAG 2.0 Level AA）规定的文本与背景基线对比度标准：普通文本和大字各要达到多少？大字的界定范围是什么？",
-          "a": "普通文本（most text）4.5:1，大字（large text）3:1；大字指 19px+ bold or 24px+ normal text。",
-          "cite": "content/color/designsystem.digital.gov--color-overview.md:44"
-        },
-        {
-          "q": "GOV.UK 要求服务中文字与交互元素的对比度必须满足哪个无障碍标准的哪条成功准则、哪个级别？",
-          "a": "Web Content Accessibility Guidelines (WCAG 2.2) success criterion 1.4.3 Contrast (minimum) level AA。",
-          "cite": "content/color/govuk--colour.md:22"
-        }
-      ],
-      "tasks": [
-        "s9",
-        "s6"
-      ],
-      "articles": [
-        "color/designsystem.digital.gov--color-overview.md",
-        "color/govuk--colour.md",
-        "color/polaris.shopify.com--color.md",
-        "color/nhs.uk--colour.md"
+        "icons/smashingmagazine.com--user-interfaces-icons-visual-elements-screen-design.md"
       ]
-    },
-    {
-      "id": "color-dark-light-modes",
-      "name": "深浅模式换挡",
-      "domain": "color",
-      "select": "明暗两套主题共用同一组颜色角色，靠中性灰阶的层叠造出深度；切到深色主题时角色不变，换对应深色阶并重新校验对比度。",
-      "checks": [
-        {
-          "q": "在 Carbon 中把界面从浅色主题切到深色主题时，同一个颜色 token 的角色需要重新指定吗？",
-          "a": "不需要。颜色 token 的名称和角色在各主题之间保持一致，只有指定给 token 的取值会随主题变化。",
-          "cite": "content/color/carbondesignsystem.com--color.md:326"
-        },
-        {
-          "q": "Spectrum 中如果拿不准对比度是否达标，应该校验什么？",
-          "a": "在不确定时，应对产品支持的所有 color theme 检查 text、icons 和 UI components 的对比度。选用低色阶的 color token 或用其他颜色做背景，可能导致对比度不足。",
-          "cite": "content/color/spectrum.adobe.com--color.md:108"
-        }
-      ],
-      "tasks": [
-        "s6"
-      ],
-      "articles": [
-        "color/carbondesignsystem.com--color.md",
-        "color/primer.style--color.md",
-        "color/spectrum.adobe.com--color.md",
-        "color/tdesign.tencent.com--dark.md",
-        "color/carbondesignsystem.com--themes.md"
-      ],
-      "value_notes": "深色模式把文字色统一换成白色叠加透明度，标题 90%、次要 60%、占位 40%、禁用 26%，正文与背景对比度不低于 1:4.5。"
     },
     {
       "id": "color-token-tiers",
@@ -960,7 +726,7 @@
         {
           "q": "iOS 和 iPadOS 的动态背景色有 system 与 grouped 两组，各组都用 primary、secondary、tertiary 变体来表达信息层级，这三个变体分别用于什么范围？",
           "a": "primary 用于整体视图（Primary for the overall view），secondary 用于在整体视图内对内容或元素分组，tertiary 用于在 secondary 元素内对内容或元素分组。",
-          "cite": "content/color/developer.apple.com--color.md:103"
+          "cite": "content/color/developer.apple.com--color.md:107"
         }
       ],
       "tasks": [
@@ -969,11 +735,6 @@
         "s1"
       ],
       "articles": [
-        "color/designsystem.digital.gov--color-overview.md",
-        "color/atlassian.design--color-new.md",
-        "color/primer.style--color.md",
-        "color/developer.apple.com--color.md",
-        "color/polaris.shopify.com--color.md",
         "standards/w3c--css-color-4.md"
       ]
     },
@@ -986,7 +747,7 @@
         {
           "q": "TDesign 为什么把中性色扩展到 14 级？常用文字的对比度又如何？",
           "a": "因为在深色模式下需要通过中性色区分界面层级，所以在 CIELab 中根据亮度将中性色扩展至 14 个。常用文字与其色彩对比度均大于 4.5，满足 WCAG2.0 标准。",
-          "cite": "content/color/tdesign.tencent.com--color.md:184"
+          "cite": "content/color/tdesign.tencent.com--color.md:91"
         },
         {
           "q": "W3C 建议较大的文本与背景的对比度要达到多少？多大算较大的文本？",
@@ -998,92 +759,7 @@
         "s6"
       ],
       "articles": [
-        "color/tdesign.tencent.com--color.md",
         "color/uisdc.com--ui-color-design-guideline.md"
-      ]
-    },
-    {
-      "id": "type-scale-steps",
-      "name": "字号阶梯",
-      "domain": "type",
-      "select": "字阶是有规律的一组字号，按任务跨度选步长。GOV.UK 给出完整字阶序列；TDesign 一级字阶等距递进，每档步长一致；Ant 建议一套系统只用少数几种字号，避免字号失控。",
-      "value_notes": "GOV.UK 字阶为 16、19、21、24、27、30、36、48、80px；TDesign 一级字阶每档差 2px；Ant 建议一套系统用 3 到 5 种字号。",
-      "checks": [
-        {
-          "q": "在 GOV.UK 里为新组件创建新的字号样式时，应该如何确定字号？",
-          "a": "先使用现有的排版样式；确需新建样式时，要把样式对齐到字阶（type scale）上已有的某一档点。",
-          "cite": "content/type/govuk--type-scale.md:24"
-        },
-        {
-          "q": "TDesign 第一字阶的字号增长步数是多少？桌面端 Body 字号和桌面端最小字号分别是多少？",
-          "a": "第一字阶每个字号的增长步数差距为 2px；桌面端 Body 字号 14px，桌面端最小字号 12px。",
-          "cite": "content/type/tdesign.tencent.com--fonts.md:44"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/govuk--type-scale.md",
-        "type/tdesign.tencent.com--fonts.md",
-        "type/polaris.shopify.com--font-and-typescale.md"
-      ]
-    },
-    {
-      "id": "type-body-min-size",
-      "name": "正文字号下限",
-      "domain": "type",
-      "select": "正文包括成段文字要用可读性有效字号，这是 USWDS 给出的下限；辅助标签可以更小，但正文不许压到这个下限以下，否则长文读不动。",
-      "value_notes": "USWDS 给出的可读性下限是 16px，正文包括成段文字的有效字号至少 16px。",
-      "checks": [
-        {
-          "q": "USWDS 对正文等成段文字的最小有效字号是怎么规定的？",
-          "a": "大多数文字包括正文（body copy）至少用 16px 的有效字号（font-size 5）；更小或更大的字只在标题、图注、摄影署名、脚注、数据表等特殊用途下少量使用。",
-          "cite": "content/type/designsystem.digital.gov--typography.md:34"
-        },
-        {
-          "q": "GOV.UK 大屏字阶中 govuk-body-s 一档的字号是多少？",
-          "a": "16px（行高 20px）。",
-          "cite": "content/type/govuk--type-scale.md:100"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/designsystem.digital.gov--typography.md",
-        "type/govuk--type-scale.md",
-        "type/polaris.shopify.com--font-and-typescale.md"
-      ]
-    },
-    {
-      "id": "type-line-height-box",
-      "name": "行高定标",
-      "domain": "type",
-      "select": "行高按网格取整，字号与行高成对定义。Ant 正文的字号与行高成对给出；Polaris 后台所有行高都是网格基准的倍数，纵向节奏因此统一。",
-      "value_notes": "行高按 4px 网格取整；Ant 正文 14px 配行高 22px；Polaris 后台所有行高都是 4px 基准的倍数。",
-      "checks": [
-        {
-          "q": "Polaris 后台所有行高为什么取 4px 基准单位的倍数？",
-          "a": "因为 admin 里的文字对齐在 4px 网格上，而行高在 web 中定义了包围盒（bounding boxes），用来决定文字在 UI 中的定位。",
-          "cite": "content/type/polaris.shopify.com--using-type.md:27"
-        },
-        {
-          "q": "TDesign 为什么把行高公式定为 line-height = font size + 8 而不是固定 1.5 倍？",
-          "a": "固定 1.5 倍在字号越大时行高越大，大号文字的信息连贯出现割裂；取 8 作变量让不同字号之间间距一致，并与 1.5 倍的 14px、16px 常用字号行高保持一致。",
-          "cite": "content/type/tdesign.tencent.com--fonts.md:67"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/polaris.shopify.com--using-type.md",
-        "type/designsystem.digital.gov--line-height.md",
-        "type/tdesign.tencent.com--fonts.md"
       ]
     },
     {
@@ -1091,17 +767,16 @@
       "name": "英文行距区间",
       "domain": "type",
       "select": "英文正文行距按字号的百分比取值，低于下限会挤，高于上限段落会散；这个区间是排印实践里多数文本的最优解，按它调就稳。",
-      "value_notes": "英文正文行距取字号的 120% 到 145%，低于 120% 会挤，高于 145% 段落会散。",
       "checks": [
         {
           "q": "Practical Typography 给多数文本定的最优行距区间是多少？文中的反例说明了什么？",
           "a": "行距取字号的 120% 到 145%；文中行距 110% 的段落太挤（too tight），说明低于这个区间会挤。",
-          "cite": "content/type/practicaltypography.com--line-spacing.md:24"
+          "cite": "content/type/practicaltypography.com--line-spacing.md:26"
         },
         {
           "q": "USWDS 里适合大多数阅读文本、尤其长文阅读的 line-height token 是哪一档？输出值是多少？",
           "a": "token 5，输出 1.62。",
-          "cite": "content/type/designsystem.digital.gov--line-height.md:72"
+          "cite": "content/type/designsystem.digital.gov--line-height.md:32"
         }
       ],
       "tasks": [
@@ -1109,64 +784,8 @@
         "s1"
       ],
       "articles": [
-        "type/practicaltypography.com--line-spacing.md",
-        "type/designsystem.digital.gov--line-height.md",
-        "type/polaris.shopify.com--using-type.md"
+        "type/practicaltypography.com--line-spacing.md"
       ]
-    },
-    {
-      "id": "type-measure-limit",
-      "name": "行长上限",
-      "domain": "type",
-      "select": "正文行宽用 measure token 控制，USWDS 给的上限是 72ex；一行太长时眼睛回扫容易串行，宽屏下要收窄正文栏。",
-      "checks": [
-        {
-          "q": "USWDS 说哪些场景可以把行长设到理想范围之外？",
-          "a": "用户只读短段落的场景（如脚注或警告），可以安全地设置比平常更长或更短的行。",
-          "cite": "content/type/designsystem.digital.gov--typography.md:52"
-        },
-        {
-          "q": "USWDS 的 measure token `5` 输出的行长值是多少？",
-          "a": "72ex。",
-          "cite": "content/type/designsystem.digital.gov--measure.md:70"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/designsystem.digital.gov--measure.md",
-        "type/designsystem.digital.gov--typography.md",
-        "type/polaris.shopify.com--using-type.md"
-      ]
-    },
-    {
-      "id": "type-weight-restraint",
-      "name": "字重克制",
-      "domain": "type",
-      "select": "一套界面通常只用两档字重：常规与中等。Ant 多数场景只出现 regular 和 medium；Spectrum 把 ExtraBold 定为最重档，Title 用 Bold 拉开与正文的落差。",
-      "checks": [
-        {
-          "q": "Spectrum 对 Black 字重的使用场景和字号下限有什么限制？",
-          "a": "Black 应保留给标题类（heading）文字样式，并在 18 px 或更大字号使用以保持可读性；只有产品特定品牌（如 Adobe Express）才用 Black。",
-          "cite": "content/type/spectrum.adobe.com--typography-system.md:32"
-        },
-        {
-          "q": "TDesign 为什么最终只提供 400 和 600 两种字重？",
-          "a": "因为在 Windows 系统下 font-weight 小于 600 默认显示为常规体，而 macOS 可以用 400、500、600 区分；综合复杂场景的显示效果，只提供 400 和 600 两种字重配置。",
-          "cite": "content/type/tdesign.tencent.com--fonts.md:79"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/spectrum.adobe.com--typography-system.md",
-        "type/tdesign.tencent.com--fonts.md"
-      ],
-      "value_notes": "字重档位封顶在 ExtraBold，Black 仅可用于标题类样式且字号须 18 px 以上；Medium 只给需与 1.5 px 描边图标视觉对齐的按钮、徽标和标签。"
     },
     {
       "id": "type-hierarchy-recipe",
@@ -1190,12 +809,8 @@
         "s1"
       ],
       "articles": [
-        "type/spectrum.adobe.com--typography-system.md",
-        "type/developer.apple.com--typography.md",
-        "type/polaris.shopify.com--using-type.md",
         "type/web.dev--typography.md"
-      ],
-      "value_notes": "Spectrum 里 Black 字重仅限 18px 以上的标题样式使用，Title 用 Bold，ExtraBold 是推荐的最重档。"
+      ]
     },
     {
       "id": "type-dynamic-scaling",
@@ -1206,7 +821,7 @@
         {
           "q": "Apple HIG 为什么建议使用系统内置的 text styles？",
           "a": "用 text styles 配合系统字体可确保支持 Dynamic Type 和更大的无障碍字号（larger accessibility type sizes），让用户自选合适的文字大小。",
-          "cite": "content/type/developer.apple.com--typography.md:141"
+          "cite": "content/type/developer.apple.com--typography.md:70"
         },
         {
           "q": "web.dev 为什么反对在 font-size 里单独使用 vw 单位？正确的写法是什么？",
@@ -1219,66 +834,8 @@
         "s9"
       ],
       "articles": [
-        "type/developer.apple.com--typography.md",
         "type/web.dev--typography.md",
-        "type/designsystem.digital.gov--typesetting-overview.md",
         "standards/w3c--css-values-4.md"
-      ],
-      "value_notes": "随屏缩放用 clamp(1rem, 0.75rem + 1.5vw, 2rem)：下限 1rem 保证不低于用户设定的根字号，上限 2rem 防止大屏把正文撑得过大。"
-    },
-    {
-      "id": "type-vertical-align",
-      "name": "垂直对齐",
-      "domain": "type",
-      "select": "文字与图标不同尺寸并排时按垂直居中对齐，行高与垂直对齐一起定，避免基线与控件中心错位。",
-      "checks": [
-        {
-          "q": "Polaris 说文字垂直对齐用在什么场景？",
-          "a": "当并排元素的包围盒（bounding boxes）大小彼此不同时，考虑把文字垂直对齐（如 badge 里文字和图标尺寸不同也要垂直居中对称）。",
-          "cite": "content/type/polaris.shopify.com--using-type.md:55"
-        },
-        {
-          "q": "Polaris 为什么反对把行内元素顶对齐？",
-          "a": "把并排呈现但包围盒大小不同的元素顶对齐（top align）会让人觉得 UI 破碎（a feeling of a broken UI）。",
-          "cite": "content/type/polaris.shopify.com--using-type.md:64"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s5"
-      ],
-      "articles": [
-        "type/polaris.shopify.com--using-type.md",
-        "type/polaris.shopify.com--font-and-typescale.md"
-      ],
-      "value_notes": "垂直对齐先靠行高盒解决：行高统一取 4px 基准的整数倍，行高加内边距仍填不满容器时，才对边界框不一致的元素单独做垂直居中。"
-    },
-    {
-      "id": "type-font-stack-selection",
-      "name": "字体栈选型",
-      "domain": "type",
-      "select": "给产品定字体栈、字阶和字重组合时用它。Carbon 用字体 token 预设字号、字重、行高，字阶公式有明确起点；Polaris 强调排版同时定义层级和用途；Spectrum 把排版当作建立层级和一致性的基础。",
-      "value_notes": "Carbon 的字阶公式以 12px 为起点，字号、字重、行高都由字体 token 预设成组取值。",
-      "checks": [
-        {
-          "q": "IBM Carbon 的字阶公式假设的起始字号是多少？",
-          "a": "公式假设 y₀=12 px，即字阶以 12px 为起点。",
-          "cite": "content/type/carbondesignsystem.com--typography.md:110"
-        },
-        {
-          "q": "Spectrum 的排版总览说排版承担哪三个基础作用？",
-          "a": "创建视觉层级、传达信息、并在 Spectrum 各产品体验间保持一致。",
-          "cite": "content/type/spectrum.adobe.com--typography.md:18"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/carbondesignsystem.com--typography.md",
-        "type/spectrum.adobe.com--typography.md",
-        "type/polaris.shopify.com--typography.md"
       ]
     },
     {
@@ -1286,7 +843,6 @@
       "name": "排版工程落地",
       "domain": "type",
       "select": "排版规范落成代码 token 时用它。Primer 用单个 font 简写 token 控制字号、字族、字重、行高，行高无单位、对齐网格；Flutter Typography 类内置 Material 2018 两套字号、字重、字距可引用。",
-      "value_notes": "Primer 的行高无单位并对齐 4px 网格，字号、字族、字重、行高由单个 font 简写 token 同时控制。",
       "checks": [
         {
           "q": "Primer 的排版设计 token 在工程落地上有什么特点？",
@@ -1304,125 +860,8 @@
         "s5"
       ],
       "articles": [
-        "type/primer.style--typography.md",
         "type/api.flutter.dev--Typography-class.md"
       ]
-    },
-    {
-      "id": "type-body-typesetting",
-      "name": "正文排版取值",
-      "domain": "type",
-      "select": "定正文和标题字号、保证长文可读时用它。NHS 正文按屏幕大小分级取值，导语每页最多一段，小号正文克制使用；Atlassian 以正文基准做 rem 换算，xxlarge 标题取粗体并配好行高。",
-      "value_notes": "NHS 正文大屏 19px、小屏 16px，导语 26px 每页最多一段；Atlassian 以 16px 为 1rem 换算，xxlarge 标题是 2rem 粗体、行高 36px。",
-      "checks": [
-        {
-          "q": "NHS.UK 的正文段落默认字号在大屏和小屏分别是多少？",
-          "a": "大屏 19px，小屏 16px。",
-          "cite": "content/type/nhs.uk--typography.md:121"
-        },
-        {
-          "q": "Atlassian 的排版 token 用什么单位表示字号和行高，和 px 怎么换算？",
-          "a": "用 rem 而不是像素值；字号由 rem 乘以浏览器默认的 16px 动态计算，即 1rem 等于 16px。",
-          "cite": "content/type/atlassian.design--typography.md:70"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "type/nhs.uk--typography.md",
-        "type/atlassian.design--typography.md"
-      ]
-    },
-    {
-      "id": "layout-spacing-scale",
-      "name": "间距尺度",
-      "domain": "layout",
-      "select": "间距不随手写，按一套尺度取值。Atlassian 出 space token 作间距基准，USWDS 用统一间距单位，GOV.UK 的尺度分响应式与静态两套。",
-      "value_notes": "Atlassian 以 8px 为基准出 space token，USWDS 用 8px 间距单位，GOV.UK 是 5px 尺度。",
-      "checks": [
-        {
-          "q": "Atlassian 的间距系统以多大的基准单位构建，space token 的数字后缀表示什么？",
-          "a": "以 8px 为基准单位（即 space.100）；数字后缀表示基准单位的百分比。",
-          "cite": "content/layout/atlassian.design--spacing.md:32"
-        },
-        {
-          "q": "Polaris 的 space token 按什么规则命名，space-100 和 space-400 各等于多少 px？",
-          "a": "按 4px 基准值的百分比倍数命名；space-100 等于 4px，space-400 等于 16px。",
-          "cite": "content/layout/polaris.shopify.com--layout-tokens.md:39"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s12"
-      ],
-      "articles": [
-        "layout/atlassian.design--spacing.md",
-        "layout/designsystem.digital.gov--spacing-units.md",
-        "layout/govuk--spacing.md",
-        "layout/polaris.shopify.com--layout-tokens.md",
-        "layout/carbondesignsystem.com--spacing.md"
-      ]
-    },
-    {
-      "id": "layout-grid-columns",
-      "name": "栅格系统",
-      "domain": "layout",
-      "select": "页面骨架先定栅格。USWDS 用 12 栏网格，Carbon 有 2x 网格与用法两层。GOV.UK 常见版式是两栏三分之二或三分之二加三分之一，默认有最大页宽限制。",
-      "value_notes": "GOV.UK 常见版式是两栏三分之二或三分之二加三分之一，默认最大页宽 1020px。",
-      "checks": [
-        {
-          "q": "GOV.UK 大多数页面推荐用哪种版式，为什么这么定？",
-          "a": "推荐 two-thirds 或 two-thirds and one-third 版式，防止桌面端每行文字太长难读，每行通常不超过 75 characters。",
-          "cite": "content/layout/govuk--layout.md:22"
-        },
-        {
-          "q": "USWDS 的布局网格一共多少栏，想排三个等宽列每列应该用什么类？",
-          "a": "基于 12 栏系统；三个等宽列每列用 grid-col-4。",
-          "cite": "content/layout/designsystem.digital.gov--layout-grid.md:52"
-        }
-      ],
-      "tasks": [
-        "s6",
-        "s1"
-      ],
-      "articles": [
-        "layout/designsystem.digital.gov--layout-grid.md",
-        "layout/carbondesignsystem.com--2x-grid.md",
-        "layout/carbondesignsystem.com--2x-grid-usage.md",
-        "layout/govuk--layout.md",
-        "layout/tdesign.tencent.com--layout.md"
-      ]
-    },
-    {
-      "id": "layout-density",
-      "name": "信息密度",
-      "domain": "layout",
-      "select": "密度是显式选择，不是挤一挤。Polaris 专篇讲密度布局与效率取舍，Spectrum 把间距拆成布局间距与组件间距两层，组件内间距不拿来当页面留白。",
-      "checks": [
-        {
-          "q": "Polaris 认为哪类界面需要高密度布局，理由是什么？",
-          "a": "信息密集的界面，比如 index pages 或 data tables，需要高密度布局来提升效率，让商家快速访问和比较数据。",
-          "cite": "content/layout/polaris.shopify.com--density.md:23"
-        },
-        {
-          "q": "Spectrum 的组件间距（component spacing）定义的是什么范围的间距？",
-          "a": "组件内部的间距关系（internal relationships within a component），保证在每个尺寸和密度下都正确。",
-          "cite": "content/layout/spectrum.adobe.com--component-spacing.md:18"
-        }
-      ],
-      "tasks": [
-        "s3",
-        "s6"
-      ],
-      "articles": [
-        "layout/polaris.shopify.com--density.md",
-        "layout/spectrum.adobe.com--layout-spacing.md",
-        "layout/spectrum.adobe.com--component-spacing.md",
-        "layout/polaris.shopify.com--layout.md"
-      ],
-      "value_notes": "信息密度靠内间距令牌升降一档：常规用 spacing-200，紧凑换 spacing-100，宽松换 spacing-300，且不要硬编码 8px 这类裸数值。"
     },
     {
       "id": "layout-intrinsic-patterns",
@@ -1449,15 +888,13 @@
         "layout/every-layout.dev--stack.md",
         "layout/every-layout.dev--sidebar.md",
         "layout/every-layout.dev--switcher.md"
-      ],
-      "value_notes": "侧栏布局用 flex-basis 20rem 定侧栏理想宽，主栏 flex-grow 999 吃掉剩余空间，min-inline-size 50% 触发折行，两栏间距用 gap 1rem。"
+      ]
     },
     {
       "id": "layout-spacing-values",
       "name": "间距取值规则",
       "domain": "layout",
       "select": "定间距刻度和响应式留白时用它。NHS 的同一套间距刻度在小屏自动降一档；优设建议基础间距按固定步长递增，宽画布配窄内容区并两侧留对称边距；Spectrum 把间距原则定为关系、比例、感知三条。",
-      "value_notes": "NHS 的间距刻度从 4px 到 64px；优设基础间距按 8px 递增，1920px 画布配 1400px 内容区时两侧各留 260px。",
       "checks": [
         {
           "q": "NHS.UK 的响应式间距类 nhsuk-u-margin-9 在小屏和大屏各应用多大的 margin？",
@@ -1467,7 +904,7 @@
         {
           "q": "优设的间距规范以什么为基数衍生间距值，衍生出哪几个数，为什么不用 40 和 56？",
           "a": "以 8px 为基数，衍生出 8、16、24、32、48、64 这 6 个间距数值；不用 40、56 是因为数值越大相邻差越难感知（56 和 64 对比只有 1.14 倍），间距数值越大跳跃的倍数应越大。",
-          "cite": "content/layout/uisdc.com--code-for-design-of-spacing.md:92"
+          "cite": "content/layout/uisdc.com--code-for-design-of-spacing.md:102"
         }
       ],
       "tasks": [
@@ -1475,66 +912,7 @@
         "s1"
       ],
       "articles": [
-        "layout/nhs.uk--spacing.md",
-        "layout/spectrum.adobe.com--spacing.md",
         "layout/uisdc.com--code-for-design-of-spacing.md"
-      ]
-    },
-    {
-      "id": "layout-alignment-skeleton",
-      "name": "对齐与骨架",
-      "domain": "layout",
-      "select": "排页面骨架和对齐规则时用它。Ant 把对齐分成文案类、表单类、数字类分别定规则，布局间距用双数组组合出节奏；Primer 用视口区间把移动端和桌面端布局分开处理。",
-      "value_notes": "Ant 的布局间距用 8 倍数双数组组合出节奏，Primer 按视口区间分移动端与桌面端。",
-      "checks": [
-        {
-          "q": "Ant Design 对数字类对齐的规则是什么，为什么这么定？",
-          "a": "为快速对比数值大小，建议所有数值取相同有效位数，并且右对齐。",
-          "cite": "content/layout/ant.design--alignment-cn.md:53"
-        },
-        {
-          "q": "Primer 的 regular 视口范围从多宽开始，最多容纳几列？",
-          "a": "从 >= 768px 开始，最多容纳 2 列。",
-          "cite": "content/layout/primer.style--layout.md:83"
-        }
-      ],
-      "tasks": [
-        "s1",
-        "s3",
-        "s2"
-      ],
-      "articles": [
-        "layout/ant.design--alignment-cn.md",
-        "layout/primer.style--layout.md",
-        "layout/tdesign.tencent.com--page-framework.md"
-      ]
-    },
-    {
-      "id": "layout-adaptive-guides",
-      "name": "跨端布局适配",
-      "domain": "layout",
-      "select": "做一套设计适配手机到桌面多端时用它。Apple 用常规和紧凑两类尺寸级别处理旋转、分屏和多任务；NHS 以移动端优先，页面有最大宽度限制，断点分四档。",
-      "value_notes": "NHS 页面最大宽 960px，断点定在 320、641、769、990px 四档。",
-      "checks": [
-        {
-          "q": "Apple HIG 为什么建议按 size class 而不是设备类型或屏幕方向来决定布局？",
-          "a": "因为 size class 描述的是实际可用的空间（actual space available），与横竖屏无关；而设备方向和类型（idiom）不提供可用空间的信息，对布局决策没有用。",
-          "cite": "content/layout/developer.apple.com--layout.md:89"
-        },
-        {
-          "q": "NHS.UK 布局的默认最大页面宽度是多少，文本每行建议不超过多少字符？",
-          "a": "默认最大页面宽度 960px；每行不超过 70 to 80 characters（70 到 80 个字符）。",
-          "cite": "content/layout/nhs.uk--layout.md:26"
-        }
-      ],
-      "tasks": [
-        "s1",
-        "s2"
-      ],
-      "articles": [
-        "layout/developer.apple.com--layout.md",
-        "layout/nhs.uk--layout.md",
-        "layout/primer.style--responsive.md"
       ]
     },
     {
@@ -1546,12 +924,12 @@
         {
           "q": "按优设《UI 设计规范全流程》，建立一套设计语言的第一步应该先做什么？",
           "a": "先建立设计准则（设计原则）。",
-          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:100"
+          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:97"
         },
         {
           "q": "优设建议基础的颜色、字体这类元素定稿后多久内不要频繁变动？",
           "a": "至少一年内不要频繁变动，否则成本会比较高。",
-          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:208"
+          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:205"
         }
       ],
       "tasks": [
@@ -1559,15 +937,13 @@
       ],
       "articles": [
         "layout/uisdc.com--ui-design-specification-process.md"
-      ],
-      "value_notes": "规范先立设计原则，再依次铺色彩、图形、栅格、字体、投影与图文关系；栅格间距取 8 的倍数，按 8、16、24、48、64 建列，基础元素一年内不动。"
+      ]
     },
     {
       "id": "motion-duration",
       "name": "动效时长",
       "domain": "motion",
       "select": "时长按场景分档，别一个值用到底。工程默认阶梯按 hover/press、tooltip 与下拉、modal 与抽屉、页面切换、全屏遮罩逐级加长，modal 与抽屉另有上限；NN/g 另给了动效时长的经验区间。",
-      "value_notes": "hover/press 100-150ms、tooltip/下拉 150-200ms、modal/抽屉 200-300ms（上限 400ms）、页面切换 300-400ms，全屏遮罩最多 700ms，NN/g 区间 100-500ms。",
       "checks": [
         {
           "q": "NN/g 说动效进入屏幕和退出屏幕的时长应该有什么差别，弹窗的例子是多少？",
@@ -1577,7 +953,7 @@
         {
           "q": "Atlassian：用户每天会触发几十次的高频动效，时长应控制在多少以内？",
           "a": "150ms 以内。",
-          "cite": "content/motion/atlassian.design--motion.md:148"
+          "cite": "content/motion/atlassian.design--motion.md:144"
         }
       ],
       "tasks": [
@@ -1585,11 +961,7 @@
         "s5"
       ],
       "articles": [
-        "motion/nngroup.com--animation-duration.md",
-        "motion/carbondesignsystem.com--motion.md",
-        "motion/atlassian.design--motion.md",
-        "motion/polaris.shopify.com--motion.md",
-        "motion/tdesign.tencent.com--motion.md"
+        "motion/nngroup.com--animation-duration.md"
       ]
     },
     {
@@ -1614,10 +986,8 @@
         "s14"
       ],
       "articles": [
-        "motion/atlassian.design--motion.md",
         "motion/developer.mozilla.org--using-css-transitions.md",
-        "standards/w3c--css-easing-1.md",
-        "motion/polaris.shopify.com--creating-motion.md"
+        "standards/w3c--css-easing-1.md"
       ]
     },
     {
@@ -1638,12 +1008,8 @@
         "s5"
       ],
       "articles": [
-        "motion/nngroup.com--animation-purpose-ux.md",
-        "motion/spectrum.adobe.com--motion.md",
-        "motion/carbondesignsystem.com--motion-choreography.md",
-        "motion/polaris.shopify.com--creating-motion.md"
-      ],
-      "value_notes": "多元素入场按 20 ms 间隔错峰，并随元素数量调整间隔，保证整段入场仍在 500 ms 内结束，动效只承担语义、不拖慢任务。"
+        "motion/nngroup.com--animation-purpose-ux.md"
+      ]
     },
     {
       "id": "motion-performance",
@@ -1686,7 +1052,7 @@
         {
           "q": "Carbon 对界面状态过渡的无障碍兜底有什么要求？",
           "a": "要始终为界面状态过渡提供替代方案（always provide alternatives），并考虑为移动端、平板做简化或减少动效，确保总有办法静态传达相同信息。",
-          "cite": "content/motion/carbondesignsystem.com--motion.md:363"
+          "cite": "content/motion/carbondesignsystem.com--motion.md:249"
         }
       ],
       "tasks": [
@@ -1694,26 +1060,20 @@
         "s9"
       ],
       "articles": [
-        "motion/carbondesignsystem.com--motion.md",
-        "motion/atlassian.design--motion.md",
-        "motion/spectrum.adobe.com--motion.md",
         "standards/w3c--mediaqueries-5.md"
-      ],
-      "value_notes": "减弱动效开启后状态直接切换，不靠缩短过渡；仍保留的微交互控制在 90 到 120 ms，元素进出与转场 150 到 400 ms。"
+      ]
     },
     {
       "id": "a11y-contrast-threshold",
       "name": "对比度阈值",
       "domain": "a11y",
       "select": "选完色要用对比度工具算过再定稿。正文文字和背景的对比度要求最严，大号文字和图形控件可放宽。信息不能只靠颜色传达，色觉障碍用户要靠图标、文字或纹理补足。",
-      "value_notes": "正文文字和背景的对比度至少 4.5:1，大号文字和图形控件至少 3:1。",
       "tasks": [
         "s9",
         "s6"
       ],
       "articles": [
-        "a11y/web.dev--a11y-color-contrast.md",
-        "a11y/carbondesignsystem.com--a11y-color.md"
+        "a11y/web.dev--a11y-color-contrast.md"
       ]
     },
     {
@@ -1726,8 +1086,7 @@
         "s5"
       ],
       "articles": [
-        "a11y/web.dev--a11y-focus.md",
-        "a11y/carbondesignsystem.com--a11y-keyboard.md"
+        "a11y/web.dev--a11y-focus.md"
       ]
     },
     {
@@ -1742,21 +1101,6 @@
       "articles": [
         "a11y/w3c--apg-dialog-modal.md",
         "a11y/w3c--apg-menu-button.md"
-      ]
-    },
-    {
-      "id": "a11y-manual-acceptance",
-      "name": "无障碍验收清单",
-      "domain": "a11y",
-      "select": "交付前先跑 W3C Easy Checks 的十几项手工检查：标题结构、对比度、表单标签、键盘可达。数值和措辞有争议时，按 WCAG 2.2 的 A、AA、AAA 成功准则逐条对可测试措辞验收。",
-      "tasks": [
-        "s9",
-        "s16"
-      ],
-      "articles": [
-        "a11y/w3c--easy-checks.md",
-        "a11y/w3c--wcag-2.2.md",
-        "a11y/carbondesignsystem.com--a11y-overview.md"
       ]
     },
     {
@@ -1876,147 +1220,17 @@
       ]
     },
     {
-      "id": "components-bulk-lists",
-      "name": "列表批量操作",
-      "domain": "components",
-      "select": "列表行点击进详情页，批量动作用「动词加名词」公式命名，窄屏用 condensed 收起批量栏，仅批量非必需时。",
-      "value_notes": "列表批量栏在 490px 以下用 condensed 收起，且仅在批量非必需时这样收。",
-      "tasks": [
-        "s3",
-        "s5"
-      ],
-      "articles": [
-        "components/polaris.shopify.com--index-table.md",
-        "components/carbondesignsystem.com--data-table-usage.md"
-      ]
-    },
-    {
-      "id": "components-input-selection",
-      "name": "输入组件选型",
-      "domain": "components",
-      "select": "按选择方式挑输入组件，用 GOV.UK 的取舍规则裁决：下拉仅作最后手段；单行文本用 text input，超一行的长文本换 textarea；单选用 radios 且不预选答案、选项默认按字母序排，多选用 checkboxes。每种组件的标签、帮助文本与错误呈现的完整细节在各组件文章，错误文案紧贴字段。",
-      "tasks": [
-        "s4",
-        "s5"
-      ],
-      "articles": [
-        "components/govuk--text-input.md",
-        "components/govuk--select.md",
-        "components/govuk--radios.md",
-        "components/govuk--checkboxes.md",
-        "components/govuk--textarea.md"
-      ]
-    },
-    {
-      "id": "components-char-upload",
-      "name": "字符数与上传",
-      "domain": "components",
-      "select": "字符计数组件不拦输入，只实时显示剩余并在超限时提示，让用户先写完再删。先试不用限制，有法律或技术理由才上，后端总撞限就提上限；无 JS 时退化为静态提示。文件上传组件给选择文件入口和出错提示。",
-      "tasks": [
-        "s4",
-        "s5"
-      ],
-      "articles": [
-        "components/govuk--character-count.md",
-        "components/govuk--file-upload.md"
-      ]
-    },
-    {
       "id": "components-button-hierarchy",
       "name": "按钮层级与状态",
       "domain": "components",
       "select": "每屏只放一个 primary 按钮，页头弹窗侧栏不算；secondary 只配 primary 做取消返回类否定动作；tertiary 可独立用；danger 有 primary、tertiary、ghost 三种样式；尺寸按档配输入框正文；切换按钮 aria-pressed 显式写 true/false，文案不随按下态改。",
-      "value_notes": "small 配 32px 输入框、medium 配 40px、large productive 配 14px 正文、large expressive 配 16px 正文。",
       "tasks": [
         "s5",
         "s4",
         "s9"
       ],
       "articles": [
-        "components/carbondesignsystem.com--button-usage.md",
-        "components/polaris.shopify.com--button.md",
-        "components/ant.design--button-cn.md",
-        "components/govuk--button.md",
         "components/inclusive-components.design--toggle-button.md"
-      ]
-    },
-    {
-      "id": "components-modal-dialog",
-      "name": "弹窗与对话",
-      "domain": "components",
-      "select": "弹窗分事务型（必选动作，带取消和主按钮）和危险确认型（删除等不可逆操作）。打开后焦点落在第一个输入框，没有表单就落在主按钮，Tab 不会跑出弹窗；提交时弹窗体上盖加载层、主按钮转加载态，登录与对话框模式给完整流程。",
-      "tasks": [
-        "s5",
-        "s4"
-      ],
-      "articles": [
-        "components/carbondesignsystem.com--modal-usage.md",
-        "patterns/carbon--dialog-pattern.md",
-        "patterns/carbon--login-pattern.md"
-      ]
-    },
-    {
-      "id": "components-tabs",
-      "name": "标签页",
-      "domain": "components",
-      "select": "标签页状态只有 hover、focus、disabled 加选中。自动切换模式焦点和选中同步移动，手动模式移动焦点不改变选中，要回车或空格才切。",
-      "tasks": [
-        "s5",
-        "s3",
-        "s18"
-      ],
-      "articles": [
-        "components/carbondesignsystem.com--tabs-usage.md",
-        "components/govuk--tabs.md"
-      ]
-    },
-    {
-      "id": "components-progressive-disclosure",
-      "name": "渐进披露",
-      "domain": "components",
-      "select": "details 折叠放不常用的帮助，accordion 把长内容分节收起，控制一次放出的信息量。折叠和渐进披露都守一条：次要信息收起来，主流程不打断。",
-      "tasks": [
-        "s5",
-        "s4"
-      ],
-      "articles": [
-        "components/govuk--accordion.md",
-        "components/govuk--details.md",
-        "patterns/carbon--disclosures-pattern.md",
-        "patterns/primer--progressive-disclosure.md"
-      ]
-    },
-    {
-      "id": "components-table-tag",
-      "name": "表格与标签",
-      "domain": "components",
-      "select": "表格用 caption 当标题帮用户定位，装行列表达可对比扫描的信息。tag 只表状态不做交互，命名用形容词不用动词，比如任务列表里的 Completed，做成链接或按钮会让人误以为能点。数据表的数字列右对齐用数字样式，列标题只写一两个词，超长截断用 tooltip 显全文，tall 工具条只配 large 和 xl 行高。",
-      "tasks": [
-        "s5",
-        "s3"
-      ],
-      "articles": [
-        "components/govuk--table.md",
-        "components/govuk--tag.md",
-        "components/polaris.shopify.com--index-table.md",
-        "components/carbondesignsystem.com--data-table-usage.md"
-      ]
-    },
-    {
-      "id": "components-header-footer",
-      "name": "页头页脚",
-      "domain": "components",
-      "select": "gov.uk 域名下每页顶部必须用 GOV.UK header 保持信任，不在 gov.uk 的政府服务改用 generic header 打自己品牌。页脚放每页底部，链接文案固定用 Privacy、Accessibility、Cookies、Terms and conditions；服务导航显示服务名。",
-      "tasks": [
-        "s5",
-        "s3"
-      ],
-      "articles": [
-        "components/govuk--header.md",
-        "components/govuk--generic-header.md",
-        "components/govuk--footer.md",
-        "components/govuk--service-navigation.md",
-        "components/govuk--language-navigation.md"
       ]
     },
     {
@@ -2030,29 +1244,8 @@
         "s18"
       ],
       "articles": [
-        "components/govuk--breadcrumbs.md",
-        "components/govuk--pagination.md",
-        "components/govuk--back-link.md",
-        "components/govuk--skip-link.md",
         "a11y/w3c--apg-disclosure.md",
         "a11y/w3c--apg-menu-button.md"
-      ]
-    },
-    {
-      "id": "components-admonitions",
-      "name": "提示组件",
-      "domain": "components",
-      "select": "通知横幅讲与页面内容无关但必须知道的事，要省着用，研究显示人们经常看不见横幅。与当前操作直接相关的信息放正文里，用 inset text 或 warning text 突出；phase banner 标 alpha 或 beta 阶段，服务过上线评估前必须挂。",
-      "tasks": [
-        "s5",
-        "s13",
-        "s19"
-      ],
-      "articles": [
-        "components/govuk--notification-banner.md",
-        "components/govuk--warning-text.md",
-        "components/govuk--phase-banner.md",
-        "components/govuk--inset-text.md"
       ]
     },
     {
@@ -2070,23 +1263,6 @@
       ]
     },
     {
-      "id": "components-cookie-feedback",
-      "name": "Cookie提示",
-      "domain": "components",
-      "select": "只要服务在用户设备上设 cookie 就必须挂 cookie banner，让用户接受或拒绝并链去 cookie 页。反馈组件让用户在任意环节评价服务，文案要说明为什么要反馈并给反馈入口；联系部门页给找人工的路径。",
-      "tasks": [
-        "s5",
-        "s4",
-        "s19"
-      ],
-      "articles": [
-        "components/govuk--cookie-banner.md",
-        "components/govuk--feedback.md",
-        "patterns/govuk--cookies-page.md",
-        "patterns/govuk--contact-a-department-or-service-team.md"
-      ]
-    },
-    {
       "id": "patterns-global-nav",
       "name": "全局导航",
       "domain": "patterns",
@@ -2097,201 +1273,8 @@
         "s18"
       ],
       "articles": [
-        "patterns/carbon--global-header.md",
-        "patterns/primer--navigation.md",
         "howto/nngroup.com--hamburger-menus.md",
         "howto/nngroup.com--is-navigation-useful.md"
-      ]
-    },
-    {
-      "id": "patterns-search-filter",
-      "name": "搜索筛选",
-      "domain": "patterns",
-      "select": "下拉筛选必须带「全部/任意」项，数据少时用边输入边搜的主动搜索。筛选初始态要么全不选要么全选，取决于默认是排除还是包含结果；收起状态下也要显示已应用筛选的指示，每个类别支持一键清空。",
-      "tasks": [
-        "s3",
-        "s4"
-      ],
-      "articles": [
-        "patterns/carbon--search-pattern.md",
-        "patterns/carbon--filtering.md",
-        "patterns/tdesign.tencent.com--backoffice-tasks.md"
-      ]
-    },
-    {
-      "id": "patterns-address-date",
-      "name": "地址日期输入",
-      "domain": "patterns",
-      "select": "地址有查询、多输入框、长文本三种形态，多输入框只在能给单字段帮助且需要分字段数据时用。日历控件不能是唯一输入方式，必须同时允许手敲文本；支持「明天」这类相对日期，星期重要时把星期也显示出来。",
-      "tasks": [
-        "s4",
-        "s5"
-      ],
-      "articles": [
-        "patterns/govuk--addresses.md",
-        "patterns/govuk--dates.md",
-        "components/govuk--date-input.md",
-        "components/govuk--text-input.md"
-      ]
-    },
-    {
-      "id": "patterns-contact-details",
-      "name": "联系方式输入",
-      "domain": "patterns",
-      "select": "收姓名、邮箱、电话各设独立问题，邮箱和电话在提交前各加一个确认步骤让用户复核。校验要容忍不同输入格式，邮编带不带空格都收，姓名允许撇号和重音字符。",
-      "tasks": [
-        "s4"
-      ],
-      "articles": [
-        "patterns/govuk--names.md",
-        "patterns/govuk--email-addresses.md",
-        "patterns/govuk--phone-numbers.md",
-        "patterns/govuk--confirm-an-email-address.md",
-        "patterns/govuk--confirm-a-phone-number.md",
-        "patterns/govuk--validation.md"
-      ]
-    },
-    {
-      "id": "patterns-account-password",
-      "name": "账户与密码",
-      "domain": "patterns",
-      "select": "先决定服务要不要让用户自建账号和用户名，别默认加。密码限制在创建和输入两处必须完全一致，不强制定期改密码，只在疑似泄露时要求换，密码绝不通过邮件发送。",
-      "tasks": [
-        "s4",
-        "s5"
-      ],
-      "articles": [
-        "patterns/govuk--passwords.md",
-        "patterns/govuk--create-accounts.md",
-        "patterns/govuk--create-a-username.md",
-        "components/govuk--password-input.md"
-      ]
-    },
-    {
-      "id": "patterns-payment-sensitive",
-      "name": "支付敏感信息",
-      "domain": "patterns",
-      "select": "银行卡用 IIN 查询边输入边识别卡种，识别后只点亮对应卡组织 logo，安全码提示文案随卡种变化。别用 CVV 这类缩写写安全码，也别默认卡上姓名等于用户姓名；银行账户和国民保险号各按专门格式校验。",
-      "tasks": [
-        "s4"
-      ],
-      "articles": [
-        "patterns/govuk--payment-card-details.md",
-        "patterns/govuk--bank-details.md",
-        "patterns/govuk--national-insurance-numbers.md"
-      ]
-    },
-    {
-      "id": "patterns-question-pages",
-      "name": "提问页设计",
-      "domain": "patterns",
-      "select": "每页只问一个问题，绝不用星号标必填，标题只针对本页要的信息，同一旅程不重复要同一份信息。每页顶部放返回链接，范围滑块必须给非拖拽的替代操作（WCAG 2.5.1）；性别族裔等敏感属性按平等信息模式先解释为什么问、拿来做什么。",
-      "tasks": [
-        "s4",
-        "s13"
-      ],
-      "articles": [
-        "patterns/govuk--question-pages.md",
-        "patterns/govuk--equality-information.md",
-        "patterns/govuk--check-a-service-is-suitable.md"
-      ]
-    },
-    {
-      "id": "patterns-check-complete",
-      "name": "核对与完成",
-      "domain": "patterns",
-      "select": "核对页每行配 Change 链接让用户改回答案，答案展示用 summary list，任务进度用 task list 且顺序随意、完成后状态改 Completed。完成页用面板给确认信息和下一步，面板里的按钮必须点击才能继续旅程。",
-      "tasks": [
-        "s4"
-      ],
-      "articles": [
-        "patterns/govuk--check-answers.md",
-        "patterns/govuk--confirmation-pages.md",
-        "patterns/govuk--complete-multiple-tasks.md",
-        "components/govuk--summary-list.md",
-        "components/govuk--task-list.md",
-        "components/govuk--panel.md"
-      ]
-    },
-    {
-      "id": "patterns-service-flow",
-      "name": "服务流程导航",
-      "domain": "patterns",
-      "select": "分步导航按用户完成顺序列步骤，用 and 表示可同时做、or 表示二选一。开始页用一个 Start 按钮做入口，跨服务跳转走导航模式讲清去哪。",
-      "tasks": [
-        "s4",
-        "s18"
-      ],
-      "articles": [
-        "patterns/govuk--start-using-a-service.md",
-        "patterns/govuk--step-by-step-navigation.md",
-        "patterns/govuk--navigate-a-service.md"
-      ]
-    },
-    {
-      "id": "patterns-error-exit",
-      "name": "异常与退出",
-      "domain": "patterns",
-      "select": "中断页用面板加必须点击的按钮拦住用户确认（继续或改答案）；服务故障页说清出了什么问题和下一步，页面不存在页给回起点的路。快速退出组件让用户一键离开，默认跳 BBC Weather 首页可以改。",
-      "tasks": [
-        "s4",
-        "s13",
-        "s19"
-      ],
-      "articles": [
-        "patterns/govuk--problem-with-the-service-pages.md",
-        "patterns/govuk--service-unavailable-pages.md",
-        "patterns/govuk--page-not-found-pages.md",
-        "patterns/govuk--interruption-pages.md",
-        "patterns/govuk--exit-a-page-quickly.md",
-        "components/govuk--exit-this-page.md"
-      ]
-    },
-    {
-      "id": "patterns-form-validation",
-      "name": "表单校验",
-      "domain": "patterns",
-      "select": "校验失败时页面标题前加 Error: 前缀，错误摘要放 main 顶部（面包屑下、h1 之上）并把键盘焦点移过去，摘要里的文案与字段旁完全一致并链接到出错字段。空字段用祈使句（Enter your name），超长用描述句（Name must be 35 characters or less）；忽略空格标点等无害字符，超字数不拦输入只提示。",
-      "tasks": [
-        "s4",
-        "s13"
-      ],
-      "articles": [
-        "patterns/govuk--validation.md",
-        "components/govuk--error-summary.md",
-        "components/govuk--error-message.md",
-        "components/govuk--character-count.md"
-      ]
-    },
-    {
-      "id": "patterns-empty-onboarding",
-      "name": "空状态与引导",
-      "domain": "patterns",
-      "select": "空状态图形要贴情境，出错时空状态用 alert 图标不卖萌，给一个主行动：没用过就带去创建，出错了就给解决或求助入口。空状态整体替换原本该出现的内容，不带原来的表头页脚；新功能引导用在用户第一次用某功能时。",
-      "tasks": [
-        "s4",
-        "s3",
-        "s19"
-      ],
-      "articles": [
-        "patterns/primer--empty-states.md",
-        "patterns/carbon--empty-states-pattern.md",
-        "patterns/primer--feature-onboarding.md"
-      ]
-    },
-    {
-      "id": "patterns-loading",
-      "name": "加载态",
-      "domain": "patterns",
-      "select": "骨架屏只用在卡片、表格这类容器型组件上，toast、下拉菜单、弹窗不用骨架。加载指示放内容原位防止布局跳动；一批骨架只做一次无障碍播报，筛选用常驻的 role=status 元素播报「5 items match the filter」这类结果数。",
-      "tasks": [
-        "s4",
-        "s3",
-        "s19"
-      ],
-      "articles": [
-        "patterns/primer--loading.md",
-        "patterns/carbon--loading-pattern.md"
       ]
     },
     {
@@ -2299,51 +1282,13 @@
       "name": "通知分层",
       "domain": "patterns",
       "select": "信息、警告、错误分层给不同措辞和图标。图标按大小决定用实心版还是描边版，描边版配大一号文字；aria-live 默认 polite，页面隐藏时关掉播报，不要播报一切。",
-      "value_notes": "12px 图标用实心版，16px 和 24px 用描边版并配 14px 以上文字。",
       "tasks": [
         "s4",
         "s13",
         "s19"
       ],
       "articles": [
-        "patterns/primer--notification-messaging.md",
-        "patterns/carbon--notification-pattern.md",
         "components/inclusive-components.design--notifications.md"
-      ]
-    },
-    {
-      "id": "patterns-states-feedback",
-      "name": "状态与反馈",
-      "domain": "patterns",
-      "select": "默认禁用态不可点、读屏也不读，用降透明度做视觉；暂时禁用等前置条件满足后自动恢复可用。只读态、溢出内容各有专门呈现；保存中要给进行中反馈，功能不可用时降级说明替代一片空白。",
-      "tasks": [
-        "s4",
-        "s5",
-        "s19"
-      ],
-      "articles": [
-        "patterns/carbon--status-indicator-pattern.md",
-        "patterns/carbon--read-only-states-pattern.md",
-        "patterns/carbon--disabled-states.md",
-        "patterns/carbon--overflow-content.md",
-        "patterns/primer--saving.md",
-        "patterns/primer--degraded-experiences.md"
-      ]
-    },
-    {
-      "id": "patterns-long-form",
-      "name": "长表单组织",
-      "domain": "patterns",
-      "select": "长表单用分区标题加 fieldset 分组拆块。标签只写字段是什么、不承载说明，关键要求不能只写在帮助文本里，因为用户会忽略帮助文本；表单排布模式给分栏与分组的完整做法。",
-      "tasks": [
-        "s4",
-        "s3"
-      ],
-      "articles": [
-        "patterns/primer--forms-overview.md",
-        "patterns/carbon--forms-pattern.md",
-        "components/polaris.shopify.com--form-layout.md",
-        "components/govuk--fieldset.md"
       ]
     },
     {
@@ -2355,36 +1300,7 @@
         "s16"
       ],
       "articles": [
-        "patterns/ux-rules-checklist.md",
-        "principles/ant.design--values-cn.md"
-      ]
-    },
-    {
-      "id": "patterns-common-actions",
-      "name": "常用操作模式",
-      "domain": "patterns",
-      "select": "给增删改这类常用操作定位置和措辞、或做文本编辑工具栏时用它。Carbon 常用操作按财务、权限、法律三类影响调整提示与确认强度，文本工具栏把编辑、搜索、附件按钮收成一组供编辑区调用。",
-      "tasks": [
-        "s5",
-        "s4"
-      ],
-      "articles": [
-        "patterns/carbon--common-actions.md",
-        "patterns/carbon--text-toolbar-pattern.md"
-      ]
-    },
-    {
-      "id": "patterns-fluid-forms",
-      "name": "流式表单布局",
-      "domain": "patterns",
-      "select": "做响应式表单页时用它。Carbon 流式布局的输入框高度固定、宽度按容器分档贴边排布，表单在不同宽度容器里自适应成行。",
-      "value_notes": "Carbon 流式输入框固定高 64px，宽度按容器分 25%、50%、100% 三档贴边排布。",
-      "tasks": [
-        "s3",
-        "s4"
-      ],
-      "articles": [
-        "patterns/carbon--fluid-styles.md"
+        "patterns/ux-rules-checklist.md"
       ]
     },
     {
@@ -2392,7 +1308,6 @@
       "name": "测试逐页走查",
       "domain": "patterns",
       "select": "出稿先把页面铺开：入口页、核心任务页、结果页按产品任务链出全，多步流程每步都算一页，内容用真实文案填满。测试按页面、交互元素、显示状态三张清单逐项走查，每项真点真操作并记录前后值，只看首页的样子不算测过。",
-      "value_notes": "量级坐标：宽度走查按 320 到 1280 的四档实测；状态取法在 articles 各篇找枚举，加载分档的秒数在本篇「反馈的四个目标」一节。",
       "checks": [
         {
           "q": "测试走查的覆盖面由哪三张清单组成，为什么只测首页不算测过？",
@@ -2418,7 +1333,6 @@
       "name": "反馈目标与通过标准",
       "domain": "patterns",
       "select": "反馈要可感知、及时、真实、可行动：按下当帧有视觉响应，等待给进行中状态，失败保留输入并说明原因，界面数字跟着数据联动。通过标准逐条对：覆盖、零死点、反馈合目标、数字对账、底线复测、回炉重测，任何一条不过就回炉整轮重测。",
-      "value_notes": "量级坐标：微反馈是百毫秒档（原文 100ms 量级），加载按 1 秒、3 秒、10 秒分档；底线比值在无障碍篇找 4.5:1 与 3:1 两档，目标尺寸 24 像素。",
       "checks": [
         {
           "q": "需要等待的过程按等待时长怎么分档给加载状态？",
@@ -2440,31 +1354,10 @@
       ]
     },
     {
-      "id": "dataviz-chart-contrast",
-      "name": "图表对比度",
-      "domain": "dataviz",
-      "select": "图表标记与背景的对比要有下限，堆叠条与进度条各段之间要加高对比分隔线区分相邻色段。",
-      "value_notes": "Primer 要求图表标记与背景的对比至少 3 比 1。",
-      "checks": [
-        {
-          "q": "Primer 对图表标记与背景的对比度下限是怎么要求的？",
-          "a": "图表标记与背景至少要有 3 比 1 的对比度（chart marks need to be at a 3:1 ratio with the background）。",
-          "cite": "content/patterns/primer--data-visualization.md:49"
-        }
-      ],
-      "tasks": [
-        "s10"
-      ],
-      "articles": [
-        "patterns/primer--data-visualization.md"
-      ]
-    },
-    {
       "id": "layouts-product-page",
       "name": "产品页版型",
       "domain": "layouts",
       "select": "区块顺序是主视觉、价值主张、功能、CTA、页脚，功能区只放少量区块，CTA 在首屏吸底加页尾各放一次。按钮文字对按钮底色的对比度有最低要求，只有明确冲 AAA 级文字对比才用更严档位；有演示视频时把视频样例放进功能区。",
-      "value_notes": "功能 3 到 5 块；按钮文字对按钮底色的对比度至少 4.5:1，冲 AAA 级文字对比用 7:1。",
       "tasks": [
         "s2"
       ],
@@ -2571,15 +1464,13 @@
         "layouts/product-picker.md",
         "layouts/layout--hero-features-cta.md",
         "layouts/layout--minimal-single-column.md"
-      ],
-      "value_notes": "做触控一体机类页面时触控目标不小于 56px，尺寸别低于这个下限。"
+      ]
     },
     {
       "id": "layouts-product-official",
       "name": "产品官网版型",
       "domain": "layouts",
       "select": "做产品官网或营销首页选版型时用它。主视觉优先版型把首屏大图加单一价值条和主按钮排到底，功能展示版型用功能卡加社会证明收尾，App Store 式版型用截图轮播加评分评论，前后对比版型用对比滑块引出转化按钮。",
-      "value_notes": "功能展示版型用 4 到 6 张功能卡加社会证明收尾，卡数别超出这个范围。",
       "tasks": [
         "s2",
         "s1"
@@ -2631,151 +1522,10 @@
       ]
     },
     {
-      "id": "dataviz-chart-anatomy",
-      "name": "图表构成与选型",
-      "domain": "dataviz",
-      "select": "矩形图由图表标题、轴、刻度、轴标题、图例、工具栏、缩放条、绘图区、tooltip 九个元素构成，数据能直标就别做长图例。选型看数据关系：流向图用桑基图、网络图、平行坐标、树图，空间图用热力图、树图、圆填充、地理图，甘特图是任务条加卡片，相邻任务条要用对比色隔开。",
-      "checks": [
-        {
-          "q": "Carbon 说矩形图通常由哪九个共同元素构成？",
-          "a": "矩形图由以下元素构成：图表标题（Chart title）、轴（Axes）、刻度（Ticks）、轴标题（Axis title）、图例（Legends）、工具栏（Toolbar）、缩放条（Zoom bar）、绘图区（Graph frame）、tooltip。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md:31"
-        },
-        {
-          "q": "Carbon 的流向图里桑基图（alluvial/sankey）用来展示什么样的数据关系？",
-          "a": "桑基图是流向图，用来展示数据集中两个指标以及记录如何在它们之间分布、突出相关性（show two indicators of a dataset and how records distribute among them）。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-flow-charts.md:29"
-        }
-      ],
-      "tasks": [
-        "s10",
-        "s3"
-      ],
-      "articles": [
-        "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md",
-        "dataviz/carbondesignsystem.com--data-visualization-flow-charts.md",
-        "dataviz/carbondesignsystem.com--data-visualization-spatial-charts.md",
-        "dataviz/carbondesignsystem.com--data-visualization-gantt-charts.md",
-        "dataviz/polaris.shopify.com--data-visualizations.md"
-      ],
-      "value_notes": "环形图扇区小于 3 度时改用引导线把标签连到扇区，小于 1 度则不渲染该扇区，数据只能从数据表读取，标签不再直接贴片。"
-    },
-    {
-      "id": "dataviz-data-palette",
-      "name": "数据色板",
-      "domain": "dataviz",
-      "select": "数据色板分分类、顺序、发散、警示几类，带亮暗两态映射。分类色板必须严格按给定顺序取色以保证相邻色对比，类别数可预测时换对应数量的专用色板。顺序色板在浅色主题里最深的颜色代表最大值，深色主题里反过来。",
-      "checks": [
-        {
-          "q": "Carbon 分类（categorical）色板为什么必须严格按给定顺序取色？",
-          "a": "因为该顺序经过精心编排以最大化相邻颜色之间的对比、帮助视觉区分（maximize contrast between neighboring colors），所以要严格按顺序取色。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-color-palettes.md:32"
-        },
-        {
-          "q": "顺序（单色 monochromatic）色板在浅色主题和深色主题里，最深或最浅的颜色分别代表什么？",
-          "a": "在浅色主题里最深的颜色代表最大值（the darkest color denotes the largest values），在深色主题里最浅的颜色代表最大值（the lightest color denotes the largest values）。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-color-palettes.md:44"
-        }
-      ],
-      "tasks": [
-        "s10",
-        "s6"
-      ],
-      "articles": [
-        "dataviz/carbondesignsystem.com--data-visualization-color-palettes.md",
-        "color/carbondesignsystem.com--color.md"
-      ],
-      "value_notes": "数据可视化元素与背景的对比度至少 3:1；文字按 24px 分界，24px 以下小字要 4.5:1，以上大字 3:1，色板取色以达标为先。"
-    },
-    {
-      "id": "dataviz-axes-legends",
-      "name": "轴标签与图例",
-      "domain": "dataviz",
-      "select": "柱状图、面积图这类比大小的图，数值轴必须从零起点画，截断 Y 轴会把小差异夸大；折线图和散点图看趋势，允许不从零起，缺数据和轴断裂另有专门画法。图例尽量省掉直接标注数据，只有一个系列的图不用图例，图例交互是悬停高亮、点击筛选。",
-      "checks": [
-        {
-          "q": "为什么柱状图、面积图的数值轴必须从零开始，而折线图、散点图可以不从零？",
-          "a": "柱状图、面积图这类比大小或部分整体的图，数值轴必须从零开始（start numerical axes at zero），截断 Y 轴会扭曲感知、把小差异夸大；折线图、散点图看趋势不比大小，裁剪 Y 轴反而帮用户看清变化方向。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md:33"
-        },
-        {
-          "q": "悬停某一类别的图例时，图中其它类别的透明度会变成多少？",
-          "a": "悬停某一类别图例会把图中所有其它类别的透明度降到 30 percent（lowers the opacity of all other categories in the chart to 30 percent）。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-legends.md:86"
-        }
-      ],
-      "tasks": [
-        "s10"
-      ],
-      "articles": [
-        "dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md",
-        "dataviz/carbondesignsystem.com--data-visualization-legends.md"
-      ],
-      "value_notes": "轴断口在 X 轴最小 16px、Y 轴固定 16px，用正弦线替换直线；图例默认最多两行，高度不超过图表的 30%，超出改为内部滚动。"
-    },
-    {
-      "id": "dataviz-dashboard-design",
-      "name": "仪表盘设计",
-      "domain": "dataviz",
-      "select": "仪表盘分展示型和探索型两套设计原则。展示型按重要性排层级，最重要的数据放页面顶部，其余按 F 形阅读顺序铺开；指标数量要砍到不干扰判读，同一个数据系列全盘用同一个颜色。",
-      "checks": [
-        {
-          "q": "展示型（presentation）仪表盘按什么顺序铺排数据，最重要的数据放哪里？",
-          "a": "按重要性建立视觉层级，最重要的数据放页面顶部，其余按 F 形阅读顺序（F-shaped pattern，从左到右、从上到下）铺开，最不重要的信息放在最后。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-dashboards.md:34"
-        },
-        {
-          "q": "同一仪表盘内每个数据系列的颜色应该怎么处理？",
-          "a": "同一仪表盘内每个数据集始终使用一致的颜色（always use consistent colors for each data set）。",
-          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-dashboards.md:42"
-        }
-      ],
-      "tasks": [
-        "s10",
-        "s3"
-      ],
-      "articles": [
-        "dataviz/carbondesignsystem.com--data-visualization-dashboards.md",
-        "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md"
-      ],
-      "value_notes": "仪表盘用留白分隔或聚合内容，留白可让理解度提升近 20%；指标按重要性排序，最重要的数据占最大面积、对比度最高。"
-    },
-    {
-      "id": "principles-interaction-states",
-      "name": "交互状态与层级",
-      "domain": "principles",
-      "select": "hover、focus、active、disabled 四种状态全项目统一处理，反馈是信息不是装饰，别做花哨过渡和强变色。投影按无、低、中、高四个 UI 层级给阴影：输入框贴地不给阴影，卡片 hover 是低层，下拉面板是中层，对话框是高层。",
-      "checks": [
-        {
-          "q": "Polaris 说成功的交互反馈应该是什么性质，要避免什么？",
-          "a": "成功的交互反馈是信息性的而非装饰性的（informative, not decorative），要避免产生视觉噪音的花哨过渡或强烈变色。",
-          "cite": "content/principles/polaris.shopify.com--interaction-states.md:40"
-        },
-        {
-          "q": "Ant Design 的阴影体系把输入框、卡片 hover、下拉面板、对话框分别放在第几层？",
-          "a": "输入框贴地属第 0 层（不给阴影），卡片 hover 属第 1 层（低层级），下拉面板属第 2 层（中层级），对话框属第 3 层（高层级）。",
-          "cite": "content/principles/ant.design--shadow-cn.md:29"
-        }
-      ],
-      "tasks": [
-        "s16",
-        "s5",
-        "s19"
-      ],
-      "articles": [
-        "principles/polaris.shopify.com--interaction-states.md",
-        "principles/ant.design--shadow-cn.md",
-        "layout/polaris.shopify.com--depth.md",
-        "layout/atlassian.design--elevation.md"
-      ],
-      "value_notes": "层级用 z-index 分档：导航 200、模态 510、Tooltip 800，弹层逐级升高；悬停切到浮层、按下回到抬升，两种切换方式不混用。"
-    },
-    {
       "id": "cases-dark-mode-rollout",
       "name": "暗色模式落地",
       "domain": "cases",
       "select": "Terra 按用户分群量暗色人群规模，给这批人定制暗色主题，读 prefers-color-scheme 系统偏好，桌面端用户跳出率下降、每会话页数上涨。Facebook.com 靠重建技术栈做出暗色模式和信息流定位记忆，架构撑不住别硬加。",
-      "value_notes": "Terra 的桌面端这批用户跳出率降 60%、每会话页数涨 170%。",
       "tasks": [
         "s15"
       ],
@@ -2789,7 +1539,6 @@
       "name": "改版效果实证",
       "domain": "cases",
       "select": "体验决策要用实测数据背书。Yahoo! JAPAN 换无密码登录后咨询量下降、登录更快；Telegraph 给广告位预留固定尺寸让 CLS 明显改善；兰蔻移动站重建成 PWA 后转化率和 iOS 移动会话都上涨。",
-      "value_notes": "Yahoo! JAPAN 咨询量降 25%、登录快 2.6 倍；Telegraph 的 CLS 从 0.25 降到 0.1；兰蔻转化率涨 17%、iOS 移动会话涨 53%。",
       "tasks": [
         "s15",
         "s16"
@@ -2798,20 +1547,6 @@
         "cases/web.dev--yahoo-japan-identity-case-study.md",
         "cases/web.dev--telegraph.md",
         "cases/web.dev--lancome.md"
-      ]
-    },
-    {
-      "id": "cases-theme-architecture",
-      "name": "主题架构改版",
-      "domain": "cases",
-      "select": "Ant Design 5.x 切 CSS 变量时权衡了三件事：SSR 场景内联样式的产物体积、主题切换卡顿、暗色闪烁。v6 改走语义化设计，解决 props、ConfigProvider、CSS 三种定制方式各自的痛点。",
-      "tasks": [
-        "s12",
-        "s15"
-      ],
-      "articles": [
-        "cases/ant.design--css-var-plan.md",
-        "cases/ant.design--semantic-beauty.md"
       ]
     },
     {
@@ -2858,6 +1593,242 @@
       "articles": [
         "cases/developer.chrome.com--scroll-animation-performance-case-study.md",
         "cases/isux.tencent.com--gesture-motion-design.md"
+      ]
+    },
+    {
+      "id": "motion-overlays",
+      "name": "浮层与转场动效",
+      "domain": "motion",
+      "select": "做菜单、弹窗、面板、页面切换这类浮层时用它：浮层从触发位置长出来，打开比关闭慢一点，关闭要能被打断；时长、曲线、缩放按取值示意取，不自己编。",
+      "checks": [
+        {
+          "q": "菜单下拉打开和关闭各多少毫秒？起始缩放多少？",
+          "a": "打开 250ms，关闭 150ms，起始 scale 0.97。",
+          "cite": "content/motion/transitions.dev--05-menu-dropdown.md:43"
+        },
+        {
+          "q": "弹窗打开和关闭的时长与起始缩放是多少？",
+          "a": "打开 250ms，关闭 150ms，起始 scale 0.96。",
+          "cite": "content/motion/transitions.dev--06-modal.md:38"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--05-menu-dropdown.md",
+        "motion/transitions.dev--06-modal.md",
+        "motion/transitions.dev--07-panel-reveal.md",
+        "motion/transitions.dev--08-page-side-by-side.md",
+        "motion/transitions.dev--41-banner-stacking.md"
+      ]
+    },
+    {
+      "id": "motion-inplace",
+      "name": "就地状态动效",
+      "domain": "motion",
+      "select": "做文本、数字、图标、卡片这类原地变化时用它：旧内容先退、新内容再进，变化过程要能看清是哪一处变了；时长、模糊与曲线按取值示意取。",
+      "checks": [
+        {
+          "q": "文本切换用多少毫秒、模糊多少？",
+          "a": "200ms，模糊 2px。",
+          "cite": "content/motion/transitions.dev--04-text-states-swap.md:40"
+        },
+        {
+          "q": "数字 pop-in 的模糊和曲线？",
+          "a": "模糊 2px，曲线 cubic-bezier(0.34, 1.45, 0.64, 1)。",
+          "cite": "content/motion/transitions.dev--02-number-pop-in.md:51"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--01-card-resize.md",
+        "motion/transitions.dev--02-number-pop-in.md",
+        "motion/transitions.dev--04-text-states-swap.md",
+        "motion/transitions.dev--09-icon-swap.md"
+      ]
+    },
+    {
+      "id": "motion-feedback",
+      "name": "反馈与悬停动效",
+      "domain": "motion",
+      "select": "做成功、错误、徽标、头像组、3D 倾斜这类反馈与悬停时用它：反馈只表达状态，不抢主操作；装饰性悬停只用在营销页，产品界面按 reduced-motion 兜底。",
+      "checks": [
+        {
+          "q": "成功勾选的路径描边多久？模糊从多少开始？",
+          "a": "描边 550ms，模糊从 10px 起。",
+          "cite": "content/motion/transitions.dev--10-success-check.md:57"
+        },
+        {
+          "q": "错误抖动两段各多少毫秒？",
+          "a": "80ms 和 60ms。",
+          "cite": "content/motion/transitions.dev--12-error-state-shake.md:62"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s19",
+        "s2"
+      ],
+      "articles": [
+        "motion/transitions.dev--03-notification-badge.md",
+        "motion/transitions.dev--10-success-check.md",
+        "motion/transitions.dev--11-avatar-group-hover.md",
+        "motion/transitions.dev--12-error-state-shake.md",
+        "motion/transitions.dev--19-3d-tilt.md"
+      ]
+    },
+    {
+      "id": "motion-inputs",
+      "name": "输入与选择动效",
+      "domain": "motion",
+      "select": "做输入框、复选框、开关、点赞、了解更多这类可操作控件时用它：状态变化要短、能看清，点击后立即给反馈；时长、位移、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "输入清空整段和出入各多少毫秒？",
+          "a": "整段 1000ms，出/入各 400ms。",
+          "cite": "content/motion/transitions.dev--13-input-clear-with-dissolve.md:54"
+        },
+        {
+          "q": "复选框勾框和描边各多少毫秒？",
+          "a": "勾框 150ms，描边 350ms。",
+          "cite": "content/motion/transitions.dev--25-checkbox-check.md:42"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--13-input-clear-with-dissolve.md",
+        "motion/transitions.dev--23-like-button.md",
+        "motion/transitions.dev--24-learn-more-hover.md",
+        "motion/transitions.dev--25-checkbox-check.md",
+        "motion/transitions.dev--27-toggle.md"
+      ]
+    },
+    {
+      "id": "motion-disclosure",
+      "name": "展开与导航动效",
+      "domain": "motion",
+      "select": "做手风琴、标签页、下拉菜单、提示浮层、轻提示这类展开与导航时用它：打开比关闭慢，浮层从触发点长出来，关闭要能被打断；时长、位移、缩放按取值示意取。",
+      "checks": [
+        {
+          "q": "手风琴展开和收起各多少毫秒？",
+          "a": "各 250ms。",
+          "cite": "content/motion/transitions.dev--21-accordion.md:45"
+        },
+        {
+          "q": "轻提示打开和关闭各多少毫秒？",
+          "a": "打开 350ms，关闭 250ms。",
+          "cite": "content/motion/transitions.dev--22-toast-open-close.md:38"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--16-tabs-sliding.md",
+        "motion/transitions.dev--18-tooltip-open-close.md",
+        "motion/transitions.dev--20-dropdown-menu-morph.md",
+        "motion/transitions.dev--21-accordion.md",
+        "motion/transitions.dev--22-toast-open-close.md"
+      ]
+    },
+    {
+      "id": "motion-loading",
+      "name": "加载与等待动效",
+      "domain": "motion",
+      "select": "做骨架屏、加载指示、流式文本、思考状态、推理流这类等待过程时用它：先给占位再换内容，等待中的动画要轻，不抢正文；时长、间隔、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "骨架屏脉冲一次多久？",
+          "a": "1000ms。",
+          "cite": "content/motion/transitions.dev--14-skeleton-loader-and-reveal.md:50"
+        },
+        {
+          "q": "点阵加载一个循环多久？",
+          "a": "1200ms。",
+          "cite": "content/motion/transitions.dev--40-matrix-dot-loader.md:42"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--14-skeleton-loader-and-reveal.md",
+        "motion/transitions.dev--37-thinking-states.md",
+        "motion/transitions.dev--38-reasoning-stream.md",
+        "motion/transitions.dev--39-streaming-text.md",
+        "motion/transitions.dev--40-matrix-dot-loader.md"
+      ]
+    },
+    {
+      "id": "motion-text",
+      "name": "文本与数字显现",
+      "domain": "motion",
+      "select": "做标题上浮、数字滚轮、数字微变、文字微光这类文本与数字变化时用它：变化要能看清是哪一处变了，数字滚动要能停在准确值；时长、位移、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "文本上浮多久、逐行延迟多少？",
+          "a": "500ms，逐行延迟 40ms。",
+          "cite": "content/motion/transitions.dev--15-texts-reveal.md:46"
+        },
+        {
+          "q": "数字滚轮步进多久？",
+          "a": "130ms。",
+          "cite": "content/motion/transitions.dev--26-spinning-counter.md:45"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s6",
+        "s19"
+      ],
+      "articles": [
+        "motion/transitions.dev--15-texts-reveal.md",
+        "motion/transitions.dev--17-shimmer-text.md",
+        "motion/transitions.dev--26-spinning-counter.md",
+        "motion/transitions.dev--44-number-subtle-change.md"
+      ]
+    },
+    {
+      "id": "dataviz-chart-library",
+      "name": "图表库主题",
+      "domain": "dataviz",
+      "select": "图表库不随组件库绑定：默认 ECharts，用主题与调色盘把颜色、字体、动效换成该站基准规范的值；Carbon 体系的项目改用 @carbon/charts。选 ECharts 看中主题可逐项覆盖、图表类型全；只在纯测试页或极简需求里用手写 SVG。",
+      "tasks": [
+        "s10",
+        "s6"
+      ],
+      "articles": [
+        "dataviz/echarts.apache.org--style.md",
+        "dataviz/echarts.apache.org--aria.md",
+        "dataviz/echarts.apache.org--canvas-vs-svg.md",
+        "dataviz/echarts.apache.org--v6-feature.md"
+      ],
+      "checks": [
+        {
+          "q": "ECharts 全局调色盘的第一个颜色是什么？",
+          "a": "全局调色盘从 #c23531 开始，后面依次是 #2f4554、#61a0a8 等。",
+          "cite": "content/dataviz/echarts.apache.org--style.md:70"
+        },
+        {
+          "q": "ECharts 从哪个大版本开始按配置自动生成图表描述，哪个版本新增了贴花？",
+          "a": "ECharts 4 起按配置智能生成描述，ECharts 5 新增贴花，让数据除颜色外还能用图案区分。",
+          "cite": "content/dataviz/echarts.apache.org--aria.md:20"
+        }
       ]
     }
   ]

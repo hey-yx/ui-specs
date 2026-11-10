@@ -4,7 +4,7 @@
  * 基准规范：Apple HIG（项目选型 project-apple-hig，见 site/src/data/guide.ts）
  * 纪律：
  *   - 字号按 Dynamic Type xSmall 档原文，正文 17px 是桌面长文派生档
- *   - 色彩按 Apple 语义色角色派生，暗色靠 prefers-color-scheme 与 data-theme 两路切换
+ *   - 色彩按语义色角色派生，只保留亮色版，不再提供主题切换
  *   - 层级靠 hairline 与留白，不用投影和玻璃
  *   - 动效 100/200/300 三档，prefers-reduced-motion 一律收敛
  *   - 色值一律走 token，规则里不写裸值
@@ -13,73 +13,73 @@
  */
 
 :root {
-  /* 主题三态：无 data-theme 时跟随系统，data-theme="light" / "dark" 强制覆盖，
-     选择存 localStorage（键 UISpecs-theme）。色值按 Apple HIG 语义色角色派生
-     （content/color/developer.apple.com--color.md:99,419,562 只给角色不给 hex），
-     派生值与对比度见 design/DECISIONS.md */
-  color-scheme: light dark;
+  /* 只有亮色一套值，没有主题切换。色值按 GOV.UK 色彩篇与语义角色派生
+     （content/color/govuk--colour.md），派生值与对比度见 design/DECISIONS.md */
+  color-scheme: light;
   --paper: #ffffff;
-  --paper-2: #f5f5f7;
-  --hover: #f2f2f6;
-  --ink: #1d1d1f;
-  --ink-2: #3a3a3c;
-  --muted: #5f5f66;
-  --faint: #6e6e73;
-  --accent: #0066cc;
-  --accent-2: #0055aa;
+  --paper-2: #f3f2f1;
+  --hover: #f3f2f1;
+  --ink: #0b0c0c;
+  --ink-2: #0b0c0c;
+  --muted: #484949;
+  --faint: #484949;
+  --accent: #1a65a6;
+  --accent-2: #0f385c;
   --on-accent: #ffffff;
-  --selection: #d6e8ff;
-  --graphite: #1d1d1f;
-  --graphite-2: #2c2c2e;
-  --on-graphite: #f5f5f7;
-  --on-graphite-2: #a1a1a6;
-  --field-surface: #f5f5f7;
-  --rule: #d2d2d7;
-  --scrim-color: rgb(0 0 0 / 0.28);
-  --shadow-color: rgb(0 0 0 / 0.18);
+  --selection: #fff3bf;
+  --graphite: #0b0c0c;
+  --graphite-2: #1d1d1f;
+  --on-graphite: #ffffff;
+  --on-graphite-2: #b1b4b6;
+  --field-surface: #ffffff;
+  --rule: #b1b4b6;
+  --focus: #ffdd00;
+  --scrim-color: rgb(0 0 0 / 0.5);
+  --shadow-color: rgb(0 0 0 / 0.15);
 
-  /* 字体：Apple HIG 系统字体栈（content/type/developer.apple.com--typography.md:12），
-     零外部请求；中文按后置回退链补齐，不另造字族 */
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto,
+  /* 字体：GDS Transport 是 GOV.UK 专有字体、不可再分发，按系统字体栈派生，
+     零外部请求；中文按后置回退链补齐 */
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto,
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   --font-mono: 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   --font-latin: var(--font-display);
   --font-serif: var(--font-body);
 
-  /* 间距：基准规范布局篇没有通用网格，按 GAP_RULES 回源 Atlassian 8px 基数
-     （content/layout/atlassian.design--spacing.md:20-34），4px 为半档 */
-  --space-3xs: 2px;
-  --space-2xs: 4px;
-  --space-xs: 8px;
-  --space-sm: 12px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
-  --space-3xl: 64px;
-  --space-4xl: 96px;
+  /* 间距：GOV.UK 响应式刻度是 5px 基数（content/layout/govuk--spacing.md），
+     0 到 9 号单位按 5 递增；小屏自动降一档 */
+  --space-3xs: 5px;
+  --space-2xs: 5px;
+  --space-xs: 10px;
+  --space-sm: 15px;
+  --space-md: 20px;
+  --space-lg: 30px;
+  --space-xl: 40px;
+  --space-2xl: 50px;
+  --space-3xl: 60px;
+  --space-4xl: 70px;
 
-  /* 字号：Apple Dynamic Type iOS xSmall 档原文值（content/type/developer.apple.com--typography.md:363-589）
-     Caption2 11/13 · Caption1 12/16 · Callout 13/18 · Body 14/19 · Title3 17/22 · Title2 19/24
-     · Title1 25/31 · LargeTitle 31/38。正文 17 是桌面长文派生档，见 FINDINGS */
-  --text-xs: 11px;
-  --text-sm: 12px;
-  --text-ui: 13px;
-  --text-base: 14px;
-  --text-body: 17px;
-  --text-lg: 17px;
-  --text-xl: 19px;
-  --text-2xl: 25px;
-  --text-display: 31px;
+  /* 字号：GOV.UK type scale（content/type/govuk--type-scale.md:40-100）
+     48/36/27/24/19/16/14，行高逐档配 50/40/30/30/25/20/20。
+     命名沿用旧 token，映射：xs 14 · sm 16 · ui 16 · base 19 · body 19 · lg 19
+     · xl 24 · 2xl 36 · display 48 */
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-ui: 16px;
+  --text-base: 19px;
+  --text-body: 19px;
+  --text-lg: 19px;
+  --text-xl: 24px;
+  --text-2xl: 36px;
+  --text-display: 48px;
   --text-display-lg: 48px;
 
-  /* 圆角：基准规范无通用 radius，按 GAP_RULES 整站派生两档起步，标 derived */
-  --radius-ctl: 8px;
-  --radius-card: 8px;
-  --radius-sm: 4px;
-  --radius-xs: 2px;
+  /* 圆角：GOV.UK 不用圆角，全部归零 */
+  --radius-ctl: 0;
+  --radius-card: 0;
+  --radius-sm: 0;
+  --radius-xs: 0;
 
   /* 动效：基准规范 motion 篇没有时长，按 GAP_RULES 回源 NN/g 100/200/300 三档
      （content/motion/nngroup.com--animation-duration.md:80-84），
@@ -104,57 +104,6 @@
   --section-surface: var(--paper-2);
 }
 
-/* 暗色值：系统偏好或手动选 dark 时套用，两份必须保持一致 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --paper: #000000;
-    --paper-2: #1c1c1e;
-    --hover: #2c2c2e;
-    --ink: #f5f5f7;
-    --ink-2: #d1d1d6;
-    --muted: #a1a1a6;
-    --faint: #98989d;
-    --accent: #0a84ff;
-    --accent-2: #64a8ff;
-    --on-accent: #000000;
-    --selection: #1f3a5f;
-    --graphite: #0a0a0a;
-    --graphite-2: #1c1c1e;
-    --on-graphite: #f5f5f7;
-    --on-graphite-2: #98989d;
-    --field-surface: #1c1c1e;
-    --rule: #38383a;
-    --scrim-color: rgb(0 0 0 / 0.6);
-    --shadow-color: rgb(0 0 0 / 0.7);
-  }
-}
-
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --paper: #000000;
-  --paper-2: #1c1c1e;
-  --hover: #2c2c2e;
-  --ink: #f5f5f7;
-  --ink-2: #d1d1d6;
-  --muted: #a1a1a6;
-  --faint: #98989d;
-  --accent: #0a84ff;
-  --accent-2: #64a8ff;
-  --on-accent: #000000;
-  --selection: #1f3a5f;
-  --graphite: #0a0a0a;
-  --graphite-2: #1c1c1e;
-  --on-graphite: #f5f5f7;
-  --on-graphite-2: #98989d;
-  --field-surface: #1c1c1e;
-  --rule: #38383a;
-  --scrim-color: rgb(0 0 0 / 0.6);
-  --shadow-color: rgb(0 0 0 / 0.7);
-}
-
-:root[data-theme='light'] {
-  color-scheme: light;
-}
 
 
 * {
@@ -184,9 +133,8 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
-  border-radius: var(--radius-xs);
 }
 
 [hidden] {
@@ -228,15 +176,15 @@ a {
 }
 
 /* ── Nav ──
- * 文档式顶栏：不透明纸条 + 底部 hairline，滚动时不换形态。
- * 层级只靠一条分隔线与留白，不做玻璃胶囊与投影。
+ * GOV.UK 式深色头：整条黑底，底部接一条 10px 品牌蓝。
+ * 白字同权，不加圆角与投影。
  */
 .nav {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background: var(--paper);
-  border-bottom: 1px solid var(--rule);
+  background: var(--ink);
+  border-bottom: 10px solid var(--accent);
 }
 
 .nav-inner {
@@ -248,9 +196,25 @@ a {
   padding: var(--space-sm) var(--page-pad);
 }
 
+/* 深色头里的控件一律白字，hover 用 12% 白叠加，不用圆角 */
+.nav .mapLink,
+.nav .ghLink,
+.nav #tocBtn,
+.nav .search-toggle {
+  color: var(--on-graphite);
+}
+
+.nav .mapLink:hover,
+.nav .ghLink:hover,
+.nav #tocBtn:hover,
+.nav .search-toggle:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: var(--on-graphite);
+}
+
 .search-zone {
   /* 搜索框左边缘固定：紧跟品牌留出间距，输入框向右生长，
-     右侧留白足够（字段最大 420px，不会顶到目录/主题按钮） */
+     右侧留白足够（字段最大 420px，不会顶到目录按钮） */
   flex: none;
   display: flex;
   justify-content: flex-start;
@@ -271,10 +235,10 @@ a {
   /* 左右各 12px：38 = 12 + 图标 14 + 12，图标左坐标与展开态完全一致 */
   padding: 0 var(--space-sm);
   justify-content: flex-start;
-  background: var(--field-surface);
+  background: transparent;
   border: 0;
-  border-radius: var(--radius-ctl);
-  color: var(--muted);
+  border-radius: 0;
+  color: var(--on-graphite);
   transition: width var(--dur-long) var(--ease-out),
     background-color var(--dur-short) var(--ease-out);
 }
@@ -284,6 +248,8 @@ a {
   width: 38px;
   padding: 0 var(--space-sm);
   justify-content: flex-start;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 @media (min-width: 768px) {
@@ -414,21 +380,24 @@ a {
   background: var(--hover);
 }
 
-/* 品牌字：纯文字字标，系统字体，不做渐变与扫光 */
+/* 品牌字：纯文字字标，GOV.UK 头部品牌档 24（type scale 的 24 档），白色 */
 .brand {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 21px;
+  font-weight: 700;
+  font-size: var(--text-xl);
   line-height: 1;
   letter-spacing: -0.01em;
   text-decoration: none;
   white-space: nowrap;
-  color: var(--ink);
+  color: var(--on-graphite);
 }
 
 .brand:hover,
 .brand:focus-visible {
-  color: var(--accent);
+  color: var(--on-graphite);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
 }
 
 .nav-right {
@@ -436,53 +405,6 @@ a {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-}
-
-#themeBtn {
-  width: 38px;
-  height: 38px;
-  border: 0;
-  border-radius: var(--radius-ctl);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
-}
-
-#themeBtn:hover {
-  background: var(--hover);
-  color: var(--ink);
-}
-
-#themeBtn:active {
-  transform: translateY(1px);
-}
-
-#themeBtn svg {
-  width: 15px;
-  height: 15px;
-}
-
-#themeBtn .sun,
-#themeBtn .moon,
-#themeBtn .auto {
-  display: none;
-}
-
-/* 三态：无 data-theme 是自动，其余两态各自显示对应图标 */
-:root:not([data-theme]) #themeBtn .auto {
-  display: block;
-}
-
-:root[data-theme='light'] #themeBtn .sun {
-  display: block;
-}
-
-:root[data-theme='dark'] #themeBtn .moon {
-  display: block;
 }
 
 /* ── GitHub 仓库入口 ── */
@@ -916,16 +838,21 @@ a {
 
 .sec-title {
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: 600;
   color: var(--ink);
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
 
+/* 页面标题用 .sec-title 时是 h1 档，与区块标题（h2，19）拉开一档 */
+h1.sec-title {
+  font-size: var(--text-2xl);
+}
+
 .sec-count {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
   align-self: baseline;
   white-space: nowrap;
@@ -970,7 +897,7 @@ a {
 
 .stepno {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--accent);
   line-height: 1.5;
 }
@@ -997,7 +924,7 @@ a {
 
 .item .tag {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
   letter-spacing: 0.03em;
   text-align: right;
@@ -1006,7 +933,7 @@ a {
 
 .item .stat {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -1015,7 +942,7 @@ a {
 
 .known-flag {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--accent);
   white-space: nowrap;
 }
@@ -1210,7 +1137,7 @@ a {
 
 .doc-crumb {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
   margin-bottom: var(--space-xs);
 }
@@ -1239,7 +1166,7 @@ a {
   flex-wrap: wrap;
   gap: var(--space-xs) var(--space-md);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
 }
 
@@ -1386,7 +1313,6 @@ a {
     white-space: nowrap;
     flex: 0 0 auto;
   }
-
   /* 窄屏空间不够横向展开搜索框：保持放大镜折叠态，点击后走 ⌘K 搜索面板 */
   .search-zone {
     margin-left: 0;
@@ -1448,8 +1374,10 @@ a {
 
 
 .star-map-wrap {
+  /* 整页滚动，纵向不再内滚；窄屏地图仍按 820 最小宽横向滚动，别让图被裁掉 */
   overflow-x: auto;
   margin: var(--space-lg) 0 var(--space-xl);
+  border: 1px solid var(--rule);
 }
 
 .star-map {
@@ -1466,6 +1394,10 @@ a {
   transition: stroke var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out);
 }
 
+.star-label-bg {
+  fill: var(--paper);
+}
+
 .star-dot {
   fill: var(--ink);
   transition: fill var(--dur-micro) var(--ease-out);
@@ -1473,13 +1405,16 @@ a {
 
 .star-label {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: var(--text-xs);
   fill: var(--muted);
   transition: fill var(--dur-micro) var(--ease-out);
 }
 
-.star-unit:hover .star-line,
-.star-unit:focus-within .star-line {
+.star-line-unit.is-dim {
+  opacity: 0.18;
+}
+
+.star-line-unit.is-hot .star-line {
   stroke: var(--accent);
   opacity: 0.6;
 }
@@ -1496,7 +1431,7 @@ a {
 
 .star-domain-label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-xs);
   fill: var(--faint);
   letter-spacing: 0.03em;
 }
@@ -1512,7 +1447,7 @@ a {
 
 .star-task-label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--text-xs);
   fill: var(--muted);
 }
 
@@ -1521,11 +1456,121 @@ a {
   max-width: 62em;
 }
 
+/* 项目选型行的主题系统截图：16:10 等比，图宽跟随弹窗 */
+.star-shot {
+  margin: 0 0 var(--space-md);
+}
+
+.star-shot-link {
+  display: block;
+}
+
+.star-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+
+.star-shot-cap {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--faint);
+}
+
+.star-shot-cap a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.star-req-note {
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
 .star-blurb {
   margin: 0 0 var(--space-md);
   font-size: var(--text-ui);
   line-height: 1.8;
   color: var(--ink);
+}
+
+.star-unit.is-source .star-dot {
+  fill: var(--accent);
+}
+
+.star-badge {
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+  color: var(--accent);
+}
+
+.star-stacks {
+  margin: 0 0 var(--space-md);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--rule);
+}
+
+.star-stacks-head {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.star-stacks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.star-stacks-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-stack-fw {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.star-stack-icon {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.star-stack-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.star-stack-pkg {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  background: none;
+}
+
+.star-stacks-empty {
+  margin: 0 0 var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--muted);
 }
 
 .star-value-notes {
@@ -1541,7 +1586,7 @@ a {
 
 .star-chip {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--muted);
 }
 
@@ -1572,13 +1617,13 @@ a {
 
 .star-art-meta {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
 }
 
 .star-ext {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--muted);
 }
 
@@ -1605,7 +1650,7 @@ a {
 .star-checks-head {
   margin: 0 0 var(--space-sm);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
 }
 
@@ -1640,7 +1685,7 @@ a {
   display: inline-block;
   margin-top: var(--space-2xs);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--accent);
   text-decoration: none;
 }
@@ -1714,6 +1759,29 @@ a.star-check-cite:hover {
   }
 }
 
+.star-legend {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  margin: var(--space-md) 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.star-legend-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.star-legend p {
+  margin: 0;
+}
+
 .star-filter {
   display: flex;
   flex-wrap: wrap;
@@ -1722,8 +1790,11 @@ a.star-check-cite:hover {
 }
 
 .star-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--muted);
   background: transparent;
   border: 0;
@@ -1746,212 +1817,6 @@ a.star-check-cite:hover {
 .star-unit.is-dim {
   opacity: 0.18;
   pointer-events: none;
-}
-
-/* ── 七步流程（已并入 /starmap/） ── */
-.flow-gate {
-  margin: var(--space-sm) 0 0;
-  padding-left: var(--space-sm);
-  border-left: 2px solid var(--rule);
-  color: var(--muted);
-  font-size: var(--text-sm);
-  line-height: 1.7;
-}
-
-.flow-gate b {
-  color: var(--ink-2);
-  font-weight: 600;
-}
-
-.map-flow {
-  scroll-margin-top: 80px;
-  margin-top: var(--space-2xl);
-  padding-top: var(--space-xl);
-  border-top: 1px solid var(--rule);
-}
-
-.map-flow .sec-title {
-  font-size: var(--text-2xl);
-}
-
-.flow {
-  list-style: none;
-  margin: var(--space-2xl) 0 0;
-  padding: 0;
-}
-
-.flow-step {
-  display: flex;
-  gap: var(--space-md);
-  align-items: flex-start;
-}
-
-.flow-num {
-  flex: 0 0 40px;
-  font-family: var(--font-latin);
-  font-size: var(--text-2xl);
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--accent);
-  padding-top: var(--space-md);
-  text-align: center;
-}
-
-.flow-arrow {
-  display: flex;
-  gap: var(--space-md);
-  color: var(--faint);
-  padding: var(--space-2xs) 0;
-  line-height: 1;
-}
-
-.flow-arrow::before {
-  content: '';
-  flex: 0 0 40px;
-}
-
-.flow-card {
-  flex: 1;
-  min-width: 0;
-  background: var(--section-surface);
-  border-radius: var(--radius-card);
-  padding: var(--space-lg) var(--space-xl);
-}
-
-.flow-title {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--text-lg);
-  font-weight: 650;
-  line-height: 1.5;
-}
-
-.flow-desc {
-  margin: 0;
-  font-size: var(--text-ui);
-  line-height: 1.9;
-  color: var(--muted);
-}
-
-.flow code {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  background: var(--paper-2);
-  padding: 2px 6px;
-  border-radius: var(--radius-ctl);
-}
-
-.flow-branch {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: var(--space-md);
-  align-items: stretch;
-  margin-top: var(--space-sm);
-}
-
-.flow-branch-item {
-  background: var(--paper-2);
-  border-radius: var(--radius-ctl);
-  padding: var(--space-md) var(--space-lg);
-}
-
-.flow-branch-title {
-  margin: 0 0 var(--space-2xs);
-  font-size: var(--text-base);
-  font-weight: 650;
-}
-
-.flow-or {
-  align-self: center;
-  color: var(--faint);
-  font-size: var(--text-sm);
-}
-
-.flow-panels {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-xs);
-  margin-top: var(--space-2xl);
-}
-
-.flow-fields {
-  margin: var(--space-sm) 0 0;
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: var(--space-xs) var(--space-md);
-  font-size: var(--text-ui);
-  line-height: 1.8;
-}
-
-.flow-fields dt {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--accent);
-  padding-top: 2px;
-}
-
-.flow-fields dd {
-  margin: 0;
-  color: var(--muted);
-}
-
-/* ── /starmap/ 区块标题 ── */
-.map-flow-title {
-  margin: 0 0 var(--space-sm);
-  font-size: var(--text-base);
-  font-weight: 650;
-}
-
-
-/* ── 置顶提示词（/starmap/） ── */
-.prompt-block {
-  margin: var(--space-lg) 0 var(--space-xl);
-}
-
-.prompt-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-sm);
-}
-
-.prompt-head .map-flow-title {
-  margin: 0;
-}
-
-.prompt-copy {
-  font: inherit;
-  font-size: var(--text-xs);
-  color: var(--muted);
-  background: var(--paper-2);
-  border: none;
-  border-radius: var(--radius-ctl);
-  padding: 4px 12px;
-  cursor: pointer;
-}
-
-.prompt-copy:hover {
-  color: var(--ink);
-  background: var(--hover);
-}
-
-.prompt-details {
-  margin-top: var(--space-sm);
-}
-
-.prompt-details summary {
-  font-size: var(--text-xs);
-  color: var(--muted);
-  cursor: pointer;
-  padding: var(--space-2xs) 0;
-  width: fit-content;
-}
-
-.prompt-details summary:hover {
-  color: var(--ink);
-}
-
-.prompt-details[open] summary {
-  margin-bottom: var(--space-xs);
 }
 
 .ai-prompt {
@@ -1977,77 +1842,99 @@ a.star-check-cite:hover {
   display: none;
 }
 
-/* ── 设计案例卡片（/examples/） ── */
-.case-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: var(--space-lg);
+/* ── 设计案例列表（/examples/） ── */
+.case-list {
   margin: var(--space-lg) 0 var(--space-xl);
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
 }
 
-.case-card {
-  background: var(--paper-2);
-  border-radius: var(--radius-ctl);
-  overflow: hidden;
+.case-row {
+  display: grid;
+  /* 预览按 320×200 缩放（0.25 倍 1280×800），列宽改动时同步改下面的 scale */
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--rule);
 }
 
-.case-preview img {
+.case-thumb {
   display: block;
-  width: 100%;
+  position: relative;
+  width: min(320px, 100%);
   aspect-ratio: 8 / 5;
-  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-ctl);
+  background: var(--paper-2);
+  overflow: hidden;
+  /* 让下面的 iframe 能按卡片实际宽度算缩放比 */
+  container-type: inline-size;
 }
 
-.case-body {
-  padding: var(--space-md);
+/* 实时预览：iframe 按 1280×800 桌面视口排版，再缩到卡片宽度。
+   第二行按卡片宽度换算缩放（宽 < 320 的窄屏才不会裁掉右边），
+   浏览器不认 cqw 里的长度相除时退回第一行。
+   pointer-events: none 让滚轮和点击都落在卡片链接上，不会卡在预览里 */
+.case-thumb iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 800px;
+  border: 0;
+  transform: scale(0.25);
+  transform: scale(calc(100cqw / 1280px));
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.case-main {
+  min-width: 0;
 }
 
 .case-title {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-xs);
   margin: 0;
   font-family: var(--font-display);
   font-size: var(--text-lg);
+  line-height: 1.4;
 }
 
 .case-title a {
   color: var(--ink);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .case-title a:hover {
-  color: var(--accent);
-}
-
-.case-slug {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--faint);
+  color: var(--accent-2);
+  text-decoration-thickness: 3px;
 }
 
 .case-tagline {
   margin: var(--space-2xs) 0 var(--space-sm);
   color: var(--muted);
   font-size: var(--text-sm);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .case-meta {
-  display: grid;
-  gap: var(--space-3xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-md);
   margin: 0 0 var(--space-sm);
 }
 
 .case-meta div {
   display: flex;
-  gap: var(--space-xs);
+  align-items: baseline;
+  gap: var(--space-3xs);
   font-size: var(--text-xs);
 }
 
 .case-meta dt {
-  flex: 0 0 3em;
   color: var(--faint);
+  white-space: nowrap;
 }
 
 .case-meta dd {
@@ -2058,13 +1945,37 @@ a.star-check-cite:hover {
 
 .case-links {
   display: flex;
-  gap: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
   margin: 0;
   font-size: var(--text-sm);
 }
 
 .case-links a {
   color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.case-links .case-open {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .case-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .case-thumb {
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sec-head {
+    flex-wrap: wrap;
+  }
 }
 
 /* ── 建站需求（/examples/briefs/、/examples/<站>/brief/） ── */
@@ -2112,7 +2023,7 @@ a.star-check-cite:hover {
 .brief-slug {
   flex: 0 0 auto;
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
 }
 
@@ -2189,7 +2100,7 @@ a.star-check-cite:hover {
 
 .brief-fields dt {
   color: var(--faint);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
 }
 
@@ -2209,6 +2120,65 @@ a.star-check-cite:hover {
   margin: 0 0 var(--space-2xs);
 }
 
+/* 需求总览：单列文档列表，摘要完整换行，不截断 */
+.brief-index {
+  margin: var(--space-sm) 0 var(--space-xl);
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.brief-index .brief-row {
+  border-bottom: 1px solid var(--rule);
+}
+
+.brief-index .brief-head {
+  display: block;
+  padding: var(--space-md) 0;
+}
+
+.brief-index .brief-id {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.brief-index .brief-name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.brief-index .brief-name:hover {
+  color: var(--accent);
+  text-decoration-thickness: 3px;
+}
+
+.brief-index .brief-slug {
+  padding: 0 var(--space-2xs);
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.brief-index .brief-product {
+  display: block;
+  max-width: 46em;
+  min-height: 0;
+  margin: var(--space-2xs) 0 0;
+  overflow: visible;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  white-space: normal;
+  -webkit-line-clamp: unset;
+}
+
 .maintain-group ul {
   margin: 0;
   padding-left: 1.1em;
@@ -2217,81 +2187,216 @@ a.star-check-cite:hover {
   line-height: 1.8;
 }
 
-@media (max-width: 640px) {
-  .flow-branch {
-    grid-template-columns: minmax(0, 1fr);
-  }
+/* ── 首页 · 文档索引 ── */
+.home-intro {
+  padding: var(--space-xl) 0 var(--space-xl);
+  border-bottom: 1px solid var(--rule);
+}
 
-  .flow-or {
-    justify-self: center;
-  }
+/* 首页不重复左栏分区：主页本身就是全部分区的目录，左栏在这里是同一份数据的第二遍。 */
+.shell:has(.home-intro) {
+  grid-template-columns: minmax(0, 1fr);
+}
 
-  .flow-card {
-    padding: var(--space-md) var(--space-lg);
-  }
+.shell:has(.home-intro) .side {
+  display: none;
+}
 
-  .flow-fields {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  .flow-fields dd {
-    margin-bottom: var(--space-xs);
+/* 触屏与窄屏没有 ⌘K，隐藏快捷键提示，避免给手机用户一个无效按键 */
+@media (hover: none) and (pointer: coarse), (max-width: 600px) {
+  .home-search kbd {
+    display: none;
   }
 }
 
-/* ── 首页 · 文档索引 ── */
-.home-intro {
-  padding: var(--space-3xl) 0 var(--space-xl);
-  border-bottom: 1px solid var(--rule);
+/* 页题与「复制提示词」同一行：入口紧跟在标题文字右侧，与标题基线对齐，不推到行尾 */
+.home-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
 }
 
 .home-title {
   font-family: var(--font-display);
-  font-size: clamp(36px, 6vw, var(--text-display-lg));
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  font-weight: 600;
+  font-size: var(--text-display);
+  line-height: 1.09;
+  letter-spacing: -0.01em;
+  font-weight: 700;
   color: var(--ink);
-  margin-bottom: var(--space-md);
+  margin-bottom: 0;
 }
 
 .home-lede {
-  font-size: var(--text-body);
-  line-height: 1.6;
+  font-size: var(--text-base);
+  line-height: 1.5;
   color: var(--muted);
   max-width: 36em;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-xl);
 }
 
-.home-links {
+/* 首页搜索：GOV.UK 的搜索条，白底 2px 黑框，右侧黑色按钮块；
+ * 行为仍是打开 ⌘K 面板（Search.astro），不建第二套检索。 */
+.home-search {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-lg);
-  font-size: var(--text-body);
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 640px;
+  height: 52px;
   margin-bottom: var(--space-md);
+  padding: 0;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-base);
+  text-align: left;
+  cursor: pointer;
 }
 
-.home-links a {
-  color: var(--accent);
-  text-decoration: none;
+.home-search:hover {
+  background: var(--paper-2);
 }
 
-.home-links a:hover,
-.home-links a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.home-search svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-left: var(--space-sm);
+}
+
+.home-search-text {
+  flex: 1;
+}
+
+.home-search kbd {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  padding: 2px var(--space-3xs);
+  margin-right: var(--space-sm);
+  line-height: 1.2;
+}
+
+.home-search-go {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-md);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
 }
 
 .home-stats {
-  font-family: var(--font-mono);
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-sm);
+  row-gap: var(--space-3xs);
   font-size: var(--text-sm);
-  color: var(--faint);
+  color: var(--muted);
+  margin-bottom: var(--space-md);
+}
+
+.home-stats .stat {
+  white-space: nowrap;
 }
 
 .home-stats b {
-  color: var(--ink-2);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* 取值示例：一行文字，不占卡片。产品证据靠行号本身。 */
+.home-sample {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.home-sample a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.home-ai-pop {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+
+/* 提示词 popover：悬停或点按钮展开，宽到 720，高到 70vh，内部滚动 */
+.home-ai-panel {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(1080px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  overflow: auto;
+  padding: var(--space-md);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-ctl);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 12%);
+}
+
+.home-ai-panel.is-up {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.home-ai-panel.is-centred {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.home-ai-panel[hidden] {
+  display: none;
+}
+
+.home-ai-panel .ai-prompt {
+  margin: 0;
+  padding: 0;
+  background: none;
+  overflow: visible;
+}
+
+/* 次动作走站内链接语言：强调色文字加下划线，不加边框也不加第二块实底，
+ * 整行唯一的实底仍是搜索条右侧那块黑（零描边、信号色面积小） */
+.home-ai-copy {
+  font: inherit;
+  font-size: var(--text-base);
   font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0 var(--space-2xs);
+  min-height: 52px;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.home-ai-copy:hover {
+  color: var(--ink);
+}
+
+/* 窄屏页题折行时，复制入口跟在标题下面，不再拉满整行 */
+@media (max-width: 600px) {
+  .home-ai-copy {
+    min-height: 44px;
+    padding-left: 0;
+  }
 }
 
 .home-index {
@@ -2300,62 +2405,79 @@ a.star-check-cite:hover {
 
 .home-index-head {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
+  font-size: var(--text-2xl);
+  font-weight: 700;
   color: var(--ink);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 
-.index-list {
-  list-style: none;
-}
-
-.index-row {
-  display: grid;
-  grid-template-columns: minmax(7em, 11em) minmax(0, 1fr) auto;
-  gap: var(--space-md);
-  align-items: baseline;
-  padding: var(--space-sm) var(--space-xs);
-  border-bottom: 1px solid var(--rule);
-  text-decoration: none;
-  color: var(--ink);
-  transition: background-color var(--dur-micro) var(--ease-out);
-}
-
-.index-row:hover {
-  background: var(--hover);
-}
-
-.index-name {
-  font-weight: 600;
-}
-
-.index-note {
-  font-size: var(--text-base);
+.home-index-note {
+  font-size: var(--text-sm);
   color: var(--muted);
-  overflow-wrap: anywhere;
+  margin-bottom: var(--space-lg);
 }
 
-.index-count {
+/* 分区目录：GOV.UK 式表行。编号、名称、一句说明、篇数四列，
+ * 行间 1px 分隔，hover 换底色；不画卡片，不用圆角。 */
+.section-rows {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.section-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 220px) minmax(0, 1fr) 72px;
+  gap: var(--space-sm);
+  align-items: baseline;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.section-row:hover {
+  background: var(--paper-2);
+}
+
+.section-row-no {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--faint);
+  color: var(--muted);
+}
+
+.section-row-name {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.section-row-name:hover {
+  color: var(--accent-2);
+  text-decoration-thickness: 3px;
+}
+
+.section-row-note {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.section-row-count {
+  text-align: right;
+  font-size: var(--text-sm);
+  color: var(--muted);
   white-space: nowrap;
 }
 
-@media (max-width: 640px) {
-  .index-row {
-    grid-template-columns: minmax(0, 1fr) auto;
+@media (max-width: 768px) {
+  .section-row {
+    grid-template-columns: 40px minmax(0, 1fr) 64px;
+    row-gap: var(--space-3xs);
   }
 
-  .index-note {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .index-row {
-    transition: none;
+  .section-row-note {
+    grid-column: 2 / -1;
   }
 }
 
@@ -2441,7 +2563,7 @@ a.star-check-cite:hover {
 .side-n {
   margin-left: auto;
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--faint);
 }
 
@@ -2484,46 +2606,8 @@ a.star-check-cite:hover {
   padding-left: var(--space-sm);
 }
 
-/* 首页：B 方案的文档式开头，标题压到 40，目录行改单列 */
-.home-intro {
-  padding: var(--space-2xl) 0 var(--space-lg);
-}
-
-.home-title {
-  font-size: clamp(32px, 4vw, 40px);
-  letter-spacing: -0.018em;
-}
-
-.home-index-head {
-  font-size: var(--text-2xl);
-}
-
-.index-row {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-xs) var(--space-md);
-  padding: var(--space-md) 0;
-}
-
-.index-name {
-  grid-column: 1;
-  font-size: var(--text-lg);
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.index-note {
-  grid-column: 1;
-  font-size: var(--text-ui);
-  line-height: 1.5;
-}
-
-.index-count {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: start;
-  padding-top: 2px;
-}
-
+/* 首页分区网格的列数由 minmax(260px, 1fr) 自己处理，
+ * 1200 / 1024 / 375 三档只需核容器宽，不另写断点。 */
 @media (min-width: 1200px) {
   .shell {
     grid-template-columns: 216px minmax(0, 1fr) 168px;
@@ -2534,7 +2618,7 @@ a.star-check-cite:hover {
   }
 
   /* 没有本页目录（分区页、设计地图等）时不占第三列，正文不吃空轨道 */
-  .shell:not(:has(.toc-rail:not([hidden]))) {
+  .shell:not(:has(.home-intro)):not(:has(.toc-rail:not([hidden]))) {
     grid-template-columns: 216px minmax(0, 1fr);
   }
 }
@@ -2546,12 +2630,6 @@ a.star-check-cite:hover {
 
   .side {
     display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .index-note {
-    display: block;
   }
 }
 
@@ -2572,4 +2650,24 @@ a.star-check-cite:hover {
  * 出处 content/standards/w3c--clreq.md:1939-1957 */
 body {
   line-break: strict;
+}
+
+/* ≤400：字号换成 GOV.UK 的 16/19 后，三个入口加两个图标按钮在 320 宽放不下，
+ * 入口降一档、间距收紧，避免顶栏横向溢出 */
+@media (max-width: 400px) {
+  .nav .mapLink {
+    font-size: var(--text-xs);
+    padding: var(--space-3xs);
+  }
+
+  .nav-right {
+    gap: var(--space-2xs);
+  }
+}
+
+/* ≤480：48 页题在 390 宽折成两行只剩一个「库」字孤字，降到 36 收成一行 */
+@media (max-width: 480px) {
+  .home-title {
+    font-size: var(--text-2xl);
+  }
 }

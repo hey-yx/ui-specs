@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Phone numbers 电话号码"
 source: https://design-system.service.gov.uk/patterns/phone-numbers/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-4
 publisher: "GOV.UK Design System"
@@ -13,28 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/phone-numbers/](https://design-system.service.gov.uk/patterns/phone-numbers/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "UK phone number"
-  },
-  id: "phone-number",
-  name: "phoneNumber",
-  type: "tel",
-  autocomplete: "tel",
-  classes: "govuk-input--width-20"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/phone-numbers/#phone-numbers-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/phone-numbers/#phone-numbers-example-nunjucks)
 
 ## When to use this pattern
 
@@ -52,7 +36,7 @@ You should validate phone numbers so you can let users know if they have entered
 
 ### Use the autocomplete attribute
 
-Use the `autocomplete` attribute on phone number inputs. This lets browsers autofill the information on a user's behalf if they’ve entered it previously.
+Use the `autocomplete` attribute on phone number inputs. This lets browsers autofill the information on a user’s behalf if they’ve entered it previously.
 
 To do this, set the `autocomplete` attribute to `tel`, as shown in the HTML and Nunjucks tabs in the examples on this page.
 
@@ -64,25 +48,8 @@ You will not normally need to use the `autocomplete` attribute in prototypes, as
 
 Error messages should be styled like this:
 
-**示例：error-empty-field**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "UK phone number"
-  },
-  errorMessage: {
-    text: "Enter a UK phone number"
-  },
-  id: "phone-number",
-  name: "phoneNumber",
-  type: "tel",
-  autocomplete: "tel",
-  classes: "govuk-input--width-20"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/phone-numbers/#error-empty-field-phone-numbers-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/phone-numbers/#error-empty-field-phone-numbers-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
@@ -98,33 +65,16 @@ Say ‘Enter a phone number in the correct format’.
 
 Use the form label or hint text to tell users if you specifically need a UK, international or mobile phone number.
 
-**示例：international**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Phone number"
-  },
-  hint: {
-    text: "For international numbers include the country code"
-  },
-  id: "phone-number",
-  name: "phoneNumber",
-  type: "tel",
-  autocomplete: "tel",
-  classes: "govuk-input--width-20"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/phone-numbers/#international-phone-numbers-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/phone-numbers/#international-phone-numbers-example-nunjucks)
 
 ### Using example phone numbers
 
 If you wish to include an example phone number (in hint text for example), [Ofcom maintains a list of numbers](https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama) that are reserved for use in media. These are:
 
-- UK non-geographic: 01632 960000 to 960999
-- UK London: 020 7946 0000 to 7946 0999
-- UK mobile: 07700 900000 to 900999
+*   UK non-geographic: 01632 960000 to 960999
+*   UK London: 020 7946 0000 to 7946 0999
+*   UK mobile: 07700 900000 to 900999
 
 ### Explain why you need a phone number
 
@@ -134,17 +84,14 @@ Tell users why you might contact them and when.
 
 It’s possible to mark up phone numbers as links, like this:
 
-```html
-<a href="tel:+442079476330">020 7947 6330</a>
-```
-
+`<a href="tel:+442079476330">020 7947 6330</a>`
 However, doing this will style phone numbers as links, which is confusing on devices that do not support phone calls.
 
 It might also not be necessary - some modern mobile browsers automatically detect phone numbers and display them as links anyway.
 
 If you do need to mark up your phone numbers as links, for example, to support a device that cannot automatically detect them, make sure they do not display as links on devices that cannot make calls.
 
-When you look at your service's user journey, remember that phone numbers as links might behave in unexpected ways for the user. For example, unless the user sets a default app to handle `tel:` links, some browsers and operating systems will automatically start a setup process.
+When you look at your service’s user journey, remember that phone numbers as links might behave in unexpected ways for the user. For example, unless the user sets a default app to handle `tel:` links, some browsers and operating systems will automatically start a setup process.
 
 ### Write phone numbers in the GOV.UK style
 
@@ -152,10 +99,10 @@ See the [GOV.UK style for writing telephone numbers](https://guidance.publishing
 
 ### Avoid input masking
 
-Avoid 'input masking', or showing placeholder answer, because it makes it harder for users to:
+Avoid ‘input masking’, or showing placeholder answer, because it makes it harder for users to:
 
-- type a number in their preferred way
-- transcribe a number from another place and check that they’ve got it right
+*   type a number in their preferred way
+*   transcribe a number from another place and check that they’ve got it right
 
 ### Avoid reformatting phone numbers
 
@@ -165,6 +112,6 @@ The GOV.UK Notify team have observed some users becoming confused when presented
 
 More research is needed on the best way to handle:
 
-- international numbers
-- extensions
-- SMS shortcodes
+*   international numbers
+*   extensions
+*   SMS shortcodes

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
 import '../styles/skin.css'
-import '@fontsource-variable/bricolage-grotesque/wght.css'
 import Toc from '../components/Toc.astro'
 import HeaderSearch from '../components/HeaderSearch.astro'
 import Search from '../components/Search.astro'
@@ -25,7 +24,6 @@ const model = buildModel(specs)
 const sectionMatch = Astro.url.pathname.match(/^\/(?:s|a)\/([^/]+)\//)
 const currentSection = sectionMatch?.[1]
 const canonical = path ? new URL(path, Astro.site ?? 'http://localhost:4321').href : undefined
-const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStorage.getItem('Readspec-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
 ---
 
 <!doctype html>
@@ -45,7 +43,6 @@ const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStora
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <script is:inline set:html={themeScript} />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
@@ -57,7 +54,7 @@ const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStora
         <nav class="nav-right" aria-label="页面导航">
           <a class="mapLink" href="/examples/">案例</a>
           <a class="mapLink" href="/briefs/">需求</a>
-          <a class="mapLink" href="/starmap/">指南</a>
+          <a class="mapLink" href="/starmap/">地图</a>
           <a
             class="ghLink"
             href="https://github.com/hey-yx/ui-specs"
@@ -89,44 +86,6 @@ const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStora
               stroke-linejoin="round"
               aria-hidden="true"
               ><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5" /></svg
-            >
-          </button>
-          <button
-            id="themeBtn"
-            type="button"
-            aria-label="主题：自动（跟随系统），点击切换"
-            title="主题：自动"
-          >
-            <svg
-              class="auto"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-              ><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" /></svg
-            >
-            <svg
-              class="moon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              aria-hidden="true"
-              ><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg
-            >
-            <svg
-              class="sun"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              aria-hidden="true"
-              ><circle cx="12" cy="12" r="4" /><path
-                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-              /></svg
             >
           </button>
         </nav>
@@ -166,8 +125,6 @@ const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStora
     </div>
 
     <script>
-      const root = document.documentElement
-      const themeBtn = document.getElementById('themeBtn')
 
       // header 滚动动效：离开顶部后整条变玻璃层。
       // 搜索框展开只看滚动距离，不看方向：越过 EXPAND_AT 展开，回到 COLLAPSE_AT 以下才收起。
@@ -207,36 +164,6 @@ const themeScript = `try{var t=localStorage.getItem('UISpecs-theme')||localStora
           window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
         })
       }
-
-      // 主题三态：自动（跟随系统）/ 浅色 / 深色，循环切换
-      function themeState() {
-        const t = root.dataset.theme
-        return t === 'light' || t === 'dark' ? t : 'auto'
-      }
-
-      function syncTheme() {
-        const state = themeState()
-        const label = state === 'auto' ? '自动（跟随系统）' : state === 'light' ? '浅色' : '深色'
-        themeBtn?.setAttribute('aria-label', `主题：${label}，点击切换`)
-        themeBtn?.setAttribute('title', `主题：${label}`)
-      }
-
-      try {
-        // 旧键回退：改名前的主题选择不能丢，读不到新键时沿用旧键值
-        const saved = localStorage.getItem('UISpecs-theme') ?? localStorage.getItem('Readspec-theme')
-        if (saved === 'light' || saved === 'dark') root.dataset.theme = saved
-      } catch (e) {}
-      syncTheme()
-
-      themeBtn?.addEventListener('click', () => {
-        const next = { auto: 'light', light: 'dark', dark: 'auto' }[themeState()]
-        if (next === 'auto') delete root.dataset.theme
-        else root.dataset.theme = next
-        try {
-          localStorage.setItem('UISpecs-theme', next)
-        } catch (e) {}
-        syncTheme()
-      })
     </script>
   </body>
 </html>

@@ -16,13 +16,7 @@ known: partial
 
 ---
 
-
-
-
-
 > Feature flag Modals focus the user’s attention exclusively on one task or piece of information by using a window that is displayed on top of the page content.
-
-
 
 Modal
 [with AI label](https://react.carbondesignsystem.com/?path=/story/components-modal--with-ai-label)
@@ -30,22 +24,6 @@ is now stable. This addition changes the visual appearance of the component and
 introduces an AI explainability feature when AI is present in the component. See
 the [AI presence](/components/modal/usage/#ai-presence) section for more
 details.
-
-
-
-
-
-Live demo
-Overview
-Formatting
-Content
-Universal behaviors
-Modal variants
-AI presence
-Related
-Feedback
-
-
 
 ## Live demo
 
@@ -106,13 +84,7 @@ feature flag will become the default version of the component.
 
 ### Anatomy
 
-
-
-
-![Modal anatomy diagram](images/modal-usage-anatomy.png)
-
-
-
+![Modal anatomy diagram](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-anatomy.png)
 
 The modal has three distinct zones: A header, the body, and a footer.
 Components, for example a data table, form or, progress indicator, can occupy
@@ -138,13 +110,7 @@ modal content you have. Modals with brief text should be extra small or small to
 avoid long single lines; for complex components, like a data table, the default
 or large modal is more suitable.
 
-
-
-
-![Modal sizes](images/modal-usage-sizes.png)
-
-
-
+![Modal sizes](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-sizes.png)
 
 #### Max heights
 
@@ -154,13 +120,7 @@ scrolling because of a maximum height limitation, consider using the next modal
 size up. If the large modal height is still not enough space then a full page
 might be needed instead.
 
-
-
-
-![Modal max heights](images/modal-usage-max-heights.png)
-
-
-
+![Modal max heights](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-max-heights.png)
 
 ### Alignment
 
@@ -168,13 +128,7 @@ In a modal that has [larger breakpoints](/components/modal/style#margin-right),
 body copy, including titles, use a 20% margin-right. However, form inputs and
 other components expand the entire width of a modal.
 
-
-
-
-![Modal alignment](images/modal-usage-alignment.png)
-
-
-
+![Modal alignment](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-alignment.png)
 
 #### Full-width content
 
@@ -183,13 +137,7 @@ margins of the modal and align flush to the container edges. These components
 typically have border dividers or containers that extend beyond the text or
 icon. Labels or text of any kind should never be in the modal margins.
 
-
-
-
-![Modal alignment](images/modal-usage-alignment-2.png)
-
-
-
+![Modal alignment](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-alignment-2.png)
 
 ## Content
 
@@ -255,13 +203,7 @@ there is additional content out of view.
 Modal content should never scroll horizontally; instead, use a larger size
 modal.
 
-
-
-
-![Overflow content example](images/modal-usage-scrolling.png)
-
-
-
+![Overflow content example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-scrolling.png)
 
 ### Title as message
 
@@ -269,13 +211,7 @@ For short, direct messages the title can include the whole message to add visual
 clarity to an otherwise repetitive title and body message. When using this
 style, no other body copy may be included.
 
-
-
-
-![Title as message example](images/modal-usage-title.png)
-
-
-
+![Title as message example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-title.png)
 
 ### Further guidance
 
@@ -302,13 +238,7 @@ Focus should then remain trapped in the dialog until it is closed. When
 navigating by keyboard, `Tab` and `Shift-Tab` do not move the focus outside of
 the modal.
 
-
-
-
-![Modal focus example](images/modal-usage-focus.png)
-
-
-
+![Modal focus example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-focus.png)
 
 ### Loading
 
@@ -321,13 +251,7 @@ If a quick loading period is needed, use an
 [inline loading](/patterns/loading-pattern#inline-loading) behavior on the
 primary button to indicate the data is being processed.
 
-
-
-
-![Modal loading options](images/modal-usage-loading.png)
-
-
-
+![Modal loading options](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-loading.png)
 
 ### Validation
 
@@ -345,13 +269,7 @@ In-field error messages should disappear when the form criteria is met. If the
 data was not able to be submitted due to server-side issues, an inline
 notification should appear.
 
-
-
-
-![Validation example](images/modal-usage-invalid.png)
-
-
-
+![Validation example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-invalid.png)
 
 ## Modal variants
 
@@ -373,13 +291,7 @@ Passive modals are persistent until dismissed in one of the following ways.
   automatically close the modal.
 - **Esc**: Pressing `ESC` on the keyboard
 
-
-
-
-![Passive modal example](images/modal-usage-passive.png)
-
-
-
+![Passive modal example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-passive.png)
 
 ### Transactional modal
 
@@ -407,13 +319,7 @@ When using two buttons, the secondary button is on the left and the primary
 button is placed on the right. Each button spans 50% of the modal and are full
 bleed to the edge.
 
-
-
-
-![Two button modal example](images/modal-usage-two-buttons.png)
-
-
-
+![Two button modal example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-two-buttons.png)
 
 #### Three buttons
 
@@ -422,13 +328,7 @@ and aligned to the right side of the modal. Only the outmost right button is
 allowed to be a primary button with the other two being secondary buttons. If
 all three actions have the same weight, all three should be secondary buttons.
 
-
-
-
-![Three button modal example](images/modal-usage-three-buttons.png)
-
-
-
+![Three button modal example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-three-buttons.png)
 
 ### Danger modal
 
@@ -439,13 +339,7 @@ replaced by a danger button. They are commonly used in high impact moments as a
 confirmation for an action that would result in a significant data loss if done
 accidentally.
 
-
-
-
-![danger modal](images/modal-usage-danger.png)
-
-
-
+![danger modal](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-danger.png)
 
 ### Acknowledgment modal
 
@@ -470,13 +364,7 @@ ways.
 Single buttons are placed on the right side, span 50% of the modal, and bleed to
 the edge. In most scenarios, a primary button is used when one button is needed.
 
-
-
-
-![One button modal example](images/modal-usage-one-button.png)
-
-
-
+![One button modal example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-one-button.png)
 
 ### Progress modal
 
@@ -509,13 +397,7 @@ button. In the last step of the sequence, the **Next** button label should
 change to reflect the final action. The **Cancel** button is aligned to left
 side of the modal and uses a ghost button.
 
-
-
-
-![Progress modal example](images/modal-usage-progress.png)
-
-
-
+![Progress modal example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-progress.png)
 
 ## AI presence
 
@@ -533,27 +415,9 @@ components should receive the AI presence styling, not the entire modal.
 For more information on designing for AI, see the
 [Carbon for AI](/guidelines/carbon-for-ai/) guidelines.
 
+![Modal's light mode AI presence example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-ai-presence-w.png)
 
-
-
-
-
-
-
-![Modal's light mode AI presence example](images/modal-usage-ai-presence-w.png)
-
-
-
-
-
-![Modal's dark mode AI presence example](images/modal-usage-ai-presence-g100.png)
-
-
-
-
-
-
-
+![Modal's dark mode AI presence example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/modal/images/modal-usage-ai-presence-g100.png)
 
 ## Related
 

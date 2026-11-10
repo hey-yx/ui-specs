@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Motion 动效"
+title: "IBM Carbon · Foundation · Motion 动效"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/overview.mdx
 section: motion
 tag: "规范"
@@ -10,37 +10,13 @@ publisher: "IBM Carbon"
 known: partial
 ---
 
-# IBM Carbon · Motion 动效
+# IBM Carbon · Foundation · Motion 动效
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/overview.mdx)
 
 ---
 
----
-title: Motion
-description:
-  Motion can bring the screen to life, guide users through complex experiences,
-  and help move them forward—from here to there, now to next, start to
-  finish—and make progress.
-tabs: ['Overview', 'Choreography', 'Code']
----
-
-
-
 > Motion can bring the screen to life, guide users through complex experiences, and help move them forward—from here to there, now to next, start to finish—and make progress.
-
-
-
-Carbon in motion
-Style
-Easing
-Duration
-Implementation
-Resources
-
-
-
-
 
 ## Carbon in motion
 
@@ -60,47 +36,17 @@ Productivity and expression are both essential to an interface. Reserve
 expressive motion for occasional, important moments, to better capture the
 user’s attention and offer a rhythmic break to the productive experience.
 
-
-
-
-
-
-
-
 <div >
 
 <p className="tab--columns_label"> Productive </p>
 
-![Curve graphs representing differences between productive and expressive animation curves](images/Motion_overview_Curves_productive.svg)
-
-
+![Curve graphs representing differences between productive and expressive animation curves](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/images/Motion_overview_Curves_productive.svg)
 
 <p className="tab--columns_label">Expressive</p>
 
-![Curve graphs representing differences between productive and expressive animation curves](images/Motion_overview_Curves_expressive.svg)
-
+![Curve graphs representing differences between productive and expressive animation curves](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/images/Motion_overview_Curves_expressive.svg)
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### Productive motion
 
@@ -119,14 +65,6 @@ clicking the primary action button, or when the movement itself conveys a
 meaning. System alerts and the appearance of notification boxes are great cases
 for expressive motion.
 
-
-
-
-
-
-
-
-
 ## Easing
 
 Strictly linear movement appears unnatural to the human eye. Elements on the
@@ -134,49 +72,24 @@ screen should speed up quickly and slow down smoothly, obeying the physics of a
 light-weight material. "Easing curves" describe the precise amount of
 accelerations in motion. We commonly use one of these three types of easing.
 
-
-
-
-
-
-
-
-
 <br />
 
 Avoid easing curves that are unnatural, distracting, or purely decorative. IBM
 motion is essential and efficient, guiding users to value as quickly as
 possible.
 
-
-
-
-
-
-
-
-
 ### Standard easing
 
 Use `standard-easing` when an element is visible from the beginning to the end
 of a motion. Expanding tiles and the sorting of table rows are good examples.
 
-
-
 <div>
-
-
 
 </div>
 
-
 <div>
 
-
-
 </div>
-
-
 
 | Style      | IBM Motion package             | CSS                             | After Effects              |
 | ---------- | ------------------------------ | ------------------------------- | -------------------------- |
@@ -190,22 +103,13 @@ With this style, an element quickly appears and slows down to a stop. Use
 appearing. Elements moving in response to the user's input, such as a dropdown
 opening or toggle switching should also use this style.
 
-
-
 <div>
-
-
 
 </div>
 
-
 <div>
 
-
-
 </div>
-
-
 
 | Style      | IBM Motion package             | CSS                           | After Effects             |
 | ---------- | ------------------------------ | ----------------------------- | ------------------------- |
@@ -223,22 +127,13 @@ reappear upon user action, use standard easing instead. A good example of this
 is a side panel. The panel leaves the view, but slows down as it exits, implying
 that it would come to rest just outside the view, and ready to be recalled.
 
-
-
 <div>
-
-
 
 </div>
 
-
 <div>
 
-
-
 </div>
-
-
 
 | Style      | IBM motion package         | CSS                           | After Effects             |
 | ---------- | -------------------------- | ----------------------------- | ------------------------- |
@@ -275,14 +170,6 @@ Motion’s duration should be dynamic based on the size of the animation; the
 larger the change in distance (traveled) or size (scaling) of the element, the
 longer the animation takes.
 
-
-
-
-
-
-
-
-
 <br />
 
 When custom duration is possible, please use the
@@ -290,11 +177,9 @@ When custom duration is possible, please use the
 calculated for your element. Carbon uses a non-linear duration scale to achieve
 better perceived consistency across all distances.
 
-
   
     - [链接](https://ibm.github.io/motion/)
   
-
 
 <br />
 
@@ -364,22 +249,3 @@ essential the motion design is. Always provide alternatives for interface state
 transitions. Consider simplified or reduced motion designs for mobile and
 tablet. Make sure there is always a way to communicate similar messages
 statically.
-
-## Resources
-
-
-  
-    - [链接](https://ibm.github.io/motion/)
-
-
-
-  
-  
-  
-    - [链接](https://github.com/carbon-design-system/carbon/tree/main/packages/motion)
-
-
-
-  
-  
-

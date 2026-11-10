@@ -6,7 +6,7 @@
   "description": "UISpecs：UI 设计规范全文库（本地可读 + 框架站点）",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/sync-readme-prompt.mjs",
+    "build": "astro build",
     "preview": "astro preview"
   },
   "dependencies": {

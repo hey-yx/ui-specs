@@ -1,5 +1,5 @@
 ---
-title: "Atlassian · Elevation 高程"
+title: "Atlassian · Foundation · Elevation 高程"
 source: https://atlassian.design/foundations/elevation
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-29
 publisher: "Atlassian"
 ---
 
-# Atlassian · Elevation 高程
+# Atlassian · Foundation · Elevation 高程
 
 > 来源：[https://atlassian.design/foundations/elevation](https://atlassian.design/foundations/elevation)
 
@@ -278,8 +278,3 @@ Different UI can have the same elevation style, but each UI should apply a diffe
 | 600 | [Flag](https://atlassian.design/components/flag/) | Overlay |
 | 700 | [Spotlight](https://atlassian.design/components/onboarding/) | Overlay |
 | 800 | [Tooltip](https://atlassian.design/components/tooltip/) | None |
-
-## Related
-
-  * Learn about the basics of [design tokens](https://atlassian.design/tokens/design-tokens).
-  * See the list of [all design tokens](https://atlassian.design/components/tokens/all-tokens) for full descriptions and values for all tokens.

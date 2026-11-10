@@ -1,7 +1,7 @@
 {
   "name": "PayloadDeck",
-  "tagline": "英文 API 文档：三栏目录、Quickstart 与错误码表",
-  "accent": "GOV.UK Purple #54319f",
-  "structure": "Long Document · 三栏文档 / 单行页脚",
-  "layout": "开发者文档"
+  "tagline": "Send one log line. Get a typed record back.",
+  "accent": "GOV.UK blue #1d70b8 (derived)",
+  "structure": "Component Playground · N8 / Ft8",
+  "layout": "Two-line opening, then six numbered bands of preview-and-code playground blocks, closing on a marquee strip."
 }

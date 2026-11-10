@@ -15,7 +15,6 @@ publisher: "Google web.dev"
 
 ---
 
-
 A form is an element that allows a user to provide data into a field or a group
 of fields. Forms can be as simple as a single field or as complicated as a
 multi-step form element with multiple fields per page, input validation, and
@@ -35,12 +34,9 @@ about in the earlier modules, such as
 [color contrast](/learn/accessibility/color-contrast), also apply to form
 elements.
 
-
 Review our [Learn Forms](/learn/forms) course to learn how to create better
 forms. There is a [form accessibility](/learn/forms/accessibility) module in
 that course with additional accessibility-specific form content.
-
-
 
 ## Fields
 
@@ -54,15 +50,11 @@ building something custom with ARIA, as certain features and
 functionalities—such as field states, properties, and values—are inherently
 built into the HTML elements, while you have to add custom ARIA manually.
 
-
-
 If the situation requires you to build custom form fields, be sure to review
 the [ARIA and HTML](/learn/accessibility/aria-html),
 [Keyboard focus](/learn/accessibility/focus), and
 [JavaScript](/learn/accessibility/javascript) modules to understand how to make
 these custom form fields as accessible as possible.
-
-
 
 <div class="switcher">
 <figure>
@@ -85,7 +77,6 @@ these custom form fields as accessible as possible.
 ```
 </figure>
 </div>
-
 
 In addition to choosing the most accessible form field patterns, where
 applicable, you should also add
@@ -138,9 +129,6 @@ Additionally, related form fields, such as a mailing address, need to be
 programmatically and visually grouped. One method is to use the fieldset/legend
 pattern to group elements that are similar.
 
-
-
-
 ## Descriptions
 
 Field descriptions are similar to labels in purpose in that they are used to
@@ -164,8 +152,6 @@ If you add the
 attribute to your element, the attribute value overrides the text within your
 `<label>`. As always, be sure to test the final code with all of the ATs you
 plan to support.
-
-
 
 ## Errors
 
@@ -201,10 +187,6 @@ the form and provide feedback about the results of their submission. An error
 message tells a user they have more updates to make, while a success message
 confirms that they have resolved all errors and successfully submitted the form.
 
-
-
-
-
 While WCAG 2.2 is still under development, there are several proposed success
 criteria that will focus on more accessible form experiences, such as
 [Target Size (Minimum)](https://www.w3.org/TR/WCAG22/#target-size-minimum),
@@ -212,7 +194,3 @@ criteria that will focus on more accessible form experiences, such as
 [Accessible Authentication](https://www.w3.org/TR/WCAG22/#accessible-authentication),
 and [Redundant Entry](https://www.w3.org/TR/WCAG22/#redundant-entry) to be
 aware of for future projects.
-
-
-
-

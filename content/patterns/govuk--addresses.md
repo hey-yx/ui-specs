@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Addresses 地址"
 source: https://design-system.service.gov.uk/patterns/addresses/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-0
 publisher: "GOV.UK Design System"
@@ -13,17 +13,15 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/addresses/](https://design-system.service.gov.uk/patterns/addresses/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
 Help users provide an address using one of the following:
 
-- address lookup
-- multiple text inputs
-- textarea
+*   address lookup
+*   multiple text inputs
+*   textarea
 
 ## Address lookup
 
@@ -45,9 +43,9 @@ An address lookup lets users specify a UK address by entering their postcode and
 
 When using an address lookup, you should:
 
-- make it clear that it will only work for UK addresses
-- provide a manual option for people with international addresses or addresses that are missing or not properly listed in the address lookup
-- let people enter their postcodes in upper or lower case and with or without spaces
+*   make it clear that it will only work for UK addresses
+*   provide a manual option for people with international addresses or addresses that are missing or not properly listed in the address lookup
+*   let people enter their postcodes in upper or lower case and with or without spaces
 
 ### Identify and match addresses with UPRN identifiers
 
@@ -63,108 +61,87 @@ Your address lookup should only use data from a single API. One option for this 
 
 ### Allow different postcode formats
 
-It's easier for users if you accept and ignore unwanted characters. This is better than rejecting the input and telling the user they have not provided a valid postcode.
+It’s easier for users if you accept and ignore unwanted characters. This is better than rejecting the input and telling the user they have not provided a valid postcode.
 
 You should let users enter postcodes that contain:
 
-- upper and lower case letters
-- no spaces
-- additional spaces at the beginning, middle or end
-- punctuation like hyphens, brackets, dashes and full stops
+*   upper and lower case letters
+*   no spaces
+*   additional spaces at the beginning, middle or end
+*   punctuation like hyphens, brackets, dashes and full stops
 
 ## Multiple text inputs
 
-**示例：multiple**
+*   [HTML](https://design-system.service.gov.uk/patterns/addresses/#multiple-text-inputs-addresses-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/addresses/#multiple-text-inputs-addresses-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-
-{% call govukFieldset({
-  legend: {
-    text: "What is your address?",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: true
-  }
-}) %}
-
-  {{ govukInput({
-    label: {
-      text: "Address line 1"
-    },
-    id: "address-line-1",
-    name: "addressLine1",
-    autocomplete: "address-line1"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "Address line 2 (optional)"
-    },
-    id: "address-line-2",
-    name: "addressLine2",
-    autocomplete: "address-line2"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "Town or city"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "address-town",
-    name: "addressTown",
-    autocomplete: "address-level2"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "County (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "address-county",
-    name: "addressCounty"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "Postcode"
-    },
-    classes: "govuk-input--width-10",
-    id: "address-postcode",
-    name: "addressPostcode",
-    autocomplete: "postal-code"
-  }) }}
-
-{% endcall %}
+```
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">
+      What is your address?
+    </h1>
+  </legend>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="address-line-1">
+      Address line 1
+    </label>
+    <input class="govuk-input" id="address-line-1" name="addressLine1" type="text" autocomplete="address-line1">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="address-line-2">
+      Address line 2 (optional)
+    </label>
+    <input class="govuk-input" id="address-line-2" name="addressLine2" type="text" autocomplete="address-line2">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="address-town">
+      Town or city
+    </label>
+    <input class="govuk-input govuk-!-width-two-thirds" id="address-town" name="addressTown" type="text" autocomplete="address-level2">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="address-county">
+      County (optional)
+    </label>
+    <input class="govuk-input govuk-!-width-two-thirds" id="address-county" name="addressCounty" type="text">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="address-postcode">
+      Postcode
+    </label>
+    <input class="govuk-input govuk-input--width-10" id="address-postcode" name="addressPostcode" type="text" autocomplete="postal-code">
+  </div>
+</fieldset>
 ```
 
 ### When to use multiple text inputs
 
 Only use multiple text inputs to offer users a manual input option when you both:
 
-- know which countries the addresses will come from
-- can find a format that supports them all – this can be difficult to know if you’re asking for addresses outside of the UK
+*   know which countries the addresses will come from
+*   can find a format that supports them all – this can be difficult to know if you’re asking for addresses outside of the UK
 
 Using multiple text inputs means:
 
-- you can easily extract and use specific parts of an address
-- you can give help for individual text inputs
-- you can validate each part of the address separately
-- users can complete the form using their browser’s autocomplete function
+*   you can easily extract and use specific parts of an address
+*   you can give help for individual text inputs
+*   you can validate each part of the address separately
+*   users can complete the form using their browser’s autocomplete function
 
 The disadvantages of using multiple text inputs are that:
 
-- it’s hard to find a single format that works for all addresses
-- there’s no guarantee that users will use the text inputs the way you think they will
-- users cannot easily paste addresses from their clipboards
+*   it’s hard to find a single format that works for all addresses
+*   there’s no guarantee that users will use the text inputs the way you think they will
+*   users cannot easily paste addresses from their clipboards
 
 ### How multiple text inputs work
 
 If you use multiple text inputs, you should:
 
-- only make individual text inputs mandatory if you really need the information
-- make the text inputs the appropriate length for the content – it helps people understand the form, for example, make postcode text inputs shorter than street text inputs
-- <a href="#allow-different-postcode-formats">let users enter postcodes in different formats</a>
+*   only make individual text inputs mandatory if you really need the information
+*   make the text inputs the appropriate length for the content – it helps people understand the form, for example, make postcode text inputs shorter than street text inputs
+*   [let users enter postcodes in different formats](https://design-system.service.gov.uk/patterns/addresses/#allow-different-postcode-formats)
 
 Make sure there are enough text inputs to accommodate longer addresses if you know your users will need them. For example, allow users to include a company name or flat number.
 
@@ -174,7 +151,7 @@ Remove the county field if you’re sure your users will not need it, and your s
 
 #### Use the autocomplete attribute on multiple address fields
 
-Use the `autocomplete` attribute on each individual address field to help users enter their address more quickly. This lets you specify each input’s purpose so browsers can autofill the information on a user’s behalf if they’ve entered it previously.
+Use the`autocomplete`attribute on each individual address field to help users enter their address more quickly. This lets you specify each input’s purpose so browsers can autofill the information on a user’s behalf if they’ve entered it previously.
 
 [Check which input purpose to use](https://www.w3.org/TR/WCAG22/#input-purposes) for each field.
 
@@ -184,118 +161,28 @@ In production, you’ll need to do this to meet [WCAG 2.2 success criterion 1.3.
 
 Error messages should be styled like this:
 
-**示例：error-messages**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-
-{% call govukFieldset({
-  legend: {
-    text: "What is your address?",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: true
-  }
-}) %}
-
-  {{ govukInput({
-    label: {
-      text: 'Address line 1'
-    },
-    id: "address-line-1",
-    name: "addressLine1",
-    errorMessage: {
-    text: "Enter address line 1, typically the building and street"
-    },
-    autocomplete: "address-line1"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: 'Address line 2 (optional)'
-    },
-    id: "address-line-2",
-    name: "addressLine2",
-    autocomplete: "address-line2"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "Town or city"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "address-town",
-    name: "addressTown",
-    errorMessage: {
-    text: "Enter town or city"
-    },
-    autocomplete: "address-level2"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "County (optional)"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "address-county",
-    name: "addressCounty"
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: "Postcode"
-    },
-    classes: "govuk-input--width-10",
-    id: "address-postcode",
-    name: "addressPostcode",
-    errorMessage: {
-    text: "Enter postcode"
-    },
-    autocomplete: "postal-code"
-  }) }}
-
-{% endcall %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/addresses/#pattern-error-addresses-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/addresses/#pattern-error-addresses-example-nunjucks)
 
 If a postcode entered is not a real postcode, use a message like this:
 
-**示例：error-postcode**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Postcode"
-  },
-  classes: "govuk-input--width-10",
-  id: "address-postcode",
-  name: "addressPostcode",
-  value: "Not a postcode",
-  errorMessage: {
-    text: "Enter a full UK postcode"
-  },
-  autocomplete: "postal-code"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/addresses/#postcode-error-addresses-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/addresses/#postcode-error-addresses-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
 ## Textarea
 
-**示例：textarea**
+*   [HTML](https://design-system.service.gov.uk/patterns/addresses/#textarea-addresses-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/addresses/#textarea-addresses-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-
-{{ govukTextarea({
-  name: "address",
-  id: "address",
-  autocomplete: "street-address",
-  label: {
-    text: "What is your address?"
-  }
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="address">
+    What is your address?
+  </label>
+  <textarea class="govuk-textarea" id="address" name="address" rows="5" autocomplete="street-address"></textarea>
+</div>
 ```
 
 ### When to use a textarea
@@ -314,7 +201,7 @@ Textareas let users enter an address in any format and make it easy to copy and 
 
 #### Use the autocomplete attribute on a textarea
 
-Use the `autocomplete` attribute on the textarea component when you're asking for an address. This lets browsers autofill the information on a user's behalf if they’ve entered it previously.
+Use the `autocomplete` attribute on the textarea component when you’re asking for an address. This lets browsers autofill the information on a user’s behalf if they’ve entered it previously.
 
 To do this, set the `autocomplete` attribute to `street-address` as shown in the HTML and Nunjucks tabs in the textarea example above.
 

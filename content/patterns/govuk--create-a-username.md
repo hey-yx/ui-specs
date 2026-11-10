@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Create a username 设置用户名"
 source: https://design-system.service.gov.uk/patterns/create-a-username/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-11
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/create-a-username/](https://design-system.service.gov.uk/patterns/create-a-username/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Help users to  Create a username
 
 Help users to create a unique and memorable username to sign into a service with.
 
@@ -27,9 +27,9 @@ Before using this pattern, you should consider whether you really need users to 
 
 Where possible, use email addresses for usernames because they are:
 
-- memorable
-- unique
-- often required by the service anyway
+*   memorable
+*   unique
+*   often required by the service anyway
 
 However, not everyone has or wants to use an email address. The number of users without access to email will differ from service to service.
 
@@ -43,10 +43,10 @@ User-generated usernames are harder to create and easier to forget than email ad
 
 You need to:
 
-- tell the user whether their proposed username is unique
-- suggest a unique username for them, in some cases
-- make sure the user can retrieve or reset their username
-- ignore letter case when accepting usernames - for example, if the actual username is ‘Mary<i></i>@example.com’, the user can still sign in with ‘mary<i></i>@example.com’
+*   tell the user whether their proposed username is unique
+*   suggest a unique username for them, in some cases
+*   make sure the user can retrieve or reset their username
+*   ignore letter case when accepting usernames - for example, if the actual username is ‘Mary@example.com’, the user can still sign in with ‘mary@example.com’
 
 ### Always let people make changes
 

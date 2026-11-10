@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Feedback 反馈"
 source: https://design-system.service.gov.uk/components/feedback/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-23
 publisher: "GOV.UK Design System"
@@ -13,25 +13,21 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/feedback/](https://design-system.service.gov.uk/components/feedback/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+**Trial**
+
+This component is being developed and may change as we improve it. Read more about [the lifecycle of our components](https://design-system.service.gov.uk/community/component-lifecycle-statuses/).
+
+Read these sections to see why this component is in trial:
+
+*   [Research on this component](https://design-system.service.gov.uk/components/feedback/#research-on-this-component)
+*   [Help improve this component](https://design-system.service.gov.uk/components/feedback/#help-improve-this-page)
 
 Ask users to give feedback about their experience using your service.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/feedback/macro.njk" import govukFeedback %}
-
-{% call govukFeedback({
-  titleText: "Help us improve this service"
-}) %}
-  <p class="govuk-body">
-    Tell us about your experience using this service. <a href="#" class="govuk-link">Give us your feedback</a>
-  </p>
-{% endcall %}
-```
+*   [HTML](https://design-system.service.gov.uk/components/feedback/#feedback-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/feedback/#feedback-example-nunjucks)
 
 ## When to use this component
 
@@ -53,18 +49,18 @@ If your service is using Nunjucks, you can use the [GOV.UK Frontend page templat
 
 The heading and message in the Feedback component should tell users:
 
-- why you want feedback
-- what you'll do with their feedback
+*   why you want feedback
+*   what you’ll do with their feedback
 
 Also try to give users some idea about:
 
-- how long it'll take to give feedback
-- the difference between giving feedback and asking for support
+*   how long it’ll take to give feedback
+*   the difference between giving feedback and asking for support
 
 You must include a link to a feedback page, which could be either:
 
-- [a GOV.UK feedback page](https://www.gov.uk/service-manual/service-assessments/get-feedback-page)
-- a feedback page page of your own, if you need to ask specific questions
+*   [a GOV.UK feedback page](https://www.gov.uk/service-manual/service-assessments/get-feedback-page)
+*   a feedback page page of your own, if you need to ask specific questions
 
 ## Research on this component
 
@@ -72,13 +68,34 @@ During design exploration for this component, desk research suggested that servi
 
 This version separates the feedback link from the [Phase banner component](https://design-system.service.gov.uk/components/phase-banner/).
 
-We've released this Feedback component in trial status as we want to understand whether:
+We’ve released this Feedback component in trial status as we want to understand whether:
 
-- moving the feedback link from the phase banner increases the amount of feedback services receive
-- placing the feedback link its own dedicated location helps users know where to provide feedback when they need to, by overcoming potential 'banner blindness' of the phase banner.
+*   moving the feedback link from the phase banner increases the amount of feedback services receive
+*   placing the feedback link its own dedicated location helps users know where to provide feedback when they need to, by overcoming potential ‘banner blindness’ of the phase banner.
 
 Until we have enough evidence that these needs are being met, the component will remain in trial.
 
 We thank the service teams across government who worked with us in the early stages of this component to measure its effectiveness.
 
 We’d also like to thank the GOV.UK Forms team for helping us build this component.
+
+## Recent changes
+
+| Date | Changed | Description |
+| --- | --- | --- |
+| Aug 2026 | [GOV.UK Frontend v6.5.0](https://github.com/alphagov/govuk-frontend/releases/tag/v6.5.0) | Component introduced. |
+
+## Help improve this component
+
+**Trial**
+
+In August 2026 we moved Feedback to trial status so we can learn how well it works for services.
+
+See the information we're looking for and how you can help move this component into stable status:
+
+[Tell us how well Feedback works in your service](https://github.com/alphagov/govuk-design-system/discussions/5619)
+
+You can also:
+
+*    take part in the [‘Feedback’ discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/4978/) and share your research 
+*   [propose a change on GitHub](https://github.com/alphagov/govuk-design-system/edit/main/src/components/feedback/index.md) – read more about [how to propose changes in GitHub](https://design-system.service.gov.uk/community/propose-a-content-change-using-github/)

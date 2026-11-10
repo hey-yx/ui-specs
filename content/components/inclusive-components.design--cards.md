@@ -50,7 +50,6 @@ to enhance assistive technology users' experience. Briefly:
 - Screen readers enumerate the items so users know how many are
   available
 
-![Set of cards announced as list, four
 items](https://inclusive-components.design/content/images/2018/06/cards1-1.svg)
 
 In this case, let's say the card is a teaser for a blog post. Note the
@@ -165,7 +164,6 @@ over the top of it). You can selectively 'raise' elements like the
 description by giving them `position: relative`, but their layout then
 becomes a gap in the card's overall clickable area.
 
-![the card on the left has a clickable area that covers everything. The
 card on the right has a gap in the clickable area where the description
 has been raised above the link](https://inclusive-components.design/content/images/2018/06/cards2.svg)
 
@@ -241,7 +239,6 @@ because — unlike `outline` — it respects the curves of the corners.
         box-shadow: 0 0 0 0 0.25rem;
     }
 
-![Nice rounded hover state wrapping the card
 container.](https://inclusive-components.design/content/images/2018/06/cards3.svg)
 
 Where there are hover styles there should also be focus styles, which
@@ -271,7 +268,6 @@ match the `:hover` style. Finally, I *remove* the unnecessary basic
 be ignored. The upshot is that users of older browsers that do not
 support `:focus-within` will still see the fallback focus style.
 
-![The left card shows the fallback text decoration focus state. The
 right card shows the focus-within style to match the hover
 style](https://inclusive-components.design/content/images/2018/06/cards4.png)
 
@@ -324,7 +320,6 @@ it a top margin of `auto`:
 This pushes the attribution element in the demo to the bottom of the
 card, regardless of its height.
 
-![The last card has more content but each card is the same
 height](https://inclusive-components.design/content/images/2018/06/cards5.png)
 
 All that's left to do is add a bottom margin to the second last element,
@@ -396,7 +391,6 @@ container. This prevents the line length for cards on large screens not
 supporting grid from becoming too long. They won't really look like
 cards in these conditions, of course, but at least they'll be readable.
 
-![The line length in the wide card in capped and the description is
 still readable.](https://inclusive-components.design/content/images/2018/06/cards6.png)
 
 Fortunately, [support for Grid is fairly extensive
@@ -472,7 +466,6 @@ this would push the link away from the preceding text.
       padding: 0.5rem 0.5rem 0.5rem 0;
     }
 
-![Chrome element inspector shows the padding around the author
 link](https://inclusive-components.design/content/images/2018/06/Screen-Shot-2018-06-02-at-10.47.31.png)
 
 Many people find they have low accuracy when targeting items by touch,
@@ -534,7 +527,6 @@ to delegate the focus style to the call-to-action button.
 Visual focus order remains logical between the title (call-to-action)
 and author link:
 
-![The left card shows to call to action focus style and the right card
 shows the author link focus style](https://inclusive-components.design/content/images/2018/06/cards8.png)
 
 For sighted screen reader users there's potential for a little confusion
@@ -636,7 +628,6 @@ would consume the structure this way. When a screen reader user
 operating NVDA presses `2` to go to the next `<h2>`, they would 'skip
 over' the image and miss it.
 
-![Illustration shows the user moving from one card to another by
 heading, thereby bypassing the second card's
 image.](https://inclusive-components.design/content/images/2018/06/cards9.svg)
 

@@ -1,5 +1,5 @@
 ---
-title: "NHS.UK · Colour 色彩"
+title: "NHS.UK · Foundation · Colour 色彩"
 source: https://service-manual.nhs.uk/design-system/styles/colour
 section: color
 tag: "规范"
@@ -9,7 +9,7 @@ id: color-12
 publisher: "NHS.UK"
 ---
 
-# NHS.UK · Colour 色彩
+# NHS.UK · Foundation · Colour 色彩
 
 > 来源：[https://service-manual.nhs.uk/design-system/styles/colour](https://service-manual.nhs.uk/design-system/styles/colour)
 

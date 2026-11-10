@@ -1,5 +1,5 @@
 ---
-title: "NHS.UK · Spacing 间距"
+title: "NHS.UK · Foundation · Spacing 间距"
 source: https://service-manual.nhs.uk/design-system/styles/spacing
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-21
 publisher: "NHS.UK"
 ---
 
-# NHS.UK · Spacing 间距
+# NHS.UK · Foundation · Spacing 间距
 
 > 来源：[https://service-manual.nhs.uk/design-system/styles/spacing](https://service-manual.nhs.uk/design-system/styles/spacing)
 

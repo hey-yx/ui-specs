@@ -1,7 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro'
 import FootLine from '../../components/FootLine.astro'
-import { CASES } from '../../data/examples'
+import { loadCases } from '../../data/examples'
+
+/** 每次请求重扫目录：还没放齐五件的站不占位，删站后刷新即消失 */
+const cases = loadCases({ strict: false })
 
 
 const description =
@@ -23,44 +26,53 @@ const jsonLd = {
       <section class="sec">
         <div class="sec-head">
           <h1 class="sec-title">设计案例</h1>
-          <span class="sec-count">{CASES.length} 站</span>
+          <span class="sec-count">{cases.length} 站</span>
         </div>
         <p class="sec-note">
-          用本库的流程走出来的成品：给定建站需求，按指南七步定语境、选基准规范与设计点，数值全部取自库内原文并逐条标行号。成品是单文件 HTML，零外部请求；每个案例的 <code>DECISIONS.md</code> 记每个数值的出处，<code>FINDINGS.md</code> 记基准规范覆盖不到的量怎么派生。
+          用本库的流程走出来的成品：给定建站需求，按指南七步定语境、选基准规范与设计点，数值全部取自库内原文并逐条标行号。成品是单文件 HTML；未开框架的零外部请求，开了框架的只引 esm.sh 的框架与组件库；每个案例的 <code>DECISIONS.md</code> 记每个数值的出处，<code>FINDINGS.md</code> 记基准规范覆盖不到的量怎么派生。
         </p>
 
-        <div class="case-grid">
-          {
-            CASES.map((c) => (
-              <article class="case-card">
-                <a class="case-preview" href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">
-                  <img src={`/examples/${c.slug}/preview.png`} alt={`${c.name} 成品预览`} />
-                </a>
-                <div class="case-body">
-                  <h2 class="case-title">
-                    <a href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">{c.name}</a>
-                    <span class="case-slug">{c.slug}</span>
-                  </h2>
-                  <p class="case-tagline">{c.tagline}</p>
-                  <dl class="case-meta">
-                    <div><dt>主色</dt><dd>{c.accent}</dd></div>
-                    <div><dt>结构</dt><dd>{c.structure}</dd></div>
-                    <div><dt>版型</dt><dd>{c.layout}</dd></div>
-                  </dl>
-                  <p class="case-links">
-                    <a href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">打开成品</a>
-                    <a href={`/briefs/${c.slug}/`}>需求</a>
-                    <a href={`/examples/${c.slug}/decisions/`}>DECISIONS</a>
-                    <a href={`/examples/${c.slug}/findings/`}>FINDINGS</a>
-                  </p>
-                </div>
-              </article>
-            ))
-          }
-        </div>
+        {
+          cases.length > 0 && (
+            <ol class="case-list">
+              {cases.map((c) => (
+                <li class="case-row">
+                  <a class="case-thumb" href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">
+                    {/* 缩略图不是截图：iframe 直接加载成品，按 1280×800 桌面视口排版后缩放，
+                        改版自动跟着变，不用重出 preview.png */}
+                    <iframe
+                      src={`/examples/${c.slug}/index.html`}
+                      title={`${c.name} 成品实时预览`}
+                      loading="lazy"
+                      tabindex="-1"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <div class="case-main">
+                    <h2 class="case-title">
+                      <a href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">{c.name}</a>
+                    </h2>
+                    <p class="case-tagline">{c.tagline}</p>
+                    <dl class="case-meta">
+                      <div><dt>主色</dt><dd>{c.accent}</dd></div>
+                      <div><dt>结构</dt><dd>{c.structure}</dd></div>
+                      <div><dt>版型</dt><dd>{c.layout}</dd></div>
+                    </dl>
+                    <p class="case-links">
+                      <a class="case-open" href={`/examples/${c.slug}/index.html`} target="_blank" rel="noopener noreferrer">打开成品</a>
+                      <a href={`/briefs/${c.slug}/`}>需求</a>
+                      <a href={`/examples/${c.slug}/decisions/`}>DECISIONS</a>
+                      <a href={`/examples/${c.slug}/findings/`}>FINDINGS</a>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )
+        }
 
         <p class="sec-note">
-          工作流与取数路径见 <a href="/starmap/">指南</a>。
+          工作流与取值路径见<a href="/">首页</a>的提示词。
         </p>
       </section>
     </div>
@@ -68,7 +80,7 @@ const jsonLd = {
     <FootLine>
       <span>UI 设计规范指南</span>
       <span class="sep" aria-hidden="true">·</span>
-      <span><b>{CASES.length}</b> 个设计案例</span>
+      <span><b>{cases.length}</b> 个设计案例</span>
       <span class="sep" aria-hidden="true">·</span>
       <span>取值出处逐条标文件行号</span>
     </FootLine>

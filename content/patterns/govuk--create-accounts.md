@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Create accounts 创建账户"
 source: https://design-system.service.gov.uk/patterns/create-accounts/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-12
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/create-accounts/](https://design-system.service.gov.uk/patterns/create-accounts/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Help users to  Create accounts
 
 ## When to use this pattern
 
@@ -27,8 +27,8 @@ Do not create user accounts if you can provide a usable service without them.
 
 This is because user accounts are:
 
-- a barrier for many users and make it more likely they will drop out
-- difficult to build and maintain
+*   a barrier for many users and make it more likely they will drop out
+*   difficult to build and maintain
 
 If you want to let users check the status of a one-off transaction, give them a unique reference number they can use along with their name or email address.
 
@@ -38,10 +38,10 @@ Unique references are hard to remember so you should send them in an email or te
 
 If a user needs an account as part of your service:
 
-- let them use as much of your service as possible before they need to create an account
-- use clear and consistent language
-- create a simple user journey
-- make the sign-up process clear
+*   let them use as much of your service as possible before they need to create an account
+*   use clear and consistent language
+*   create a simple user journey
+*   make the sign-up process clear
 
 ### Use clear and consistent language
 
@@ -65,7 +65,7 @@ Make sure users do not need to enter the same information more than once when cr
 
 ### Avoid using security measures such as CAPTCHAs
 
-<abbr title="Completely Automated Public Turing Test to Tell Computers and Humans Apart">CAPTCHAs</abbr> and similar tests require users to recognise words or pictures.
+CAPTCHAs and similar tests require users to recognise words or pictures.
 
 These are tests of cognitive function, which might be difficult for some users. Users can also struggle to recognise specific words or pictures due to differences in culture and locale.
 

@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Validation 校验"
 source: https://design-system.service.gov.uk/patterns/validation/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-29
 publisher: "GOV.UK Design System"
@@ -13,20 +13,18 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/validation/](https://design-system.service.gov.uk/patterns/validation/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
-Check the information the user gives you to make sure it’s valid. If there's a validation error, tell the user what's gone wrong and how to fix it. Turn off HTML5 validation.
+Check the information the user gives you to make sure it’s valid. If there’s a validation error, tell the user what’s gone wrong and how to fix it. Turn off HTML5 validation.
 
 ## When to use this pattern
 
-Use validation to identify when the user tried to provide information that you're not able to use. Then show the user an error message that helps them to fix the problem.
+Use validation to identify when the user tried to provide information that you’re not able to use. Then show the user an error message that helps them to fix the problem.
 
 But minimise your chances of needing to show an error message in the first place by:
 
-- [making sure your questions are well designed](https://www.gov.uk/service-manual/design/designing-good-questions)
-- accepting information in different formats, as long as it’s not ambiguous (for example, accept postcodes with or without spaces - and names that include a non-alphabetical character or an apostrophe, accent or other diacritic)
+*   [making sure your questions are well designed](https://www.gov.uk/service-manual/design/designing-good-questions)
+*   accepting information in different formats, as long as it’s not ambiguous (for example, accept postcodes with or without spaces - and names that include a non-alphabetical character or an apostrophe, accent or other diacritic)
 
 ## When not to use this pattern
 
@@ -34,17 +32,17 @@ Do not use validation to check whether the user is eligible to use the service o
 
 There are separate patterns for:
 
-- [‘There is a problem with the service’ pages](https://design-system.service.gov.uk/patterns/problem-with-the-service-pages/)
-- [‘Page not found’ pages](https://design-system.service.gov.uk/patterns/page-not-found-pages/)
-- [‘Service unavailable’ pages](https://design-system.service.gov.uk/patterns/service-unavailable-pages/)
+*   [‘There is a problem with the service’ pages](https://design-system.service.gov.uk/patterns/problem-with-the-service-pages/)
+*   [‘Page not found’ pages](https://design-system.service.gov.uk/patterns/page-not-found-pages/)
+*   [‘Service unavailable’ pages](https://design-system.service.gov.uk/patterns/service-unavailable-pages/)
 
 ## How it works
 
 Validation should refuse to accept:
 
-- information that cannot be correct
-- information that’s too ambiguous for you to use
-- missing information, if the information is required
+*   information that cannot be correct
+*   information that’s too ambiguous for you to use
+*   missing information, if the information is required
 
 For example, if you’re asking for someone’s date of birth you should not accept ‘13’ in the month field.
 
@@ -54,26 +52,26 @@ If these characters caused a validation error, it would be difficult for the use
 
 You should ignore unwanted characters entered:
 
-- as part of numbers and codes, such as postcodes or card details
-- before or after an answer, as users might have copied and pasted them in by accident
-- by dictation software – this is particularly common when dictating numbers
+*   as part of numbers and codes, such as postcodes or card details
+*   before or after an answer, as users might have copied and pasted them in by accident
+*   by dictation software – this is particularly common when dictating numbers
 
 ### How to tell the user about validation errors
 
-If the user's answers fail validation:
+If the user’s answers fail validation:
 
-- show them the page again, with the form fields as the user filled them in
-- add ‘Error: ’ to the beginning of the page `<title>` so screen readers read it out as soon as possible
-- show an [Error summary component](https://design-system.service.gov.uk/components/error-summary/) at the top of the page, and move keyboard focus to it
-- show [Error message components](https://design-system.service.gov.uk/components/error-message/) next to fields with errors
+*   show them the page again, with the form fields as the user filled them in
+*   add ‘Error: ’ to the beginning of the page `<title>` so screen readers read it out as soon as possible
+*   show an [Error summary component](https://design-system.service.gov.uk/components/error-summary/) at the top of the page, and move keyboard focus to it
+*   show [Error message components](https://design-system.service.gov.uk/components/error-message/) next to fields with errors
 
-Read guidance on [writing good error messages](/components/error-message/#be-clear-and-concise).
+Read guidance on [writing good error messages](https://design-system.service.gov.uk/components/error-message/#be-clear-and-concise).
 
 Keeping information that failed validation helps users to:
 
-- see what went wrong
-- edit their previous answer
-- avoid re-entering information
+*   see what went wrong
+*   edit their previous answer
+*   avoid re-entering information
 
 ### When to tell the user about validation errors
 
@@ -89,24 +87,24 @@ If you do use this sort of validation, [make sure you validate in a way that’s
 
 There are 2 ways to carry out validation:
 
-- server side validation
-- client side validation (in the browser, using either JavaScript or HTML)
+*   server side validation
+*   client side validation (in the browser, using either JavaScript or HTML)
 
 You’ll always need to carry out server side validation, even if you use client side validation. This is because there’s no guarantee that client side validation will work in all circumstances. For example, the user can bypass client side validation, or [JavaScript can fail to load](https://www.gov.uk/service-manual/technology/using-progressive-enhancement).
 
-Only add client side validation if you find a user need for it. For example, because research shows it helps the user if you validate the information they're providing as they type.
+Only add client side validation if you find a user need for it. For example, because research shows it helps the user if you validate the information they’re providing as they type.
 
 Before you add client side validation, consider that:
 
-- it's hard to tell the user about errors in a way that works reliably across different browsers and assistive technologies
-- carrying out both kinds of validation means you have to check their rules do not conflict
+*   it’s hard to tell the user about errors in a way that works reliably across different browsers and assistive technologies
+*   carrying out both kinds of validation means you have to check their rules do not conflict
 
 ## Turn off HTML5 validation
 
 HTML5 validation is a type of client side validation built into browsers. Do not use it because:
 
-- the visual style, placement and content of HTML5 error messages cannot be made consistent with the GOV.UK Design System
-- we know that the GOV.UK Design System error message and error summary components are accessible
+*   the visual style, placement and content of HTML5 error messages cannot be made consistent with the GOV.UK Design System
+*   we know that the GOV.UK Design System error message and error summary components are accessible
 
 To turn off HTML5 validation, add ‘[novalidate](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#novalidate)’ to your form tags.
 
@@ -116,6 +114,6 @@ Do not add ‘required’ to your input fields.
 
 This approach to validation has been used on a number of services over an extended period of time. For example, [Renew or replace your adult passport](https://www.gov.uk/renew-adult-passport/renew).
 
-But we'd like to expand the guidance, and we're especially interested in hearing from teams whose research has identified a need to use client side validation.
+But we’d like to expand the guidance, and we’re especially interested in hearing from teams whose research has identified a need to use client side validation.
 
-We'd also like to know about any research into whether not adding ‘required‘ to form fields causes problems for screen reader users.
+We’d also like to know about any research into whether not adding ‘required‘ to form fields causes problems for screen reader users.

@@ -1,628 +1,637 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PayloadDeck API — Quickstart and reference</title>
+<title>PayloadDeck — log parsing API</title>
+<meta name="description" content="PayloadDeck turns newline-delimited logs into typed records you can query. Request, response and CLI examples for the /v1/parse endpoint.">
+<link rel="icon" href="data:,">
 <style>
-/* Hallmark · macrostructure: Long Document (three-rail docs) · tone: utilitarian-technical · anchor hue: purple
- * pre-emit critique: P5 H4 E5 S4 R5 V4 · UISpecs owns the numbers, Hallmark keeps structure + slop gates
- */
+/* ---------- tokens ---------- */
 :root{
-  /* palette: GOV.UK colour, one whole set (gap-fill 色值) */
-  --paper:#ffffff;      /* content/color/govuk--colour.md:476 */
-  --canvas:#f3f3f3;     /* content/color/govuk--colour.md:470 */
-  --tint:#f6f5fa;       /* content/color/govuk--colour.md:302 */
-  --ink:#0b0c0c;        /* content/color/govuk--colour.md:454 */
-  --muted:#484949;      /* content/color/govuk--colour.md:458 */
-  --subtle:#858686;     /* content/color/govuk--colour.md:462 */
-  --hair:#cecece;       /* content/color/govuk--colour.md:466 */
-  --accent:#54319f;     /* content/color/govuk--colour.md:286 */
-  --accent-hover:#3f2577;/* content/color/govuk--colour.md:306 */
-  --success:#0f7a52;    /* content/color/govuk--colour.md:222 */
-  --danger:#ca3535;     /* content/color/govuk--colour.md:346 */
-  --warnbg:#fffdf2;     /* content/color/govuk--colour.md:422 */
-  --warnline:#ffdd00;   /* content/color/govuk--colour.md:406 */
-  --on-accent:#ffffff;  /* content/color/govuk--colour.md:476 */
-  /* spacing: Atlassian 8px base, one whole scale (gap-fill 间距) */
-  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px;
-  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
-  /* type: three sizes from GOV.UK type scale (gap-fill 字阶) */
-  --t-1:16px; --t-2:19px; --t-3:24px;
-  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  /* radius: derived, two steps */
-  --r-sm:4px; --r-lg:8px;
-  /* motion: NN/g durations, W3C + Atlassian curves (gap-fill 动效) */
-  --dur-micro:100ms; --dur-out:200ms; --dur-in:300ms;
-  --e-in:cubic-bezier(0.42, 0, 1, 1);
-  --e-out:cubic-bezier(0, 0, 0.58, 1);
-  --e-panel:cubic-bezier(0, 0.4, 0, 1);
+  /* Primer semantic roles, values from the GOV.UK palette (derived, see DECISIONS) */
+  --ink:#0b0c0c;            /* fgColor-default      */
+  --ink-2:#484949;          /* fgColor-muted        */
+  --paper:#ffffff;          /* bgColor-default      */
+  --tint:#f4f8fb;           /* bgColor-inset        */
+  --rule:#cecece;           /* borderColor-default  */
+  --rule-ink:#0b0c0c;       /* borderColor-emphasis */
+  --accent:#1d70b8;         /* accent-emphasis      */
+  --accent-deep:#0f385c;    /* accent hover         */
+  --accent-wash:#d2e2f1;    /* accent-muted         */
+  --accent-line:#8eb8dc;    /* accent border        */
+  --ok:#0f7a52;
+  --err:#ca3535;
+
+  /* 8px base scale — Atlassian space tokens */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:80px;
+
+  /* type scale — GOV.UK points */
+  --fs-1:36px; --fs-2:27px; --fs-3:19px; --fs-4:16px; --fs-mono:14px; --fs-meta:12px;
+
+  --mono:ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* derived (GAP: radius, hairline, focus ring) */
+  --r-sm:4px; --r-md:8px; --hair:1px;
+  --focus:2px solid var(--ink); --focus-offset:2px;
 }
+
+/* ---------- reset ---------- */
 *,*::before,*::after{box-sizing:border-box}
-html,body{overflow-x:clip}
-[hidden]{display:none !important}
-/* brief hard rule: line-height = font-size + 8, per element, zero specificity */
-:where(body, body *){line-height:calc(1em + 8px)}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1);font-weight:400}
-a{color:var(--accent)}
-a:hover{color:var(--accent-hover)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-h1,h2,h3{font-weight:600;margin:0 0 var(--sp-4);overflow-wrap:anywhere;min-width:0}
-h1{font-size:var(--t-3)}
-h2{font-size:var(--t-2)}
-h3{font-size:var(--t-1);margin-top:var(--sp-8)}
-p,ul,ol,dl{margin:0 0 var(--sp-4)}
-p,li,dd,dt,th,td{overflow-wrap:anywhere}
-.prose,.lede{max-width:80ch}
-.muted{color:var(--muted)}
-.mono,code,kbd,pre{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.skip{position:absolute;left:-9999px;top:0;background:var(--paper);padding:var(--sp-2) var(--sp-4);z-index:60}
-.skip:focus{left:var(--sp-2);top:var(--sp-2)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:var(--fs-3)}
+h1,h2,h3,p,ul,ol,dl,dd,figure,pre{margin:0}
+h1,h2,h3{font-weight:600}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+a:hover{color:var(--accent-deep)}
+ul,ol{padding:0;list-style:none}
+button{font-family:inherit;font-size:inherit;font-weight:inherit;line-height:calc(1em + 8px);color:inherit;background:none;border:0;padding:0;cursor:pointer}
+table{border-collapse:collapse}
+img,svg{display:block;max-width:100%}
+[hidden]{display:none!important}
 
-/* header — static, scrolls with the page (Primer layout:141) */
-.topbar{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;padding:var(--sp-4);border-bottom:1px solid var(--hair)}
-.brand{display:inline-flex;align-items:center;gap:var(--sp-2);text-decoration:none;color:var(--ink);font-weight:600;min-height:32px}
-.brand svg{width:24px;height:24px;flex:none}
-.brand-sep{color:var(--muted)}
-.top-tag{color:var(--muted)}
-.ver-chip{margin-left:auto;background:var(--accent);color:var(--on-accent);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);font-variant-numeric:tabular-nums}
+/* line-height = font-size + 8, resolved per element so nested inline
+   children never inherit another size's rhythm */
+*{line-height:calc(1em + 8px)}
+pre,pre *{line-height:1.5}
 
-/* shell — Primer split page: left pane / content / right pane */
-.shell{max-width:1280px;margin:0 auto;padding:var(--sp-8) var(--sp-4) var(--sp-16);display:grid;gap:var(--sp-8);grid-template-columns:minmax(0,1fr)}
-.main{min-width:0}
-.main section{margin:0 0 var(--sp-12);scroll-margin-top:var(--sp-4)}
-.sidebar,.toc-aside{min-width:0}
-.sidebar{align-self:start;position:sticky;top:var(--sp-4);max-height:calc(100vh - 32px);overflow-y:auto}
-.toc-aside{display:none}
-.rail-title{font-weight:600;margin:0 0 var(--sp-2)}
-.rail{list-style:none;margin:0;padding:0}
-.rail li{margin:0}
-.rail a{display:block;padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-3);color:var(--muted);text-decoration:none;border-left:2px solid transparent;min-height:32px}
-.rail a:hover{background:var(--canvas);color:var(--ink)}
-.rail a[aria-current="location"],.rail a[aria-current="true"]{border-left-color:var(--accent);background:var(--tint);color:var(--accent);font-weight:600}
-.rail a.sub{padding-left:var(--sp-8)}
-.toc-narrow{display:none}
-.toc-narrow summary{cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:var(--sp-2) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);list-style:none}
-.toc-narrow summary::-webkit-details-marker{display:none}
-.toc-narrow summary::after{content:"+"}
-.toc-narrow[open] summary::after{content:"\2212"}
+::selection{background:var(--accent-wash);color:var(--ink)}
+:focus-visible{outline:var(--focus);outline-offset:var(--focus-offset);border-radius:var(--r-sm)}
 
-/* tables */
-.table-wrap{max-width:100%;overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:520px}
-caption{text-align:left;font-weight:600;padding:0 0 var(--sp-2)}
-th,td{text-align:left;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--hair);vertical-align:top}
-thead th{border-bottom:1px solid var(--subtle);font-weight:600;white-space:nowrap}
-tbody tr:hover{background:var(--canvas)}
-td .req{color:var(--muted)}
+.wrap{width:100%;max-width:1280px;margin-inline:auto;padding-inline:var(--s4)}
+@media (min-width:1012px){.wrap{padding-inline:var(--s5)}}
 
-/* code sample */
-.code{background:var(--canvas);border:1px solid var(--subtle);border-radius:var(--r-lg);overflow:hidden}
-.code-head{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--hair)}
-.code-label{color:var(--muted)}
-.tabs{display:flex;gap:var(--sp-1);flex-wrap:wrap}
-.tab{background:none;border:0;border-bottom:2px solid transparent;padding:var(--sp-1) var(--sp-2);min-height:32px;color:var(--muted);cursor:pointer;font-family:var(--font);font-size:var(--t-1)}
-.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
-.code-actions{margin-left:auto;display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap}
-.copied{color:var(--success);display:inline-flex;align-items:center;gap:var(--sp-1);font-weight:600}
-.copied svg{width:16px;height:16px;flex:none}
-pre{margin:0;padding:var(--sp-4);max-width:100%;font-size:var(--t-1);white-space:pre-wrap;overflow-wrap:break-word;color:var(--ink)}
+.skip{position:absolute;left:var(--s4);top:-100px;background:var(--paper);color:var(--ink);
+  padding:var(--s2) var(--s3);border:var(--hair) solid var(--ink);border-radius:var(--r-sm);z-index:9}
+.skip:focus{top:var(--s2)}
 
-/* buttons + fields */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:32px;padding:var(--sp-1) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1);cursor:pointer;transition:background-color var(--dur-micro) var(--e-out),color var(--dur-micro) var(--e-out)}
-.btn svg{width:16px;height:16px;flex:none}
-.btn:hover{background:var(--canvas)}
-.btn:disabled{color:var(--subtle);background:var(--canvas);cursor:not-allowed}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
-.btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
-.chapters-btn,.drawer-close{display:none}
-label{display:block;font-weight:600;margin:0 0 var(--sp-1)}
-input[type=search],input[type=text]{width:100%;max-width:360px;min-height:40px;padding:var(--sp-2) var(--sp-3);border:1px solid var(--subtle);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--t-1)}
-input[aria-invalid="true"]{border-color:var(--danger)}
-.field{margin:0 0 var(--sp-4)}
-.field-error{color:var(--danger);margin:var(--sp-1) 0 0}
-.error-summary{border-left:3px solid var(--danger);background:var(--canvas);padding:var(--sp-3) var(--sp-4);margin:0 0 var(--sp-4)}
-.error-summary h3{margin:0 0 var(--sp-2);color:var(--danger)}
-.error-summary ul{margin:0;padding-left:var(--sp-4)}
-.note{border-left:3px solid var(--warnline);background:var(--warnbg);padding:var(--sp-3) var(--sp-4)}
-.result-ok{color:var(--success);font-weight:600}
-.live-count{color:var(--muted)}
-.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-2) var(--sp-4);max-width:80ch}
-.facts dt{font-weight:600;color:var(--muted)}
-.facts dd{margin:0}
-.steps{padding-left:var(--sp-4);max-width:80ch}
-.steps li{margin:0 0 var(--sp-2)}
-.filters{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;margin:0 0 var(--sp-2)}
-.form-actions{display:flex;gap:var(--sp-2);flex-wrap:wrap}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* footer */
-.foot{border-top:1px solid var(--hair);padding:var(--sp-4) var(--sp-6);color:var(--muted);display:flex;flex-wrap:wrap;gap:var(--sp-2);justify-content:space-between}
+/* ---------- N8 · terminal command nav ---------- */
+.nav{border-bottom:var(--hair) solid var(--rule);background:var(--paper)}
+.nav__line{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0 var(--s4);
+  font-family:var(--mono);font-size:var(--fs-mono);padding-block:var(--s3)}
+.nav__word{color:var(--ink);font-weight:500;white-space:nowrap}
+.nav__prompt{color:var(--accent)}
+.nav__flags{display:flex;flex-wrap:wrap;gap:0 var(--s3);min-width:0}
+.nav a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent-line);
+  text-underline-offset:3px}
+.nav a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.caret{color:var(--accent);animation:blink 1.05s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
 
-/* narrow drawer + scrim (derived overlay, single tier) */
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:25}
-@media (min-width:768px){
-  .shell{grid-template-columns:200px minmax(0,1fr)}
-}
-@media (min-width:1012px){
-  .shell{grid-template-columns:208px minmax(0,1fr) 220px;gap:var(--sp-8)}
-  .toc-aside{display:block;align-self:start;position:sticky;top:var(--sp-4);max-height:calc(100vh - 32px);overflow-y:auto}
-}
+/* ---------- intro ---------- */
+.intro{padding-block:var(--s5) var(--s6)}
+.intro__grid{display:grid;gap:var(--s7)}
+@media (min-width:1012px){.intro__grid{grid-template-columns:minmax(0,1fr) 328px;gap:var(--s7);align-items:start}}
+.eyebrow{font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:0 var(--s3)}
+.eb-status{display:inline-flex;align-items:center;gap:var(--s1);color:var(--ink)}
+h1{font-size:var(--fs-1);margin-top:var(--s2);max-width:26ch}
+@media (max-width:543px){h1{font-size:var(--fs-2)}}
+.lead{margin-top:var(--s3);max-width:56ch;color:var(--ink);text-wrap:pretty}
+.lead code,.path code,.note code,td code,th code,.callout code,.step code{font-family:var(--mono);font-size:var(--fs-4);
+  background:var(--tint);border:var(--hair) solid var(--rule);border-radius:var(--r-sm);padding:0 var(--s1);
+  white-space:nowrap;overflow-wrap:normal}
+.facts{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s1) var(--s6);margin-top:var(--s5)}
+.fact{display:flex;align-items:baseline;gap:var(--s2)}
+.fact__k{display:block;font-family:var(--mono);font-size:var(--fs-mono);color:var(--ink-2)}
+.fact__v{display:block;font-family:var(--mono);font-size:var(--fs-4);margin-top:var(--s1)}
+
+/* inline response diagram */
+.diagram{border:var(--hair) solid var(--rule);border-radius:var(--r-md);padding:var(--s3) var(--s4) var(--s4);
+  background:var(--tint);max-width:460px}
+.diagram svg{width:100%;height:auto;font-family:var(--mono)}
+.diagram__cap{font-size:var(--fs-meta);color:var(--ink-2);margin-top:var(--s2);max-width:34ch}
+
+/* ---------- bands ---------- */
+.band{padding-block:var(--s5);border-top:var(--hair) solid var(--rule);scroll-margin-top:var(--s5)}
+.band__head{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s3)}
+.band__no{font-family:var(--mono);font-size:var(--fs-mono);color:var(--accent);font-weight:500}
+.band__rule{flex:1 1 auto;height:var(--hair);background:var(--rule);min-width:var(--s5)}
+.band__meta{font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2);white-space:nowrap}
+h2{font-size:var(--fs-2);max-width:34ch;text-wrap:balance;margin-bottom:var(--s4)}
+.lede{max-width:58ch;margin-bottom:var(--s4);text-wrap:pretty}
+.note{max-width:62ch;color:var(--ink-2);margin-top:var(--s3)}
+
+/* ---------- playground block ---------- */
+.block{border:var(--hair) solid var(--rule);border-radius:var(--r-md);overflow:hidden;background:var(--paper)}
+.block__head{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3);
+  padding:var(--s2) var(--s3);border-bottom:var(--hair) solid var(--rule);background:var(--paper)}
+.block__id{display:flex;align-items:center;gap:var(--s2);min-width:0;flex:1 1 auto}
+.method{font-family:var(--mono);font-size:var(--fs-meta);background:var(--accent-wash);color:var(--ink);
+  border-radius:var(--r-sm);padding:1px var(--s2);align-self:center}
+.path{font-family:var(--mono);font-size:var(--fs-mono);overflow-wrap:anywhere;min-width:0}
+.status{font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2);display:inline-flex;align-items:center;gap:var(--s1)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block}
+.block__tools{display:flex;align-items:center;gap:var(--s3);margin-left:auto}
+
+.tabs{display:flex;gap:var(--s1);flex-wrap:wrap}
+.tabs [role=tab]{font-family:var(--mono);font-size:var(--fs-mono);color:var(--ink-2);
+  padding:var(--s1) var(--s2);border-radius:var(--r-sm);border:var(--hair) solid transparent;min-height:28px}
+.tabs [role=tab]:hover{color:var(--ink);background:var(--tint)}
+.tabs [role=tab][aria-selected=true]{color:var(--ink);background:var(--paper);
+  border-color:var(--rule);box-shadow:inset 0 -2px 0 var(--accent)}
+.tabs--solid [role=tab][aria-selected=true]{background:var(--accent);color:var(--paper);border-color:var(--accent);box-shadow:none}
+.copy{font-family:var(--mono);font-size:var(--fs-mono);color:var(--accent);border:var(--hair) solid var(--rule);
+  border-radius:var(--r-sm);padding:var(--s1) var(--s3);min-height:32px}
+.copy:hover{border-color:var(--accent);color:var(--accent-deep)}
+.copy[data-done]{color:var(--ink);border-color:var(--ink)}
+
+.block__body{display:grid}
+@media (min-width:1012px){.block__body{grid-template-columns:minmax(0,1.02fr) minmax(0,1fr)}}
+.pane{min-width:0;background:var(--tint);padding:var(--s4);border-bottom:var(--hair) solid var(--rule)}
+@media (min-width:1012px){.pane{border-bottom:0;border-right:var(--hair) solid var(--rule)}}
+.pane__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s3);flex-wrap:wrap}
+.pane__label{font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2);display:inline-flex;align-items:center;gap:var(--s2)}
+
+/* record view */
+.rec{display:grid;gap:0}
+.rec__row{display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr);gap:var(--s3);
+  align-items:baseline;padding-block:var(--s1);border-bottom:var(--hair) solid rgba(11,12,12,.08)}
+.rec__row:last-child{border-bottom:0}
+.rec__k{font-family:var(--mono);font-size:var(--fs-mono);color:var(--ink-2);overflow-wrap:anywhere}
+.rec__v{font-family:var(--mono);font-size:var(--fs-mono);min-width:0;display:flex;justify-content:space-between;
+  align-items:baseline;gap:var(--s3)}
+.rec__v-t{overflow-wrap:anywhere}
+.rec__t{font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2);text-align:right;white-space:nowrap}
+.rec__group{padding-left:var(--s4);border-left:var(--hair) solid var(--accent-line);margin-block:var(--s2);display:grid}
+.rec__v--str{color:var(--ok)}
+.rec__v--num{color:var(--accent-deep)}
 @media (max-width:543px){
-  .facts{grid-template-columns:minmax(0,1fr);gap:var(--sp-1)}
-  .facts dt{margin-top:var(--sp-2)}
-  .facts dd{margin-bottom:var(--sp-2)}
+  .rec__t{display:none}
+  .rec__row{grid-template-columns:minmax(0,1fr);gap:0}
+  .rec__k{color:var(--ink-2)}
 }
-@media (min-width:1280px){
-  .shell{padding-left:var(--sp-6);padding-right:var(--sp-6)}
-}
-@media (max-width:767px){
-  .shell{padding:var(--sp-6) var(--sp-4) var(--sp-12)}
-  .chapters-btn{display:inline-flex;width:100%;justify-content:space-between;margin:0 0 var(--sp-4)}
-  .drawer-close{display:inline-flex;margin:0 0 var(--sp-4)}
-  .toc-narrow{display:block;margin:0 0 var(--sp-6)}
-  .toc-narrow .rail{padding:var(--sp-2) 0 0}
-  .toc-aside{display:none}
-  .sidebar{position:fixed;top:0;left:0;bottom:0;width:min(86vw,300px);max-height:none;z-index:30;background:var(--paper);border-right:1px solid var(--subtle);padding:var(--sp-4);transform:translateX(-100%);visibility:hidden;transition:transform var(--dur-out) var(--e-in)}
-  .sidebar.open{transform:none;visibility:visible;transition:transform var(--dur-in) var(--e-panel)}
-  .sidebar.closing{transform:translateX(-100%);visibility:visible;transition:transform var(--dur-out) var(--e-in)}
-  .rail a,.btn,.tab{min-height:44px}
-  .foot{padding:var(--sp-4)}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{transition-duration:0ms !important;animation-duration:0ms !important}
-}
-@media (forced-colors:active){
-  .rail a[aria-current]{border-left-color:Highlight}
-  :focus-visible{outline-color:Highlight}
+
+.code{min-width:0;background:var(--paper);display:flex;flex-direction:column}
+.code__bar{padding:var(--s4) var(--s4) 0;font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2)}
+.code__hint{margin:0 auto 0 0;width:100%;padding:var(--s2) var(--s4);color:var(--ink-2);font-size:var(--fs-meta);
+  font-family:var(--mono);margin-top:auto;border-top:var(--hair) solid var(--rule)}
+.code pre,pre.pane__pre{margin:0;padding:var(--s4);overflow-x:auto;overflow-y:hidden;
+  font-family:var(--mono);font-size:var(--fs-mono);white-space:pre;tab-size:2;-webkit-overflow-scrolling:touch}
+.code pre{color:var(--ink)}
+.tok-p{color:var(--accent)}        /* prompt / flag */
+.tok-s{color:var(--ok)}            /* string */
+.tok-c{color:var(--ink-2)}         /* comment */
+.tok-k{color:var(--accent-deep)}   /* keyword */
+
+/* ---------- result table ---------- */
+.scroller{overflow-x:auto;border:var(--hair) solid var(--rule);border-radius:var(--r-md);background:var(--paper)}
+table{width:100%;min-width:560px;font-family:var(--mono);font-size:var(--fs-mono)}
+caption{text-align:left;padding:var(--s3) var(--s4);font-family:var(--mono);font-size:var(--fs-meta);
+  color:var(--ink-2);border-bottom:var(--hair) solid var(--rule)}
+th,td{text-align:left;padding:var(--s2) var(--s4);border-bottom:var(--hair) solid var(--rule);vertical-align:top}
+thead th{font-family:var(--mono);font-size:var(--fs-meta);font-weight:500;color:var(--ink-2)}
+#fields td:first-child,#fields th:first-child{width:20%}
+#fields td:nth-child(2),#fields th:nth-child(2){width:12%}
+tbody tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.lv-error{color:var(--err)}
+.lv-warn{color:var(--accent-deep)}
+td.wide{font-family:var(--sans);font-size:var(--fs-4);min-width:280px}
+
+/* ---------- error card ---------- */
+.callout{border:var(--hair) solid var(--rule);border-left:3px solid var(--err);border-radius:var(--r-sm);
+  background:var(--paper);padding:var(--s3) var(--s4)}
+.badge{display:inline-block;font-family:var(--mono);font-size:var(--fs-meta);color:var(--paper);
+  background:var(--err);border-radius:var(--r-sm);padding:1px var(--s2)}
+.raw{margin-top:var(--s3);font-family:var(--mono);font-size:var(--fs-mono);color:var(--ink);
+  background:var(--tint);border:var(--hair) solid var(--rule);border-radius:var(--r-sm);padding:var(--s2) var(--s3);
+  overflow-x:auto;white-space:pre}
+.callout p{margin-top:var(--s3);max-width:56ch}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);max-width:70ch}
+@media (min-width:768px){.steps{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none;gap:var(--s5)}}
+.step{border-top:2px solid var(--ink);padding-top:var(--s3);min-width:0}
+.step__no{font-family:var(--mono);font-size:var(--fs-mono);color:var(--accent)}
+.step h3{font-size:var(--fs-3);margin-top:var(--s1)}
+.step p{margin-top:var(--s2);color:var(--ink-2)}
+
+/* ---------- footer · Ft8 ---------- */
+.foot{border-top:2px solid var(--ink);margin-top:var(--s7);overflow:hidden}
+.foot__legal{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);align-items:baseline;
+  padding-block:var(--s4);font-family:var(--mono);font-size:var(--fs-meta);color:var(--ink-2)}
+.foot__legal a{color:var(--ink-2)}
+.foot__legal a:hover{color:var(--accent)}
+.foot__mark{flex:1 1 auto;color:var(--ink)}
+.foot__band{overflow:hidden;background:var(--tint);
+  -webkit-mask-image:linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+  mask-image:linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent)}
+.foot__track{display:flex;width:max-content;white-space:nowrap;padding-block:var(--s5);
+  background:var(--tint);animation:marquee 38s linear infinite}
+.foot__track span{font-family:var(--mono);font-size:var(--fs-3);color:var(--ink);padding-right:var(--s6)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+@media (prefers-reduced-motion: reduce){
+  .caret{animation:none;opacity:1}
+  .foot__track{animation:none}
 }
 </style>
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
-  var baseTitle=document.title;
-
-  /* in-page TOC collected from real headings, both rails */
-  var heads=$$('#main h2, #main h3').filter(function(h){return h.id && !h.closest('#error-summary');});
-  ['#toc-list','#toc-list-narrow'].forEach(function(sel){
-    var ul=document.querySelector(sel); if(!ul)return;
-    heads.forEach(function(h){
-      var li=document.createElement('li'), a=document.createElement('a');
-      a.href='#'+h.id; a.textContent=h.textContent;
-      if(h.tagName==='H3')a.className='sub';
-      li.appendChild(a); ul.appendChild(li);
-    });
-  });
-
-  /* active section tracking: rect-based; scroll fires in browsers, timer is the fallback */
-  function syncActive(){
-    var heads=$$('#main section > h2, #main section > h3');
-    if(!heads.length)return;
-    var curHead=heads[0];
-    heads.forEach(function(h){if(h.getBoundingClientRect().top<=120)curHead=h;});
-    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2)curHead=heads[heads.length-1];
-    var sec=curHead.closest('section');
-    $$('#chapters-list a').forEach(function(a){
-      if(a.getAttribute('href')==='#'+sec.id)a.setAttribute('aria-current','location');
-      else a.removeAttribute('aria-current');
-    });
-    $$('.toc a').forEach(function(a){
-      if(a.getAttribute('href')==='#'+curHead.id)a.setAttribute('aria-current','true');
-      else a.removeAttribute('aria-current');
-    });
-  }
-  window.addEventListener('scroll',syncActive,{passive:true});
-  window.addEventListener('resize',syncActive);
-  setInterval(syncActive,250);
-  syncActive();
-
-  /* code language tabs */
-  var tabs=$$('[role=tab]'), panels=$$('[role=tabpanel]');
-  function activate(i,focus){
-    tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i?'true':'false');t.tabIndex=k===i?0:-1;});
-    panels.forEach(function(p,k){p.hidden=k!==i;});
-    if(focus)tabs[i].focus();
-    window.__activeTab=i;
-  }
-  tabs.forEach(function(t,i){
-    t.addEventListener('click',function(){activate(i,false);});
-    t.addEventListener('keydown',function(e){
-      var n=null;
-      if(e.key==='ArrowRight')n=(i+1)%tabs.length;
-      else if(e.key==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;
-      else if(e.key==='Home')n=0;
-      else if(e.key==='End')n=tabs.length-1;
-      if(n!==null){e.preventDefault();activate(n,true);}
-    });
-  });
-  activate(0,false);
-
-  /* copy with graceful fallback for file:// clipboard restrictions */
-  function copyText(text){
-    try{
-      if(navigator.clipboard&&window.isSecureContext){
-        return navigator.clipboard.writeText(text).then(function(){return 'clipboard';},function(){return legacy(text);});
-      }
-    }catch(e){}
-    return Promise.resolve(legacy(text));
-  }
-  function legacy(text){
-    try{
-      var ta=document.createElement('textarea');
-      ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='-1000px';
-      document.body.appendChild(ta);ta.select();
-      var ok=document.execCommand('copy');ta.remove();return ok?'execCommand':null;
-    }catch(e){return null;}
-  }
-  $$('.copy-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var wrap=btn.closest('.code');
-      var visible=wrap.querySelector('[role=tabpanel]:not([hidden]) pre');
-      var pre=visible||wrap.querySelector('pre');
-      copyText(pre?pre.textContent:'').then(function(method){
-        window.__lastCopyMethod=method;
-        var badge=wrap.querySelector('.copied');
-        if(method&&badge){
-          badge.hidden=false;clearTimeout(badge._t);
-          badge._t=setTimeout(function(){badge.hidden=true;},2000);
-        }
-      });
-    });
-  });
-
-  /* live filter on error codes */
-  var f=document.getElementById('filter'), rows=$$('#error-table tbody tr');
-  var count=document.getElementById('filter-count'), empty=document.getElementById('filter-empty');
-  window.__visibleRows=rows.length;
-  function applyFilter(){
-    var q=f.value.trim().toLowerCase(),n=0;
-    rows.forEach(function(r){var hit=!q||r.textContent.toLowerCase().indexOf(q)!==-1;r.hidden=!hit;if(hit)n++;});
-    count.textContent='Showing '+n+' of '+rows.length;
-    empty.hidden=n!==0;
-    window.__visibleRows=n;
-  }
-  f.addEventListener('input',applyFilter);
-  document.getElementById('filter-clear').addEventListener('click',function(){f.value='';applyFilter();f.focus();});
-
-  /* three-state form validation */
-  var form=document.getElementById('try-form'), summary=document.getElementById('error-summary');
-  var sumList=document.getElementById('error-list'), keyI=document.getElementById('api-key');
-  var lineI=document.getElementById('log-line'), result=document.getElementById('try-result');
-  window.__formErrors=0;window.__resultVisible=false;
-  function clearErr(){
-    $$('.field-error').forEach(function(e){e.hidden=true;e.textContent='';});
-    [keyI,lineI].forEach(function(i){i.removeAttribute('aria-invalid');i.removeAttribute('aria-describedby');});
-    summary.hidden=true;sumList.innerHTML='';
-  }
-  form.addEventListener('submit',function(e){
-    e.preventDefault();clearErr();
-    var errs=[];
-    if(!keyI.value.trim())errs.push([keyI,'key','Enter your API key']);
-    if(!lineI.value.trim())errs.push([lineI,'line','Enter a log line']);
-    if(errs.length){
-      document.title='Error: '+baseTitle;
-      errs.forEach(function(row){
-        var li=document.createElement('li'),a=document.createElement('a');
-        a.href='#'+row[0].id;a.textContent=row[2];li.appendChild(a);sumList.appendChild(li);
-        var msg=document.getElementById('err-'+row[1]);msg.textContent=row[2];msg.hidden=false;
-        row[0].setAttribute('aria-invalid','true');row[0].setAttribute('aria-describedby','err-'+row[1]);
-      });
-      summary.hidden=false;summary.focus();
-      result.hidden=true;
-    }else{
-      document.title=baseTitle;
-      result.hidden=false;
-      document.getElementById('try-echo').textContent=keyI.value.trim().slice(0,4)+'\u2026'+keyI.value.trim().slice(-4);
-    }
-    window.__formErrors=errs.length;window.__resultVisible=!result.hidden;
-  });
-  form.addEventListener('reset',function(){
-    clearErr();result.hidden=true;document.title=baseTitle;
-    window.__formErrors=0;window.__resultVisible=false;
-  });
-
-  /* narrow-viewport chapter drawer */
-  var sb=document.getElementById('sidebar'), openBtn=document.getElementById('chapters-btn');
-  var closeBtn=document.getElementById('drawer-close'), scrim=document.getElementById('scrim');
-  window.__drawerOpen=false;
-  function setDrawer(open){
-    clearTimeout(sb._closeT);
-    sb.classList.toggle('open',open);
-    if(open){sb.classList.remove('closing');}
-    else if(sb.classList.contains('closing')===false){
-      sb.classList.add('closing');
-      sb._closeT=setTimeout(function(){sb.classList.remove('closing');},220);
-    }
-    openBtn.setAttribute('aria-expanded',String(open));
-    scrim.hidden=!open;
-    if(window.matchMedia('(max-width:767px)').matches)sb.setAttribute('aria-hidden',String(!open));
-    else sb.removeAttribute('aria-hidden');
-    if(open)closeBtn.focus();else if(window.matchMedia('(max-width:767px)').matches)openBtn.focus();
-    window.__drawerOpen=open;
-  }
-  openBtn.addEventListener('click',function(){setDrawer(true);});
-  closeBtn.addEventListener('click',function(){setDrawer(false);});
-  scrim.addEventListener('click',function(){setDrawer(false);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sb.classList.contains('open'))setDrawer(false);});
-  var mqNarrow=window.matchMedia('(max-width:767px)');
-  function syncDrawerMode(){
-    if(!mqNarrow.matches){
-      sb.classList.remove('open','closing');
-      clearTimeout(sb._closeT);
-      scrim.hidden=true;
-      openBtn.setAttribute('aria-expanded','false');
-      sb.removeAttribute('aria-hidden');
-      if(document.activeElement===closeBtn){var firstLink=document.querySelector('#chapters-list a');if(firstLink)firstLink.focus();}
-      window.__drawerOpen=false;
-    }else{
-      sb.setAttribute('aria-hidden',String(!sb.classList.contains('open')));
-    }
-  }
-  if(mqNarrow.addEventListener)mqNarrow.addEventListener('change',syncDrawerMode);
-  else if(mqNarrow.addListener)mqNarrow.addListener(syncDrawerMode);
-  window.addEventListener('resize',syncDrawerMode);
-  syncDrawerMode();
-  window.__setDrawer=setDrawer;
-});
-</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="topbar">
-  <a class="brand" href="#overview" aria-label="PayloadDeck API docs, back to overview">
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <rect x="1" y="1" width="18" height="18" rx="4" fill="#54319f"/>
-      <path d="M5 6h10M5 10h7M5 14h4" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M15 10l-4 5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-    PayloadDeck
-  </a>
-  <span class="brand-sep" aria-hidden="true">/</span>
-  <span class="top-tag">API docs</span>
-  <span class="ver-chip">v2.4</span>
+<header class="nav">
+  <div class="wrap">
+    <p class="nav__line">
+      <span class="nav__word"><span class="nav__prompt">&gt;</span>payloaddeck</span>
+      <span class="nav__flags"><a href="#send">--parse</a><a href="#query">--query</a><a href="#cli">--cli</a><a href="#fields">--fields</a><span class="caret" aria-hidden="true">▮</span></span>
+    </p>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
 
-  <nav class="sidebar" id="sidebar" aria-label="Chapters">
-    <button class="btn drawer-close" id="drawer-close" type="button">Close chapters</button>
-    <p class="rail-title">Reference</p>
-    <ul class="rail" id="chapters-list">
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#quickstart">Quickstart</a></li>
-      <li><a href="#request-fields">Request fields</a></li>
-      <li><a href="#response">Response</a></li>
-      <li><a href="#error-codes">Error codes</a></li>
-      <li><a href="#try-it">Try a request</a></li>
-      <li><a href="#version">Version &amp; build</a></li>
-    </ul>
-  </nav>
-  <div class="scrim" id="scrim" hidden></div>
+    <section class="intro">
+      <div class="intro__grid">
+        <div>
+          <p class="eyebrow"><span>Log parsing API</span><span>v1.4</span><span class="eb-status"><i class="dot"></i>all systems go</span></p>
+          <h1>Send one log line.<br>Get a typed record back.</h1>
+          <p class="lead">PayloadDeck turns newline-delimited logs into typed records you can query. No schema file, no agent, no sidecar.</p>
+          <div class="facts">
+            <div class="fact"><span class="fact__k">p50 / 1k lines</span><span class="fact__v">41 ms</span></div>
+            <div class="fact"><span class="fact__k">max request</span><span class="fact__v">5 MB</span></div>
+            <div class="fact"><span class="fact__k">integration</span><span class="fact__v">30 min</span></div>
+          </div>
+        </div>
 
-  <main class="main" id="main">
-    <button class="btn chapters-btn" id="chapters-btn" type="button" aria-controls="sidebar" aria-expanded="false">Chapters <span aria-hidden="true">&#9776;</span></button>
-    <details class="toc-narrow">
-      <summary>On this page</summary>
-      <ul class="rail toc" id="toc-list-narrow"></ul>
-    </details>
-
-    <section id="overview">
-      <h1>PayloadDeck API</h1>
-      <p class="lede">Send a raw log line, get structured fields back. This page takes you from an empty terminal to a working request, then gives you the field and error tables to check against.</p>
-      <dl class="facts">
-        <dt>Base URL</dt><dd class="mono">https://api.logreap.dev</dd>
-        <dt>Parse endpoint</dt><dd class="mono">POST /v2/parse</dd>
-        <dt>Authentication</dt><dd>Bearer token in the <code>Authorization</code> header</dd>
-        <dt>Payload</dt><dd>JSON, UTF-8, 256 KB maximum</dd>
-        <dt>Rate limit</dt><dd class="mono">600 requests / minute</dd>
-      </dl>
+        <figure class="diagram">
+          <svg viewBox="0 0 320 176" role="img" aria-labelledby="diagTitle">
+            <title id="diagTitle">One log line becomes a typed record: the line is sent to /v1/parse, the format is detected, and typed fields come back.</title>
+            <g fill="#ffffff" stroke="#cecece" stroke-width="1">
+              <rect x="0.5" y="0.5" width="319" height="43" rx="4"/>
+              <rect x="0.5" y="66.5" width="319" height="37" rx="4"/>
+              <rect x="0.5" y="126.5" width="319" height="49" rx="4"/>
+            </g>
+            <g font-size="12" fill="#484949">
+              <text x="12" y="18">checkout.log</text>
+              <text x="12" y="83">detect · type · normalise</text>
+              <text x="12" y="143">record</text>
+            </g>
+            <g font-size="12" fill="#0b0c0c">
+              <text x="12" y="35">level=error dur=30012 svc=checkout-api</text>
+              <text x="12" y="96" fill="#1d70b8">logfmt → 6 fields, 0 unparsed</text>
+              <text x="12" y="160">level: error · duration_ms: 30012</text>
+            </g>
+            <g stroke="#1d70b8" stroke-width="1.5" fill="none">
+              <path d="M160 44v14M154 52l6 6 6-6"/>
+              <path d="M160 104v14M154 112l6 6 6-6"/>
+            </g>
+            <g fill="#1d70b8" font-size="11">
+              <text x="172" y="57">POST /v1/parse</text>
+              <text x="172" y="117">200 OK</text>
+            </g>
+          </svg>
+          <figcaption class="diagram__cap">One line in, one typed record out.</figcaption>
+        </figure>
+      </div>
     </section>
 
-    <section id="quickstart">
-      <h2 id="h-quickstart">Quickstart</h2>
-      <p class="prose">Four steps, about two minutes. Everything below is a static example: this page never sends a request to the API.</p>
+    <!-- 01 -->
+    <section class="band" id="send">
+      <div class="band__head"><span class="band__no">01</span><span class="band__rule"></span><span class="band__meta">POST /v1/parse</span></div>
+      <h2>Send a batch</h2>
+      <p class="lede">Post up to 5 MB of newline-delimited logs. One record comes back for every line, in the order you sent them — parsed or not.</p>
+
+      <div class="block">
+        <div class="block__head">
+          <div class="block__id">
+            <span class="method">POST</span><span class="path">/v1/parse</span>
+            <span class="status"><i class="dot"></i>200 · 24 ms</span>
+          </div>
+          <div class="block__tools">
+            <div class="tabs" role="tablist" aria-label="Example language">
+              <button role="tab" id="t1-a" aria-controls="p1-a" aria-selected="true" tabindex="0">curl</button>
+              <button role="tab" id="t1-b" aria-controls="p1-b" aria-selected="false" tabindex="-1">python</button>
+              <button role="tab" id="t1-c" aria-controls="p1-c" aria-selected="false" tabindex="-1">node</button>
+            </div>
+            <button class="copy" data-copy>Copy</button>
+          </div>
+        </div>
+        <div class="block__body">
+          <div class="pane">
+            <div class="pane__bar">
+              <span class="pane__label"><i class="dot"></i>response</span>
+              <div class="tabs" role="tablist" aria-label="Response view">
+                <button role="tab" id="v1-a" aria-controls="w1-a" aria-selected="true" tabindex="0">record</button>
+                <button role="tab" id="v1-b" aria-controls="w1-b" aria-selected="false" tabindex="-1">json</button>
+              </div>
+            </div>
+
+            <div role="tabpanel" id="w1-a" aria-labelledby="v1-a">
+              <dl class="rec">
+                <div class="rec__row"><dt class="rec__k">id</dt><dd class="rec__v"><span class="rec__v-t">lg_8f21c4</span><span class="rec__t">string</span></dd></div>
+                <div class="rec__row"><dt class="rec__k">received_at</dt><dd class="rec__v"><span class="rec__v-t">2026-11-08T09:14:03.221Z</span><span class="rec__t">timestamp</span></dd></div>
+                <div class="rec__row"><dt class="rec__k">format</dt><dd class="rec__v"><span class="rec__v-t">logfmt</span><span class="rec__t">enum</span></dd></div>
+                <div class="rec__group">
+                  <div class="rec__row"><dt class="rec__k">ts</dt><dd class="rec__v"><span class="rec__v-t">2026-11-08T09:13:59.004Z</span><span class="rec__t">timestamp</span></dd></div>
+                  <div class="rec__row"><dt class="rec__k">level</dt><dd class="rec__v rec__v--str"><span class="rec__v-t">error</span><span class="rec__t">enum</span></dd></div>
+                  <div class="rec__row"><dt class="rec__k">service</dt><dd class="rec__v rec__v--str"><span class="rec__v-t">checkout-api</span><span class="rec__t">string</span></dd></div>
+                  <div class="rec__row"><dt class="rec__k">message</dt><dd class="rec__v rec__v--str"><span class="rec__v-t">payment authorisation timed out</span><span class="rec__t">string</span></dd></div>
+                  <div class="rec__row"><dt class="rec__k">duration_ms</dt><dd class="rec__v rec__v--num"><span class="rec__v-t">30012</span><span class="rec__t">number</span></dd></div>
+                  <div class="rec__row"><dt class="rec__k">trace_id</dt><dd class="rec__v rec__v--str"><span class="rec__v-t">5f2c9a41b7</span><span class="rec__t">string</span></dd></div>
+                </div>
+                <div class="rec__row"><dt class="rec__k">unparsed</dt><dd class="rec__v"><span class="rec__v-t">[]</span><span class="rec__t">array</span></dd></div>
+              </dl>
+            </div>
+
+            <div role="tabpanel" id="w1-b" aria-labelledby="v1-b" hidden>
+              <pre class="pane__pre">{
+  "id": "lg_8f21c4",
+  "received_at": "2026-11-08T09:14:03.221Z",
+  "format": "logfmt",
+  "record": {
+    "level": "error",
+    "service": "checkout-api",
+    "duration_ms": 30012
+  },
+  "unparsed": []
+}</pre>
+            </div>
+          </div>
+
+          <div class="code">
+            <pre role="tabpanel" id="p1-a" aria-labelledby="t1-a"><span class="tok-p">curl</span> -X POST https://api.payloaddeck.dev/v1/parse \
+  -H <span class="tok-s">"Authorization: Bearer $PAYLOADDECK_KEY"</span> \
+  -H <span class="tok-s">"Content-Type: application/x-ndjson"</span> \
+  --data-binary @checkout.log</pre>
+            <p class="code__hint">$PAYLOADDECK_KEY · one key per project</p>
+            <pre role="tabpanel" id="p1-b" aria-labelledby="t1-b" hidden><span class="tok-k">from</span> payloaddeck <span class="tok-k">import</span> Client
+
+client = Client(api_key=os.environ[<span class="tok-s">"PAYLOADDECK_KEY"</span>])
+batch = client.parse(<span class="tok-k">open</span>(<span class="tok-s">"checkout.log"</span>, <span class="tok-s">"rb"</span>))
+
+<span class="tok-k">for</span> record <span class="tok-k">in</span> batch.records:
+    <span class="tok-k">print</span>(record[<span class="tok-s">"level"</span>], record[<span class="tok-s">"duration_ms"</span>])</pre>
+            <pre role="tabpanel" id="p1-c" aria-labelledby="t1-c" hidden><span class="tok-k">import</span> { Client } <span class="tok-k">from</span> <span class="tok-s">"@payloaddeck/client"</span>;
+
+<span class="tok-k">const</span> client = <span class="tok-k">new</span> Client({ apiKey: process.env.PAYLOADDECK_KEY });
+<span class="tok-k">const</span> batch = <span class="tok-k">await</span> client.parse(fs.readFileSync(<span class="tok-s">"checkout.log"</span>));
+
+<span class="tok-k">for</span> (<span class="tok-k">const</span> record <span class="tok-k">of</span> batch.records) {
+  console.log(record.level, record.duration_ms);
+}</pre>
+          </div>
+        </div>
+      </div>
+      <p class="note">The call is synchronous up to 5 MB. Above that, send the file to <code>/v1/jobs</code> and poll the job id — same records, no timeout.</p>
+    </section>
+
+    <!-- 02 -->
+    <section class="band" id="query">
+      <div class="band__head"><span class="band__no">02</span><span class="band__rule"></span><span class="band__meta">POST /v1/query</span></div>
+      <h2>Query what you stored</h2>
+      <p class="lede">Fields keep the type PayloadDeck inferred, so you filter on numbers and timestamps without casting them. This returns every checkout that ran longer than five seconds in the last fifteen minutes, whatever level it logged at.</p>
+
+      <div class="block">
+        <div class="block__head">
+          <div class="block__id">
+            <span class="method">POST</span><span class="path">/v1/query</span>
+            <span class="status"><i class="dot"></i>200 · 4 rows</span>
+          </div>
+          <div class="block__tools"><button class="copy" data-copy>Copy</button></div>
+        </div>
+        <div class="block__body">
+          <div class="pane">
+            <div class="scroller" style="border:0;background:transparent">
+              <table>
+                <caption>records · last 15 minutes · limit 50</caption>
+                <thead><tr><th scope="col">ts</th><th scope="col">level</th><th scope="col">service</th><th scope="col" class="num">duration_ms</th></tr></thead>
+                <tbody>
+                  <tr><td>09:14:02</td><td class="lv-error">error</td><td>checkout-api</td><td class="num">30012</td></tr>
+                  <tr><td>09:13:41</td><td class="lv-error">error</td><td>checkout-api</td><td class="num">8120</td></tr>
+                  <tr><td>09:12:58</td><td class="lv-warn">warn</td><td>checkout-api</td><td class="num">6904</td></tr>
+                  <tr><td>09:12:20</td><td class="lv-error">error</td><td>checkout-api</td><td class="num">5244</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="code">
+            <pre><span class="tok-k">from</span> records
+<span class="tok-k">where</span> service = <span class="tok-s">"checkout-api"</span>
+  <span class="tok-k">and</span> duration_ms &gt; 5000
+  <span class="tok-k">and</span> ts &gt; now() - <span class="tok-s">"15m"</span>
+<span class="tok-k">order by</span> ts <span class="tok-k">desc</span>
+<span class="tok-k">limit</span> 50</pre>
+            <p class="code__hint">ts takes relative windows: 15m, 2h, 7d</p>
+          </div>
+        </div>
+      </div>
+      <p class="note">Send the same query as a JSON body to <code>/v1/query</code>. The CLI writes the body for you with <code>--print-query</code>.</p>
+    </section>
+
+    <!-- 03 -->
+    <section class="band" id="errors">
+      <div class="band__head"><span class="band__no">03</span><span class="band__rule"></span><span class="band__meta">207 · partial</span></div>
+      <h2>Handle the line that will not parse</h2>
+      <p class="lede">A line that does not match its declared format is not dropped and does not fail the batch. It comes back in <code>unparsed</code> with the reason and the raw text, and every other record is still written.</p>
+
+      <div class="block">
+        <div class="block__head">
+          <div class="block__id">
+            <span class="method">POST</span><span class="path">/v1/parse?strict=false</span>
+            <span class="status"><i class="dot"></i>207 · 1 unparsed</span>
+          </div>
+          <div class="block__tools">
+            <div class="tabs" role="tablist" aria-label="Example language">
+              <button role="tab" id="t3-a" aria-controls="p3-a" aria-selected="true" tabindex="0">node</button>
+              <button role="tab" id="t3-b" aria-controls="p3-b" aria-selected="false" tabindex="-1">python</button>
+            </div>
+            <button class="copy" data-copy>Copy</button>
+          </div>
+        </div>
+        <div class="block__body">
+          <div class="pane">
+            <div class="callout">
+              <span class="badge">E_FORMAT_UNPARSED</span>
+              <div class="raw">line 3: 2026-11-08 09:13:59 WARN checkout-api slow</div>
+              <p><strong>reason</strong> — <code>slow</code> is a bare token, not a <code>key=value</code> pair. logfmt needs a value on every field.</p>
+              <p>The record is kept with the fields that did parse, and <code>unparsed[0].raw</code> holds the original line for a retry.</p>
+            </div>
+          </div>
+          <div class="code">
+            <pre role="tabpanel" id="p3-a" aria-labelledby="t3-a"><span class="tok-k">const</span> batch = <span class="tok-k">await</span> client.parse(file, { strict: <span class="tok-k">false</span> });
+
+<span class="tok-k">for</span> (<span class="tok-k">const</span> line <span class="tok-k">of</span> batch.unparsed) {
+  console.warn(line.index, line.reason, line.raw);
+  deadLetter.push(line.raw);
+}</pre>
+            <pre role="tabpanel" id="p3-b" aria-labelledby="t3-b" hidden>batch = client.parse(file, strict=<span class="tok-k">False</span>)
+
+<span class="tok-k">for</span> line <span class="tok-k">in</span> batch.unparsed:
+    log.warning(<span class="tok-s">"%s %s"</span>, line.index, line.reason)
+    dead_letter.append(line.raw)</pre>
+            <p class="code__hint">unparsed[] is capped at 100 entries per batch</p>
+          </div>
+        </div>
+      </div>
+      <p class="note">Set <code>strict=true</code> only when a partial batch is worse than no batch — it returns 422 and writes nothing.</p>
+    </section>
+
+    <!-- 04 -->
+    <section class="band" id="cli">
+      <div class="band__head"><span class="band__no">04</span><span class="band__rule"></span><span class="band__meta">CLI</span></div>
+      <h2>Check the shape before you write code</h2>
+      <p class="lede">The CLI calls the same endpoint. Pipe a file in, read the records out — this is the fastest way to see what your own logs turn into before you wire up a queue.</p>
+
+      <div class="block">
+        <div class="block__head">
+          <div class="block__id"><span class="method">CLI</span><span class="path">payloaddeck parse</span></div>
+          <div class="block__tools"><button class="copy" data-copy>Copy</button></div>
+        </div>
+        <div class="block__body">
+          <div class="pane">
+            <div class="pane__bar"><span class="pane__label">stdout</span></div>
+            <pre class="pane__pre"><span class="tok-p">$</span> payloaddeck parse --file checkout.log --table
+<span class="tok-c"># 1,204 lines · 1,203 parsed · 1 unparsed · 38 ms</span>
+TS        LEVEL  SERVICE       DURATION_MS
+09:14:02  error  checkout-api        30012
+09:13:41  error  checkout-api         8120
+09:13:59  warn   checkout-api          904</pre>
+          </div>
+          <div class="code">
+            <div class="code__bar"><span>shell</span></div>
+            <pre><span class="tok-p">npm</span> i -g @payloaddeck/cli
+payloaddeck parse --file checkout.log --table
+
+<span class="tok-c"># or keep the raw records</span>
+payloaddeck parse --file checkout.log &gt; records.ndjson</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="band">
+      <div class="band__head"><span class="band__no">05</span><span class="band__rule"></span><span class="band__meta">integration</span></div>
+      <h2>Thirty minutes, three steps</h2>
       <ol class="steps">
-        <li>Create a service key in your PayloadDeck workspace.</li>
-        <li>Pick a parser, or omit <code>parser</code> and let the API auto-detect the format.</li>
-        <li>Send one log line to <code>POST /v2/parse</code>.</li>
-        <li>Read the returned fields and check any error code against the table below.</li>
+        <li class="step">
+          <span class="step__no">01</span>
+          <h3>Create a project key</h3>
+          <p>One key per project, scoped to one pipeline. Put it in the environment, never in the repo — the SDK reads <code>PAYLOADDECK_KEY</code> on its own.</p>
+        </li>
+        <li class="step">
+          <span class="step__no">02</span>
+          <h3>Send one real file</h3>
+          <p>Not a fixture. Take 1,000 lines from the service that hurts most and read the record shape it comes back as. Keep <code>unparsed</code> open in a second pane.</p>
+        </li>
+        <li class="step">
+          <span class="step__no">03</span>
+          <h3>Point one rule at it</h3>
+          <p>Start with <code>level = "error"</code> and <code>duration_ms &gt; 5000</code>. One rule that fires on real traffic beats a dashboard nobody opens.</p>
+        </li>
       </ol>
-
-      <h3 id="h-send">Send the request</h3>
-      <div class="code" id="code-request">
-        <div class="code-head">
-          <div class="tabs" role="tablist" aria-label="Request example language">
-            <button class="tab" type="button" role="tab" id="tab-curl" aria-controls="panel-curl" aria-selected="true" tabindex="0">cURL</button>
-            <button class="tab" type="button" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="false" tabindex="-1">Node.js</button>
-            <button class="tab" type="button" role="tab" id="tab-python" aria-controls="panel-python" aria-selected="false" tabindex="-1">Python</button>
-          </div>
-          <div class="code-actions">
-            <span class="copied" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l3.5 3.5L14 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied</span>
-            <button class="btn copy-btn" type="button" aria-label="Copy request example"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3H4a1 1 0 00-1 1v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy</button>
-          </div>
-        </div>
-        <div role="tabpanel" id="panel-curl" aria-labelledby="tab-curl"><pre>curl -X POST https://api.logreap.dev/v2/parse \
-  -H "Authorization: Bearer $LOGREAP_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "line": "127.0.0.1 - [07/Nov:09:12:44] \"GET /v2/health\"",
-    "parser": "nginx"
-  }'</pre></div>
-        <div role="tabpanel" id="panel-node" aria-labelledby="tab-node" hidden><pre>const res = await fetch("https://api.logreap.dev/v2/parse", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.LOGREAP_KEY}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    line: '127.0.0.1 - [07/Nov:09:12:44] "GET /v2/health"',
-    parser: "nginx"
-  })
-});
-const data = await res.json();</pre></div>
-        <div role="tabpanel" id="panel-python" aria-labelledby="tab-python" hidden><pre>import os, requests
-
-res = requests.post(
-    "https://api.logreap.dev/v2/parse",
-    headers={"Authorization": f"Bearer {os.environ['LOGREAP_KEY']}"},
-    json={
-        "line": '127.0.0.1 - [07/Nov:09:12:44] "GET /v2/health"',
-        "parser": "nginx",
-    },
-)
-data = res.json()</pre></div>
-      </div>
-
-      <h3 id="h-read">Read the response</h3>
-      <div class="code" id="code-response">
-        <div class="code-head">
-          <span class="code-label mono">200 OK &middot; application/json</span>
-          <div class="code-actions">
-            <span class="copied" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l3.5 3.5L14 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied</span>
-            <button class="btn copy-btn" type="button" aria-label="Copy response example"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 3H4a1 1 0 00-1 1v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy</button>
-          </div>
-        </div>
-        <div><pre>{
-  "id": "prs_8f2c41ad",
-  "parser": "nginx",
-  "confidence": 0.98,
-  "fields": {
-    "remote_addr": "127.0.0.1",
-    "time": "2026-11-07T09:12:44Z",
-    "method": "GET",
-    "path": "/v2/health",
-    "status": 200,
-    "bytes": 34
-  },
-  "request_id": "req_31be7c",
-  "duration_ms": 4.2
-}</pre></div>
-      </div>
-      <p class="note">This response is a fixed example. No network request is made by the page.</p>
     </section>
 
-    <section id="request-fields">
-      <h2 id="h-fields">Request fields</h2>
-      <p class="prose">All fields go in the JSON body. Only <code>line</code> is required.</p>
-      <div class="table-wrap">
+    <!-- 06 -->
+    <section class="band" id="fields">
+      <div class="band__head"><span class="band__no">06</span><span class="band__rule"></span><span class="band__meta">schema</span></div>
+      <h2>Response fields</h2>
+      <p class="lede">Every record carries these fields. Anything your log line contained and PayloadDeck could type lands in <code>record</code> as a flat key — no dotted paths, no nested objects to unwrap.</p>
+      <div class="scroller">
         <table>
-          <caption>Body fields for POST /v2/parse</caption>
-          <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Required</th><th scope="col">Description</th></tr></thead>
+          <caption>record object · /v1/parse</caption>
+          <thead><tr><th scope="col">field</th><th scope="col">type</th><th scope="col">notes</th></tr></thead>
           <tbody>
-            <tr><td><code>line</code></td><td>string</td><td>yes</td><td>Raw log line to parse.</td></tr>
-            <tr><td><code>parser</code></td><td>string</td><td class="req">no</td><td>Named parser: <code>nginx</code>, <code>syslog</code>, <code>json</code>. Omit to auto-detect.</td></tr>
-            <tr><td><code>timestamp_format</code></td><td>string</td><td class="req">no</td><td>Override for the inferred timestamp layout.</td></tr>
-            <tr><td><code>timezone</code></td><td>string</td><td class="req">no</td><td>IANA zone used when the line has no offset. Defaults to UTC.</td></tr>
-            <tr><td><code>include_raw</code></td><td>boolean</td><td class="req">no</td><td>Echo the original line in the response. Defaults to false.</td></tr>
-            <tr><td><code>fields</code></td><td>array</td><td class="req">no</td><td>Restrict the returned field set.</td></tr>
-            <tr><td><code>request_id</code></td><td>string</td><td class="req">no</td><td>Your correlation id, echoed back unchanged.</td></tr>
-            <tr><td><code>strict</code></td><td>boolean</td><td class="req">no</td><td>Reject partially matched lines. Defaults to false.</td></tr>
+            <tr><td>id</td><td>string</td><td class="wide">Stable per record. Use it to dedupe a replayed batch.</td></tr>
+            <tr><td>received_at</td><td>timestamp</td><td class="wide">Server clock, ISO 8601 with milliseconds, UTC.</td></tr>
+            <tr><td>format</td><td>enum</td><td class="wide">Detected from the first 20 lines: <code>logfmt</code>, <code>json</code>, <code>syslog</code>, <code>regex</code>.</td></tr>
+            <tr><td>record</td><td>object</td><td class="wide">One flat object per line. Keys keep the casing of the source line.</td></tr>
+            <tr><td>record.level</td><td>enum</td><td class="wide"><code>debug</code> <code>info</code> <code>warn</code> <code>error</code> <code>fatal</code>. Unknown levels fall back to <code>info</code>.</td></tr>
+            <tr><td>record.ts</td><td>timestamp</td><td class="wide">Read from the line. Falls back to <code>received_at</code> when the line carries no time.</td></tr>
+            <tr><td>record.duration_ms</td><td>number</td><td class="wide">Present only when the line carries a duration in a unit PayloadDeck can convert.</td></tr>
+            <tr><td>unparsed</td><td>array</td><td class="wide">Empty when every line parsed. Each entry has <code>index</code>, <code>reason</code>, <code>raw</code>.</td></tr>
           </tbody>
         </table>
       </div>
+      <p class="note">That is the whole response. If a field is missing, the line did not carry it — nothing is filled in for you.</p>
     </section>
 
-    <section id="response">
-      <h2 id="h-response">Response</h2>
-      <p class="prose">A successful parse returns the detected parser, a confidence score, and a flat field map.</p>
-      <dl class="facts">
-        <dt>id</dt><dd>Unique id for this parse result.</dd>
-        <dt>parser</dt><dd>The parser that matched, or the one you requested.</dd>
-        <dt>confidence</dt><dd class="mono">0.0&ndash;1.0</dd>
-        <dt>fields</dt><dd>Extracted key/value pairs; keys depend on the parser.</dd>
-        <dt>request_id</dt><dd>Your correlation id, if supplied.</dd>
-        <dt>duration_ms</dt><dd>Server-side parse time in milliseconds.</dd>
-      </dl>
-    </section>
+  </div>
+</main>
 
-    <section id="error-codes">
-      <h2 id="h-errors">Error codes</h2>
-      <p class="prose">Errors use the HTTP status plus a machine-readable <code>code</code>. Search the table as you read.</p>
-      <div class="filters">
-        <label for="filter" style="margin:0">Filter error codes</label>
-        <input type="search" id="filter" placeholder="e.g. parser or 429" autocomplete="off">
-        <button class="btn" type="button" id="filter-clear">Clear filter</button>
-      </div>
-      <p class="live-count" id="filter-count" aria-live="polite">Showing 9 of 9</p>
-      <p id="filter-empty" hidden>No codes match that search. Try a shorter term.</p>
-      <div class="table-wrap">
-        <table id="error-table">
-          <caption>Error codes returned by /v2/parse</caption>
-          <thead><tr><th scope="col">HTTP</th><th scope="col">Code</th><th scope="col">Kind</th><th scope="col">Meaning</th><th scope="col">What to do</th></tr></thead>
-          <tbody>
-            <tr><td class="mono">400</td><td><code>invalid_json</code></td><td>Client error</td><td>The body is not valid JSON.</td><td>Validate the body before sending.</td></tr>
-            <tr><td class="mono">401</td><td><code>missing_key</code></td><td>Client error</td><td>No API key was supplied.</td><td>Add the Authorization header.</td></tr>
-            <tr><td class="mono">403</td><td><code>key_revoked</code></td><td>Client error</td><td>The API key has been revoked.</td><td>Issue a new service key.</td></tr>
-            <tr><td class="mono">413</td><td><code>payload_too_large</code></td><td>Client error</td><td>Body exceeds 256 KB.</td><td>Split the batch.</td></tr>
-            <tr><td class="mono">422</td><td><code>unparseable_line</code></td><td>Client error</td><td>No parser matched the log line.</td><td>Set a parser explicitly.</td></tr>
-            <tr><td class="mono">429</td><td><code>rate_limited</code></td><td>Client error</td><td>Too many requests this minute.</td><td>Back off and retry.</td></tr>
-            <tr><td class="mono">500</td><td><code>internal_error</code></td><td>Server error</td><td>Unexpected server error.</td><td>Retry with the same request id.</td></tr>
-            <tr><td class="mono">503</td><td><code>parser_unavailable</code></td><td>Server error</td><td>The requested parser is offline.</td><td>Omit parser to auto-detect.</td></tr>
-            <tr><td class="mono">504</td><td><code>upstream_timeout</code></td><td>Server error</td><td>The parser timed out.</td><td>Retry once, then report it.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="try-it">
-      <h2 id="h-try">Try a request</h2>
-      <p class="prose">Check a request locally before you wire up the SDK. The form only validates your input and shows the fixed example response; it never contacts the API.</p>
-      <form id="try-form" novalidate>
-        <div class="error-summary" id="error-summary" role="alert" tabindex="-1" hidden>
-          <h3>There is a problem</h3>
-          <ul id="error-list"></ul>
-        </div>
-        <div class="field">
-          <label for="api-key">API key</label>
-          <input type="text" id="api-key" autocomplete="off" placeholder="lr_live_...">
-          <p class="field-error" id="err-key" hidden></p>
-        </div>
-        <div class="field">
-          <label for="log-line">Log line</label>
-          <input type="text" id="log-line" autocomplete="off" placeholder="127.0.0.1 - - [07/Nov/2026:09:12:44 +0000]">
-          <p class="field-error" id="err-line" hidden></p>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-primary" type="submit">Validate request</button>
-          <button class="btn" type="reset">Clear</button>
-        </div>
-      </form>
-      <div id="try-result" hidden>
-        <p class="result-ok">Request validated for key <span class="mono" id="try-echo"></span>.</p>
-        <div class="code">
-          <div class="code-head"><span class="code-label mono">Example response (static)</span></div>
-          <div><pre>{
-  "id": "prs_8f2c41ad",
-  "status": "ok",
-  "fields": { "method": "GET", "path": "/v2/health", "status": 200 }
-}</pre></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="version">
-      <h2 id="h-version">Version &amp; build</h2>
-      <dl class="facts">
-        <dt>API version</dt><dd class="mono">v2.4.1</dd>
-        <dt>Docs build</dt><dd class="mono">2026-11-07</dd>
-        <dt>Schema revision</dt><dd class="mono">2026-09-18</dd>
-        <dt>Bundle</dt><dd class="mono">a1b2c3d</dd>
-        <dt>Renderer</dt><dd>Static HTML, no live requests</dd>
-      </dl>
-      <p><button class="btn" type="button" disabled>Download OpenAPI spec (unavailable in this static example)</button></p>
-    </section>
-  </main>
-
-  <aside class="toc-aside" aria-label="On this page">
-    <p class="rail-title">On this page</p>
-    <ul class="rail toc" id="toc-list"></ul>
-  </aside>
-</div>
-
-<footer class="foot">
-  <span>PayloadDeck API &middot; v2.4.1 &middot; docs build 2026-11-07 &middot; static examples, no live requests</span>
-  <a href="#overview">Back to top</a>
+<footer class="foot" aria-label="Footer">
+  <div class="wrap">
+    <div class="foot__legal">
+      <span class="foot__mark">PayloadDeck · log parsing API</span>
+      <a href="#send">Quickstart</a>
+      <a href="#errors">Errors</a>
+      <a href="#fields">Reference</a>
+      <span>MIT licensed</span>
+    </div>
+  </div>
+  <div class="foot__band">
+    <div class="foot__track" aria-hidden="true">
+      <span>PARSE · NORMALISE · QUERY · SHIP · PARSE · NORMALISE · QUERY · SHIP ·</span>
+      <span>PARSE · NORMALISE · QUERY · SHIP · PARSE · NORMALISE · QUERY · SHIP ·</span>
+    </div>
+  </div>
+  <p class="vh">PayloadDeck. Parse, normalise, query, ship. MIT licensed, 2026.</p>
 </footer>
+
+<script>
+(function(){
+  var live = document.createElement('p');
+  live.setAttribute('aria-live','polite');
+  live.className = 'vh';
+  document.body.appendChild(live);
+
+  /* tabs */
+  document.querySelectorAll('[role=tablist]').forEach(function(group){
+    var tabs = Array.prototype.slice.call(group.querySelectorAll('[role=tab]'));
+    var panels = tabs.map(function(t){ return document.getElementById(t.getAttribute('aria-controls')); });
+    function select(i, move){
+      tabs.forEach(function(t,j){
+        var on = j === i;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (panels[j]) panels[j].hidden = !on;
+      });
+      if (move) tabs[i].focus();
+    }
+    tabs.forEach(function(t,i){ t.addEventListener('click', function(){ select(i,false); }); });
+    group.addEventListener('keydown', function(e){
+      var i = tabs.indexOf(document.activeElement), n = null;
+      if (i < 0) return;
+      if (e.key === 'ArrowRight') n = (i+1) % tabs.length;
+      if (e.key === 'ArrowLeft')  n = (i-1+tabs.length) % tabs.length;
+      if (e.key === 'Home') n = 0;
+      if (e.key === 'End') n = tabs.length-1;
+      if (n !== null) { e.preventDefault(); select(n,true); }
+    });
+  });
+
+  /* copy */
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var block = btn.closest('.block');
+      var codes = Array.prototype.slice.call(block.querySelectorAll('.code pre'));
+      var pane = codes.filter(function(p){ return !p.hidden; })[0] || codes[0];
+      var text = pane ? pane.textContent.replace(/^\n+|\s+$/g,'') : '';
+      var done = function(){
+        btn.textContent = 'Copied';
+        btn.setAttribute('data-done','');
+        live.textContent = 'Snippet copied to clipboard';
+        setTimeout(function(){ btn.textContent = 'Copy'; btn.removeAttribute('data-done'); }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+      function fallback(){
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+        ta.remove(); done();
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@ title: "UI 文字设计规范详解"
 source: https://www.uisdc.com/ui-text-design-specification
 section: type
 tag: "实战"
-fetched: 2026-10-17
+fetched: 2026-11-09
 status: full
 id: type-9
 publisher: "优设网"
@@ -15,37 +15,38 @@ publisher: "优设网"
 
 ---
 
-UI设计中，文字设置是必不可少的一环。
+[UI设计](https://www.uisdc.com/tag/ui%e8%ae%be%e8%ae%a1)中，文字设置是必不可少的一环。
 
 文字设置过程中涉及到字体类型、字号、字重、行高、行宽以及颜色等。
 
-本文讲述的文字设计规范，包含以下部分：
+本文讲述的文字[设计规范](https://www.uisdc.com/tag/%e8%ae%be%e8%ae%a1%e8%a7%84%e8%8c%83)，包含以下部分：
 
-- 类型
+        - 类型
+        - 字号
+        - 字重
+        - 行高
+        - 行宽
+        - 颜色
 
-- 字号
-
-- 字重
-
-- 行高
-
-- 行宽
-
-- 颜色
+#### 类型
 
 iOS设备的系统默认字体，中文为苹方，英文&数字为SF UI Text。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-1.jpg)
 
 Android设备系统默认字体，中文为思源黑体，英文&数字为Roboto。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-2.jpg)
+
+#### 字号
 
 不同的使用场景，文字的字号也不相同。文字的主使用场景分为：一级标题、二级标题、三级标题、正文和提示文字 。
 
 文字最小字号一般为11。也有特殊情况，例如标签里面的文字，字号为10甚至可能更小。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-3.jpg)
+
+#### 字重
 
 字重就是指字体笔画的粗细。字重的等级是用来标明同一字体家族中不同粗细笔画的字型。
 
@@ -53,37 +54,38 @@ UI设计中，常用的字重有两个，一个是常规（Regular），另一�
 
 正常文字使用常规体（Regular）。当需要突出层级展示，增加对比时使用中黑体（ Medium），中黑体（ Medium）常用于标题。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-4.jpg)
+
+#### 行高
 
 字号大小等于文字高度，如下图所示，字号为16时，行高设置为16，那么其行高也是字体本身的高度（16pt）。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-5.jpg)
 
 行高= 字号 + 行间距。
 
 如下图所示：行间距距离文字上方为3pt，行间距距离文字下方也为3pt。字体高度为16pt。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-6.jpg)
 
 行高（22）= 字号（16） + 行间距（3+3）。
 
 在界面过程中，需要规范字号大小和对应的行高。不然的话会存在设计布局问题。
-
-举个例子，设计一个标签时，当字号为14时，行高为20，那么为了保持视觉上字体到四周距离相同，那么上下间距为4，左右间距为8。
+ 举个例子，设计一个标签时，当字号为14时，行高为20，那么为了保持视觉上字体到四周距离相同，那么上下间距为4，左右间距为8。
 
 因为行间距的存在，不能将上下间距和左右间距设置相同。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-7.jpg)
 
 如果行高设置为14（文字本身大小），那么上下间距应该也为8pt，而非4pt。
 
 如下表格为iOS设计指南建议字号和对应的行高对照表。
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-8.jpg)
 
 下图是Sketch默认字号和行高对照表：
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-9.jpg)
 
 可以看出iOS建议字号行高的对照表和Sketch默认的不一样。
 
@@ -91,34 +93,32 @@ Sketch视觉稿到了开发实现，字号和对应行间距会出现不一致�
 
 解决行高无法完美开发还原的办法有两个：
 
-- 将行高设置为字号大小，这样的话，就不存在行间距的问题，可以保证完美还原。但是由于一倍行高会导致有些机型的字被切掉。
+        - 将行高设置为字号大小，这样的话，就不存在行间距的问题，可以保证完美还原。但是由于一倍行高会导致有些机型的字被切掉。
+        - 使用字体插件，这样它可以自动修复Sketch文档中的字体行高，做到Sketch中字体行高与开发中字体行高100%还原。
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-10.jpg)
 
-- 使用字体插件，这样它可以自动修复Sketch文档中的字体行高，做到Sketch中字体行高与开发中字体行高100%还原。
-
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+#### 行宽
 
 行宽=字体宽度+两侧距离字体的宽度
 
 行宽作用于文本范围，如下图所示：
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-11.jpg)
 
 将行宽拉长，代表着设置了文本内容范围，文本距离右侧语音图标为12pt，表示当文字内容距离语音图标12pt时，文字打点或截断展示。
 
+#### 颜色
+
 字体颜色有两种规则定义做法，一种是直接使用色值，如图所示：
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-12.jpg)
 
 另一种做法是通过不透明度实现，通常以#000000为基准，设置不同的不透明度，如下图所示：
 
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+![看不懂UI文字设计规范？这篇文章帮你搞定！](https://image.uisdc.com/wp-content/uploads/2020/11/uisdc-gd-20201102-13.jpg)
 
 综合而言，使用不透明度的方法，使用场景更加广泛一些。
 
-iOS&Android自动修复行高的插件下载链接: https://pan.baidu.com/s/1QbKTDSnTpIFm9bpB6bzppQ(https://link.uisdc.com/?redirect=https%3A%2F%2Fpan.baidu.com%2Fs%2F1QbKTDSnTpIFm9bpB6bzppQ) 提取码: kphj
+iOS&Android自动修复行高的插件下载链接: [https://pan.baidu.com/s/1QbKTDSnTpIFm9bpB6bzppQ](https://link.uisdc.com/?redirect=https%3A%2F%2Fpan.baidu.com%2Fs%2F1QbKTDSnTpIFm9bpB6bzppQ) 提取码: kphj
 
-备用下载链接：https://share.weiyun.com/7jscZcpC(https://link.uisdc.com/?redirect=https%3A%2F%2Fshare.weiyun.com%2F7jscZcpC)
-
-欢迎关注作者的微信公众号：「Echo的设计笔记」
-
-[看不懂UI文字设计规范？这篇文章帮你搞定！]
+备用下载链接：[https://share.weiyun.com/7jscZcpC](https://link.uisdc.com/?redirect=https%3A%2F%2Fshare.weiyun.com%2F7jscZcpC)

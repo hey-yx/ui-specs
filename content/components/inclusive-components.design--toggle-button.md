@@ -68,7 +68,6 @@ notifications setting.
     <input type="checkbox" id="notify" name="notify" value="on">  
     <label for="notify">Notify by email</label>  
 
-![The notify my email control with checkbox
 checked](https://inclusive-components.design/content/images/2017/03/checkbox.svg)
 
 Screen reader software is fairly uniform in its interpretation of this
@@ -96,7 +95,6 @@ employed.
       <label for="notify-off">off</label>
     </fieldset>  
 
-![Fieldset with notify by email group label (legend) and radio buttons
 labeled on and off. The on one is
 selected.](https://inclusive-components.design/content/images/2017/03/radio.svg)
 
@@ -278,7 +276,6 @@ should appear above the `[aria-prressed="true"]` block in the cascade.
                   0.25em 0.25em #000;
     }
 
-![Left button, sticking out, is labeled aria-pressed equals false. Right
 button, visually depressed, is labelled aria-pressed equals
 true.](https://inclusive-components.design/content/images/2017/03/pressed_unpressed.svg)
 
@@ -432,7 +429,6 @@ provided for styling.
       </li>
     </ul>  
 
-![A list of notifications settings with associated buttons reading with
 either on or off highlighted, depending on the
 state](https://inclusive-components.design/content/images/2017/03/notifications.svg)
 

@@ -23,10 +23,6 @@ available for production use. The guidance included reflects our current
 understanding of this topic, and the pattern is currently open for code
 contributions.
 
-## Resources
-
-  - [Text toolbar pattern library](sketch://add-library/cloud/f32b7e90-d97e-48ef-ae53-beabf75f5846)
-
 ## Overview
 
 A text toolbar is a set of buttons and menus that is grouped horizontally. These
@@ -214,15 +210,6 @@ the number of tab stops in the keyboard interface.
 
 For further accessibility guidance of text toolbars, see
 [WAI-ARIAs guidelines](https://www.w3.org/TR/wai-aria-practices/examples/toolbar/toolbar.html).
-
-## Related
-
-- [Button](https://www.carbondesignsystem.com/components/button/usage)
-- [Dropdown](https://www.carbondesignsystem.com/components/dropdown/usage#dropdown)
-- [File uploader](https://www.carbondesignsystem.com/components/file-uploader/usage)
-- [Overflow menu](https://www.carbondesignsystem.com/components/overflow-menu/usage)
-- [Search](https://www.carbondesignsystem.com/components/search/usage)
-- [Text area](https://www.carbondesignsystem.com/components/text-input/usage#character-count)
 
 ## References
 

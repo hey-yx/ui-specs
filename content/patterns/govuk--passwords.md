@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Passwords 密码"
 source: https://design-system.service.gov.uk/patterns/passwords/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-10
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/passwords/](https://design-system.service.gov.uk/patterns/passwords/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Ask users for  Passwords
 
 Help users to create and enter secure and memorable passwords.
 
@@ -29,17 +29,17 @@ For technical considerations, you may also want to read the guidance for the [Pa
 
 When using passwords in your service, you should:
 
-- help users make strong, unique passwords
-- let users paste their password
-- keep them secure, particularly when helping users reset a password
+*   help users make strong, unique passwords
+*   let users paste their password
+*   keep them secure, particularly when helping users reset a password
 
 ### Helping users choose strong passwords
 
 Overly strict or confusing constraints can make it harder for people to create strong and memorable passwords. This could mean they:
 
-- stop using your service
-- forget their password and have to reset it
-- store their password in a non-secure place
+*   stop using your service
+*   forget their password and have to reset it
+*   store their password in a non-secure place
 
 Choose restrictions that meet the security needs of your service, and be clear and consistent about them.
 
@@ -49,10 +49,10 @@ If you need additional security, consider adding a second authentication factor 
 
 Make sure you:
 
-- set a minimum length of at least 8 characters
-- do not set a maximum length
-- explain any restrictions to users
-- do not allow commonly used passwords
+*   set a minimum length of at least 8 characters
+*   do not set a maximum length
+*   explain any restrictions to users
+*   do not allow commonly used passwords
 
 ### Do not make users keep changing their passwords
 
@@ -60,9 +60,9 @@ Some services force users to change their passwords regularly, for example every
 
 You should not do this because it means users:
 
-- are more likely to forget their passwords
-- will tend to pick simple variations on their previous password
-- are more likely to store their password in a non-secure place
+*   are more likely to forget their passwords
+*   will tend to pick simple variations on their previous password
+*   are more likely to store their password in a non-secure place
 
 Usually, you should only force a password change if you suspect an account might be compromised.
 
@@ -82,9 +82,9 @@ Passwords that are hard to guess can also be hard to remember.
 
 When helping users who’ve forgotten their password, you should:
 
-- send them a link or code to trigger a password reset
-- avoid password reset questions
-- avoid password reminders
+*   send them a link or code to trigger a password reset
+*   avoid password reset questions
+*   avoid password reminders
 
 ### Send a link to trigger password resets
 
@@ -100,9 +100,9 @@ Some services ask users a ‘password reset question’ when they create a passw
 
 You should not use password reset questions because they often ask for information that’s:
 
-- too obscure and therefore just as hard to remember as a password
-- too easy for someone else to find out, for example ‘mother’s maiden name’
-- subject to change, for example ‘favourite colour’
+*   too obscure and therefore just as hard to remember as a password
+*   too easy for someone else to find out, for example ‘mother’s maiden name’
+*   subject to change, for example ‘favourite colour’
 
 ### Avoid password reminders
 
@@ -110,8 +110,8 @@ Some services ask users to provide a ‘password reminder’ when they create a 
 
 You should not use password reminders because they:
 
-- encourage users to reveal information about their password
-- do not work for very strong passwords involving random strings of characters
+*   encourage users to reveal information about their password
+*   do not work for very strong passwords involving random strings of characters
 
 ## Research on this pattern
 

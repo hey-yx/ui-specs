@@ -1,246 +1,228 @@
-# DECISIONS · SamePaper samepaper
+# SamePaper v5 · 取值记录
 
-> 交付：`examples/samepaper/index.html`（单文件，零外部请求）
-> 基准规范：TDesign（腾讯）· 设计场景：S2 落地页与营销页
-> 引用一律 `content/完整路径:行号`；实测数字均来自 `file://` 页面在真实浏览器里的运行结果。
+站点：`index.html`（单文件，45,348 字节，1,022 行，零外部请求）
+需求：`briefs/samepaper.md`（7 行，只给语言、分类、产品）
+基准规范：TDesign
+自验环境：`browser_exec` session `samepaper-new`，Chromium，`file://` 直接打开，`Emulation.setDeviceMetricsOverride` 切视口
 
-## 1. 设计前提
+---
 
-| 项 | 结论 |
+## 1 设计前提
+
+**产品类型 + 给谁用**（七步第 1 步的判断依据）：中文协作 SaaS 的营销落地页，读者是正在评估协作工具的产品、设计、研发团队。页面任务是把「文档、讨论、任务写在同一张纸面上」这句主张讲成可核对的动作，并落到申请试用。
+
+**为什么选 TDesign**：`site/dist/ai/guide.md:23` 的「中文产品 UI（中后台 / 工具 / 内容 / 协作）」行把 TDesign 列为中文协作类产品的基准规范；`:31` 的「新品牌官网」行规定中文品牌走 TDesign。需求第一行钉死「中文」，所以不走 Atlassian（英文体系）。一个项目只认一个基准规范，全站数值只从这里取。
+
+**腔调怎么落地**：全站按可核对的写法，每个卖点写成可验证的动作。页面里每个主张都带可核对的量：讨论挂在行号上、10 秒内发确认信、5 人团队一年差 ¥840、按行合并、冻结后只读。全页没有出现「高效」「极致」「一站式」。
+
+---
+
+## 2 版式三件与理由（照调度表，未换件）
+
+`node scripts/check-rotation.mjs --brief samepaper` 指定：Marquee Hero + N5 + Ft1 + Purple7 `#7137bf`。
+
+### 2.1 Marquee Hero（`hallmark/references/macrostructures/03-marquee-hero.md`）
+
+| 原件要求 | 本页做法 |
 | --- | --- |
-| 受众 | 产品、设计、研发团队的负责人与成员，正在评估要不要换协作工具（`briefs/samepaper.md:5`） |
-| 用途 | 营销落地页：让人看懂产品做什么、相信自己团队用得上，然后开始试用（briefs/samepaper.md:6） |
-| 语气 | 具体、可核对、不承诺数字。全页没有「赋能 / 一站式 / 无缝 / 极致」这类词，卖点都写成可验证的动作（评论贴段落、结论转任务、链接可收回） |
-| 产品语境 | 原创品牌官网，中文（briefs/samepaper.md:3 语言=中文；briefs/samepaper.md:16 名字=SamePaper） |
-| 基准规范 | TDesign。依据 `site/dist/ai/guide.md:20`：新品牌官网（非复刻既有品牌）中文走 TDesign。本稿是营销页而非产品内界面，所以没有走「协作与项目管理工具 → Atlassian」那一行（guide.md:26）：那一行管的是产品内界面，落地的数值气质要与营销页一致 |
-| 设计场景 | S2 落地页与营销页（`site/dist/ai/guide.md:638`），辅以 S1 页面基本功、S6 数值层、S5 组件、S9 无障碍 |
-| 交付边界 | 不做真注册。所有 CTA 打开同一个弹窗，提交后进入「已建好」的成功态并明确说明是演示环境（briefs/samepaper.md:15） |
+| 首屏就是整页（`:3`） | `<section class="marquee">` 占 `88svh`，除 h1 与导航外没有任何元素 |
+| 大字贴视口两缘（`:5`） | 三行 `h1` 每行是「行号 + 大字 + 一条延伸到右缘的发丝线」，横向铺满整个视口宽（左内边距 24px 是安全边距，右端不设内边距） |
+| 折叠线以下换结构（`:6`、`:7`） | 8px 紫条（`#7137bf`）加背景硬切 `#ffffff → #f3f3f3`，下面立刻换成文档 + 讨论的两栏结构 |
+| 折叠线内无按钮（`:8`）、无图（`:9`） | 首屏零图像、零插画、零按钮；导航胶囊悬浮在页面上方，不属于折叠线内容；首个 CTA 在第 4 节之后的深色区 |
 
-基准规范文件（全部读完）：`content/color/tdesign.tencent.com--color.md`、`content/type/tdesign.tencent.com--fonts.md`、`content/layout/tdesign.tencent.com--layout.md`、`content/icons/tdesign.tencent.com--icon.md`、`content/motion/tdesign.tencent.com--motion.md`。
+**64px 上限与 8 到 14vw 的冲突**：原件要 8 到 14vw（1280 宽即 102 到 179px），TDesign 第二字阶封顶 64px（`content/type/tdesign.tencent.com--fonts.md:60`）。取 64px，用三件事补「占住折叠线」：三行而不是一行；`justify-content:space-between` 把三行撑到 46svh 的上下两端；每行发丝线顶到右缘，让版心横跨整个视口。行号 01/02/03 在左缘成列，把阅读顺序钉成从上到下（第一版奇偶行左右交错，读过一次后改掉，见第 8 节第 2 条）。
 
-## 2. 结构决策
+### 2.2 N5 悬浮胶囊（`hallmark/references/components/n5-floating-pill.md`）
 
-产品页版型的区块顺序是主视觉 → 价值主张 → 功能 → CTA → 页脚（`content/layouts/layout--hero-features-cta.md:58-62`），定价版型是价格卡 → 对比表 → FAQ → 收尾 CTA，每卡都放 CTA，导航放吸顶 CTA（`content/layouts/layout--pricing-page-cta.md:58-67`）。需求里要求的八项内容比这两个版型多（要客户 logo、评价、定价、FAQ），所以把它们串成一条单向叙事，而不是照抄版型：
+原件要求整颗胶囊明显离开页面边缘、距顶约 `--space-md`、毛玻璃背衬、软阴影（`:2`）；反模式是「95% 视口宽的胶囊」（`:28`）。
 
-| 区块 | 内容 | 依据 |
-| --- | --- | --- |
-| 首屏 | H1 + 主张 + 两个 CTA + 一张「纸面」示意（`role="img"`，不可交互） | `layout--hero-features-cta.md:58`；示意卡代替产品截图，遵守 briefs/samepaper.md:9「自己画，不用截图」 |
-| 01 产品 | 三项能力，用带分隔线的行排，不用卡片墙 | `layout--hero-features-cta.md:61`（功能 3-5 项）；不用 bento：bento 适合多块不等权内容，三项等权会排成空格子（`site/dist/ai/design-points.json` 中 bento-grid-layout 的 select） |
-| 02 演示 | 左边文档 + 评论，右边待办，点「转为任务」真的落一条任务 | `layout--product-demo-features` 思路（演示放在功能区）；也是需求「真实协作场景的界面演示」 |
-| 03 客户 | logo 文字墙 + 一条大字评价 + 两条小评价 | briefs/samepaper.md:11；数据标注为示例（见 FINDINGS 缺口 7） |
-| 04 定价 | 月/年切换 + 三档卡（免费/团队/企业），每卡一个 CTA | `layout--pricing-page-cta.md:58-69` |
-| 05 FAQ | 五条手风琴，button + aria-expanded | `layout--pricing-page-cta.md:60`（用 FAQ 解顾虑） |
-| 06 收束 | 一句反问 + 一个主按钮 | `layout--hero-features-cta.md:61` |
+本页：`position:fixed`、距顶 24px、内容自适应宽度（1280 档实测 561px，远低于 720px 上限）、`backdrop-filter:blur(14px) saturate(120%)`、`border-radius:999px`、阴影 `0 8px 24px -12px rgba(24,24,24,.18)`。≤767px 收起四个文字链，只留 wordmark 与 CTA。
 
-**版式**：12 栅格（`content/layout/tdesign.tencent.com--layout.md:87`）。首屏 7/5、演示 7/5、评价 7/5、定价 4/4/4、页脚 4/2/2/2/2。左对齐、无居中大标题、无渐变球、无装饰性插图；节奏靠白底段与 `#f3f3f3` 灰色段的交替，以及区块编号 01–06 建立。
+### 2.3 Ft1 页眉式页脚（`hallmark/references/components/ft1-mast-headed.md`）
 
-**导航**：吸顶页头（`position:sticky`），左品牌、右四个锚点、最右一个主按钮。导航里的 CTA 是定价版型要求的吸顶 CTA（`content/layouts/layout--pricing-page-cta.md:66`）。窄屏折叠成「菜单」按钮（`aria-expanded` + `hidden`），不引入抽屉。
+原件：wordmark 与一句 tagline 撑一条横带，旁边两三个小链接，地址或许可放下面（`:2`）；用于重内容页面，页脚要安静（`:3`）。
 
-**页脚**：品牌说明 + 四列链接（产品/资源/公司/法律）+ 一行法务与虚构声明。列宽按 12 栅格 4+2+2+2+2。
+本页：`SamePaper` + `文档、讨论、任务，同一张纸。` 一条横带 → 三个链接一行 → 版权一行。没有四栏、没有社交图标。深色承接上面的 CTA，用 `#393939` 发丝线分开。
 
-**强调色**：只用一支 Tencent Blue `#0052d9`，落在主按钮底、链接文字、焦点环、在线状态点、评论卡左边线。理由：配色框架的做法是「一个色相 + 深浅变体」而不是多色相拼盘（`content/howto/learnui.design--color-in-ui-design-a-practical-framework.md:208`）；NN/g 建议不复杂的设计限 2 主色 + 2 辅色，且不要靠颜色单独传层级（`content/howto/nngroup.com--visual-hierarchy-ux-definition.md:58`）。实测填色面积 0.50%（1280 档），远低于 5% 的上限。
+### 2.4 强调色 `#7137bf`（Purple7，`content/color/tdesign.tencent.com--color.md:414`）
 
-## 3. 色彩表
+深浅变体只在本族阶梯里取：`#fbf0ff` Purple1（`:396`）、`#eedcff` Purple2（`:399`）、`#dcbfff` Purple3（`:402`）、`#c69cff` Purple4（`:405`）、`#5610a4` Purple8（`:417`）、`#3b007b` Purple9（`:420`）。没有第二个色相，没有自造 hex。
 
-WCAG 2.x 相对亮度公式实算，半透明字色按实际底色合成为不透明色后再算。
+深色区的主 CTA 用 `#c69cff` 底 + `#3b007b` 字（实测 6.52:1），而不是深紫底白字：`#7137bf` 压在 `#181818` 上只有 2.56:1，按钮边界不达 WCAG 2.2 的 3:1，所以深色区反向取浅紫。这是同一颗基色的变体，不算第二套配色。
 
-| token | 值 | 出处 | 用在哪 | 实测对比度 |
+---
+
+## 3 色彩表（值 + 出处 + 用途 + 实测对比度）
+
+对比度用 WCAG 2.x 相对亮度公式现算，括号里是「文字色 / 底色」。
+
+| Token | 值 | 出处 | 用途 | 实测 |
 | --- | --- | --- | --- | --- |
-| `--white` | `#ffffff` | `content/color/tdesign.tencent.com--color.md:187` | 页面底、卡片底 | — |
-| `--gray-1` | `#f3f3f3` | `color...color.md:189` | 灰段底、示意卡底衬、禁用底 | 承载 `--ink` 15.68:1、`--ink-2` 5.17:1 |
-| `--gray-3` | `#e8e8e8` | `color...color.md:193` | 装饰分隔线（不承担控件边界） | 1.23:1（装饰线，见 guide.md:42 发丝线一条） |
-| `--gray-4` | `#dddddd` | `color...color.md:195` | 卡片/示意卡边框（装饰） | 1.36:1 |
-| `--gray-7` | `#8b8b8b` | `color...color.md:201` | 输入框、次按钮、勾选框边框 | 3.41:1（非文本 ≥3 ✓） |
-| `--gray-9` | `#5e5e5e` | `color...color.md:205` | 功能列表对勾、辅助说明 | 6.48:1 |
-| `--brand` | `#0052d9` | `color...color.md:66`（Blue7） | 主按钮底、链接、焦点环 | 白字压底 6.54:1；白底上 6.54:1 |
-| `--brand-hover` | `#003cab` | `color...color.md:69`（Blue8） | 主按钮 hover、强调按钮文字 | 8.52:1（压 `#f2f3ff`）；白底 9.40:1 |
-| `--brand-active` | `#002a7c` | `color...color.md:72`（Blue9） | 主按钮 active | 白字压底 12.95:1 |
-| `--brand-soft` | `#f2f3ff` | `color...color.md:48`（Blue1） | 强调按钮底、计费切换选中底 | 承载 `--brand-hover` 8.52:1 |
-| `--brand-line` | `#d9e1ff` | `color...color.md:51`（Blue2） | 选中文本高亮、轻边框 | 装饰 |
-| `--ink` | `rgba(0,0,0,.9)` | `content/type/tdesign.tencent.com--fonts.md:96`（Font Gy1） | 标题与正文 | 白底 17.40:1 |
-| `--ink-2` | `rgba(0,0,0,.6)` | `fonts.md:98`（Font Gy2） | 次要文字、导航、页脚链接、价格单位 | 白底 5.74:1 |
-| `--ink-3` | `rgba(0,0,0,.4)` | `fonts.md:100`（Font Gy3） | **只**给禁用态 | 压 `#f3f3f3` 2.81:1（WCAG 1.4.3 对禁用控件豁免，不做正文） |
-| 错误边框 | `#d54941` | `color...color.md:80`（Red6） | 校验失败输入框边框 | 4.32:1（非文本 ≥3 ✓） |
-| 错误文字 | `#ad352f` | `color...color.md:101`（Red7） | 字段错误文案 | 6.31:1 |
-| 遮罩 | `rgba(0,0,0,.45)` | 派生（guide.md:50） | 弹窗背景 | — |
+| `--paper` | `#ffffff` | `color.md:187` | 页面底、卡片底、按钮底 | 无 |
+| `--paper-2` | `#f3f3f3` | `color.md:189`（Gray1） | 浅色区底、讨论卡底、任务块底 | `#181818` 16.00；`#5e5e5e` 5.84 |
+| `--ink` | `#181818` | `color.md:215`（Gray14） | 正文、标题、深色区底 | 压白 17.76 |
+| `--ink-2` | `#5e5e5e` | `color.md:205`（Gray9） | 次要文字、行号、说明 | 压白 6.48；压 `#f3f3f3` 5.84 |
+| `--rule` | `#dddddd` | `color.md:195`（Gray4） | 装饰分隔线 | 压白 1.36，纯装饰 |
+| `--rule-strong` | `#c6c6c6` | `color.md:197`（Gray5） | 卡片外框、表头下横线、已解决徽标描边 | 压白 1.71，装饰 |
+| `--control` | `#8b8b8b` | `color.md:201`（Gray7） | 控件边界：输入框、勾选框、chip | 压白 3.41；压 `#f3f3f3` 3.07（非文本 ≥3 ✓） |
+| `--accent` | `#7137bf` | `color.md:414`（Purple7） | 主色：CTA、节号、讨论徽标、第三行标题、紫条 | 压白 7.00；白字压它 7.00 |
+| `--accent-deep` | `#5610a4` | `color.md:417`（Purple8） | 按钮 hover、链接 hover | 白字压它 10.47 |
+| `--accent-deepest` | `#3b007b` | `color.md:420`（Purple9） | 「最常选」标签字、深色区按钮字 | 压 `#eedcff` 11.08；压 `#c69cff` 6.52 |
+| `--accent-tint` | `#eedcff` | `color.md:399`（Purple2） | 标签底、选中行高亮 | `#7137bf` 压 5.44；`#181818` 13.80 |
+| `--accent-wash` | `#fbf0ff` | `color.md:396`（Purple1） | 徽标底、空态底、表单成功态底 | `#7137bf` 6.33；`#5e5e5e` 5.87 |
+| `--accent-line` | `#c69cff` | `color.md:405`（Purple4） | 徽标描边、深色区主按钮底 | 压 `#181818` 8.12 |
+| `--accent-lighter` | `#dcbfff` | `color.md:402`（Purple3） | 深色区按钮 hover | 压 `#181818` 10.94 |
+| `--danger` | `#ad352f` | `color.md:101`（Red7） | 邮箱校验错误文字 | 压白 6.31 |
+| `--danger-line` | `#d54941` | `color.md:80`（Red6「错误色」） | 错误输入框边框 | 压白 4.32（非文本 ✓；作文字不达 4.5，见 FINDINGS 3.3） |
+| `--on-dark-2` | `#e8e8e8` | `color.md:193`（Gray3） | 深色区副文、页脚标语 | 压 `#181818` 14.49 |
+| `--on-dark-3` | `#c6c6c6` | `color.md:197`（Gray5） | 深色区链接 | 压 `#181818` 10.40 |
+| `--on-dark-4` | `#a6a6a6` | `color.md:199`（Gray6） | 页脚版权 | 压 `#181818` 7.29 |
+| `--on-dark-line` | `#393939` | `color.md:209`（Gray11） | CTA 与页脚之间的发丝线 | 压 `#181818` 1.54，纯装饰 |
 
-两条换档记录：
+**静态全量扫描最低 5.84:1**（`#5e5e5e` 压 `#f3f3f3`），127 个文本节点低于 4.5:1 的 0 个；hover 态最低 5.44:1（`#7137bf` 压 `#eedcff`，讨论徽标）。非文本最低 3.07:1（`#8b8b8b` 压 `#f3f3f3`）。
 
-- **hover 不用 Blue6。** 基准规范的语义 token 是 `brand-color-hover:@blue-color-6`（`color...color.md:508`），但 `#366ef4` 白字实测 4.47:1，差 0.03 不达 AA。按 guide.md:43「hover/active 按实际底色复算，不达 AA 就同族换档」，改用同色板的 Blue8 `#003cab`（9.40:1），`brand-color-active` 用 Blue9。
-- **40% 字色不进正文。** `fonts.md:89` 自述「文字显示色彩对比满足至少 1:4.5（AA 级别）」，但 40% 档压白底实测 2.85:1、压 `#f3f3f3` 2.81:1。按 guide.md:43，该档只给禁用与装饰，正文只用 90%/60% 两档。
+**强调色面积 2.58%** 视口面积（1280×800，只算命中紫色系且可见的背景块：导航 CTA、第三行 2px 横线、8px 分节条、选中的周期按钮、深色区按钮），低于 5% 上限。
 
-## 4. 字号 / 行高 / 字重
+---
 
-字阶取自 `content/type/tdesign.tencent.com--fonts.md:51-60`（12/14/16/20/24/28/36/48/64）。每档断点内**只有 3 个字号**，符合「字号最多 3 档、最大的元素不超过 2 个」（`content/howto/nngroup.com--visual-hierarchy-ux-definition.md:76-77`）。全页只有 1 个大标题（H1）。
+## 4 字阶与行高
 
-| 档位 | ≥1200px | 768–1199 | 360–767 | ≤359 | 用在哪 |
+字阶全部取自 TDesign 第二字阶（`content/type/tdesign.tencent.com--fonts.md:51-60`），一个字没改：
+
+| 用途 | 字号 | 出处 |
+| --- | --- | --- |
+| 首屏 h1（≥1200） | 64px | `fonts.md:60`（+16 → 64px） |
+| 首屏 h1（992 到 1199） | 48px | `fonts.md:59`（+12 → 48px） |
+| 首屏 h1（480 到 991） | 36px | `fonts.md:58`（+8 → 36px） |
+| 首屏 h1（<480） | 28px | `fonts.md:57`（+4 → 28px） |
+| 首屏 h1（<360） | 24px | `fonts.md:56`（+4 → 24px） |
+| 收尾 CTA 标题 | 48px / 36px / 28px | `fonts.md:59` / `:58` / `:57` |
+| 区块标题 h2 | 36px / 28px | `fonts.md:58` / `:57` |
+| 弹层标题 | 24px | `fonts.md:56` |
+| 计划名、步骤标题 | 20px | `fonts.md:54`（+4 → 20px） |
+| 正文、文档行、任务、问答 | 16px | `fonts.md:53`（+2 → 16px） |
+| 导航、按钮、表格、评论 | 14px | `fonts.md:52`（+2 → 14px） |
+| 行号、徽标、标签、元信息 | 12px | `fonts.md:51`（+2 → 12px，桌面端最小） |
+
+**行高**：`:where(body, body *){line-height:calc(1em + 8px)}`。`1em` 在 `line-height` 里指元素自身字号，每个元素算自己的值，不继承 body 的 24px（`fonts.md:67` 公式、`:74` `n = 8`）。**实测 127 个承载直接文本的元素，违例 0**（容差 1.5px）。
+
+**字重只有 400 / 600**（`fonts.md:81`），没有 500、700。
+
+**字号分布（实测）**：64px × 3、48px × 1、36px × 4、20px × 13、16px × 29、14px × 42、12px × 34，全部落在第二字阶上，没有 13px、15px 这类刻度外字号。
+
+**12px 占比 27.6%**（35 / 127 个文本节点）。12px 只用在行号、讨论徽标、讨论卡元信息、步骤列头、任务来源、页脚版权，正文与标题一个 12px 都没有。
+
+**层级只有三档**（`howto/nngroup.com--visual-hierarchy-ux-definition.md:76`「最多 3 档」）：展示（64 / 48）、标题（36 / 28）、正文（16）。最大的元素全页 2 个：h1 与收尾 CTA 标题（`:59`「最多 3 个反差变体、最大元素不超过 2 个」）。20 / 14 / 12 只出现在组件内部，不参与页面级层级。
+
+---
+
+## 5 间距、圆角、动效
+
+**间距刻度**（`content/layout/tdesign.tencent.com--layout.md:107`「8 倍数原则的基础上，增加了 4、12 两档」）：
+
+```
+4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96
+```
+
+同一篇原文配套：网格基数 8px（`:65`）、槽 16px（`:77`）、安全边距 24px（`:81`）、内容区 12 栅格（`:87`）、断点 sm 768 / md 992 / lg 1200（`:117-119`）。全站只这一套刻度。
+
+**纵向间距只有一层**：区块用 `padding-block` 给节奏（桌面 96、≤767 收到 64），区块内部的元素间距由父级 `gap` 与组件的 `padding-block` 给，元素不写 margin，避免父子叠加出双份留白（`every-layout.dev--stack.md:34` 讲的就是这个：margin 是元素之间的关系，不该写死在元素上）。
+
+**多栏**：文档区 `grid-template-columns:40px minmax(0,1fr) 28px`（行号 / 正文 / 讨论徽标），整张纸 `minmax(0,1fr) 360px`；正文列 `max-inline-size:34em`（16px × 34 字，落在 GAP_RULES「中文 35 到 45 字」区间，`guide.md:58`）。
+
+**编号栏对齐**：节号占一列，正文列用 `padding-inline-start:var(--rail)`（≥768 为 72px，480 到 767 为 56px，<480 为 0）让开，标题再负 margin 拉回满宽。这样节号、标题、卡片、表格共用两条竖线，不是三个左基准。
+
+**圆角**：库内无通用 radius 规范（`guide.md:50`），派生两档 + 整圆，标 derived：
+
+| 值 | 用途 |
+| --- | --- |
+| 4px | 徽标底、任务块、输入框、错误态 |
+| 8px | 纸张卡、弹层 |
+| 999px | 胶囊导航、按钮、chip、讨论徽标（组件形状，不是第三档圆角） |
+
+**发丝线**：1px（`guide.md:52`，derived）。装饰线 `#dddddd`，控件边界另取 `#8b8b8b`。
+
+**动效**（`content/motion/tdesign.tencent.com--motion.md`）：
+
+| Token | 值 | 出处 | 用在哪 |
+| --- | --- | --- | --- |
+| `--t-fast` | 200ms | `:99` `@duration-desktop-base` | 悬停、徽标、chip、按钮、任务勾选、行高亮 |
+| `--ease` | `cubic-bezier(.38,0,.24,1)` | `:111` `@standard easing` | 全部过渡 |
+
+`prefers-reduced-motion: reduce` 下关掉全部 transition（`guide.md` 第 7 步要求照做），写在样式表末尾避免被后置规则反超。
+
+**组件尺寸**（`guide.md` 第 6 步派生成套）：导航按钮 36px 高、chip 与周期按钮 40px、表单控件与弹层按钮 44px；讨论徽标 24px，命中区用 `::after{inset:-10px}` 补到 44px；弹层宽 `min(480px, 100vw − 32px)`。
+
+---
+
+## 6 设计点路由
+
+方法层必读三篇先读，再从 `points_by_task['s2']`（落地页）里选点：
+
+| 设计点 | 为什么选 | 读了哪些原文 | 落到哪 |
+| --- | --- | --- | --- |
+| `howto-visual-hierarchy`（方法层必读） | 首屏只有一句话，全靠层级撑住 | `howto/nngroup.com--visual-hierarchy-ux-definition.md`（`:76` 最多 3 档字号、`:59` 最多 3 个反差） | 全页层级三档；最大元素只有 h1 与收尾标题 |
+| `howto-ui-color-framework`（方法层必读） | 强调色被钉死成一颗紫，得先定变体从哪来 | `howto/learnui.design--color-in-ui-design-a-practical-framework.md`（`:26` 把一个基色改成多个变体、`:82` 状态也是同一色的变体） | 五个变体全落 Purple1/2/3/4/7/8/9，hover 只降亮度（Purple8） |
+| `layout-intrinsic-patterns`（方法层必读） | 纵向间距只准有一层来源，多栏先定栏距 | `layout/every-layout.dev--stack.md`（`:34` margin 是关系不是元素属性）、`layout/every-layout.dev--sidebar.md`（`:38-41` 用 flex-basis 定主从栏） | 间距由父级 gap 给；纸张两栏 `1fr + 360px` |
+| `layouts-pricing-comparison` | 定价是这一页的第三个必答问题 | `layouts/layout--pricing-page-cta.md`（区块顺序 Pricing → 对比 → FAQ → CTA；年付差额写真实数字；FAQ 解顾虑） | 定价 → 问答 → 收尾 CTA 的顺序；月付/年付切换；年付差额写实数 ¥840 |
+| `layouts-page-selection-chain` | 先定版型再定组件，防止用组件反推结构 | `layouts/layout--hero-features-cta.md`（区块顺序；CTA 文案对底色至少 4.5:1） | 版式先定（Marquee → 纸张 → 四步 → 定价 → 问答 → CTA）；白字压紫实测 7.00:1 |
+| `project-tdesign` | 编号栏、表格、卡片要共用竖线 | `layout/tdesign.tencent.com--page-framework.md` | 节号一列 + 内容列 `--rail` 让开 |
+| `markdown-cn-copywriting`（文案写作 s13） | 中文文案与数字排版的用词规矩 | `principles/ant.design--copywriting-cn.md`（`:212` 统计数字用阿拉伯数字、`:262` 链接与文字之间加空格） | 金额一律阿拉伯数字 + 千分位 + `tabular-nums`；中英文之间留空 |
+| `project-tdesign` / `primer--empty-states`（状态 s19） | 讨论全部解决后要给空态而不是一块空白 | `patterns/primer--empty-states.md`（`:42` 空态只放一个主行动） | 空态一行说明 + 一句下一步，不放大按钮 |
+| `a11y-focus-visibility`（无障碍 s9） | 键盘必须看得见焦点在哪 | `a11y/web.dev--a11y-focus.md`（`:161` 焦点指示器） | 全局 `:focus-visible` 2px 实线 + 2px 偏移；顶部跳转链接 |
+| `motion-inplace` / `motion-feedback`（动效 s5 / s6） | 有状态变化的组件都要有过渡 | `motion/transitions.dev--04-text-states-swap.md`、`--10-success-check.md` | 讨论徽标、任务勾选、选中行、周期切换各有 200ms 过渡 |
+| `patterns-review-checklist`（评审 s16） | 验收按清单逐条过 | `patterns/ux-rules-checklist.md` | 见第 7 节与 FINDINGS 第 1 节 |
+
+**与版型的偏离（有意）**：`layout--pricing-page-cta` 的区块顺序里有「Price comparison cards」，本页改成一张三行费率表。三档计划是同一批字段的不同取值，表格比三张等宽卡更好比价，也避开「等宽卡片网格」这个默认骨架。版型只借区块顺序与转化结构。
+
+---
+
+## 7 交互实测（真点，记前后数字）
+
+| # | 交互 | 动作 | 前 | 后 | 结果 |
 | --- | --- | --- | --- | --- | --- |
-| L | 64px | 48px | 36px | 28px | 只有 H1 |
-| M | 28px | 28px | 24px | 20px | 区块 H2、价格数字、主评价 |
-| S | 16px | 16px | 16px | 16px | 正文、导航、按钮、表格外的其余全部 |
+| 1 | 讨论徽标定位 | 点第 13 行的「3」 | 徽标 `aria-pressed=false`；行与讨论卡无序 | `true`；对应行底色 `rgb(238,220,255)`，讨论卡 `data-active=true` | 读屏播报「已定位到第 13 行的讨论。」 |
+| 2 | 换一个徽标 | 再点第 12 行的「2」 | 第 13 行高亮 | 第 12 行高亮，第 13 行回到未选 | 同时只有一处定位 |
+| 3 | 只看未解决 | 点筛选 chip | 3 处讨论全显；计数 2 处未解决 | 已解决的第 12 行隐藏，剩 2 处 | 再点还原，chip `aria-pressed` 同步 |
+| 4 | 标为已解决 | 点第 13 行的「标为已解决」 | 未解决 2 处；徽标紫色 | 未解决 1 处；徽标转灰（`data-resolved=true`）；按钮消失 | 计数 `#open-count` 同步 |
+| 5 | 全部解决 | 再解决第 14 行 | 未解决 1 处 | 未解决 0 处 | 空态出现：「3 处讨论都已解决。下一处，从选中一行开始。」 |
+| 6 | 任务完成 | 点任务块的勾选框 | `data-done=false`，文案「标记完成」，方框空 | `true`，文案「已完成」，方框出现 ✓，标题加删除线 | 再点回到未完成 |
+| 7 | 计费周期 | 月付 → 年付 | 团队 ¥72 / ¥4,320；组织 ¥122 / ¥7,320；旁注「切到年付…少付 ¥840」 | 团队 ¥58 / ¥3,480；组织 ¥98 / ¥5,880；旁注「已按年付计价…」 | 切回月付完全还原 |
+| 8 | 打开试用弹层 | 点导航「申请试用」 | `open=false` | `true`，焦点进邮箱框 | `showModal()`，背景不可滚 |
+| 9 | 空值提交 | 直接点「发确认信」 | 无错误 | 「邮箱还没填。」`aria-invalid=true`，焦点回邮箱 | |
+| 10 | 非法格式 | 填 `abc` 再提交 | 无错误 | 「邮箱要带 @ 和域名，例如 name@team.com。」 | |
+| 11 | 合法提交 | 填 `linchuan@team.com` | 表单可见 | 表单隐藏，显示「确认信已发出，10 秒内到。」 | 提交成功后表单不可再提交（整块换掉） |
+| 12 | 关闭与复位 | 点「关闭」→ 重开 | `open=true` | `false`；重开时表单复位、邮箱清空 | 另支持 Esc 与点遮罩关闭 |
+| 13 | 键盘 Tab 序列 | 从 body 连按 17 次 | 无 | 跳转链接 → 品牌 → 四个导航项 → 导航 CTA → 筛选 → 3 个徽标 → 任务勾选 → 2 个「标为已解决」→ 2 个周期按钮 → 问答 1 | 顺序与视觉顺序一致，焦点环每项都可见（`solid 2px`） |
+| 14 | 导航当前项 | 依次滚到四个区块 | 无 `aria-current` | 分别标在「一张纸」「怎么用」「定价」「问答」 | 点导航项后 60ms 内也会重算，不必等滚动结束 |
 
-其余标题（卡片名、FAQ 问题、页脚列名）统一在 S 档，靠字重 600 与色阶 90%/60% 拉开层级，不新增字号。
+---
 
-| 字号 | 行高 | 说明 |
-| --- | --- | --- |
-| 64 | 72px | 公式产物（字号+8） |
-| 48 | 56px | 公式产物 |
-| 36 | 44px | 公式产物 |
-| 28 | 36px | 公式产物 |
-| 24 | 32px | 公式产物 |
-| 20 | 28px | 公式产物 |
-| 16 | 24px | 公式产物 |
+## 8 回炉记录
 
-实现：`line-height = font size + 8`（`fonts.md:67`、`:73-74`），用零特异性通配 `:where(body, body *){line-height:calc(1em + 8px)}`，让每个元素按自身字号算，避免在 `body` 上写死被继承成固定值。
-
-字重只有 400 / 600 两档（`fonts.md:81`，原文说明 Windows 下小于 600 会回落成常规体，所以只用这两档）。
-
-## 5. 间距 / 圆角 / 容器 / 断点
-
-| 维度 | 取值 | 依据 |
-| --- | --- | --- |
-| 间距 | 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 | 8px 基数（`content/layout/tdesign.tencent.com--layout.md:65`）+ 允许 4、12 两档（`layout.md:107`）；全部为 8 的倍数或原文点名的小档，未用字阶步进凑间距 |
-| 栅格 | 12 列，列间距 16 / 区块间距 24 | `layout.md:87`；槽默认 16（`layout.md:77`），区块用 24 与安全边距同档（`layout.md:81`） |
-| 容器 | 最大 1200px，左右 24px（≥1200 时 32px） | 设计画板 1440（`layout.md:25`），安全边距默认 24（`layout.md:81`） |
-| 断点 | 768 / 992 / 1200 | `layout.md:117-119` |
-| 断点（派生） | 359 | 320 档放不下 9 个 36px 字（见第 9 节回炉 c） |
-| 圆角 | 4px（按钮、输入框、标签）/ 8px（卡片、示意卡、弹窗） | 库无通用 radius 原文，按 guide.md:40 成套派生两档 |
-| 发丝线 | 1px | 库只给线色不给线宽，按 guide.md:42 派生；装饰线不承担控件边界 |
-| 正文行长 | 40em（≈40 个汉字），窄栏 34em | guide.md:48：中文 35–45 字，同页只用一种主行长 |
-| 首屏高度 | `calc(80vh - 64px)`，加页头合计约 80% 屏高 | guide.md:49：85% 上下并让下一节露头；实测 1280×900 时下一节标题能看到 |
-| 触控目标 | 按钮/输入/链接 ≥44×44，间距 ≥8 | guide.md:51；WCAG 2.2 目标尺寸（`content/a11y/w3c--wcag-2.2.md:871`，2.5.8 的 24×24 下限之上取稳） |
-| 焦点环 | 2px 实线 `#0052d9` + 2px 偏移 | guide.md:51；对比白底 6.54:1 ≥3 |
-| 组件尺寸（派生） | 按钮高 44、输入框高 44、头像 28、勾选框 16、图标 24（行内 20） | guide.md:45：基准规范不给组件尺寸，整套自定 |
-| 金额 | 两位小数、`tabular-nums`、¥ 在数字前 | guide.md:52；TCloud Number 拿不到，按 guide.md:41 降级为 tabular-nums |
-
-## 6. 动效
-
-时长与曲线全部来自基准规范 `content/motion/tdesign.tencent.com--motion.md`，没有跨源，也没有自造曲线：
-
-| token | 值 | 出处 | 用在哪 |
-| --- | --- | --- | --- |
-| base | 200ms | `motion.md:99`（@duration-desktop-base） | 按钮 hover/active、输入框边框、焦点、轻提示 |
-| moderate | 240ms | `motion.md:100` | 弹窗位移、任务新增行的高亮 |
-| slow | 280ms | `motion.md:101` | 弹窗整体（进出） |
-| standard | `cubic-bezier(.38,0,.24,1)` | `motion.md:111` | 颜色、位移的默认曲线 |
-| ease out（入画） | `cubic-bezier(0,0,.15,1)` | `motion.md:112` | 弹窗进入 |
-| ease in（出画） | `cubic-bezier(0.82,0,1,.9)` | `motion.md:113` | 弹窗退场 |
-
-桌面端 200–600ms 是原文给的合适区间（`motion.md:89`），本页取区间下沿，因为都是小元素的反馈，不需要长时长。
-
-`prefers-reduced-motion: reduce` 下把所有过渡压到 0.01ms、关掉平滑滚动、去掉弹窗位移。
-
-**有意不做动效的地方**：FAQ 手风琴直接用 `hidden` 切换，不做高度过渡——动画期间内容仍在 DOM 里，屏读会读到收起的答案；宁可瞬切也不牺牲可读性。
-
-## 7. 设计点路由表
-
-| 设计点 | 选用标准（select 摘要） | 取舍 | 落在哪 |
-| --- | --- | --- | --- |
-| howto-visual-hierarchy | 字号最多 3 档、最大元素 ≤2、简单设计 2 主色 2 辅色 | 采用：3 档字号 + 唯一 H1 + 单强调色 | 第 4 节；全页只有 1 个 64/48/36px 元素 |
-| howto-ui-color-framework（方法层必读） | 一个色相靠深浅变体表达状态，hover/选中各只动一个维度 | 采用原则，取值仍走基准规范色板（Blue6/7/8/9） | 第 3 节；hover 因对比度从 Blue6 换 Blue8 |
-| bento-grid-layout | 内容块跨度不一、想用便当格时选 | 不选：三项等权，bento 会留空格 | 能力区改成带分隔线的行 |
-| layouts-product-page | 主视觉→价值主张→功能→CTA→页脚；CTA 首屏+页尾 | 采用，并在中间插入需求里要求的演示、客户、定价、FAQ | 第 2 节区块表 |
-| layouts-pricing-comparison | 每卡 CTA、导航吸顶 CTA、突出目标套餐、年付写真实数字、FAQ 解顾虑 | 采用；砍掉功能对比表（三档差异已用列表写清，加表只会拉长决策） | 04 定价 |
-| components-cards | 卡片挂在区块 h2 下时卡内标题降 h3；无 hover 也完整可读 | 采用 | 价格卡、待办卡、评论卡都是 h3 挂在区块 h2 下 |
-| components-button-hierarchy | 每屏一个 primary（页头/弹窗不算）；secondary 只配 primary | 采用：每个视口内正文区最多一个实底主按钮 | hero、pricing、收尾各一个；弹窗内一个 |
-| components-modal-dialog | 打开后焦点落第一个输入框，Tab 不出框 | 采用：原生 `<dialog showModal>` 自带焦点陷阱 | 弹窗 |
-| a11y-modal-focus-trap | 焦点锁在框内、Esc 关闭、关闭后焦点还原到触发元素 | 采用，并补一帧延迟修正原生回焦顺序 | 第 9 节回炉 g |
-| a11y-expand-collapse-keys | 手风琴标题是 button，Enter/Space 可开合，`aria-expanded` + `aria-controls` | 采用 | FAQ |
-| a11y-focus-visibility | `:focus-visible` 才出现焦点环；页首 skip link | 采用 | 全局；skip link 首个 Tab 停在 top:12px |
-| icons-spec（TDesign） | 一个项目只跟一个图标源，网格/线宽/端点成套 | 采用 TDesign：24 栅格、2px 描边、端点直角 | 全站内联 SVG（`content/icons/tdesign.tencent.com--icon.md:38,56,60`） |
-| patterns-states-feedback | 禁用态不可点、降透明度；只读有专门呈现 | 部分采用：禁用用第三档字色 + 灰底；没有只读态需求 | 转任务后的按钮 |
-| patterns-feedback-criteria | 当帧有响应、失败保留输入并说明原因、数字与数据联动 | 采用 | 见第 8 节交互前后数字 |
-| type-measure-limit / clreq | 中文行长有上限 | 采用 guide.md:48 的 35–45 字，取 40 | 正文 `max-width:40em` |
-
-未取值的点：`brands-*` 全部只作气质参照、不取任何色值或字号（guide.md:20 明确新品牌不抄 brands 的值）；`dataviz-*` 无图表需求，未用。
-
-## 8. 交付自验
-
-全部为 `file:///Users/mac/workspace/active/UISpecs/examples/samepaper/index.html` 在 Chrome 中的实测值。
-
-**四档宽度**（`documentElement.scrollWidth / clientWidth`）：
-
-| 视口 | scrollWidth / clientWidth | 结论 | 文档高 |
-| --- | --- | --- | --- |
-| 320 | 320 / 320 | 无横向溢出 | 7956 |
-| 375 | 375 / 375 | 无横向溢出 | 7710 |
-| 768 | 753 / 753 | 无横向溢出（滚动条占 15） | 6888 |
-| 1280 | 1265 / 1265 | 无横向溢出（滚动条占 15） | 5220 |
-
-另测：320 档展开移动导航后面板宽 320、页面仍 320/320。
-
-**零外链**：`performance.getEntriesByType('resource').length === 0`，四档均 0。CSS/JS 内联，图标与示意图全部是内联 SVG 或 HTML/CSS，没有字体文件、没有图片请求。
-
-**行高普查**：遍历含直接文本节点的元素，逐个数 `computedStyle.lineHeight - (fontSize + 8)`，容差 0.6px。四档均 **177 个文本节点，0 违例**。
-
-**字号档位**（同一普查顺带统计）：320 = {28×1, 20×10, 16×163}；375 = {36×1, 24×10, 16×163}；768 = {48×1, 28×10, 16×163}；1280 = {64×1, 28×10, 16×163}。每档恰好 3 个字号。
-
-**核心交互**（真点，记录前后）：
-
-| 交互 | 操作前 | 操作后 |
-| --- | --- | --- |
-| 计费周期切换（月付→年付） | 团队档 `39.00`，说明「月付 ¥39.00 / 人 / 月；换年付 ¥31.20，每年省 ¥93.60。」 | `31.20`，说明「年付：¥374.40 / 人 / 年，比月付省 ¥93.60。」 |
-| 评论转任务（真实坐标点击） | 待办 `2 项` / 2 个 `li` | `3 项` / 3 个 `li`，新行「把迁移脚本的失败重试补上 · 林岚」；按钮变「已转为任务」并 `disabled` |
-| 重置演示 | 3 项 | 回到 `2 项`，按钮恢复「转为任务」 |
-| FAQ 展开 | 5 条全 `aria-expanded="false"` | `#qa2b` → `true`、面板 `hidden=false`、符号 `−`；再展开第 3 条时同时开 2 条；再点回 `false` |
-| 弹窗空提交 | 0 条错误 | 2 条错误（团队名称、邮箱），两字段 `aria-invalid="true"`，边框转 `rgb(213,73,65)` 2px |
-| 弹窗非法邮箱 `a@b` | 2 条错误 | 1 条错误「邮箱格式不完整，检查一下 @ 后面的域名。」；说明文字收起 |
-| 弹窗合法提交 | 表单可见 | 表单 `hidden`，成功面板显示「测试团队的纸面已经建好」，焦点到「回到页面」 |
-| Esc 关闭弹窗 | 打开 | 关闭，焦点回到触发按钮（页头「免费开始」） |
-| 移动导航（375 与 320） | `hidden=true`，`display:none` | `hidden=false`，`display:flex`，面板高 193；点链接后自动收起 |
-| 页脚占位链接 | — | 轻提示「更新日志还没写：这是演示页面，本稿只包含首页。」，`role="status"` 播报 |
-
-**键盘**：首 Tab 落在 skip link（top 12px，可见），焦点环 `rgb(0,82,217) solid 2px`，offset 2px；第 3 个 Tab 到「产品」导航项，同样是 2px 实线环。
-
-**对比度**（合成后半透明字色实算）：
-
-| 位置 | 前景 / 背景 | 实测 |
-| --- | --- | --- |
-| 正文与标题 | `rgba(0,0,0,.9)` / `#fff` | 17.40:1 |
-| 次要文字（主张、说明、页脚链接、导航） | `rgba(0,0,0,.6)` / `#fff` | 5.74:1 |
-| 高亮按钮文字 | `#003cab` / `#f2f3ff` | 8.52:1 |
-| 主按钮文字 | `#fff` / `#0052d9` | 6.54:1 |
-| 错误文案 | `#ad352f` / `#fff` | 6.31:1 |
-| 禁用按钮 | `rgba(0,0,0,.4)` / `#f3f3f3` | 2.81:1（禁用豁免） |
-| 输入框边框（非文本） | `#8b8b8b` / `#fff` | 3.41:1 |
-| 焦点环（非文本） | `#0052d9` / `#fff` | 6.54:1 |
-
-**强调色实填面积**（统计所有 `background-color` 为 `rgb(0,82,217)` 的元素面积 ÷ 文档面积）：320 = 1.18%，375 = 1.12%，768 = 0.93%，1280 = 0.50%，均 < 5%。
-
-**控制台**：装 `error` / `unhandledrejection` 监听后把 8 个交互跑一遍，捕获 0 条。
-
-## 9. 回炉记录
-
-第一版出稿后逐项测，下面每条都是实测或截图发现的问题，改完重测。
-
-| # | 问题 | 怎么发现 | 改法 | 改后 |
+| # | 改动 | 前 | 后 | 依据 |
 | --- | --- | --- | --- | --- |
-| a | 字号出现第 4、第 5 档：`h3` 落回浏览器默认 18.72px，页脚/弹窗 `h2` 落回 24px | 字号普查：1280 档出现 `18.72px × 18`、`24px × 5` | 加 `h1,h2,h3{font-size:var(--fs-s)}`，具体类再覆盖 | 每档只剩 3 个字号 |
-| b | 首屏示意卡里绝对定位的协作者光标压在正文上，被读成渲染错误 | 截图评审 | 去掉浮动光标，改成卡片内一行 presence「林岚 正在改第 2 段 / 周敏 正在看评论 / 陈可 在收尾待办」，2px 光标竖线做标记 | 正文不再被遮挡，协作信息可读 |
-| c | 768 档标题断成「…写在同 / 一张纸上」，320 档把「任务」拆开、末行只剩「上」 | 分档截图 | H1 在逗号后强制断行；<359 再退到字阶 28/20 两档 | 各档都是 2 行，断在逗号后 |
-| d | 演示区右栏比左栏矮 56px，「重置演示」挂在右栏下像局部操作 | 量两栏高度：409 / 353 | 重置提到区块说明下面作为整区动作，待办卡 `flex:1` 撑满 | 两栏 409 / 409 |
-| e | 计费切换选中态是整块实蓝，像两个按钮；且月付选中时说明写「年付价…」有歧义 | 截图评审 | 选中改品牌浅底 + 1px 内描边；说明改成「月付 ¥39.00…换年付 ¥31.20，每年省 ¥93.60。」 | 像分段控件，文案无歧义 |
-| f | 邮箱字段报错时，说明文字和错误提示同时挂在字段下 | 弹窗报错态截图 | 报错时收起 `#emailHint`，输入即恢复 | 一个字段只有一条提示 |
-| g | 关闭弹窗后焦点回到文档里上一个焦点元素，而不是触发按钮 | 交互实测 | `close` 事件里 `requestAnimationFrame` 再还给 `lastTrigger` | 焦点回到页头「免费开始」 |
-| h | 首屏与下一节之间留白过大，下一节只露出空白 | 截图评审 | hero 高度改 `calc(80vh - 64px)`，上下 padding 收到 48/64 | 1280×900 能看到「01 / 产品」与小标题 |
-| i | 320 档按钮「免费档不限人数」断成孤字「人数」 | 375/320 截图 | 主张下方三段说明各自 `nowrap`，只在「·」处换行 | 断行落在分隔符 |
-
-## 10. 超出基准规范的数值清单
-
-全部标 derived，或回到基准规范原文；没有跨源借值。
-
-| 维度 | 值 | 状态 | 规则 |
-| --- | --- | --- | --- |
-| 圆角 | 4 / 8 | derived | guide.md:40，两档成套 |
-| 发丝线宽 | 1px | derived | guide.md:42 |
-| 正文行长 | 40em / 34em | derived | guide.md:48，中文 35–45 字 |
-| 首屏高度 | `calc(80vh - 64px)` | derived | guide.md:49，取 85% 下沿并留出下一节标题 |
-| 弹层遮罩 | `rgba(0,0,0,.45)` | derived | guide.md:50 |
-| 触控目标 | 44×44 | derived | guide.md:51（WCAG 2.2 下限之上取稳） |
-| 焦点环 | 2px + 2px 偏移 | derived | guide.md:51 |
-| 组件尺寸 | 按钮/输入 44，头像 28，勾选框 16 | derived | guide.md:45，整套自定 |
-| 金额排版 | 两位小数 + tabular-nums | derived / 降级 | guide.md:52、:41（TCloud Number 零请求下拿不到） |
-| 断点 359 | 28/20 两档 | derived | guide.md:47 的窄屏降档，值仍取 TDesign 字阶 |
-| 栅格跨度 | 7/5、4/4/4、4/2/2/2/2 | derived（组合） | 12 栅格（`layout.md:87`）内的 span 组合，不是新数值 |
-| 阴影 | 不使用 | 缺口 | 库内无 elevation/阴影数值，用 1px 边框代替，见 FINDINGS 缺口 4 |
-| 图标尺寸 | 24 / 20 | 原文 | `content/icons/tdesign.tencent.com--icon.md:38` |
+| 1 | 阅读顺序 | 首版三行大字靠行号与语义连读 | 每行接一条贴右缘的发丝线，行号成列 | Marquee `:5` 要求贴视口两缘；发丝线同时把视线推向右缘，又保持从上到下 |
+| 2 | 首屏版心 | 初稿把三行居中堆叠，右侧全空 | `justify-content:space-between` + 满宽发丝线 + 左注入 | 视觉复查判「右重左轻、占不满折叠线」 |
+| 3 | 节号与正文两个左基准 | 节号 56px 栏，标题缩进，卡片回到最左 | 正文列统一让出 `--rail`，标题负 margin 拉回 | 视觉复查判「三个左基准，像没对齐」 |
+| 4 | 表格溢出 | 正文列用 `margin-inline-start` 让位，`width:100%` 的定价表多出 72px，1280 档 `scrollWidth 1304 > clientWidth 1265` | 改成 `.wrap` 的 `padding-inline-start`，标题负 margin | 断点边界实测；`width:100%` 不含 margin，必然撑破 |
+| 5 | 讨论徽标参差 | 徽标跟在文字末尾，三行三个位置 | 独立第三列，成一条竖线 | 视觉复查判「核心导航线索参差」 |
+| 6 | 任务行归属 | 任务块排在正文末尾，看着像第 14 行的延伸 | 给它行号 15，并补 16、17 两行正文把它夹在文档中间 | 视觉复查判「由第 12 行转来的任务却落在第 14 行下面」 |
+| 7 | 选中态与任务块撞色 | 行高亮与任务块都用 `--accent-wash` | 行高亮改 `--accent-tint`；任务块改 `--paper-2` + 2px 紫左边 | 视觉复查判「淡紫整块像选中行」 |
+| 8 | 任务两个控件 | 复选框 + 「标记完成」按钮表达同一件事，按钮灰描边像禁用 | 合成一个控件：方框 + 文字，`aria-pressed` 同步 | 视觉复查判「功能重复、像禁用态」 |
+| 9 | 定价表数字 | `text-align:end` 被 `.price-table td` 的更高特异性压掉，数字实际左对齐 | 补 `.price-table .num{text-align:end}` | 实测 computedStyle 为 `start`，右缘 928 / 1233 不齐 |
+| 10 | 步骤区「留下」列 | 每行重复「留下：」四次，标签与值同灰度 | 加一行列头「留下」，值改 14px 正文色；窄屏用 `::before` 补回标签 | 视觉复查判「重复噪音，像脚注」 |
+| 11 | 收尾 CTA 布局与配色 | 按钮右浮、浅紫 `#eedcff`，与深色区对比弱 | 按钮移到副文下方、改 `#c69cff` 底 + `#3b007b` 字（6.52:1） | 视觉复查判「收尾按钮像次级」；深紫底白字压 `#181818` 只有 2.56:1 不达 3:1 |
+| 12 | 区块说明孤字 | 第一版说明 46 字，第二行只剩「红。」 | 压到 34 字，一行收 | 实测末行宽 32px，是典型的孤字 |
+| 13 | 深色区与页脚左缘 | CTA 与页脚从左内边距起，与上面各节错开 72px | `.cta__in` / `.foot__in` 同样让出 `--rail` | 视觉复查判「容器对齐不统一」 |
+| 14 | 窄屏费率表 | 三列在 320 下把「文档」「条数」拆到词中断行 | ≤479 改堆叠：表头隐藏，每档一块，价格行「标签 + 金额」两端对齐 | 视觉复查判「挤到断词」；堆叠后 320 档 `scrollWidth 320` |
+| 15 | 表格说明被压成竖排 | 堆叠后 caption 退化成 `table-caption`，量到 28×320，逐字换行 | `caption{display:block;inline-size:100%}` | 实测 28×320 → 272×28 |
+| 16 | 个人档「5 人一年 ¥0」 | ¥0 让人以为 5 人也免费 | 改「不含」，并从计费切换的取值列里摘掉 | 语义矛盾；`data-month` 摘掉后切换不再改写它 |
+| 17 | 推荐行没有任何视觉区分 | 三行同底色，只有一枚小标签 | 团队行加 `--accent-wash` 底色 | 视觉复查判「主推方案看不出来」；浅紫底明度高，不抢价格 |
+| 18 | 导航没有当前区块 | 四个导航项只有 hover，滚到哪一节都不标 | 滚动监听 + `aria-current="true"`，激活态做成浅紫胶囊（`#eedcff` 底 + `#3b007b` 字，10.9:1） | 实测四个区块逐一切换，`aria-current` 都落在对应项；胶囊宽度 501px 不随状态变 |
+| 19 | 767 以下整条菜单被藏掉 | `@media(max-width:767px){.pill__links{display:none}}`，窄屏没有导航 | ≤767 恢复四项；≤479 改两行胶囊（品牌 + 按钮 / 四项平铺） | 实测 320/375/480 下四个链接宽高均为 42×35，全部可点 |
+| 20 | 页脚三个链接看不出是链接 | 灰字无下划线，压在黑底上像说明文字 | 1px 下划线 `rgba(255,255,255,.6)`，hover 转白、active 转 `#c69cff` | 视觉复查判「链接感偏弱」；下划线用 45% 白时几乎看不见，提到 60% |
+| 21 | 胶囊压在深色区上发灰 | 84% 白叠在黑底上算出 ≈`#d6d6d6`，灰字对比掉到 4.5:1 | 侦测 `.cta` / `.foot` 与胶囊中线的重叠，命中时提到 96% 白 | 计算 + 实测：96% 白 → ≈`#f7f7f7`，灰字回到 6.6:1 |
+| 22 | 激活态用了下划线，和胶囊语言打架 | 第一版激活态是「紫字 + 2px 下划线」，同一个胶囊里「申请试用」是实心胶囊，一个容器出现两种形状语言 | 改成胶囊填充：hover 灰胶囊 `#f3f3f3`、当前浅紫胶囊 `#eedcff`、按下实紫 `#7137bf` 白字；四项与按钮统一 36px 高 | 用户指出「申请试用是胶囊，为什么菜单项是下划线」；改完量到 4 个链接与按钮同为 36px 高，胶囊宽 501px |
+| 23 | 「同一容器一种形状」没有进验收口径 | 前 21 条全靠我看图，没人把这条当必过项 | 写进 `examples/README.md` 验收口径与维护技能：状态形状检验（悬停、选中、按下与本体同形） | 这类缺陷只有形状一致性这一条验收标准能拦住，加进清单才有下一次 |
+| 24 | 形状普查又抓到三处 | 同页还混着「标为已解决」下划线文字按钮、方形任务勾选、浅紫描边徽标（2.0:1 边界） | 讨论动作改 28px 描边胶囊；任务勾选 4px 圆角改 999px 圆形；徽标描边 `#c69cff` 改 `#7137bf`（6.6:1）、已解决态用 `#8b8b8b`（3.4:1） | 按第 10 条逐控件量 `border-radius` 与高度抓到；动作件现在全是 999px，输入框 4px 属输入框规范 |

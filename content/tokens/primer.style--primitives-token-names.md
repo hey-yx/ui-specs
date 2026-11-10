@@ -1,5 +1,5 @@
 ---
-title: "Primer · Design Token 命名约定"
+title: "GitHub Primer · Token · Design Token 命名约定"
 source: https://github.com/primer/design/blob/main/content/foundations/primitives/token-names.mdx
 section: tokens
 tag: "命名约定"
@@ -9,7 +9,7 @@ id: tokens-6
 publisher: "GitHub"
 ---
 
-# Primer · Design Token 命名约定
+# GitHub Primer · Token · Design Token 命名约定
 
 > 来源：[https://github.com/primer/design/blob/main/content/foundations/primitives/token-names.mdx](https://github.com/primer/design/blob/main/content/foundations/primitives/token-names.mdx)
 

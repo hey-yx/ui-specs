@@ -5,7 +5,8 @@ import FootLine from '../components/FootLine.astro'
 import { buildModel } from '../lib/model'
 import { countSources } from '../lib/sources'
 import starData from '../data/star-points.json'
-import { CASES } from '../data/examples'
+import { loadCases } from '../data/examples'
+import { AI_PROMPT } from '../data/guide.ts'
 
 const specs = await getCollection('specs')
 const model = buildModel(specs)
@@ -13,9 +14,9 @@ const model = buildModel(specs)
 const sources = countSources(model.all.map((s) => ({ publisher: s.data.publisher, source: s.data.source })))
 const pointCount = Object.keys(starData.points).length
 const taskCount = Object.keys(starData.tasks).length
-const caseCount = CASES.length
+const caseCount = loadCases({ strict: false }).length
 
-const description = `全文收录的 UI 设计规范库：${model.total} 篇，按 ${model.sections.length} 个分区组织，覆盖 Apple HIG、Polaris、Primer、Carbon、GOV.UK、Ant Design 等官方规范。`
+const description = `全文收录的 UI 设计规范库：${model.total} 篇，按 ${model.sections.length} 个分区组织，覆盖 Apple HIG、Material 3、Fluent 2、Polaris、Primer、Carbon、GOV.UK、GitLab Pajamas、Ant Design 等官方规范。`
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -31,30 +32,58 @@ const jsonLd = {
   <div class="page">
     <div id="main">
       <section class="home-intro" aria-labelledby="home-title">
-        <h1 class="home-title" id="home-title">UISpecs</h1>
+        <div class="home-head">
+          <h1 class="home-title" id="home-title">UI 设计规范全文库</h1>
+          <div class="home-ai-pop" id="homePromptPop">
+            <button class="home-ai-copy" id="homePromptBtn" type="button" aria-expanded="false" aria-controls="homePromptPanel">
+              复制提示词
+            </button>
+            <div class="home-ai-panel" id="homePromptPanel" role="group" aria-label="提示词全文" tabindex="0" hidden>
+              <pre class="ai-prompt"><code>{AI_PROMPT}</code></pre>
+            </div>
+          </div>
+        </div>
         <p class="home-lede">
-          官方规范全文收录，按分区组织。每条规范都标着文件和行号，按场景能查到该读的原文。
+          官方规范全文收录。每条值都能回到原文的文件和行号。
         </p>
-        <p class="home-links">
-          <a href="/starmap/">设计地图</a>
-          <a href="/briefs/">建站需求</a>
-          <a href="/examples/">案例站</a>
-        </p>
+        <button class="home-search" type="button" data-home-search aria-label="搜索全文">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg
+          >
+          <span class="home-search-text">搜索标题、来源、标签</span>
+          <kbd>⌘K</kbd>
+          <span class="home-search-go" aria-hidden="true">搜索</span>
+        </button>
         <p class="home-stats">
-          <b>{model.total}</b> 篇全文 · <b>{model.sections.length}</b> 分区 · <b>{pointCount}</b> 设计点 · <b>{taskCount}</b> 设计场景 · <b>{caseCount}</b> 案例站
+          <span class="stat"><b>{model.total}</b> 篇全文</span>
+          <span class="stat"><b>{model.sections.length}</b> 分区</span>
+          <span class="stat"><b>{pointCount}</b> 设计点</span>
+          <span class="stat"><b>{taskCount}</b> 设计场景</span>
+          <span class="stat"><b>{caseCount}</b> 案例站</span>
+        </p>
+        <p class="home-sample">
+          取值示例：Apple HIG · xSmall · Title 3 17pt / 行高 22pt ·
+          <a href="/a/type/developer.apple.com--typography/">typography.md:434-438</a>
         </p>
       </section>
 
       <section class="home-index" aria-labelledby="index-title">
         <h2 class="home-index-head" id="index-title">按分区读</h2>
-        <ul class="index-list">
+        <p class="home-index-note">{model.sections.length} 个分区，按标签顺序从入门到专题。</p>
+        <ul class="section-rows">
           {
-            model.sections.map((section) => (
+            model.sections.map((section, i) => (
               <li>
-                <a class="index-row" href={`/s/${section.key}/`}>
-                  <span class="index-name">{section.title}</span>
-                  <span class="index-note">{section.note}</span>
-                  <span class="index-count">{section.items.length} 篇</span>
+                <a class="section-row" href={`/s/${section.key}/`}>
+                  <span class="section-row-no">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="section-row-name">{section.title}</span>
+                  <span class="section-row-note">{section.note}</span>
+                  <span class="section-row-count">{section.items.length} 篇</span>
                 </a>
               </li>
             ))
@@ -63,6 +92,86 @@ const jsonLd = {
       </section>
     </div>
 
+    <script>
+      // 提示词：悬停或聚焦展开全文，点击复制；站点地址运行时替换成当前域名
+      const pop = document.getElementById('homePromptPop')
+      const btn = document.getElementById('homePromptBtn') as HTMLButtonElement | null
+      const panel = document.getElementById('homePromptPanel')
+      const code = panel?.querySelector<HTMLElement>('code')
+      if (pop && btn && panel && code) {
+        code.textContent = (code.textContent ?? '').replaceAll('<站点地址>', location.origin)
+
+        // 面板朝下放不下时翻到按钮上方，并按可用高度收 max-height
+        const place = () => {
+          const r = btn.getBoundingClientRect()
+          const width = Math.min(1080, window.innerWidth - 32)
+          panel.style.width = `${width}px`
+          const below = window.innerHeight - r.bottom - 24
+          const above = r.top - 24
+          // 上下都放不下 480 时改为视口居中的大面板，避免只剩一小条可读区
+          const centred = Math.max(below, above) < 480
+          const up = !centred && below < 480 && above > below
+          panel.classList.toggle('is-up', up)
+          panel.classList.toggle('is-centred', centred)
+          // 右边放不下就把面板往左挪，别让页面横向裁掉
+          const over = r.left + width + 16 - window.innerWidth
+          panel.style.left = centred ? '' : over > 0 ? `${-over}px` : '0px'
+          panel.style.maxHeight = centred
+            ? 'min(80vh, 720px)'
+            : `${Math.min(720, Math.max(240, up ? above : below))}px`
+        }
+        const setOpen = (open: boolean) => {
+          if (open && panel.hidden) place()
+          panel.hidden = !open
+          btn.setAttribute('aria-expanded', String(open))
+        }
+        const isOpen = () => !panel.hidden
+        const canHover = matchMedia('(hover: hover)').matches
+
+        if (canHover) {
+          pop.addEventListener('pointerenter', () => setOpen(true))
+          pop.addEventListener('pointerleave', () => {
+            if (!pop.contains(document.activeElement)) setOpen(false)
+          })
+        }
+        window.addEventListener('resize', () => {
+          if (isOpen()) place()
+        })
+        btn.addEventListener('click', async () => {
+          const done = (msg: string) => {
+            btn.textContent = msg
+            setTimeout(() => (btn.textContent = '复制提示词'), 2400)
+          }
+          setOpen(true)
+          try {
+            await Promise.race([
+              navigator.clipboard.writeText(code.textContent ?? ''),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1200)),
+            ])
+            done('已复制')
+          } catch {
+            // 剪贴板被禁：面板已展开，直接选中全文，⌘C 也能走
+            const range = document.createRange()
+            range.selectNodeContents(code)
+            const sel = getSelection()
+            sel?.removeAllRanges()
+            sel?.addRange(range)
+            done('剪贴板受限，已选中')
+          }
+        })
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && isOpen()) {
+            setOpen(false)
+            btn.focus({ preventScroll: true })
+          }
+        })
+        document.addEventListener('pointerdown', (e) => {
+          if (isOpen() && !pop.contains(e.target as Node)) setOpen(false)
+        })
+      }
+    </script>
+
     <FootLine>
       <span><b>{model.total}</b> 篇全文</span>
       <span class="sep" aria-hidden="true">·</span>
@@ -70,3 +179,10 @@ const jsonLd = {
     </FootLine>
   </div>
 </Base>
+
+<script>
+  document.querySelector('[data-home-search]')?.addEventListener('click', (event) => {
+    const trigger = event.currentTarget as HTMLElement
+    window.dispatchEvent(new CustomEvent('ui-specs:open-search', { detail: { trigger } }))
+  })
+</script>

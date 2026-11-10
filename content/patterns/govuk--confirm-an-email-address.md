@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Confirm an email address 确认邮箱"
 source: https://design-system.service.gov.uk/patterns/confirm-an-email-address/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-6
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/confirm-an-email-address/](https://design-system.service.gov.uk/patterns/confirm-an-email-address/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Help users to  Confirm an email address
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
@@ -25,8 +25,8 @@ Check that a user has access to a specific email account using an email confirma
 
 Only use email confirmation loops if:
 
-- critical functionality in the service is only available via email, for example, a password reset
-- accidentally using the wrong email address would give someone else access to sensitive information about the user
+*   critical functionality in the service is only available via email, for example, a password reset
+*   accidentally using the wrong email address would give someone else access to sensitive information about the user
 
 Remember that confirmed emails do not prove a person’s identity, just that they have access to that email address at the time they confirmed.
 
@@ -36,19 +36,19 @@ Email confirmation loops can be disruptive because they force users to switch fr
 
 Common problems with email confirmation include:
 
-- confusing users about the journey outside the service
-- assuming users have an email account and access to it
-- taking too long to send the confirmation email
-- not taking steps to prevent emails from being marked as spam
+*   confusing users about the journey outside the service
+*   assuming users have an email account and access to it
+*   taking too long to send the confirmation email
+*   not taking steps to prevent emails from being marked as spam
 
 You must design your service to reduce these issues for users.
 
 If you use email confirmation loops you must consider:
 
-- any expiry conditions you set on the email link
-- letting users resend their email
-- whether to use a blocking or non-blocking loop
-- the design of the ‘activate your account’ page
+*   any expiry conditions you set on the email link
+*   letting users resend their email
+*   whether to use a blocking or non-blocking loop
+*   the design of the ‘activate your account’ page
 
 Most email confirmation loops will send the user a link and ask them to click it to return to the service. Another approach is to send the user a security code, similar to the [Confirm a phone number pattern](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/), and ask the user to enter it.
 
@@ -58,9 +58,9 @@ You must set an expiry date on the email you send so that the link cannot be use
 
 You should also set the link to expire when:
 
-- it’s been used once
-- it’s superseded by a new link
-- the user has changed the email address on their account
+*   it’s been used once
+*   it’s superseded by a new link
+*   the user has changed the email address on their account
 
 If a user attempts to use an expired link or a link that’s already been used then you should explain that it’s expired, and why.
 
@@ -90,18 +90,18 @@ You should show this page immediately after the user provides their email addres
 
 The page should:
 
-- show the user the email address that you sent their activation email to
-- explain that they need to click the link in the email to proceed
-- let them resend the activation email to a different email address if necessary
+*   show the user the email address that you sent their activation email to
+*   explain that they need to click the link in the email to proceed
+*   let them resend the activation email to a different email address if necessary
 
 For blocking loops this should be the only page the user sees if they try to sign in before activating their account.
 
 For non-blocking loops, if a user signs in before activating their account then you should:
 
-- let them use the service
-- remind them that they need to activate their account
-- tell them where the activation email has been sent
-- let them resend the activation email
-- let them change their email address and confirm that instead
+*   let them use the service
+*   remind them that they need to activate their account
+*   tell them where the activation email has been sent
+*   let them resend the activation email
+*   let them change their email address and confirm that instead
 
 When a user clicks on the link in the activation email, send them to a page that confirms they’ve activated their account. You may or may not require them to sign in at this stage, depending on where in the flow the ‘activate your account’ screen appears.

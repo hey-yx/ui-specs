@@ -15,17 +15,7 @@ publisher: "IBM Carbon"
 
 ---
 
-
 > IBM firmly believes that web and software experiences should be accessible for everyone. Carbon is committed to following and complying with accessibility best practices.
-
-
-
-Carbon and accessibility
-Global accessibility standards
-Tools
-Resources
-
-
 
 ## Carbon and accessibility
 
@@ -128,7 +118,7 @@ to severe. It affects about 4% of the world's population.
 
 Low vision disabilities
 
-![Blurred vision and tunnel vision example on Google website](images/color-accessibility-2.png)
+![Blurred vision and tunnel vision example on Google website](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/color-accessibility-2.png)
 
 #### Designing for low vision
 
@@ -219,45 +209,18 @@ Functional cognitive disabilities can result in difficulties with:
 
 ## Tools
 
-
-
 - [链接](https://www.ibm.com/able/toolkit)
 
-![IBM bee icon](images/a11ybee.svg)
-
-
-
+![IBM bee icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/a11ybee.svg)
 
 - [链接](https://chrome.google.com/webstore/detail/high-contrast/djcfdncoelnlbldjfhinnjlhdjlikmph/related?hl=en)
 
-![high-contrast icon](images/high-contrast.png)
-
-
-
+![high-contrast icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/high-contrast.png)
 
 - [链接](https://www.figma.com/community/plugin/732603254453395948/Stark)
 
-![Stark logo](images/stark.png)
-
-
-
+![Stark logo](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/stark.png)
 
 - [链接](https://marijohannessen.github.io/color-contrast-checker/)
 
-![color contrast icon](images/color-contrast-icon.png)
-
-
-
-
-
-## Resources
-
-
-
-  - [链接](https://www.ibm.com/able/requirements/requirements/)
-
-![IBM bee icon](images/bee.svg)
-
-  
-
-
+![color contrast icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/guidelines/accessibility/images/color-contrast-icon.png)

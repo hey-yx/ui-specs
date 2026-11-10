@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Dashboards 仪表盘"
+title: "IBM Carbon · Pattern · Dashboards 仪表盘"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/dashboards/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-7
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Dashboards 仪表盘
+# IBM Carbon · Pattern · Dashboards 仪表盘
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/dashboards/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/dashboards/index.mdx)
 

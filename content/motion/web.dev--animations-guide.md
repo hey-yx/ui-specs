@@ -62,11 +62,9 @@ For example, if you animate something that changes layout, the paint and composi
 steps also have to run again. Animating something that changes layout
 is therefore more expensive than animating something that only changes compositing.
 
-
 For an in-depth look at exactly how this process happens in the browser
 read [From Braces to Pixels](https://alistapart.com/article/braces-to-pixels/) and
 [Inside look at modern browser browser](https://developer.chrome.com/blog/inside-browser-part3/).
-
 
 ### Animating layout properties {: #layout }
 
@@ -101,10 +99,8 @@ This is why the `opacity` property is included in the list of things which are c
 As long as this property is in its own layer, changes to it can be handled by the GPU during the compositing step.
 Chromium-based browsers and WebKit create a new layer for any element which has a CSS transition or animation on `opacity`.
 
-
 For an in-depth look at compositing see the article
 [GPU Animation: Doing It Right](https://www.smashingmagazine.com/2016/12/gpu-animation-doing-it-right/)
-
 
 ## What is a layer? {: #layers }
 
@@ -121,10 +117,8 @@ On devices with limited memory creating new layers may cause more of a performan
 In addition, each layer's textures need to be uploaded to the GPU.
 Therefore you may well hit constraints of bandwidth between the CPU and GPU.
 
-
 You can read a good explanation of layers, and how to create them in
 [Layers and how to force them](https://dassur.ma/things/forcing-layers/).
-
 
 ## CSS vs JavaScript performance {: #css-js }
 

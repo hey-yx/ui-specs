@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Chart anatomy 图表构成"
+title: "IBM Carbon · Pattern · Chart anatomy 图表构成"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/chart-anatomy/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-0
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Chart anatomy 图表构成
+# IBM Carbon · Pattern · Chart anatomy 图表构成
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/chart-anatomy/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/chart-anatomy/index.mdx)
 
@@ -26,7 +26,7 @@ publisher: "IBM Carbon"
 
 Most data visualizations are rectangular charts, with two dimensions represented on a vertical and a horizontal axis. Rectangular charts are typically constructed with a set of common elements including a legend, axis titles, and navigation tools like a zoom bar and tooltip.
 
-![Color in UI](images/chart-anatomy-1.png)
+![Color in UI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/chart-anatomy/images/chart-anatomy-1.png)
 
 1. Chart title
 2. Axes
@@ -54,7 +54,7 @@ The graph frame is the area where the data will be visualized as graphics or num
 
 Circular charts are primarily pie and donut charts. Other circular layout charts include radar and solar charts.
 
-![Color in UI](images/chart-anatomy-2.png)
+![Color in UI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/chart-anatomy/images/chart-anatomy-2.png)
 
 1. Chart title
 2. Label

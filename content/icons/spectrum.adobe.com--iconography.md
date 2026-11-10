@@ -1,5 +1,5 @@
 ---
-title: "Spectrum · Iconography 图标"
+title: "Spectrum · Foundation · Iconography 图标"
 source: https://spectrum.adobe.com/page/iconography
 section: icons
 tag: "规范"
@@ -9,7 +9,7 @@ id: icons-13
 publisher: "Adobe Spectrum"
 ---
 
-# Spectrum · Iconography 图标
+# Spectrum · Foundation · Iconography 图标
 
 > 来源：[https://spectrum.adobe.com/page/iconography](https://spectrum.adobe.com/page/iconography)
 

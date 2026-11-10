@@ -141,22 +141,6 @@ also be a way to dismiss all filters across all categories at once.
 ![Filter reset example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/patterns/filtering/images/filter-7.png)
 
 __
-
-## Related
-
-#### Components
-
-- [Radio button](https://carbondesignsystem.com/components/radio-button/usage)
-- [Dropdown](https://carbondesignsystem.com/components/dropdown/usage)
-- [Checkbox](https://carbondesignsystem.com/components/checkbox/usage)
-- [Data table](https://carbondesignsystem.com/components/data-table/usage)
-
-#### Patterns
-
-- [Clear](https://carbondesignsystem.com/patterns/common-actions#clear)
-- [Notifications](https://carbondesignsystem.com/patterns/notification-pattern)
-- [Search](https://carbondesignsystem.com/patterns/search-pattern)
-
 ## References
 
 - Patternfly,

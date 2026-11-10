@@ -1,5 +1,5 @@
 ---
-title: "DTCG · Token 类型"
+title: "DTCG · Token · Token types 类型"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/types.md
 section: tokens
 tag: "语法标准"
@@ -10,7 +10,7 @@ publisher: "W3C DTCG"
 known: full
 ---
 
-# DTCG · Token 类型
+# DTCG · Token · Token types 类型
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/types.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/types.md)
 

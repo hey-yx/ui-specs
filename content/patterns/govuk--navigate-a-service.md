@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Navigate a service 服务导航"
 source: https://design-system.service.gov.uk/patterns/navigate-a-service/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-20
 publisher: "GOV.UK Design System"
@@ -12,8 +12,6 @@ publisher: "GOV.UK Design System"
 # GOV.UK · Pattern · Navigate a service 服务导航
 
 > 来源：[https://design-system.service.gov.uk/patterns/navigate-a-service/](https://design-system.service.gov.uk/patterns/navigate-a-service/)
-
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
 
 ---
 
@@ -27,9 +25,9 @@ This pattern also includes guidance on how to add other elements commonly used a
 
 Navigation links usually appear in services that:
 
-- are used repeatedly by some users
-- involve multiple tasks
-- do not have a clear order of tasks or end-to-end journey
+*   are used repeatedly by some users
+*   involve multiple tasks
+*   do not have a clear order of tasks or end-to-end journey
 
 Simplify the user journey as much as possible first. This might remove the need for users to navigate around your service.
 
@@ -39,9 +37,9 @@ If your service does have a clear end-to-end journey, avoid using navigation lin
 
 Use a [Task list component](https://design-system.service.gov.uk/components/task-list/) instead, as they’re better for helping users understand:
 
-- the tasks involved in completing a transaction
-- the order they should complete tasks in
-- when they’ve completed tasks
+*   the tasks involved in completing a transaction
+*   the order they should complete tasks in
+*   when they’ve completed tasks
 
 See how to do this in the [Help users to complete multiple tasks pattern](https://design-system.service.gov.uk/patterns/complete-multiple-tasks/).
 
@@ -51,16 +49,14 @@ Together, the [GOV.UK header component](https://design-system.service.gov.uk/com
 
 The GOV.UK header (blue background) includes space to show:
 
-- the GOV.UK logo, which links to the GOV.UK homepage
-- GOV.UK-wide tools such as GOV.UK One Login
+*   the GOV.UK logo, which links to the GOV.UK homepage
+*   GOV.UK-wide tools such as GOV.UK One Login
 
 The Service navigation (light blue background) includes space to show:
 
-- the service name, which links to the homepage of your service (or closest page)
-- a navigation menu for your service
-- service-level tools, such as a search within your service
-
-### Plan your GOV.UK header
+*   the service name, which links to the homepage of your service (or closest page)
+*   a navigation menu for your service
+*   service-level tools, such as a search within your service
 
 The [GOV.UK header component](https://design-system.service.gov.uk/components/header/) should only be used to show the GOV.UK logo and any GOV.UK-wide tools used in your service, such as GOV.UK One Login.
 
@@ -72,7 +68,7 @@ To help users focus on completing your service, [do not add the menu of GOV.UK t
 
 The menu bar used in the [GOV.UK homepage](https://www.gov.uk/) and mainstream guidance pages are designed to help users explore topics and find government services and information.
 
-Once users enter your service, they should have all the information they need to complete it [from your service's Start page](https://design-system.service.gov.uk/patterns/start-using-a-service/). If you need to refer to specific information as part of your service’s journey, use links within your pages.
+Once users enter your service, they should have all the information they need to complete it [from your service’s Start page](https://design-system.service.gov.uk/patterns/start-using-a-service/). If you need to refer to specific information as part of your service’s journey, use links within your pages.
 
 ### Plan your Service navigation
 
@@ -84,16 +80,16 @@ Show your service name in the Service navigation. Make the service name a link t
 
 If your service does not have a homepage, link to either:
 
-- your service’s GOV.UK start page
-- the first question of your service
+*   your service’s GOV.UK start page
+*   the first question of your service
 
 #### Choosing and writing navigation links
 
 You can use the rest of the space in the Service navigation component to show links, such as to help users:
 
-- navigate around your service
-- get in touch
-- manage their accounts
+*   navigate around your service
+*   get in touch
+*   manage their accounts
 
 Links within your service must go to the most important top-level sections that are the most useful to the user. This gives the user an idea of what your service does and what they can find within it.
 
@@ -105,8 +101,8 @@ In November 2021, [the GOV.UK homepage introduced a menu bar](https://insidegovu
 
 Links that go outside of your service should usually:
 
-- be grouped together, and shown after links within your service
-- open in a new window – warn the user of this, if possible
+*   be grouped together, and shown after links within your service
+*   open in a new window – warn the user of this, if possible
 
 Consider showing external links in the page body instead.
 
@@ -140,20 +136,18 @@ Most other service-level elements can be added within the Service navigation, af
 
 #### Language navigation
 
-If you provide your whole service in more than one language, you can place the [Language navigation component in the Service navigation](/components/language-navigation/#if-you-offer-your-whole-service-in-another-language).
+If you provide your whole service in more than one language, you can place the [Language navigation component in the Service navigation](https://design-system.service.gov.uk/components/language-navigation/#if-you-offer-your-whole-service-in-another-language).
 
 #### Use ‘slots’ to add custom elements
 
-The [Service navigation component includes ‘slots’](/components/service-navigation/#use-slots-to-add-custom-html-code) to support adding custom elements. You’ll need to decide on the most appropriate layout and positioning and provide your own styles.
+The [Service navigation component includes ‘slots’](https://design-system.service.gov.uk/components/service-navigation/#use-slots-to-add-custom-html-code) to support adding custom elements. You’ll need to decide on the most appropriate layout and positioning and provide your own styles.
 
 For example, you might add a search input, if it only searches within your service. To help users understand what the search input will cover, include ‘Search [your service]’ as placeholder text within the search input.
 
-#### Phase banners
-
 Show the [Phase banner component](https://design-system.service.gov.uk/components/phase-banner/) directly under either:
 
-- the Service navigation component
-- the GOV.UK header (if your service does not use the Service navigation component)
+*   the Service navigation component
+*   the GOV.UK header (if your service does not use the Service navigation component)
 
 Phase banners are shown across all pages of a service, so users should understand it as a service-level message.
 
@@ -171,9 +165,9 @@ We introduced this pattern and the [Service navigation component](https://design
 
 We made these changes to help users better understand:
 
-- the relationship between GOV.UK and services
-- that GOV.UK functions as one website
-- the difference between GOV.UK-wide tools with service-level tools
+*   the relationship between GOV.UK and services
+*   that GOV.UK functions as one website
+*   the difference between GOV.UK-wide tools with service-level tools
 
 To help us further improve, share your research and give us your feedback in our [GitHub discussion space](https://github.com/alphagov/govuk-design-system/discussions/categories/navigation/).
 

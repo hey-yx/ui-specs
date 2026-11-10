@@ -1,5 +1,5 @@
 ---
-title: "Primer · Typography 字体"
+title: "GitHub Primer · Foundation · Typography 字体"
 source: https://raw.githubusercontent.com/primer/design/main/content/foundations/typography.mdx
 section: type
 tag: "规范"
@@ -9,7 +9,7 @@ id: type-2
 publisher: "GitHub Primer"
 ---
 
-# Primer · Typography 字体
+# GitHub Primer · Foundation · Typography 字体
 
 > 来源：[https://raw.githubusercontent.com/primer/design/main/content/foundations/typography.mdx](https://raw.githubusercontent.com/primer/design/main/content/foundations/typography.mdx)
 
@@ -28,31 +28,19 @@ The following typographic styles are not yet fully integrated into Primer compon
 
 Typography design tokens use `rem` units for a more [accessible](https://www.w3.org/WAI/WCAG21/Understanding/resize-text.html) browser zoom experience. Additionally, line height values are unitless and vary per style, making them align to the 4px grid. Each style is opinionated, as reflected in the “shorthand” tokens which control size, family, weight, and line-height with a single `font` CSS declaration.
 
-
-
 ### Headings
-
-
 
 ### Body
 
-
-
 ### Code
-
-
 
 ## Font weight
 
 Font weight options include light, normal, medium, and semibold.
 
-
-
 ## Font family
 
 Each font stack uses system fonts, which are optimized for performance.
-
-
 
 ## Best practices
 
@@ -71,7 +59,6 @@ When establishing hierarchy for GitHub products, designers should remember that 
 - **Font weight**—Adjust font weight to add emphasis and differentiate content hierarchy.
 
 - **Letter spacing**—Please refrain from altering letter-spacing on our products. There may be rare scenarios in which this is acceptable, but generally speaking, this should be avoided altogether.
-
 
   
     <img
@@ -92,8 +79,6 @@ When establishing hierarchy for GitHub products, designers should remember that 
     Don't use arbitrary weight number values for font-weight
   
 
-
-
   
     <img
       src="https://user-images.githubusercontent.com/18661030/234685422-963b8278-e6d0-49c9-9943-1f781975c21a.png"
@@ -111,13 +96,3 @@ When establishing hierarchy for GitHub products, designers should remember that 
       alt="A button with text in all caps"
     />
     Don’t adjust semantic heading tag order to achieve a specific visual design
-  
-
-
-## Related components
-
-- [Heading](/components/heading)
-- [PageHeader](/components/page-header)
-- [Text](/components/text)
-
-export const meta = {displayName: 'Typography'}

@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Text input 文本输入框"
 source: https://design-system.service.gov.uk/components/text-input/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-44
 publisher: "GOV.UK Design System"
@@ -13,25 +13,10 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/text-input/](https://design-system.service.gov.uk/components/text-input/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is the name of the event?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  id: "event-name",
-  name: "eventName"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-example-nunjucks)
 
 ## When to use this component
 
@@ -51,51 +36,27 @@ You should align labels above the text input they refer to. They should be short
 
 Do not use placeholder text in place of a label, or for hints or examples, as:
 
-- it vanishes when the user starts typing, which can cause problems for users with memory conditions or when reviewing answers
-- not all screen readers read it out
-- its browser default styles often do not meet [WCAG 2.2 success criterion 1.4.3 Contrast (minimum)](https://www.w3.org/TR/WCAG22/#contrast-minimum)
+*   it vanishes when the user starts typing, which can cause problems for users with memory conditions or when reviewing answers
+*   not all screen readers read it out
+*   its browser default styles often do not meet [WCAG 2.2 success criterion 1.4.3 Contrast (minimum)](https://www.w3.org/TR/WCAG22/#contrast-minimum)
 
-### If you're asking one question on the page
+### If you’re asking one question on the page
 
 If you’re asking just [one question per page in your service](https://design-system.service.gov.uk/patterns/question-pages/#start-by-asking-one-question-per-page) as recommended, you can set the contents of the `<label>` as the page heading. This is good practice as it means that users of screen readers will only hear the contents once.
 
 Read more about [why and how to set legends as headings](https://design-system.service.gov.uk/get-started/labels-legends-headings/).
 
-There are 2 ways to use the text input component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk), you can use the Nunjucks macro.
+There are 2 ways to use the text input component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/), you can use the Nunjucks macro.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is the name of the event?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  id: "event-name",
-  name: "eventName"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-second-example-nunjucks)
 
 ### If you’re asking more than one question on the page
 
-If you're asking more than one question on the page, do not set the contents of the `<label>` as the page heading. Read more about [asking multiple questions on Question pages](https://design-system.service.gov.uk/patterns/question-pages/#asking-multiple-questions-on-a-page).
+If you’re asking more than one question on the page, do not set the contents of the `<label>` as the page heading. Read more about [asking multiple questions on Question pages](https://design-system.service.gov.uk/patterns/question-pages/#asking-multiple-questions-on-a-page).
 
-**示例：without-heading**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is the name of the event?"
-  },
-  id: "event-name",
-  name: "eventName"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-without-a-heading-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-without-a-heading-text-input-example-nunjucks)
 
 ### Use appropriately-sized text inputs
 
@@ -113,65 +74,8 @@ The widths are designed for specific character lengths and to be consistent acro
 
 On fixed width inputs, the width will remain fixed on all screens unless it is wider than the viewport, in which case it will shrink to fit.
 
-**示例：input-fixed-width**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "20 character width"
-  },
-  classes: "govuk-input--width-20",
-  id: "width-20",
-  name: "width20"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "10 character width"
-  },
-  classes: "govuk-input--width-10",
-  id: "width-10",
-  name: "width10"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "5 character width"
-  },
-  classes: "govuk-input--width-5",
-  id: "width-5",
-  name: "width5"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "4 character width"
-  },
-  classes: "govuk-input--width-4",
-  id: "width-4",
-  name: "width4"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "3 character width"
-  },
-  classes: "govuk-input--width-3",
-  id: "width-3",
-  name: "width3"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "2 character width"
-  },
-  classes: "govuk-input--width-2",
-  id: "width-2",
-  name: "width2"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#fixed-width-inputs-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#fixed-width-inputs-text-input-example-nunjucks)
 
 #### Fluid width inputs
 
@@ -179,65 +83,8 @@ Use the width override classes to reduce the width of an input in relation to it
 
 Fluid width inputs will resize with the viewport.
 
-**示例：input-fluid-width**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Full width"
-  },
-  classes: "govuk-!-width-full",
-  id: "full",
-  name: "full"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "Three-quarters width"
-  },
-  classes: "govuk-!-width-three-quarters",
-  id: "three-quarters",
-  name: "threeQuarters"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "Two-thirds width"
-  },
-  classes: "govuk-!-width-two-thirds",
-  id: "two-thirds",
-  name: "twoThirds"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "One-half width"
-  },
-  classes: "govuk-!-width-one-half",
-  id: "one-half",
-  name: "oneHalf"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "One-third width"
-  },
-  classes: "govuk-!-width-one-third",
-  id: "one-third",
-  name: "oneThird"
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "One-quarter width"
-  },
-  classes: "govuk-!-width-one-quarter",
-  id: "one-quarter",
-  name: "oneQuarter"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#fluid-width-inputs-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#fluid-width-inputs-text-input-example-nunjucks)
 
 ### Hint text
 
@@ -247,28 +94,12 @@ Keep hint text to a single short sentence, without any full stops.
 
 Do not use links in hint text. While screen readers will read out the link text when describing the field, they usually do not tell users the text is a link.
 
-**示例：input-hint-text**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is the name of the event?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  hint: {
-    text: "The name you’ll use on promotional material"
-  },
-  id: "event-name",
-  name: "eventName"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#hint-text-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#hint-text-text-input-example-nunjucks)
 
 #### When not to use hint text
 
-Do not use hint text to explain anything that's longer than a short, simple sentence. Screen readers read out the entire text when users interact with the form element. This could frustrate users if the text is long.
+Do not use hint text to explain anything that’s longer than a short, simple sentence. Screen readers read out the entire text when users interact with the form element. This could frustrate users if the text is long.
 
 If you’re asking a question that needs a detailed explanation, see [asking complex questions without using hint text](https://design-system.service.gov.uk/patterns/question-pages/#asking-complex-questions-without-using-hint-text).
 
@@ -280,62 +111,26 @@ Do not include links within hint text. While screen readers will read out the li
 
 #### Asking for whole numbers
 
-If you're asking the user to enter a whole number, set the `inputmode` attribute to `numeric` to use the numeric keypad on devices with on-screen keyboards.
+If you’re asking the user to enter a whole number, set the `inputmode` attribute to `numeric` to use the numeric keypad on devices with on-screen keyboards.
 
 See how to do this by opening the HTML and Nunjucks tabs in this example:
 
-**示例：number-input**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is your account number?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  classes: "govuk-input--width-10",
-  hint: {
-    text: "Must be between 6 and 8 digits long"
-  },
-  id: "account-number",
-  name: "accountNumber",
-  inputmode: "numeric",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#number-input-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#number-input-text-input-example-nunjucks)
 
 There is specific guidance on:
 
-- [how to ask for dates](https://design-system.service.gov.uk/patterns/dates/)
-- [how to ask for phone numbers](https://design-system.service.gov.uk/patterns/phone-numbers/)
+*   [how to ask for dates](https://design-system.service.gov.uk/patterns/dates/)
+*   [how to ask for phone numbers](https://design-system.service.gov.uk/patterns/phone-numbers/)
 
 #### Asking for decimal numbers
 
-If you're asking the user to enter a number that might include decimal places, set `inputmode` to `decimal`. Similar to `numeric`, this will show a numeric keypad to users on devices with on-screen keyboards, including a decimal separator.
+If you’re asking the user to enter a number that might include decimal places, set `inputmode` to `decimal`. Similar to `numeric`, this will show a numeric keypad to users on devices with on-screen keyboards, including a decimal separator.
 
 Some devices do not allow users to enter negative values using the on-screen keypad. If you want to give users the option to enter a negative number, use `input type="text"` without the `inputmode` attribute.
 
-**示例：decimal-input**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Weight, in kilograms"
-  },
-  classes: "govuk-input--width-5",
-  id: "weight",
-  name: "weight",
-  suffix: {
-    text: "kg"
-  },
-  spellcheck: false,
-  inputmode: "decimal"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#example-of-an-input-asking-for-numbers-with-decimal-places-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#example-of-an-input-asking-for-numbers-with-decimal-places-text-input-example-nunjucks)
 
 #### Avoid using inputs with a type of number
 
@@ -343,141 +138,63 @@ Do not use `<input type="number">` unless your user research shows that there’
 
 ### Codes and sequences
 
-Help the user visually check the code they've typed is correct by styling the input's text to visually separate each character. This is important if you're asking the user to enter a code or sequence they're unlikely to have memorised, such as an application reference ID, account number or security code.
+Help the user visually check the code they’ve typed is correct by styling the input’s text to visually separate each character. This is important if you’re asking the user to enter a code or sequence they’re unlikely to have memorised, such as an application reference ID, account number or security code.
 
 You do not need to do this for memorable information, such as phone numbers and postcodes.
 
-**示例：code-sequence**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Company authentication code"
-  },
-  hint: {
-    text: "This is on the company incorporation letter sent to the registered office address"
-  },
-  classes: "govuk-input--width-5 govuk-input--extra-letter-spacing",
-  id: "authentication-code",
-  name: "authenticationCode",
-  spellcheck: false,
-  value: "NC1701"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#example-of-a-text-input-asking-for-a-code-or-sequence-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#example-of-a-text-input-asking-for-a-code-or-sequence-text-input-example-nunjucks)
 
 There is specific guidance on:
 
-- [how to ask for bank account details](https://design-system.service.gov.uk/patterns/bank-details/)
-- [how to ask for National Insurance numbers](https://design-system.service.gov.uk/patterns/national-insurance-numbers/)
-- [how to confirm a phone number](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/)
+*   [how to ask for bank account details](https://design-system.service.gov.uk/patterns/bank-details/)
+*   [how to ask for National Insurance numbers](https://design-system.service.gov.uk/patterns/national-insurance-numbers/)
+*   [how to confirm a phone number](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/)
 
 ### Prefixes and suffixes
 
 Use prefixes and suffixes to help users enter things like currencies and measurements.
 
-**示例：input-prefix-suffix**
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-and-suffix-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-and-suffix-text-input-example-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
+Prefixes and suffixes are useful when there’s a commonly understood symbol or abbreviation for the type of information you’re asking for. Do not rely on prefixes or suffixes alone, because screen readers will not read them out.
 
-{{ govukInput({
-  id: "cost-per-item",
-  name: "costPerItem",
-  label: {
-    text: "What is the cost per item, in pounds?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  prefix: {
-    text: "£"
-  },
-  suffix: {
-    text: "per item"
-  },
-  classes: "govuk-input--width-5",
-  spellcheck: false
-}) }}
-```
+If you need a specific type of information, say so in the input label or hint text as well. For example, put ‘Cost, in pounds’ in the input label and use the ‘£’ symbol in the prefix.
 
-Prefixes and suffixes are useful when there's a commonly understood symbol or abbreviation for the type of information you're asking for. Do not rely on prefixes or suffixes alone, because screen readers will not read them out.
-
-If you need a specific type of information, say so in the input label or hint text as well. For example, put 'Cost, in pounds' in the input label and use the '£' symbol in the prefix.
-
-Position prefixes and suffixes so that they're outside of their input. This is to avoid interfering with some browsers that might insert an icon into the input (for example to show or generate a password).
+Position prefixes and suffixes so that they’re outside of their input. This is to avoid interfering with some browsers that might insert an icon into the input (for example to show or generate a password).
 
 Some users may miss that the input already has a suffix or prefix, and enter a prefix or suffix into the input. Allow for this in your validation and do not show an error.
 
 #### Text inputs with a prefix
 
-**示例：input-prefix**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  id: "cost",
-  name: "cost",
-  label: {
-    text: "What is the cost in pounds?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  prefix: {
-    text: "£"
-  },
-  classes: "govuk-input--width-5",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-text-input-example-nunjucks)
 
 #### Text inputs with a suffix
 
-**示例：input-suffix**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  id: "weight",
-  name: "weight",
-  label: {
-    text: "What is the weight in kilograms?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  suffix: {
-    text: "kg"
-  },
-  classes: "govuk-input--width-5",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-suffix-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-suffix-text-input-example-nunjucks)
 
 ### Use the autocomplete attribute
 
-Use the `autocomplete` attribute on text inputs to help users complete forms more quickly. This lets you specify an input's purpose so browsers can autofill the information on a user's behalf if they’ve entered it previously.
+Use the `autocomplete` attribute on text inputs to help users complete forms more quickly. This lets you specify an input’s purpose so browsers can autofill the information on a user’s behalf if they’ve entered it previously.
 
 For example, to enable autofill on a postcode field, set the `autocomplete` attribute to `postal-code`. See how to do this in the HTML and Nunjucks tabs in the following example.
 
-**示例：input-autocomplete-attribute**
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-autocomplete-attribute-text-input-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-autocomplete-attribute-text-input-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Postcode"
-  },
-  classes: "govuk-input--width-10",
-  id: "postcode",
-  name: "postcode",
-  autocomplete: "postal-code"
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="postcode">
+    Postcode
+  </label>
+  <input class="govuk-input govuk-input--width-10" id="postcode" name="postcode" type="text" autocomplete="postal-code">
+</div>
 ```
 
-If you are working in production and there is a relevant [input purpose](https://www.w3.org/TR/WCAG22/#input-purposes), you'll need to use the `autocomplete` attribute to meet [WCAG 2.2 success criterion 1.3.5 Identify input purpose, level AA](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html).
+If you are working in production and there is a relevant [input purpose](https://www.w3.org/TR/WCAG22/#input-purposes), you’ll need to use the `autocomplete` attribute to meet [WCAG 2.2 success criterion 1.3.5 Identify input purpose, level AA](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html).
 
 You will not normally need to use the `autocomplete` attribute in prototypes, as users will not generally be using their own devices.
 
@@ -485,7 +202,7 @@ You will not normally need to use the `autocomplete` attribute in prototypes, as
 
 Users often need to copy and paste information into a text input, so do not stop them from doing this.
 
-### Avoid restricting the length of a user's input
+### Avoid restricting the length of a user’s input
 
 Using the `maxlength` attribute means there is no feedback to users that their text input is truncated. This is especially true where the text has been copied and pasted from elsewhere. This can cause users to accidentally provide incorrect or incomplete information.
 
@@ -503,19 +220,16 @@ If you are asking users for information which is not appropriate to spellcheck, 
 
 To do this set the `spellcheck` attribute to `false` as shown in this example.
 
-**示例：input-spellcheck-disabled**
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-spellcheck-disabled-text-input-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-spellcheck-disabled-text-input-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Reference number"
-  },
-  id: "name",
-  name: "name",
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="name">
+    Reference number
+  </label>
+  <input class="govuk-input" id="name" name="name" type="text" spellcheck="false">
+</div>
 ```
 
 Browsers do not consistently spellcheck user’s input by default. If you are asking a question where spellcheck would be useful, set the `spellcheck` attribute to `true`.
@@ -524,132 +238,102 @@ Browsers do not consistently spellcheck user’s input by default. If you are as
 
 Error messages should be styled like this:
 
-**示例：error**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "What is the name of the event?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  id: "event-name",
-  name: "eventName",
-  hint: {
-    text: "The name you’ll use on promotional material"
-  },
-  errorMessage: {
-    text: "Enter an event name"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-errors-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-errors-text-input-example-nunjucks)
 
 #### If the input has a prefix or a suffix
 
-**示例：input-prefix-suffix-error**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  id: "cost-per-item-error",
-  name: "costPerItemError",
-  label: {
-    text: "What is the cost per item, in pounds?",
-    classes: "govuk-label--l",
-    isPageHeading: true
-  },
-  prefix: {
-    text: "£"
-  },
-  suffix: {
-    text: "per item"
-  },
-  errorMessage: {
-    text: "Enter a cost per item, in pounds"
-  },
-  classes: "govuk-input--width-5",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-and-suffix-with-error-text-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/text-input/#text-input-with-prefix-and-suffix-with-error-text-input-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
 #### If the input is empty
 
-Say ‘Enter [whatever it is]’.<br>
+Say ‘Enter [whatever it is]’.
+
 For example, ‘Enter your first name’.
 
 #### If the input is too long
 
-Say ‘[whatever it is] must be [number] characters or less’.<br>
+Say ‘[whatever it is] must be [number] characters or less’.
+
 For example, ‘Address line 1 must be 35 characters or less’.
 
 #### If the input is too short
 
-Say ‘[whatever it is] must be [number] characters or more’.<br>
+Say ‘[whatever it is] must be [number] characters or more’.
+
 For example, ‘Full name must be 2 characters or more’.
 
 #### If the input has both a minimum and maximum length
 
-Say ‘[whatever it is] must be between [number] and [number] characters’.<br>
+Say ‘[whatever it is] must be between [number] and [number] characters’.
+
 For example, ‘Last name must be between 2 and 35 characters’.
 
 #### If the input uses characters that are not allowed and you know what the characters are
 
-Say ‘[whatever it is] must not include [characters]’.<br>
+Say ‘[whatever it is] must not include [characters]’.
+
 For example, ‘Town or city must not include è and £’.
 
 Support all the characters the user might need to enter, including numbers and symbols.
 
 #### If the input uses characters that are not allowed and you do not know what the characters are
 
-Say ‘[whatever it is] must only include [list of allowed characters]’.<br>
+Say ‘[whatever it is] must only include [list of allowed characters]’.
+
 For example, ‘Full name must only include letters a to z, and special characters such as hyphens, spaces and apostrophes’.
 
 Support all the characters the user might need to enter, including numbers and symbols.
 
 #### If the input is not a number
 
-Say ‘[whatever it is] must be a number [optional example]’.<br>
+Say ‘[whatever it is] must be a number [optional example]’.
+
 For example, ‘Hours worked a week must be a number, like 30’.
 
 If the input requires a decimal, use a decimal in the example. If the input allows both whole numbers and decimals, use both in the example.
 
 #### If the input is not a whole number
 
-Say ‘[whatever it is] must be a whole number [optional example]’.<br>
+Say ‘[whatever it is] must be a whole number [optional example]’.
+
 For example, ‘Hours worked a week must be a whole number, like 30’.
 
 #### If the number is too low
 
-Say ‘[whatever it is] must be [lowest] or more’.<br>
+Say ‘[whatever it is] must be [lowest] or more’.
+
 For example, ‘Hours worked a week must be 16 or more’.
 
 #### If the number is too high
 
-Say ‘[whatever it is] must be [highest] or fewer’.<br>
+Say ‘[whatever it is] must be [highest] or fewer’.
+
 For example, ‘Hours worked a week must be 99 or fewer’.
 
 #### If the input must be between 2 numbers
 
-Say ‘[whatever it is] must be between [lowest] and [highest]’.<br>
+Say ‘[whatever it is] must be between [lowest] and [highest]’.
+
 For example, ‘Hours worked a week must be between 16 and 99’.
 
 #### If the input is an amount of money that needs decimals
 
-Say ‘[whatever it is] must include pence, like 123.45 or 156.00’.<br>
+Say ‘[whatever it is] must include pence, like 123.45 or 156.00’.
+
 For example, ‘How much you earn a week must include pence, like 123.45 or 156.00’.
 
 #### If the input is an amount of money that must not have decimals
 
-Say ‘[whatever it is] must not include pence, like 123 instead of 123.45’.<br>
+Say ‘[whatever it is] must not include pence, like 123 instead of 123.45’.
+
 For example, ‘How much you earn a week must not include pence, like 123 instead of 123.45’.
 
 ## Research on this component
 
-Read a blog post about [the problems we discovered with input type="number"](https://technology.blog.gov.uk/2020/02/24/why-the-gov-uk-design-system-team-changed-the-input-type-for-numbers/).
+Read a blog post about [the problems we discovered with input type=”number”](https://technology.blog.gov.uk/2020/02/24/why-the-gov-uk-design-system-team-changed-the-input-type-for-numbers/).
 
 The prefix and suffix design has tested well in a number of services, but [some users have been observed clicking on prefixes](https://github.com/alphagov/govuk-design-system/discussions/6016#discussioncomment-18811223), on the assumption that this would do something.

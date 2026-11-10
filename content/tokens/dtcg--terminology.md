@@ -1,5 +1,5 @@
 ---
-title: "DTCG · 术语表"
+title: "DTCG · Token · Glossary 术语表"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/terminology.md
 section: tokens
 tag: "语法标准"
@@ -9,7 +9,7 @@ id: dtcg-0
 publisher: "W3C DTCG"
 ---
 
-# DTCG · 术语表
+# DTCG · Token · Glossary 术语表
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/terminology.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/terminology.md)
 

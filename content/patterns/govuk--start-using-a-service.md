@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Start using a service 开始使用服务"
 source: https://design-system.service.gov.uk/patterns/start-using-a-service/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-21
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/start-using-a-service/](https://design-system.service.gov.uk/patterns/start-using-a-service/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Help users to  Start using a service
 
 GOV.UK services must start on a GOV.UK content page. This links your service to the rest of GOV.UK, and means that users can find it using search or through GOV.UK’s navigation.
 
@@ -29,13 +29,13 @@ Service teams will need to agree content for this GOV.UK content page with the G
 
 ## How it works
 
-A service's start point should:
+A service’s start point should:
 
-- give the user just enough information to help them understand what the service does and whether it will meet their need – including [giving the service a name that reflects the problem it solves for users](https://www.gov.uk/service-manual/design/naming-your-service)
-- include a ‘button’ linking into the service, with text that’s consistent with the action you’re asking users to take – for example, ‘Start now’, ‘Sign in’ or ‘Register or update your details’ (if you need a secondary call to action, use a standard link)
-- let users sign in, resume an application they’ve already started or update their details (if relevant)
-- include any other information that most users are likely to need before they start using the service online – for example, how much it costs to use the service and roughly how long it will take
-- include details of other ways to access the service – for example, by phone or by completing a paper form
+*   give the user just enough information to help them understand what the service does and whether it will meet their need – including [giving the service a name that reflects the problem it solves for users](https://www.gov.uk/service-manual/design/naming-your-service)
+*   include a ‘button’ linking into the service, with text that’s consistent with the action you’re asking users to take – for example, ‘Start now’, ‘Sign in’ or ‘Register or update your details’ (if you need a secondary call to action, use a standard link)
+*   let users sign in, resume an application they’ve already started or update their details (if relevant)
+*   include any other information that most users are likely to need before they start using the service online – for example, how much it costs to use the service and roughly how long it will take
+*   include details of other ways to access the service – for example, by phone or by completing a paper form
 
 You’ll also need to list any documents or information the user will need to help them complete the service (there’s no need to list information that a user is likely to know from memory – for example, their own date of birth).
 
@@ -59,22 +59,22 @@ The content team at GDS is responsible for creating mainstream start points on G
 
 For a mainstream start point, the options are:
 
-- a simple start page
-- a start point within a multipart guide
+*   a simple start page
+*   a start point within a multipart guide
 
 Use a simple start page if users can start using the service without needing much context.
 
-![A screenshot showing an example of a simple start page from the coronavirus shielding support service. The page includes a heading, text to explain who can use the service, and a start button labelled 'Register or update your details'.](simple-start-page.png)
+![Image 1: A screenshot showing an example of a simple start page from the coronavirus shielding support service. The page includes a heading, text to explain who can use the service, and a start button labelled 'Register or update your details'.](/img/gov/a8cf7bdcfe4d.png)
 
 If the start point is linked to a wider process that needs more explanation, create an ‘Apply’ section within a multipart guide.
 
-For example, for a user to prove their right to work in the UK, they need to understand which documents they'll need and how to show them to an employer. This depends on their nationality, what kind of permission they have to work in the UK and types of documents they've been issued with. Some users have the option of getting a 'share code' by entering their documents online. There are some specific schemes which use different documents.
+For example, for a user to prove their right to work in the UK, they need to understand which documents they’ll need and how to show them to an employer. This depends on their nationality, what kind of permission they have to work in the UK and types of documents they’ve been issued with. Some users have the option of getting a ‘share code’ by entering their documents online. There are some specific schemes which use different documents.
 
 It’s important that users have this context, so it makes sense to embed the start point within the multipart guide – rather than creating the start point as a separate start page, allowing users to miss the context and potentially do the wrong thing.
 
-![A screenshot showing an example of a start point within a multipart guide. The page is shown as part of a set of pages and its body text explains what the user will need to use the service, followed by a start button labelled 'Apply now'.](multipart-guide-start-point.png)
+![Image 2: A screenshot showing an example of a start point within a multipart guide. The page is shown as part of a set of pages and its body text explains what the user will need to use the service, followed by a start button labelled 'Apply now'.](/img/gov/f3b0f21dd6f8.png)
 
-[Read a blog post about how DWP's digital team found that providing a start page within a multipart guide for Carer's Allowance improved the journey for users](https://dwpdigital.blog.gov.uk/2014/07/24/improving-to-the-carers-allowance-guide/).
+[Read a blog post about how DWP’s digital team found that providing a start page within a multipart guide for Carer’s Allowance improved the journey for users](https://dwpdigital.blog.gov.uk/2014/07/24/improving-to-the-carers-allowance-guide/).
 
 ### Creating a start point using Whitehall Publisher
 
@@ -82,6 +82,4 @@ For non-mainstream services, publishers in departments with access to the ‘Whi
 
 Use this Markdown to create a button within a detailed guide:
 
-```plaintext
-{button start}[Button text goes here](https://servicename.service.gov.uk/first-page-within-service){/button}
-```
+`{button start}[Button text goes here](https://servicename.service.gov.uk/first-page-within-service){/button}`

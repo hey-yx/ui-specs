@@ -35,7 +35,7 @@
 
 ## 基准规范覆盖普查
 
-`python3 scripts/check-source-coverage.py` 按色值、尺寸、时长三个维度扫 12 套基准规范，10 套至少缺一个维度，明细在 `site/design/source-coverage.md`。
+`python3 scripts/check-source-coverage.py` 按色值、尺寸、时长三个维度扫 16 套基准规范，11 套至少缺一个维度，明细在 `site/design/source-coverage.md`。
 
 Apple 缺色与动效。色彩篇只有语义角色，动效篇是概念页，这两类数值本来就不在正文。布局篇与动效篇保留作原则来源，不替换：间距与时长按缺口规则回源，文章本身给安全区、适配与运动原则。若要把 Apple 当纯数值源，要重采 typography 的七档表，这是采集问题，不是选型问题。
 

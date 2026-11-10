@@ -1,5 +1,5 @@
 ---
-title: "DTCG · 别名（Aliases）"
+title: "DTCG · Token · Aliases 别名"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/aliases.md
 section: tokens
 tag: "语法标准"
@@ -9,7 +9,7 @@ id: dtcg-4
 publisher: "W3C DTCG"
 ---
 
-# DTCG · 别名（Aliases）
+# DTCG · Token · Aliases 别名
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/aliases.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/aliases.md)
 

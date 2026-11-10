@@ -1,4 +1,4 @@
-import { MAIN_SOURCES, USAGE_STEPS, MAINTENANCE_RULES, GAP_RULES } from '../../data/guide.ts'
+import { MAIN_SOURCES, USAGE_STEPS, MAINTENANCE_RULES, GAP_RULES, REQUIRED_RULES } from '../../data/guide.ts'
 import starData from '../../data/star-points.json'
 
 export const prerender = true
@@ -9,6 +9,7 @@ export function GET() {
     JSON.stringify(
       {
         usage_steps: USAGE_STEPS,
+        required: REQUIRED_RULES,
         main_sources: MAIN_SOURCES,
         gap_rules: GAP_RULES,
         maintenance: MAINTENANCE_RULES,

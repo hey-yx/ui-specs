@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Spatial charts 空间图"
+title: "IBM Carbon · Pattern · Spatial charts 空间图"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-2
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Spatial charts 空间图
+# IBM Carbon · Pattern · Spatial charts 空间图
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/index.mdx)
 
@@ -18,11 +18,6 @@ publisher: "IBM Carbon"
 > Discover spatial patterns and hierarchies, showcasing tree maps, circle packs, and geospatial charts. Explore the interplay of data elements through tree maps, circle packs, and geospatial charts, revealing spatial relationships and hierarchical structures within your data.
 
 **Note:** Some of the charts below are not included in the carbon-charts repository yet. To see our roadmap, make feature requests, or contribute, please go to the [carbon-charts repository](https://github.com/carbon-design-system/carbon-charts).
-
-- Heat maps
-- Tree maps
-- Circle packs
-- Geospatial charts
 
 ## Heat maps
 
@@ -40,7 +35,7 @@ Sequential scales use a blended progression, typically of a single color, from t
 
 Axis ticks and legend can be used to leverage the chart potential giving the users additional information and dedicated kinds of interaction.
 
-![Heat map hover detail](images/04a_adv_heatmap_detail_288.png)
+![Heat map hover detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/04a_adv_heatmap_detail_288.png)
 
 *Exploration of a domain axis hover behavior*
 
@@ -68,15 +63,15 @@ Divergent tree maps combine Carbon's divergent color palette with the hierarchic
 
 As with [heat maps](#heat-maps), the diverging palette shows color progression in either direction from an inflection point (for example, a 0 value midway between -10 and +10). In the example below, the inflection point is simply an average. Tourism can be mapped by the number of visitors to a certain country, but the visualization can also compare this data to a yearly average. For instance, even though one country may have a lot of visitors compared to another country, tourism for that country may fall below its annual average.
 
-![Basic tree map](images/new_adv_treemap_02_928.png)
+![Basic tree map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/new_adv_treemap_02_928.png)
 
 *Example of a divergent tree map adding color as a second variable to a basic tree map structure*
 
-![Basic treemap tooltip detail](images/new_adv_treemap_a_288.png)
+![Basic treemap tooltip detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/new_adv_treemap_a_288.png)
 
 *Detail of a tooltip on a basic treemap*
 
-![Tooltip detail](images/new_adv_treemap_b_288.png)
+![Tooltip detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/new_adv_treemap_b_288.png)
 
 *Detail of a comparative tooltip on a divergent tree map*
 
@@ -96,13 +91,13 @@ For Circle Packs with more than two levels of hierarchy, zoom functionality allo
 
 A map that uses differences in shading, coloring, or the placing of symbols within predefined areas to indicate the average values of a property or quantity in those areas.
 
-![Choropleth map](images/09_adv_geo_choropleth_928.png)
+![Choropleth map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/09_adv_geo_choropleth_928.png)
 
 ### Proportional symbol map
 
 Symbols driven by data are overlaid in geographical regions. A bubble is the symbol most commonly used in this instance—with the area of the circle proportional to its value in the dataset.
 
-![Proportional symbol map](images/10_adv_geo_prop_sym_928.png)
+![Proportional symbol map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/10_adv_geo_prop_sym_928.png)
 
 ### Connection map
 
@@ -110,7 +105,7 @@ Connection Maps are drawn by connecting points placed on a map by straight or cu
 
 While Connection Maps are great for showing connections and relationships geographically, they can also be used to display map routes through a single chain of links. Connection Maps can also be useful in revealing spatial patterns through the distribution of connections or by how concentrated connections are on a map.
 
-![Connecting lines on a spatial map](images/11_adv_geo_connections_928.png)
+![Connecting lines on a spatial map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/11_adv_geo_connections_928.png)
 
 ### Geospatial distortions
 
@@ -120,9 +115,9 @@ Density-equalizing cartograms are the most common type of cartogram. In this sit
 
 Cartograms are useful for visualizing populations through different lenses — for instance, ethnicities, political parties, or religious affiliation. Carbon does not have a coded component for cartograms but online generators like [go-cart.io](https://go-cart.io/) allow you to upload your own data sets and download an .svg file.
 
-![Equal area map](images/12a_adv_cartogram_448.png)
+![Equal area map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/12a_adv_cartogram_448.png)
 
-![Cartogram of population](images/12b_adv_cartogram_448.png)
+![Cartogram of population](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/12b_adv_cartogram_448.png)
 
 #### Dorling cartograms
 
@@ -130,9 +125,9 @@ The Dorling Cartogram is a technique for representing data for areas that avoids
 
 As with the density-equalizing cartogram above, the larger the total population, the larger the representation of the country.
 
-![Dorling cartogram with squares](images/13_adv_geo_dorling_a_448.png)
+![Dorling cartogram with squares](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/13_adv_geo_dorling_a_448.png)
 
-![Dorling cartogram with circles](images/14_adv_geo_dorling_b_448.png)
+![Dorling cartogram with circles](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/14_adv_geo_dorling_b_448.png)
 
 ### Mapbox
 
@@ -140,19 +135,19 @@ For more dynamic, real-time mapping, Carbon has created four themes using [Mapbo
 
 These styles can be used as is, or as a backdrop for other geospatial data sets. For more complex data sets that require the full breadth of the Carbon charts palette, we suggest using either the White or the Gray 100 style for the most accessible results.
 
-![Mapbox white style](images/15_adv_geo_mapbox_a_928.jpg)
+![Mapbox white style](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/15_adv_geo_mapbox_a_928.jpg)
 
 *Example of a Carbon’s White theme style in Mapbox*
 
-![Mapbox g10 style](images/16_adv_geo_mapbox_b_288.png)
+![Mapbox g10 style](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/16_adv_geo_mapbox_b_288.png)
 
 *Example of a Carbon’s Gray 10 theme style in Mapbox*
 
-![Mapbox g90 style](images/17_adv_geo_mapbox_c_288.png)
+![Mapbox g90 style](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/17_adv_geo_mapbox_c_288.png)
 
 *Example of a Carbon’s Gray 90 theme style in Mapbox*
 
-![Mapbox g100 style](images/18_adv_geo_mapbox_d_288.png)
+![Mapbox g100 style](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/spatial-charts/images/18_adv_geo_mapbox_d_288.png)
 
 *Example of a Carbon’s Gray 100 theme style in Mapbox*
 

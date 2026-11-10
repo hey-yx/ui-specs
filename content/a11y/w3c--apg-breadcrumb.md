@@ -24,8 +24,6 @@ the current page in hierarchical order. It helps users find their place
 within a website or web application. Breadcrumbs are often placed
 horizontally before a page's main content.
 
-![](../../../../content-images/wai-aria-practices/images/pattern-breadcrumb.svg)
-
 ## Example
 
 [Breadcrumb design pattern example](examples/breadcrumb/)

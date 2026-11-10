@@ -1,31 +1,65 @@
 ---
-title: "Spectrum · Typography 字体排印"
+title: "Spectrum · Foundation · Typography 字体排印"
 source: https://spectrum.adobe.com/foundations/typography/overview
 section: type
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: type-10
 publisher: "Spectrum"
 ---
 
-# Spectrum · Typography 字体排印
+# Spectrum · Foundation · Typography 字体排印
 
 > 来源：[https://spectrum.adobe.com/foundations/typography/overview](https://spectrum.adobe.com/foundations/typography/overview)
 
 ---
 
+## Typography
+
 Typography creates visual hierarchy, communicates information, and brings consistency across Spectrum experiences. This overview introduces Adobe Clean Spectrum and its features.
+
+![Adobe Clean Spectrum VF headline on a blue gradient background, with a large outlined Ag glyph sample.](https://spectrum.adobe.com/page/iconography/media_16a9c337a6bdb865078b1b7fd9656ff863a19fa48.png?width=750&format=png&optimize=medium)
 
 ## Typefaces
 
-**Adobe Clean Spectrum** is the default font family for Spectrum. It’s based on Adobe Clean, Adobe’s corporate typeface. The Adobe Clean font family includes over 10 typefaces for specific use cases, such as longer reading experiences, displaying code, and supporting a wide range of languages and writing systems.  
-  
+**Adobe Clean Spectrum** is the default font family for Spectrum. It’s based on Adobe Clean, Adobe’s corporate typeface. The Adobe Clean font family includes over 10 typefaces for specific use cases, such as longer reading experiences, displaying code, and supporting a wide range of languages and writing systems. 
+ 
 **Adobe Clean Spectrum VF** is the default typeface for Spectrum on web, iOS, Android, and other supported platforms. It’s a variable font, which means a single font file can support a range of weights and widths.
+
+![Adobe Clean Spectrum VF headline shown with style tabs (Default, Italic, Condensed, Origin) and a list of available weights from Light to Black.](https://spectrum.adobe.com/page/iconography/media_1c6efb5d6281ac24cdedf4ce5edd22ad459eb7192.png?width=750&format=png&optimize=medium)
+
+![Crafted for Clarity headline above a diagram comparing an upright A and an italic a with a 12-degree slant angle indicated.](https://spectrum.adobe.com/page/iconography/media_1012f71e83acb02b7d7c110acece752bc814876bc.png?width=750&format=png&optimize=medium)
+
+![Typeface specs showing 24 styles with 804 glyphs each, and available formats listed as OTF/TTF.](https://spectrum.adobe.com/page/iconography/media_10d0336241a6832acab947c3064d8b0d17a4bb143.png?width=750&format=png&optimize=medium)
+
+![List of supported scripts: Latin, Cyrillic, CJK, Greek, Thai, Arabic, Hebrew, and Devanagari.](https://spectrum.adobe.com/page/iconography/media_173290f80e14bbcd13a7a945b5bd8e258fe041266.png?width=750&format=png&optimize=medium)
+
+## Adobe Clean features
+
+![Adobe Clean typeface displaying a diacritics set, showing the Polish pangram Zażółć gęślą jaźń with accented characters.](https://spectrum.adobe.com/page/iconography/media_12e7eb93d7d420154635041f22802af852db129bd.png?width=750&format=png&optimize=medium)
+
+![Adobe Clean typeface displaying standard ligatures, showing the ff and ft letter combinations.](https://spectrum.adobe.com/page/iconography/media_1ab4426a25f6472a0751d5c446d2c1261c576a14c.png?width=750&format=png&optimize=medium)
+
+![Adobe Clean typeface displaying tabular figures, showing the numerals 0 through 5 in bold weight.](https://spectrum.adobe.com/page/iconography/media_1dda11559e4a0d3cb6dcdef680372b595b81171d1.png?width=750&format=png&optimize=medium)
 
 ## About Adobe Clean Spectrum VF
 
 Adobe Clean Spectrum VF provides two main benefits over the non-variable versions:
 
-*   **Improves alignment with UI elements.** Adobe Clean Spectrum VF uses updated baseline metrics, which are the measurements that determine how text is positioned. These updated metrics help text align more consistently with other interface elements, such as icons, components, and avatars.
-*   **Supports future adjustments.** Spectrum currently recommends using the default weights and widths. However, the variable font makes it easier to fine-tune typography in future updates. For example, a slightly thinner weight may improve readability in dark mode.
+    - **Improves alignment with UI elements.** Adobe Clean Spectrum VF uses updated baseline metrics, which are the measurements that determine how text is positioned. These updated metrics help text align more consistently with other interface elements, such as icons, components, and avatars.
+    - **Supports future adjustments.** Spectrum currently recommends using the default weights and widths. However, the variable font makes it easier to fine-tune typography in future updates. For example, a slightly thinner weight may improve readability in dark mode.
+
+#### Jump to
+
+![Icon illustrating Typography system, showing two T letterforms in a blue-to-green gradient above a font-size adjustment icon.](https://spectrum.adobe.com/page/iconography/media_1735d74eaa72d8a5b4d22dfa24c63543afc0266e5.png?width=750&format=png&optimize=medium)
+
+Typography system
+
+[Typography system](https://spectrum.adobe.com/foundations/typography/typography-system)
+
+![Icon illustrating Applying the type system, showing two overlapping T letterforms in a blue-to-teal gradient.](https://spectrum.adobe.com/page/iconography/media_1bfdcea0ca1f5a86d02adde5500e376465c822b02.png?width=750&format=png&optimize=medium)
+
+Applying the type system
+
+[Applying the type system](https://spectrum.adobe.com/foundations/typography/applying-the-type-system)

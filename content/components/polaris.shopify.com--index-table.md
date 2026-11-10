@@ -15,14 +15,7 @@ publisher: "Shopify Polaris"
 
 ---
 
-
-
-
-
-
 An index table displays a collection of objects of the same type, like orders or products. The main job of an index table is to help merchants get an at-a-glance of the objects to perform actions or navigate to a full-page representation of it.
-
-
 
 Index tables can also:
 
@@ -95,8 +88,6 @@ Index tables should:
 
 - Identify the type of resource, usually with a heading
 
-
-
 #### Do
 
 - Products
@@ -106,11 +97,7 @@ Index tables should:
 
 - _No heading_
 
-
-
 - Indicate when not all members of a resource are being shown. For a card summarizing and linking to recently purchased products:
-
-
 
 #### Do
 
@@ -119,8 +106,6 @@ Index tables should:
 #### Don’t
 
 - Products
-
-
 
 - Follow the verb + noun formula for bulk actions
 

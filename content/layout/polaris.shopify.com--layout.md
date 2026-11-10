@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Layout 布局"
+title: "Polaris · Foundation · Layout 布局"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/layout/index.mdx
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-2
 publisher: "Shopify Polaris"
 ---
 
-# Polaris · Layout 布局
+# Polaris · Foundation · Layout 布局
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/layout/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/layout/index.mdx)
 
@@ -20,7 +20,6 @@ publisher: "Shopify Polaris"
 ## Space defines proximity
 
 Space plays a vital role in establishing connections between items. The principle of proximity states that the closer objects are, the stronger their perceived relationship.
-![An order card with an inset table followed by an apps card with a grid
 pattern made of different
 surfaces](https://polaris.shopify.com/images/design/layout/layout-overview-01-space@2x.png)
 Grouping similar items together helps merchants understand which elements are
@@ -36,7 +35,6 @@ Nest inset shapes and surfaces.
 In the Shopify admin, larger, heavier, and contrasting elements attract attention and create visual rhythm.
 
 Smaller, lighter, and more subtle elements are work-oriented and provide detailed information.
-![A grid pattern showing different marketing statistics, separated in cards
 that have a title and a larger stat
 numbe](https://polaris.shopify.com/images/design/layout/layout-overview-04-emphasis@2x.png)
 Use size, weight, and contrast to establish hierarchy in the admin. Divider
@@ -51,7 +49,6 @@ Use divider lines to create visual hierarchy or separation outside of indexes of
 ## Software, not website
 
 Since the admin is more like software, rather than a website, elements need to be sized appropriately based on their job.
-![Different cards showing button placement, popover contextual menus and
 high-density cards containing a lot of
 information](https://polaris.shopify.com/images/design/layout/layout-overview-07-adapt@2x.png)
 Compact elements add detail, and larger elements command more attention.

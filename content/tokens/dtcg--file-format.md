@@ -1,5 +1,5 @@
 ---
-title: "DTCG · 文件格式"
+title: "DTCG · Token · File format 文件格式"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/file-format.md
 section: tokens
 tag: "语法标准"
@@ -9,7 +9,7 @@ id: dtcg-2
 publisher: "W3C DTCG"
 ---
 
-# DTCG · 文件格式
+# DTCG · Token · File format 文件格式
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/file-format.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/file-format.md)
 

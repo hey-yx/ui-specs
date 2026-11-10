@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · 2x Grid 网格系统"
+title: "IBM Carbon · Foundation · 2x Grid 网格系统"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/overview.mdx
 section: layout
 tag: "规范"
@@ -9,26 +9,13 @@ id: layout-14
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · 2x Grid 网格系统
+# IBM Carbon · Foundation · 2x Grid 网格系统
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/overview.mdx)
 
 ---
 
-
 > It's fundamental to everything we design. The 2x Grid is the geometric foundation of all the visual elements of IBM Design, from typography to columns, boxes, icons, and illustrations. It provides structure and guidance for all creative decision-making.
-
-
-
-Mini unit
-2x Grid fundamentals
-Grid behaviors
-Grid influencers
-Sizing scale
-
-
-
-
 
 ## Mini unit
 
@@ -45,8 +32,6 @@ Margin and padding are always applied in fixed mini unit multiples. Boxes are
 sized by applying a sizing scale based on either fixed mini units or fluid
 column widths, along with a core set of aspect ratios.
 
-
-
 ## 2x Grid fundamentals
 
 The core concept of the 2x Grid is to divide or multiply by two, forming a
@@ -54,15 +39,11 @@ visual rhythm. Fluid grids are built by division, whereas fixed grids are built
 with multiplication. On breakpoint boundaries, these sizes match. Margins and
 padding are applied consistently in both cases.
 
-
-
 Columns and rows
 Margins
 Padding
 Gutters
 Breakpoints
-
-
 
 ### Columns and Rows
 
@@ -70,7 +51,7 @@ Columns and rows create key lines that are essential for visual rhythm,
 especially for typography. Construct columns by either dividing a space into a
 fluid grid, or by tiling fixed boxes in multiples.
 
-![Columns and rows](images/Layout_overview_Columns-rows.svg)
+![Columns and rows](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Columns-rows.svg)
 
 #### Fluid grid
 
@@ -99,7 +80,7 @@ both.
 
 For dense content, use mini units for further alignment and spatial guidance.
 
-![Columns and rows for dense content](images/Layout_overview_Columns-rows-light-dense.svg)
+![Columns and rows for dense content](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Columns-rows-light-dense.svg)
 
 ### Margins
 
@@ -107,7 +88,7 @@ The margins at the outer edge of the grid are always a fixed size within a
 breakpoint, even when columns are fluid. See [breakpoints](#breakpoints) for a
 table of margin sizes.
 
-![Margins](images/Layout_overview_Margins.svg)
+![Margins](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Margins.svg)
 
 ### Padding
 
@@ -116,20 +97,18 @@ breakpoints. Always align type to the edge of box padding. Note, some design
 tools add padding to text boxes by default; check text box padding and remove it
 if necessary.
 
-![Padding](images/Layout_overview_Paddings.svg)
-
-
-  
-
-![Always place type against the padding.](images/Layout_overview_Paddings-do.svg)
-
-  
-  
-
-![Never place type on the padding.](images/Layout_overview_Paddings-dont.svg)
+![Padding](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Paddings.svg)
 
   
 
+![Always place type against the padding.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Paddings-do.svg)
+
+  
+  
+
+![Never place type on the padding.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Paddings-dont.svg)
+
+  
 
 ### Gutters
 
@@ -138,7 +117,7 @@ around each grid box matches its padding, for a total gutter of 32 pixels. For
 closely related content, consider a gutterless grid. Apply gutters when content
 warrants more separation.
 
-![Gutters](images/Layout_overview_Gutters.svg)
+![Gutters](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Gutters.svg)
 
 ### Breakpoints
 
@@ -161,8 +140,6 @@ for more information.
 
 For best results, test designs and code at each of these standard breakpoints.
 
-
-
 ## Grid behaviors
 
 In user interfaces, screen size is dictated by the device and the user's chosen
@@ -173,14 +150,10 @@ displaying dynamic content. If a user's goal is to see more items, scale column
 count by tiling fixed boxes. If a user wants to see more content within each
 item, scale boxes and use fixed column counts.
 
-
-
 Fluid columns
 Fixed boxes
 Hybrid boxes
 Key lines
-
-
 
 ### Fluid columns
 
@@ -196,15 +169,11 @@ ratios. Margin and padding are fixed multiples of mini units. In between
 breakpoints, actual column width is a percentage of the grid area, not a mini
 unit multiple. Content scales fluidly.
 
-
-
 ### Fixed boxes
 
 A grid can be formed with fixed boxes by arranging tiles in an inline block,
 icons in toolbars, etc. Column count grows with browser width. Tiles wrap to the
 next line, or are sometimes truncated with an overflow scroll.
-
-
 
 First choose a base size from the [sizing scale](#sizing-scale), then build up
 each box in multiples of the base size, following recommended
@@ -221,8 +190,6 @@ in one dimension but not the other, use hybrid boxes.
 Use the [sizing scale](#sizing-scale) to size a fixed dimension. Use
 column-width multiples to size a grid-fluid dimension. Aspect ratios do not
 apply.
-
-
 
 Here are some common UI behaviors:
 
@@ -251,12 +218,8 @@ is positioned within the responsive grid. This section outlines which of these
 patterns you'll need, where users expect to see them, and how they impact the
 layout of content.
 
-
-
 Screen regions
 Panel behavior
-
-
 
 ### Screen regions
 
@@ -265,15 +228,15 @@ We call these areas _screen regions_. It is especially important for these zones
 to be consistent across devices and adapt across breakpoints.
 [Learn more on the Global header pattern page](/patterns/global-header).
 
-![Shell Illustration](images/Layout_overview_Screen-regions-1.svg)
+![Shell Illustration](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Screen-regions-1.svg)
 
 1. Header 2. Global sidenav 3. Local sidenav
 
-![Dropdown Illustration](images/Layout_overview_Screen-regions-2.svg)
+![Dropdown Illustration](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Screen-regions-2.svg)
 
 4. Dropdown menu 5. Content 6. Footer
 
-![Dialog Illustration](images/Layout_overview_Screen-regions-3.svg)
+![Dialog Illustration](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Screen-regions-3.svg)
 
 7. Dialog
 
@@ -289,8 +252,6 @@ The collapsed Flexible Panel expands when the user hovers over any portion of
 it. When flexible panels expand, they either condense both the content and the
 grid or they push content beyond the edge of the browser.
 
-
-
 <br />
 <br />
 
@@ -298,8 +259,6 @@ grid or they push content beyond the edge of the browser.
 
 Fixed panels maintain a static width, cannot be collapsed, and also exist
 outside of the responsive grid.
-
-
 
 <br />
 <br />
@@ -310,8 +269,6 @@ This panel style floats above the primary content area and does not affect the
 responsive grid. Floating panels conceal any UI elements below them and must be
 dismissible by the user. Inline menus, dropdowns and tooltips also float.
 
-
-
 ## Sizing scale
 
 We provide a sizing scale for both fixed and fluid sizes. Use it to size content
@@ -320,8 +277,6 @@ range of sizes to improve consistency and rhythm, while still allowing a wide
 range of sizes. Spacing tokens are used to apply these relationships
 consistently across UIs.
 
-
-
 Fixed base unit
 Fluid base unit
 Scaling multiple
@@ -329,14 +284,12 @@ Aspect ratio
 Vertical rhythm
 Components
 
-
-
 ### Fixed base unit
 
 Use this fixed sizing scale, comprised of select mini unit multiples, when
 sizing icons, tiling boxes, and applying vertical margin space.
 
-![Fixed base unit](images/Layout_overview_Fixed-base-unit.svg)
+![Fixed base unit](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Fixed-base-unit.svg)
 
 Choose a size to use as your fixed base unit. Also see the
 [breakpoints table](#breakpoints).
@@ -358,14 +311,12 @@ multiple columns, its height is a multiple of column width. Use cases are
 leading section in a webpage, divided section for editorial content, modals,
 etc. Check out the [breakpoints table](#breakpoints) for pixel sizings.
 
-![Fluid base unit](images/Layout_overview_Fluid-base-unit.svg)
+![Fluid base unit](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Fluid-base-unit.svg)
 
 ### Scaling multiple
 
 After determining your base size, multiply it as needed for each use. For box
 sizing, apply an [aspect ratio](#aspect-ratio) too.
-
-
 
 ### Aspect ratio
 
@@ -386,28 +337,24 @@ span 4 columns in width and 2 column-widths of height. To size a fixed box with
 the same aspect ratio, you could start with an 80 pixel base unit, then multiply
 it by 4 in width and 2 in height, for a fixed box size of 320 by 160.
 
-![aspect ratio](images/Layout_overview_Aspect-ratio.svg)
+![aspect ratio](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Aspect-ratio.svg)
 
 ### Vertical rhythm
 
 Use the fixed sizing scale to set vertical spacing between sections, by adding
 it to the top or bottom margin of a box:
 
-
-
-
   
 
-![Mini unit is the guide when needed. Spacer snaps to the text box and does not necessarily need to snap to the mini unit.](images/Layout_overview_Visual-rhythm-do.svg)
+![Mini unit is the guide when needed. Spacer snaps to the text box and does not necessarily need to snap to the mini unit.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Visual-rhythm-do.svg)
 
   
 
   
 
-![Always use “Auto” in alignment to ensure the text box fits with the content. Spacer snaps to the text box.](images/Layout_overview_Visual-rhythm-dont.svg)
+![Always use “Auto” in alignment to ensure the text box fits with the content. Spacer snaps to the text box.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/2x-grid/images/Layout_overview_Visual-rhythm-dont.svg)
 
   
-
 
 ### Components
 
@@ -418,5 +365,4 @@ component is cramped, use the minor sizing scale:
 When multiple components adhere to the same scale, grid relationships naturally
 emerge. For example, vertically aligning form fields such as checkboxes and
 radio buttons produces a grid effect when interior spacing is consistent.
-
 

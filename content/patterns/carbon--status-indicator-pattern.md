@@ -526,20 +526,6 @@ such as orange and yellow in Carbon light themes.
 
 _Example shows the icon indicators do not need outlines, while shape indicators
   do due to the lack of symbols_
-
-## Related
-
-#### Components
-
-- [Loading](https://carbondesignsystem.com/components/loading/usage)
-- [Data table](https://carbondesignsystem.com/components/data-table/usage)
-- [Notification](https://carbondesignsystem.com/components/notification/usage)
-- [Progress indicator](https://carbondesignsystem.com/components/progress-indicator/usage)
-
-#### Patterns
-
-- [Notifications](https://carbondesignsystem.com/patterns/notification-pattern)
-
 ## References
 
 - Nick Babich,

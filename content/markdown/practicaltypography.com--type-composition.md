@@ -3,7 +3,7 @@ title: "Practical Typography · 文字排版"
 source: https://practicaltypography.com/type-composition.html
 section: markdown
 tag: "阅读排版"
-fetched: 2026-10-17
+fetched: 2026-11-09
 status: full
 id: markdown-7
 publisher: "Matthew Butterick"
@@ -17,12 +17,80 @@ publisher: "Matthew Butterick"
 
 Type composition
 
-Good ty­pog­ra­phy starts with good typ­ing. This chap­ter is a tour of the non­al­pha­betic char­ac­ters on the com­puter key­board—some ob­scure, some un­der­ap­pre­ci­ated, and some well-known but misused.
+![](https://practicaltypography.com/images/typewriter.jpg)
 
-A text is a se­quence of char­ac­ters. Every char­ac­ter is a tool. Your goal: to al­ways use the right tool for the job.
+![](https://practicaltypography.com/images/keyboard.jpg)
 
-To­day’s com­puter key­boards de­pict the avail­able char­ac­ters in al­most the same way as a man­ual type­writer. But this de­pic­tion is mis­lead­ing. The com­puter key­board can pro­duce many more char­ac­ters than the ones vis­i­ble on its keys. These in­clude ac­cented char­ac­ters(https://practicaltypography.com/accented-characters.html), math sym­bols(https://practicaltypography.com/math-symbols.html), and white-space char­ac­ters(https://practicaltypography.com/white-space-characters.html)—in­vis­i­ble mark­ers that are use­ful for get­ting con­sis­tent ty­po­graphic results.
+Good typography starts with good typing. This chapter is a tour of the nonalphabetic characters on the computer keyboard—some obscure, some underappreciated, and some well-known but misused.
 
-Be­ware. This chap­ter is more dif­fi­cult than it might seem. Typ­ing is sec­ond na­ture for most of us. Habits are in­grained. Af­ter years of do­ing things one way, it can be hard to learn a dif­fer­ent way.
+A text is a sequence of characters. Every character is a tool. Your goal: to always use the right tool for the job.
 
-But it’s worth it. By typ­ing the right char­ac­ters while writ­ing and edit­ing, you’ll save time and ef­fort later on when you’re for­mat­ting and lay­ing out your document.
+Today’s computer keyboards depict the available characters in almost the same way as a manual typewriter. But this depiction is misleading. The computer keyboard can produce many more characters than the ones visible on its keys. These include [accented characters](https://practicaltypography.com/accented-characters.html), [math symbols](https://practicaltypography.com/math-symbols.html), and [white-space characters](https://practicaltypography.com/white-space-characters.html)—invisible markers that are useful for getting consistent typographic results.
+
+Beware. This chapter is more difficult than it might seem. Typing is second nature for most of us. Habits are ingrained. After years of doing things one way, it can be hard to learn a different way.
+
+But it’s worth it. By typing the right characters while writing and editing, you’ll save time and effort later on when you’re formatting and laying out your document.
+
+- [straight and curly quotes](https://practicaltypography.com/straight-and-curly-quotes.html)
+  - [one space between sentences](https://practicaltypography.com/one-space-between-sentences.html)
+  - [question marks and exclamation points](https://practicaltypography.com/question-marks-and-exclamation-points.html)
+  - [emoticons & emoji](https://practicaltypography.com/emoticons-and-emoji.html)
+  - [semicolons and colons](https://practicaltypography.com/semicolons-and-colons.html)
+  - [paragraph and section marks](https://practicaltypography.com/paragraph-and-section-marks.html)
+  - [parentheses, brackets, and braces](https://practicaltypography.com/parentheses-brackets-and-braces.html)
+  - [hyphens and dashes](https://practicaltypography.com/hyphens-and-dashes.html)
+  - [ampersands](https://practicaltypography.com/ampersands.html)
+  - [signature lines](https://practicaltypography.com/signature-lines.html)
+  - [trademark & copyright symbols](https://practicaltypography.com/trademark-and-copyright-symbols.html)
+  - [ellipses](https://practicaltypography.com/ellipses.html)
+  - [apostrophes](https://practicaltypography.com/apostrophes.html)
+  - [accented characters](https://practicaltypography.com/accented-characters.html)
+  - [foot and inch marks](https://practicaltypography.com/foot-and-inch-marks.html)
+  - [white-space characters](https://practicaltypography.com/white-space-characters.html)
+  - [word spaces](https://practicaltypography.com/word-spaces.html)
+  - [nonbreaking spaces](https://practicaltypography.com/nonbreaking-spaces.html)
+  - [tabs and tab stops](https://practicaltypography.com/tabs-and-tab-stops.html)
+  - [hard line breaks](https://practicaltypography.com/hard-line-breaks.html)
+  - [carriage returns](https://practicaltypography.com/carriage-returns.html)
+  - [hard page breaks](https://practicaltypography.com/hard-page-breaks.html)
+  - [optional hyphens](https://practicaltypography.com/optional-hyphens.html)
+  - [math symbols](https://practicaltypography.com/math-symbols.html)
+  - [ligatures](https://practicaltypography.com/ligatures.html)
+
+undock
+
+
+
+move
+
+
+
+Heliotrope
+
+Equity
+
+Valkyrie
+
+Century Supra
+
+Concourse
+
+Triplicate
+
+buy font
+
+
+
+close
+
+
+
+←
+
+where do the rules come from?
+
+top
+
+straight and curly quotes
+
+→

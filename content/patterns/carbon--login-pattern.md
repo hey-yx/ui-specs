@@ -369,12 +369,6 @@ screen readers to skip directly to the input fields. This is especially
 important if you are using the split-screen layout or have additional content on
 the page.
 
-## Related
-
-- [Button](https://www.carbondesignsystem.com/components/button/usage)
-- [Link](https://www.carbondesignsystem.com/components/link/usage)
-- [Text input](https://www.carbondesignsystem.com/components/text-input/usage)
-
 ## References
 
 - Raluca Budiu,

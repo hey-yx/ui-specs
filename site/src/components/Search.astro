@@ -53,6 +53,8 @@
   let active = 0
   let hits = []
   let index = null
+  /** 打开面板的元素；关闭时把焦点还回去，而不是一律丢给 header 的搜索按钮。 */
+  let lastTrigger: HTMLElement | null = null
 
   /** 结果全部用 DOM API 拼，不走 innerHTML：字段来自正文文件，虽是构建期生成，仍按不可信输入处理。 */
   function render(list, groupLabel) {
@@ -102,7 +104,9 @@
     input.setAttribute('aria-activedescendant', `cmdk-opt-${active}`)
   }
 
-  async function open() {
+  async function open(trigger?: HTMLElement) {
+    const current = document.activeElement
+    lastTrigger = trigger ?? (current instanceof HTMLElement && current !== document.body ? current : null)
     cmdk.hidden = false
     input.setAttribute('aria-expanded', 'true')
     input.focus()
@@ -123,7 +127,9 @@
     cmdk.hidden = true
     input.setAttribute('aria-expanded', 'false')
     input.removeAttribute('aria-activedescendant')
-    document.getElementById('searchToggle')?.focus()
+    const target = lastTrigger ?? document.getElementById('searchToggle')
+    target?.focus()
+    lastTrigger = null
   }
 
   input?.addEventListener('input', async () => {
@@ -189,7 +195,10 @@
     }
   })
 
-  // header 搜索框在窄屏下把搜索请求转交给这里
-  window.addEventListener('ui-specs:open-search', open)
+  // header 搜索框在窄屏下、首页搜索按钮把搜索请求转交给这里；带 trigger 时关闭后焦点还给它
+  window.addEventListener('ui-specs:open-search', (event) => {
+    const trigger = (event as CustomEvent).detail?.trigger
+    open(trigger instanceof HTMLElement ? trigger : undefined)
+  })
   cmdk?.querySelector('[data-close]')?.addEventListener('click', close)
 </script>

@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Motion 动效"
+title: "Polaris · Foundation · Motion 动效"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/motion/index.mdx
 section: motion
 tag: "规范"
@@ -9,7 +9,7 @@ id: motion-1
 publisher: "Shopify Polaris"
 ---
 
-# Polaris · Motion 动效
+# Polaris · Foundation · Motion 动效
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/motion/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/motion/index.mdx)
 

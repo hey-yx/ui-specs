@@ -1,5 +1,5 @@
 ---
-title: "W3C WAI · Easy Checks 无障碍快速自查"
+title: "W3C WAI · Standard · Easy Checks 无障碍快速自查"
 source: https://www.w3.org/WAI/test-evaluate/preliminary/
 section: a11y
 tag: "规范"
@@ -9,7 +9,7 @@ id: a11y-24
 publisher: "W3C WAI"
 ---
 
-# W3C WAI · Easy Checks 无障碍快速自查
+# W3C WAI · Standard · Easy Checks 无障碍快速自查
 
 > 来源：[https://www.w3.org/WAI/test-evaluate/preliminary/](https://www.w3.org/WAI/test-evaluate/preliminary/)
 
@@ -894,7 +894,6 @@ for Firefox, Safari, and IE are below.
       Usually 4-6 key presses gets to 200%.
     - To check or set the zoom percent from the menu option:
       - Click the menu button.  
-        ![Firefox customization menu zoom percent
         settings.](https://support.cdn.mozilla.net/media/uploads/gallery/images/2014-02-06-12-50-57-fa7069.png)
       - In the customization menu, click the + button to zoom larger.
         The number before the + button is the current zoom percent.

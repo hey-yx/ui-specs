@@ -1,15 +1,15 @@
 ---
-title: "GOV.UK · Colour 色彩"
+title: "GOV.UK · Foundation · Colour 色彩"
 source: https://design-system.service.gov.uk/styles/colour/
 section: color
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: color-4
 publisher: "GOV.UK Design System"
 ---
 
-# GOV.UK · Colour 色彩
+# GOV.UK · Foundation · Colour 色彩
 
 > 来源：[https://design-system.service.gov.uk/styles/colour/](https://design-system.service.gov.uk/styles/colour/)
 
@@ -35,121 +35,38 @@ Do not copy the specific hexadecimal (hex) colour values. For example, use `govu
 
 This means that your service will always use the most recent colour palette whenever you update.
 
-Only use the variables in the context they’re designed for. In all other cases, you should reference the [GOV.UK web palette](#govuk-web-palette) directly. For example, if you wanted to use red, you should use `govuk-colour("red")` rather than `govuk-functional-colour("error")`.
+Only use the variables in the context they’re designed for. In all other cases, you should reference the [GOV.UK web palette](https://design-system.service.gov.uk/styles/colour/#govuk-web-palette) directly. For example, if you wanted to use red, you should use `govuk-colour("red")` rather than `govuk-functional-colour("error")`.
 
 ### Text
-
-`text`
-
-`#0b0c0c`
-
-`secondary-text`
-
-`#484949`
-
-`inverse-text`
-
-`#ffffff`
-
-Use this colour for text on dark backgrounds
-
+`text``#0b0c0c`
+`secondary-text``#484949`
+`inverse-text``#ffffff`Use this colour for text on dark backgrounds
 ### Link
-
-`link`
-
-`#1a65a6`
-
-`link-hover`
-
-`#0f385c`
-
-`link-visited`
-
-`#54319f`
-
-`link-active`
-
-`#0b0c0c`
-
+`link``#1a65a6`
+`link-hover``#0f385c`
+`link-visited``#54319f`
+`link-active``#0b0c0c`
 ### Border
-
-`border`
-
-`#cecece`
-
-`input-border`
-
-`#0b0c0c`
-
+`border``#cecece`
+`input-border``#0b0c0c`
 ### Background
-
-`template-background`
-
-`#f4f8fb`
-
-Use this colour if you need to match the colour of the <html> element
-
-`body-background`
-
-`#ffffff`
-
-Use this colour if you need to match the colour of the <body> element
-
+`template-background``#f4f8fb`Use this colour if you need to match the colour of the <html> element
+`body-background``#ffffff`Use this colour if you need to match the colour of the <body> element
 ### Focus state
-
-`focus`
-
-`#ffdd00`
-
-Only use this colour to indicate which element is focused on. For example, when a user tabs to an element with their keyboard.
-
-`focus-text`
-
-`#0b0c0c`
-
+`focus``#ffdd00`Only use this colour to indicate which element is focused on. For example, when a user tabs to an element with their keyboard.
+`focus-text``#0b0c0c`
 ### Error state
-
-`error`
-
-`#ca3535`
-
-Use this colour for error messages
-
+`error``#ca3535`Use this colour for error messages
 ### Success state
-
-`success`
-
-`#0f7a52`
-
-Use this colour for success messages
-
+`success``#0f7a52`Use this colour for success messages
 ### Hover state
-
-`hover`
-
-`#cecece`
-
-Use this colour for input hover states
-
+`hover``#cecece`Use this colour for input hover states
 ### Brand colour
-
-`brand`
-
-`#1d70b8`
-
+`brand``#1d70b8`
 ### Surface
-
-`surface-background`
-
-`#f4f8fb`
-
-`surface-text`
-
-`#0b0c0c`
-
-`surface-border`
-
-`#8eb8dc`
+`surface-background``#f4f8fb`
+`surface-text``#0b0c0c`
+`surface-border``#8eb8dc`
 
 ## GOV.UK web palette
 
@@ -182,302 +99,88 @@ Most colours include these variants:
 Black includes a ‘primary’ black, with tints to show greys. White has no variants.
 
 ### Blue
-
-`primary`
-
-`#1d70b8`
-
-`tint-25`
-
-`#5694ca`
-
-`tint-50`
-
-`#8eb8dc`
-
-`tint-80`
-
-`#d2e2f1`
-
-`tint-95`
-
-`#f4f8fb`
-
-`shade-10`
-
-`#1a65a6`
-
-`shade-25`
-
-`#16548a`
-
-`shade-50`
-
-`#0f385c`
-
+`primary``#1d70b8`
+`tint-25``#5694ca`
+`tint-50``#8eb8dc`
+`tint-80``#d2e2f1`
+`tint-95``#f4f8fb`
+`shade-10``#1a65a6`
+`shade-25``#16548a`
+`shade-50``#0f385c`
 ### Green
-
-`primary`
-
-`#0f7a52`
-
-`tint-25`
-
-`#4b9b7d`
-
-`tint-50`
-
-`#87bca8`
-
-`tint-80`
-
-`#cfe4dc`
-
-`tint-95`
-
-`#f3f8f6`
-
-`shade-25`
-
-`#0b5c3e`
-
-`shade-50`
-
-`#083d29`
-
+`primary``#0f7a52`
+`tint-25``#4b9b7d`
+`tint-50``#87bca8`
+`tint-80``#cfe4dc`
+`tint-95``#f3f8f6`
+`shade-25``#0b5c3e`
+`shade-50``#083d29`
 ### Teal
-
-`primary`
-
-`#158187`
-
-`tint-25`
-
-`#50a1a5`
-
-`tint-50`
-
-`#8ac0c3`
-
-`tint-80`
-
-`#d0e6e7`
-
-`tint-95`
-
-`#f3f9f9`
-
-`shade-25`
-
-`#106165`
-
-`shade-50`
-
-`#0b4144`
-
-`accent`
-
-`#00ffe0`
-
+`primary``#158187`
+`tint-25``#50a1a5`
+`tint-50``#8ac0c3`
+`tint-80``#d0e6e7`
+`tint-95``#f3f9f9`
+`shade-25``#106165`
+`shade-50``#0b4144`
+`accent``#00ffe0`
 ### Purple
-
-`primary`
-
-`#54319f`
-
-`tint-25`
-
-`#7f65b7`
-
-`tint-50`
-
-`#aa98cf`
-
-`tint-80`
-
-`#ddd6ec`
-
-`tint-95`
-
-`#f6f5fa`
-
-`shade-25`
-
-`#3f2577`
-
-`shade-50`
-
-`#2a1950`
-
+`primary``#54319f`
+`tint-25``#7f65b7`
+`tint-50``#aa98cf`
+`tint-80``#ddd6ec`
+`tint-95``#f6f5fa`
+`shade-25``#3f2577`
+`shade-50``#2a1950`
 ### Magenta
-
-`primary`
-
-`#ca357c`
-
-`tint-25`
-
-`#d7689d`
-
-`tint-50`
-
-`#e59abe`
-
-`tint-80`
-
-`#f4d7e5`
-
-`tint-95`
-
-`#fcf5f8`
-
-`shade-25`
-
-`#98285d`
-
-`shade-50`
-
-`#651b3e`
-
+`primary``#ca357c`
+`tint-25``#d7689d`
+`tint-50``#e59abe`
+`tint-80``#f4d7e5`
+`tint-95``#fcf5f8`
+`shade-25``#98285d`
+`shade-50``#651b3e`
 ### Red
-
-`primary`
-
-`#ca3535`
-
-`tint-25`
-
-`#d76868`
-
-`tint-50`
-
-`#e59a9a`
-
-`tint-80`
-
-`#f4d7d7`
-
-`tint-95`
-
-`#fcf5f5`
-
-`shade-25`
-
-`#982828`
-
-`shade-50`
-
-`#651b1b`
-
+`primary``#ca3535`
+`tint-25``#d76868`
+`tint-50``#e59a9a`
+`tint-80``#f4d7d7`
+`tint-95``#fcf5f5`
+`shade-25``#982828`
+`shade-50``#651b1b`
 ### Orange
-
-`primary`
-
-`#f47738`
-
-`tint-25`
-
-`#f7996a`
-
-`tint-50`
-
-`#fabb9c`
-
-`tint-80`
-
-`#fde4d7`
-
-`tint-95`
-
-`#fef8f5`
-
-`shade-25`
-
-`#b7592a`
-
-`shade-50`
-
-`#7a3c1c`
-
+`primary``#f47738`
+`tint-25``#f7996a`
+`tint-50``#fabb9c`
+`tint-80``#fde4d7`
+`tint-95``#fef8f5`
+`shade-25``#b7592a`
+`shade-50``#7a3c1c`
 ### Yellow
-
-`primary`
-
-`#ffdd00`
-
-`tint-25`
-
-`#ffe640`
-
-`tint-50`
-
-`#ffee80`
-
-`tint-80`
-
-`#fff8cc`
-
-`tint-95`
-
-`#fffdf2`
-
-`shade-25`
-
-`#bfa600`
-
-`shade-50`
-
-`#806f00`
-
+`primary``#ffdd00`
+`tint-25``#ffe640`
+`tint-50``#ffee80`
+`tint-80``#fff8cc`
+`tint-95``#fffdf2`
+`shade-25``#bfa600`
+`shade-50``#806f00`
 ### Brown
-
-`primary`
-
-`#99704a`
-
-`tint-25`
-
-`#b39477`
-
-`tint-50`
-
-`#ccb8a5`
-
-`tint-95`
-
-`#faf8f6`
-
+`primary``#99704a`
+`tint-25``#b39477`
+`tint-50``#ccb8a5`
+`tint-95``#faf8f6`
 ### Black
-
-`primary`
-
-`#0b0c0c`
-
-`tint-25`
-
-`#484949`
-
-`tint-50`
-
-`#858686`
-
-`tint-80`
-
-`#cecece`
-
-`tint-95`
-
-`#f3f3f3`
-
+`primary``#0b0c0c`
+`tint-25``#484949`
+`tint-50``#858686`
+`tint-80``#cecece`
+`tint-95``#f3f3f3`
 ### White
-
-`primary`
-
-`#ffffff`
+`primary``#ffffff`
 
 ## Organisation colours
 
-You can find brand colours for government departments and organisations in the [\_colours-organisations file in GOV.UK Frontend](https://github.com/alphagov/govuk-frontend/blob/main/packages/govuk-frontend/src/govuk/settings/_colours-organisations.scss).
+You can find brand colours for government departments and organisations in the [_colours-organisations file in GOV.UK Frontend](https://github.com/alphagov/govuk-frontend/blob/main/packages/govuk-frontend/src/govuk/settings/_colours-organisations.scss).
 
 This file is maintained on a best effort basis and is assembled from a number of sources, including:
 
@@ -485,10 +188,3 @@ This file is maintained on a best effort basis and is assembled from a number of
 *   Cabinet Office branding team
 *   [Design102](https://design102.co.uk/), the government’s in-house design studio
 *   Communications teams from individual organisations
-
-## Help improve this style
-
-To help make sure that this page is useful, relevant and up to date, you can:
-
-*   take part in the [‘Colour’ discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/6102/) and share your research
-*   [propose a change on GitHub](https://github.com/alphagov/govuk-design-system/edit/main/src/styles/colour/index.md) – read more about [how to propose changes in GitHub](https://design-system.service.gov.uk/community/propose-a-content-change-using-github/)

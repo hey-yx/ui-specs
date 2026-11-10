@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Inset text 插入文字块"
 source: https://design-system.service.gov.uk/components/inset-text/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-28
 publisher: "GOV.UK Design System"
@@ -13,27 +13,18 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/inset-text/](https://design-system.service.gov.uk/components/inset-text/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
-**示例：default**
-
-```njk
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
-{% call govukInsetText() %}
-  It can take up to 8 weeks to register a lasting power of attorney if there are no mistakes in the application.
-{% endcall %}
-```
+*   [HTML](https://design-system.service.gov.uk/components/inset-text/#inset-text-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/inset-text/#inset-text-example-nunjucks)
 
 ## When to use this component
 
 Use the inset text component to differentiate a block of text from the content that surrounds it, for example:
 
-- quotes
-- examples
-- additional information about the page
+*   quotes
+*   examples
+*   additional information about the page
 
 ## When not to use this component
 
@@ -47,12 +38,13 @@ Use inset text very sparingly - it’s less effective if it’s overused.
 
 There are 2 ways to use the inset text component. You can use HTML or, if you’re using Nunjucks or the GOV.UK Prototype Kit, you can use the Nunjucks macro.
 
-**示例：default (second)**
+*   [HTML](https://design-system.service.gov.uk/components/inset-text/#inset-text-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/inset-text/#inset-text-second-example-nunjucks)
 
-```njk
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+## Recent changes
 
-{% call govukInsetText() %}
-  It can take up to 8 weeks to register a lasting power of attorney if there are no mistakes in the application.
-{% endcall %}
-```
+| Date | Changed | Description |
+| --- | --- | --- |
+| Aug 2022 | [GOV.UK Frontend v4.3.0](https://github.com/alphagov/govuk-frontend/releases/tag/v4.3.0) | Added the ability to pass the `html` parameter using [Nunjucks call syntax](https://mozilla.github.io/nunjucks/templating.html#call). |
+| Mar 2019 | [GOV.UK Frontend v2.8.0](https://github.com/alphagov/govuk-frontend/releases/tag/v2.8.0) | Fixed nested components within Inset text being misaligned. |
+| Jun 2018 | [GOV.UK Frontend v1.0.0](https://github.com/alphagov/govuk-frontend/releases/tag/v1.0.0) | Component introduced. |

@@ -359,13 +359,6 @@ do and where they can go in your UI.
 
 _Screenshot of a rotor in action_
 
-## Related
-
-- [UI shell header](https://carbondesignsystem.com/components/UI-shell-header/code/)
-- [UI shell left panel](https://carbondesignsystem.com/components/UI-shell-left-panel/code/)
-- [UI shell right panel](https://www.carbondesignsystem.com/components/UI-shell-right-panel/code/)
-- [Breadcrumb](https://www.carbondesignsystem.com/components/breadcrumb/code/)
-
 ## References
 
 - David R. Danielson,

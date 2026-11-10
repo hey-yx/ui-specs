@@ -1,7 +1,7 @@
 {
   "name": "MetricRail",
-  "tagline": "数据看板：主数字、趋势图与可下钻明细，一屏看完",
-  "accent": "Blue7 #0052d9",
-  "structure": "Stat-Led · N9 / Ft2",
-  "layout": "数据看板"
+  "tagline": "经营看板：一个数字打头，趋势与渠道跟着走。",
+  "accent": "Blue10 #001a57",
+  "structure": "Stat-Led · N3 左缘竖条 / Ft3 三栏索引",
+  "layout": "左缘深蓝竖条 + 巨大成交额 + 三张 KPI 卡 + 趋势与渠道双栏 + 渠道明细表"
 }

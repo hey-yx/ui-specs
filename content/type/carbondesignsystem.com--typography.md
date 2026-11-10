@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Typography 字体"
+title: "IBM Carbon · Foundation · Typography 字体"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/overview.mdx
 section: type
 tag: "规范"
@@ -9,40 +9,13 @@ id: type-3
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Typography 字体
+# IBM Carbon · Foundation · Typography 字体
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/overview.mdx)
 
 ---
 
----
-label:
-  Our approach to the typographic system uses IBM Plex as its typeface. It has
-  been carefully engineered with suitable scales, styles, and weights to help
-  create clear hierarchies and organize information that guides users through
-  IBM products or experiences.
-title: Typography
-description:
-  Typography can help create clear hierarchies, organize information, and guide
-  users through a product or experience.
-tabs: ['Overview', 'Style strategies', 'Type sets', 'Code']
----
-
-
-
-
 > Our approach to the typographic system uses IBM Plex as its typeface. It has been carefully engineered with suitable scales, styles, and weights to help create clear hierarchies and organize information that guides users through IBM products or experiences.
-
-
-
-Type tokens and sets
-Typeface: IBM Plex
-Scale
-Style
-Type color
-Resources
-
-
 
 ## Type tokens and sets
 
@@ -82,8 +55,6 @@ designed to meet IBM's needs as a global technology company and reflect IBM's
 spirit, beliefs, and design principles. IBM Plex can be accessed and downloaded
 from the [Plex GitHub Repo](https://github.com/ibm/plex).
 
-
-
 ### Sans-serif font stack
 
 ```scss
@@ -111,8 +82,6 @@ that y₀=12 px.
 
 <br />
 
-
-
 ```
 Xn = Xn-1 + {INT[(n-2)/4] + 1} * 2
 Xn: step n type size Xn-1: step n-1 type size
@@ -138,15 +107,11 @@ We suggest using IBM Plex Light, Regular, and SemiBold for digital experiences.
 The semibold weight is ideal for section headers, but should not be used for
 long text.
 
-
-
 ### Italic
 
 Each weight has an italic style, which should only be used when you need to
 emphasize certain words in a sentence (i.e., titles of works, technical terms,
 names of devices, and captions).
-
-
 
 ## Type color
 
@@ -154,85 +119,18 @@ Type color should be carefully considered, with legibility and accessibility as
 paramount concerns. Keep type color neutral in running text. Use primary blue
 for primary actions.
 
+![Neutral color for text](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-1.svg)
 
+![I'm a magenta sentence for no reason](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-2.svg)
 
+![Neutral color for text](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-3.svg)
 
-![Neutral color for text](images/Typography_overview_Type-color-1.svg)
+![Color is not for decoration](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-4.svg)
 
+![Link with icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-5.svg)
 
+![Download with icon](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-6.svg)
 
+![Oops, something went wrong! colored text](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-7.svg)
 
-![I'm a magenta sentence for no reason](images/Typography_overview_Type-color-2.svg)
-
-
-
-
-
-
-
-![Neutral color for text](images/Typography_overview_Type-color-3.svg)
-
-
-
-
-![Color is not for decoration](images/Typography_overview_Type-color-4.svg)
-
-
-
-
-
-
-
-![Link with icon](images/Typography_overview_Type-color-5.svg)
-
-
-
-
-![Download with icon](images/Typography_overview_Type-color-6.svg)
-
-
-
-
-
-
-
-![Oops, something went wrong! colored text](images/Typography_overview_Type-color-7.svg)
-
-
-
-
-![Code snippet with colored highlight type](images/Typography_overview_Type-color-8.svg)
-
-
-
-
-## Resources
-
-
-
-  - [链接](https://github.com/ibm/plex/releases/latest)
-
-
-
-  
-
-
-  - [链接](https://www.ibm.com/plex/)
-
-  
-
-
-  - [链接](https://github.com/carbon-design-system/carbon/tree/main/packages/type)
-
-
-
-  
-
-
-  - [链接](https://github.com/carbon-design-system/carbon/tree/main/packages/type)
-
-
-
- 
-
-
+![Code snippet with colored highlight type](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/typography/images/Typography_overview_Type-color-8.svg)

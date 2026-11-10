@@ -15,14 +15,7 @@ publisher: "Shopify Polaris"
 
 ---
 
-
-
-
-
-
 Buttons are used primarily for actions, such as "Add", "Close", "Cancel", or "Save". Plain buttons, which look similar to links, are used for less important or less commonly used actions, such as "view shipping settings".
-
-
 
 ## Best practices
 
@@ -50,8 +43,6 @@ The HTML that renders for the `Button` and `Link` components carries meaning. Us
 
 ## Content guidelines
 
-
-
 Buttons need to be clear and predictable. Merchants should be able to anticipate what will happen when they select a button. Never mislead someone by mislabeling a button.
 
 - Use universally understood iconography instead of words wherever you can
@@ -60,8 +51,6 @@ Buttons need to be clear and predictable. Merchants should be able to anticipate
 - Sentence case
 - No articles (“a” “an” “the”)
 - No punctuation
-
-
 
 #### Do
 
@@ -75,11 +64,7 @@ Buttons need to be clear and predictable. Merchants should be able to anticipate
 - Edit collection
 - Add tag(s)
 
-
-
 Always write button text in sentence case, which means the first word is capitalized and the rest are lowercase (unless a term is a proper noun).
-
-
 
 #### Do
 
@@ -89,11 +74,7 @@ Always write button text in sentence case, which means the first word is capital
 
 - Buy New Domain
 
-
-
 Avoid unnecessary words and articles such as “the,” “an,” or “a.”
-
-
 
 #### Do
 
@@ -102,8 +83,6 @@ Add menu item
 #### Don’t
 
 Add a menu item
-
-
 
 ---
 
@@ -142,8 +121,6 @@ To help support merchants who use speech activation software as well as sighted 
 
 When possible, give the button visible text that clearly conveys its purpose without the use of `accessibilityLabel`. When no additional content is needed, duplicating the button text with `accessibilityLabel` isn’t necessary.
 
-
-
 #### Do
 
 ```jsx
@@ -165,8 +142,6 @@ When possible, give the button visible text that clearly conveys its purpose wit
 <Button accessibilityLabel="Edit">Edit</Button>
 ```
 
-
-
 #### External links
 
 When you use the button component to create a link to an external resource:
@@ -176,8 +151,6 @@ When you use the button component to create a link to an external resource:
 - Use the `accessibilityLabel` prop to include the warning about opening a new tab in the button text for non-visual screen reader users
 
 For more information on making accessible links, see the [link component](https://polaris.shopify.com/components/link).
-
-
 
 #### Do
 
@@ -200,8 +173,6 @@ For more information on making accessible links, see the [link component](https:
   Terms and conditions
 </Button>
 ```
-
-
 
 ### Keyboard support
 

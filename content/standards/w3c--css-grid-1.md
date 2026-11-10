@@ -23,7 +23,6 @@ _This section is not normative._
 
 Grid Layout is a new layout model for CSS that has powerful abilities to control the sizing and positioning of boxes and their contents. Unlike [Flexible Box Layout](https://www.w3.org/TR/css-flexbox-1/), which is single-axis–oriented, Grid Layout is optimized for 2-dimensional layouts: those in which alignment of content is desired in both dimensions.
 
-![An example of flex layout:
 two rows of items,
 the first being three items a third of the space each,
 and the second being five items, a fifth of the space each.
@@ -31,7 +30,6 @@ There is therefore alignment along the “rows”, but not along the “columns�
 
 Representative Flex Layout Example
 
-![An example of grid layout:
 two rows of items,
 the first being four items—the last of which spans both rows,
 and the second being two items—the first of which spans the first two columns— plus the spanned item from the first row.](https://www.w3.org/TR/css-grid-1/images/grid-layout.png)
@@ -2113,12 +2111,10 @@ For example, in the following grid, the spanning item’s grid area is increased
 .item3 { grid-column: 3 / 5; }
 /\* last two items auto-place into the last two grid cells \*/
 
-![Grid with 10px gap and an element spanning all columns.
 The sum of the columns is less than the width of the grid container.](https://www.w3.org/TR/css-grid-1/images/spanned-gap.svg)
 
 Grid before alignment
 
-![Same grid with increased gaps absorbing the excess grid container width.
 The spanning element has grown to accommodate the extra space assigned to the gap it crosses.](https://www.w3.org/TR/css-grid-1/images/spanned-gap-align.svg)
 
 Grid after alignment

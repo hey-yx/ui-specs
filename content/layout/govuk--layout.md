@@ -3,7 +3,7 @@ title: "GOV.UK · Layout 布局"
 source: https://design-system.service.gov.uk/styles/layout/
 section: layout
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: layout-18
 publisher: "GOV.UK"
@@ -29,7 +29,7 @@ The default maximum page width is 1020px, but you can make it wider if your cont
 
 ### Two-thirds
 
-*   [HTML](#common-two-thirds-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#common-two-thirds-layout-example-open-html)
 
 ```
 <div class="govuk-width-container">
@@ -47,7 +47,7 @@ The default maximum page width is 1020px, but you can make it wider if your cont
 
 ### Two-thirds and one-third
 
-*   [HTML](#common-two-thirds-one-third-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#common-two-thirds-one-third-layout-example-open-html)
 
 ```
 <div class="govuk-width-container">
@@ -67,10 +67,10 @@ The default maximum page width is 1020px, but you can make it wider if your cont
 </div>
 ```
 
-### Row 1: Two-thirds  
+### Row 1: Two-thirds   
 Row 2: Two-thirds and one-third
 
-*   [HTML](#common-two-thirds-with-two-rows-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#common-two-thirds-with-two-rows-layout-example-open-html)
 
 ```
 <div class="govuk-width-container">
@@ -117,7 +117,7 @@ If you’re not using the [Breadcrumbs component](https://design-system.service.
 
 ### Exploded view of page wrappers
 
-*   [HTML](#page-wrapper-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#page-wrapper-layout-example-open-html)
 
 ```
 <div class="govuk-width-container">
@@ -132,7 +132,7 @@ If you’re not using the [Breadcrumbs component](https://design-system.service.
 </div>
 ```
 
-*   [HTML](#page-wrapper-without-content-after-the-header-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#page-wrapper-without-content-after-the-header-layout-example-open-html)
 
 ```
 <div class="govuk-width-container">
@@ -164,7 +164,7 @@ The available widths are:
 
 ### Full width
 
-*   [HTML](#full-width-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#full-width-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -176,7 +176,7 @@ The available widths are:
 
 ### One-half
 
-*   [HTML](#one-half-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#one-half-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -188,7 +188,7 @@ The available widths are:
 
 ### One-third
 
-*   [HTML](#one-third-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#one-third-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -200,7 +200,7 @@ The available widths are:
 
 ### Two-thirds
 
-*   [HTML](#two-thirds-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#two-thirds-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -212,7 +212,7 @@ The available widths are:
 
 ### One-quarter
 
-*   [HTML](#one-quarter-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#one-quarter-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -224,7 +224,7 @@ The available widths are:
 
 ### Three-quarters
 
-*   [HTML](#three-quarters-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#three-quarters-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -236,7 +236,7 @@ The available widths are:
 
 ### Example combinations
 
-*   [HTML](#combinations-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#combinations-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -290,7 +290,7 @@ The available widths are:
 
 To specify a width at the desktop breakpoint you can use the desktop specific grid classes. For example `govuk-grid-column-two-thirds-from-desktop` will set your column width to be two-thirds width at the desktop breakpoint only.
 
-*   [HTML](#desktop-grid-classes-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#desktop-grid-classes-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -305,7 +305,7 @@ To specify a width at the desktop breakpoint you can use the desktop specific gr
 
 The desktop specific classes also allow you to set the width of the tablet breakpoint by using them in combination with the standard grid classes. For example using `govuk-grid-column-one-half` and `govuk-grid-column-two-thirds-from-desktop` together will mean the column will be one-half at the tablet breakpoint and two-thirds width at desktop.
 
-*   [HTML](#desktop-and-tablet-grid-classes-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#desktop-and-tablet-grid-classes-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -320,7 +320,7 @@ The desktop specific classes also allow you to set the width of the tablet break
 
 ### Nested grids
 
-*   [HTML](#nested-layout-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#nested-layout-example-open-html)
 
 ```
 <div class="govuk-grid-row">
@@ -346,7 +346,7 @@ The width override classes start with `govuk-!-width-`, followed by the width on
 
 These examples are for the generic width override classes - read specific [guidance on setting text input width](https://design-system.service.gov.uk/components/text-input/#use-appropriately-sized-text-inputs).
 
-*   [HTML](#overriding-input-width-spacing-example-open-html)
+*   [HTML](https://design-system.service.gov.uk/styles/layout/#overriding-input-width-spacing-example-open-html)
 
 ```
 <div class="govuk-form-group">

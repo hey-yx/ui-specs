@@ -1,76 +1,71 @@
-# FINDINGS — PayloadDeck API docs
+# FINDINGS · PayloadDeck
 
-Run: `examples/payloaddeck/` · 2026-11-07 · single-file page, no build, verified over `file://`.
+## 1. 合格线落点
 
----
+浏览器实测，session `payloaddeck`，本地 `file://` 直开，1280 / 768 / 375 / 320 四档用 CDP 设备指标覆盖，量的是 `document.documentElement`。
 
-## 1. Where this draft lands against the pass line
+| 项 | 门槛 | 320 | 375 | 768 | 1280 | 判定 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `scrollWidth` / `clientWidth` | 相等 | 320 / 320 | 375 / 375 | 768 / 768 | 1280 / 1280 | 过（0px 溢出） |
+| 外部资源 | 0 | 0 | 0 | 0 | 0 | 过（`performance.getEntriesByType('resource').length`） |
+| 行高 = 字号 + 8 | 全过 | 215 / 215 | 215 / 215 | 225 / 225 | 225 / 225 | 过（0 违例，215–225 个含直接文本节点） |
+| 代码块行高 = 1.5× | 全过 | 41 / 41 | 41 / 41 | 41 / 41 | 41 / 41 | 过（0 违例，均为 21px） |
+| 12px 文本占比 | ≤ 30% | 38 / 256 = 14.8% | 38 / 256 = 14.8% | 48 / 266 = 18.0% | 48 / 266 = 18.0% | 过 |
+| 最小文本对比度 | ≥ 4.5:1 | 4.83 | 4.83 | 4.83 | 4.83 | 过（`#ca3535` 压 `#f4f8fb`） |
 
-All figures below were produced in the same browser session as the delivered file. No estimates.
+分母口径：`body` 下所有含非空直接文本的节点，排除 `script` / `style` / `svg` / visually-hidden / `display:none` 的隐藏面板（隐藏的标签页面板不计入，切到前台才计）。
 
-| Check | Pass line | Measured |
+对比度口径：每个文本节点的前景色与其背景色（沿祖先链逐层做 alpha 合成，直到遇到不透明层）按 WCAG 相对亮度公式换算。全站最低值出现在结果表与错误卡里的红色文字，5.16（白底）与 4.83（淡底）。
+
+逐档色值实测：
+
+| 前景 | 背景 | 比值 |
 | --- | --- | --- |
-| Horizontal overflow at 320 / 375 / 768 / 1280 | `scrollWidth === clientWidth` | 320/320, 375/375, 768/768, 1280/1280 |
-| External requests | 0 | `performance.getEntriesByType('resource').length === 0` at all four widths |
-| Line-height rule (`font-size + 8`) | 0 violations | **218 text nodes, 0 violations** (tolerance 0.6px) |
-| Text contrast | ≥ 4.5:1 | min non-disabled **4.82:1** (`Copied` label); body 19.59, muted 9.03, error 5.16, active tab 8.17 |
-| Non-text boundaries | ≥ 3:1 | input / button / code border **3.65:1**; active tab rule 9.06:1 |
-| Accent share | ≤ 5 % of viewport | **0.575 %** (6,625 px² at 1280×900) |
-| Tabs | state changes, one panel | cURL → Python, 1 visible panel |
-| Copy | confirmation, then revert | badge appears (Clipboard API) and clears after 2 s |
-| Filter | live count + clear + empty state | 9 → 3 (`server`) → 0 (`Showing 0 of 9` + empty state) → 9 |
-| Form | error summary + inline + title | empty submit: 2 errors, 2 inline messages, focus `#error-summary`, title prefixed; valid submit: 0 errors, result visible |
-| Drawer | closed not reachable, open labelled | closed `visibility:hidden`; open `aria-expanded=true`, scrim shown; closes after the 220 ms exit (observed hidden by 600 ms under harness timer throttling), focus returns |
-| TOC tracking | follows h2/h3 and page end | "Send the request", "Read the response", "Error codes", "Version & build" all resolve |
+| `#0b0c0c` | `#ffffff` | 19.59 |
+| `#0b0c0c` | `#f4f8fb` | 18.34 |
+| `#484949` | `#ffffff` | 9.03 |
+| `#484949` | `#f4f8fb` | 8.46 |
+| `#1d70b8` | `#ffffff` | 5.17 |
+| `#1d70b8` | `#f4f8fb` | 4.84 |
+| `#0f385c` | `#ffffff` | 12.07 |
+| `#ffffff` | `#1d70b8` | 5.17 |
+| `#0f7a52` | `#f4f8fb` | 5.01 |
+| `#ca3535` | `#ffffff` | 5.16 |
+| `#ca3535` | `#f4f8fb` | 4.83（全站最低） |
+| `#0b0c0c` | `#d2e2f1` | 14.82 |
 
-The page is 4,205 px tall at 1280×900, 33,651 bytes, one file, zero dependencies.
+页面体积 36,375 字节（单文件，CSS / JS / SVG 全内联）。1280 下文档高 3,980px。
 
----
+## 2. 数值缺口（基准规范缺、按 GAP 回源的）
 
-## 2. Numeric gaps and how they were filled
-
-The gap table lives at `site/dist/ai/guide.md:33`–`site/dist/ai/guide.md:52` ("基准规范缺口与派生"). Each row was applied as written; nothing was improvised per component.
-
-| Gap | Row | Handling | Evidence |
+| 维度 | Primer 给到什么 | 回源 | 取的值 |
 | --- | --- | --- | --- |
-| Colour values | `site/dist/ai/guide.md:46` (`色值`) | Primer defines roles but ships no hex (its value tables are images, `content/color/primer.style--color.md:67`). Took the **GOV.UK palette as one whole set** — paper, canvas, tint, ink, muted, subtle, hair, accent, hover, success, danger, warning bg/stripe | 14 tokens, each cited to `content/color/govuk--colour.md:<line>` in the CSS and in DECISIONS §3 |
-| Type scale | `site/dist/ai/guide.md:47` (`字阶`) | Took the **GOV.UK type scale as one whole set**: 16 / 19 / 24 px | `content/type/govuk--type-scale.md:100`, `content/type/govuk--type-scale.md:92`, `content/type/govuk--type-scale.md:84` |
-| Line height | `site/dist/ai/guide.md:47` ("行高同源定") vs run brief | The brief's hard rule (`font-size + 8`) wins. This is a **recorded divergence**: GDS's own table pairs 19px with 25px, the brief pairs it with 27px | Formula source `content/type/tdesign.tencent.com--fonts.md:67`; DECISIONS §4 |
-| Spacing | `site/dist/ai/guide.md:38` (`间距`) | **Atlassian 8px base**, one scale 4–64 px, no locally invented steps | `content/layout/atlassian.design--spacing.md:32`, `content/layout/atlassian.design--spacing.md:70`–`content/layout/atlassian.design--spacing.md:150` |
-| Motion durations | `site/dist/ai/guide.md:39` (`动效时长与缓动`) | **NN/g 100 / 200 / 300 ms**; enter 300 ms, exit 200 ms (enter longer than exit) | `content/motion/nngroup.com--animation-duration.md:80`, `content/motion/nngroup.com--animation-duration.md:84` |
-| Easing | `site/dist/ai/guide.md:39` | Named curves only, no invented bezier: `ease-in` and `ease-out` from W3C, Atlassian's panel curve | `content/standards/w3c--css-easing-1.md:134`, `content/standards/w3c--css-easing-1.md:138`; `content/motion/atlassian.design--motion.md:72` |
-| Radius | `site/dist/ai/guide.md:40` (`圆角`) | Two derived steps, 4 / 8 px, used everywhere | marked **derived** in DECISIONS §10 |
-| Hairline | `site/dist/ai/guide.md:42` (`发丝线宽`) | 1 px derived for decorative rules; control boundaries use `#858686` at 3.65:1 instead | measured border contrast |
-| Component sizes | `site/dist/ai/guide.md:45` (`组件尺寸`) | Derived and consistent: 32 px buttons, 40 px inputs, 24 px version chip, 12/16 px cell padding | DECISIONS §10 |
-| Touch target + focus ring | `site/dist/ai/guide.md:51` (`触控目标与焦点环`) | 44 px targets at ≤767 px; focus ring 2 px solid accent + 2 px offset, 9.06:1 | `content/layout/primer.style--responsive.md:62`; `content/a11y/w3c--wcag-2.2.md:871` |
-| Overlay scrim | `site/dist/ai/guide.md:50` (`弹层遮罩`) | One scrim `rgba(0,0,0,0.45)`, no second layer | derived, one value globally |
-| Line length | `site/dist/ai/guide.md:48` (`正文行长`) | **No gap**: the main source caps lines at ~80 characters, so the 60–75 fallback was not used | `content/type/primer.style--typography.md:67` |
-| Colour-as-text | `site/dist/ai/guide.md:43` (`色阶当文字`) | Every text colour recomputed against its real background; accent on tint 8.36:1, hover on white 12.05:1; the pale warning stripe is decoration only, never text | measured values in DECISIONS §3 |
-| First-screen share | `site/dist/ai/guide.md:49` | **Not applicable**: no hero, the page opens on the reference itself | — |
-| Numeric font / money / chart geometry | `site/dist/ai/guide.md:41`, `site/dist/ai/guide.md:44`, `site/dist/ai/guide.md:52` | **Not applicable**: no numerals-in-columns, no prices, no charts | — |
+| 色值 | 只有语义角色与 token 名，明确不给 hex（`content/color/primer.style--color.md:67` `:170`） | GOV.UK 调色板（`content/color/govuk--colour.md`） | 整套 12 个值，见 DECISIONS §3；语义角色→值的映射标 derived |
+| 字号 | 只给 rem、unitless 行高、4px 网格的原则（`content/type/primer.style--typography.md:29`），无档点 | GOV.UK type scale | 36 / 27 / 19 / 16（`:68` `:76` `:92` `:100`） |
+| 间距 | 无 spacing scale，只有 content padding 16 / 24（`content/layout/primer.style--layout.md:111-118`） | Atlassian 8px 基数 | 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64（`content/layout/atlassian.design--spacing.md:70` 起） |
+| 断点 | 有，320 / 544 / 768 / 1012 / 1280 / 1400（`content/layout/primer.style--layout.md:96-103`） | 直接用 | 取 544 / 768 / 1012 |
+| 容器宽 | 1280 上限（`content/layout/primer.style--layout.md:225`） | 直接用 | 1280，padding 16（<1012）/ 24（≥1012） |
+| 行长 | 建议 ≤80 字符（`content/type/primer.style--typography.md:67`），无具体 measure | GAP 正文行长条 | 58ch（落在 60–75 字符区间内），标 derived |
+| 触控目标 | AA 24px，建议 AAA 44px（`content/layout/primer.style--responsive.md:54`） | 直接用 + 派生 | 标签页与按钮 28–32px，标 derived |
 
-Two-source rule respected: primer owns structure, tone and semantic roles; GOV.UK owns the palette and type scale; Atlassian owns spacing; NN/g + W3C own motion. No value is blended from two palettes or two scales.
+## 3. 新缺口（库内无对应原文，成套派生）
 
----
+以下 7 项库里没有任何一篇给出数值，按 GAP 兜底成套自定，全站只此一套，不逐处随手取：
 
-## 3. New gaps (not covered by the library as it stands)
+1. **行高 = 字号 + 8。** 批次硬规则，与 GOV.UK 的字号/行高配对（19/25 给 +6）冲突，听批次规则。代价：36px 的 h1 只有 44px 行高（1.22 倍），大标题偏紧，单行标题看不出，两行标题（本站 h1 强制两行）行间比常规排版紧一档。
+2. **代码块行高 1.5×（14/21）。** 行业惯例，标 derived。21 不在 4px 网格上，与 Primer 的网格原则（`content/type/primer.style--typography.md:29`）不严格一致；换来的是等宽块的可扫读性。
+3. **圆角 4 / 8 两档。** 无原文。
+4. **发丝线 1px。** 无原文。装饰分隔 `#cecece`（1.47:1，只做分隔不承担边界），控件边界用 `#0b0c0c`。
+5. **焦点环 2px 实线 + 2px 偏移，`#0b0c0c`。** 没用 GOV.UK 的黄色焦点底 `#ffdd00`：黄压白底只有 1.3:1，不满足非文本 3:1，改用高对比黑环。
+6. **组件尺寸。** 标签页高 28px、Copy 32px、方法 chip 20px、表格行 44–50px。Primer 不给组件尺寸，成套自定。
+7. **插图的几何参数。** 首屏内联 SVG 的框高、箭头、字号（12 / 11.5）自定，标 derived；构图原则照响应结构本身，不引外部图。
 
-These are the places where this build needed a decision the library does not currently supply. All are candidates for backfill.
+## 4. 已知局限
 
-1. **Docs shell geometry.** Primer's split-page article describes regions but gives no column widths. This page uses 208 px / fluid / 220 px at ≥1012 px, chosen so the content column stays ≥640 px. No source exists for those two numbers; they are recorded as derived, but a `docs shell` pattern with tested widths would remove the guesswork.
-2. **In-page TOC behaviour.** No article states how the current heading should be marked (this build uses `aria-current` on both rails, chapter = `location`, TOC = `true`), nor how to handle the last section at the bottom of the page (this build force-selects the final heading when the scroll is at the end).
-3. **Code block chrome.** Tabs inside a code sample, a copy button with a transient success label, and long-line handling are standard in developer docs; the library has no component entry for any of the three. The success label borrows Primer's green check rule (`content/patterns/primer--notification-messaging.md:81`, `content/patterns/primer--notification-messaging.md:85`) but the 2 s duration is invented.
-4. **Drawer width and scrim on docs rails.** The navigation article says the sidebar becomes a menu on narrow viewports (`content/patterns/primer--navigation.md:185`) but gives no width, no scrim, and no breakpoint. `min(86vw,300px)` and 767 px are both derived.
-5. **Filter over a table.** Carbon covers filter categories and clear-all (`content/patterns/carbon--filtering.md:122`, `content/patterns/carbon--filtering.md:132`) but not the combined "filter input + live count + empty state" unit used here; the wording `Showing N of 9` is invented.
-6. **Validation on a two-field demo form.** GOV.UK covers the error summary and inline messages in detail (`content/patterns/govuk--validation.md:66`–`content/patterns/govuk--validation.md:68`), but not the case where the whole form is a code sample that also has a success result panel; hiding the result on error is this build's choice.
-
----
-
-## 4. Known limits
-
-- **Static file only.** Opened as `file://`; no server, no build step, no framework. Verified in Chromium via CDP.
-- **Harness limits that shaped the implementation.** The headless session does not advance `requestAnimationFrame` or CSS transitions, does not dispatch native `scroll` events on programmatic scroll, and refuses `navigator.clipboard` without a real user gesture. Two implementation choices exist because of this: the drawer exit uses a timer-removed `.closing` class instead of transitioning `visibility`, and the TOC has a 250 ms `setInterval` fallback next to the normal `scroll` listener. Both are correct in a real browser; the fallback also covers browsers that throttle scroll handlers.
-- **Copy fallback not exercised.** The code prefers `navigator.clipboard` and falls back to a hidden `<textarea>` + `execCommand`. The success path was verified through a real mouse gesture; the fallback branch was not triggered in this browser.
-- **JavaScript-dependent interactions.** Tabs, copy, filter and the try-it result need JS. Without it the page still reads end to end: the cURL panel is the default visible tab, all sections and the error table render, and the form carries `novalidate` so the browser never shows native validation bubbles; it simply cannot validate or return a result.
-- **Single theme.** Light only; no dark mode tokens, because the intent did not ask for one and the palette set is single-valued.
-- **Contrast figures are for the delivered palette.** Any palette swap requires recomputing the whole table; the disabled state (3.29:1) is deliberately below AA and relies on the WCAG inactive-control exemption.
+1. **只做浅色。** Primer 的 color 篇要求 light / dark 双模式（`content/color/primer.style--color.md:31`），本案例只交付浅色一套 token。深色要另一套语义映射并对每个 text/background 组合复算对比度，不属于本次范围，未做。
+2. **示例数据是虚构的。** `api.payloaddeck.dev` 与所有响应、耗时、行数是产品设定的示例，不是真实测量。页面上写死的 `200 · 24 ms`、`207 · 1 unparsed` 是示意值。
+3. **12px 占比随视口变化。** 320/375 是 14.8%，768/1280 是 18.0%：小屏时记录行堆叠，类型标签被 `display:none` 隐藏，分母也小。同一份内容在两档宽度下分子分母都不同，报数时要带视口。
+4. **`preview.png` 只覆盖首屏。** 1280×800，滚动后的四个区块没有成品图，视觉验收需要打开 `index.html`。
+5. **动效只有两处**（导航光标 1.05s、页脚标语条 38s），`prefers-reduced-motion: reduce` 下全部停掉，此时标语条静止在第一帧，靠两端遮罩淡出收边。没有做滚动进场、没有做过渡曲线（因此 motion 的回源文章只用于「有没有必要」的裁决，时长没进 token）。
+6. **剪贴板依赖浏览器权限。** `navigator.clipboard` 不可用时退到 `execCommand('copy')`，再不行会静默失败但按钮状态仍会回退；无 JS 时 Copy 按钮无效，代码本身仍可手选。
+7. **12px 元数据与 14px 等宽的分工是设计判断。** 库内没有任何一篇给「元数据字号」，12px 的下限来自 TDesign 的桌面端最小字号（`content/type/tdesign.tencent.com--fonts.md:44`），本次只在纯元数据上用，未用于任何成句文本。

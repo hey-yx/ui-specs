@@ -10,6 +10,7 @@
  * 在构建流水线里调用（site/src/integrations/pipeline.mjs），build 时生效。
  */
 import { SECTIONS } from '../data/sections.ts'
+import { REQUIRED_RULES } from '../data/guide.ts'
 
 /** loadDoc()（content.js）的返回结构：frontmatter 字段平铺在顶层 */
 export interface Doc {
@@ -94,13 +95,12 @@ export interface StarPointFile {
   name: string
   domain: string
   select: string
-  value_notes?: string
   checks?: StarPointCheck[]
   tasks: string[]
   articles: string[]
 }
 
-/** 测量数值：带单位的量、色值、「N 到 M」区间。select 里不许有，只许进 value_notes */
+/** 测量数值：带单位的量、色值、「N 到 M」区间。select 里不许有，数值只许来自原文 */
 const MEAS_RE =
   /(\d+\s*(px|rem|em|%|:1|°|ms|秒|倍))|(#[0-9a-fA-F]{3,8})|(\d+\s*(到|~|–|-)\s*\d+\s*(px|%|rem|em|秒|ms|°)?)/
 
@@ -110,6 +110,7 @@ export function validateStarPoints(
   byFile: Map<string, Doc>,
   sectionKeys: Set<string>,
   extraArticles: string[] = [],
+  tasks: Record<string, unknown> = {},
 ): string[] {
   const errors: string[] = []
   const seen = new Set<string>()
@@ -120,10 +121,7 @@ export function validateStarPoints(
     if (!p.name) errors.push(`${where}：缺 name`)
     if (!p.select) errors.push(`${where}：缺 select`)
     else if (MEAS_RE.test(p.select)) {
-      errors.push(`${where}：select 含测量数值（数值只许进 value_notes）`)
-    }
-    if (p.value_notes !== undefined && !/\d/.test(p.value_notes)) {
-      errors.push(`${where}：value_notes 不含任何数字`)
+      errors.push(`${where}：select 含测量数值（数值只许来自原文）`)
     }
     if (p.checks !== undefined) {
       if (!Array.isArray(p.checks) || p.checks.length < 1 || p.checks.length > 2) {
@@ -171,12 +169,22 @@ export function validateStarPoints(
     ) {
       errors.push(`${where}：tasks 必须是 1-3 个 s1..s19`)
     }
-    if (!Array.isArray(p.articles) || p.articles.length < 1 || p.articles.length > 6) {
-      errors.push(`${where}：articles 必须 1-6 个`)
+    if (!Array.isArray(p.articles) || p.articles.length < 1 || p.articles.length > 8) {
+      errors.push(`${where}：articles 必须 1-8 个`)
     } else {
       for (const a of p.articles) {
         if (!byFile.has(a)) errors.push(`${where}：文章不存在 content/${a}`)
       }
+    }
+  }
+  // 必选规则引用必须存在：删场景或删光某类点会让「必选」静默失效
+  for (const rule of REQUIRED_RULES) {
+    for (const t of rule.tasks) {
+      if (!(t in tasks)) errors.push(`必选规则 ${rule.title}：场景 ${t} 不存在`)
+    }
+    const prefix = rule.pointPrefix
+    if (prefix && !points.some((p) => p.id.startsWith(prefix))) {
+      errors.push(`必选规则 ${rule.title}：没有 id 以 ${prefix} 开头的设计点`)
     }
   }
   // 每篇必须被至少一个点牵引：新文章不挂点、旧点引用被删，都会让构建失败

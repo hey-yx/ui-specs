@@ -13,17 +13,6 @@
 import { readFile, readdir } from 'node:fs/promises'
 import { join, relative, sep } from 'node:path'
 
-/** 各来源站点的根地址，用于把文档里的根相对路径补全成绝对地址 */
-const BASES = [
-  ['ant.design--', 'https://ant.design'],
-  ['govuk--', 'https://design-system.service.gov.uk'],
-  ['carbondesignsystem.com--', 'https://carbondesignsystem.com'],
-  ['polaris.shopify.com--', 'https://polaris.shopify.com'],
-  ['designsystem.digital.gov--', 'https://designsystem.digital.gov'],
-  ['web.dev--', 'https://web.dev'],
-  ['primer.style--', 'https://raw.githubusercontent.com/primer/design/main/content'],
-]
-
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/
 
 /**
@@ -86,18 +75,100 @@ export function cleanBody(body, file) {
   return out.trim()
 }
 
-/** 正文里的根相对路径 → 来源站点绝对地址 */
-export function absolutizeLinks(html, file) {
-  const name = file.split('/').pop() ?? ''
-  let base = null
-  for (const [prefix, url] of BASES) {
-    if (name.startsWith(prefix)) {
-      base = url
-      break
+/** 本站自己的路由前缀：正文里指向这些路径的链接不改写 */
+const SITE_ROUTE_RE = /^\/(?:a|s|md|ai|api|examples|briefs|starmap)\/|^\/(?:catalog\.json|index\.html)$/
+// 本站静态资源：入库图本地化后存 site/public/img/，正文用 /img/... 引用
+const LOCAL_ASSET_RE = /^\/img\//
+
+/**
+ * 每篇的来源地址 → 链接解析基准。
+ * 普通文档站直接用页面地址；GitHub raw 与 blob 源用仓库 blob 地址，
+ * 这样正文里的相对链接会落到 GitHub 上对应的文件或目录，而不是本站路径。
+ * asset 基准给 src 用：raw 源保持 raw，图片才能直接显示。
+ */
+function basesFor(source) {
+  if (!source) return null
+  let url
+  try {
+    url = new URL(source)
+  } catch {
+    return null
+  }
+  if (url.hostname === 'raw.githubusercontent.com') {
+    const [, user, repo, branch, ...rest] = url.pathname.split('/')
+    if (!user || !repo || !branch) return null
+    return {
+      link: `https://github.com/${user}/${repo}/blob/${branch}/${rest.join('/')}`,
+      asset: source,
+      repo: true,
     }
   }
-  if (!base) return html
-  return html.replace(/(src|href)="\/(?!\/)/g, `$1="${base}/`)
+  if (url.hostname === 'github.com' && url.pathname.includes('/blob/')) {
+    return {
+      link: source,
+      asset: `https://raw.githubusercontent.com/${url.pathname.split('/blob/')[1]}`,
+      repo: true,
+    }
+  }
+  return { link: source, asset: source, repo: false }
+}
+
+/**
+ * 仓库来源的文章里，根相对路径（`/images/...`）指的是它自己文档站的公开路径。
+ * 文件名前缀就是那个站的域名（`polaris.shopify.com--xxx.md`），直接拿来当站点根，
+ * 不去维护仓库到站点的对照表。
+ */
+function siteOriginOf(file) {
+  const prefix = (file?.split('/').pop() ?? '').split('--')[0]
+  return /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(prefix) ? `https://${prefix}` : null
+}
+
+/** 解析单条链接；外部、锚点、协议相对与本站路由返回 null（保持原样） */
+function resolveHref(value, base) {
+  if (!value) return null
+  if (/^([a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return null
+  if (SITE_ROUTE_RE.test(value)) return null
+  let abs
+  try {
+    abs = new URL(value, base)
+  } catch {
+    return null
+  }
+  // GitHub 上没扩展名的目标是目录，blob 打不开，换成 tree
+  if (abs.hostname === 'github.com' && (value.endsWith('/') || !(abs.pathname.split('/').pop() ?? '').includes('.'))) {
+    abs.pathname = abs.pathname.replace('/blob/', '/tree/')
+  }
+  return abs.href
+}
+
+/**
+ * 正文里的相对链接与根相对路径 → 上游绝对地址。
+ *
+ * 源文里的链接是按原站路径写的（`/foundations/color`、`../button/`），
+ * 直接渲染会按本站路径解析成 404。这里以该篇 frontmatter 的 source 为基准补全。
+ * 仓库来源的两类路径分开处理：相对路径落到仓库 blob/tree，
+ * 根相对路径落到该篇文件名前缀那个站点（拿不到站点就不改）。
+ * 代码块里的内容是示例文本，不能改：`<pre>` 与 `<code>` 整段跳过。
+ */
+export function absolutizeLinks(html, source, file) {
+  const bases = basesFor(source)
+  if (!bases) return html
+  const siteOrigin = bases.repo ? siteOriginOf(file) : null
+  return html.replace(
+    /(<pre\b[^>]*>[\s\S]*?<\/pre>|<code\b[^>]*>[\s\S]*?<\/code>)|(href|src)=(["'])([^"']*)\3/gi,
+    (all, code, attr, quote, value) => {
+      if (code) return code
+      // 本站静态资源（site/public/img/*）不能拼上游域名，否则渲染成源站路径 404
+      if (LOCAL_ASSET_RE.test(value)) return all
+      if (bases.repo && value.startsWith('/')) {
+        if (!siteOrigin) return all
+        const abs = resolveHref(value, siteOrigin)
+        return abs ? `${attr}=${quote}${abs}${quote}` : all
+      }
+      const abs = resolveHref(value, attr.toLowerCase() === 'src' ? bases.asset : bases.link)
+      return abs ? `${attr}=${quote}${abs}${quote}` : all
+    },
+  )
 }
 
 /** 页内锚点比较用的归一化：统一全半角与大小写，去掉空白、标点与符号 */

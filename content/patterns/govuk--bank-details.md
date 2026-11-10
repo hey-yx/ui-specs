@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Bank details 银行账户"
 source: https://design-system.service.gov.uk/patterns/bank-details/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-8
 publisher: "GOV.UK Design System"
@@ -13,75 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/bank-details/](https://design-system.service.gov.uk/patterns/bank-details/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
-**示例：default**
-
-```njk
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-<h1 class="govuk-heading-l">Bank or building society account details</h1>
-
-{{ govukInput({
-  label: {
-    text: "Name on the account"
-  },
-  id: "name-on-the-account",
-  name: "nameOnTheAccount",
-  autocomplete: "name",
-  spellcheck: false
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "Sort code"
-  },
-  classes: "govuk-input--width-5 govuk-input--extra-letter-spacing",
-  hint: {
-    text: "Must be 6 digits long"
-  },
-  id: "sort-code",
-  name: "sortCode",
-  inputmode: "numeric",
-  spellcheck: false
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "Account number"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  hint: {
-    text: "Must be between 6 and 8 digits long"
-  },
-  id: "account-number",
-  name: "accountNumber",
-  inputmode: "numeric",
-  spellcheck: false
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "Building society roll number (if you have one)"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  hint: {
-    text: "You can find it on your card, statement or passbook"
-  },
-  id: "roll-number",
-  name: "rollNumber",
-  spellcheck: false
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/bank-details/#bank-details-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/bank-details/#bank-details-example-nunjucks)
 
 ## When to use this pattern
 
@@ -123,56 +60,16 @@ Let users choose to get paid by an alternative method.
 
 Adapt this question depending on what payment options your users need and what your service can support.
 
-**示例：branch**
-
-```njk
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-
-{{ govukRadios({
-  name: "methodOfPayment",
-  fieldset: {
-    legend: {
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l",
-      text: "How do you want to be paid?"
-    }
-  },
-  items: [
-    {
-      value: "bank-account-or-building-society",
-      text: "UK bank or building society account"
-    },
-    {
-      value: "non-uk-bank-account",
-      text: "Non-UK bank account"
-    },
-    {
-      value: "cheque",
-      text: "Cheque"
-    },
-    {
-      value: "none",
-      text: "None of the above",
-      hint: {
-        text: "We'll contact you to arrange payment"
-      }
-    }
-  ]
-}) }}
-
-{{ govukButton({
-  text: "Continue"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/bank-details/#branch-question-bank-details-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/bank-details/#branch-question-bank-details-example-nunjucks)
 
 ### International bank account details
 
 If you expect your users will have a non-UK bank account, you’ll need to:
 
-- use different fields to sort code and account number - usually BIC code (also known as 'SWIFT code') and IBAN
-- do research on other fields you may need to add for the countries your service supports
-- only show the fields for the country your user selects
+*   use different fields to sort code and account number - usually BIC code (also known as ‘SWIFT code’) and IBAN
+*   do research on other fields you may need to add for the countries your service supports
+*   only show the fields for the country your user selects
 
 If you expect your users to have a non-UK bank account, give them an option to select this.
 
@@ -184,120 +81,76 @@ Only show the fields that relate to that country.
 
 Most countries need the IBAN and BIC, sometimes known as the SWIFT code.
 
-**示例：international**
-
-```njk
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "BIC or SWIFT code"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  hint: {
-    text: "Must be between 8 and 11 characters long – you can ask your bank or check your bank statement"
-  },
-  id: "bic-code",
-  name: "bicCode",
-  spellcheck: false
-}) }}
-
-{{ govukInput({
-  label: {
-    text: "IBAN"
-  },
-  classes: "govuk-input--extra-letter-spacing",
-  hint: {
-    text: "You can ask your bank or check your bank statement"
-  },
-  id: "iban",
-  name: "iban",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/bank-details/#international-bank-account-details-bank-details-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/bank-details/#international-bank-account-details-bank-details-example-nunjucks)
 
 ### Error messages
 
 Error messages should be styled like this:
 
-**示例：error**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Sort code"
-  },
-  classes: "govuk-input--width-5 govuk-input--extra-letter-spacing",
-  hint: {
-    text: "Must be 6 digits long"
-  },
-  value: "12",
-  id: "sort-code",
-  name: "sortCode",
-  inputmode: "numeric",
-  spellcheck: false,
-  errorMessage: {
-    text: "Enter a valid sort code like 309430"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/bank-details/#errors-bank-details-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/bank-details/#errors-bank-details-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
 #### If the name on the account is empty
 
-Say 'Enter the name on the account'.
+Say ‘Enter the name on the account’.
 
 #### If the sort code is empty
 
-Say 'Enter a sort code'.
+Say ‘Enter a sort code’.
 
 #### If the sort code is not in the correct format
 
-Say 'Enter a valid sort code like 309430'.
+Say ‘Enter a valid sort code like 309430’.
 
 #### If the account number is empty
 
-Say 'Enter an account number'
+Say ‘Enter an account number’
 
 #### If the account number is not in the correct format
 
-Say 'Enter a valid account number like 00733445'.
+Say ‘Enter a valid account number like 00733445’.
 
 #### If the account number is too long or too short
 
-Say 'Account number must be between 6 and 8 digits'.
+Say ‘Account number must be between 6 and 8 digits’.
 
 #### If the building society roll number is too long
 
-Say 'Building society roll number must be between 1 and 18 characters'.
+Say ‘Building society roll number must be between 1 and 18 characters’.
 
 #### If the building society roll number uses characters that are not allowed
 
-Say 'Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops'.
+Say ‘Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops’.
 
 ## Research on this pattern
 
 This pattern was originally contributed by a team at the Ministry of Justice.
 
-It has not been tested in user research yet. It's closely based on the pattern used by GOV.UK Pay, and patterns used by the following government services.
+It has not been tested in user research yet. It’s closely based on the pattern used by GOV.UK Pay, and patterns used by the following government services.
 
-**Department for Work and Pensions**<br>
-Universal Credit<br>
-Get Jobseeker’s Allowance<br>
+**Department for Work and Pensions**
+
+Universal Credit
+
+Get Jobseeker’s Allowance
+
 Get your State Pension
 
-**HM Revenue & Customs**<br>
-Register your anti-money laundering supervision<br>
+**HM Revenue & Customs**
+
+Register your anti-money laundering supervision
+
 Tax-Free Childcare
 
-**Office of the Public Guardian**<br>
+**Office of the Public Guardian**
+
 Claim a power of attorney refund
 
-**Ministry of Justice**<br>
+**Ministry of Justice**
+
 Claim for costs of a child’s funeral
 
 If you’ve used this pattern, get in touch to share your user research findings.
@@ -306,13 +159,13 @@ If you’ve used this pattern, get in touch to share your user research findings
 
 The team that developed this pattern only found one service, Claim power of attorney refund, that warns users their bank details will be hidden for their security.
 
-But GoCardless says to display a user's bank details again before the user submits them.
+But GoCardless says to display a user’s bank details again before the user submits them.
 
 Some users with older bank or building society accounts might have account numbers that are 9 or 10 digits long. Research is needed to confirm that these users know how to shorten their account number to fit into the field.
 
 More research is also needed on:
 
-- how to ask users for their bank details in the context of setting up Direct Debit payments
-- whether bank details should be shown or not on a ‘Check your answers’ page and how that affects this pattern
-- how to handle international bank accounts so users are only asked for information that’s needed based on the location of their bank account
-- the information required to pay credit union accounts and how to ask credit union members for that information
+*   how to ask users for their bank details in the context of setting up Direct Debit payments
+*   whether bank details should be shown or not on a ‘Check your answers’ page and how that affects this pattern
+*   how to handle international bank accounts so users are only asked for information that’s needed based on the location of their bank account
+*   the information required to pay credit union accounts and how to ask credit union members for that information

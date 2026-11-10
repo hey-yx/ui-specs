@@ -1,5 +1,5 @@
 ---
-title: "NHS.UK · Typography 字体排印"
+title: "NHS.UK · Foundation · Typography 字体排印"
 source: https://service-manual.nhs.uk/design-system/styles/typography
 section: type
 tag: "规范"
@@ -9,7 +9,7 @@ id: type-16
 publisher: "NHS.UK"
 ---
 
-# NHS.UK · Typography 字体排印
+# NHS.UK · Foundation · Typography 字体排印
 
 > 来源：[https://service-manual.nhs.uk/design-system/styles/typography](https://service-manual.nhs.uk/design-system/styles/typography)
 

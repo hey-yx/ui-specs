@@ -15,42 +15,12 @@ publisher: "IBM Carbon"
 
 ---
 
-
-
-
-
-
-
-
 > Buttons are used to initialize an action. Button labels express what action will occur when the user interacts with it.
-
-
 
 **Note:** Some of the examples we discuss here include fluid (full-span) and
 hanging buttons which are not available for production use. This guidance
 reflects our current understanding of these topics and we are working towards
 releasing this work in a future version of Carbon.
-
-
-
-
-
-Live demo
-Overview
-Formatting
-Content
-Universal behaviors
-Primary button
-Secondary button
-Tertiary button
-Ghost button
-Danger button
-Modifiers
-Related
-References
-Feedback
-
-
 
 ## Live demo
 
@@ -100,18 +70,9 @@ In a Carbon button, the label is always left-aligned, not center-aligned. The
 icons in a button with a label is right-aligned but in an icon only button, the
 icon is centered.
 
-
-
-
-![Button anatomy](images/button_usage_2.png)
-
-
-
+![Button anatomy](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_2.png)
 
 Anatomy of buttons
-
-
-
 
 #### 1. Button
 
@@ -121,9 +82,6 @@ A. Label <br /> B. Container <br /> C. Icon (optional)
 
 A. Label <br /> C. Icon (optional)
 
-
-
-
 #### 2. Tertiary button
 
 A. Label <br /> B. Container <br /> C. Icon (optional)
@@ -131,9 +89,6 @@ A. Label <br /> B. Container <br /> C. Icon (optional)
 #### 4. Icon button
 
 B. Container <br /> C. Icon
-
-
-
 
 ### Button sizes
 
@@ -155,13 +110,7 @@ We do not recommend mixing different button sizes in #button-groups.
 | Extra large        | Use when buttons bleed to the edge of a larger component, like in the context of modals, side panel and narrow tearsheets.                        |
 | 2XL                | Use when buttons bleed to the edge of a full-screen component, like in the context of large tearsheets.                                           |
 
-
-
-
-![Button sizes](images/button_usage_3.png)
-
-
-
+![Button sizes](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_3.png)
 
 Sizes of buttons in relation to its usage.
 
@@ -189,18 +138,16 @@ A high-emphasis button can be accompanied by medium- and low-emphasis buttons
 that perform less important actions. Keep in mind that you should only group
 together calls to action that have a relationship to one another.
 
-
   
 
-![Do use high-emphasis and medium-emphasis buttons in a button group.](images/button_usage_8.png)
+![Do use high-emphasis and medium-emphasis buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_8.png)
 
   
   
 
-![Do not use two high-emphasis buttons in a button group.](images/button_usage_9.png)
+![Do not use two high-emphasis buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_9.png)
 
   
-
 
 ### Alignment
 
@@ -228,13 +175,7 @@ button locations include:
 - Cards
 - Toolbars
 
-
-
-
-![Primary button context](images/button_usage_10.png)
-
-
-
+![Primary button context](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_10.png)
 
 Alignment of buttons across various layouts.
 
@@ -252,15 +193,9 @@ padding of 16px to the left and a 64px padding to the right of the button label.
 The button label determines the button’s width. Refer to the
 [Style tab](/components/button/style#button-structure) for more guidance.
 
-
-
-
-![Example of a fixed width primary button in a layout.](images/button_usage_bg_1.png)
+![Example of a fixed width primary button in a layout.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_1.png)
 
 Example of a fixed width primary button in a layout.
-
-
-
 
 #### Hanging versus non-hanging button alignment
 
@@ -274,18 +209,16 @@ don’t have a visible container in the default state, such as ghost button and
 danger ghost button, refer to
 [ghost button](/components/button/usage/#ghost-button) alignment.
 
-
   
 
-![Example of a fixed width button’s hanging alignment.](images/button_usage_bg_2.png)
+![Example of a fixed width button’s hanging alignment.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_2.png)
 
   
   
 
-![Example of a fixed width button’s non-hanging alignment.](images/button_usage_bg_3.png)
+![Example of a fixed width button’s non-hanging alignment.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_3.png)
 
   
-
 
 #### Fluid width button
 
@@ -300,18 +233,10 @@ on the page. Ideally, when using groups of related buttons (not including ghost
 buttons unless in a tearsheet or modal), they should all be the same width. See
 button groups below for more detailed information.
 
-
-
-
-![Example of a fluid width primary button matching the width of a card in a layout.](images/button_usage_bg_4.png)
-
+![Example of a fluid width primary button matching the width of a card in a layout.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_4.png)
 
   Example of a fluid width primary button matching the width of a card in a
   layout.
-
-
-
-
 
 ### Button groups
 
@@ -325,15 +250,9 @@ tertiary button can be used in conjunction with a primary button. In fact, due
 to the visual weight of the secondary button, it’s recommended to use tertiary
 or ghost buttons in layouts with more than three calls to action.
 
-
-
-
-![Example of button groups in a UI.](images/button_usage_bg_5.png)
+![Example of button groups in a UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_5.png)
 
 Example of button groups in a UI.
-
-
-
 
 #### Button groups versus menu buttons
 
@@ -344,18 +263,9 @@ the amount of space these actions take up on a page. Alternatively, for
 interfaces that need many common actions or functions, consider using a
 [toolbar](https://pages.github.ibm.com/carbon/ibm-products/components/toolbar/usage/).
 
+![Do use menu buttons to group meaningful actions being applied to the same data.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_6.png)
 
-
-
-![Do use menu buttons to group meaningful actions being applied to the same data.](images/button_usage_bg_6.png)
-
-
-
-
-![Do not use many individual buttons applying to the same data.](images/button_usage_bg_7.png)
-
-
-
+![Do not use many individual buttons applying to the same data.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_7.png)
 
 #### Button width in button groups
 
@@ -366,28 +276,20 @@ longest button label.
 _Note: We recommend following this guidance for both the toolbar and the batch
 actions toolbar as well._
 
-
-
-
-![Example of button width in button groups.](images/button_usage_bg_8.png)
+![Example of button width in button groups.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_8.png)
 
 Example of button width in button groups.
 
-
-
-
-
   
 
-![Do apply the same width to all buttons in a group, even if they don’t bleed.](images/button_usage_bg_9.png)
+![Do apply the same width to all buttons in a group, even if they don’t bleed.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_9.png)
 
   
   
 
-![Do not make buttons in a group different widths.](images/button_usage_bg_10.png)
+![Do not make buttons in a group different widths.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_10.png)
 
   
-
 
 #### Hanging versus non-hanging fluid width button group alignment
 
@@ -405,18 +307,9 @@ buttons by treating the button group as a single object (rather than two
 separate entities) on the grid. Each button will essentially span 50% of its
 container with a programmatic 16px gutter between them.
 
+![Example of hanging buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_11.png)
 
-
-
-![Example of hanging buttons in a button group.](images/button_usage_bg_11.png)
-
-
-
-
-![The button group is treated as one element on the grid to achieve a 16px gutter between the two, without the gutter hang.](images/button_usage_bg_12.png)
-
-
-
+![The button group is treated as one element on the grid to achieve a 16px gutter between the two, without the gutter hang.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_12.png)
 
 #### Fluid button groups
 
@@ -431,28 +324,20 @@ ghost button can have a fluid width when paired with other buttons in a group.
 Also, as a general rule, fluid buttons are never left-aligned in a layout or a
 container—they’re either right-aligned or span the full width of the container.
 
-
-
-
-![Login screen using a fluid input field and a fluid button.](images/button_usage_11.png)
+![Login screen using a fluid input field and a fluid button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_11.png)
 
 Login screen using a fluid input field and a fluid button.
 
-
-
-
-
   
 
-![Do bleed ghost button hovers when they are paired with other fluid buttons.](images/button_usage_12.png)
+![Do bleed ghost button hovers when they are paired with other fluid buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_12.png)
 
   
   
 
-![Do not use a tertiary button in a fluid application.](images/button_usage_13.png)
+![Do not use a tertiary button in a fluid application.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_13.png)
 
   
-
 
 #### Fluid button border
 
@@ -462,17 +347,9 @@ interactive UI elements. The border is a recommended feature to improve
 accessibility. Refer to the
 [Style tab](/components/button/style#button-groups-structure) for more guidance.
 
-
-
-
-![Example of $button-separator token border between fluid buttons.](images/button_usage_14.png)
-
+![Example of $button-separator token border between fluid buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_14.png)
 
   Example of $button-separator token border between fluid buttons.
-
-
-
-
 
 #### Horizontally arranged groups
 
@@ -482,22 +359,12 @@ left-aligned and positioned to the left of the secondary/tertiary button on
 full-page designs. The primary button will be right-aligned and appear to the
 right of the secondary/tertiary button within wizards and dialog windows.
 
-
-
 **Note:** This guidance has changed. Previously we advocated maintaining the
 primary button position to the right of the secondary button when the button
 group was left-aligned. After talking to teams and doing more research, we’ve
 revised our position.
 
-
-
-
-
-
-![Button groups in context](images/button_usage_23.png)
-
-
-
+![Button groups in context](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_23.png)
 
 #### Vertically stacked button groups
 
@@ -514,13 +381,7 @@ button is below.
 _Note: Experimenting with stacked fluid buttons would require an override to the
 existing code._
 
-
-
-
-![Fluid and default stacked button group examples](images/button_usage_24.png)
-
-
-
+![Fluid and default stacked button group examples](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_24.png)
 
 #### Button group combinations
 
@@ -529,73 +390,55 @@ use case. We recommend the following combination of button groups.
 
 Button groups with a primary button
 
-
-
-
 | Number of buttons | Recommended combinations                                                                                                                                                                                                                                                                                                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 2                 | Primary and secondary buttonPrimary and tertiary buttonPrimary and ghost buttonPrimary and danger tertiary buttonDanger primary and secondary buttonDanger primary and ghost button |
 | 3                 | Primary, secondary, and tertiary buttonPrimary, secondary, and ghost buttonPrimary and 2 secondary buttonsPrimary and 2 tertiary buttonsPrimary, tertiary, and danger tertiary                           |
 
-
-
-
 Button groups without a primary button
-
-
-
 
 | Number of buttons | Recommended combinations                                                                                                                                 |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2                 | 2 Tertiary buttonsTertiary and ghost button2 Ghost buttons |
 | 3                 | 3 Tertiary buttons2 Tertiary and 1 danger tertiary button                       |
 
-
-
-
 #### Button group combinations to avoid
 
 Button groups can consist of different button variants depending on the product
 use case. We recommend avoiding the following combination of button groups.
 
-
   
 
-![Do not use two high-emphasis buttons in a button group.](images/button_usage_bg_14.png)
-
-  
-  
-
-![Do not use two high-emphasis buttons in a button group.](images/button_usage_bg_13.png)
-
-  
-
-
-
-  
-
-![Do not use the secondary button in conjunction with non-primary buttons.](images/button_usage_bg_16.png)
+![Do not use two high-emphasis buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_14.png)
 
   
   
 
-![Do not use tertiary and danger tertiary buttons together.](images/button_usage_bg_18.png)
+![Do not use two high-emphasis buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_13.png)
 
   
 
-
-
   
 
-![Do not use primary and danger ghost buttons together.](images/button_usage_bg_15.png)
+![Do not use the secondary button in conjunction with non-primary buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_16.png)
 
   
   
 
-![Do not use tertiary and danger ghost buttons together.](images/button_usage_bg_17.png)
+![Do not use tertiary and danger tertiary buttons together.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_18.png)
 
   
 
+  
+
+![Do not use primary and danger ghost buttons together.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_15.png)
+
+  
+  
+
+![Do not use tertiary and danger ghost buttons together.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_bg_17.png)
+
+  
 
 ## Content
 
@@ -622,46 +465,36 @@ For consistency, see Carbon’s
 [content guidelines](/guidelines/content/action-labels) for a list of
 recommended action labels.
 
-
   
 
-![Do use the verb + noun content formula in buttons whenever possible.](images/button_usage_26.png)
+![Do use the verb + noun content formula in buttons whenever possible.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_26.png)
 
   
   
 
-![Do not use only a noun as a button label.](images/button_usage_27.png)
+![Do not use only a noun as a button label.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_27.png)
 
   
-
 
 Label alignment
 
-
   
 
-![Do left-align the label in a button, even if the button is wide.](images/button_usage_5.png)
+![Do left-align the label in a button, even if the button is wide.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_5.png)
 
   
   
 
-![Do not center align the label in a button, even if the button is wide.](images/button_usage_6.png)
+![Do not center align the label in a button, even if the button is wide.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_6.png)
 
   
-
 
 #### Internationalization (RTL)
 
 For right-to-left (RTL) languages, the entire button is mirrored horizontally.
 The label is right-aligned and the icon is left-aligned.
 
-
-
-
-![Primary button without and with RTL.](images/button-usage-RTL.png)
-
-
-
+![Primary button without and with RTL.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button-usage-RTL.png)
 
 Primary button without and with RTL.
 
@@ -674,18 +507,16 @@ recommend truncating a button label.
 As mentioned above, it is best practice to keep button label succinct and follow
 the &#123;verb&#125; + &#123;noun&#125; content formula.
 
-
   
 
-![Do wrap the button label to a second line if there’s overflow content.](images/button_usage_overflow_1.png)
+![Do wrap the button label to a second line if there’s overflow content.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_overflow_1.png)
 
   
   
 
-![Do not truncate the label of a button if there’s insufficient space inside the button.](images/button_usage_overflow_2.png)
+![Do not truncate the label of a button if there’s insufficient space inside the button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_overflow_2.png)
 
   
-
 
 ### Further guidance
 
@@ -701,18 +532,10 @@ button typically takes focus. On a form, if focus is on a component that is not
 actionable with the `Enter` key, pressing `Enter` will activate the primary
 button.
 
-
-
-
-![Primary button takes default focus when there’s no other actionable component in a dialog.](images/button_usage_ub_focus.png)
-
-
-
-
+![Primary button takes default focus when there’s no other actionable component in a dialog.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ub_focus.png)
 
   Primary button takes default focus when there’s no other actionable component
   in a dialog.
-
 
 ### States
 
@@ -725,13 +548,7 @@ button [Style](/components/button/style#color) tab guidelines.
 
 Users can trigger a button by clicking anywhere within the button container.
 
-
-
-
-![Mouse interaction for button.](images/button_usage_ub_interaction.png)
-
-
-
+![Mouse interaction for button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ub_interaction.png)
 
 Mouse interaction for button.
 
@@ -748,18 +565,9 @@ Buttons can have
 that provides visual feedback that the action is in process. The button would be
 disabled when inline loading is in progress.
 
+![Inline loading in the context of a button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button-usage-ub-inline-loading.gif)
 
-
-
-
-
-![Inline loading in the context of a button.](images/button-usage-ub-inline-loading.gif)
-
-![Inline loading in the context of a button.](images/button_usage_ub_loading_4.png)
-
-
-
-
+![Inline loading in the context of a button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ub_loading_4.png)
 
 Inline loading in the context of a button.
 
@@ -770,13 +578,7 @@ button should only appear once per screen (the only exceptions are temporary
 flows with primary actions). Primary button helps give the user focus and gives
 them context behind the expected next step.
 
-
-
-
-![Primary button in the context of a product UI.](images/button_usage_primary_1.png)
-
-
-
+![Primary button in the context of a product UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_primary_1.png)
 
 Primary button in the context of a product UI.
 
@@ -791,18 +593,10 @@ another flow, therefore temporarily having two primary buttons on a page is
 acceptable. This is the only scenario where having two primary actions on a page
 is advised.
 
-
-
-
-![A temporary user flow where a data table with primary action has an open side panel with its own primary action.](images/button_usage_primary_2.png)
-
-
-
-
+![A temporary user flow where a data table with primary action has an open side panel with its own primary action.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_primary_2.png)
 
   A temporary user flow where a data table with primary action has an open side
   panel with its own primary action.
-
 
 ### Best practices
 
@@ -812,18 +606,10 @@ Sometimes the primary purpose of the page is to interact with other components
 or read over content, rather than to trigger an action. In this case, use
 tertiary and ghost buttons for these supporting actions or experiences.
 
-
-
-
-![The primary intent of this page is to present content, with actions like filtering and editing represented by tertiary and ghost buttons.](images/button_usage_primary_3.png)
-
-
-
-
+![The primary intent of this page is to present content, with actions like filtering and editing represented by tertiary and ghost buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_primary_3.png)
 
   The primary intent of this page is to present content, with actions like
   filtering and editing represented by tertiary and ghost buttons.
-
 
 ## Secondary button
 
@@ -833,13 +619,7 @@ due to their lower saturation. As a result, secondary buttons are intended to be
 used in conjunction with a primary button. When used in a pair, the secondary
 button executes the set's negative action, like "Cancel" or "Back."
 
-
-
-
-![Secondary button in the context of a product UI.](images/button_usage_secondary_1.png)
-
-
-
+![Secondary button in the context of a product UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_secondary_1.png)
 
 Secondary button in the context of a product UI.
 
@@ -847,18 +627,16 @@ Secondary buttons should not be used in isolation or for a positive/primary
 action. See [button groups](#button-groups) for more guidance on how to use
 secondary buttons.
 
-
   
 
-![Do use the secondary button in conjunction with the primary button.](images/button_usage_secondary_2.png)
+![Do use the secondary button in conjunction with the primary button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_secondary_2.png)
 
   
   
 
-![Do not use the secondary button in isolation or for a positive/primary action.](images/button_usage_secondary_3.png)
+![Do not use the secondary button in isolation or for a positive/primary action.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_secondary_3.png)
 
   
-
 
 ## Tertiary button
 
@@ -866,13 +644,7 @@ Tertiary buttons have less prominence than a primary button and slightly more
 prominence than a ghost button. Tertiary buttons work well on their own or as
 part of a button group.
 
-
-
-
-![Tertiary button in the context of a product UI.](images/button_usage_tertiary_1.png)
-
-
-
+![Tertiary button in the context of a product UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_1.png)
 
 Tertiary button in the context of a product UI.
 
@@ -881,18 +653,16 @@ sure the tertiary button has adequate padding on all sides. As mentioned in the
 [fluid button guidance](#alignment), tertiary buttons should not be used in
 fluid arrangements.
 
-
   
 
-![Do align the tertiary button with the rest of the content.](images/button_usage_tertiary_2.png)
+![Do align the tertiary button with the rest of the content.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_2.png)
 
   
   
 
-![Do not use a tertiary button in a fluid arrangement.](images/button_usage_tertiary_3.png)
+![Do not use a tertiary button in a fluid arrangement.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_3.png)
 
   
-
 
 ### Best practices
 
@@ -909,31 +679,23 @@ If it is determined that the button in the page header, across all tabs, should
 be primary, ensure none of the content below the header contain another primary
 action.
 
-
   
 
-![Do use a tertiary button in the page header if there is a primary button in the content section.](images/button_usage_tertiary_4.png)
+![Do use a tertiary button in the page header if there is a primary button in the content section.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_4.png)
 
   
   
 
-![Do not use a primary button in the page header and the content section.](images/button_usage_tertiary_5.png)
+![Do not use a primary button in the page header and the content section.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_5.png)
 
   
-
 
 #### Tertiary buttons in button groups
 
 In [button groups](#button-groups), where there is one primary and two other
 actions with shared importance, consider using tertiary buttons.
 
-
-
-
-![Example of tertiary buttons used in button groups.](images/button_usage_tertiary_6.png)
-
-
-
+![Example of tertiary buttons used in button groups.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_6.png)
 
 Example of tertiary buttons used in button groups.
 
@@ -942,13 +704,7 @@ Example of tertiary buttons used in button groups.
 For empty states that appear on pages that already have the primary action
 defined, a tertiary button is the ideal solution to launch a new task flow.
 
-
-
-
-![Example of a tertiary button used with empty state content.](images/button_usage_tertiary_7.png)
-
-
-
+![Example of a tertiary button used with empty state content.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_tertiary_7.png)
 
 Example of a tertiary button used with empty state content.
 
@@ -959,13 +715,7 @@ are more subtle, making them ideal for supplementary actions. They work best
 when they are flush against a container or horizontally grouped with other
 elements.
 
-
-
-
-![Ghost button in the context of a product UI.](images/button_usage_ghost_1.png)
-
-
-
+![Ghost button in the context of a product UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_1.png)
 
 Ghost button in the context of a product UI.
 
@@ -975,18 +725,16 @@ Ghost buttons work well when aligned to a corner of a container. The general
 rule for vertically aligning a ghost button with other content is to ensure its
 label aligns with the text elsewhere on the page.
 
-
   
 
-![Do align the ghost button label with the rest of the content.](images/button_usage_ghost_2.png)
+![Do align the ghost button label with the rest of the content.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_2.png)
 
   
   
 
-![Do not align the edge of the ghost button with the rest of the content, even if it looks partially aligned.](images/button_usage_ghost_3.png)
+![Do not align the edge of the ghost button with the rest of the content, even if it looks partially aligned.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_3.png)
 
   
-
 
 Ghost buttons can be useful for small supplementary actions in side panels. In
 this context, extending the width of the ghost button to the full width of the
@@ -994,33 +742,23 @@ container makes this treatment seem intentional. Aligning to the full width of 
 container is only recommended when the containers are smaller in size such as a
 side panel of 480px (medium) and below.
 
-
   
 
-![Do extend the ghost button to the full width of the side panel.](images/button_usage_ghost_4.png)
+![Do extend the ghost button to the full width of the side panel.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_4.png)
 
   
   
 
-![Do not leave a ghost button hanging halfway within the side panel.](images/button_usage_ghost_5.png)
+![Do not leave a ghost button hanging halfway within the side panel.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_5.png)
 
   
-
 
 Ghost buttons can also be aligned horizontally and inline with other components
 on the page.
 
-
-
-
-![Example of a ghost button aligned horizontally and inline with a component.](images/button_usage_ghost_6.png)
-
-
-
-
+![Example of a ghost button aligned horizontally and inline with a component.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_6.png)
 
   Example of a ghost button aligned horizontally and inline with a component.
-
 
 ### Best practices
 
@@ -1030,18 +768,10 @@ Buttons in the table toolbar are often depicted as a primary button, but this
 might not always be the case. Use a ghost button instead if there is another
 button on the page that requires primary styling.
 
-
-
-
-![A ghost button represents the data table's primary action to avoid conflict with the primary button in the page header.](images/button_usage_ghost_7.png)
-
-
-
-
+![A ghost button represents the data table's primary action to avoid conflict with the primary button in the page header.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_7.png)
 
   A ghost button represents the data table's primary action to avoid conflict
   with the primary button in the page header.
-
 
 #### Ghost buttons in productive cards
 
@@ -1054,13 +784,7 @@ See
 the [cards component](https://pages.github.ibm.com/carbon/ibm-products/components/card/overview/)
 for more details.
 
-
-
-
-![Example of a ghost button used in cards.](images/button_usage_ghost_8.png)
-
-
-
+![Example of a ghost button used in cards.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_8.png)
 
 Example of a ghost button used in cards.
 
@@ -1071,13 +795,7 @@ less attention; users have to purposefully find and click the button to cancel.
 In tearsheets, the buttons are fluid, which wouldn’t be a suitable application
 for a tertiary button.
 
-
-
-
-![Example of ghost button used in a modal.](images/button_usage_ghost_9.png)
-
-
-
+![Example of ghost button used in a modal.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_ghost_9.png)
 
 Example of ghost button used in a modal.
 
@@ -1097,28 +815,20 @@ if a destructive action is just one of several actions a user could choose from,
 then a lower emphasis style like the tertiary danger button or the ghost danger
 button may be more appropriate.
 
-
-
-
-![Danger button in the context of a product UI.](images/button_usage_danger_primary.png)
-
-
-
+![Danger button in the context of a product UI.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_danger_primary.png)
 
 Danger button in the context of a product UI.
 
-
   
 
-![Do use a tertiary danger button for lower emphasis destructive actions.](images/button_usage_danger_tertiary.png)
+![Do use a tertiary danger button for lower emphasis destructive actions.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_danger_tertiary.png)
 
   
   
 
-![Do use a ghost danger button for lower emphasis destructive actions.](images/button_usage_danger_ghost.png)
+![Do use a ghost danger button for lower emphasis destructive actions.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_danger_ghost.png)
 
   
-
 
 ## Modifiers
 
@@ -1138,31 +848,27 @@ buttons.
   taking.
 - Icons must match the color value of the label within a button.
 
-
   
 
-![Do place the icon on the right side of the button after the label](images/button_usage_button_with_icon_1.png)
-
-  
-  
-
-![Do not place the icon to the left of the label on the button.](images/button_usage_button_with_icon_2.png)
-
-  
-
-
-
-  
-
-![Do use 8px spacing between the label and the icon in a ghost button.](images/button_usage_button_with_icon_3.png)
+![Do place the icon on the right side of the button after the label](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_1.png)
 
   
   
 
-![Do not leave too much space between the label and the icon in a ghost button.](images/button_usage_button_with_icon_4.png)
+![Do not place the icon to the left of the label on the button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_2.png)
 
   
 
+  
+
+![Do use 8px spacing between the label and the icon in a ghost button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_3.png)
+
+  
+  
+
+![Do not leave too much space between the label and the icon in a ghost button.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_4.png)
+
+  
 
 #### Universal actions with well-established icons
 
@@ -1203,18 +909,16 @@ know [here](https://github.com/carbon-design-system/carbon/issues/new/choose).
 Using icons in the above list for other actions can confuse the expected outcome
 and experience.
 
-
   
 
-![Do use a defined icon to represent a universal action.](images/button_usage_button_with_icon_5.png)
+![Do use a defined icon to represent a universal action.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_5.png)
 
   
   
 
-![Do not use an icon for an action that would not be associated with it.](images/button_usage_button_with_icon_6.png)
+![Do not use an icon for an action that would not be associated with it.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_6.png)
 
   
-
 
 #### Launch icon
 
@@ -1229,18 +933,10 @@ _For IBMers only:_ See the
 [navigation labels](https://pages.github.ibm.com/carbon/ibm-products/guidelines/content/navigation-labels/)
 of our content guide.
 
-
-
-
-![Example of a tertiary button with icon indicating that clicking the button would launch a new page.](images/button_usage_button_with_icon_7.png)
-
-
-
-
+![Example of a tertiary button with icon indicating that clicking the button would launch a new page.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_7.png)
 
   Example of a tertiary button with icon indicating that clicking the button
   would launch a new page.
-
 
 #### Be consistent with icon usage for buttons in a button group
 
@@ -1255,31 +951,27 @@ Only use icons in button groups for the universal actions listed in the table
 above or for other actions where a particular icon is commonly paired and
 associated.
 
-
   
 
-![Do follow a consistent approach across button groups when introducing icons.](images/button_usage_button_with_icon_8.png)
-
-  
-  
-
-![Do follow a consistent approach across button groups when introducing icons.](images/button_usage_button_with_icon_9.png)
-
-  
-
-
-
-  
-
-![Do not introduce icons only for a few buttons in a button group.](images/button_usage_button_with_icon_10.png)
+![Do follow a consistent approach across button groups when introducing icons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_8.png)
 
   
   
 
-![Do not introduce icons only for a few buttons in a button group.](images/button_usage_button_with_icon_11.png)
+![Do follow a consistent approach across button groups when introducing icons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_9.png)
 
   
 
+  
+
+![Do not introduce icons only for a few buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_10.png)
+
+  
+  
+
+![Do not introduce icons only for a few buttons in a button group.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_11.png)
+
+  
 
 #### Use the default variation for all icons
 
@@ -1288,18 +980,16 @@ has this variation, we advise using the default option for all icons (the only
 exception is status icons, which have their own defined icon to use). Default
 icons are named after their action.
 
-
   
 
-![Do use the default icon which is “Play”.](images/button_usage_button_with_icon_12.png)
+![Do use the default icon which is “Play”.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_12.png)
 
   
   
 
-![Do not use the filled icon variations.](images/button_usage_button_with_icon_13.png)
+![Do not use the filled icon variations.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_button_with_icon_13.png)
 
   
-
 
 ### Icon only buttons
 
@@ -1320,17 +1010,9 @@ for the following use cases:
   the [toolbar component](https://pages.github.ibm.com/carbon/ibm-products/components/toolbar/usage/)
   for more details.
 
-
-
-
-![Example of an icon only ghost button in a toolbar showing a tooltip on hover.](images/button_usage_icon_only_button_1.png)
-
+![Example of an icon only ghost button in a toolbar showing a tooltip on hover.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_1.png)
 
   Example of an icon only ghost button in a toolbar showing a tooltip on hover.
-
-
-
-
 
 #### Tooltips for icon only buttons
 
@@ -1338,17 +1020,9 @@ Regardless of how recognizable an icon may or may not be, or whether that action
 lies within the universal actions list, a tooltip is always required with text
 explaining what the icon button would do if clicked.
 
-
-
-
-![Example of an icon only ghost button showing a tooltip on hover.](images/button_usage_icon_only_button_2.png)
-
+![Example of an icon only ghost button showing a tooltip on hover.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_2.png)
 
   Example of an icon only ghost button showing a tooltip on hover.
-
-
-
-
 
 #### Colors of icon only ghost buttons
 
@@ -1358,18 +1032,16 @@ buttons. The same applies for specifications across components. Learn more about
 icon only ghost button colors in the
 [Style](/components/button/style#ghost-button-color.mdx) tab.
 
-
   
 
-![Do use the system’s defined color for ghost icon only buttons.](images/button_usage_icon_only_button_3.png)
+![Do use the system’s defined color for ghost icon only buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_3.png)
 
   
   
 
-![Do not change the color for ghost icon only buttons.](images/button_usage_icon_only_button_4.png)
+![Do not change the color for ghost icon only buttons.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_4.png)
 
   
-
 
 #### Danger buttons cannot be used in an icon only form
 
@@ -1378,28 +1050,16 @@ higher emphasis along with a visual label. As mentioned in
 the [danger button guidance](#danger-button),  it is best to use a danger button
 in a primary, tertiary, or ghost button form.
 
-
   
 
-![Do use a visual label in a danger button for a destructive action.](images/button_usage_icon_only_button_5.png)
+![Do use a visual label in a danger button for a destructive action.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_5.png)
 
   
   
 
-![Do not use a danger button in an icon only form for a destructive action.](images/button_usage_icon_only_button_6.png)
+![Do not use a danger button in an icon only form for a destructive action.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/button/images/button_usage_icon_only_button_6.png)
 
   
-
-
-## Related
-
-- [Button labels](https://pages.github.ibm.com/carbon/ibm-products/guidelines/content/button-labels/)
-- [Fixed button bars](https://pages.github.ibm.com/carbon/ibm-products/patterns/fixed-button-bars/usage/)
-- [Form pattern](/patterns/forms-pattern)
-- [Icons](https://carbondesignsystem.com/elements/icons/library/)
-- [Link component](/components/link/usage)
-- [Menu buttons](https://carbondesignsystem.com/components/menu-buttons/usage/)
-- [Modal component](/components/modal/usage)
 
 ## References
 

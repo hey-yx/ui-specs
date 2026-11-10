@@ -1,5 +1,5 @@
 ---
-title: "DTCG · Design Token 定义"
+title: "DTCG · Token · Design Token 定义"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/design-token.md
 section: tokens
 tag: "语法标准"
@@ -9,7 +9,7 @@ id: dtcg-1
 publisher: "W3C DTCG"
 ---
 
-# DTCG · Design Token 定义
+# DTCG · Token · Design Token 定义
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/design-token.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/design-token.md)
 

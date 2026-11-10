@@ -1036,7 +1036,6 @@ Thus, when interpreting the rules in [CSS2§10.3.7](https://www.w3.org/TR/CSS2/v
 
 In the case of [center](#valdef-self-position-center) alignment, the [available space](https://www.w3.org/TR/css-sizing-3/#available) for the box is double the distance between the center of the [static-position rectangle](#static-position-rectangle) and the closest edge of the [containing block](https://www.w3.org/TR/css-display-4/#containing-block) in the relevant axis.
 
-![Start alignment sizes into the space between
 the start edge of the static-position rectangle and the end edge of the containing block.
 End alignment sizes into the space between
 the end edge of the static-position rectangle and the start edge of the containing block.

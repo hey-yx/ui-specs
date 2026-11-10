@@ -55,8 +55,6 @@ Features needed to provide sufficient rotation control include:
     restart unless the user explicitly requests it to do so.
   - Stops rotating whenever the mouse is hovering over the carousel.
 
-![](../../../../content-images/wai-aria-practices/images/pattern-carousel.svg)
-
 ## Examples
 
 - [Auto-Rotating Image Carousel with Buttons for Slide

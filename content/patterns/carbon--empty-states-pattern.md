@@ -462,20 +462,6 @@ require that decorative images are given either an empty `alt` tag or their
 `role` is assigned `presentation`. As an empty `alt` tag is more widely
 supported, we recommend you align with the WCAG guidance and avoid assigning
 `role` to `presentation` until support is more ubiquitous.
-
-## Related
-
-#### Components
-
-- [Button](https://carbondesignsystem.com/components/button/usage)
-- [Data table](https://carbondesignsystem.com/components/data-table/usage)
-- [Tile](https://carbondesignsystem.com/components/tile/usage)
-
-#### Patterns
-
-- Error states (future)
-- Onboarding (future)
-
 ## References
 
 - Jakob Nielsen,

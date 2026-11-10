@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Password input 密码输入框"
 source: https://design-system.service.gov.uk/components/password-input/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-33
 publisher: "GOV.UK Design System"
@@ -13,25 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/password-input/](https://design-system.service.gov.uk/components/password-input/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Help users to create and enter passwords.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/password-input/macro.njk" import govukPasswordInput %}
-
-{{ govukPasswordInput({
-  label: {
-    text: "Password"
-  },
-  id: "password-input",
-  name: "password"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/password-input/#password-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/password-input/#password-input-example-nunjucks)
 
 ## When to use this component
 
@@ -45,9 +32,9 @@ Do not use this component to ask for any information other than a password.
 
 Use a [Text input component](https://design-system.service.gov.uk/components/text-input/) to ask for other security information, such as:
 
-- multi-factor authentication codes
-- answers to security questions
-- other personally identifiable information
+*   multi-factor authentication codes
+*   answers to security questions
+*   other personally identifiable information
 
 Also see the [Confirm a phone number pattern](https://design-system.service.gov.uk/patterns/confirm-a-phone-number/).
 
@@ -59,22 +46,8 @@ This allows users to visually check their password before they submit it, which 
 
 ### Error messages
 
-**示例：error**
-
-```njk
-{% from "govuk/components/password-input/macro.njk" import govukPasswordInput %}
-
-{{ govukPasswordInput({
-  label: {
-    text: "Password"
-  },
-  id: "password-input-with-error-message",
-  name: "password-input-with-error-message",
-  errorMessage: {
-    text: "Enter a password"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/password-input/#password-input-with-errors-password-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/password-input/#password-input-with-errors-password-input-example-nunjucks)
 
 If the user enters their account details incorrectly, do not reveal whether they got the username or password wrong. Clear any information entered into the password input.
 
@@ -90,14 +63,14 @@ If you do choose to include two or more password inputs on a page, the ‘show�
 
 For example, you can label:
 
-- the first input as 'Password' with a toggle of 'show password'
-- the second input as 'Re-enter password' with a toggle of 'show re-entered password'
+*   the first input as ‘Password’ with a toggle of ‘show password’
+*   the second input as ‘Re-enter password’ with a toggle of ‘show re-entered password’
 
 ### Avoid adding a ‘confirm password’ field
 
 It’s not necessary to add a second password field, also known as a ‘confirm password’ field, particularly as this component allows users to show and hide passwords.
 
-See [Research on this component](#research-on-this-component) and why we decided having a second field is not helpful for users.
+See [Research on this component](https://design-system.service.gov.uk/components/password-input/#research-on-this-component) and why we decided having a second field is not helpful for users.
 
 ### Define the input’s type as ‘password’
 
@@ -125,7 +98,7 @@ Users can copy any text from a password field when it’s set on ‘show’ – 
 
 This can be useful for users, such as to save a password that the browser has suggested into a separate password manager.
 
-### Avoid restricting the user's input
+### Avoid restricting the user’s input
 
 See the [Ask users for passwords pattern](https://design-system.service.gov.uk/patterns/passwords/) to see how to help users choose strong passwords.
 
@@ -141,7 +114,7 @@ Users will not get any feedback when they’ve reached the `maxlength` and their
 
 If you must restrict the length of a password, show an error message instead using the [Validation pattern](https://design-system.service.gov.uk/patterns/validation/).
 
-### Do not spellcheck or autocapitalise the user's input
+### Do not spellcheck or autocapitalise the user’s input
 
 Some browsers might automatically change what the user is typing when the input’s text is visible, such as correcting spelling or automatically turning on upper case letters at the start of sentences.
 
@@ -157,9 +130,9 @@ Some apps and tools will add their own native functionality to show and hide pas
 
 These tools include:
 
-- browsers (particularly when suggesting new passwords)
-- password managers
-- screen readers
+*   browsers (particularly when suggesting new passwords)
+*   password managers
+*   screen readers
 
 We’ve tried to minimise duplicate functionality by hiding other types of ‘show password’ buttons where possible.
 
@@ -167,8 +140,8 @@ There’s also other instances where a password could be ‘shown’ or ‘hidde
 
 [We found this mismatch happens in some browsers](https://github.com/alphagov/govuk-design-system/issues/3552#issuecomment-1976660248) when:
 
-- a keyboard shortcut is pressed
-- a suggested password is created
+*   a keyboard shortcut is pressed
+*   a suggested password is created
 
 ## Research on this component
 

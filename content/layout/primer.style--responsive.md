@@ -1,5 +1,5 @@
 ---
-title: "Primer · Responsive 响应式"
+title: "GitHub Primer · Foundation · Responsive 响应式"
 source: https://raw.githubusercontent.com/primer/design/main/content/foundations/responsive.mdx
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-30
 publisher: "GitHub Primer"
 ---
 
-# Primer · Responsive 响应式
+# GitHub Primer · Foundation · Responsive 响应式
 
 > 来源：[https://raw.githubusercontent.com/primer/design/main/content/foundations/responsive.mdx](https://raw.githubusercontent.com/primer/design/main/content/foundations/responsive.mdx)
 
@@ -97,9 +97,3 @@ To test this, change the size in the browser:
 
 - In Chrome: Go to `chrome://settings`. Under **Appearance**, change the font size.
 - In Firefox: In the menu button, select **Settings**. Under ”Language and Appearance” you can set different size. Default is `16`.
-
-## See also
-
-- [Viewport ranges](https://primer.style/foundations/layout#viewport-ranges)
-- [Responsive breakpoints](https://primer.style/foundations/layout#breakpoints)
-- [Responsive layout behavior](https://primer.style/foundations/layout#responsive-behavior)

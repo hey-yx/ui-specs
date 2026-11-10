@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Motion Choreography 动效编排"
+title: "IBM Carbon · Foundation · Motion Choreography 动效编排"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/choreography.mdx
 section: motion
 tag: "规范"
@@ -9,70 +9,23 @@ id: motion-8
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Motion Choreography 动效编排
+# IBM Carbon · Foundation · Motion Choreography 动效编排
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/choreography.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/motion/choreography.mdx)
 
 ---
 
-
-
-
 Paths
 Composition
-
-
 
 ## Paths
 
 Elements in Carbon dance on the grid. Motion paths trace lines along the grid
 which never run diagonally.
 
-
-
-
-
-
-
-
-
 <br />
 
-
-
-
-
-
-
-
-
 <br />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Composition
 
@@ -94,35 +47,11 @@ seam. Therefore, they should use the same motion style (productive) and easing
 (entrance, standard). However, they should use slightly different durations due
 to their difference in size.
 
-
-
-
-
-
-
-
-
 #### Spatial consistency
 
 Pay attention to the spatial relationships between elements and screens, and
 information hierarchy. Visually similar elements may need the different motions
 to clarify their respective spatial locations.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #### Intentional inconsistency
 
@@ -131,40 +60,11 @@ or intent behind actions with similar visual appearance. Usually, forward motion
 in the direction of entrance signals affirmation, while reversing entrance
 motion signals cancellation.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Continuity
 
 Motion can help establish a sense of continuity between screens and experiences.
 Pay attention to shared elements across screens, such as title panels or
 buttons, to create a graceful transition.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### Sequence and stagger
 
@@ -176,26 +76,10 @@ For example, staggering the entrance of table content by 20 ms significantly
 reduces the cognitive load. Depending on the number of staggered elements, the
 delay should be adjusted to ensure that total time is still within 500 ms.
 
-
-
-
-
-
-
-
-
 Sequence the loading of page content when possible. Start with the most stable
 content, such as static content and header, and end with the most important
 information, such as the primary button or a calculation result, to focus the
 user’s attention on them.
-
-
-
-
-
-
-
-
 
 Follow this recommended sequence of different types of content when
 choreographing content entrance. Not all categories will be present in every

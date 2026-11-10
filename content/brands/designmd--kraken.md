@@ -15,8 +15,6 @@ publisher: "Awesome Design MD"
 
 ---
 
-# Design System Inspired by Kraken
-
 ## 1. Visual Theme & Atmosphere
 
 Kraken's website is a clean, trustworthy crypto exchange that uses purple as its commanding brand color. The design operates on white backgrounds with Kraken Purple (`#7132f5`, `#5741d8`, `#5b1ecf`) creating a distinctive, professional crypto identity. The proprietary Kraken-Brand font handles display headings with bold (700) weight and negative tracking, while Kraken-Product (with IBM Plex Sans fallback) serves as the UI workhorse.

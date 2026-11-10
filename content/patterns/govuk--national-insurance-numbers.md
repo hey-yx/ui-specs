@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · National Insurance numbers 国民保险号"
 source: https://design-system.service.gov.uk/patterns/national-insurance-numbers/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-7
 publisher: "GOV.UK Design System"
@@ -13,32 +13,16 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/national-insurance-numbers/](https://design-system.service.gov.uk/patterns/national-insurance-numbers/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Ask users for  National Insurance numbers
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
 Ask users to provide their National Insurance number.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "National Insurance number"
-  },
-  hint: {
-    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  id: "national-insurance-number",
-  name: "nationalInsuranceNumber",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-numbers-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-numbers-example-nunjucks)
 
 ## When to use this pattern
 
@@ -58,56 +42,47 @@ Show a National Insurance number using the format ‘QQ 12 34 56 C’ – the sp
 
 When asking for a National Insurance number:
 
-- allow for 13 characters as National Insurance numbers are spaced in pairs followed by a single letter
-- let users enter upper and lower case letters, additional spaces and punctuation
-- ignore any unwanted characters before validating
-- avoid using ‘AB 12 34 56 C’ as an example because it belongs to a real person and use ‘QQ 12 34 56 C’ instead
-- set the `spellcheck` attribute to `false` so that browsers do not spellcheck the National Insurance number
+*   allow for 13 characters as National Insurance numbers are spaced in pairs followed by a single letter
+*   let users enter upper and lower case letters, additional spaces and punctuation
+*   ignore any unwanted characters before validating
+*   avoid using ‘AB 12 34 56 C’ as an example because it belongs to a real person and use ‘QQ 12 34 56 C’ instead
+*   set the `spellcheck` attribute to `false` so that browsers do not spellcheck the National Insurance number
 
-**示例：default**
+*   [HTML](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-numbers-second-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-numbers-second-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "National Insurance number"
-  },
-  hint: {
-    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  id: "national-insurance-number",
-  name: "nationalInsuranceNumber",
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="national-insurance-number">
+    National Insurance number
+  </label>
+  <div id="national-insurance-number-hint" class="govuk-hint">
+    It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’
+  </div>
+  <input class="govuk-input govuk-input--width-10 govuk-input--extra-letter-spacing" id="national-insurance-number" name="nationalInsuranceNumber" type="text" spellcheck="false" aria-describedby="national-insurance-number-hint">
+</div>
 ```
 
 ### Error messages
 
 Error messages should be styled like this:
 
-**示例：error**
+*   [HTML](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-number-input-with-errors-national-insurance-numbers-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#national-insurance-number-input-with-errors-national-insurance-numbers-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "National Insurance number"
-  },
-  hint: {
-    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
-  },
-  classes: "govuk-input--width-10 govuk-input--extra-letter-spacing",
-  id: "national-insurance-number",
-  name: "nationalInsuranceNumber",
-  value: "12345678",
-  errorMessage: {
-    text: "Enter a National Insurance number in the correct format"
-  },
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="national-insurance-number">
+    National Insurance number
+  </label>
+  <div id="national-insurance-number-hint" class="govuk-hint">
+    It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’
+  </div>
+  <p id="national-insurance-number-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Enter a National Insurance number in the correct format
+  </p>
+  <input class="govuk-input govuk-input--width-10 govuk-input--extra-letter-spacing govuk-input--error" id="national-insurance-number" name="nationalInsuranceNumber" type="text" spellcheck="false" value="12345678" aria-describedby="national-insurance-number-hint national-insurance-number-error">
+</div>
 ```
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.

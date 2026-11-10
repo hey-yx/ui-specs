@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Color 色彩"
+title: "IBM Carbon · Foundation · Color 色彩"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/overview.mdx
 section: color
 tag: "规范"
@@ -10,40 +10,13 @@ publisher: "IBM Carbon"
 known: partial
 ---
 
-# IBM Carbon · Color 色彩
+# IBM Carbon · Foundation · Color 色彩
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/overview.mdx)
 
 ---
 
----
-title: Color
-description:
-  Maintaining consistent and engaging digital interfaces throughout IBM, whether
-  applications or experiences, demands extended guidance around color usage.
-tabs: ['Overview', 'Usage', 'Tokens', 'Code']
----
-
-
-
-
-
 > Maintaining consistent and engaging digital interfaces throughout IBM, whether applications or experiences, demands extended guidance around color usage. The following concepts provide the foundation as we strive to achieve balance and harmony through our User Interface design.
-
-
-
-Introduction
-Color anatomy
-Implementing color
-Themes
-Tokens
-Interaction states
-Accessibility
-Resources
-
-
-
-
 
 <br />
 
@@ -56,12 +29,8 @@ to IBM's array of digital products and interfaces. This consistency is grounded
 in a set of well-defined rules about how to work with the Carbon component
 library in the context of dark and light themes.
 
-
-
-![6 screenshots showing a range of color schemes and considerations for text and data visualizations](images/introduction.gif)
-![UI color alternatives](images/introduction.jpeg)
-
-
+![6 screenshots showing a range of color schemes and considerations for text and data visualizations](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/introduction.gif)
+![UI color alternatives](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/introduction.jpeg)
 
 ## Color anatomy
 
@@ -76,7 +45,6 @@ and experiences. Additional colors are used sparingly and purposefully.
   
   
 </div>
-
 
 Alert Colors
 
@@ -94,17 +62,9 @@ The layering model differs between the _light_ and _dark_ themes.
   added layer.
 - In the dark themes, layers become one step lighter with each added layer.
 
-
-
-
-![Layering model for light themes](images/color-layering-model.png)
-
-
-
-
+![Layering model for light themes](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-layering-model.png)
 
   Layering model for the White theme (left) and Gray 100 theme (right)
-
 
 <br />{' '}
 
@@ -132,9 +92,6 @@ use Gray 100 and Gray 90 backgrounds. Within each theme, the values for the
 universal color tokens use the primary background color as the base of its
 layering model.
 
-
-
-
 <div className="cds--aspect-ratio cds--aspect-ratio--1x1">
   <div className="cds--aspect-ratio--object color-square color-square--white">
     White
@@ -143,17 +100,11 @@ layering model.
 
 <div className="cds--caption">Light</div>
 
-
-
-
 <div className="cds--aspect-ratio cds--aspect-ratio--1x1">
   <div className="cds--aspect-ratio--object color-square color-square--gray-10">
     Gray 10
   </div>
 </div>
-
-
-
 
 <div className="cds--aspect-ratio cds--aspect-ratio--1x1">
   <div className="cds--aspect-ratio--object color-square color-square--gray-100">
@@ -163,17 +114,11 @@ layering model.
 
 <div className="cds--caption">Dark</div>
 
-
-
-
 <div className="cds--aspect-ratio cds--aspect-ratio--1x1">
   <div className="cds--aspect-ratio--object color-square color-square--gray-90">
     Gray 90
   </div>
 </div>
-
-
-
 
 <br />
  Global background colors 
@@ -206,34 +151,19 @@ In the light themes, layers alternate between White and Gray 10.
   first with components using White backgrounds. The second layer uses Gray 10
   and the third layer used White.
 
+![A dashboard in the white theme](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-themes-white.png)
 
-
-
-
-![A dashboard in the white theme](images/color-overview-themes-white.png)
-
-
-
-
-
-![A dashboard in the Gray 10 theme](images/color-overview-themes-gray10.png)
-
-
-
-
-
+![A dashboard in the Gray 10 theme](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-themes-gray10.png)
 
   
 
-![Gray 10 dropdown on White background.](images/Light_theme_01.png)
+![Gray 10 dropdown on White background.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/Light_theme_01.png)
 
   
 
-
-![Gray 10 dropdown on a Gray 20 background](images/Light_theme_04.png)
+![Gray 10 dropdown on a Gray 20 background](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/Light_theme_04.png)
 
   
-
 
 <br />
 
@@ -256,34 +186,20 @@ In the dark themes, layers become one step lighter with each added layer.
   layered first with components using Gray 90 backgrounds. The second layer uses
   Gray 80 and the third layer used Gray 70.
 
+![A dashboard in the Gray 90 theme](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-themes-gray90.png)
 
-
-
-
-![A dashboard in the Gray 90 theme](images/color-overview-themes-gray90.png)
-
-
-
-
-
-![A dashboard in the Gray 100 theme](images/color-overview-themes-gray100.png)
-
-
-
-
-
+![A dashboard in the Gray 100 theme](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-themes-gray100.png)
 
   
 
-![Gray 90 dropdown on Gray 100 background](images/Dark_theme_01_new.png)
+![Gray 90 dropdown on Gray 100 background](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/Dark_theme_01_new.png)
 
   
  
 
-![Gray 100 dropdown on Gray 90 background](images/Dark_theme_04_new.png)
+![Gray 100 dropdown on Gray 90 background](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/Dark_theme_04_new.png)
 
   
-
 
 <br />
 
@@ -297,18 +213,16 @@ times high contrast moments can be achieved through applying
 [inline theming](/elements/color/usage/#inline-theming) for instances like a
 dark UI Shell Header with a light theme page.
 
-
   
 
-![High contrast example in a light theme.](images/High_contrast_01.png)
+![High contrast example in a light theme.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/High_contrast_01.png)
 
   
   
 
-![High contrast example in a dark theme.](images/High_contrast_02.png)
+![High contrast example in a dark theme.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/High_contrast_02.png)
 
   
-
 
 <br />
 
@@ -340,18 +254,10 @@ specify its unique role within the element group
 like `$border-subtle` or `$text-primary`. Additionally, some tokens include an
 interaction state at the end, like `$background-hover`.
 
-
-
-
-![Generic text input showing same tokens assigned for White and Gray 100 themes.](images/color-overview-tokens.png)
-
-
-
-
+![Generic text input showing same tokens assigned for White and Gray 100 themes.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-tokens.png)
 
   Color tokens for components are the same across themes as shown by this text
   input using the White theme (left) and Gray 100 theme (right).
-
 
 <br />
 
@@ -411,13 +317,7 @@ The color layering model for interaction tokens is as follows:
 - For values between Black and Gray 70, interaction gets lighter.
 - For values between Gray 60 and White, interaction gets darker.
 
-
-
-
-![Hover states palette](images/color-overview-interactive.png)
-
-
-
+![Hover states palette](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-interactive.png)
 
 <br />
 
@@ -442,18 +342,10 @@ accompanied by a background hover color shift as well. For example, an overflow
 menu uses `$text-secondary` and `$layer` in its enabled state. On hover, the
 text switches to `$text-primary` and the background to `$layer-hover`.
 
-
-
-
-![Hover state colors are half steps](images/color-overview-interactive-hover.png)
-
-
-
-
+![Hover state colors are half steps](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-interactive-hover.png)
 
   Shown in the white theme, '$layer' enabled color (1) has a value of 10 and
   '$layer-hover' (2) has a value of 15.
-
 
 <br />
 
@@ -471,18 +363,10 @@ is Blue 80.
 The exceptions are that White value shares the same active state value as Gray
 10, and Black value shares the same active state value as Gray 100.
 
-
-
-
-![Active state colors are two steps over](images/color-overview-interactive-active.png)
-
-
-
-
+![Active state colors are two steps over](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-interactive-active.png)
 
   Shown in the White theme, `$button-primary` enabled color (1) has a value of
   Blue 60 and `$button-primary-active` active color (2) has a value of Blue 80.
-
 
 <br />
 
@@ -505,18 +389,10 @@ will change to the `primary` color when selected, giving them a subtle emphasis.
 Most of the time, this shift in color (to the text or icon element) will be
 accompanied by a selected background color shift as well.
 
-
-
-
-![Selected state colors are one step over](images/color-overview-interactive-selected.png)
-
-
-
-
+![Selected state colors are one step over](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-interactive-selected.png)
 
   Shown in the white theme, `$layer` enabled color (1) has a value of Gray 10
   and `$layer-selected` selected color (2) has a value of Gray 20.
-
 
 <br />
 
@@ -538,17 +414,9 @@ Focus states are required on all interactive elements and must pass 3:1 color
 contrast accessibility. Often times to achieve proper 3:1 contrast a
 `$focus-inset` border is used between the focus border and the element itself.
 
-
-
-
-![Focus state colors](images/color-overview-interactive-focus.png)
-
-
-
-
+![Focus state colors](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/color-overview-interactive-focus.png)
 
   White theme `$focus` color (1) and Gray 90 theme `$focus` color (2).
-
 
 <br />
 
@@ -576,22 +444,13 @@ Using various forms of contrast is the most important consideration when making
 user-friendly color and interface choices. Awareness of standards and best
 practices is the key to accessible color selections.
 
-
-
     - [链接](https://www.ibm.com/design/language/color#accessibility)
 
-
-
   
-
 
     - [链接](https://www.ibm.com/able/toolkit/design/visual/color-and-contrast)
 
-
-
   
-
-
 
 ### Contrast ratios
 
@@ -607,17 +466,9 @@ The IBM palette is comprised of twelve color grades—Black, White and ten value
 for each hue. The following table indicates the minimum number of steps required
 to achieve commonly used contrast ratios between any two colors.
 
+![color grades - Mobile image](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/colorgrades_table_mobile.png)
 
-
-
-
-![color grades - Mobile image](images/colorgrades_table_mobile.png)
-
-![color grades graphic](images/colorgrades_table.png)
-
-
-
-
+![color grades graphic](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/color/images/colorgrades_table.png)
 
 | Color 1 | Color 2 (4.5:1 contrast)   | Color 2 (3:1 contrast)     |
 | ------- | -------------------------- | -------------------------- |
@@ -633,22 +484,3 @@ to achieve commonly used contrast ratios between any two colors.
 | 20      | 70 through Black (5 steps) | 60 through Black (4 steps) |
 | 10      | 60 through Black (5 steps) | 50 through Black (4 steps) |
 | White   | 60 through Black (6 steps) | 50 through Black (5 steps) |
-
-## Resources
-
-
-
-  - [链接](https://github.com/carbon-design-system/carbon/raw/refs/heads/main/packages/colors/artifacts/IBM_Colors.zip)
-
-
-
-  
-
-
-  - [链接](https://github.com/carbon-design-system/carbon/tree/main/packages/colors)
-
-
-
-  
-
-

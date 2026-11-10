@@ -1,15 +1,15 @@
 ---
-title: "USWDS · Typography 字体排印"
+title: "USWDS · Foundation · Typography 字体排印"
 source: https://designsystem.digital.gov/components/typography/
 section: type
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: type-12
 publisher: "USWDS"
 ---
 
-# USWDS · Typography 字体排印
+# USWDS · Foundation · Typography 字体排印
 
 > 来源：[https://designsystem.digital.gov/components/typography/](https://designsystem.digital.gov/components/typography/)
 
@@ -32,7 +32,7 @@ The U.S. Web Design System controls typesetting values with a token system. You 
 ### Font size
 
 *   **Use a comfortable reading size for body text.** For most text, including body copy, use at least an effective size of 16px ([font-size 5](https://designsystem.digital.gov/design-tokens/typesetting/font-size/)). Smaller and larger text can be used sparingly for special purposes (like headings, captions, photo credits, footnotes, data tables, or specialized UI elements).
-*   **Font size tokens.** The following two points are basic guidelines for selecting font size tokens:
+*   **Font size tokens.** The following two points are basic guidelines for selecting font size tokens: 
     *   Use tokens between [font-size 5](https://designsystem.digital.gov/design-tokens/typesetting/font-size/) and [font-size 8](https://designsystem.digital.gov/design-tokens/typesetting/font-size/) for most running text.
     *   Use tokens smaller than [font-size 5](https://designsystem.digital.gov/design-tokens/typesetting/font-size/) more sparingly — for shorter companion text like captions, footnotes, photo credits, or specialized UI elements.
 
@@ -51,7 +51,7 @@ Controlling the length of lines of text (also known as _measure_) helps readers�
 *   **Text with greater line height can have a longer measure.** Since one of the functions of measure is to help readers move from one line of text to another more naturally, the effects of a long measure can be lessened by increasing the space between lines. Thus, text with more space between lines can have somewhat longer line length.
 *   **Short passages can have measure outside the ideal range.** In contexts when users will be reading short passages of text (such as footnotes or alerts), you can safely set somewhat longer or shorter lines than usual.
 *   **Large text can have a shorter measure.** Since larger text takes up more screen real estate, it may make sense to assign it a relatively small measure.
-*   **Measure tokens.** The following three points are basic guidelines for selecting measure tokens:
+*   **Measure tokens.** The following three points are basic guidelines for selecting measure tokens: 
     *   Tokens between [measure 2](https://designsystem.digital.gov/design-tokens/typesetting/measure/) and [measure 5](https://designsystem.digital.gov/design-tokens/typesetting/measure/) are appropriate for most long-running text.
     *   The [measure 6](https://designsystem.digital.gov/design-tokens/typesetting/measure/) token can be appropriate for shorter blocks of text, like captions of fewer than three lines, or for text that isn’t meant for longform reading.
     *   The [measure 1](https://designsystem.digital.gov/design-tokens/typesetting/measure/) token can be appropriate for helper text (no longer than a paragraph or two) or for larger text (like a subheading or intro text).
@@ -63,7 +63,7 @@ Line height controls the vertical rhythm and density of a block of text. It is w
 *   **Longer texts require more line height.** Headings and other content elements no longer than a line or two can have a line height between 1 ([line-height 1](https://designsystem.digital.gov/design-tokens/typesetting/line-height/)) and 1.35 ([line-height 3](https://designsystem.digital.gov/design-tokens/typesetting/line-height/)). Longer texts should have a line height of at least 1.5 ([line-height 4](https://designsystem.digital.gov/design-tokens/typesetting/line-height/)).
 *   **Longer lines usually require more line height.** Distinguishing between lines of text can be difficult when the eye has to travel from the end of one long line to the beginning of the next. Using more line height makes it easier for readers to distinguish individual lines. Though, somewhat counterintuitively, long lines of text can benefit from slightly less line height than usual, as too much line height can make each individual line appear too prominent.
 *   **Readable text has a medium density.** Strive for text that appears neither very dense nor loose. The reader typically shouldn’t notice the space between lines of text.
-*   **Line height tokens.** The following six points are basic guidelines for selecting line height tokens:
+*   **Line height tokens.** The following six points are basic guidelines for selecting line height tokens: 
     *   The [line-height 1](https://designsystem.digital.gov/design-tokens/typesetting/line-height/) token is a good option for most buttons and other short UI elements. (This option is often best for clear vertical alignment.)
     *   The [line-height 2](https://designsystem.digital.gov/design-tokens/typesetting/line-height/) token is a good option for most headings and introductory text no longer than 1-2 sentences.
     *   The [line-height 3](https://designsystem.digital.gov/design-tokens/typesetting/line-height/) token is a good option for short text (under a paragraph), captions, and long lines.
@@ -158,55 +158,9 @@ a b c d e f g h i j k l m n o p q r s t u v w x y z
 
 Meaningful code and guidance updates are listed in the following table:
 
-Date
-
-USWDS version
-
-Affects
-
-Breaking
-
-Description
-
-2024-03-20
-
-N/A
-
-*   Guidance
-
-No
-
-**Added WCAG compliance tag.** More information: [uswds-site#2540](https://github.com/uswds/uswds-site/pull/2540)
-
-2023-06-09
-
-[3.5.0](https://github.com/uswds/uswds/releases/tag/v3.5.0)
-
-*   Styles
-
-No
-
-**Stopped using font smoothing.** No longer use font smoothing for dark backgrounds and disabled buttons. More information: [uswds#5250](https://github.com/uswds/uswds/pull/5250)
-
-2023-03-09
-
-[3.4.0](https://github.com/uswds/uswds/releases/tag/v3.4.0)
-
-*   Guidance
-*   Settings
-
-No
-
-**Use only `woff2` in our `@font-face` declarations.** Since modern browsers only need the `woff2` font format, we now only output `woff2` fonts in our `@font-face` rules. If you need `woff` and `ttf` for IE11 compatibility, set `$theme-font-browser-compatibility` to `true` in settings. More information: [uswds#5108](https://github.com/uswds/uswds/pull/5108)
-
-2022-04-28
-
-[3.0.0](https://github.com/uswds/uswds/releases/tag/v3.0.0)
-
-*   Assets
-*   JavaScript
-*   Styles
-
-Breaking
-
-Breaking **Updated to Sass module syntax and new package structure.** More information: [uswds#4656](https://github.com/uswds/uswds/pull/4656)
+| Date | USWDS version | Affects | Breaking | Description |
+| --- | --- | --- | --- | --- |
+| 2024-03-20 | N/A | * Guidance | No | **Added WCAG compliance tag.** More information: [uswds-site#2540](https://github.com/uswds/uswds-site/pull/2540) |
+| 2023-06-09 | [3.5.0](https://github.com/uswds/uswds/releases/tag/v3.5.0) | * Styles | No | **Stopped using font smoothing.** No longer use font smoothing for dark backgrounds and disabled buttons. More information: [uswds#5250](https://github.com/uswds/uswds/pull/5250) |
+| 2023-03-09 | [3.4.0](https://github.com/uswds/uswds/releases/tag/v3.4.0) | * Guidance * Settings | No | **Use only `woff2` in our `@font-face` declarations.** Since modern browsers only need the `woff2` font format, we now only output `woff2` fonts in our `@font-face` rules. If you need `woff` and `ttf` for IE11 compatibility, set `$theme-font-browser-compatibility` to `true` in settings. More information: [uswds#5108](https://github.com/uswds/uswds/pull/5108) |
+| 2022-04-28 | [3.0.0](https://github.com/uswds/uswds/releases/tag/v3.0.0) | * Assets * JavaScript * Styles | Breaking | Breaking**Updated to Sass module syntax and new package structure.** More information: [uswds#4656](https://github.com/uswds/uswds/pull/4656) |

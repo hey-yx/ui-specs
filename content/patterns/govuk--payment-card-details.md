@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Payment card details 银行卡"
 source: https://design-system.service.gov.uk/patterns/payment-card-details/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-9
 publisher: "GOV.UK Design System"
@@ -13,13 +13,13 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/payment-card-details/](https://design-system.service.gov.uk/patterns/payment-card-details/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Ask users for  Payment card details
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
-![A form entitled enter card details which asks for a card number, an expiry date, a name on the card and the card security code.](enter-card-details.jpg)
+![Image 1: A form entitled enter card details which asks for a card number, an expiry date, a name on the card and the card security code.](/img/gov/f509d88f7915.jpg)
 
 ## When to use this pattern
 
@@ -41,24 +41,18 @@ Show logos for the cards you accept as icons so users can see whether their card
 
 Use Issuer Identification Number (IIN) lookups to validate the card number as the user enters it. Once you’ve been able to identify the user’s card type, leave only the relevant logo highlighted and grey out the others.
 
-<div class="app-video">
-  <video class="app-video__player" role="region" aria-labelledby="card-number-video-description" controls muted>
-    <source src="card-number.mp4" type="video/mp4">
-  </video>
-  <p class="app-video__description" id="card-number-video-description">
-    This video shows the card number validation in practice. It does not have any audio.
-  </p>
-</div>
+[Video 3](https://design-system.service.gov.uk/patterns/payment-card-details/card-number.mp4)
+This video shows the card number validation in practice. It does not have any audio.
 
 If JavaScript is not available, display all of the logos anyway, as they still help users to understand which card types you support.
 
 When you validate the card number, the card security code information should update according to the type of card being used. For example, if a user enters an American Express card, the hint text and icon should change to match the front of the card.
 
-![2 different images of a card security code input, one above the other. The top image shows an input where the security code is the last 3 digits on the back of the card, with hint text and an icon showing that. The bottom image shows an input where the security code is the last 4 digits after the card number on the front, with hint text and an icon showing that.](card-security-code.jpg)
+![Image 2: 2 different images of a card security code input, one above the other. The top image shows an input where the security code is the last 3 digits on the back of the card, with hint text and an icon showing that. The bottom image shows an input where the security code is the last 4 digits after the card number on the front, with hint text and an icon showing that.](/img/gov/16f4036c471b.jpg)
 
 Do not use CVV or other acronyms for the card security code.
 
-If you need to ask for a user's name elsewhere in your service, do not assume that the name on their card will be the same.
+If you need to ask for a user’s name elsewhere in your service, do not assume that the name on their card will be the same.
 
 ## Research on this pattern
 
@@ -70,44 +64,62 @@ The GOV.UK Pay team tests this pattern quarterly as part of its user research.
 
 As of August 2018 the following services were using this pattern as part of GOV.UK Pay.
 
-**Office of the Public Guardian**<br>
+**Office of the Public Guardian**
+
 Lasting Power of Attorney
 
-**Ministry of Justice**<br>
+**Ministry of Justice**
+
 Send money to a prisoner
 
-**Border Force**<br>
-Registered Traveller: faster entry through the UK border<br>
-Global Entry: apply for faster entry to the USA<br>
+**Border Force**
+
+Registered Traveller: faster entry through the UK border
+
+Global Entry: apply for faster entry to the USA
+
 Electronic Visa Waiver
 
-**Disclosure and Barring Service**<br>
-Basic Disclosure<br>
+**Disclosure and Barring Service**
+
+Basic Disclosure
+
 Disclosure Scotland
 
-**HM Courts and Tribunals**<br>
-Probate Fees<br>
-Civil Money Claims<br>
+**HM Courts and Tribunals**
+
+Probate Fees
+
+Civil Money Claims
+
 Divorce Fees
 
-**Foreign and Commonwealth Office**<br>
+**Foreign and Commonwealth Office**
+
 Emergency Travel Documents
 
-**Ministry of Defence**<br>
+**Ministry of Defence**
+
 Defence Academy
 
-**Department for Digital, Culture, Media & Sport**<br>
-Government Art Collection<br>
+**Department for Digital, Culture, Media & Sport**
+
+Government Art Collection
+
 Press Accreditation
 
-**Department for International Trade**<br>
+**Department for International Trade**
+
 Overseas Market Introduction Service
 
-**Nottingham University Hospitals NHS Trust**<br>
+**Nottingham University Hospitals NHS Trust**
+
 Private Care
 
-**Land Registry**<br>
+**Land Registry**
+
 Local Land Charges
 
-**Environment Agency**<br>
+**Environment Agency**
+
 Waste Permitting

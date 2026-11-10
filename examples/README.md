@@ -1,40 +1,49 @@
 # examples · 真实建站案例
 
-这十一个站是「AI 读本库做设计」真实流程跑出来的案例。2026-11-07 晚这一轮改成需求驱动：需求单独放在仓库根的 `briefs/`，站目录里只剩成品件，页面结构和取值全部由指南七步重新推出来，旧成品已删，备份在仓库外。
+这些站是「AI 读本库做设计」真实流程跑出来的案例。2026-11-07 晚这一轮改成需求驱动：需求单独放在仓库根的 `briefs/`，站目录里只剩成品件，页面结构和取值全部由指南七步重新推出来，旧成品已删，备份在仓库外。
 
-每站五件：`index.html`（单文件，零外部请求）、`DECISIONS.md`（每条数值的出处：值 + `文件:行号` + 用在哪）、`FINDINGS.md`（基准规范缺口与被迫派生的维度）、`preview.png`（1280×800 首屏）、`meta.json`（案例卡展示用的站名、一句描述、主色、结构、版型）。放齐五件，构建时自动出现在 `/examples/` 和首页统计里，不用改代码；缺一件构建直接失败。生成前的需求不在站目录里，在 `briefs/<站>.md`。站内浏览在 `/examples/`。
+每站五件：`index.html`（单文件；未开框架的零外部请求，开框架的只引 esm.sh 的框架与组件库）、`DECISIONS.md`（每条数值的出处：值 + `文件:行号` + 用在哪）、`FINDINGS.md`（基准规范缺口与被迫派生的维度）、`preview.png`（1280×800 首屏）、`meta.json`（案例卡展示用的站名、一句描述、主色、结构、版型）。放齐五件，构建时自动出现在 `/examples/` 和首页统计里，不用改代码；缺一件构建直接失败。生成前的需求不在站目录里，在 `briefs/<站>.md`。站内浏览在 `/examples/`。
 
 ## 建站需求
 
-生成前的建站需求不与案例站混放，真源是仓库根的 `briefs/sites.json`：每站一条，字段固定为名字、分类、语言、产品、受众、核心任务、语气、差异化约束、页面必备内容、边界。站名只有一个字段 `name`，分类 `category` 写一句中文短名（视频站、数据看板、写作工具这类），需求列表与详情页显示的就是它，slug 只在 URL 与目录名里出现。语气决定文案腔调，差异化约束给一个色相方向或结构倾向，具体色值与尺寸仍按基准规范取，需求里不写数值。站点直接读这份数据渲染，总览在 `/briefs/`，单站在 `/briefs/<站>/`；AI 可以拉 `/ai/case-briefs.json`。每站的 `briefs/<站>.md` 由 `scripts/build-briefs.mjs` 从 JSON 生成（`--check` 只比对不写盘），改需求改 JSON 一处就够，缺一条或对不上案例清单会在构建时直接报错。换案例成品时只动 `examples/`，需求不受影响。
+生成前的建站需求不与案例站混放，真源是仓库根的 `briefs/`：一份 `<slug>.md` 一站，frontmatter 写 name、category、lang，另有可选的 framework（react 或 vue，省略即按静态 HTML 手写，开了用该站基准规范配套的官方组件库）。产品只写是什么、给谁用，写在 frontmatter 之后的正文，不写页面区块，也不写文案语气：语气由生成时自己定，不写进需求。站名只有一个字段 `name`，分类 `category` 写一句中文短名（视频站、数据看板、写作工具这类），需求列表与详情页显示的就是它，slug 取文件名，只在 URL 与目录名里出现。页面要有哪些区块、用什么版式、取什么数值，都由指南七步在生成时定，需求里不写数值也不写版式。站点直接扫这个目录渲染，总览在 `/briefs/`，单站在 `/briefs/<站>/`；AI 可以拉 `/ai/case-briefs.json`。加一站就是加一个文件，没有第二份清单要同步；frontmatter 缺字段或正文为空会在构建时直接报错。换案例成品时只动 `examples/`，需求不受影响。
 
-## 十一个站
+## 现有案例
+
+目录里有几站就列几站，值从各站 `meta.json` 与 DECISIONS 抄。
 
 | 站 | 站名 | 基准规范 | 强调色 | 结构（macrostructure / nav / footer） |
 | --- | --- | --- | --- | --- |
-| epdeck | EpDeck | TDesign（含暗色板） | Blue6 `#2174ff` | Catalogue Index / 顶部导航 / 三段页脚 |
-| pickbin | PickBin | TDesign | Blue7 `#0052d9` | 柜面双栏 / 页头 / 简洁页脚 |
-| metricrail | MetricRail | TDesign | Blue7 `#0052d9` | Stat-Led / N9 / Ft2 |
-| samepaper | SamePaper | TDesign | Blue7 `#0052d9` | 编辑式长页 / 吸顶页头 / 四列页脚 |
-| swimboard | SwimBoard | TDesign | Blue7 `#0052d9` | 应用骨架 / 侧栏导航 / 署名条 |
-| tallylane | TallyLane | TDesign | Blue7 `#0052d9` | Ledger Column / N9 / Ft5 |
-| fixqueue | FixQueue | TDesign | Blue7 `#0052d9` | Workbench / 侧栏 / 队列页脚 |
-| quilldeck | QuillDeck | TDesign | Blue7 `#0052d9` | Narrative Workflow / N1b / Ft2 |
-| listenrail | ListenRail | TDesign | Blue7 `#0052d9` | Marquee Hero / N9 / Ft5 |
-| weekdeck | WeekDeck | TDesign | Blue7 `#0052d9` | Long Document / N6 / Ft2 |
-| payloaddeck | PayloadDeck | Primer（色值与字阶回源 GOV.UK） | GOV.UK Purple `#54319f` | Long Document / 三栏文档 / 单行页脚 |
+| samepaper | SamePaper | TDesign | Purple7 `#7137bf` | Marquee Hero · N5 悬浮胶囊 / Ft1 页眉式页脚 |
+| tallylane | TallyLane | TDesign | Yellow7 `#8b6600` | Bento Grid · N12 / Ft5 |
+| payloaddeck | PayloadDeck | Primer（色值与字阶回源 GOV.UK） | GOV.UK blue `#1d70b8`（derived） | Component Playground · N8 / Ft8 |
+| metricrail | MetricRail | TDesign（React + tdesign-react 1.18.6） | Blue10 `#001a57` | Stat-Led · N3 左缘竖条 / Ft3 三栏索引 |
 
-十一站的名字都按 NameYouLike 的起名提示词生成（英文名，它不出汉字名），并按同一套核验口径跑过 npm、GitHub 同名仓、同赛道产品与 RDAP 域名四道；生成在会话里执行，域名查询走仓内 `scripts/domain-check-fast.py`。提示词与核验方法见 [NameYouLike · 取名台](https://github.com/hey-yx/NameYouLike)。评分口径见 [`SCORES.md`](SCORES.md)，本轮评分待重做。
+站名都按 NameYouLike 的起名提示词生成（英文名，它不出汉字名），并按同一套核验口径跑过 npm、GitHub 同名仓、同赛道产品与 RDAP 域名四道；生成在会话里执行。提示词与核验方法见 [NameYouLike · 取名台](https://github.com/hey-yx/NameYouLike)。评分口径见本节末尾。
 
-有一点值得先看：不预设四轴后，十一站里有九站都选了 TDesign Blue7 作强调色，epdeck 走同族暗色 Blue6，只有 payloaddeck 因为基准规范不同落在紫色。结构也集中在中性骨架（文档、列表、看板）上，这是本轮的实测结果，不是刻意安排。
+不预设四轴时会出现趋同：多数站会选 TDesign Blue7 当强调色，结构也集中在文档、列表、看板这类中性骨架上，这是实测结果，不是刻意安排。所以批量跑之前先按 `briefs/rotation.json` 分派版式与色相。
 
 ## 验收口径（各站都过）
 
-- 单文件 HTML，零外部请求；中文站用中文真实文案，英文站用英文真实文案。
-- 320 / 375 / 768 / 1280 四档无横向溢出（`scrollWidth === clientWidth`）。
+- 单文件 HTML；未开框架的站零外部请求，开框架的站只允许 esm.sh 的框架与组件库请求（MetricRail 开了框架，映射与请求口径见其 FINDINGS 第 3 节）；中文站用中文真实文案，英文站用英文真实文案。
+- 开框架的站：组件来自该行官方组件库，主题变量映射到基准规范值，逐个组件量 `backgroundColor` / `fontSize` / `borderRadius` 对账；只改品牌色不算过。
+- 320 / 375 / 768 / 1280 四档无横向溢出（`scrollWidth === clientWidth`），另按基准规范断点逐个边界量一次。
 - 核心交互真跑：筛选、表单校验、数据联动、弹层开合逐个实测，前后数字记在 DECISIONS。
 - 对比度：正文 ≥ 4.5:1，非文本 ≥ 3:1，实测值进取值记录。
 - 质量六条：首屏字号按字阶档位取（英文站按 measure 判，每行 60-75 字符）、层次靠底色不靠框线、强调色面积 < 5%、封面与图表内联 SVG、交互态齐全、行高 = 字号 + 8。
+- 形状语言一致：胶囊或圆角容器里的悬停、选中、按下与本体同形，只换填充色不换形状；同排控件的圆角与高度实测相等。验收标准见下面「必选场景检验」。
+
+## 必选场景检验（每站都跑）
+
+跑不过不算交付。验收标准都写成能测的量，不靠眼睛感觉。
+
+| 场景 | 怎么跑 | 通过标准 |
+| --- | --- | --- |
+| 状态与本体同形 | 找出站内所有胶囊或圆角容器（悬浮导航、分段切换、标签、按钮组、卡片内操作行），逐个把悬停、选中、按下调出来，量 `border-radius`、高度、`background-color`、`text-decoration-line` | 三种状态只换填充与文字色，不出现下划线、方框、左侧竖条；同排控件圆角与高度实测相等；实心＝动作，浅色填充＝当前位置，两者形状同族、层级分得开 |
+
+这条专拦一种错：胶囊导航里主按钮是实心胶囊，选中项却写成下划线，一个容器出现两种形状语言。对比度、溢出、行高、间距全部查不出来，只有形状一致性这一条能拦住。
+
+分层不算违规：动作件（按钮、切换、徽标、标签、行内操作）统一胶囊；容器件（卡片、面板、任务块）用 4 至 8px 小圆角；输入框与文本域按基准规范的输入框圆角，不跟着胶囊走。判的是「同类件之间」和「同一件的三种状态之间」，不是全页一个圆角。
 
 ## 取值纪律（看取值记录时重点看这些）
 

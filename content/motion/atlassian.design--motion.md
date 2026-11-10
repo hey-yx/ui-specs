@@ -1,5 +1,5 @@
 ---
-title: "Atlassian · Motion 动效"
+title: "Atlassian · Foundation · Motion 动效"
 source: https://atlassian.design/foundations/motion
 section: motion
 tag: "规范"
@@ -9,7 +9,7 @@ id: motion-3
 publisher: "Atlassian"
 ---
 
-# Atlassian · Motion 动效
+# Atlassian · Foundation · Motion 动效
 
 > 来源：[https://atlassian.design/foundations/motion](https://atlassian.design/foundations/motion)
 
@@ -131,13 +131,9 @@ Keep small elements (hover states, micro-interactions) fast and understated. All
 
 Use motion to direct attention to a new element, provide feedback from an action, or reinforce a brand moment during onboarding or loading. Before adding motion ask, if I remove this, does the user lose information or context?
 
-![A user flow where each step's motion is short and supports the task, keeping momentum forward.](示例图见原文)
-
 #### Do
 
 Check for workflow friction. Walk through the full user flow with motion enabled. If an animation supports the task, keep it. If not, shorten it through easing and duration.
-
-![A user blocked by a long animation between steps, with the next action waiting.](示例图见原文)
 
 #### Don’t
 
@@ -151,13 +147,9 @@ Match motion expression to how often it is seen. High-frequency interactions lik
 
 Start motion immediately on interactions to avoid perceptible lags. Make exit motion faster than entrances so dismissed elements don't block someone's workflow. If motion makes the interface feel slower without helping users understand context, shorten it or remove it.
 
-![A single Modal scaling into view to draw the user's attention to one focal change.](示例图见原文)
-
 #### Do
 
 Lead with one clear focal point. When multiple elements need to animate, simplify so a single event leads and others support it. A clear focal point keeps attention on the primary task.
-
-![Multiple elements of the Modal scaling at once, splitting the user's attention across competing motion.](示例图见原文)
 
 #### Don’t
 

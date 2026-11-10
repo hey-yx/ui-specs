@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Dates 日期"
 source: https://design-system.service.gov.uk/patterns/dates/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-1
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/dates/](https://design-system.service.gov.uk/patterns/dates/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Ask users for  Dates
 
 Help users enter or select a date.
 
@@ -29,10 +29,10 @@ The way you should ask users for dates depends on the types of date you’re ask
 
 Dates you may need users to provide include:
 
-- memorable dates, like a date of birth or marriage
-- dates from documents or cards, like a passport or credit card
-- approximate dates, like ‘December 2017’
-- relative dates, like ‘4 days from today’
+*   memorable dates, like a date of birth or marriage
+*   dates from documents or cards, like a passport or credit card
+*   approximate dates, like ‘December 2017’
+*   relative dates, like ‘4 days from today’
 
 In some cases you might need users to pick a date from a given selection.
 
@@ -40,26 +40,8 @@ In some cases you might need users to pick a date from a given selection.
 
 Ask for memorable dates, like dates of birth, using the [Date input component](https://design-system.service.gov.uk/components/date-input/) component.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2024"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/dates/#dates-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/dates/#dates-example-nunjucks)
 
 ### Asking for dates from documents and cards
 
@@ -83,11 +65,11 @@ To do this, you can present dates in a calendar format using a calendar control.
 
 Only use a calendar control if users need to:
 
-- pick a date in the near future or recent past
-- know the day of the week, or the week of the month, as well as the date
-- be able to see dates in relation to other dates
+*   pick a date in the near future or recent past
+*   know the day of the week, or the week of the month, as well as the date
+*   be able to see dates in relation to other dates
 
-Never make a calendar control that depends on JavaScript as the only input option. Allow users to enter the date into a text input as well as use the control.
+Never make a calendar control that depends on JavaScript as the only input option.Allow users to enter the date into a text input as well as use the control.
 
 ### How to write dates
 

@@ -3,7 +3,7 @@ title: "GOV.UK · Component · File upload 文件上传"
 source: https://design-system.service.gov.uk/components/file-upload/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-25
 publisher: "GOV.UK Design System"
@@ -13,33 +13,20 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/file-upload/](https://design-system.service.gov.uk/components/file-upload/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
 Help users select and upload a file.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
-
-{{ govukFileUpload({
-  id: "file-upload-1",
-  name: "fileUpload1",
-  label: {
-    text: "Upload a file"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/file-upload/#file-upload-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/file-upload/#file-upload-example-nunjucks)
 
 ## When to use this component
 
 You should only ask users to upload something if it’s critical to the delivery of your service.
 
-We improved the component in March 2025, so you’ll need to enable the [improved File upload component](#using-the-improved-file-upload-component) as a new feature.
+We improved the component in March 2025, so you’ll need to enable the [improved File upload component](https://design-system.service.gov.uk/components/file-upload/#using-the-improved-file-upload-component) as a new feature.
 
 Read a blog post about [design tips for helping users upload things](https://designnotes.blog.gov.uk/2017/02/14/some-design-tips-for-uploading-things/).
 
@@ -47,8 +34,8 @@ Read a blog post about [design tips for helping users upload things](https://des
 
 To upload a file, the user can either:
 
-- use the ‘Choose file’ button
-- drag and drop a file into the file upload input area
+*   use the ‘Choose file’ button
+*   drag and drop a file into the file upload input area
 
 ### Let users reuse uploaded files
 
@@ -58,58 +45,36 @@ For example, a user might need to upload a photo of their driving licence to pro
 
 You can make it easier for the user to reuse a file by showing it as an option for the user to select so they do not need to upload it again. Consider users on public devices before choosing to make the file available to preview or download.
 
-There are 2 ways to use the file upload component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk), you can use the Nunjucks macro.
+There are 2 ways to use the file upload component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/), you can use the Nunjucks macro.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
-
-{{ govukFileUpload({
-  id: "file-upload-1",
-  name: "fileUpload1",
-  label: {
-    text: "Upload a file"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/file-upload/#file-upload-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/file-upload/#file-upload-second-example-nunjucks)
 
 ### Error messages
 
 Error messages should be styled like this:
 
-**示例：error**
-
-```njk
-{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
-
-{{ govukFileUpload({
-  id: "file-upload-1",
-  name: "fileUpload1",
-  label: {
-    text: "Upload a file"
-  },
-  errorMessage: {
-    text: "The CSV must be smaller than 2MB"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/file-upload/#error-file-upload-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/file-upload/#error-file-upload-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
 #### If no file has been selected
 
-Say ‘Select a [whatever they need to select]’.<br>
+Say ‘Select a [whatever they need to select]’.
+
 For example, ‘Select a report’.
 
 #### If the file is the wrong file type
 
-Say ‘The selected file must be a [list of file types]’.<br>
+Say ‘The selected file must be a [list of file types]’.
+
 For example, ‘The selected file must be a CSV or ODS’ or ‘The selected file must be a JPG, BMP, PNG, TIF or PDF’.
 
 #### If the file is too big
 
-Say ‘The selected file must be smaller than [largest file size]’.<br>
+Say ‘The selected file must be smaller than [largest file size]’.
+
 For example, ‘The selected file must be smaller than 2MB’.
 
 #### If the file is empty
@@ -130,7 +95,8 @@ Say ‘The selected file could not be uploaded – try again’.
 
 #### If there is a limit on how many files the user can select
 
-Say ‘You can only select up to [highest number] files at the same time’.<br>
+Say ‘You can only select up to [highest number] files at the same time’.
+
 For example, ‘You can only select up to 10 files at the same time’.
 
 #### If the file is not in a template that must be used or the template has been changed
@@ -143,30 +109,18 @@ In March 2025, we introduced changes to the File upload component that service t
 
 The improved component is intended to:
 
-- fix accessibility issues
-- improve the user experience
-- allow text in the component to be translated
+*   fix accessibility issues
+*   improve the user experience
+*   allow text in the component to be translated
 
-We recommend service teams start using the latest component to improve the experience for users. However, it's a visual change from the previous component and might affect existing designs and layouts.
+We recommend service teams start using the latest component to improve the experience for users. However, it’s a visual change from the previous component and might affect existing designs and layouts.
 
 To let teams migrate at their own pace, the improvements are only enabled if you use the `javascript` macro option or extra markup in your HTML.
 
 This example shows you how to enable the improved File upload component:
 
-**示例：enhanced**
-
-```njk
-{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
-
-{{ govukFileUpload({
-  id: "file-upload-1",
-  name: "fileUpload1",
-  label: {
-    text: "Upload a file"
-  },
-  javascript: true
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/file-upload/#enhanced-file-upload-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/file-upload/#enhanced-file-upload-example-nunjucks)
 
 ### About HTML attributes
 
@@ -174,21 +128,21 @@ JavaScript creates the improved version of the component out of the input (`<inp
 
 Some HTML attributes applied to the input might not work or work differently.
 
-These attributes must stay in the original input since they're used by the button:
+These attributes must stay in the original input since they’re used by the button:
 
-- `id` and its value are added to the button and renamed on the input
-- `disabled` is copied and synchronised with any changes that happen on the input
-- `aria-describedby` is copied
+*   `id` and its value are added to the button and renamed on the input
+*   `disabled` is copied and synchronised with any changes that happen on the input
+*   `aria-describedby` is copied
 
 These attributes must stay in the original input since they only work in the input (and not the button):
 
-- `name`
-- `accept`
-- `capture`
-- `accesskey`
-- `multiple`, which also changes the behaviour of the button as text is added when multiple files are selected
+*   `name`
+*   `accept`
+*   `capture`
+*   `accesskey`
+*   `multiple`, which also changes the behaviour of the button as text is added when multiple files are selected
 
-To add any other attributes to the improved version, you'll have to add them either to the parent `<div>` or through JavaScript to the button.
+To add any other attributes to the improved version, you’ll have to add them either to the parent `<div>` or through JavaScript to the button.
 
 Screen readers will not read out the `required` attribute in the improved version. Although we [recommend not to use that attribute](https://design-system.service.gov.uk/patterns/validation/#turn-off-html5-validation).
 
@@ -196,9 +150,9 @@ Screen readers will not read out the `required` attribute in the improved versio
 
 To make it easier for users to drag and drop files, we’ve made the drop zone:
 
-- bigger
-- visible at all times
-- more visually responsive to user interactions
+*   bigger
+*   visible at all times
+*   more visually responsive to user interactions
 
 We’ve also changed the ‘Choose file’ button to be more consistent with the secondary button in the [Button component](https://design-system.service.gov.uk/components/button).
 
@@ -212,11 +166,11 @@ Users of Dragon, a speech recognition tool, [cannot activate their browser’s n
 
 With the improved File upload component, users can say commands for interacting with web page controls to choose files.
 
-However, due to [browser security features](https://developer.mozilla.org/en-US/docs/Web/Security/User_activation), this may not work right away or on subsequent interactions on the same page. If users cannot interact with the component, they'll first need to perform another action, such as a mouse click.
+However, due to [browser security features](https://developer.mozilla.org/en-US/docs/Web/Security/User_activation), this may not work right away or on subsequent interactions on the same page. If users cannot interact with the component, they’ll first need to perform another action, such as a mouse click.
 
 ## Research on this component
 
-### Colour and 'interaction state' updates from the GOV.UK brand refresh
+### Colour and ‘interaction state’ updates from the GOV.UK brand refresh
 
 In February 2026, we updated the improved File upload component.
 

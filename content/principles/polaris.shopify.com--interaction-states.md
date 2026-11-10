@@ -15,23 +15,14 @@ publisher: "Polaris"
 
 ---
 
-
-![A collection of buttons in different states](/images/design/interaction-states/interaction-states-intro@2x.png)
+![A collection of buttons in different states](https://polaris-react.shopify.com/images/design/interaction-states/interaction-states-intro@2x.png)
 
 ---
 
-
-
-
-
-
 > **Caution**
-
 
 This section is currently being reworked to provide better guidance aligned
 with Polaris v12. Stay tuned!
-
-
 
 ## Principles
 
@@ -64,19 +55,19 @@ To learn more, check out the [accessibility guidelines](/foundations/accessibili
 
 Provide merchants with cues as to what the interface will do if they interact with it. By using signifiers we set expectations about what components can do, which creates a more intuitive interface that’s easier to use. The types of signifiers include:
 
-![A "sort" button in a default state.](/images/design/interaction-states/interaction-states-explicit@2x.png)
+![A "sort" button in a default state.](https://polaris-react.shopify.com/images/design/interaction-states/interaction-states-explicit@2x.png)
 
 **Explicit**, where content directs merchants to do the intended action, such as “Sort” or “Save.”
 
-![An "edit" button with its underline appearing when the mouse hovers above it.](/images/design/interaction-states/interaction-states-hidden@2x.png)
+![An "edit" button with its underline appearing when the mouse hovers above it.](https://polaris-react.shopify.com/images/design/interaction-states/interaction-states-hidden@2x.png)
 
 **Hidden**, where the clue isn’t revealed until the merchant interacts with it, such as hovering or using tab navigation to see if a button is clickable.
 
-![A "print packing slip" button that is grayed out and inactive.](/images/design/interaction-states/interaction-states-negative@2x.png)
+![A "print packing slip" button that is grayed out and inactive.](https://polaris-react.shopify.com/images/design/interaction-states/interaction-states-negative@2x.png)
 
 **Negative**, where the action appears inactive (like the button is grayed out and doesn’t respond to hover) because it isn’t available for the merchant to use.
 
-![A toast component, a button with a spinner component and a text field component with an error message.](/images/design/interaction-states/interaction-states-behavior@2x.png)
+![A toast component, a button with a spinner component and a text field component with an error message.](https://polaris-react.shopify.com/images/design/interaction-states/interaction-states-behavior@2x.png)
 
 ### Behavior
 

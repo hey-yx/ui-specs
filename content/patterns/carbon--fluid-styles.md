@@ -199,27 +199,3 @@ _Examples of various ways a fluid component may be attached to its container._
 - Default and fluid components can be used together in certain hybrid scenarios.
   The most common pairing is default input components, with fluid buttons in a
   contained form, like a modal or side panel.
-
-## Related
-
-#### Components
-
-- [Button](https://carbondesignsystem.com/components/button/usage)
-- [Date picker](https://carbondesignsystem.com/components/date-picker/usage/)
-- [Dropdown](https://carbondesignsystem.com/components/dropdown/usage/)
-- [Form](https://carbondesignsystem.com/components/form/usage/)
-- [Number input](https://carbondesignsystem.com/components/number-input/usage/)
-- [Search](https://carbondesignsystem.com/components/search/usage/)
-- [Select](https://carbondesignsystem.com/components/select/usage/)
-- [Text input](https://carbondesignsystem.com/components/text-input/usage/)
-
-#### Patterns
-
-- [Forms](https://carbondesignsystem.com/patterns/forms-pattern/)
-- [Login](https://carbondesignsystem.com/patterns/login-pattern/)
-
-#### Guidelines
-
-- [2x Grid](https://carbondesignsystem.com/elements/2x-grid/overview/)
-- [Motion](https://carbondesignsystem.com/elements/motion/overview/)
-- [Typography](https://carbondesignsystem.com/elements/typography/style-strategies)

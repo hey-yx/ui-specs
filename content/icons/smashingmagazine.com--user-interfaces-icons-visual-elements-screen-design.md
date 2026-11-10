@@ -112,13 +112,11 @@ Let’s see some examples of using icons in different screen designs.
 
 Buddha Pizza has got navigation on the left containing some linear icons. The icons are big and clear, and they move nicely on hover. Other explicative icons are discovered in the page sections.
 
-
 #### Kinsta(https://kinsta.com/)
 
 Kinsta uses two kind of icons. The first are simple line icons, displayed with labels that explain their role:
 
 Then, we find illustrated icons that move.
-
 
 #### HTML Burger(https://htmlburger.com/)
 
@@ -127,7 +125,6 @@ This website makes beautiful use of pictures and simple icons.
 Some sections are described with big line icons:
 
 While others present simple and clear icons:
-
 
 ### Mobile Apps
 
@@ -140,7 +137,6 @@ Calm is an app for mindfulness and meditation. On its intro screen, we find line
 #### Movesum(https://itunes.apple.com/us/app/movesum/id1064026338?mt=8)
 
 The Movesum app helps you find the motivation to exercise. It shows what kind of food you’re shedding when you burn calories. And guess what it uses to explain it? Icons.
-
 
 #### Health
 
@@ -161,7 +157,6 @@ Apple’s live introduction(https://www.youtube.com/watch?v=NS0txu_Kzl8) shows h
 ### Car Dashboards
 
 Last but not least, let’s see an example of how icons are indispensable in car dashboards. Now they are touchable in cars, too.
-
 
 ### Illustrator And XD: In Cooperation
 
@@ -206,13 +201,3 @@ Here is the list of items we’ve covered in this article:
 I hope you’ve enjoyed my article! Feel free to ask anything in the comments below.
 
 This article is part of a UX design series sponsored by Adobe. Adobe XD is made for a fast and fluid UX design process, as it lets you go from idea to prototype faster. Design, prototype, and share — all in one app. You can check out more inspiring projects created with Adobe XD on Behance, and also sign up for the Adobe experience design newsletter to stay updated and informed on the latest trends and insights for UX/UI design.
-
-### Further Reading
-
-- An Actionable And Reliable Usability Questionnaire With Only 7 Items: Inuit(https://www.smashingmagazine.com/2023/10/actionable-reliable-usability-questionnaire-inuit/)
-- How Accessibility Standards Can Empower Better Chart Visual Design(https://www.smashingmagazine.com/2024/02/accessibility-standards-empower-better-chart-visual-design/)
-- When Words Cannot Describe: Designing For AI Beyond Conversational Interfaces(https://www.smashingmagazine.com/2024/02/designing-ai-beyond-conversational-interfaces/)
-- In Search Of The Ideal Privacy Icon(https://www.smashingmagazine.com/2023/11/search-ideal-privacy-icon/)
-
-[Smashing Editorial]
-(ra, al, il, mrn)

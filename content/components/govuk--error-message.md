@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Error message 错误提示"
 source: https://design-system.service.gov.uk/components/error-message/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-20
 publisher: "GOV.UK Design System"
@@ -13,37 +13,14 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/error-message/](https://design-system.service.gov.uk/components/error-message/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 This guidance is for government teams that build online services. [To find information and services for the public, go to GOV.UK](https://www.gov.uk/).
 
 Follow the [Validation pattern](https://design-system.service.gov.uk/patterns/validation/) and show an error message when there is a validation error. In the error message explain what went wrong and how to fix it.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  },
-  errorMessage: {
-    text: "The date your passport was issued must be in the past"
-  },
-  id: "passport-issued",
-  namePrefix: "passport-issued"
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/error-message/#error-message-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/error-message/#error-message-example-nunjucks)
 
 ## When to use this component
 
@@ -59,40 +36,29 @@ Instead, take the user to a page that explains the problem (for example, telling
 
 There are separate patterns for:
 
-- ['There is a problem with the service' pages](https://design-system.service.gov.uk/patterns/problem-with-the-service-pages/)
-- ['Page not found' pages](https://design-system.service.gov.uk/patterns/page-not-found-pages/)
-- ['Service unavailable' pages](https://design-system.service.gov.uk/patterns/service-unavailable-pages/)
+*   [‘There is a problem with the service’ pages](https://design-system.service.gov.uk/patterns/problem-with-the-service-pages/)
+*   [‘Page not found’ pages](https://design-system.service.gov.uk/patterns/page-not-found-pages/)
+*   [‘Service unavailable’ pages](https://design-system.service.gov.uk/patterns/service-unavailable-pages/)
 
 ## How it works
 
 For each error:
 
-- put the message in red after the question text and hint text
-- use a red border to visually connect the message and the question it belongs to
-- if the error relates to a specific field within the question, give it a red border and refer to that field in the error message - for example: "you must enter a year"
+*   put the message in red after the question text and hint text
+*   use a red border to visually connect the message and the question it belongs to
+*   if the error relates to a specific field within the question, give it a red border and refer to that field in the error message - for example: “you must enter a year”
 
 Do not clear any form fields when showing the Error message component. Keep both passing and failing answers.
 
 Keeping information that caused errors helps users to:
 
-- see what went wrong
-- edit their previous answer
-- avoid re-entering information
+*   see what went wrong
+*   edit their previous answer
+*   avoid re-entering information
 
-To help screen reader users, the error message component includes a hidden 'Error:' before the error message. These users will hear, for example, "Error: The date your passport was issued must be in the past".
+To help screen reader users, the error message component includes a hidden ‘Error:’ before the error message. These users will hear, for example, “Error: The date your passport was issued must be in the past”.
 
 If your error message is written in another language, you can change the prefix as needed, as shown in this example.
-
-**示例：custom-prefix**
-
-```njk
-{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
-
-{{ govukErrorMessage({
-  text: "Rhowch eich enw llawn",
-  visuallyHiddenText: "Gwall"
-}) }}
-```
 
 Summarise all errors at the top of the page the user is on using an [Error summary component](https://design-system.service.gov.uk/components/error-summary/).
 
@@ -100,64 +66,13 @@ There are 2 ways to use the error message component. You can use HTML or, if you
 
 ### Legend
 
-**示例：legend**
-
-```njk
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-
-{{ govukCheckboxes({
-  name: "nationality",
-  fieldset: {
-    legend: {
-      text: "What is your nationality?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "If you have dual nationality, select all options that are relevant to you"
-  },
-  errorMessage: {
-    text: "Select if you are British, Irish or a citizen of a different country"
-  },
-  items: [
-    {
-      value: "british",
-      text: "British"
-    },
-    {
-      value: "irish",
-      text: "Irish"
-    },
-    {
-      value: "other",
-      text: "Citizen of another country"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/error-message/#error-message-with-legend-error-message-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/error-message/#error-message-with-legend-error-message-example-nunjucks)
 
 ### Label
 
-**示例：label**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "National Insurance number"
-  },
-  hint: {
-    text: "It’s on your National Insurance card, benefit letter, payslip or P60 – for example, ‘QQ 12 34 56 C’"
-  },
-  id: "national-insurance-number",
-  name: "nationalInsuranceNumber",
-  errorMessage: {
-    text: "Enter a National Insurance number in the correct format"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/error-message/#error-message-with-label-error-message-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/error-message/#error-message-with-label-error-message-example-nunjucks)
 
 ### Match up error messages to labels
 
@@ -167,13 +82,13 @@ Here are some examples of label and error message pairs.
 
 Example 1:
 
-- Label: ‘How many hours do you work a week?’
-- Error message: ‘Enter how many hours you work a week’
+*   Label: ‘How many hours do you work a week?’
+*   Error message: ‘Enter how many hours you work a week’
 
 Example 2:
 
-- Label: ‘Address line 1’
-- Error message: ‘Enter address line 1, typically the building and street’
+*   Label: ‘Address line 1’
+*   Error message: ‘Enter address line 1, typically the building and street’
 
 ### Be clear and concise
 
@@ -181,12 +96,12 @@ Describe what has happened and tell them how to fix it. The message must be in p
 
 Do not use:
 
-- technical jargon like ‘form post error’, ‘unspecified error’ and ‘error 0x0000000643’
-- words like ‘forbidden’, ‘illegal’, ‘you forgot’ and ‘prohibited’
-- ‘please’ because it implies a choice
-- ‘sorry’ because it does not help fix the problem
-- ‘valid’ and ‘invalid’ because they do not add anything to the message
-- humourous, informal language like ‘oops’
+*   technical jargon like ‘form post error’, ‘unspecified error’ and ‘error 0x0000000643’
+*   words like ‘forbidden’, ‘illegal’, ‘you forgot’ and ‘prohibited’
+*   ‘please’ because it implies a choice
+*   ‘sorry’ because it does not help fix the problem
+*   ‘valid’ and ‘invalid’ because they do not add anything to the message
+*   humourous, informal language like ‘oops’
 
 Do not give an example in the error message if there is an example on the screen. For example, if you are asking for a National Insurance number and include ‘QQ 12 34 56 C’ as hint text, do not include an example in the error message.
 
@@ -198,27 +113,27 @@ Read the message out loud to see if it sounds like something you would say.
 
 Use the same message next to the field and in the [Error summary component](https://design-system.service.gov.uk/components/error-summary/) so they:
 
-- look, sound and mean the same
-- make sense out of context
-- reduce the cognitive effort needed to understand what has happened
+*   look, sound and mean the same
+*   make sense out of context
+*   reduce the cognitive effort needed to understand what has happened
 
 ### Be specific
 
 General errors are not helpful to everyone. They do not make sense out of context. Avoid messages like:
 
-- ‘An error occurred’
-- ‘Answer the question’
-- ‘Select an option’
-- ‘Fill in the field’
-- ‘This field is required’
+*   ‘An error occurred’
+*   ‘Answer the question’
+*   ‘Select an option’
+*   ‘Fill in the field’
+*   ‘This field is required’
 
 Different errors need different messages. For example, text fields may be:
 
-- empty
-- too long
-- too short
-- using characters that are not allowed
-- in the wrong format
+*   empty
+*   too long
+*   too short
+*   using characters that are not allowed
+*   in the wrong format
 
 An error for a specific situation is more helpful. It will tell someone what has happened and how to fix it.
 
@@ -226,9 +141,9 @@ An error for a specific situation is more helpful. It will tell someone what has
 
 Some errors work better as instructions and some work better as descriptions. For example:
 
-- ‘Enter your first name’ is clearer, more direct and natural than ‘First name must have an entry’
-- ‘Enter a first name that is 35 characters or less’ is wordier, less direct and natural than ‘First name must be 35 characters or less’
-- ‘Enter a date after 31 August 2017 for when you started the course’ is wordier, less direct and natural than ‘Date you started the course must be after 31 August 2017’
+*   ‘Enter your first name’ is clearer, more direct and natural than ‘First name must have an entry’
+*   ‘Enter a first name that is 35 characters or less’ is wordier, less direct and natural than ‘First name must be 35 characters or less’
+*   ‘Enter a date after 31 August 2017 for when you started the course’ is wordier, less direct and natural than ‘Date you started the course must be after 31 August 2017’
 
 Use both instructions and descriptions, but use them consistently. For example, use an instruction for empty fields like ‘Enter your name’, but a description like ‘Name must be 35 characters or less’ for entries that are too long.
 
@@ -236,26 +151,26 @@ Use both instructions and descriptions, but use them consistently. For example, 
 
 Use template messages for common errors on:
 
-- [Addresses pattern](https://design-system.service.gov.uk/patterns/addresses/#error-messages)
-- [Character count component](https://design-system.service.gov.uk/components/character-count/#error-messages)
-- [Checkboxes component](https://design-system.service.gov.uk/components/checkboxes/#error-messages)
-- [Date input component](https://design-system.service.gov.uk/components/date-input/#error-messages)
-- [Email address pattern](https://design-system.service.gov.uk/patterns/email-addresses/#error-messages)
-- [File upload component](https://design-system.service.gov.uk/components/file-upload/#error-messages)
-- [Names pattern](https://design-system.service.gov.uk/patterns/names/#error-messages)
-- [National Insurance numbers pattern](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#error-messages)
-- [Radios component](https://design-system.service.gov.uk/components/radios/#error-messages)
-- [Phone numbers pattern](https://design-system.service.gov.uk/patterns/phone-numbers/#error-messages)
-- [Text input component](https://design-system.service.gov.uk/components/text-input/#error-messages)
-- [Textarea component](https://design-system.service.gov.uk/components/textarea/#error-messages)
+*   [Addresses pattern](https://design-system.service.gov.uk/patterns/addresses/#error-messages)
+*   [Character count component](https://design-system.service.gov.uk/components/character-count/#error-messages)
+*   [Checkboxes component](https://design-system.service.gov.uk/components/checkboxes/#error-messages)
+*   [Date input component](https://design-system.service.gov.uk/components/date-input/#error-messages)
+*   [Email address pattern](https://design-system.service.gov.uk/patterns/email-addresses/#error-messages)
+*   [File upload component](https://design-system.service.gov.uk/components/file-upload/#error-messages)
+*   [Names pattern](https://design-system.service.gov.uk/patterns/names/#error-messages)
+*   [National Insurance numbers pattern](https://design-system.service.gov.uk/patterns/national-insurance-numbers/#error-messages)
+*   [Radios component](https://design-system.service.gov.uk/components/radios/#error-messages)
+*   [Phone numbers pattern](https://design-system.service.gov.uk/patterns/phone-numbers/#error-messages)
+*   [Text input component](https://design-system.service.gov.uk/components/text-input/#error-messages)
+*   [Textarea component](https://design-system.service.gov.uk/components/textarea/#error-messages)
 
 ### Track errors
 
 Find out how often people see them. This will let you:
 
-- improve content
-- A/B test variations
-- redesign a journey
+*   improve content
+*   A/B test variations
+*   redesign a journey
 
 ## Research on this component
 
@@ -263,8 +178,8 @@ Error messages designed using this guidance have been tested with all types of u
 
 Research showed users:
 
-- understood what went wrong
-- knew how to fix the problem
-- were able to recover from the error
+*   understood what went wrong
+*   knew how to fix the problem
+*   were able to recover from the error
 
 If you’ve used this component, get in touch to share your user research findings.

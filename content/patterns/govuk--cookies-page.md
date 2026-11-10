@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Cookies page Cookie 页"
 source: https://design-system.service.gov.uk/patterns/cookies-page/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-23
 publisher: "GOV.UK Design System"
@@ -13,71 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/cookies-page/](https://design-system.service.gov.uk/patterns/cookies-page/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Tell users about the cookies you’re setting on their device and let them accept or reject different types of non-essential cookies.
 
-**示例：full-page**
-
-```njk
-{% extends "example-wrappers/full-page.njk" %}
-
-{% from "govuk/components/table/macro.njk" import govukTable %}
-
-{% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Cookies</h1>
-    <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
-    <p class="govuk-body">We use cookies to make this site work and collect information about how you use our service.</p>
-    <h2 class="govuk-heading-m">Essential cookies</h2>
-    <p class="govuk-body">Essential cookies keep your information secure while you use this service. We do not need to ask permission to use them.</p>
-    {{ govukTable({
-      caption: "Essential cookies we use",
-      captionClasses: "govuk-table__caption--s",
-      firstCellIsHeader: false,
-      head: [
-        {
-          text: "Name"
-        },
-        {
-          text: "Purpose"
-        },
-        {
-          text: "Expires"
-        }
-      ],
-      rows: [
-        [
-          {
-            text: "session_cookie"
-          },
-          {
-            text: "Used to keep you signed in"
-          },
-          {
-            text: "20 hours"
-          }
-        ],
-        [
-          {
-            text: "cookie_policy"
-          },
-          {
-            text: "Saves your cookie consent settings"
-          },
-          {
-            text: "1 year"
-          }
-        ]
-      ]
-    }) }}
-  </div>
-</div>
-{% endblock %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/cookies-page/#full-page-cookies-page-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/cookies-page/#full-page-cookies-page-example-nunjucks)
 
 ## When to use this pattern
 
@@ -93,18 +34,18 @@ You must publish a cookies page by the time your service goes into public beta. 
 
 Follow the steps below to create a cookie policy.
 
-1. Audit your cookies.
-2. Categorise your cookies.
-3. Write your cookies page.
+1.   Audit your cookies.
+2.   Categorise your cookies.
+3.   Write your cookies page.
 
 ## Auditing and categorising your cookies
 
 List all the cookies you’re using in the service. Divide the list into:
 
-- essential cookies - these are cookies you need to set so the service will work
-- functional cookies - the service will work without them, but the user will not be able to take advantage of some functionality (for example, remembering the settings they’ve chosen between different visits)
-- analytics cookies - cookies that let you collect analytics data to use within your own organisation
-- any other types of cookie you’re using
+*   essential cookies - these are cookies you need to set so the service will work
+*   functional cookies - the service will work without them, but the user will not be able to take advantage of some functionality (for example, remembering the settings they’ve chosen between different visits)
+*   analytics cookies - cookies that let you collect analytics data to use within your own organisation
+*   any other types of cookie you’re using
 
 You should also identify if each cookie is set on the server or client.
 
@@ -112,9 +53,9 @@ The result of your audit will guide your cookie policy and how the service shoul
 
 The [Cookie banner component](https://design-system.service.gov.uk/components/cookie-banner/) shows several options for using a cookie banner for services that:
 
-- only set essential cookies
-- sets non-essential cookies on the server - including services that also set non-essential cookies on the client
-- sets non-essential cookies - but only on the client
+*   only set essential cookies
+*   sets non-essential cookies on the server - including services that also set non-essential cookies on the client
+*   sets non-essential cookies - but only on the client
 
 ## Writing your cookies page
 
@@ -124,10 +65,10 @@ Cookie policy must be written in [clear language](https://guidance.publishing.se
 
 List the cookies individually on the cookies page, under the relevant category. For each cookie, give:
 
-- the cookie name
-- a brief description of what the cookie does
-- for third party cookies, who is setting the cookie (for example, social media websites may require users to accept their cookies in order to provide their functionality as part of your service)
-- when the cookie will expire
+*   the cookie name
+*   a brief description of what the cookie does
+*   for third party cookies, who is setting the cookie (for example, social media websites may require users to accept their cookies in order to provide their functionality as part of your service)
+*   when the cookie will expire
 
 You can see an example on the [GOV.UK Notify cookies page](https://www.notifications.service.gov.uk/cookies).
 
@@ -145,8 +86,8 @@ You must get the user’s consent before you set any cookies that are not strict
 
 You can get the user’s consent:
 
-- by using a [Cookie banner component](https://design-system.service.gov.uk/components/cookie-banner/)
-- by letting the user change and save their settings on the cookies page
+*   by using a [Cookie banner component](https://design-system.service.gov.uk/components/cookie-banner/)
+*   by letting the user change and save their settings on the cookies page
 
 ## Publishing your cookies page
 
@@ -158,83 +99,13 @@ Use a [Radios component](https://design-system.service.gov.uk/components/radios/
 
 Load the page with the radios set to ‘no’ on the user’s first visit. If they’ve previously used the service and set their preferences, load the page with those preferences selected.
 
-**示例：cookies-form**
-
-```njk
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l">Change your cookie settings</h2>
-    <form action="/form-handler" method="post" novalidate>
-      {{ govukRadios({
-          name: "cookies[functional]",
-          idPrefix: "cookies-functional",
-          fieldset: {
-            legend: {
-              text: "Do you want to accept functional cookies?",
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-            {
-              value: "yes",
-              text: "Yes"
-            },
-            {
-              value: "no",
-              text: "No",
-              checked: true
-            }
-          ]
-        }) }}
-
-        {{ govukRadios({
-          name: "cookies[analytics]",
-          idPrefix: "cookies-analytics",
-          fieldset: {
-            legend: {
-              text: "Do you want to accept analytics cookies?",
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-            {
-              value: "yes",
-              text: "Yes"
-            },
-            {
-              value: "no",
-              text: "No",
-              checked: true
-            }
-          ]
-        }) }}
-
-        {{ govukButton({
-          text: "Save cookie settings"
-        }) }}
-    </form>
-  </div>
-</div>
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/cookies-page/#cookie-preferences-form-cookies-page-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/cookies-page/#cookie-preferences-form-cookies-page-example-nunjucks)
 
 When the user sets or changes their cookie preferences, use a green [Notification banner component](https://design-system.service.gov.uk/components/notification-banner/) to confirm that the service has updated the user’s cookie settings. This is so they can get back to the page they were looking at.
 
-**示例：cookies-updated**
-
-```njk
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-
-{% call govukNotificationBanner({
-  type: "success"
-}) %}
-  <p class="govuk-notification-banner__heading">
-    You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="#">Go back to the page you were looking at</a>.
-  </p>
-{% endcall %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/cookies-page/#cookie-preferences-updated-cookies-page-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/cookies-page/#cookie-preferences-updated-cookies-page-example-nunjucks)
 
 ## If you depend on JavaScript to ask users to accept or reject cookies
 
@@ -242,32 +113,20 @@ If you depend on JavaScript to ask about cookie preferences and the user’s dev
 
 Replace the radios with a section of text explaining what the user needs to do in order to change their cookie settings.
 
-**示例：no-js**
-
-```njk
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l">Change your cookie settings</h2>
-    <p class="govuk-body">We cannot change your cookie settings at the moment because JavaScript is not running in your browser. To fix this, try:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>turning on JavaScript in your browser settings</li>
-      <li>reloading this page</li>
-    </ul>
-  </div>
-</div>
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/cookies-page/#no-javascript-cookies-page-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/cookies-page/#no-javascript-cookies-page-example-nunjucks)
 
 ## Keeping your cookies page up to date and asking for new consent
 
 Update your cookies page when you change the cookies you’re using. Check with your organisation’s privacy expert:
 
-- how you should classify the new cookie
-- whether you’ll need to ask for new consent from all users (including those who’ve already consented to the cookies you were previously using)
+*   how you should classify the new cookie
+*   whether you’ll need to ask for new consent from all users (including those who’ve already consented to the cookies you were previously using)
 
 It’s likely you’ll need to ask for new consent if:
 
-- you start using a type of non-essential cookie you have not used before (for example, if you start using functional cookies for the first time)
-- you start using cookies which could be considered intrusive (for example because they collect sensitive information which could be associated with an individual, like health information)
-- you start doing something with the data you’re collecting through cookies which is significantly different to what the user originally consented to
+*   you start using a type of non-essential cookie you have not used before (for example, if you start using functional cookies for the first time)
+*   you start using cookies which could be considered intrusive (for example because they collect sensitive information which could be associated with an individual, like health information)
+*   you start doing something with the data you’re collecting through cookies which is significantly different to what the user originally consented to
 
 Do not set any new non-essential cookies until the user has given their consent again.

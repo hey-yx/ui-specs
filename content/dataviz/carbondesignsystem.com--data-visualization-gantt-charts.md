@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Gantt charts 甘特图"
+title: "IBM Carbon · Pattern · Gantt charts 甘特图"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-3
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Gantt charts 甘特图
+# IBM Carbon · Pattern · Gantt charts 甘特图
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/index.mdx)
 
@@ -19,29 +19,23 @@ publisher: "IBM Carbon"
 
 **Note:** The charts below are not included in the carbon-charts library. To see our roadmap, make feature requests, or contribute, please go to the [carbon-charts repository](https://github.com/carbon-design-system/carbon-charts).
 
-## Resources
-
-- [Gantt Chart Kit (Alpha)](https://www.figma.com/file/nQJ9Y5u3s7zPHGjceT4eLY/(Alpha)-Carbon-Gantt-Chart-Library?type=design&node-id=5284%3A423754&mode=design&t=8kurHvxJyiVziXNz-1)
-
-- [Documentation](https://www.figma.com/file/FurnT9pJvtQn9G2GnuWK2T/(Alpha)-Carbon-Gantt-Chart-Kit?type=design&node-id=3711%3A6208&mode=design&t=lI1ZAzzbSfjt4OTN-1)
-
 ## Card Component
 
 Card lies on the y-axis of the Gantt chart, the cards are used to show any additional information about the task bar. Cards can expand to include sub cards that have the details of a sub task.
 
-![Gantt - Card Component](images/card-component.png)
+![Gantt - Card Component](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/images/card-component.png)
 
 ## Task component
 
 A visual representation of an action that is tracked across time on a gantt chart. It depicts the action relative to time it will take complete and when to start.
 
-![Gantt - Card Component](images/task-component.png)
+![Gantt - Card Component](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/images/task-component.png)
 
 ## Design recommendations
 
 When designing the Gantt chart make sure to arrange task bars with contrasting colors next to each other and similar colors away from each other. Tasks should have a clear title and all users who are assigned listed in the card.
 
-![Gantt - Card Component](images/design-recs.png)
+![Gantt - Card Component](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/gantt-charts/images/design-recs.png)
 
 ## Contributors
 

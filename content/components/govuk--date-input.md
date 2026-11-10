@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Date input 日期输入框"
 source: https://design-system.service.gov.uk/components/date-input/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-18
 publisher: "GOV.UK Design System"
@@ -13,32 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/date-input/](https://design-system.service.gov.uk/components/date-input/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Use the date input component to help users enter a memorable date or one they can easily look up.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#date-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#date-input-example-nunjucks)
 
 ## When to use this component
 
@@ -64,88 +44,68 @@ Make sure that any example dates you use in hint text are valid for the question
 
 Accept month names written out in full or abbreviated form (for example, ‘january’ or ‘jan’) as some users may enter months in this way.
 
-There are 2 ways to use the date input component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk), you can use the Nunjucks macro.
+There are 2 ways to use the date input component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/), you can use the Nunjucks macro.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#date-input-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#date-input-second-example-nunjucks)
 
 Never automatically tab users between the fields of the date input because this can be confusing and may clash with normal keyboard controls.
 
 ### If you’re asking more than one question on the page
 
-If you're asking more than one question on the page, do not set the contents of the `<legend>` as the page heading. Read more about [asking multiple questions on question pages](https://design-system.service.gov.uk/patterns/question-pages/#asking-multiple-questions-on-a-page).
+If you’re asking more than one question on the page, do not set the contents of the `<legend>` as the page heading. Read more about [asking multiple questions on question pages](https://design-system.service.gov.uk/patterns/question-pages/#asking-multiple-questions-on-a-page).
 
-**示例：without-heading**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#date-input-without-a-heading-date-input-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#date-input-without-a-heading-date-input-second-example-nunjucks)
 
 ### Use the autocomplete attribute for a date of birth
 
-Use the `autocomplete` attribute on the date input component when you're asking for a date of birth. This lets browsers autofill the information on a user's behalf if they’ve entered it previously.
+Use the `autocomplete` attribute on the date input component when you’re asking for a date of birth. This lets browsers autofill the information on a user’s behalf if they’ve entered it previously.
 
 To do this, set the `autocomplete` attribute on the 3 fields to `bday-day`, `bday-month` and `bday-year`. See how to do this in the HTML and Nunjucks tabs in the following example.
 
-**示例：date-of-birth**
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#default-2-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#default-2-open-nunjucks)
 
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "dob",
-  namePrefix: "dob",
-  fieldset: {
-    legend: {
-      text: "What is your date of birth?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 31 3 1980"
-  },
-  day: {
-    autocomplete: "bday-day"
-  },
-  month: {
-    autocomplete: "bday-month"
-  },
-  year: {
-    autocomplete: "bday-year"
-  }
-}) }}
+```
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="dob-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        What is your date of birth?
+      </h1>
+    </legend>
+    <div id="dob-hint" class="govuk-hint">
+      For example, 31 3 1980
+    </div>
+    <div class="govuk-date-input" id="dob">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="dob-day">
+            Day
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-day" name="dob-day" type="text" autocomplete="bday-day" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="dob-month">
+            Month
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dob-month" name="dob-month" type="text" autocomplete="bday-month" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="dob-year">
+            Year
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dob-year" name="dob-year" type="text" autocomplete="bday-year" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
 ```
 
 If you are working in production you’ll need to do this to meet [WCAG 2.2 success criterion 1.3.5: Identify input purpose, level AA](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html).
@@ -154,149 +114,95 @@ If you are working in production you’ll need to do this to meet [WCAG 2.2 succ
 
 If you’re highlighting the whole date, style all the fields like this:
 
-**示例：error**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  },
-  errorMessage: {
-    text: "The date your passport was issued must be in the past"
-  },
-  values: {
-    day: 6,
-    month: 3,
-    year: 2076
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#date-input-with-errors-date-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#date-input-with-errors-date-input-example-nunjucks)
 
 If you’re highlighting just one field - either the day, month or year - only style the field that has an error. The error message must say which field has an error, like this:
 
-**示例：error-single**
-
-```njk
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-
-{{ govukDateInput({
-  id: "passport-issued",
-  namePrefix: "passport-issued",
-  fieldset: {
-    legend: {
-      text: "When was your passport issued?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "For example, 27 3 2007"
-  },
-  errorMessage: {
-    text: "The date your passport was issued must include a year"
-  },
-  values: {
-    day: 6,
-    month: 3
-  },
-  year: {
-    error: true
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/date-input/#dates-with-errors-date-input-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/date-input/#dates-with-errors-date-input-example-nunjucks)
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
 
 If there’s more than one error, show the highest priority error message. In order of priority, show error messages about:
 
-- missing or incomplete information
-- information that cannot be correct (for example, the number ‘13’ in the month field)
-- information that fails validation for another reason
+*   missing or incomplete information
+*   information that cannot be correct (for example, the number ‘13’ in the month field)
+*   information that fails validation for another reason
 
 #### If nothing is entered
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘Enter [whatever it is]’. For example, ‘Enter your date of birth’.
 
 #### If the date is incomplete
 
-Highlight the day, month or year field where the information is missing or incomplete. If more than one field is missing information, highlight the fields the user needs to fill in.<br>
+Highlight the day, month or year field where the information is missing or incomplete. If more than one field is missing information, highlight the fields the user needs to fill in.
 
-Say ‘[whatever it is] must include a [whatever is missing]’.<br>
+Say ‘[whatever it is] must include a [whatever is missing]’.
 
 For example, ‘Date of birth must include a month’, ‘Date of birth must include a day and month’ or ‘Year must include 4 numbers’.
 
 #### If the date entered cannot be correct
 
-For example, ‘13’ in the month field cannot be correct.<br>
+For example, ‘13’ in the month field cannot be correct.
 
-Highlight the day, month or year field with the incorrect information. Or highlight the date as a whole if there’s incorrect information in more than one field, or it's not clear which field is incorrect.<br>
+Highlight the day, month or year field with the incorrect information. Or highlight the date as a whole if there’s incorrect information in more than one field, or it’s not clear which field is incorrect.
 
 Say ‘[Whatever it is] must be a real date’. For example, ‘Date of birth must be a real date’.
 
 #### If the date is in the future when it needs to be in the past
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be in the past’. For example, ‘Date of birth must be in the past’.
 
 #### If the date is in the future when it needs to be today or in the past
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be today or in the past’. For example, ‘Date of birth must be today or in the past’.
 
 #### If the date is in the past when it needs to be in the future
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be in the future’. For example, ‘The date your course ends must be in the future’.
 
 #### If the date is in the past when it needs to be today or in the future
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be today or in the future’. For example, ‘The date your course ends must be today or in the future’.
 
 #### If the date must be the same as or after another date
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be the same as or after [date and optional description]’. For example, ‘The date your course ends must be the same as or after 1 September 2017 when you started the course’.
 
 #### If the date must be after another date
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be after [date and optional description]’. For example, ‘The day your course ends must be after 1 September 2017’.
 
 #### If the date must be the same as or before another date
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be the same as or before [date and optional description]’. For example, ‘The date of Gordon’s last exam must be the same as or before 31 August 2017 when they left school’.
 
 #### If the date must be before another date
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be before [date and optional description]’. For example, ‘The date of Gordon’s last exam must be the same as or before 31 August 2017’.
 
 #### If the date must be between two dates
 
-Highlight the date input as a whole.<br>
+Highlight the date input as a whole.
 
 Say ‘[whatever it is] must be between [date] and [date and optional description]’. For example, ‘The date your contract started must be between 1 September 2017 and 30 September 2017 when you were self-employed’.
 

@@ -33,7 +33,7 @@ export default function uiSpecsPipeline() {
         // cp 只增不清：先删目标目录，删掉的案例才不会残留在发布目录
         await rm(EXAMPLES_OUT, { recursive: true, force: true })
         await cp(EXAMPLES_ROOT, EXAMPLES_OUT, { recursive: true, force: true })
-        // 需求单独放 briefs/，/briefs/sites.json 与 briefs/<站>.md 原文都从这里来
+        // 需求单独放 briefs/，/briefs/<站>.md 原文都从这里来
         await rm(BRIEFS_OUT, { recursive: true, force: true })
         await cp(BRIEFS_ROOT, BRIEFS_OUT, { recursive: true, force: true })
       },
@@ -50,7 +50,7 @@ export default function uiSpecsPipeline() {
         const star = JSON.parse(await readFile(STAR_FILE, 'utf8'))
         const errors = [
           ...validateDocs(docs, usage),
-          ...validateStarPoints(star.points, byFile, sectionKeys, buildProjectPoints().flatMap((p) => p.articles)),
+          ...validateStarPoints(star.points, byFile, sectionKeys, buildProjectPoints().flatMap((p) => p.articles), star.tasks),
         ]
         if (errors.length) {
           throw new Error(

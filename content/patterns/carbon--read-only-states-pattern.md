@@ -221,29 +221,6 @@ navigable. Read-only components remain navigable so that users can review the
 information they contain. This contrasts with disabled components, which cannot
 be reached by a keyboard. However, read-only components are not operable,
 meaning users can neither manipulate nor alter their values.
-
-## Related
-
-#### Components
-
-- [Checkbox](https://carbondesignsystem.com/components/checkbox/usage)
-- [Date picker](https://carbondesignsystem.com/components/date-picker/usage/)
-- [Dropdown](https://carbondesignsystem.com/components/dropdown/usage/)
-- [Number input](https://carbondesignsystem.com/components/number-input/usage/)
-- [Radio button](https://carbondesignsystem.com/components/radio-button/usage/)
-- [Slider](https://carbondesignsystem.com/components/slider/usage/)
-- [Text area](https://carbondesignsystem.com/components/text-input/usage/#text-area)
-- [Text input](https://carbondesignsystem.com/components/text-input/usage/#text-input)
-- [Toggle](https://carbondesignsystem.com/components/toggle/usage/)
-
-#### Patterns
-
-[Disabled states](https://carbondesignsystem.com/patterns/disabled-states/)
-
-#### Carbon for IBM Products
-
-[Read-only canvas](https://pages.github.ibm.com/cdai-design/pal/patterns/canvas/read-only-canvas)
-
 ## References
 
 - MDN contributors,

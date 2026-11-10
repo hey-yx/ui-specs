@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Task list 任务列表"
 source: https://design-system.service.gov.uk/components/task-list/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-43
 publisher: "GOV.UK Design System"
@@ -13,83 +13,12 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/task-list/](https://design-system.service.gov.uk/components/task-list/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 The task list component displays all the tasks a user needs to do, and allows users to easily identify which ones are done and which they still need to do.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
-
-{{ govukTaskList({
-  idPrefix: "company-details",
-  items: [
-    {
-      title: {
-        text: "Company Directors"
-      },
-      href: "#",
-      status: {
-        text: "Completed"
-      }
-    },
-    {
-      title: {
-        text: "Registered company details"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "Financial history"
-      },
-      hint: {
-        text: "Include 5 years of the company’s relevant financial information"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "Business plan"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "References"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/task-list/#default-1-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/task-list/#default-1-nunjucks)
 
 ## When to use this component
 
@@ -97,8 +26,8 @@ Use the task list to give users more control over how they complete long, comple
 
 Only use the task list if there’s evidence that users:
 
-- do not want to, or cannot, complete all the tasks in one sitting
-- need to be able to choose the order they complete the tasks in
+*   do not want to, or cannot, complete all the tasks in one sitting
+*   need to be able to choose the order they complete the tasks in
 
 ## When not to use this component
 
@@ -112,77 +41,8 @@ The task list should not be used as a way of showing users their answers. For th
 
 There are 2 ways to use the task list component. You can use HTML or, if you’re using [Nunjucks](https://mozilla.github.io/nunjucks/) or the [GOV.UK Prototype Kit](https://prototype-kit.service.gov.uk/docs/), you can use the Nunjucks macro.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
-
-{{ govukTaskList({
-  idPrefix: "company-details",
-  items: [
-    {
-      title: {
-        text: "Company Directors"
-      },
-      href: "#",
-      status: {
-        text: "Completed"
-      }
-    },
-    {
-      title: {
-        text: "Registered company details"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "Financial history"
-      },
-      hint: {
-        text: "Include 5 years of the company’s relevant financial information"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "Business plan"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    },
-    {
-      title: {
-        text: "References"
-      },
-      href: "#",
-      status: {
-        tag: {
-          text: "Incomplete",
-          classes: "govuk-tag--blue"
-        }
-      }
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/task-list/#task-list-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/task-list/#task-list-second-example-nunjucks)
 
 Users should be able to complete tasks in whatever order they like.
 
@@ -246,8 +106,8 @@ We have also introduced a new colour palette for statuses, using colour contrast
 
 While this new component is based on user research from the task list pattern, we still need to carry out user testing with this new component. In particular, we would like to test the following assumptions:
 
-- the benefits of linking the whole task row outweigh the risks of accidental clicking
-- the contrast of the statuses is sufficient
-- the suggested wording of the statuses make the most sense to users
+*   the benefits of linking the whole task row outweigh the risks of accidental clicking
+*   the contrast of the statuses is sufficient
+*   the suggested wording of the statuses make the most sense to users
 
 If you are using this component in a service, we would like to hear about any user research so that we can identify any potential issues.

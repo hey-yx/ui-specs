@@ -1,5 +1,5 @@
 ---
-title: "GitHub Primer · Color 色彩"
+title: "GitHub Primer · Foundation · Color 色彩"
 source: https://raw.githubusercontent.com/primer/design/main/content/foundations/color/overview.mdx
 section: color
 tag: "规范"
@@ -9,7 +9,7 @@ id: color-2
 publisher: "GitHub Primer"
 ---
 
-# Primer · Color 色彩
+# GitHub Primer · Foundation · Color 色彩
 
 > 来源：[https://raw.githubusercontent.com/primer/design/main/content/foundations/color/overview.mdx](https://raw.githubusercontent.com/primer/design/main/content/foundations/color/overview.mdx)
 
@@ -21,8 +21,6 @@ description:
   Color is a fundamental part of Primer's visual language. In this guide you will learn about the principles,
   patterns, and abstractions that make up Primer’s color system.
 ---
-
-
 
 ## Overview
 
@@ -175,7 +173,6 @@ Foreground semantic colors provide contrast against `muted` and default backgrou
 |  `closed`       | Closed tasks, PRs or workflows         |
 |  `done`           | Completed tasks, PRs or workflows      |
 |  `sponsors`           | Text and icons related to GitHub Sponsors      |
-
 
 ## Developers
 

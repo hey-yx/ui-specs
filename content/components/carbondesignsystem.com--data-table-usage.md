@@ -15,12 +15,7 @@ publisher: "IBM Carbon"
 
 ---
 
-
-
-
 > Data tables are used to organize and display data efficiently. The data table component allows for customization with additional functionality, as needed by your product's users.
-
-
 
 Data table
 [with AI label](https://react.carbondesignsystem.com/?path=/docs/components-datatable-withailabel--overview)
@@ -28,23 +23,6 @@ is now stable. This addition changes the visual appearance of the component and
 introduces an AI explainability feature when AI is present in the component. See
 the [AI presence](/components/data-table/usage/#ai-presence) section for more
 details.
-
-
-
-
-
-Live demo
-Overview
-Formatting
-Content
-Variants
-Universal behaviors
-Modifiers
-AI presence
-Related
-Feedback
-
-
 
 ## Live demo
 
@@ -81,13 +59,7 @@ table display settings, and other utilities.
 
 ### Anatomy
 
-
-
-
-![data table anatomy](images/datatable-anatomy.png)
-
-
-
+![data table anatomy](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-anatomy.png)
 
 1. **Title and description**: contains the data table title and an optional
    description.
@@ -105,48 +77,25 @@ table display settings, and other utilities.
 The data table is available in five different row sizes: extra large, large,
 medium, small, extra small.
 
-
-
-
-![data table size](images/datatable-sizes.png)
-
-
-
+![data table size](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-sizes.png)
 
 The column header row `.cds--data-table thead` should always match the row size
 of the table. Extra large row heights are only recommended if your data is
 expected to have 2 lines of content in a single row.
 
+![Do: Do use the same row height for the table and header rows.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/./images/datatable-header-size-do.png)
 
-
-
-![Do: Do use the same row height for the table and header rows.](./images/datatable-header-size-do.png)
-
-
-
-
-![Don’t: mix row heights for the table and header rows.](./images/datatable-header-size-dont.png)
-
-
-
+![Don’t: mix row heights for the table and header rows.](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/./images/datatable-header-size-dont.png)
 
 Two heights are available to be paired with the row heights of the data table.
 The tall toolbar should only be paired with the large and extra large row
 heights and the small toolbar should only be used with the small and extra small
 row heights.
 
-
-
-
-![data table toolbar size](images/datatable-toolbar-sizes.png)
-
+![data table toolbar size](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-toolbar-sizes.png)
 
   A small toolbar on a short data table and a tall toolbar on a normal data
   table{' '}
-
-
-
-
 
 ### Placement
 
@@ -169,15 +118,9 @@ condensed gutter modes. Note the different type alignments and gutter sizes.
 The wide gutter mode is the default and gives the most breathing room between
 the data table and the other components or content.
 
-
-
-
-![data table wide ](images/datatable-alignment-wide.png)
+![data table wide ](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-alignment-wide.png)
 
 Data table on a wide (default) grid
-
-
-
 
 #### Narrow gutter mode
 
@@ -185,15 +128,9 @@ Using the data table on a narrow grid will hang the component into the gutter
 and create a desirable type alignment between the the data table's title and
 other type on the page.
 
-
-
-
-![data table narrow ](images/datatable-alignment-narrow.png)
+![data table narrow ](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-alignment-narrow.png)
 
 Data table on a narrow grid
-
-
-
 
 #### Condensed gutter mode
 
@@ -202,15 +139,9 @@ avoid any unintentional relationships with other UI elements. Use a hybrid grid
 or a dissimilar background color to avoid the components blending in to each
 other.
 
-
-
-
-![data table condensed ](images/datatable-alignment-condensed.png)
+![data table condensed ](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-alignment-condensed.png)
 
 Data table on a condensed grid
-
-
-
 
 ## Content
 
@@ -254,13 +185,7 @@ additional query time. When the content in the expanded area feels cramped,
 consider taking the user to a dedicated page, side panel, or data table to view
 the information and complete tasks.
 
-
-
-
-![Example of data table with row expansion](images/datatable-expand.png)
-
-
-
+![Example of data table with row expansion](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-expand.png)
 
 #### Batch expansion
 
@@ -271,13 +196,7 @@ variant. Keeping detailed information in the expanded section saves user loading
 time by postponing some data queries until needed. Expanding all rows at once
 will typically negate this advantage of the expandable table.
 
-
-
-
-![Example of data table with batch expansion](images/datatable-expand-all.png)
-
-
-
+![Example of data table with batch expansion](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-expand-all.png)
 
 ### Selectable
 
@@ -292,13 +211,7 @@ Actions applied to the chosen selected items are found in the default
 [table toolbar](/components/data-table/usage/#table-toolbar) or
 [batch action mode](/components/data-table/usage/#batch-actions).
 
-
-
-
-![Example of a data table with selection](images/datatable-multi-select.png)
-
-
-
+![Example of a data table with selection](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-multi-select.png)
 
 #### Radio selection
 
@@ -308,26 +221,14 @@ first column on the left side. Single actions applied to the chosen radio item
 are often placed on the right side of the table toolbar area. They can manifest
 as primary, ghost, or icon-only buttons.
 
-
-
-
-![Example of a data table with radio select](images/datatable-radio-select.png)
-
-
-
+![Example of a data table with radio select](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-radio-select.png)
 
 ### Expandable + selectable
 
 Data tables can be configured to have both expandable and selectable features.
 The expandable icon always appears first and to the left of the selection icon.
 
-
-
-
-![Example of a data table with expansion and selection](images/datatable-expandable+selectable.png)
-
-
-
+![Example of a data table with expansion and selection](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-expandable+selectable.png)
 
 ## Universal behaviors
 
@@ -345,15 +246,9 @@ button or component. Each action or function has its own distinct click target.
 See the [Accessibility](/components/data-table/accessibility/) tab for more
 information.
 
-
-
-
-![data table target areas](images/datatable-target.png)
+![data table target areas](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-target.png)
 
 Highlighted target areas for data table mouse interactions
-
-
-
 
 #### Hover
 
@@ -361,13 +256,7 @@ The data table’s row hover state should always be enabled as it can help the
 user visually scan the columns of data in a row even if the row is not
 interactive.
 
-
-
-
-![data table row hover](images/datatable-hover.png)
-
-
-
+![data table row hover](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-hover.png)
 
 ### Pagination
 
@@ -378,15 +267,9 @@ the number of items per page and to jump to a specific page number. The
 pagination component is always placed at the bottom of the data table. For more
 information, see the [pagination](/components/pagination/usage) component.
 
-
-
-
-![data table target areas](images/datatable-pagination.png)
+![data table target areas](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-pagination.png)
 
 Simple (top) and advanced (bottom) pagination configurations
-
-
-
 
 ### Table toolbar
 
@@ -396,13 +279,7 @@ use primary, ghost, or icon-only buttons. Include up to five actions within the
 table toolbar. More actions can be made available through an overflow menu,
 combo button, or similar components.
 
-
-
-
-![data table sorting in descending order](images/datatable-toolbar.png)
-
-
-
+![data table sorting in descending order](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-toolbar.png)
 
 ### Searching
 
@@ -413,18 +290,9 @@ toolbar. By default search follows the
 [active search](/patterns/search-pattern/#active-search) pattern. The search is
 closed by default, and placed below the table title.
 
+![data table search](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable_search.gif)
 
-
-
-
-
-![data table search](images/datatable_search.gif)
-
-![data table search](images/data-table-usage-search.png)
-
-
-
-
+![data table search](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/data-table-usage-search.png)
 
 #### Open search
 
@@ -432,13 +300,7 @@ The search field can appear always open on a data table. The field is placed on
 the left side of the table under the table title and stretches until it meets
 the actions on the right.
 
-
-
-
-![data table search](images/datatable-search-2-b.png)
-
-
-
+![data table search](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-search-2-b.png)
 
 ### Sorting
 
@@ -453,13 +315,7 @@ column displays an icon, and unsorted icons are only visible on hover. You can
 see a demo of sorting in
 Carbon’s [React Storybook](https://react.carbondesignsystem.com/?path=/story/components-datatable-sorting--default).
 
-
-
-
-![data table unsorted](images/datatable-sorting.png)
-
-
-
+![data table unsorted](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-sorting.png)
 
 ### Batch actions
 
@@ -473,13 +329,7 @@ is active, single action icons and overflow menus on the row should be disabled.
 To exit the batch action mode, the user can select the cancel button on the far
 right of the bar or deselect all items.
 
-
-
-
-![data table multi select](images/datatable-batch-action.png)
-
-
-
+![data table multi select](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-batch-action.png)
 
 ### Inline actions
 
@@ -492,13 +342,7 @@ When the overflow menu contains fewer than three options, keep the actions
 inline as icon buttons instead. This approach reduces a click and makes
 available actions visible at a glance.
 
-
-
-
-![data table inline actions](images/datatable-inline-actions.png)
-
-
-
+![data table inline actions](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-inline-actions.png)
 
 ### Overflow menu
 
@@ -512,30 +356,18 @@ For mobile and touch devices the data table will detect if the user agent
 supports hover-over and persist the overflow menus even if the
 `overflowMenuOnHover` prop is enabled.
 
-
-
-
-![data table inline actions](images/datatable-persistent-hover.png)
+![data table inline actions](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-persistent-hover.png)
 
 Persistent overflow (left), on hover (right).
-
-
-
 
 ### Loading
 
 If extra load time is expected to display information, use skeleton states
 instead of spinners.
 
-
-
-
-![data table in expanded and collapsed state](images/datatable-skeleton.png)
+![data table in expanded and collapsed state](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-skeleton.png)
 
 Expanding all rows with skeleton states
-
-
-
 
 ## Modifiers
 
@@ -544,13 +376,7 @@ Expanding all rows with skeleton states
 The data table can use a zebra stripes modifier to style the table rows with
 alternating colors to make scanning horizontal information easier for the user.
 
-
-
-
-![data table with zebra stripes](images/datatable-zebra.png)
-
-
-
+![data table with zebra stripes](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/datatable-zebra.png)
 
 ## AI presence
 
@@ -568,33 +394,19 @@ For more information on designing for AI, see the
 When the entire data table is styled for AI, it indicates to the user that AI is
 present in all aspects of the data table.
 
-
-
-
-![Example of a data table generated by AI](images/usage-ai-presence-datatable.png)
+![Example of a data table generated by AI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/usage-ai-presence-datatable.png)
 
 Example of a data table generated by AI.
-
-
-
 
 #### Individual cells
 
 If only some data table cells have content generated by AI, then those cells
 have an in-line AI label next to them. These cells do not get any AI layering.
 
-
-
-
-![Example of a data table cell generated by AI represented by the in-line AI label](images/usage-ai-presence-inline-datatable.png)
-
+![Example of a data table cell generated by AI represented by the in-line AI label](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/usage-ai-presence-inline-datatable.png)
 
   Example of a data table cell generated by AI represented by the in-line AI
   label.
-
-
-
-
 
 #### Rows and columns
 
@@ -602,58 +414,10 @@ If content belonging to only a row or column of the data table is generated by
 AI, then only those respective row/s and column/s should receive the AI presence
 styling along with the AI label, not the entire data table.
 
-
-
-
-![Example of a data table column generated by AI](images/usage-ai-presence-datatable-column-ai.png)
+![Example of a data table column generated by AI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/usage-ai-presence-datatable-column-ai.png)
 
 Example of a data table column generated by AI.
 
+![Light mode example of data table rows generated by AI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/usage-ai-presence-datatable-row-ai-l.png)
 
-
-
-
-
-
-
-
-
-
-![Light mode example of data table rows generated by AI](images/usage-ai-presence-datatable-row-ai-l.png)
-
-
-
-
-
-![Dark mode example of data table rows generated by AI](images/usage-ai-presence-datatable-row-ai-d.png)
-
-
-
-
-
-
-
-
-## Related
-
-### Community extensions
-
-#### Carbon for IBM Product
-
-_This content is accessible to IBMers only._
-
-- [Data table extensions](https://pages.github.ibm.com/cdai-design/pal/components/data-table/overview)
-- [Data table on Cloud](https://pages.github.ibm.com/cdai-design/cloud-pal/components/data-table/usage/)
-- [Data spreadsheet](https://pages.github.ibm.com/cdai-design/pal/components/data-spreadsheet/usage/)
-
-### Similar components
-
-The following components are additional ways to organize and navigate data.
-
-- [Accordion](/components/accordion/code/)
-
-- [List](/components/list/code/)
-
-- [Pagination](/components/pagination/code/)
-
-- [Structured list](/components/structured-list/code/)
+![Dark mode example of data table rows generated by AI](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/components/data-table/images/usage-ai-presence-datatable-row-ai-d.png)

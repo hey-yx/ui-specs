@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Notification banner 通知横幅"
 source: https://design-system.service.gov.uk/components/notification-banner/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-30
 publisher: "GOV.UK Design System"
@@ -13,32 +13,17 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/notification-banner/](https://design-system.service.gov.uk/components/notification-banner/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 Use a notification banner to tell the user about something they need to know about, but that’s not directly related to the page content.
-
-**示例：default**
-
-```njk
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-
-{% call govukNotificationBanner() %}
-  <p class="govuk-notification-banner__heading">
-    You have 7 days left to send your application.
-    <a class="govuk-notification-banner__link" href="#">View application</a>.
-  </p>
-{% endcall %}
-```
 
 ## When to use this component
 
 A notification banner lets you tell the user about something that’s not directly relevant to the thing they’re trying to do on that page of the service. For example:
 
-- telling the user about a problem that’s affecting the service as a whole (for example, delays in processing applications because of an emergency)
-- telling the user about something that affects them in particular (for example, an approaching deadline they need to meet)
-- telling the user about the outcome of something they've just done on a previous page (for example, confirming that an email has been sent)
+*   telling the user about a problem that’s affecting the service as a whole (for example, delays in processing applications because of an emergency)
+*   telling the user about something that affects them in particular (for example, an approaching deadline they need to meet)
+*   telling the user about the outcome of something they’ve just done on a previous page (for example, confirming that an email has been sent)
 
 ## When not to use this component
 
@@ -48,18 +33,16 @@ If the information is directly relevant to the thing the user is doing on that p
 
 Do not:
 
-- use a notification banner to tell the user about validation errors - use an [Error message component](https://design-system.service.gov.uk/components/error-message/) and [Error summary component](https://design-system.service.gov.uk/components/error-summary/) instead
-- show a notification banner and an [Error summary component](https://design-system.service.gov.uk/components/error-summary/) on the same page - just show the error summary
+*   use a notification banner to tell the user about validation errors - use an [Error message component](https://design-system.service.gov.uk/components/error-message/) and [Error summary component](https://design-system.service.gov.uk/components/error-summary/) instead
+*   show a notification banner and an [Error summary component](https://design-system.service.gov.uk/components/error-summary/) on the same page - just show the error summary
 
 ## How it works
 
-Position a notification banner immediately before the page `h1`. The notification banner should be the same width as the page's other content, such as components, headings and body text. For example, if the other content takes up two-thirds of the screen on desktop devices, then the notification banner should also take up two-thirds. [Read about how to lay out pages](https://design-system.service.gov.uk/styles/layout/).
+Position a notification banner immediately before the page `h1`. The notification banner should be the same width as the page’s other content, such as components, headings and body text. For example, if the other content takes up two-thirds of the screen on desktop devices, then the notification banner should also take up two-thirds. [Read about how to lay out pages](https://design-system.service.gov.uk/styles/layout/).
 
 Use `role="region"` and `aria-labelledby="govuk-notification-banner-title"` (with `id="govuk-notification-banner-title"` on `<govuk-notification-banner__title>`) so that screen reader users can navigate to the notification banner.
 
 Avoid showing more than one notification banner on the same page. Instead, combine the messages in a single notification banner. If the messages are too different to combine, only show the highest priority notification banner.
-
-### Notification banner headings
 
 You can use `<h3>` headings in the `govuk-notification-banner__content` to help structure your content.
 
@@ -71,41 +54,18 @@ Use a ‘neutral’ blue notification banner if the user needs to know about a p
 
 For example:
 
-- in a service that lets the user register or apply for something, they might need to know that it’s taking longer than usual to process applications because of an emergency
-- in an account-type service, the user might need to know that the service will be down for scheduled maintenance
+*   in a service that lets the user register or apply for something, they might need to know that it’s taking longer than usual to process applications because of an emergency
+*   in an account-type service, the user might need to know that the service will be down for scheduled maintenance
 
-**示例：whole-service**
-
-```njk
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-
-{% call govukNotificationBanner() %}
-  There may be a delay in processing your application because of the coronavirus outbreak.
-{% endcall %}
-```
-
-If your service is on GOV.UK and it’s affected by an emergency, ask your department’s content team to [make a request to add a downtime message on GOV.UK content that links to it](https://guidance.publishing.service.gov.uk/accounts-support/make-content-requests/ask-downtime-messages/).
+If your service is on GOV.UK and it’s affected by an emergency, ask your department’s content team to [make a request to add a downtime message on GOV.UK content that links to it](https://guidance.publishing.service.gov.uk/accounts-support/make-content-requests/ask-downtime-messages/).  
 If your service is getting more demand than usual, check that you’ve set up [There is a problem with the service pages](https://design-system.service.gov.uk/patterns/problem-with-the-service-pages/) and [Service unavailable pages](https://design-system.service.gov.uk/patterns/service-unavailable-pages/), and the wording is up to date.
 
 ## Telling the user about something that’s happening elsewhere
 
 Use a ‘neutral’ notification banner if the user needs to know about something that’s happening elsewhere in the service. For example:
 
-- in a case working system, the user might need to know that there are new cases waiting for their attention
-- in an account-type service, you might need to tell the user that there’s a deadline approaching or that a payment is overdue
-
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-
-{% call govukNotificationBanner() %}
-  <p class="govuk-notification-banner__heading">
-    You have 7 days left to send your application.
-    <a class="govuk-notification-banner__link" href="#">View application</a>.
-  </p>
-{% endcall %}
-```
+*   in a case working system, the user might need to know that there are new cases waiting for their attention
+*   in an account-type service, you might need to tell the user that there’s a deadline approaching or that a payment is overdue
 
 ## Reacting to something the user has done
 
@@ -117,33 +77,28 @@ Use a [Confirmation page in a linear service](https://design-system.service.gov.
 
 Use the green version of the notification banner to confirm that something they’re expecting to happen has happened.
 
-**示例：success**
-
-```njk
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-
-{% call govukNotificationBanner({
-  type: "success"
-}) %}
-  <h3 class="govuk-notification-banner__heading">
-    Training outcome recorded and trainee withdrawn
-  </h3>
-  <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there’s a problem.</p>
-{% endcall %}
-```
-
 Since you’re using the notification banner to tell the user about the outcome of something they’ve just done, add `role="alert"` so focus shifts to the notification banner on page load.
 
 Remove a green notification banner when the user moves to a new page.
 
 To make the green version of the notification banner accessible:
 
-- use headings like ‘Success’ - so that you’re not relying on colour alone to convey meaning – to [meet WCAG 2.2 success criterion 1.4.1 Use of colour](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html)
-- use the same heading for green notification banners within the same service - so that you’re identifying components that work in the same way consistently – this is to [meet WCAG 2.2 success criterion 3.2.4 Consistent identification](https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification)
+*   use headings like ‘Success’ - so that you’re not relying on colour alone to convey meaning – to [meet WCAG 2.2 success criterion 1.4.1 Use of colour](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html)
+*   use the same heading for green notification banners within the same service - so that you’re identifying components that work in the same way consistently – this is to [meet WCAG 2.2 success criterion 3.2.4 Consistent identification](https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification)
 
 ## Research on this component
 
 We need more research to understand:
 
-- how common it is for users to miss important information in notification banners (including users of assistive technology, who might skip straight to the `h1`)
-- whether it’s sometimes helpful to allow users to dismiss notifications, and how to do this
+*   how common it is for users to miss important information in notification banners (including users of assistive technology, who might skip straight to the `h1`)
+*   whether it’s sometimes helpful to allow users to dismiss notifications, and how to do this
+
+## Recent changes
+
+| Date | Changed | Description |
+| --- | --- | --- |
+| Aug 2022 | [GOV.UK Frontend v4.3.0](https://github.com/alphagov/govuk-frontend/releases/tag/v4.3.0) | Added the ability to pass the `html` parameter using [Nunjucks call syntax](https://mozilla.github.io/nunjucks/templating.html#call). |
+| Sept 2021 | Guidance | Added more detailed guidance on where to position the notification banner on a page. |
+| Feb 2021 | Guidance | Added advice on how and when to use heading HTML tags in the component. |
+| Dec 2020 | [GOV.UK Frontend v3.10.1](https://github.com/alphagov/govuk-frontend/releases/tag/v3.10.1) | Fixed small gap between header and outer border. Explicitly set component’s text colour. Updated component to wrap text at two thirds of `width-container` width. |
+| Nov 2020 | [GOV.UK Frontend v3.10.0](https://github.com/alphagov/govuk-frontend/releases/tag/v3.10.0) | Component introduced. |

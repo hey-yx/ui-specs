@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Themes 主题"
+title: "IBM Carbon · Foundation · Themes 主题"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/themes/overview.mdx
 section: color
 tag: "规范"
@@ -9,7 +9,7 @@ id: color-13
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Themes 主题
+# IBM Carbon · Foundation · Themes 主题
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/themes/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/themes/overview.mdx)
 
@@ -102,7 +102,3 @@ The following example demonstrates the relationship between the different themes
 | 4 | `$icon-primary` | Primary icon color | Gray 100 | Gray 10 |
 | 5 | `$field-01` | Field color | Gray 10 | Gray 90 |
 | 6 | `$background` | Page background | White | Gray 100 |
-
-## Resources
-
-- [Carbon themes package](https://github.com/carbon-design-system/carbon/tree/main/packages/themes)

@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Accordion 手风琴"
 source: https://design-system.service.gov.uk/components/accordion/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-11
 publisher: "GOV.UK Design System"
@@ -13,63 +13,20 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/accordion/](https://design-system.service.gov.uk/components/accordion/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 The accordion component lets users show and hide sections of related content on a page.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
-
-{{ govukAccordion({
-  id: "accordion-default",
-  items: [
-    {
-      heading: {
-        text: "Writing well for the web"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Writing well for the web.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "Writing well for specialists"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Writing well for specialists.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "Know your audience"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Know your audience.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "How people read"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for How people read.</p>'
-      }
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/accordion/#accordion-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/accordion/#accordion-example-nunjucks)
 
 ## When to use this component
 
-Only use an accordion if there's evidence it’s helpful for the user to:
+Only use an accordion if there’s evidence it’s helpful for the user to:
 
-- see an overview of multiple, related sections of content
-- choose to show and hide sections that are relevant to them
-- look across information that might otherwise be on different pages
+*   see an overview of multiple, related sections of content
+*   choose to show and hide sections that are relevant to them
+*   look across information that might otherwise be on different pages
 
 For example, an accordion can work well if the user needs to reveal and compare information that’s relevant to them.
 
@@ -87,10 +44,10 @@ Test your content without an accordion first. Well-written and structured conten
 
 It’s usually better to:
 
-- simplify and reduce the amount of content
-- split the content across multiple pages
-- keep the content on a single page, separated by headings
-- use a list of links at the start of the page (known as 'anchor links') to take the user to particular sections of a page
+*   simplify and reduce the amount of content
+*   split the content across multiple pages
+*   keep the content on a single page, separated by headings
+*   use a list of links at the start of the page (known as ‘anchor links’) to take the user to particular sections of a page
 
 Accordions work best for simple content and links. Do not use accordions to split up a series of questions. Use separate pages instead.
 
@@ -104,10 +61,10 @@ The Accordion component, [Tabs component](https://design-system.service.gov.uk/c
 
 If you decide to use one of these components, consider if:
 
-- the user needs to look at more than one section at a time – an accordion can show multiple sections at a time, unlike tabs
-- the user needs to switch quickly between sections – tabs can show content without pushing other sections down the page, unlike accordions
-- there are many sections of content – accordions can fit more sections as they’re arranged vertically, unlike tabs which are arranged horizontally
-- there’s only one or two pieces of short, less important content – the details component is more suitable as it’s visually smaller and less prominent than an accordion or tabs
+*   the user needs to look at more than one section at a time – an accordion can show multiple sections at a time, unlike tabs
+*   the user needs to switch quickly between sections – tabs can show content without pushing other sections down the page, unlike accordions
+*   there are many sections of content – accordions can fit more sections as they’re arranged vertically, unlike tabs which are arranged horizontally
+*   there’s only one or two pieces of short, less important content – the details component is more suitable as it’s visually smaller and less prominent than an accordion or tabs
 
 ## How it works
 
@@ -115,7 +72,7 @@ There are 2 ways to use the accordion component. You can use HTML or, if you’r
 
 The accordion component uses JavaScript. When JavaScript is not available, users will see all the content displayed with the section labels as headings.
 
-If you are using HTML, you must add an 'id' attribute to the `<div>` tag with the `govuk-accordion` class. It must be unique across the service's domain to maintain the persistent expanded state of the accordion.
+If you are using HTML, you must add an ‘id’ attribute to the `<div>` tag with the `govuk-accordion` class. It must be unique across the service’s domain to maintain the persistent expanded state of the accordion.
 
 ### Section heading buttons
 
@@ -123,55 +80,14 @@ An accordion will usually start with all sections hidden. To show a section, the
 
 The heading button includes all of these areas:
 
-- heading text
-- summary line (if you decide to add one)
-- call-to-action text to 'show' or 'hide'
+*   heading text
+*   summary line (if you decide to add one)
+*   call-to-action text to ‘show’ or ‘hide’
 
-For users of screen readers, all the text in the button will be read as a single statement (separated by commas to allow for slight pauses). There’s also some visually hidden content in the heading text to help announce the call-to-action as 'show this section' or 'hide this section'.
+For users of screen readers, all the text in the button will be read as a single statement (separated by commas to allow for slight pauses). There’s also some visually hidden content in the heading text to help announce the call-to-action as ‘show this section’ or ‘hide this section’.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
-
-{{ govukAccordion({
-  id: "accordion-default",
-  items: [
-    {
-      heading: {
-        text: "Writing well for the web"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Writing well for the web.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "Writing well for specialists"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Writing well for specialists.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "Know your audience"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for Know your audience.</p>'
-      }
-    },
-    {
-      heading: {
-        text: "How people read"
-      },
-      content: {
-        html: '<p class="govuk-body">This is the content for How people read.</p>'
-      }
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/accordion/#accordion-second-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/accordion/#accordion-second-example-nunjucks)
 
 #### Write clear button text
 
@@ -183,136 +99,12 @@ If you struggle to come up with clear button text, it might be because the way y
 
 #### Adding a summary line
 
-Only add a summary line if it’s actually needed, as it's likely to make the button text too long.
+Only add a summary line if it’s actually needed, as it’s likely to make the button text too long.
 
 If you’ve decided that you need the summary line, you must make it as short as possible.
 
-**示例：with-summary-section**
-
-```njk
-{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
-
-{{ govukAccordion({
-  id: "accordion-with-summary-sections",
-  items: [
-    {
-      heading: {
-        text: "Understanding agile project management"
-      },
-      summary: {
-        text: "Introductions, methods, core features."
-      },
-      content: {
-        html:
-        '<ul class="govuk-list">
-            <li>
-              <a class="govuk-link" href="#">Agile and government services: an introduction</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Agile methods: an introduction</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Core principles of agile</a>
-            </li>
-        </ul>'
-      }
-    },
-    {
-      heading: {
-        text: "Working with agile methods"
-      },
-      summary: {
-        text: "Workspaces, tools and techniques, user stories, planning."
-      },
-      content: {
-        html:
-        '<ul class="govuk-list">
-            <li>
-              <a class="govuk-link" href="#">Creating an agile working environment</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Agile tools and techniques</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Set up a team wall</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Writing user stories</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Planning in agile</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Deciding on priorities</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Developing a roadmap</a>
-            </li>
-        </ul>'
-      }
-    },
-    {
-      heading: {
-        text: "Governing agile services"
-      },
-      summary: {
-        text: "Principles, measuring progress, spending money."
-      },
-      content: {
-        html:
-        '<ul class="govuk-list">
-            <li>
-              <a class="govuk-link" href="#">Governance principles for agile service delivery</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Measuring and reporting progress</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Spend controls: check if you need approval to spend money on a service</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Spend controls: apply for approval to spend money on a service</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Spend controls: the new pipeline process</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Working across organisational boundaries</a>
-            </li>
-        </ul>'
-      }
-    },
-    {
-      heading: {
-        text: "Phases of an agile project"
-      },
-      summary: {
-        text: "Discovery, alpha, beta, live and retirement."
-      },
-      content: {
-        html:
-        '<ul class="govuk-list">
-            <li>
-              <a class="govuk-link" href="#">How the discovery phase works</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">How the alpha phase works</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">How the beta phase works</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">How the live phase works</a>
-            </li>
-            <li>
-              <a class="govuk-link" href="#">Retiring your service</a>
-            </li>
-        </ul>'
-      }
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/accordion/#accordion-with-summary-sections-accordion-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/accordion/#accordion-with-summary-sections-accordion-example-nunjucks)
 
 #### Structure section headings with the rest of the page
 
@@ -322,11 +114,11 @@ The accordion component shows section headings as `<h2>` headings. If needed, ch
 
 Users might need some sections to be open from the start. If they leave and then return to the page, they might also need sections they opened to stay open.
 
-By default, if the user leaves and then returns to the page within the same page session, the accordion component will use ['session storage'](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) to remember which sections were open. This functionality can be turned off by adding `rememberExpanded: false` to the Nunjucks macro.
+By default, if the user leaves and then returns to the page within the same page session, the accordion component will use [‘session storage’](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) to remember which sections were open. This functionality can be turned off by adding `rememberExpanded: false` to the Nunjucks macro.
 
-To see the changes you've made, you may need to create a new 'session'. For example, by opening a page in a new tab or window.
+To see the changes you’ve made, you may need to create a new ‘session’. For example, by opening a page in a new tab or window.
 
-Add the `govuk-accordion__section--expanded` class to the `govuk-accordion__section` `div` to make individual sections open from the start. You can also do this using nunjucks macro options, if you are using the nunjucks macro by setting the `expanded` option to `true` on the individual accordion items you want to be expanded.
+Add the `govuk-accordion__section--expanded` class to the `govuk-accordion__section``div` to make individual sections open from the start. You can also do this using nunjucks macro options, if you are using the nunjucks macro by setting the `expanded` option to `true` on the individual accordion items you want to be expanded.
 
 You can configure sections to start and stay open, but not stay closed.
 
@@ -348,7 +140,7 @@ We need to find out more about users that navigate using ‘elements lists’ of
 
 For these users, it might not be clear enough that the section headings are considered buttons. This could mislead them to navigate (less efficiently) using the show or hide labels.
 
-While this experience is inconvenient at first, it's likely the user will better understand the button area once they interact with it and see its focus state. [See ‘Testing with Dragon’ in the accessibility clinic summary](https://github.com/alphagov/govuk-frontend/issues/2295#issuecomment-906449543).
+While this experience is inconvenient at first, it’s likely the user will better understand the button area once they interact with it and see its focus state. [See ‘Testing with Dragon’ in the accessibility clinic summary](https://github.com/alphagov/govuk-frontend/issues/2295#issuecomment-906449543).
 
 We want to hear about any user research done in this area so we can identify potential issues.
 

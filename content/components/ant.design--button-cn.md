@@ -1,5 +1,5 @@
 ---
-title: "Ant Design · Button 按钮"
+title: "Ant Design · Component · Button 按钮"
 source: https://raw.githubusercontent.com/ant-design/ant-design/master/components/button/index.zh-CN.md
 section: components
 tag: "规范"
@@ -9,14 +9,13 @@ id: components-2
 publisher: "Ant Design"
 ---
 
-# Ant Design · Button 按钮
+# Ant Design · Component · Button 按钮
 
 > 来源：[https://raw.githubusercontent.com/ant-design/ant-design/master/components/button/index.zh-CN.md](https://raw.githubusercontent.com/ant-design/ant-design/master/components/button/index.zh-CN.md)
 
 ---
 
-
-## 何时使用 
+## 何时使用
 
 标记了一个（或封装一组）操作命令，响应用户点击行为，触发相应的业务逻辑。
 
@@ -35,31 +34,7 @@ publisher: "Ant Design"
 - 🚫 禁用：行动点不可用的时候，一般需要文案解释。
 - 🔃 加载中：用于异步操作等待反馈的时候，也可以避免多次提交。
 
-## 代码演示 
-
-
-<code src="./demo/basic.tsx">语法糖</code>
-<code src="./demo/color-variant.tsx" version="5.21.0">颜色与变体</code>
-<code src="./demo/debug-color-variant" debug>调试颜色与变体</code>
-<code src="./demo/icon.tsx">按钮图标</code>
-<code src="./demo/icon-placement.tsx" version="5.17.0">按钮图标位置</code>
-<code src="./demo/debug-icon.tsx" debug>调试图标按钮</code>
-<code src="./demo/debug-block.tsx" debug>调试按钮block属性</code>
-<code src="./demo/size.tsx">按钮尺寸</code>
-<code src="./demo/disabled.tsx">不可用状态</code>
-<code src="./demo/loading.tsx">加载中状态</code>
-<code src="./demo/multiple.tsx">多个按钮组合</code>
-<code src="./demo/ghost.tsx">幽灵按钮</code>
-<code src="./demo/danger.tsx">危险按钮</code>
-<code src="./demo/block.tsx">Block 按钮</code>
-<code src="./demo/legacy-group.tsx" debug>废弃的 Block 组</code>
-<code src="./demo/chinese-chars-loading.tsx" debug>加载中状态 bug 还原</code>
-<code src="./demo/component-token.tsx" debug>组件 Token</code>
-<code src="./demo/linear-gradient.tsx">渐变按钮</code>
-<code src="./demo/wave.tsx">自定义按钮波纹</code>
-<code src="./demo/chinese-space.tsx" version="5.17.0">移除两个汉字之间的空格</code>
-<code src="./demo/custom-disabled-bg.tsx">自定义禁用样式背景</code>
-<code src="./demo/style-class.tsx" version="6.0.0">自定义语义结构的样式和类</code>
+## 代码演示
 
 ## API
 
@@ -73,7 +48,7 @@ publisher: "Ant Design"
 | --- | --- | --- | --- | --- | --- |
 | autoInsertSpace | 我们默认提供两个汉字之间的空格，可以设置 `autoInsertSpace` 为 `false` 关闭 | boolean | `true` | 5.17.0 | 5.17.0 |
 | block | 将按钮宽度调整为其父宽度的选项 | boolean | false |  | × |
-| classNames | 用于自定义组件内部各语义化结构的 class，支持对象或函数 | Record<[SemanticDOM](#semantic-dom), string> \| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.0.0 | 6.0.0 |
+| classNames | 用于自定义组件内部各语义化结构的 class，支持对象或函数 | Record \| (info: { props })=> Record | - | 6.0.0 | 6.0.0 |
 | color | 设置按钮的颜色 | `default` \| `primary` \| `danger` \| [PresetColors](#presetcolors) | `variant="solid"` 时为 `primary` | `default`、`primary` 和 `danger`: 5.21.0, `PresetColors`: 5.23.0, `solid` 默认颜色: 6.4.0 | 5.25.0 |
 | danger | 语法糖，设置危险按钮。当设置 `color` 时会以后者为准 | boolean | false |  | × |
 | disabled | 设置按钮失效状态 | boolean | false |  | × |
@@ -84,11 +59,11 @@ publisher: "Ant Design"
 | iconPlacement | 设置按钮图标组件的位置 | `start` \| `end` | `start` | - | × |
 | ~~iconPosition~~ | 设置按钮图标组件的位置,请使用 `iconPlacement` 替换 | `start` \| `end` | `start` | 5.17.0 | × |
 | loading | 设置按钮载入状态 | boolean \| { delay: number, icon: ReactNode } | false | icon: 5.23.0 | × |
-| loadingIcon | （仅支持全局配置）设置按钮的加载图标 | ReactNode | `<LoadingOutlined />` |  | 6.3.0 |
-| onClick | 点击按钮时的回调 | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - |  | × |
+| loadingIcon | （仅支持全局配置）设置按钮的加载图标 | ReactNode | `` |  | 6.3.0 |
+| onClick | 点击按钮时的回调 | (event: React.MouseEvent) => void | - |  | × |
 | shape | 设置按钮形状 | `default` \| `circle` \| `round` | `default` |  | 5.27.0 |
 | size | 设置按钮大小 | `large` \| `medium` \| `small` | `medium` |  | × |
-| styles | 用于自定义组件内部各语义化结构的行内 style，支持对象或函数 | Record<[SemanticDOM](#semantic-dom), CSSProperties> \| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.0.0 | 6.0.0 |
+| styles | 用于自定义组件内部各语义化结构的行内 style，支持对象或函数 | Record \| (info: { props })=> Record | - | 6.0.0 | 6.0.0 |
 | target | 相当于 a 链接的 target 属性，href 存在时生效 | string | - |  | × |
 | type | 语法糖，设置按钮类型。当设置 `variant` 与 `color` 时以后者为准 | `primary` \| `dashed` \| `link` \| `text` \| `default` | `default` |  | × |
 | variant | 设置按钮的变体 | `outlined` \| `dashed` \| `solid` \| `filled` \| `text` \| `link` | - | 5.21.0 | 5.25.0 |
@@ -101,16 +76,11 @@ publisher: "Ant Design"
 
 ## Semantic DOM
 
-
-<code src="./demo/_semantic.tsx" simplify="true"></code>
-
 ## 主题变量（Design Token）
-
-
 
 ## FAQ
 
-### 类型和颜色与变体如何选择？ 
+### 类型和颜色与变体如何选择？
 
 类型本质上是颜色与变体的语法糖，内部为其提供了一组颜色与变体的映射关系。如果两者同时存在，优先使用颜色与变体。
 
@@ -126,7 +96,7 @@ publisher: "Ant Design"
 </Button>
 ```
 
-### 如何关闭点击波纹效果？ 
+### 如何关闭点击波纹效果？
 
 如果你不需要这个特性，可以设置 [ConfigProvider](/components/config-provider#api) 的 `wave` 的 `disabled` 为 `true`。
 
@@ -136,13 +106,6 @@ publisher: "Ant Design"
 </ConfigProvider>
 ```
 
-<style>
-.site-button-ghost-wrapper {
-  padding: 16px;
-  background: rgb(190, 200, 200);
-}
-</style>
-
-## 设计指引 
+## 设计指引
 
 - [我的按钮究竟该放哪儿！？| Ant Design 4.0 系列分享](https://zhuanlan.zhihu.com/p/109644406)

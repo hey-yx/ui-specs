@@ -1,958 +1,1022 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
 <title>SamePaper · 文档、讨论、任务写在同一张纸上</title>
-<meta name="description" content="SamePaper 把文档、讨论和任务放在同一张纸面上：光标带名字，评论贴段落，结论一键转任务，权限按项目分开。">
+<meta name="description" content="SamePaper 把文档、讨论和任务写在同一张纸面上。讨论挂在行号上，任务带着原话，版本可以冻结。">
+<link rel="icon" href="data:,">
 <style>
-/* =========================================================
-   SamePaper landing · 单文件
-   数值基准规范：TDesign（content/color|type|layout|icons|motion/tdesign.tencent.com--*.md）
-   缺口按 site/dist/ai/guide.md「基准规范缺口与派生」处理，逐条见 DECISIONS.md
-   ========================================================= */
-
 :root{
-  /* 色板：TDesign 官方色板 content/color/tdesign.tencent.com--color.md */
-  --white:#ffffff;              /* color.md:187 */
-  --gray-1:#f3f3f3;             /* color.md:189 */
-  --gray-2:#eeeeee;             /* color.md:191 */
-  --gray-3:#e8e8e8;             /* color.md:193 */
-  --gray-4:#dddddd;             /* color.md:195 */
-  --gray-6:#a6a6a6;             /* color.md:199 */
-  --gray-7:#8b8b8b;             /* color.md:201 */
-  --gray-9:#5e5e5e;             /* color.md:205 */
-  --brand:#0052d9;              /* Blue7 color.md:66 */
-  --brand-hover:#003cab;        /* Blue8 color.md:69（Blue6 #366ef4 白字仅 4.47:1，弃用） */
-  --brand-active:#002a7c;       /* Blue9 color.md:72 */
-  --brand-soft:#f2f3ff;         /* Blue1 color.md:48 */
-  --brand-line:#d9e1ff;         /* Blue2 color.md:51 */
+  --paper:#ffffff;
+  --paper-2:#f3f3f3;
+  --ink:#181818;
+  --ink-2:#5e5e5e;
+  --rule:#dddddd;
+  --rule-strong:#c6c6c6;
+  --control:#8b8b8b;
+  --accent:#7137bf;
+  --accent-deep:#5610a4;
+  --accent-tint:#eedcff;
+  --accent-wash:#fbf0ff;
+  --accent-line:#c69cff;
+  --accent-lighter:#dcbfff;
+  --accent-deepest:#3b007b;
+  --danger:#ad352f;
+  --danger-line:#d54941;
+  --on-dark-1:#ffffff;
+  --on-dark-2:#e8e8e8;
+  --on-dark-3:#c6c6c6;
+  --on-dark-4:#a6a6a6;
+  --on-dark-line:#393939;
 
-  /* 字色：TDesign 透明度字色 content/type/tdesign.tencent.com--fonts.md:96-102 */
-  --ink:rgba(0,0,0,.9);         /* Font Gy1 */
-  --ink-2:rgba(0,0,0,.6);       /* Font Gy2 */
-  --ink-3:rgba(0,0,0,.4);       /* Font Gy3，仅禁用/装饰 */
-
-  /* 字阶：TDesign 字阶 content/type/tdesign.tencent.com--fonts.md:51-60 */
-  --fs-l:64px; --fs-m:28px; --fs-s:16px;
-  /* 行高为零特异性通配，按元素自身字号算：font size + 8（fonts.md:67-74） */
-  --lh-n:8px;
-
-  /* 间距：TDesign 布局 8px 基数 + 4/12 两档 content/layout/tdesign.tencent.com--layout.md:107 */
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
   --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
 
-  /* 派生：圆角两档（库无通用 radius 原文） */
-  --r-1:4px; --r-2:8px;
-
-  /* 动效：TDesign 动效 content/motion/tdesign.tencent.com--motion.md:99-113 */
-  --dur-base:200ms;   /* @duration-desktop-base */
-  --dur-mid:240ms;    /* @duration-desktop-moderate */
-  --dur-slow:280ms;   /* @duration-desktop-slow */
-  --ease-std:cubic-bezier(.38,0,.24,1);   /* @standard easing */
-  --ease-in:cubic-bezier(0,0,.15,1);      /* @ease out（入画） */
-  --ease-out:cubic-bezier(.82,0,1,.9);    /* @ease in（出画） */
+  --r-1:4px; --r-2:8px; --r-pill:999px;
+  --t-fast:200ms; --ease:cubic-bezier(.38,0,.24,1);
+  --maxw:1200px;
+  --gutter:24px;
+  --rail:0px;
 }
 
 *,*::before,*::after{box-sizing:border-box}
-:where(body, body *){line-height:calc(1em + 8px)}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--white);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
-  font-size:var(--fs-s);font-weight:400;
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+  font-size:16px;
+  font-weight:400;
 }
-/* 只有一个 h1 用大档；每档断点内总量 3 档（64/28/16 → 48/28/16 → 36/24/16） */
-h1,h2,h3{font-size:var(--fs-s);font-weight:600}
-h1,h2,h3,p,figure,ul,ol{margin:0}
+:where(body,body *){line-height:calc(1em + 8px)}
+h1,h2,h3,p,figure,ul,ol,dl,dd{margin:0}
 ul,ol{padding:0;list-style:none}
-img,svg{display:block}
-a{color:var(--brand);text-decoration:none}
-a:hover{text-decoration:underline;text-underline-offset:2px}
-button,input{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-::selection{background:var(--brand-line);color:var(--ink)}
+[hidden]{display:none!important}
+img,svg{display:block;max-inline-size:100%}
+button{font-family:inherit}
+a{color:inherit}
 
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-
-.wrap{width:100%;max-width:1200px;margin-inline:auto;padding-inline:var(--s-5)}
-@media (min-width:992px){ .wrap{padding-inline:var(--s-6)} }
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r-1)}
+.cta :focus-visible,.foot :focus-visible,footer :focus-visible{outline-color:var(--accent-tint)}
 
 .skip{
-  position:absolute;left:var(--s-4);top:-100px;z-index:60;
-  background:var(--brand);color:var(--white);padding:var(--s-3) var(--s-4);
+  position:absolute;inset-block-start:-100px;inset-inline-start:var(--s-4);
+  z-index:40;background:var(--ink);color:var(--on-dark-1);
+  padding:var(--s-2) var(--s-4);border-radius:var(--r-1);
+  font-size:14px;text-decoration:none;
+}
+.skip:focus{inset-block-start:var(--s-4)}
+
+/* 导航 · N5 悬浮胶囊 */
+.pill{
+  position:fixed;inset-block-start:var(--s-5);inset-inline-start:50%;
+  transform:translateX(-50%);z-index:20;
+  display:inline-flex;align-items:center;gap:var(--s-3);
+  max-inline-size:calc(100vw - 32px);
+  padding:var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+  background:color-mix(in srgb,#ffffff 84%,transparent);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  backdrop-filter:blur(14px) saturate(120%);
+  border:1px solid var(--rule);
+  border-radius:var(--r-pill);
+  box-shadow:0 8px 24px -12px rgba(24,24,24,.18);
+  transition:background-color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease);
+}
+.pill--on-dark{
+  background:color-mix(in srgb,#ffffff 96%,transparent);
+  border-color:transparent;
+  box-shadow:0 14px 36px -16px rgba(0,0,0,.55);
+}
+.pill__brand{font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap}
+.pill__links{display:flex;gap:var(--s-4)}
+.pill__links a{
+  display:inline-flex;align-items:center;min-block-size:36px;
+  font-size:14px;color:var(--ink-2);text-decoration:none;white-space:nowrap;
+  padding:0 var(--s-3);
+  border-radius:var(--r-pill);
+  transition:color var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease);
+}
+.pill__links a:hover{color:var(--ink);background:var(--paper-2)}
+.pill__links a:active{color:#ffffff;background:var(--accent)}
+.pill__links a[aria-current="true"]{color:var(--accent-deepest);font-weight:600;background:var(--accent-tint)}
+.pill__links a[aria-current="true"]:hover{background:var(--accent-tint);color:var(--accent-deepest)}
+.pill__cta{
+  font-size:14px;font-weight:600;color:#ffffff;background:var(--accent);
+  border:1px solid var(--accent);border-radius:var(--r-pill);
+  padding:6px var(--s-4);cursor:pointer;white-space:nowrap;
+  min-block-size:36px;
+  transition:background var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease);
+}
+.pill__cta:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.pill__cta:active{background:var(--accent-deepest);border-color:var(--accent-deepest)}
+
+/* 首屏 · Marquee Hero */
+.marquee{
+  min-block-size:88vh;min-block-size:88svh;
+  display:grid;align-content:center;
+  padding:120px 0 var(--s-7) var(--gutter);
+}
+.marquee h1{
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-block-size:46vh;min-block-size:46svh;
+  font-size:64px;font-weight:600;letter-spacing:-.01em;
+}
+.ln{display:flex;align-items:flex-end;gap:var(--s-3);min-inline-size:0}
+.ln__no{
+  flex:none;inline-size:28px;font-size:12px;font-weight:400;
+  color:var(--ink-2);padding-block-end:6px;
+  font-variant-numeric:tabular-nums;
+}
+.ln__text{flex:none;white-space:nowrap}
+.ln__rule{flex:1 1 auto;min-inline-size:var(--s-5);block-size:1px;background:var(--rule);margin-block-end:.18em}
+.ln--last .ln__text{color:var(--accent)}
+.ln--last .ln__rule{block-size:2px;background:var(--accent)}
+
+.seam{block-size:8px;background:var(--accent)}
+
+/* 通用区块 */
+.sec{padding-block:var(--s-9);padding-inline:var(--gutter);scroll-margin-block-start:96px}
+.sec--tint{background:var(--paper-2)}
+.wrap{max-inline-size:var(--maxw);margin-inline:auto}
+.sec-head{
+  display:grid;grid-template-columns:56px minmax(0,1fr);
+  column-gap:var(--s-4);row-gap:var(--s-2);
+  align-items:start;
+  padding-block-start:var(--s-4);
+  border-block-start:1px solid var(--rule-strong);
+  margin-block-end:var(--s-7);
+}
+.sec-no{
+  font-size:14px;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;padding-block-start:6px;
+}
+.sec-title{font-size:36px;font-weight:600;letter-spacing:-.01em}
+.sec-note{grid-column:2;font-size:16px;color:var(--ink-2);max-inline-size:40em}
+/* 编号占一列，正文列与标题列同一条左基线 */
+.sec .wrap{padding-inline-start:var(--rail)}
+.sec .sec-head{margin-inline-start:calc(-1 * var(--rail))}
+@media (min-width:480px){:root{--rail:56px}}
+@media (min-width:768px){:root{--rail:72px}}
+
+/* 一张纸 */
+.sheet-tools{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--s-4);flex-wrap:wrap;margin-block-end:var(--s-4);
+}
+.sheet-count{font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.chip{
+  font-size:14px;color:var(--ink);background:var(--paper);
+  border:1px solid var(--control);border-radius:var(--r-pill);
+  padding:var(--s-2) var(--s-4);cursor:pointer;min-block-size:40px;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease);
+}
+.chip:hover{border-color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#ffffff;font-weight:600}
+
+.sheet{
+  display:grid;grid-template-columns:minmax(0,1fr) 360px;
+  gap:var(--s-6);padding:var(--s-5);
+  background:var(--paper);border-radius:var(--r-2);
+  box-shadow:0 24px 64px -48px rgba(24,24,24,.45);
+}
+.sheet__bar{
+  grid-column:1 / -1;
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:var(--s-4);flex-wrap:wrap;
+  padding-block-end:var(--s-4);border-block-end:1px solid var(--rule);
+}
+.sheet__title{font-size:16px;font-weight:600}
+.sheet__meta{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+.doc{display:grid;grid-template-columns:40px minmax(0,1fr) 28px;column-gap:var(--s-3);row-gap:var(--s-5);align-content:start}
+.doc__no{font-size:12px;color:var(--ink-2);padding-block-start:4px;font-variant-numeric:tabular-nums}
+.doc__line{font-size:16px;max-inline-size:34em;text-wrap:pretty;transition:background var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease)}
+.doc__line[data-active="true"]{background:var(--accent-tint);box-shadow:0 0 0 8px var(--accent-tint);border-radius:2px}
+.mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  inline-size:24px;block-size:24px;margin-block-start:-2px;
+  border:1px solid var(--accent);border-radius:var(--r-pill);
+  background:var(--accent-wash);color:var(--accent);
+  font-size:12px;font-weight:600;cursor:pointer;
+  position:relative;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease);
+}
+.mark::after{content:"";position:absolute;inset:-10px}
+.mark:hover{background:var(--accent-tint)}
+.mark[data-resolved="true"]{border-color:var(--control);color:var(--ink-2);background:var(--paper)}
+.mark[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#ffffff}
+
+.task{
+  grid-column:2 / -1;
+  margin-inline-end:calc(28px + var(--s-3));
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:start;gap:var(--s-3);
+  padding:var(--s-3) var(--s-4);
+  background:var(--paper-2);
   border-radius:var(--r-1);
+  border-inline-start:2px solid var(--accent);
 }
-.skip:focus{top:var(--s-3)}
-
-/* ---------- 页头 ---------- */
-.site-header{
-  position:sticky;top:0;z-index:40;background:var(--white);
-  border-bottom:1px solid var(--gray-3);
+.task__text{font-size:16px}
+.task__label{display:block;font-size:12px;color:var(--ink-2);margin-block-start:var(--s-1)}
+.task__toggle{
+  position:relative;display:inline-flex;align-items:center;gap:var(--s-2);
+  font-size:14px;color:var(--ink);background:none;border:0;padding:0;
+  cursor:pointer;white-space:nowrap;min-block-size:28px;
 }
-.header-inner{display:flex;align-items:center;gap:var(--s-5);min-height:64px}
-.brand{display:inline-flex;align-items:center;gap:var(--s-2);color:var(--ink);font-weight:600;min-height:44px}
-.brand:hover{text-decoration:none}
-.brand svg{width:24px;height:24px;color:var(--brand)}
-.nav{margin-left:auto;display:flex;align-items:center;gap:var(--s-5)}
-.nav a{color:var(--ink-2);min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
-.nav a:hover{color:var(--ink);text-decoration:none}
-.header-cta{margin-left:var(--s-2)}
-.menu-btn{display:none}
-
-/* ---------- 按钮 ---------- */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
-  min-height:44px;padding:var(--s-2) var(--s-4);
-  border-radius:var(--r-1);border:1px solid transparent;
-  font-weight:600;cursor:pointer;text-decoration:none;
-  transition:background-color var(--dur-base) var(--ease-std),border-color var(--dur-base) var(--ease-std),color var(--dur-base) var(--ease-std);
+.task__toggle::after{content:"";position:absolute;inset:-8px}
+.task__box{
+  inline-size:20px;block-size:20px;
+  border:1px solid var(--control);border-radius:var(--r-pill);
+  background:var(--paper);color:var(--accent);
+  font-size:12px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease);
 }
-.btn:hover{text-decoration:none}
-.btn-primary{background:var(--brand);color:var(--white)}
-.btn-primary:hover{background:var(--brand-hover)}
-.btn-primary:active{background:var(--brand-active)}
-.btn-secondary{background:var(--white);color:var(--ink);border-color:var(--gray-7)}
-.btn-secondary:hover{background:var(--gray-1)}
-.btn-quiet{background:transparent;color:var(--brand);border-color:var(--gray-4);padding-inline:var(--s-3)}
-.btn-quiet:hover{background:var(--brand-soft);border-color:var(--brand-line)}
-.btn-accent{background:var(--brand-soft);color:var(--brand-hover);border-color:var(--brand)}
-.btn-accent:hover{background:var(--brand-line)}
-.btn[disabled]{cursor:not-allowed;opacity:1;color:var(--ink-3);border-color:var(--gray-4);background:var(--gray-1)}
-.link-btn{
-  background:none;border:0;padding:var(--s-1) 0;min-height:44px;
-  color:var(--brand);cursor:pointer;font-weight:400;text-align:left;
+.task__toggle:hover .task__box{border-color:var(--ink-2)}
+.task[data-done="true"] .task__text{text-decoration:line-through;color:var(--ink-2)}
+.task[data-done="true"] .task__box{background:var(--accent);border-color:var(--accent);color:#ffffff}
+
+.side{
+  display:flex;flex-direction:column;gap:var(--s-3);
+  padding-inline-start:var(--s-5);
+  border-inline-start:1px solid var(--rule);
 }
-.link-btn:hover{text-decoration:underline;text-underline-offset:2px}
-
-/* ---------- 首屏 ---------- */
-.hero{padding-block:var(--s-7) var(--s-8);min-height:calc(80vh - 64px);display:flex;align-items:center}
-.hero-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);width:100%;align-items:center}
-.hero-copy{grid-column:span 7;min-width:0}
-.hero-figure{grid-column:span 5;min-width:0;background:var(--gray-1);border:1px solid var(--gray-3);border-radius:var(--r-2);padding:var(--s-4)}
-.hero h1{font-size:var(--fs-l);font-weight:600;letter-spacing:-.01em;max-width:12em}
-.hero-lead{margin-top:var(--s-5);color:var(--ink-2);max-width:34em}
-.nb{white-space:nowrap}
-.hero-actions{display:flex;flex-wrap:wrap;gap:var(--s-3);margin-top:var(--s-6)}
-.hero-meta{margin-top:var(--s-4);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:0}
-.hero-meta > span{white-space:nowrap}
-.meta-sep{padding-inline:var(--s-2);color:var(--gray-7)}
-
-/* 演示用纸面（示意，不承载交互） */
-.sheet{border:1px solid var(--gray-4);border-radius:var(--r-2);background:var(--white);overflow:hidden}
-
-.sheet-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3);background:var(--gray-1)}
-.sheet-doc{font-weight:600}
-.sheet-live{color:var(--ink-2);display:inline-flex;align-items:center;gap:var(--s-2)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--brand);display:inline-block}
-.sheet-body{position:relative;padding:var(--s-5)}
-.sheet-body p{max-width:100%}
-.sheet-lead{color:var(--ink)}
-.sheet-lead mark{background:var(--brand-line);color:var(--ink);padding:0 2px}
-.sheet-note{margin-top:var(--s-3);color:var(--ink-2)}
-.presence{
-  display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-1) var(--s-4);
-  padding:var(--s-2) var(--s-4);border-bottom:1px solid var(--gray-3);color:var(--ink-2);
+.side__head{font-size:12px;color:var(--ink-2);letter-spacing:.08em}
+.thread{
+  padding:var(--s-3);
+  border-radius:var(--r-1);
+  background:var(--paper-2);
+  border-inline-start:2px solid transparent;
+  transition:background var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease);
 }
-.pres{white-space:nowrap}
-.presence b{font-weight:400;color:var(--ink);display:inline-flex;align-items:center;gap:var(--s-1)}
-.caret{width:2px;height:16px;background:var(--brand);display:inline-block}
-.comment{
-  margin-top:var(--s-5);border:1px solid var(--gray-3);border-left:2px solid var(--brand);
-  border-radius:var(--r-1);padding:var(--s-3) var(--s-4);background:var(--white);
-  transition:border-color var(--dur-base) var(--ease-std);
+.thread[data-resolved="false"]{border-inline-start-color:var(--accent)}
+.thread[data-active="true"]{background:var(--accent-wash);box-shadow:inset 0 0 0 1px var(--accent-line)}
+.thread__top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3)}
+.thread__ref{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.thread__state{font-size:12px;font-weight:600;color:var(--accent)}
+.thread__state::before{
+  content:"";display:inline-block;inline-size:6px;block-size:6px;
+  border-radius:50%;background:currentColor;margin-inline-end:6px;vertical-align:2px;
 }
-.comment-who{color:var(--ink-2);display:flex;align-items:center;gap:var(--s-2)}
-.avatar{width:28px;height:28px;border-radius:50%;background:var(--gray-2);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-size:16px}
-.comment p + p{margin-top:var(--s-2)}
-.comment .btn{margin-top:var(--s-3)}
-.task-strip{
-  margin-top:var(--s-4);border-top:1px solid var(--gray-3);padding-top:var(--s-3);
-  display:flex;align-items:center;gap:var(--s-2);color:var(--ink-2);
+.thread[data-resolved="true"] .thread__state{color:var(--ink-2);font-weight:400}
+.thread[data-resolved="true"] .thread__state::before{display:none}
+.cmt{padding-block:var(--s-3);border-block-start:1px solid var(--rule)}
+.cmt:first-of-type{border-block-start:0;padding-block-start:var(--s-2)}
+.cmt__by{font-size:12px;color:var(--ink-2);display:block;margin-block-end:2px}
+.cmt__text{font-size:14px}
+.thread__link{margin-block-start:var(--s-1);font-size:12px;color:var(--ink-2)}
+.thread__act{
+  position:relative;margin-block-start:var(--s-2);
+  display:inline-flex;align-items:center;min-block-size:28px;
+  font-size:12px;color:var(--ink-2);background:transparent;
+  border:1px solid var(--control);border-radius:var(--r-pill);
+  padding:0 var(--s-3);cursor:pointer;
+  transition:color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease);
 }
-.strip-label{color:var(--gray-9)}
-.checkbox{width:16px;height:16px;border:1px solid var(--gray-7);border-radius:2px;flex:none}
-
-/* ---------- 区块通用 ---------- */
-.section{padding-block:var(--s-9)}
-.section + .section{border-top:1px solid var(--gray-3)}
-.band{background:var(--gray-1);border-top:1px solid var(--gray-3)}
-.eyebrow{color:var(--ink-2);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:var(--s-3)}
-.eyebrow::after{content:"";height:1px;background:var(--gray-4);flex:1}
-.h2{font-size:var(--fs-m);font-weight:600;margin-top:var(--s-4);max-width:22em}
-.section-lead{margin-top:var(--s-4);color:var(--ink-2);max-width:38em}
-
-/* ---------- 01 能力 ---------- */
-.feature-list{margin-top:var(--s-8);border-top:1px solid var(--gray-3)}
-.feature{
-  display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-3) var(--s-5);
-  padding-block:var(--s-5);border-bottom:1px solid var(--gray-3);
+.thread__act::after{content:"";position:absolute;inset:-8px -4px}
+.thread__act:hover{color:var(--accent-deep);border-color:var(--accent-line);background:var(--accent-wash)}
+.thread__act:active{color:var(--accent-deepest);background:var(--accent-tint);border-color:var(--accent-line)}
+.side__empty{
+  padding:var(--s-4);border-radius:var(--r-1);
+  background:var(--accent-wash);font-size:14px;
 }
-.feature-title{grid-column:span 4;font-weight:600}
-.feature-title svg{width:24px;height:24px;color:var(--brand);margin-bottom:var(--s-2)}
-.feature-copy{grid-column:span 8;color:var(--ink-2);max-width:38em}
 
-/* ---------- 02 演示 ---------- */
-.demo-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);margin-top:var(--s-7);align-items:stretch}
-.demo-paper{grid-column:span 7;min-width:0}
-.demo-side{grid-column:span 5;min-width:0;display:flex;flex-direction:column}
-.doc-h{font-weight:600;margin-bottom:var(--s-3)}
-.doc-body p + p{margin-top:var(--s-3)}
-.doc-body .mark-line{background:var(--brand-soft);border-left:2px solid var(--brand);padding:var(--s-2) var(--s-3);margin-top:var(--s-4)}
-.comment.done{border-left-color:var(--gray-6)}
-.tasks{border:1px solid var(--gray-4);border-radius:var(--r-2);background:var(--white);display:flex;flex-direction:column;flex:1}
-.tasks-head{display:flex;justify-content:space-between;align-items:center;padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3);background:var(--gray-1);font-weight:600}
-.tasks-head span:last-child{color:var(--ink-2);font-weight:400;font-variant-numeric:tabular-nums}
-.task{display:flex;align-items:flex-start;gap:var(--s-2);padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--gray-3)}
-.task:last-of-type{border-bottom:0}
-.task .who{margin-left:auto;color:var(--ink-2);white-space:nowrap;padding-left:var(--s-2)}
-.task-new{background:var(--brand-soft);transition:background-color var(--dur-mid) var(--ease-std)}
-.tasks-note{padding:var(--s-3) var(--s-4);color:var(--ink-2);border-top:1px solid var(--gray-3);margin-top:auto}
-.demo-tools{margin-top:var(--s-1)}
-.demo-tools .link-btn{color:var(--ink-2)}
-
-/* ---------- 03 客户 ---------- */
-.logos{display:flex;flex-wrap:wrap;gap:var(--s-4) var(--s-7);margin-top:var(--s-6);padding-top:var(--s-5);border-top:1px solid var(--gray-3)}
-.logos li{color:var(--ink-2);font-weight:600}
-.quotes{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-6) var(--s-5);margin-top:var(--s-7)}
-.quote-main{grid-column:span 7;min-width:0}
-.quote-side{grid-column:span 5;display:grid;gap:var(--s-5);min-width:0}
-.quote-main blockquote{font-size:var(--fs-m);font-weight:400;max-width:18em}
-.quote-side blockquote{color:var(--ink);max-width:26em}
-.quote figcaption{margin-top:var(--s-3);color:var(--ink-2)}
-.quote-main{border-left:2px solid var(--brand);padding-left:var(--s-5)}
-
-/* ---------- 04 定价 ---------- */
-.billing{display:inline-flex;gap:0;border:1px solid var(--gray-7);border-radius:var(--r-1);padding:2px;margin-top:var(--s-5);background:var(--white)}
-.billing label{position:relative}
-.billing input{position:absolute;opacity:0;width:1px;height:1px}
-.billing span{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s-4);border-radius:2px;cursor:pointer;color:var(--ink-2);transition:background-color var(--dur-base) var(--ease-std),color var(--dur-base) var(--ease-std)}
-.billing input:checked + span{background:var(--brand-soft);color:var(--brand-hover);font-weight:600;box-shadow:inset 0 0 0 1px var(--brand)}
-.billing input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
-.billing input:not(:checked) + span:hover{color:var(--ink)}
-.billing-note{margin-top:var(--s-3);color:var(--ink-2);font-variant-numeric:tabular-nums}
-.plans{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);margin-top:var(--s-7);align-items:stretch}
-.plan{grid-column:span 4;display:flex;flex-direction:column;border:1px solid var(--gray-4);border-radius:var(--r-2);padding:var(--s-5);background:var(--white)}
-.plan-featured{border-color:var(--brand);border-top-width:2px}
-.plan-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s-2)}
-.plan-name{font-weight:600}
-.tag{color:var(--brand-hover);background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:var(--r-1);padding:0 var(--s-2);white-space:nowrap}
-.price{display:flex;align-items:baseline;gap:var(--s-1);margin-top:var(--s-4);font-variant-numeric:tabular-nums}
-.price-num{font-size:var(--fs-m);font-weight:600}
-.price-cur,.price-per{color:var(--ink-2)}
-.plan-desc{margin-top:var(--s-2);color:var(--ink-2)}
-.plan ul{margin-top:var(--s-5);display:grid;gap:var(--s-2);color:var(--ink-2)}
-.plan li{display:flex;gap:var(--s-2);align-items:flex-start}
-.plan li svg{width:20px;height:20px;flex:none;color:var(--gray-9);margin-top:2px}
-.plan .btn{margin-top:var(--s-6)}
-.plan-foot{margin-top:var(--s-5);color:var(--ink-2);border-top:1px solid var(--gray-3);padding-top:var(--s-3)}
-
-/* ---------- 05 常见问题 ---------- */
-.faq{margin-top:var(--s-7);border-top:1px solid var(--gray-3)}
-.qa{border-bottom:1px solid var(--gray-3)}
-.qa h3{font-weight:400}
-.qa-btn{
-  width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
-  background:none;border:0;text-align:left;cursor:pointer;padding:var(--s-4) 0;min-height:44px;
-  font-weight:600;color:var(--ink);
+/* 步骤 */
+.steps-head{
+  display:grid;grid-template-columns:56px minmax(0,1fr) 280px;
+  column-gap:var(--s-4);font-size:12px;color:var(--ink-2);
+  padding-block-end:var(--s-2);
 }
-.qa-btn:hover{color:var(--brand);background:var(--gray-1)}
-.qa-btn{border-radius:var(--r-1)}
-.qa-sign{color:var(--ink-2);flex:none;font-variant-numeric:tabular-nums}
-.qa-panel{padding-bottom:var(--s-5);color:var(--ink-2);max-width:40em}
+.steps{border-block-start:1px solid var(--rule)}
+.step{
+  display:grid;grid-template-columns:56px minmax(0,1fr) 280px;
+  column-gap:var(--s-4);row-gap:var(--s-2);
+  padding-block:var(--s-5);
+  border-block-end:1px solid var(--rule);
+  align-items:start;
+}
+.step__no{
+  font-size:14px;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;padding-block-start:8px;
+}
+.step__title{font-size:20px;font-weight:600}
+.step__desc{font-size:16px;color:var(--ink-2);max-inline-size:32em;margin-block-start:var(--s-1)}
+.step__keep{font-size:14px;color:var(--ink);padding-block-start:6px}
+.step__keep b{font-weight:400}
 
-/* ---------- 06 收束 ---------- */
-.closing{padding-block:var(--s-9);border-top:1px solid var(--gray-3);background:var(--gray-1)}
-.closing-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-5);align-items:end}
-.closing-copy{grid-column:span 8;min-width:0}
-.closing-action{grid-column:span 4;min-width:0}
+/* 定价 */
+.bill-row{
+  display:flex;align-items:center;gap:var(--s-4);flex-wrap:wrap;
+  margin-block-end:var(--s-5);
+}
+.bill{
+  display:inline-flex;gap:var(--s-1);padding:var(--s-1);
+  background:var(--paper);border:1px solid var(--rule-strong);
+  border-radius:var(--r-pill);
+}
+.bill__btn{
+  font-size:14px;color:var(--ink-2);background:transparent;
+  border:0;border-radius:var(--r-pill);padding:var(--s-2) var(--s-4);
+  cursor:pointer;min-block-size:40px;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease);
+}
+.bill__btn[aria-pressed="true"]{background:var(--accent);color:#ffffff;font-weight:600}
+.bill-note{font-size:14px;color:var(--ink-2);max-inline-size:34em}
 
-/* ---------- 页脚 ---------- */
-.site-footer{padding-block:var(--s-8) var(--s-6);border-top:1px solid var(--gray-3)}
-.footer-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-6) var(--s-5)}
-.footer-brand{grid-column:span 4;min-width:0}
-.footer-col{grid-column:span 2;min-width:0}
-.footer-col h2{font-weight:600;margin-bottom:var(--s-2)}
-.footer-col li + li{margin-top:var(--s-1)}
-.footer-col a{color:var(--ink-2);display:inline-flex;min-height:44px;min-width:44px;align-items:center}
-.footer-col a:hover{color:var(--ink)}
-.footer-legal{grid-column:span 12;margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--gray-3);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5)}
+.price-table{
+  inline-size:100%;table-layout:fixed;border-collapse:collapse;
+  background:var(--paper);border-radius:var(--r-2);overflow:hidden;
+}
+.price-table caption{
+  display:block;inline-size:100%;
+  text-align:start;font-size:12px;color:var(--ink-2);
+  padding-block-end:var(--s-2);
+}
+.price-table th,.price-table td{
+  padding:var(--s-4) var(--s-5);
+  text-align:start;vertical-align:top;
+  border-block-end:1px solid var(--rule);
+}
+.price-table thead th{font-size:14px;font-weight:400;color:var(--ink-2)}
+.price-table tbody tr:last-child th,.price-table tbody tr:last-child td{border-block-end:0}
+.price-table tbody tr:nth-child(2){background:var(--accent-wash)}
+.price-table col:nth-child(1){width:46%}
+.price-table col:nth-child(2){width:27%}
+.price-table col:nth-child(3){width:27%}
+.plan{font-size:20px;font-weight:600;display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap}
+.plan-desc{font-size:14px;color:var(--ink-2);margin-block-start:var(--s-1);font-weight:400;display:block;word-break:keep-all;overflow-wrap:break-word}
+.tag{
+  font-size:12px;font-weight:600;color:var(--accent-deepest);
+  background:var(--accent-tint);border-radius:var(--r-1);
+  padding:2px 8px;white-space:nowrap;
+}
+.num{text-align:end;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.price-table .num{text-align:end}
+.price-table .num-na{font-size:14px;font-weight:400;color:var(--ink-2)}
 
-/* ---------- 弹窗 ---------- */
+/* 问答 */
+.faq{max-inline-size:44em;border-block-start:1px solid var(--rule)}
+.faq details{border-block-end:1px solid var(--rule)}
+.faq summary{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+  padding-block:var(--s-4);font-size:16px;font-weight:600;
+  cursor:pointer;list-style:none;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:20px;font-weight:400;color:var(--accent);flex:none}
+.faq details[open] summary::after{content:"－"}
+.faq p{font-size:16px;color:var(--ink-2);padding-block-end:var(--s-4);max-inline-size:40em}
+
+/* 结尾 CTA */
+.cta{background:var(--ink);color:var(--on-dark-1);padding-block:var(--s-9);padding-inline:var(--gutter)}
+.cta__in{max-inline-size:var(--maxw);margin-inline:auto;padding-inline-start:var(--rail)}
+.cta h2{font-size:48px;font-weight:600;letter-spacing:-.01em;max-inline-size:14em}
+.cta__note{font-size:16px;color:var(--on-dark-2);margin-block-start:var(--s-3);max-inline-size:32em}
+.cta__btn{
+  margin-block-start:var(--s-6);
+  font-size:16px;font-weight:600;color:var(--accent-deepest);
+  background:var(--accent-line);border:1px solid var(--accent-line);
+  border-radius:var(--r-pill);padding:var(--s-3) var(--s-7);
+  cursor:pointer;min-block-size:44px;white-space:nowrap;
+  transition:background var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease);
+}
+.cta__btn:hover{background:var(--accent-lighter);border-color:var(--accent-lighter)}
+.cta__btn:active{background:var(--accent-tint);border-color:var(--accent-tint)}
+
+/* 页脚 · Ft1 */
+.foot{
+  background:var(--ink);color:var(--on-dark-2);
+  padding-block:var(--s-6) var(--s-7);padding-inline:var(--gutter);
+  border-block-start:1px solid var(--on-dark-line);
+}
+.foot__in{max-inline-size:var(--maxw);margin-inline:auto;padding-inline-start:var(--rail)}
+.foot__mast{display:flex;align-items:baseline;gap:var(--s-4);flex-wrap:wrap;margin-block-end:var(--s-4)}
+.foot__brand{font-size:20px;font-weight:600;color:var(--on-dark-1)}
+.foot__tag{font-size:16px;color:var(--on-dark-2)}
+.foot__links{display:flex;gap:var(--s-5);flex-wrap:wrap;margin-block-end:var(--s-4);font-size:14px}
+.foot__links a{
+  color:var(--on-dark-3);padding-block:var(--s-2);
+  text-decoration:underline;text-decoration-color:rgba(255,255,255,.6);
+  text-decoration-thickness:1px;text-underline-offset:3px;
+  transition:color var(--t-fast) var(--ease),text-decoration-color var(--t-fast) var(--ease);
+}
+.foot__links a:hover{color:var(--on-dark-1);text-decoration-color:currentColor}
+.foot__links a:active{color:var(--accent-line)}
+.foot__legal{font-size:12px;color:var(--on-dark-4)}
+
+/* 试用弹层 */
 dialog{
-  width:min(520px,calc(100vw - 48px));padding:0;border:1px solid var(--gray-4);border-radius:var(--r-2);
-  background:var(--white);color:var(--ink);
-  opacity:0;transform:translateY(8px);
-  transition:opacity var(--dur-base) var(--ease-in),transform var(--dur-mid) var(--ease-in),overlay var(--dur-mid) allow-discrete,display var(--dur-mid) allow-discrete;
+  border:0;border-radius:var(--r-2);
+  inline-size:min(480px,calc(100vw - 32px));
+  padding:var(--s-6);
+  background:var(--paper);color:var(--ink);
 }
-dialog[open]{opacity:1;transform:none}
-@starting-style{dialog[open]{opacity:0;transform:translateY(8px)}}
-dialog::backdrop{background:rgba(0,0,0,.45);opacity:0;transition:opacity var(--dur-base) var(--ease-in)}
-dialog[open]::backdrop{opacity:1}
-.dlg-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s-4);padding:var(--s-5) var(--s-5) var(--s-4)}
-.dlg-title{font-weight:600}
-.dlg-sub{color:var(--ink-2);margin-top:var(--s-1)}
-.dlg-close{background:none;border:1px solid var(--gray-4);border-radius:var(--r-1);min-width:44px;min-height:44px;cursor:pointer;color:var(--ink-2)}
-.dlg-close:hover{background:var(--gray-1);color:var(--ink)}
-.dlg-body{padding:0 var(--s-5) var(--s-5)}
-.field + .field{margin-top:var(--s-4)}
-.field label{display:block;font-weight:600;margin-bottom:var(--s-1)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.dlg__title{font-size:24px;font-weight:600;margin-block-end:var(--s-2)}
+.dlg__note{font-size:14px;color:var(--ink-2);margin-block-end:var(--s-5)}
+.field{display:block;margin-block-end:var(--s-2)}
+.field span{display:block;font-size:14px;font-weight:600;margin-block-end:var(--s-2)}
 .field input{
-  width:100%;min-height:44px;padding:var(--s-2) var(--s-3);
-  border:1px solid var(--gray-7);border-radius:var(--r-1);background:var(--white);
-  transition:border-color var(--dur-base) var(--ease-std);
+  inline-size:100%;font-family:inherit;font-size:16px;font-weight:400;
+  color:var(--ink);background:var(--paper);
+  border:1px solid var(--control);border-radius:var(--r-1);
+  padding:10px var(--s-3);min-block-size:44px;
 }
-.field input:hover{border-color:var(--gray-9)}
-.field input[aria-invalid="true"]{border-color:#d54941;border-width:2px;padding:7px 11px}
-.field-err{color:#ad352f;margin-top:var(--s-1)}
-.field-hint{color:var(--ink-2);margin-top:var(--s-1)}
-.dlg-actions{margin-top:var(--s-5);display:flex;flex-direction:column;gap:var(--s-2)}
-.dlg-actions .btn{width:100%}
-.success{padding:var(--s-5);border-top:1px solid var(--gray-3)}
-.success h3{font-weight:600}
-.success p{color:var(--ink-2);margin-top:var(--s-2)}
-.success .btn{margin-top:var(--s-4)}
-
-/* 轻提示 */
-.toast{
-  position:fixed;left:50%;bottom:var(--s-5);transform:translate(-50%,8px);
-  background:var(--ink);color:var(--white);padding:var(--s-3) var(--s-4);border-radius:var(--r-1);
-  max-width:calc(100vw - 48px);opacity:0;pointer-events:none;z-index:70;
-  transition:opacity var(--dur-base) var(--ease-std),transform var(--dur-base) var(--ease-std);
+.field input[aria-invalid="true"]{border-color:var(--danger-line);border-width:2px;padding:9px 11px}
+.err{font-size:14px;color:var(--danger);margin-block-end:var(--s-4);min-block-size:24px}
+.dlg__acts{display:flex;gap:var(--s-3);flex-wrap:wrap;margin-block-start:var(--s-4)}
+.btn-primary{
+  font-size:16px;font-weight:600;color:#ffffff;background:var(--accent);
+  border:1px solid var(--accent);border-radius:var(--r-pill);
+  padding:var(--s-3) var(--s-5);cursor:pointer;min-block-size:44px;
+  transition:background var(--t-fast) var(--ease);
 }
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.btn-primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.btn-primary:disabled{background:var(--ink-2);border-color:var(--ink-2);cursor:default}
+.btn-quiet{
+  font-size:16px;color:var(--ink);background:transparent;
+  border:1px solid var(--control);border-radius:var(--r-pill);
+  padding:var(--s-3) var(--s-5);cursor:pointer;min-block-size:44px;
+}
+.btn-quiet:hover{border-color:var(--ink-2)}
+.dlg__done{font-size:16px;color:var(--ink);padding:var(--s-4);background:var(--accent-wash);border-radius:var(--r-1)}
+.sr{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* ---------- 断点：768 / 992（TDesign 断点系统 layout.md:116-119） ---------- */
+/* 响应式 */
+@media (max-width:1199px){
+  .marquee h1{font-size:48px}
+}
 @media (max-width:991px){
-  :root{--fs-l:48px;--fs-m:28px;--fs-s:16px}
-  .hero-copy,.hero-figure,.demo-paper,.demo-side,
-  .quote-main,.quote-side,.closing-copy,.closing-action{grid-column:span 12}
-  .plan{grid-column:span 12}
-  .footer-brand{grid-column:span 12}
-  .footer-col{grid-column:span 3}
-  .hero{min-height:0;padding-block:var(--s-7) var(--s-8)}
-  .section{padding-block:var(--s-8)}
-  .feature-title{grid-column:span 12}
-  .feature-copy{grid-column:span 12}
+  .marquee h1{font-size:36px}
+  .sheet{grid-template-columns:minmax(0,1fr)}
+  .side{padding-inline-start:0;border-inline-start:0;border-block-start:1px solid var(--rule);padding-block-start:var(--s-4)}
+  .steps-head{display:none}
+  .step{grid-template-columns:40px minmax(0,1fr)}
+  .step__keep{grid-column:2;padding-block-start:0}
+  .step__keep::before{content:"留下：";color:var(--ink-2)}
 }
 @media (max-width:767px){
-  :root{--fs-l:36px;--fs-m:24px;--fs-s:16px}
-  .wrap{padding-inline:var(--s-4)}
-  .nav{
-    position:absolute;left:0;right:0;top:100%;
-    flex-direction:column;align-items:stretch;gap:0;
-    background:var(--white);border-bottom:1px solid var(--gray-3);padding:var(--s-2) var(--s-4);
+  .pill{gap:var(--s-2);padding-inline-start:var(--s-3)}
+  .pill__links{gap:var(--s-1)}
+  .pill__links a{padding-inline:var(--s-2)}
+  .sec{padding-block:var(--s-8);scroll-margin-block-start:80px}
+  .sec-head{grid-template-columns:40px minmax(0,1fr);margin-block-end:var(--s-6)}
+  .sec-title{font-size:28px}
+  .cta h2{font-size:36px}
+  .cta{padding-block:var(--s-8)}
+  .price-table th,.price-table td{padding:var(--s-3) var(--s-3)}
+  .plan{font-size:16px}
+  .num{font-size:16px}
+  .price-table col:nth-child(1){width:40%}
+  .price-table col:nth-child(2){width:30%}
+  .price-table col:nth-child(3){width:30%}
+}
+@media (max-width:479px){
+  .pill{
+    inset-inline-start:var(--s-4);transform:none;
+    inline-size:calc(100vw - 32px);
+    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+    gap:0;padding:var(--s-2) var(--s-2) var(--s-2) var(--s-4);
   }
-  .nav a{min-height:44px}
-  .menu-btn{
-    display:inline-flex;align-items:center;margin-left:auto;
-    min-height:44px;padding:0 var(--s-3);background:var(--white);
-    border:1px solid var(--gray-7);border-radius:var(--r-1);cursor:pointer;
+  .pill__brand{grid-area:1 / 1}
+  .pill__cta{grid-area:1 / 2;justify-self:end}
+  .pill__links{
+    grid-area:2 / 1 / 3 / 3;
+    justify-content:space-between;gap:var(--s-2);
+    margin-block-start:var(--s-2);
+    border-block-start:1px solid var(--rule);
   }
-  .header-cta{margin-left:0}
-  .header-inner{gap:var(--s-2)}
-  .nav[hidden]{display:none}
-  .billing{width:100%}
-  .billing label{flex:1}
-  .billing span{width:100%;justify-content:center;padding:0 var(--s-2)}
-  .footer-col{grid-column:span 6}
-  .hero h1{max-width:100%}
+  .sec{scroll-margin-block-start:136px}
+  .marquee{padding-inline-start:var(--s-4)}
+  .marquee h1{font-size:28px;min-block-size:40svh}
+  .ln{gap:var(--s-2)}
+  .ln__no{inline-size:18px;padding-block-end:4px}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .sec-note{grid-column:1}
+  .doc{grid-template-columns:24px minmax(0,1fr) 24px;column-gap:var(--s-2)}
+  .task{grid-template-columns:minmax(0,1fr)}
+  .task__toggle{margin-block-start:var(--s-2)}
+  .price-table,.price-table tbody,.price-table tr,.price-table th,.price-table td{display:block;inline-size:100%}
+  .price-table thead{display:none}
+  .price-table colgroup{display:none}
+  .price-table tr{padding-block:var(--s-4);border-block-end:1px solid var(--rule)}
+  .price-table tr:last-child{border-block-end:0}
+  .price-table th,.price-table td{padding:0;border:0}
+  .price-table .num{
+    display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);
+    text-align:start;font-size:16px;padding-block-start:var(--s-2);
+  }
+  .price-table .num::before{content:attr(data-label);font-size:12px;font-weight:400;color:var(--ink-2)}
+  .plan{font-size:16px}
+  .num{font-size:16px}
+  .cta h2{font-size:28px}
 }
 @media (max-width:359px){
-  /* 320 档：9 个 36px 字宽放不进 288px 版面，退到字阶 28/20 两档（均在 TDesign 字阶内），
-     不缩小字号就会把「任务」拆开、末行只剩一个字 */
-  :root{--fs-l:28px;--fs-m:20px;--fs-s:16px}
-}
-@media (min-width:768px){
-  .nav[hidden]{display:flex}
+  .marquee h1{font-size:24px}
 }
 
 @media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;animation-iteration-count:1 !important}
-  dialog{transform:none}
+  *,*::before,*::after{transition:none!important;animation:none!important}
 }
 </style>
 </head>
-<body id="top">
-<a class="skip" href="#main">跳到主要内容</a>
+<body>
+<a class="skip" href="#main">跳到正文</a>
 
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="#top">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
-        <path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M8 12h8M8 16h5"/>
-      </svg>
-      SamePaper
-    </a>
-    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav">菜单</button>
-    <nav class="nav" id="siteNav" aria-label="主导航" hidden>
-      <a href="#features">产品</a>
-      <a href="#demo">演示</a>
-      <a href="#pricing">定价</a>
-      <a href="#faq">常见问题</a>
-    </nav>
-    <div class="header-cta">
-      <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
-    </div>
-  </div>
-</header>
+<nav class="pill" aria-label="主导航">
+  <a class="pill__brand" href="#top">SamePaper</a>
+  <ul class="pill__links">
+    <li><a href="#sheet">一张纸</a></li>
+    <li><a href="#steps">怎么用</a></li>
+    <li><a href="#price">定价</a></li>
+    <li><a href="#faq">问答</a></li>
+  </ul>
+  <button class="pill__cta" type="button" data-open-trial>申请试用</button>
+</nav>
 
 <main id="main">
-
-  <!-- 首屏 -->
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <h1 id="heroTitle">文档、讨论、任务，<br>写在同一张纸上</h1>
-        <p class="hero-lead">SamePaper 把三件事放回同一页：光标带名字，评论贴着它讨论的那一段，<span class="nb">结论一键变成任务</span>。谁在改、改到哪、<span class="nb">下一步做什么</span>，<span class="nb">一屏看得清</span>。</p>
-        <div class="hero-actions">
-          <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
-          <a class="btn btn-secondary" href="#demo">看协作演示</a>
-        </div>
-        <p class="hero-meta"><span>不用信用卡</span><span class="meta-sep">·</span><span>3 分钟建好第一张纸</span><span class="meta-sep">·</span><span>免费档不限人数</span></p>
-      </div>
-
-      <figure class="sheet hero-figure" role="img" aria-label="界面示意图：文档里一段话被选中，右侧贴着一条评论，页脚是一条已转成任务的结论，两个人名的光标停在纸上">
-        <div class="sheet-bar">
-          <span class="sheet-doc">9月版本复盘</span>
-          <span class="sheet-live"><span class="dot" aria-hidden="true"></span>3 人在线</span>
-        </div>
-        <div class="presence">
-          <span class="pres"><b><span class="caret" aria-hidden="true"></span>林岚</b> 正在改第 2 段</span>
-          <span class="pres"><b><span class="caret" aria-hidden="true"></span>周敏</b> 正在看评论</span>
-          <span class="pres"><b><span class="caret" aria-hidden="true"></span>陈可</b> 在收尾待办</span>
-        </div>
-        <div class="sheet-body">
-          <p class="sheet-lead">这一版把评论和任务放在同一页：<mark>讨论收敛后不再抄一遍到任务板</mark>，结论直接留在出处旁边。</p>
-          <div class="comment">
-            <p class="comment-who"><span class="avatar" aria-hidden="true">林</span>林岚 · 设计</p>
-            <p>重试逻辑这块没有负责人，建议直接开成任务，别在评论里等。</p>
-            <span class="btn btn-quiet" aria-hidden="true">转为任务</span>
-          </div>
-          <div class="task-strip">
-            <span class="strip-label">刚转成任务</span>
-            <span class="checkbox" aria-hidden="true"></span>
-            <span>补上失败重试 · 林岚 · 周五</span>
-          </div>
-        </div>
-      </figure>
-    </div>
+  <section class="marquee" id="top">
+    <h1>
+      <span class="ln"><span class="ln__no" aria-hidden="true">01</span><span class="ln__text">文档、讨论、任务，</span><span class="ln__rule" aria-hidden="true"></span></span>
+      <span class="ln"><span class="ln__no" aria-hidden="true">02</span><span class="ln__text">都写在</span><span class="ln__rule" aria-hidden="true"></span></span>
+      <span class="ln ln--last"><span class="ln__no" aria-hidden="true">03</span><span class="ln__text">同一张纸上。</span><span class="ln__rule" aria-hidden="true"></span></span>
+    </h1>
   </section>
 
-  <!-- 01 能力 -->
-  <section class="section" id="features" aria-labelledby="featuresTitle">
-    <div class="wrap">
-      <p class="eyebrow">01 / 产品</p>
-      <h2 class="h2" id="featuresTitle">一张纸，三件事不用来回切</h2>
-      <p class="section-lead">换工具最贵的不是迁移，是每天在三个窗口之间找同一件事的上下文。SamePaper 把上下文留在它发生的地方。</p>
+  <div class="seam" aria-hidden="true"></div>
 
-      <div class="feature-list">
-        <div class="feature">
-          <h3 class="feature-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 6h16v9H9l-5 4z"/><path d="M8 10h8"/></svg>
-            同页协作与评论
-          </h3>
-          <p class="feature-copy">光标和选区带着名字走，评论贴在它对应的段落旁边。翻到文档另一端，讨论不会跟丢，修改记录也按段落排。</p>
-        </div>
-        <div class="feature">
-          <h3 class="feature-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 5h16"/><path d="M8 5v14l4-3 4 3V5"/></svg>
-            结论转任务
-          </h3>
-          <p class="feature-copy">讨论收敛后，任何一条评论都能直接转成任务。负责人、截止时间、来源段落一起写进纸面，任务板上的状态会同步回来。</p>
-        </div>
-        <div class="feature">
-          <h3 class="feature-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><rect x="4" y="10" width="16" height="10"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-            按人和项目授权
-          </h3>
-          <p class="feature-copy">每个项目单独设可见范围。给外部伙伴一页只读链接，随时收回；他们看得到该看的那一页，看不到别的项目。</p>
-        </div>
+  <section class="sec sec--tint" id="sheet" aria-labelledby="sheet-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no" aria-hidden="true">01</span>
+        <h2 class="sec-title" id="sheet-title">讨论挂在那一行下面</h2>
+        <p class="sec-note">选中一行开始讨论。行改了，讨论跟着标位置；行删了，讨论留在原地标红。</p>
       </div>
-    </div>
-  </section>
 
-  <!-- 02 演示 -->
-  <section class="section band" id="demo" aria-labelledby="demoTitle">
-    <div class="wrap">
-      <p class="eyebrow">02 / 演示</p>
-      <h2 class="h2" id="demoTitle">在一张纸上走完一次讨论</h2>
-      <p class="section-lead">左边是林岚留在这段结论旁的评论。点「转为任务」，它会落到右边的待办里：负责人取评论作者，来源仍是这一段。</p>
-      <p class="demo-tools"><button class="link-btn" type="button" id="resetDemo">重置演示</button></p>
+      <div class="sheet-tools">
+        <p class="sheet-count">3 处讨论 · 6 条 · <span id="open-count">2</span> 处未解决</p>
+        <button class="chip" type="button" id="filter-btn" aria-pressed="false">只看未解决（2）</button>
+      </div>
 
-      <div class="demo-grid">
-        <div class="paper demo-paper sheet">
-          <div class="sheet-bar">
-            <span class="sheet-doc">9月版本复盘</span>
-            <span class="sheet-live"><span class="dot" aria-hidden="true"></span>2 人正在看</span>
-          </div>
-          <div class="sheet-body doc-body">
-            <h3 class="doc-h">结论</h3>
-            <p>这一版把「评论」和「任务」放在同一页。讨论收敛之后，不用再抄一遍到任务板，也不用在群里问谁在跟。</p>
-            <p class="mark-line">下一步：把迁移脚本的失败重试补上，再开放给第二批团队。</p>
-            <div class="comment" id="commentCard">
-              <p class="comment-who"><span class="avatar" aria-hidden="true">林</span>林岚 · 设计</p>
-              <p>重试逻辑这块没有负责人，建议直接开成任务，别在评论里等。</p>
-              <button class="btn btn-accent" type="button" id="toTaskBtn">转为任务</button>
+      <div class="sheet">
+        <div class="sheet__bar">
+          <p class="sheet__title">上线清单 · 定价页 v2.4</p>
+          <p class="sheet__meta">3 人可编辑 · 最后改动 14:20</p>
+        </div>
+
+        <div class="doc">
+          <span class="doc__no" aria-hidden="true">12</span>
+          <p class="doc__line" data-thread="t1">定价页的三档改成按月、按年两种价，年付那档把省下的钱写成数字。</p>
+          <button class="mark" type="button" aria-pressed="false" data-thread="t1" aria-controls="t1" aria-label="第 12 行有 2 条讨论" data-resolved="true">2</button>
+
+          <span class="doc__no" aria-hidden="true">13</span>
+          <p class="doc__line" data-thread="t2">试用表单只留一个邮箱输入框，提交后 10 秒内发确认信。</p>
+          <button class="mark" type="button" aria-pressed="false" data-thread="t2" aria-controls="t2" aria-label="第 13 行有 3 条讨论" data-resolved="false">3</button>
+
+          <span class="doc__no" aria-hidden="true">14</span>
+          <p class="doc__line" data-thread="t3">迁移说明写进问答第 5 条，附上 Markdown 导入的限制。</p>
+          <button class="mark" type="button" aria-pressed="false" data-thread="t3" aria-controls="t3" aria-label="第 14 行有 1 条讨论" data-resolved="false">1</button>
+
+          <span class="doc__no" aria-hidden="true">15</span>
+          <div class="task" data-done="false">
+            <div>
+              <p class="task__text">周五 18:00 前把 5 人团队的年付差额算进定价表</p>
+              <span class="task__label">任务 · 由第 12 行的讨论转来 · 林川负责</span>
             </div>
+            <button class="task__toggle" type="button" aria-pressed="false">
+              <span class="task__box" aria-hidden="true"></span>
+              <span class="task__act">标记完成</span>
+            </button>
           </div>
+
+          <span class="doc__no" aria-hidden="true">16</span>
+          <p class="doc__line">定价表上方加一行说明：价格含税，年付中途升级按剩余天数折算。</p>
+          <span aria-hidden="true"></span>
+
+          <span class="doc__no" aria-hidden="true">17</span>
+          <p class="doc__line">上线前把这一页发给客服组，附上三个常见问法的答法。</p>
+          <span aria-hidden="true"></span>
         </div>
 
-        <div class="demo-side">
-          <div class="tasks">
-            <div class="tasks-head"><span>待办</span><span id="taskCount" aria-live="polite">2 项</span></div>
-            <ul id="taskList">
-              <li class="task"><span class="checkbox" aria-hidden="true"></span><span>补上第二批团队的邀请名单</span><span class="who">周敏</span></li>
-              <li class="task"><span class="checkbox" aria-hidden="true"></span><span>确认 9 月版本的发布窗口</span><span class="who">陈可</span></li>
-            </ul>
-            <p class="tasks-note" id="demoNote" aria-live="polite">点左边的「转为任务」试一下。</p>
+        <div class="side">
+          <p class="side__head">讨论 · 按行号排</p>
+          <p class="side__empty" id="all-clear" hidden>3 处讨论都已解决。下一处，从选中一行开始。</p>
+
+          <article class="thread" id="t1" data-count="2" data-resolved="true" aria-labelledby="t1-ref">
+            <div class="thread__top">
+              <span class="thread__ref" id="t1-ref">第 12 行 · 2 条</span>
+              <span class="thread__state">已解决</span>
+            </div>
+            <div class="cmt"><span class="cmt__by">周野</span><p class="cmt__text">「省多少」写数字，别写「更划算」。</p></div>
+            <div class="cmt"><span class="cmt__by">林川</span><p class="cmt__text">5 人团队一年差 ¥840，就写这个数。</p></div>
+            <p class="thread__link">已转任务 · 第 15 行</p>
+          </article>
+
+          <article class="thread" id="t2" data-count="3" data-resolved="false" aria-labelledby="t2-ref">
+            <div class="thread__top">
+              <span class="thread__ref" id="t2-ref">第 13 行 · 3 条</span>
+              <span class="thread__state">未解决</span>
+            </div>
+            <div class="cmt"><span class="cmt__by">郑苏</span><p class="cmt__text">10 秒是从点提交算，还是从我们收到请求算？</p></div>
+            <div class="cmt"><span class="cmt__by">林川</span><p class="cmt__text">从收到请求算。慢于 10 秒记一条告警。</p></div>
+            <div class="cmt"><span class="cmt__by">郑苏</span><p class="cmt__text">告警文案挂到哪里？我建议写进第 14 行的说明。</p></div>
+            <button class="thread__act" type="button">标为已解决</button>
+          </article>
+
+          <article class="thread" id="t3" data-count="1" data-resolved="false" aria-labelledby="t3-ref">
+            <div class="thread__top">
+              <span class="thread__ref" id="t3-ref">第 14 行 · 1 条</span>
+              <span class="thread__state">未解决</span>
+            </div>
+            <div class="cmt"><span class="cmt__by">周野</span><p class="cmt__text">导入限制我补了，任务见第 15 行。</p></div>
+            <button class="thread__act" type="button">标为已解决</button>
+          </article>
+        </div>
+      </div>
+      <p class="sr" id="live" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="sec" id="steps" aria-labelledby="steps-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no" aria-hidden="true">02</span>
+        <h2 class="sec-title" id="steps-title">一张纸怎么长出来</h2>
+        <p class="sec-note">四个动作，每一步都在同一行上留下可回看的东西。</p>
+      </div>
+
+      <div class="steps-head" aria-hidden="true"><span></span><span>动作</span><span>留下</span></div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__no" aria-hidden="true">01</span>
+          <div>
+            <h3 class="step__title">划选</h3>
+            <p class="step__desc">选中第 12 行的一句话，行尾多出一个讨论入口，不用另开文档。</p>
           </div>
+          <p class="step__keep"><b>一处挂在行号上的讨论</b></p>
+        </li>
+        <li class="step">
+          <span class="step__no" aria-hidden="true">02</span>
+          <div>
+            <h3 class="step__title">讨论</h3>
+            <p class="step__desc">讨论按行排。行内容改了标「已改动」，行被删了讨论留在原位并标红。</p>
+          </div>
+          <p class="step__keep"><b>带行号的对话记录</b></p>
+        </li>
+        <li class="step">
+          <span class="step__no" aria-hidden="true">03</span>
+          <div>
+            <h3 class="step__title">转任务</h3>
+            <p class="step__desc">在任意一条讨论上点「转任务」，原话、作者、行号一起写进任务行。</p>
+          </div>
+          <p class="step__keep"><b>一条能追回原话的任务</b></p>
+        </li>
+        <li class="step">
+          <span class="step__no" aria-hidden="true">04</span>
+          <div>
+            <h3 class="step__title">结项</h3>
+            <p class="step__desc">关掉讨论、勾完任务，同一行一起空出来。冻结后这一页只读，谁也改不动。</p>
+          </div>
+          <p class="step__keep"><b>一个可回看的版本</b></p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--tint" id="price" aria-labelledby="price-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-no" aria-hidden="true">03</span>
+        <h2 class="sec-title" id="price-title">定价</h2>
+        <p class="sec-note">按人按年写在表里，年付省下的钱是实数，不写「更划算」。</p>
+      </div>
+
+      <div class="bill-row">
+        <div class="bill" role="group" aria-label="计费周期">
+          <button class="bill__btn" type="button" data-bill="month" aria-pressed="true">按月付</button>
+          <button class="bill__btn" type="button" data-bill="year" aria-pressed="false">按年付</button>
         </div>
+        <p class="bill-note" id="bill-note" aria-live="polite">切到年付，5 人团队一年少付 ¥840。</p>
       </div>
+
+      <table class="price-table">
+        <caption>5 人一年 = 每人每月 × 12 × 5；年付一档已折算成月均。</caption>
+        <colgroup><col><col><col></colgroup>
+        <thead>
+          <tr><th scope="col">计划</th><th scope="col" class="num">每人每月</th><th scope="col" class="num">5 人一年</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">
+              <span class="plan">个人</span>
+              <span class="plan-desc">1 人、3 份文档，讨论不限条数</span>
+            </th>
+            <td class="num" data-month="0" data-year="0" data-label="每人每月">¥0</td>
+            <td class="num num-na" data-label="5 人一年">不含</td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <span class="plan">团队<span class="tag">最常选</span></span>
+              <span class="plan-desc">文档不限、版本冻结、导出 PDF 与带批注的 HTML</span>
+            </th>
+            <td class="num" data-month="72" data-year="58" data-label="每人每月">¥72</td>
+            <td class="num" data-month="4,320" data-year="3,480" data-label="5 人一年">¥4,320</td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <span class="plan">组织</span>
+              <span class="plan-desc">团队的全部，加单点登录、审计日志、专属支持</span>
+            </th>
+            <td class="num" data-month="122" data-year="98" data-label="每人每月">¥122</td>
+            <td class="num" data-month="7,320" data-year="5,880" data-label="5 人一年">¥7,320</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- 03 客户 -->
-  <section class="section" id="customers" aria-labelledby="customersTitle">
+  <section class="sec" id="faq" aria-labelledby="faq-title">
     <div class="wrap">
-      <p class="eyebrow">03 / 已经在用 · 示例数据</p>
-      <h2 class="h2" id="customersTitle">换过来之后，周会短了半小时</h2>
-
-      <ul class="logos" aria-label="客户（虚构示例）">
-        <li>北辰数据</li><li>澜图设计</li><li>河岸科技</li><li>微光实验室</li><li>三川制造</li><li>岭上教育</li>
-      </ul>
-      <p class="section-lead">客户名、评价与人数都是本稿的虚构占位，上线前换成真实素材。</p>
-
-      <div class="quotes">
-        <figure class="quote quote-main">
-          <blockquote>以前一个需求要开三个窗口：文档、群聊、任务板。现在讨论就贴在段落旁边，结论当场变成任务，周会上不用再对一遍进度。</blockquote>
-          <figcaption>周敏 · 产品负责人 · 北辰数据（48 人）</figcaption>
-        </figure>
-        <div class="quote-side">
-          <figure class="quote">
-            <blockquote>新同事第一天就能看懂一个项目为什么这么定，因为讨论没丢，都在原文旁边。</blockquote>
-            <figcaption>林岚 · 设计负责人 · 澜图设计（12 人）</figcaption>
-          </figure>
-          <figure class="quote">
-            <blockquote>权限按项目分开以后，外包同学只看得到该看的那一页，我们省掉了每次发 PDF 的功夫。</blockquote>
-            <figcaption>陈可 · 研发经理 · 河岸科技（86 人）</figcaption>
-          </figure>
-        </div>
+      <div class="sec-head">
+        <span class="sec-no" aria-hidden="true">04</span>
+        <h2 class="sec-title" id="faq-title">问答</h2>
+        <p class="sec-note">五个问题都是评估时会问到的，答案写到能当场核对。</p>
       </div>
-    </div>
-  </section>
-
-  <!-- 04 定价 -->
-  <section class="section band" id="pricing" aria-labelledby="pricingTitle">
-    <div class="wrap">
-      <p class="eyebrow">04 / 定价</p>
-      <h2 class="h2" id="pricingTitle">按人计费，免费档不限期</h2>
-      <p class="section-lead">先用免费档把一个真项目跑通，再决定要不要给整个团队开。</p>
-
-      <fieldset class="billing">
-        <legend class="sr-only">计费周期</legend>
-        <label>
-          <input type="radio" name="billing" value="monthly" checked>
-          <span>月付</span>
-        </label>
-        <label>
-          <input type="radio" name="billing" value="yearly">
-          <span>年付（省 20%）</span>
-        </label>
-      </fieldset>
-      <p class="billing-note" id="billingNote" aria-live="polite">月付 ¥39.00 / 人 / 月；换年付 ¥31.20，每年省 ¥93.60。</p>
-
-      <div class="plans">
-        <article class="plan">
-          <div class="plan-head"><h3 class="plan-name">免费</h3></div>
-          <p class="price"><span class="price-cur">¥</span><span class="price-num" data-monthly="0" data-yearly="0">0.00</span><span class="price-per">/ 人 / 月</span></p>
-          <p class="plan-desc">先在一个真项目上试。</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>3 个项目</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>每页 30 条评论</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>7 天历史版本</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>基础权限</li>
-          </ul>
-          <button class="btn btn-secondary" type="button" data-open data-plan="免费档">免费开始</button>
-          <p class="plan-foot">不限人数，不限时长。</p>
-        </article>
-
-        <article class="plan plan-featured">
-          <div class="plan-head"><h3 class="plan-name">团队</h3><span class="tag">最常选</span></div>
-          <p class="price"><span class="price-cur">¥</span><span class="price-num" data-monthly="39" data-yearly="31.2">39.00</span><span class="price-per">/ 人 / 月</span></p>
-          <p class="plan-desc">让讨论直接长出任务。</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>不限项目与评论数</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>评论转任务与状态同步</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>按项目授权与只读链接</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>1 年历史版本</li>
-          </ul>
-          <button class="btn btn-primary" type="button" data-open data-plan="团队档">免费试用 14 天</button>
-          <p class="plan-foot">14 天后按所选周期扣费，随时可停。</p>
-        </article>
-
-        <article class="plan">
-          <div class="plan-head"><h3 class="plan-name">企业</h3></div>
-          <p class="price"><span class="price-num">定制</span></p>
-          <p class="plan-desc">给要审计和私有部署的团队。</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>SSO 单点登录</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>审计日志与数据导出</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>私有部署</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 12l5 5 11-11"/></svg>专属支持与迁移协助</li>
-          </ul>
-          <button class="btn btn-secondary" type="button" data-open data-plan="企业档">联系我们</button>
-          <p class="plan-foot">按规模报价，含部署与培训。</p>
-        </article>
-      </div>
-      <p class="billing-note">价格为演示数据；年付一次结清，按实际人数结算。</p>
-    </div>
-  </section>
-
-  <!-- 05 常见问题 -->
-  <section class="section" id="faq" aria-labelledby="faqTitle">
-    <div class="wrap">
-      <p class="eyebrow">05 / 常见问题</p>
-      <h2 class="h2" id="faqTitle">换之前，通常会问这几件</h2>
 
       <div class="faq">
-        <div class="qa">
-          <h3><button class="qa-btn" type="button" id="qa1b" aria-expanded="false" aria-controls="qa1">数据存在哪里？可以私有部署吗？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
-          <div class="qa-panel" id="qa1" role="region" aria-labelledby="qa1b" hidden>
-            <p>默认存在国内多可用区，按项目加密隔离，备份保留 30 天。企业档支持私有部署，跑在你自己的云账号里，升级窗口由我们和你一起排。</p>
-          </div>
-        </div>
-        <div class="qa">
-          <h3><button class="qa-btn" type="button" id="qa2b" aria-expanded="false" aria-controls="qa2">免费档有什么限制？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
-          <div class="qa-panel" id="qa2" role="region" aria-labelledby="qa2b" hidden>
-            <p>3 个项目、每页 30 条评论、历史版本保留 7 天。人数不限，也不限期；超出评论上限时只提示，不删除已有内容。</p>
-          </div>
-        </div>
-        <div class="qa">
-          <h3><button class="qa-btn" type="button" id="qa3b" aria-expanded="false" aria-controls="qa3">从现在的工具迁过来要多久？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
-          <div class="qa-panel" id="qa3" role="region" aria-labelledby="qa3b" hidden>
-            <p>30 人团队通常两天：第一天导文档，第二天把进行中的任务对一遍。支持 Markdown、Word 和常见任务板的导出文件；对不上号的行会单独列出来，不会静默丢掉。</p>
-          </div>
-        </div>
-        <div class="qa">
-          <h3><button class="qa-btn" type="button" id="qa4b" aria-expanded="false" aria-controls="qa4">「转为任务」能和 Jira、飞书对接吗？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
-          <div class="qa-panel" id="qa4" role="region" aria-labelledby="qa4b" hidden>
-            <p>团队档起可以。任务转出后在 SamePaper 里仍然可见，状态双向同步；两边同时改时以最后修改为准，并在纸面上留一条记录。</p>
-          </div>
-        </div>
-        <div class="qa">
-          <h3><button class="qa-btn" type="button" id="qa5b" aria-expanded="false" aria-controls="qa5">团队里有人只用手机怎么办？<span class="qa-sign" aria-hidden="true">+</span></button></h3>
-          <div class="qa-panel" id="qa5" role="region" aria-labelledby="qa5b" hidden>
-            <p>手机浏览器能读、能评论、能勾任务，这条链路是完整的。复杂排版和批量授权建议回桌面端做，窄屏上不做多列表格。</p>
-          </div>
-        </div>
+        <details open>
+          <summary>讨论和文档是两份数据吗？</summary>
+          <p>不是。讨论挂在行号区间上，和正文同一条记录。行内容改了，讨论标「已改动」；行被删了，讨论留在原行号并标红，不会跟着消失。</p>
+        </details>
+        <details>
+          <summary>能导出什么格式？</summary>
+          <p>三种：Markdown（带行号引用）、PDF（批注排成侧栏）、HTML（离线可开，批注可点）。导出走同一份数据，三种格式里的行号一致。</p>
+        </details>
+        <details>
+          <summary>断网写的内容还能合并吗？</summary>
+          <p>能。按行合并，冲突的那几行两边都保留并标红，不自动选一边。合并结果写进新版本，旧版本不动。</p>
+        </details>
+        <details>
+          <summary>冻结之后还能改吗？</summary>
+          <p>冻结的版本只读。要继续写会在同一页上开新版本，旧版本的讨论留在旧版本，可以回看、可以导出。</p>
+        </details>
+        <details>
+          <summary>从文档、群聊、任务工具迁过来要多久？</summary>
+          <p>粘贴 Markdown 保留标题层级；群聊记录按时间贴进讨论栏，自动挂到当前段落；已有的任务导成清单，每条带上来源行号。一份五千字的文档，两个人半天能搬完。</p>
+        </details>
       </div>
     </div>
   </section>
 
-  <!-- 06 收束 -->
-  <section class="closing" id="start" aria-labelledby="startTitle">
-    <div class="wrap closing-grid">
-      <div class="closing-copy">
-        <p class="eyebrow">06 / 开始</p>
-        <h2 class="h2" id="startTitle">先建一张纸，再决定要不要换</h2>
-        <p class="section-lead">不用信用卡。建好之后把你们正在做的一个项目搬进来，两天就知道合不合适。</p>
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="cta__in">
+      <div>
+        <h2 id="cta-title">把下一份文档开在同一张纸上。</h2>
+        <p class="cta__note">试用 14 天，只用填一个邮箱。</p>
       </div>
-      <div class="closing-action">
-        <button class="btn btn-primary" type="button" data-open data-plan="免费档">免费开始</button>
-      </div>
+      <button class="cta__btn" type="button" data-open-trial>申请试用</button>
     </div>
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap footer-grid">
-    <div class="footer-brand">
-      <a class="brand" href="#top">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M8 12h8M8 16h5"/></svg>
-        SamePaper
-      </a>
-      <p class="section-lead">文档、讨论、任务，写在同一张纸上。</p>
+<footer class="foot">
+  <div class="foot__in">
+    <div class="foot__mast">
+      <p class="foot__brand">SamePaper</p>
+      <p class="foot__tag">文档、讨论、任务，同一张纸。</p>
     </div>
-    <div class="footer-col">
-      <h2>产品</h2>
-      <ul>
-        <li><a href="#features">功能</a></li>
-        <li><a href="#demo">演示</a></li>
-        <li><a href="#pricing">定价</a></li>
-        <li><a href="#top" data-todo="更新日志还没写">更新日志</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h2>资源</h2>
-      <ul>
-        <li><a href="#top" data-todo="帮助中心还没写">帮助中心</a></li>
-        <li><a href="#top" data-todo="迁移指南还没写">迁移指南</a></li>
-        <li><a href="#top" data-todo="开发者文档还没写">开发者</a></li>
-        <li><a href="#faq">常见问题</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h2>公司</h2>
-      <ul>
-        <li><a href="#top" data-todo="关于页还没写">关于</a></li>
-        <li><a href="#top" data-todo="招聘页还没写">招聘</a></li>
-        <li><a href="#start">联系我们</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h2>法律</h2>
-      <ul>
-        <li><a href="#top" data-todo="隐私政策还没写">隐私</a></li>
-        <li><a href="#top" data-todo="服务条款还没写">条款</a></li>
-        <li><a href="#top" data-todo="Cookie 说明还没写">Cookie</a></li>
-      </ul>
-    </div>
-    <div class="footer-legal">
-      <span>© 2026 SamePaper</span>
-      <span>本页为 UISpecs 案例演示，客户名与评价均为虚构。</span>
-    </div>
+    <ul class="foot__links">
+      <li><a href="#price">定价</a></li>
+      <li><a href="#faq">问答</a></li>
+      <li><a href="#top">回到顶部</a></li>
+    </ul>
+    <p class="foot__legal">© 2026 SamePaper</p>
   </div>
 </footer>
 
-<dialog id="signup" aria-labelledby="dlgTitle">
-  <div class="dlg-head">
-    <div>
-      <h2 class="dlg-title" id="dlgTitle">创建你的第一张纸</h2>
-      <p class="dlg-sub" id="dlgPlan">从「免费档」开始</p>
+<dialog id="trial" aria-labelledby="trial-title">
+  <h2 class="dlg__title" id="trial-title">申请试用</h2>
+  <p class="dlg__note">填团队邮箱，确认信里带登录链接。</p>
+  <form id="trial-form" novalidate>
+    <label class="field" for="email">
+      <span>工作邮箱</span>
+      <input id="email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="email-err" placeholder="name@team.com">
+    </label>
+    <p class="err" id="email-err" role="alert"></p>
+    <div class="dlg__acts">
+      <button class="btn-primary" type="submit" id="trial-submit">发确认信</button>
+      <button class="btn-quiet" type="button" id="trial-close">关闭</button>
     </div>
-    <button class="dlg-close" type="button" id="dlgClose" aria-label="关闭">关闭</button>
-  </div>
-  <div class="dlg-body">
-    <form id="signupForm" novalidate>
-      <div class="field">
-        <label for="teamName">团队名称</label>
-        <input id="teamName" name="teamName" type="text" autocomplete="organization" aria-describedby="teamNameErr" placeholder="例如：北辰数据 · 产品组">
-        <p class="field-err" id="teamNameErr" hidden></p>
-      </div>
-      <div class="field">
-        <label for="email">工作邮箱</label>
-        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="emailErr emailHint" placeholder="you@company.com">
-        <p class="field-hint" id="emailHint">用来接收邀请，演示环境不会真的发信。</p>
-        <p class="field-err" id="emailErr" hidden></p>
-      </div>
-      <div class="dlg-actions">
-        <button class="btn btn-primary" type="submit">创建并进入</button>
-        <button class="btn btn-secondary" type="button" id="dlgCancel">先看看别的</button>
-      </div>
-    </form>
-    <div class="success" id="signupSuccess" hidden>
-      <h3 id="successTitle">纸面已经建好</h3>
-      <p>这是演示环境：没有真的创建账号，也没有发邮件。真实流程里，下一步是邀请同事并导入第一个项目。</p>
-      <button class="btn btn-secondary" type="button" id="successClose">回到页面</button>
-    </div>
-  </div>
+  </form>
+  <p class="dlg__done" id="trial-done" hidden>确认信已发出，10 秒内到。没收到就再点一次申请试用。</p>
 </dialog>
 
-<p class="toast" id="toast" role="status" aria-live="polite"></p>
-
 <script>
-(function () {
-  'use strict';
-  var $ = function (s, c) { return (c || document).querySelector(s); };
-  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+(function(){
+  "use strict";
+  var live = document.getElementById("live");
 
-  /* ---------- 移动导航 ---------- */
-  var menuBtn = $('#menuBtn'), nav = $('#siteNav');
-  function closeMenu() {
-    if (!menuBtn) return;
-    menuBtn.setAttribute('aria-expanded', 'false');
-    menuBtn.textContent = '菜单';
-    nav.hidden = true;
+  var marks = Array.prototype.slice.call(document.querySelectorAll(".mark"));
+  var threads = Array.prototype.slice.call(document.querySelectorAll(".thread"));
+  var filterBtn = document.getElementById("filter-btn");
+  var openCountEl = document.getElementById("open-count");
+  var allClear = document.getElementById("all-clear");
+  var onlyOpen = false;
+
+  function openThreads(){
+    return threads.filter(function(t){
+      return t.getAttribute("data-resolved") !== "true";
+    }).length;
   }
-  if (menuBtn && nav) {
-    menuBtn.addEventListener('click', function () {
-      var open = menuBtn.getAttribute('aria-expanded') === 'true';
-      menuBtn.setAttribute('aria-expanded', String(!open));
-      menuBtn.textContent = open ? '菜单' : '收起';
-      nav.hidden = open;
+
+  function render(){
+    var open = openThreads();
+    var visible = 0;
+    threads.forEach(function(t){
+      var resolved = t.getAttribute("data-resolved") === "true";
+      var show = !(onlyOpen && resolved);
+      t.hidden = !show;
+      if (show) visible++;
     });
-    $$('a', nav).forEach(function (a) {
-      a.addEventListener('click', function () {
-        if (window.matchMedia('(max-width: 767px)').matches) closeMenu();
-      });
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
-        closeMenu();
-        menuBtn.focus();
+    openCountEl.textContent = String(open);
+    filterBtn.textContent = "只看未解决（" + open + "）";
+    allClear.hidden = open !== 0;
+    return {open: open, visible: visible};
+  }
+
+  marks.forEach(function(m){
+    m.addEventListener("click", function(){
+      var id = m.getAttribute("data-thread");
+      var was = m.getAttribute("aria-pressed") === "true";
+      marks.forEach(function(x){ x.setAttribute("aria-pressed", "false"); });
+      threads.forEach(function(t){ t.setAttribute("data-active", "false"); });
+      document.querySelectorAll(".doc__line").forEach(function(l){ l.setAttribute("data-active", "false"); });
+      if (!was) {
+        m.setAttribute("aria-pressed", "true");
+        var card = document.getElementById(id);
+        card.setAttribute("data-active", "true");
+        var line = document.querySelector('.doc__line[data-thread="' + id + '"]');
+        if (line) line.setAttribute("data-active", "true");
+        live.textContent = "已定位到" + card.querySelector(".thread__ref").textContent.split("·")[0].trim() + "的讨论。";
+      } else {
+        live.textContent = "已取消定位。";
       }
     });
-  }
+  });
 
-  /* ---------- 轻提示 ---------- */
-  var toast = $('#toast'), toastTimer = null;
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3000);
-  }
-  $$('[data-todo]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      e.preventDefault();
-      showToast(a.getAttribute('data-todo') + '：这是演示页面，本稿只包含首页。');
+  filterBtn.addEventListener("click", function(){
+    onlyOpen = !onlyOpen;
+    filterBtn.setAttribute("aria-pressed", String(onlyOpen));
+    var s = render();
+    live.textContent = onlyOpen ? "只看未解决，" + s.visible + " 处。" : "显示全部讨论。";
+  });
+
+  threads.forEach(function(t){
+    var btn = t.querySelector(".thread__act");
+    if (!btn) return;
+    btn.addEventListener("click", function(){
+      t.setAttribute("data-resolved", "true");
+      t.setAttribute("data-active", "false");
+      t.querySelector(".thread__state").textContent = "已解决";
+      btn.remove();
+      marks.forEach(function(m){
+        if (m.getAttribute("data-thread") === t.id) {
+          m.setAttribute("aria-pressed", "false");
+          m.setAttribute("data-resolved", "true");
+        }
+      });
+      var s = render();
+      live.textContent = "已标为已解决，还剩 " + s.open + " 处未解决。";
     });
   });
 
-  /* ---------- 定价周期 ---------- */
-  var note = $('#billingNote');
-  function currentCycle() {
-    var checked = $('input[name="billing"]:checked');
-    return checked ? checked.value : 'monthly';
+  var task = document.querySelector(".task");
+  var taskToggle = task.querySelector(".task__toggle");
+  var taskBox = task.querySelector(".task__box");
+  var taskAct = task.querySelector(".task__act");
+  function toggleTask(){
+    var done = task.getAttribute("data-done") === "true";
+    task.setAttribute("data-done", String(!done));
+    taskToggle.setAttribute("aria-pressed", String(!done));
+    taskBox.textContent = done ? "" : "✓";
+    taskAct.textContent = done ? "标记完成" : "已完成";
+    live.textContent = done ? "任务回到未完成。" : "任务已完成。";
   }
-  function renderBilling() {
-    var yearly = currentCycle() === 'yearly';
-    $$('.price-num[data-monthly]').forEach(function (el) {
-      var v = parseFloat(yearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly'));
-      el.textContent = v.toFixed(2);
-    });
-    note.textContent = yearly
-      ? '年付：¥374.40 / 人 / 年，比月付省 ¥93.60。'
-      : '月付 ¥39.00 / 人 / 月；换年付 ¥31.20，每年省 ¥93.60。';
-  }
-  $$('input[name="billing"]').forEach(function (r) { r.addEventListener('change', renderBilling); });
+  taskToggle.addEventListener("click", toggleTask);
 
-  /* ---------- 评论转任务 ---------- */
-  var toTask = $('#toTaskBtn'), taskList = $('#taskList'), taskCount = $('#taskCount'),
-      demoNote = $('#demoNote'), resetDemo = $('#resetDemo'), commentCard = $('#commentCard');
-  var baseCount = taskList ? taskList.children.length : 0;
-  if (toTask) {
-    toTask.addEventListener('click', function () {
-      if (toTask.disabled) return;
-      var li = document.createElement('li');
-      li.className = 'task task-new';
-      li.innerHTML = '<span class="checkbox" aria-hidden="true"></span><span>把迁移脚本的失败重试补上</span><span class="who">林岚</span>';
-      taskList.appendChild(li);
-      taskCount.textContent = taskList.children.length + ' 项';
-      commentCard.classList.add('done');
-      toTask.disabled = true;
-      toTask.textContent = '已转为任务';
-      demoNote.textContent = '已写入待办：把迁移脚本的失败重试补上。负责人林岚（评论作者），来源是这一段。';
-    });
-    resetDemo.addEventListener('click', function () {
-      $$('.task-new', taskList).forEach(function (n) { n.remove(); });
-      taskCount.textContent = taskList.children.length + ' 项';
-      commentCard.classList.remove('done');
-      toTask.disabled = false;
-      toTask.textContent = '转为任务';
-      demoNote.textContent = '点左边的「转为任务」试一下。';
-    });
-  }
-
-  /* ---------- 常见问题 ---------- */
-  $$('.qa-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      var panel = document.getElementById(btn.getAttribute('aria-controls'));
-      btn.setAttribute('aria-expanded', String(!open));
-      panel.hidden = open;
-      btn.querySelector('.qa-sign').textContent = open ? '+' : '−';
+  var billBtns = Array.prototype.slice.call(document.querySelectorAll(".bill__btn"));
+  var billNote = document.getElementById("bill-note");
+  var cells = Array.prototype.slice.call(document.querySelectorAll(".price-table td[data-month]"));
+  var notes = {
+    month: "切到年付，5 人团队一年少付 ¥840。",
+    year: "已按年付计价：5 人团队一年 ¥3,480，比月付少 ¥840。"
+  };
+  billBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      var mode = b.getAttribute("data-bill");
+      billBtns.forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      cells.forEach(function(c){
+        c.textContent = "¥" + c.getAttribute("data-" + mode);
+      });
+      billNote.textContent = notes[mode];
     });
   });
 
-  /* ---------- 弹窗与表单三态 ---------- */
-  var dlg = $('#signup'), form = $('#signupForm'), success = $('#signupSuccess'),
-      dlgPlan = $('#dlgPlan'), successTitle = $('#successTitle');
-  var lastTrigger = null;
+  var dlg = document.getElementById("trial");
+  var form = document.getElementById("trial-form");
+  var email = document.getElementById("email");
+  var err = document.getElementById("email-err");
+  var submit = document.getElementById("trial-submit");
+  var doneMsg = document.getElementById("trial-done");
+  var openers = Array.prototype.slice.call(document.querySelectorAll("[data-open-trial]"));
 
-  function openDialog(trigger) {
-    lastTrigger = trigger || null;
-    var plan = trigger && trigger.getAttribute('data-plan');
-    dlgPlan.textContent = plan ? '从「' + plan + '」开始' : '从「免费档」开始';
-    resetForm();
-    dlg.showModal();
-    $('#teamName').focus();
-  }
-  function resetForm() {
+  function resetForm(){
     form.hidden = false;
-    success.hidden = true;
-    form.reset();
-    $('#emailHint').hidden = false;
-    [['#teamName', '#teamNameErr'], ['#email', '#emailErr']].forEach(function (pair) {
-      var input = $(pair[0]), err = $(pair[1]);
-      input.removeAttribute('aria-invalid');
-      err.hidden = true;
-      err.textContent = '';
-    });
-  }
-  function setError(input, err, msg) {
-    input.setAttribute('aria-invalid', 'true');
-    err.textContent = msg;
-    err.hidden = false;
-    /* 报错时收起说明文字，避免同一字段下面同时挂两条提示 */
-    if (input.id === 'email') $('#emailHint').hidden = true;
+    doneMsg.hidden = true;
+    email.value = "";
+    email.removeAttribute("aria-invalid");
+    err.textContent = "";
+    submit.disabled = false;
+    submit.textContent = "发确认信";
   }
 
-  $$('[data-open]').forEach(function (b) {
-    b.addEventListener('click', function () { openDialog(b); });
-  });
-  $('#dlgClose').addEventListener('click', function () { dlg.close(); });
-  $('#dlgCancel').addEventListener('click', function () { dlg.close(); });
-  $('#successClose').addEventListener('click', function () { dlg.close(); });
-  dlg.addEventListener('close', function () {
-    var trigger = lastTrigger;
-    if (trigger && document.contains(trigger)) {
-      /* 原生 dialog 关闭后会把焦点还给打开前的元素，这里延后一帧再还给触发按钮 */
-      requestAnimationFrame(function () { trigger.focus(); });
-    }
-  });
-  dlg.addEventListener('click', function (e) {
-    if (e.target === dlg) dlg.close();
-  });
-
-  ['teamName', 'email'].forEach(function (id) {
-    var input = document.getElementById(id);
-    input.addEventListener('input', function () {
-      input.removeAttribute('aria-invalid');
-      var err = document.getElementById(id + 'Err');
-      err.hidden = true;
-      err.textContent = '';
-      if (id === 'email') $('#emailHint').hidden = false;
+  openers.forEach(function(b){
+    b.addEventListener("click", function(){
+      resetForm();
+      if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+      email.focus();
     });
   });
 
-  form.addEventListener('submit', function (e) {
+  document.getElementById("trial-close").addEventListener("click", function(){ dlg.close(); });
+  dlg.addEventListener("click", function(e){ if (e.target === dlg) dlg.close(); });
+
+  form.addEventListener("submit", function(e){
     e.preventDefault();
-    var name = $('#teamName'), email = $('#email'),
-        nameErr = $('#teamNameErr'), emailErr = $('#emailErr'), errors = 0;
-
-    name.removeAttribute('aria-invalid'); nameErr.hidden = true;
-    email.removeAttribute('aria-invalid'); emailErr.hidden = true;
-
-    if (!name.value.trim()) {
-      setError(name, nameErr, '请填写团队名称，之后可以改。');
-      errors++;
-    }
     var v = email.value.trim();
-    if (!v) {
-      setError(email, emailErr, '请填写工作邮箱。');
-      errors++;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
-      setError(email, emailErr, '邮箱格式不完整，检查一下 @ 后面的域名。');
-      errors++;
-    }
-
-    if (errors) {
-      (name.getAttribute('aria-invalid') ? name : email).focus();
+    if (v === "") {
+      email.setAttribute("aria-invalid", "true");
+      err.textContent = "邮箱还没填。";
+      email.focus();
       return;
     }
-
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+      email.setAttribute("aria-invalid", "true");
+      err.textContent = "邮箱要带 @ 和域名，例如 name@team.com。";
+      email.focus();
+      return;
+    }
+    email.removeAttribute("aria-invalid");
+    err.textContent = "";
     form.hidden = true;
-    success.hidden = false;
-    successTitle.textContent = name.value.trim() + '的纸面已经建好';
-    $('#successClose').focus();
+    doneMsg.hidden = false;
+    live.textContent = "确认信已发出。";
   });
-
-  renderBilling();
 })();
+
+  /* 导航：跟着滚动标出当前区块，压在深色区上时收边 */
+  (function(){
+    var pill = document.querySelector(".pill");
+    var links = Array.prototype.slice.call(pill.querySelectorAll(".pill__links a"));
+    var secs = links.map(function(a){ return document.querySelector(a.getAttribute("href")); });
+    var dark = [document.querySelector(".cta"), document.querySelector(".foot")];
+    var ticking = false;
+
+    function paint(){
+      ticking = false;
+      var line = scrollY + pill.getBoundingClientRect().height + 56;
+      var idx = -1;
+      secs.forEach(function(sec, i){
+        if (sec && sec.getBoundingClientRect().top + scrollY <= line) idx = i;
+      });
+      links.forEach(function(a, i){
+        if (i === idx) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+      var r = pill.getBoundingClientRect();
+      var mid = r.top + r.height / 2;
+      var onDark = dark.some(function(el){
+        if (!el) return false;
+        var b = el.getBoundingClientRect();
+        return b.top <= mid && b.bottom >= mid;
+      });
+      pill.classList.toggle("pill--on-dark", onDark);
+    }
+
+    function queue(){
+      if (ticking) return;
+      ticking = true;
+      if (document.hidden) setTimeout(paint, 80);
+      else requestAnimationFrame(paint);
+    }
+    addEventListener("scroll", queue, {passive:true});
+    addEventListener("resize", queue, {passive:true});
+    document.addEventListener("visibilitychange", queue);
+    links.forEach(function(a){ a.addEventListener("click", function(){ setTimeout(paint, 60); }); });
+    paint();
+  })();
 </script>
 </body>
 </html>

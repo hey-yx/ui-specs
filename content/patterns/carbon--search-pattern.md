@@ -304,25 +304,6 @@ facet.
 After a facet is selected or deselected, the focus state should be retained as
 the content reloads, that way users don’t have to `TAB` through everything again
 as they move down the list.
-
-## Related
-
-#### Components
-
-- [Checkbox](https://carbondesignsystem.com/components/checkbox/usage)
-- [Date picker](https://carbondesignsystem.com/components/date-picker/usage)
-- [Modal](https://carbondesignsystem.com/components/modal/usage)
-- [Pagination](https://carbondesignsystem.com/components/pagination/usage)
-- [Search](https://carbondesignsystem.com/components/search/usage)
-- [Select](https://carbondesignsystem.com/components/button/usage#icon-usage)
-- [Text input](https://carbondesignsystem.com/components/text-input/usage)
-- [UI shell](https://carbondesignsystem.com/components/ui-shell-header/usage)
-
-#### Patterns
-
-- [Empty states](https://carbondesignsystem.com/patterns/empty-states-pattern)
-- [Filtering](https://carbondesignsystem.com/patterns/filtering)
-
 ## References
 
 - Apple Human Interface Guidelines,

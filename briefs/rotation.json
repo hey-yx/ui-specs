@@ -1,0 +1,135 @@
+{
+  "batch": "2026-11-08-b",
+  "note": "批次调度表：每站一件 Hallmark 版式组合（macrostructure / nav / footer）加一个强调色。版式件名必须能在 hallmark 版式库里找到，强调色必须能在该站基准规范的色板原文里找到。这张表是生成时的输入，不是需求的一部分，需求里不写配色与版式。",
+  "rules": [
+    "同一批内 macrostructure 不重复",
+    "同一批内 nav 不重复",
+    "footer 每种最多用两次",
+    "色相不少于七种，同色相的两站明度必须差两档以上",
+    "强调色取基准规范原文 hex，写明 content/ 路径与行号；基准规范没有 hex 的按缺口回源并标 derived"
+  ],
+  "sites": [
+    {
+      "slug": "epdeck",
+      "macrostructure": "20-ecosystem-index",
+      "macrostructureName": "Ecosystem Index",
+      "nav": "N6",
+      "footer": "Ft2",
+      "accent": "#be5a00",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:71",
+      "why": "视频站首页有主推、热播、分类、继续看四个发现面，平台价值在浏览而不是一句宣言，Ecosystem Index 的多发现面正对这个动作；暗底用 Orange6 而不是浅橙，深底上才压得住。",
+      "colorFamily": "Orange"
+    },
+    {
+      "slug": "pickbin",
+      "macrostructure": "14-narrative-workflow",
+      "macrostructureName": "Narrative Workflow",
+      "nav": "N1a",
+      "footer": "Ft1",
+      "accent": "#00668e",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:186",
+      "why": "产品本体就是投柜、取码、取件三段流程，Narrative Workflow 的编号阶段等于把流程画出来；单页两链接的极简导航，才不抢流程。",
+      "colorFamily": "Cyan"
+    },
+    {
+      "slug": "metricrail",
+      "macrostructure": "04-stat-led",
+      "macrostructureName": "Stat-Led",
+      "nav": "N3",
+      "footer": "Ft3",
+      "accent": "#001a57",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:51",
+      "why": "分析员开机先看数字，Stat-Led 的首屏就是一个巨大指标加支撑数据；侧栏导航对应看板的视图切换。强调色取 Blue10 深墨蓝，让数字和图表成为唯一亮处。",
+      "colorFamily": "Blue"
+    },
+    {
+      "slug": "samepaper",
+      "macrostructure": "03-marquee-hero",
+      "macrostructureName": "Marquee Hero",
+      "nav": "N5",
+      "footer": "Ft1",
+      "accent": "#7137bf",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:198",
+      "why": "产品是协作 SaaS 的营销页，要卖的是一句话能记住的工作方式，Marquee Hero 的首屏一句大字正好把主张当信息；折叠线以下接真实界面示意，用户在第二屏看到证据。旧版同组效果好，但选它的依据是营销页形态，不是照抄旧版。",
+      "colorFamily": "Purple"
+    },
+    {
+      "slug": "swimboard",
+      "macrostructure": "05-workbench",
+      "macrostructureName": "Workbench",
+      "nav": "N2",
+      "footer": "Ft4",
+      "accent": "#006c45",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:84",
+      "why": "看板工作台的内容就是产品界面本身，Workbench 的「带你看它在用的时候长什么样」正对；绿色只用来标「进行中」，不当装饰。",
+      "colorFamily": "Green"
+    },
+    {
+      "slug": "tallylane",
+      "macrostructure": "01-bento-grid",
+      "macrostructureName": "Bento Grid",
+      "nav": "N12",
+      "footer": "Ft5",
+      "accent": "#8b6600",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:210",
+      "why": "记账页是三块不等的活：记一笔、本月对比、预算提醒，Bento 用格子大小分主次；黄色取深档，白底上才够对比。",
+      "colorFamily": "Yellow"
+    },
+    {
+      "slug": "fixqueue",
+      "macrostructure": "13-index-first",
+      "macrostructureName": "Index-First",
+      "nav": "N9",
+      "footer": "Ft6",
+      "accent": "#242424",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:107",
+      "why": "工单台打开就该是队列本身，Index-First 的「页面即列表」省掉营销层；强调色走中性墨色 Gray13，彩色只留给状态（待处理灰、处理中蓝、已关闭绿），避免强调色与状态色在同一屏抢语义。",
+      "colorFamily": "Gray"
+    },
+    {
+      "slug": "quilldeck",
+      "macrostructure": "16-feature-stack",
+      "macrostructureName": "Feature Stack",
+      "nav": "N1b",
+      "footer": "Ft5",
+      "accent": "#c43695",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:221",
+      "why": "写作助手要演示「提纲到成稿」的连续动作，Feature Stack 的左侧标签配右侧同步屏幕能把四步串成一条时间线。",
+      "colorFamily": "Pink"
+    },
+    {
+      "slug": "weekdeck",
+      "macrostructure": "02-long-document",
+      "macrostructureName": "Long Document",
+      "nav": "N10",
+      "footer": "Ft7",
+      "accent": "#ad352f",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:60",
+      "why": "周报要能打印，Long Document 的连续正文加行内小节就是一张可读的纸；砖红只做关键数字与超期标记。",
+      "colorFamily": "Red"
+    },
+    {
+      "slug": "listenrail",
+      "macrostructure": "09-quote-led",
+      "macrostructureName": "Quote-Led",
+      "nav": "N11",
+      "footer": "Ft2",
+      "accent": "#ad75fe",
+      "accentSource": "content/color/tdesign.tencent.com--color.md:196",
+      "why": "播客的说服力来自听友的话，Quote-Led 用引语领衔；往期节目多，mega-menu 装得下。",
+      "colorFamily": "Purple"
+    },
+    {
+      "slug": "payloaddeck",
+      "macrostructure": "21-component-playground",
+      "macrostructureName": "Component Playground",
+      "nav": "N8",
+      "footer": "Ft8",
+      "accent": "#1d70b8",
+      "accentSource": "content/color/govuk--colour.md:138",
+      "accentDerived": true,
+      "why": "API 文档的每一节都是「示例请求 + 结果」，Component Playground 的代码与预览块结构最贴；基准规范 Primer 只给语义角色不给 hex，强调色按缺口表回源到 GOV.UK 蓝并标 derived。",
+      "colorFamily": "Blue"
+    }
+  ]
+}

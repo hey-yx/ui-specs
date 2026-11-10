@@ -7,9 +7,11 @@
 
 用法：
   python3 scripts/check-source-coverage.py            两项都跑，输出 markdown
+  python3 scripts/check-source-coverage.py --write    把报告写进 site/design/source-coverage.md
+  python3 scripts/check-source-coverage.py --check    只比对报告与当前数据，不一致退出 1（每日巡检用）
   python3 scripts/check-source-coverage.py --json     覆盖结果输出 JSON
   python3 scripts/check-source-coverage.py --refs     只跑引用体检
-退出码：0 全过；1 有缺口或坏链；2 缺构建产物。
+退出码：0 全过；1 有缺口、坏链或报告过期；2 缺构建产物。
 """
 
 import json
@@ -109,44 +111,69 @@ def ref_targets():
     return found
 
 
+REPORT = ROOT / "site/design/source-coverage.md"
+
+
+def render(rows: list, bad: int, refs: list, broken: list) -> str:
+    out = [
+        "由 `python3 scripts/check-source-coverage.py --write` 生成。数据源是构建产物 "
+        "`site/dist/ai/design-points.json` 与全库路径引用；单套基准规范某维度命中少于 "
+        f"{MIN_HITS} 处记缺口。",
+        "",
+        "## 基准规范数值覆盖",
+        "",
+        "| 基准规范 | 文章 | 字数 | 色值 | 尺寸 | 时长 | 缺口 |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for r in rows:
+        gaps = "、".join(r["gaps"]) if r["gaps"] else "无"
+        if r["missing"]:
+            gaps += "（缺文件 " + "、".join(r["missing"]) + "）"
+        out.append(
+            f"| {r['name'] or r['point']} | {r['files']} | {r['chars']} | "
+            f"{r['hex']} | {r['len']} | {r['time']} | {gaps} |"
+        )
+    out += ["", f"基准规范 {len(rows)} 套，缺维度或缺文件 {bad} 套。", "", "## 引用体检", ""]
+    out.append(f"扫到 {len(refs)} 处 content 引用，坏链 {len(broken)} 处。")
+    if broken:
+        out += ["", "| 引用 | 出现在 |", "| --- | --- |"]
+        out += [f"| `{target}` | {where} |" for where, target in broken]
+    return "\n".join(out) + "\n"
+
+
 def main() -> int:
-    refs_only = "--refs" in sys.argv
+    args = set(sys.argv[1:])
+    refs_only = "--refs" in args
     bad = 0
+    rows = []
 
     if not refs_only:
         if not PACK.exists():
             print("缺少 site/dist/ai/design-points.json，先跑 npm run build", file=sys.stderr)
             return 2
         rows = coverage_rows()
-        if "--json" in sys.argv:
+        if "--json" in args:
             print(json.dumps(rows, ensure_ascii=False, indent=2))
             return 0 if all(not r["gaps"] and not r["missing"] for r in rows) else 1
-
-        print("## 基准规范数值覆盖\n")
-        print("| 基准规范 | 篇目 | 字数 | 色值 | 尺寸 | 时长 | 缺口 |")
-        print("| --- | --- | --- | --- | --- | --- | --- |")
-        for r in rows:
-            gaps = "、".join(r["gaps"]) if r["gaps"] else "无"
-            if r["missing"]:
-                gaps += "（缺文件 " + "、".join(r["missing"]) + "）"
-            if r["gaps"] or r["missing"]:
-                bad += 1
-            print(
-                f"| {r['name'] or r['point']} | {r['files']} | {r['chars']} | "
-                f"{r['hex']} | {r['len']} | {r['time']} | {gaps} |"
-            )
-        print()
-        print(f"基准规范 {len(rows)} 套，缺维度或缺文件 {bad} 套。\n")
+        bad = sum(1 for r in rows if r["gaps"] or r["missing"])
 
     refs = ref_targets()
     broken = sorted({(w, t) for w, t in refs if not (ROOT / t).exists()})
-    print("## 引用体检\n")
-    print(f"扫到 {len(refs)} 处 content 引用，坏链 {len(broken)} 处。\n")
-    if broken:
-        print("| 引用 | 出现在 |")
-        print("| --- | --- |")
-        for where, target in broken:
-            print(f"| `{target}` | {where} |")
+    text = render(rows, bad, refs, broken)
+
+    if "--check" in args:
+        current = REPORT.read_text(encoding="utf-8") if REPORT.exists() else ""
+        if current != text:
+            print(
+                "site/design/source-coverage.md 与当前数据不一致："
+                "跑 python3 scripts/check-source-coverage.py --write"
+            )
+            return 1
+        return 0
+    if "--write" in args:
+        REPORT.write_text(text, encoding="utf-8")
+    else:
+        print(text, end="")
     return 1 if (bad or broken) else 0
 
 

@@ -3,1018 +3,403 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MetricRail · 数据看板</title>
+<title>MetricRail · 经营总览</title>
+<link rel="stylesheet" href="https://esm.sh/tdesign-react@1.18.6/dist/tdesign.min.css">
 <style>
-/* Hallmark · macrostructure: Stat-Led · tone: utilitarian · theme: UISpecs/Carbon（数据可视化）· nav: N9 Edge-aligned minimal · footer: Ft2 Inline single line · accent: #0052d9 · H4 knobs: tabular display / qualifier below / secondary stats row of four */
-/* Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V4 */
-/* 数值纪律：基准规范 = Carbon（数据可视化），只取原则；数值按指南「基准规范缺口与派生」回源：
-   色板 → content/color/tdesign.tencent.com--color.md；字阶/行高/字重/字体栈 → content/type/tdesign.tencent.com--fonts.md；
-   间距 → content/layout/atlassian.design--spacing.md；时长 → content/motion/nngroup.com--animation-duration.md；
-   缓动 → content/standards/w3c--css-easing-1.md；圆角/组件尺寸/几何/遮罩/断点 → derived。逐值出处见 DECISIONS.md。 */
+  :root {
+    /* TDesign 色板：Blue10 强调，Gray 系中性色（content/color/tdesign.tencent.com--color.md:51,95-104） */
+    --td-brand-color: #001a57;
+    --td-brand-color-hover: #002a7c;
+    --td-brand-color-active: #001a57;
+    --td-brand-color-focus: #d9e1ff;
+    --td-brand-color-disabled: #dddddd;
+    --td-success-color: #006c45;
+    --td-error-color: #ad352f;
+    --td-radius-default: 4px;
+    --td-radius-medium: 8px;
+    --td-font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
 
-:root{
-  /* 色板整套回源 content/color/tdesign.tencent.com--color.md */
-  --paper:#ffffff;        /* :186-187 White */
-  --paper-2:#f3f3f3;      /* :188-189 Gray1 */
-  --paper-3:#eeeeee;      /* :190-191 Gray2 */
-  --line:#e8e8e8;         /* :192-193 Gray3 */
-  --line-strong:#8b8b8b;  /* :200-201 Gray7 */
-  --ink:#242424;          /* :212-213 Gray13 */
-  --ink-2:#5e5e5e;        /* :204-205 Gray9 */
-  --ink-3:#8b8b8b;        /* :200-201 Gray7 */
-  --accent:#0052d9;       /* :65-66 Blue7 品牌色 */
-  --accent-deep:#003cab;  /* :68-69 Blue8 */
-  --accent-soft:#f2f3ff;  /* :47-48 Blue1 */
-  --danger:#ad352f;       /* :100-101 Red7 */
-  --danger-soft:#fff0ed;  /* :82-83 Red1 */
-  --success:#006c45;      /* :170-171 Green7 */
-  --success-soft:#e3f9e9; /* :152-153 Green1 */
-  --series-2:#00668e;     /* :380-381 Cyan7 */
-  --on-accent:#ffffff;    /* :186-187 White */
-  /* 字阶三档：content/type/tdesign.tencent.com--fonts.md:52 / :54 / :58 */
-  --text-body:14px;       /* :52 的 14px */
-  --text-sub:20px;        /* :54 的 20px */
-  --text-display:36px;    /* :58 的 36px */
-  --font:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Source Han Sans CN,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol; /* :34 */
-  /* 间距整套回源 content/layout/atlassian.design--spacing.md（8px 基数 :22/:32） */
-  --sp-050:4px;   /* :70 */
-  --sp-100:8px;   /* :86 */
-  --sp-150:12px;  /* :94 */
-  --sp-200:16px;  /* :102 */
-  --sp-300:24px;  /* :118 */
-  --sp-400:32px;  /* :126 */
-  --sp-600:48px;  /* :142 */
-  /* 时长回源 content/motion/nngroup.com--animation-duration.md */
-  --dur-micro:100ms; /* :80 的 100 ms */
-  --dur-exit:200ms;  /* :84 的 200 or 250ms */
-  --dur-enter:300ms; /* :84 的 300ms to appear */
-  /* 缓动回源 content/standards/w3c--css-easing-1.md */
-  --ease-out:cubic-bezier(0, 0, 0.58, 1);       /* :136-138 */
-  --ease-in:cubic-bezier(0.42, 0, 1, 1);        /* :132-134 */
-  --ease-in-out:cubic-bezier(0.42, 0, 0.58, 1); /* :140-142 */
-  /* derived：圆角两档、控件高度、遮罩、容器宽度、断点；规则见 DECISIONS.md §5 */
-  --radius-sm:4px;
-  --radius-lg:8px;
-  --control-h:44px;
-  --row-h:44px;
-  --scrim:rgba(0,0,0,0.45);
-  --max-w:1280px;
-}
+    --ink: rgba(0, 0, 0, 0.9);
+    --ink-2: rgba(0, 0, 0, 0.6);
+    --rule: #e8e8e8;
+    --paper: #ffffff;
+    --paper-2: #f3f3f3;
+    --accent: #001a57;
+    --green: #006c45;
+    --red: #d54941;
+    /* 动效：TDesign 桌面端 200 / 240 / 280ms（content/motion/tdesign.tencent.com--motion.md:101-103） */
+    --dur-base: 200ms;
+    --dur-moderate: 240ms;
+    --dur-slow: 280ms;
+    --ease: ease-out;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper-2); color: var(--ink); }
+  body {
+    font-family: var(--td-font-family);
+    font-size: 14px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app { display: flex; min-height: 100vh; }
 
-:where(body, body *){ line-height: calc(1em + 8px); } /* content/type/tdesign.tencent.com--fonts.md:67 行高 = 字号 + 8，逐元素按自身字号算 */
-html,body{ overflow-x:clip; }
-[hidden]{ display:none !important; }
-*,*::before,*::after{ box-sizing:border-box; }
-html{ background:var(--paper); }
-body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--font); font-size:var(--text-body); font-weight:400;
-  -webkit-font-smoothing:antialiased;
-}
-h1,h2,h3,p,dl,dd,figure{ margin:0; }
-ul{ margin:0; padding:0; list-style:none; }
-button,input,select{ font:inherit; color:inherit; }
-button{ cursor:pointer; }
-.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-.tnum{ font-variant-numeric:tabular-nums; } /* 降级：content/type/tdesign.tencent.com--fonts.md:37 的 TCloud Number 零外链拿不到 */
+  /* N3：左缘竖条，品牌字旋转 */
+  .rail {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 64px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 8px;
+    z-index: 20;
+  }
+  .rail .brand {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 22px;
+    margin-bottom: 16px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 4px; }
+  .rail-btn {
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border: 0; border-radius: var(--td-radius-default);
+    background: transparent; color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+  }
+  .rail-btn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+  .rail-btn[aria-current="page"] { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  .rail-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .rail .me {
+    margin-top: auto;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #d9e1ff; color: var(--accent);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 600; line-height: 20px;
+  }
 
-/* 焦点环：2px 实线 + 2px 偏移，derived（GAP_RULES「触控目标与焦点环」，WCAG 2.2 :791-792 的 3:1） */
-:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-.skip{
-  position:absolute; left:var(--sp-200); top:-100px; z-index:900;
-  background:var(--ink); color:var(--paper); padding:var(--sp-100) var(--sp-200);
-  border-radius:var(--radius-sm); text-decoration:none;
-}
-.skip:focus{ top:var(--sp-100); }
+  main { margin-left: 64px; width: calc(100% - 64px); padding: 24px 32px 0; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
 
-/* ============ N9 · Edge-aligned minimal：品牌硬左、单一主操作硬右 ============ */
-.top{
-  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--sp-100) var(--sp-200);
-  padding:var(--sp-200) var(--sp-300);
-  border-bottom:1px solid var(--line);
-  background:var(--paper);
-}
-.top-inner,.main-inner,.foot-inner{ width:100%; max-width:var(--max-w); margin-inline:auto; }
-.top{ padding-inline:max(var(--sp-200), calc((100vw - var(--max-w))/2)); }
-.brand{ display:flex; align-items:baseline; gap:var(--sp-100); min-width:0; }
-.brand-name{ font-size:var(--text-sub); font-weight:600; letter-spacing:-0.02em; white-space:nowrap; }
-.brand-sub{ font-size:var(--text-body); color:var(--ink-2); white-space:nowrap; }
-.top-right{ display:flex; align-items:center; gap:var(--sp-200); flex-wrap:wrap; }
-.stamp{ color:var(--ink-2); white-space:nowrap; }
+  .top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .eyebrow { margin: 0 0 4px; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+  h1 { margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; }
+  .tools { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
-/* 按钮：一屏一个 primary（content/components/carbondesignsystem.com--button-usage.md:67 / :85） */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:var(--sp-100);
-  min-height:var(--control-h); padding:var(--sp-100) var(--sp-200);
-  border:1px solid transparent; border-radius:var(--radius-sm);
-  font-size:var(--text-body); font-weight:600; text-decoration:none; white-space:nowrap;
-  transition:background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
-}
-.btn svg{ width:16px; height:16px; flex:none; }
-.btn-primary{ background:var(--accent); color:var(--on-accent); }
-.btn-primary:hover{ background:var(--accent-deep); }
-.btn-primary:active{ transform:translateY(1px); }
-.btn-secondary{ background:var(--paper); color:var(--accent); border-color:var(--line-strong); }
-.btn-secondary:hover{ background:var(--accent-soft); }
-.btn-secondary:active{ transform:translateY(1px); }
-.btn-tertiary{ background:transparent; color:var(--ink-2); padding-inline:var(--sp-100); }
-.btn-tertiary:hover{ background:var(--paper-3); color:var(--ink); }
-.btn-tertiary:active{ transform:translateY(1px); }
-.btn:disabled{ background:var(--paper-3); color:var(--ink-2); border-color:transparent; cursor:not-allowed; transform:none; } /* 禁用态用色阶替换而非降透明度，见 DECISIONS.md */
-.btn[data-state="loading"]{ color:var(--ink-2); cursor:progress; }
-.btn[data-state="success"]{ background:var(--success); color:var(--on-accent); }
+  /* Stat-Led：一个巨大数字打头 */
+  .hero { margin-top: 24px; padding: 24px 0 28px; border-bottom: 1px solid var(--rule); }
+  .hero .label { margin: 0; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .hero .huge {
+    margin: 4px 0 0;
+    font-size: 64px;
+    line-height: 72px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .hero .delta { margin: 4px 0 0; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .hero .delta b { color: var(--green); font-weight: 600; }
 
-/* ============ 页面骨架：Stat-Led，最重要数据占最大面积与最高对比（Carbon dashboards :32-34） ============ */
-main{ padding:var(--sp-300) var(--sp-200) var(--sp-600); }
-.main-inner{ display:grid; gap:var(--sp-300); }
-.card{ background:var(--paper-2); border-radius:var(--radius-lg); padding:var(--sp-300); overflow:hidden; }
-.card-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:var(--sp-100) var(--sp-200); margin-bottom:var(--sp-200); }
-.card-head h2{ font-size:var(--text-sub); font-weight:600; }
-.meta{ color:var(--ink-2); }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .kpi { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--td-radius-medium); padding: 16px 20px; }
+  .kpi .k { margin: 0; font-size: 12px; line-height: 20px; color: var(--ink); }
+  .kpi .v { margin: 4px 0 0; font-size: 28px; line-height: 36px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi .m { margin: 2px 0 0; font-size: 12px; line-height: 20px; color: var(--ink-2); }
 
-/* 全局筛选栏 */
-.filters{ background:var(--paper-2); border-radius:var(--radius-lg); padding:var(--sp-300); }
-.filter-top{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--sp-150); }
-h1.page-title{ font-size:var(--text-sub); font-weight:600; }
-.tabs{ display:flex; flex-wrap:wrap; gap:var(--sp-050); } /* 标签页：content/components/carbondesignsystem.com--tabs-usage.md:310-311 一两个词 */
-.tab{
-  min-height:var(--control-h); padding:var(--sp-100) var(--sp-150);
-  border:0; border-bottom:2px solid transparent; border-radius:0;
-  background:transparent; color:var(--ink-2); font-weight:400; white-space:nowrap;
-  transition:color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
-}
-.tab:hover{ background:var(--paper-3); color:var(--ink); }
-.tab[aria-selected="true"]{ color:var(--accent); font-weight:600; border-bottom-color:var(--accent); }
-.form-row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:var(--sp-150) var(--sp-200); margin-top:var(--sp-200); }
-.field{ display:grid; gap:var(--sp-050); min-width:0; }
-.field label{ color:var(--ink-2); }
-.field input,.field select,.kw{
-  min-height:var(--control-h); padding:var(--sp-100) var(--sp-150);
-  background:var(--paper); color:var(--ink);
-  border:1px solid var(--line-strong); border-radius:var(--radius-sm);
-  width:100%;
-}
-.field input,.field select{ width:auto; min-width:9.5em; }
-.field input[data-state="error"],.field select[data-state="error"]{ border-color:var(--danger); background:var(--danger-soft); }
-.field input[data-state="success"],.field select[data-state="success"]{ border-color:var(--success); background:var(--success-soft); }
-.field input:hover,.field select:hover,.kw:hover{ border-color:var(--ink); }
-.form-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-100); }
-.form-msg{ flex:1 1 16em; min-width:0; color:var(--ink-2); }
-.form-msg[data-state="error"]{ color:var(--danger); font-weight:600; }
-.form-msg[data-state="success"]{ color:var(--success); font-weight:600; }
-.applied{
-  display:inline-flex; align-items:center; gap:var(--sp-050);
-  padding:var(--sp-050) var(--sp-150); border-radius:var(--radius-sm);
-  background:var(--accent-soft); color:var(--accent); font-weight:600; white-space:nowrap;
-}
+  .grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--td-radius-medium); padding: 20px; min-width: 0; }
+  .card h2 { margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; }
+  .card .sub { margin: 2px 0 16px; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+  .chart { width: 100%; height: auto; display: block; }
+  .chart text { font-family: var(--td-font-family); font-size: 12px; fill: var(--ink-2); }
+  .chart .dot { transition: r var(--dur-base) var(--ease); cursor: default; }
+  .chart .dot:hover { r: 5; }
 
-/* KPI：一个 36px 主数字 + 四个 20px 次级（NN/g :76-77 三档、最大元素 ≤2） */
-.kpi{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,2fr); gap:var(--sp-300); }
-.kpi-lead{ display:flex; flex-direction:column; justify-content:center; gap:var(--sp-100); min-width:0; }
-.kpi-label{ color:var(--ink-2); }
-.kpi-big{ font-size:var(--text-display); font-weight:600; letter-spacing:-0.02em; overflow-wrap:anywhere; min-width:0; }
-.kpi-delta{ color:var(--ink-2); }
-.kpi-delta b{ font-weight:600; }
-.up{ color:var(--success); }
-.down{ color:var(--danger); }
-.kpi-list{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-200) var(--sp-300); align-content:center; }
-.kpi-item{ display:grid; gap:var(--sp-050); min-width:0; }
-.kpi-item dt{ color:var(--ink-2); }
-.kpi-item dd{ font-size:var(--text-sub); font-weight:600; overflow-wrap:anywhere; min-width:0; }
-.kpi-item .delta{ font-size:var(--text-body); font-weight:400; color:var(--ink-2); }
-.kpi-period{ grid-column:1 / -1; padding-top:var(--sp-200); border-top:1px solid var(--line); color:var(--ink-2); }
-.kpi-period b{ color:var(--ink); font-weight:600; }
+  .table-card { margin-top: 16px; }
+  .table-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .empty { padding: 40px 0; text-align: center; color: var(--ink-2); }
+  .empty b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 4px; }
 
-/* 趋势图：折线图可裁剪 Y 轴（Carbon axes-and-labels :45）；九元素里保留标题/轴/刻度/绘图区/tooltip（:31-39） */
-.chart-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:var(--sp-100) var(--sp-200); }
-.chart-body{ position:relative; margin-top:var(--sp-200); }
-.chart-grid{ display:grid; grid-template-columns:4.5em minmax(0,1fr); gap:var(--sp-100); }
-.y-axis{ position:relative; height:240px; }
-.y-axis span{ position:absolute; right:0; transform:translateY(-50%); color:var(--ink-2); white-space:nowrap; }
-.chart-box{ position:relative; min-width:0; }
-.chart-svg{ display:block; width:100%; height:240px; touch-action:none; }
-.x-axis{ display:flex; justify-content:space-between; gap:var(--sp-050); margin-top:var(--sp-050); padding-left:calc(4.5em + var(--sp-100)); color:var(--ink-2); }
-.x-axis span{ min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.legend{ display:flex; flex-wrap:wrap; gap:var(--sp-100); margin-top:var(--sp-150); }
-.legend-item{
-  display:inline-flex; align-items:center; gap:var(--sp-100);
-  min-height:var(--control-h); padding:var(--sp-100) var(--sp-150);
-  background:transparent; border:1px solid transparent; border-radius:var(--radius-sm); color:var(--ink);
-}
-.legend-item:hover{ background:var(--paper-3); }
-.legend-item[aria-pressed="false"]{ color:var(--ink-3); }
-.swatch{ width:14px; height:3px; border-radius:2px; flex:none; }
-.swatch-a{ background:var(--accent); }
-.swatch-b{ background:var(--series-2); }
-.tip{
-  position:absolute; z-index:5; pointer-events:none; min-width:9em;
-  padding:var(--sp-100) var(--sp-150); border-radius:var(--radius-sm);
-  background:var(--ink); color:var(--paper); box-shadow:0 2px 8px var(--scrim);
-  display:grid; gap:var(--sp-050);
-}
-.tip b{ font-weight:600; }
-.chart-note{ margin-top:var(--sp-150); color:var(--ink-2); }
+  footer { margin-top: 32px; padding: 24px 0 32px; border-top: 1px solid var(--rule); }
+  .foot-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 720px; }
+  .foot-cols h3 { margin: 0 0 8px; font-size: 12px; line-height: 20px; color: var(--ink-2); font-weight: 600; }
+  .foot-cols a { display: block; color: var(--ink); text-decoration: none; font-size: 14px; line-height: 22px; }
+  .foot-cols a:hover { color: var(--accent); text-decoration: underline; }
+  .foot-note { margin: 24px 0 0; font-size: 12px; line-height: 20px; color: var(--ink-2); }
 
-/* 明细表：数字列右对齐、列标题一两个词（Carbon data-table :230-231） */
-.table-tools{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--sp-150); margin-bottom:var(--sp-200); }
-.kw-wrap{ width:min(20em,100%); }
-.table-scroll{ overflow-x:auto; max-width:100%; border-radius:var(--radius-sm); }
-table{ width:100%; min-width:44em; border-collapse:collapse; background:var(--paper); }
-caption{ text-align:left; }
-th,td{ padding:var(--sp-100) var(--sp-150); text-align:left; border-bottom:1px solid var(--line); white-space:nowrap; }
-thead th{ background:var(--paper-3); color:var(--ink-2); font-weight:600; }
-tbody tr:hover{ background:var(--accent-soft); } /* Carbon data-table :360-362 行 hover 常开 */
-td.num,th.num{ text-align:right; font-variant-numeric:tabular-nums; }
-tbody tr:last-child td{ border-bottom:0; }
-.drill{ min-height:var(--control-h); padding:var(--sp-050) var(--sp-100); background:transparent; border:1px solid transparent; border-radius:var(--radius-sm); color:var(--accent); font-weight:600; }
-.drill:hover{ background:var(--accent-soft); }
-.drill:active{ transform:translateY(1px); }
-.empty{ padding:var(--sp-400) var(--sp-200); text-align:center; color:var(--ink-2); border:1px dashed var(--line-strong); border-radius:var(--radius-sm); background:var(--paper); }
-.empty .btn{ margin-top:var(--sp-150); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .t-select .t-input:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rail :focus-visible { outline-color: #fff; }
 
-/* Ft2 · 单行页脚 */
-footer{ border-top:1px solid var(--line); padding:var(--sp-200); margin-top:var(--sp-400); }
-.foot-inner{ display:flex; flex-wrap:wrap; gap:var(--sp-050) var(--sp-150); color:var(--ink-2); }
-.foot-inner b{ color:var(--ink); font-weight:600; }
-
-/* 抽屉：宽度按屏幕占比（min(46vw, 620px)），遮罩全站一档 rgba(0,0,0,0.45) derived */
-.scrim{ position:fixed; inset:0; z-index:600; background:var(--scrim); }
-.drawer{
-  position:fixed; top:0; right:0; z-index:610; width:min(46vw,620px); height:100%;
-  background:var(--paper); border-left:1px solid var(--line);
-  padding:var(--sp-300); overflow-y:auto;
-  /* 浮层开合改即时状态切换：无头/后台标签页会节流 CSS transition，
-     实测 transform 会停在 translateX(100%) 的屏外值，交付前必须可见。 */
-}
-.drawer.is-open{ transform:none; }
-.drawer-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:var(--sp-200); margin-bottom:var(--sp-200); }
-.drawer-head h2{ font-size:var(--text-sub); font-weight:600; }
-.icon-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:var(--control-h); height:var(--control-h); flex:none;
-  background:transparent; border:1px solid transparent; border-radius:var(--radius-sm); color:var(--ink-2);
-}
-.icon-btn:hover{ background:var(--paper-3); color:var(--ink); }
-.icon-btn svg{ width:18px; height:18px; }
-.drawer-path{ color:var(--ink-2); margin-bottom:var(--sp-200); }
-.drawer-sum{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-150); margin-bottom:var(--sp-300); }
-.drawer-sum div{ background:var(--paper-2); border-radius:var(--radius-sm); padding:var(--sp-150); min-width:0; }
-.drawer-sum dt{ color:var(--ink-2); }
-.drawer-sum dd{ font-size:var(--text-sub); font-weight:600; overflow-wrap:anywhere; }
-.drawer h3{ font-size:var(--text-body); font-weight:600; margin-bottom:var(--sp-150); }
-.drawer-list li{ display:flex; justify-content:space-between; gap:var(--sp-200); padding:var(--sp-100) 0; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
-.drawer-list li:last-child{ border-bottom:0; }
-
-/* 导出对话框 */
-dialog{
-  width:min(40em,calc(100vw - var(--sp-400))); max-height:80vh; overflow:auto;
-  padding:var(--sp-300); border:1px solid var(--line-strong); border-radius:var(--radius-lg);
-  background:var(--paper); color:var(--ink);
-}
-dialog::backdrop{ background:var(--scrim); }
-.dialog-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:var(--sp-200); margin-bottom:var(--sp-150); }
-.dialog-head h2{ font-size:var(--text-sub); font-weight:600; }
-.dialog-meta{ color:var(--ink-2); margin-bottom:var(--sp-150); }
-pre.csv{
-  max-height:14em; overflow:auto; padding:var(--sp-150); margin:0 0 var(--sp-200);
-  background:var(--paper-2); border-radius:var(--radius-sm);
-  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:var(--text-body);
-  white-space:pre; color:var(--ink);
-}
-.dialog-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-150); }
-.copy-status{ color:var(--success); font-weight:600; }
-
-/* 断点 derived：640 / 960 两档；四档实测 320 / 375 / 768 / 1280 */
-@media (max-width:960px){
-  .kpi{ grid-template-columns:1fr; }
-  .drawer{ width:min(70vw,620px); }
-}
-@media (max-width:640px){
-  main{ padding-inline:var(--sp-150); }
-  .card,.filters{ padding:var(--sp-200); }
-  .drawer{ width:100%; }
-  .kpi-list{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-150); }
-  .chart-grid{ grid-template-columns:3.6em minmax(0,1fr); }
-  .x-axis{ padding-left:calc(3.6em + var(--sp-100)); }
-  .field input,.field select{ width:100%; }
-  .field{ flex:1 1 100%; }
-  .form-actions{ width:100%; }
-  .top{ padding-inline:var(--sp-150); }
-  .stamp{ display:none; }
-}
-/* 减少动效：无障碍底线，动效关闭并即时完成（content/motion/atlassian.design--motion.md:170；NN/g :24） */
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{ transition:none !important; animation:none !important; }
-  .drawer{ transform:none; }
-}
+  @media (max-width: 991px) {
+    .grid { grid-template-columns: 1fr; }
+    main { padding: 20px 20px 0; }
+    .hero .huge { font-size: 48px; line-height: 56px; }
+  }
+  @media (max-width: 767px) {
+    .rail { width: 48px; padding: 16px 0; }
+    .rail .brand { font-size: 12px; letter-spacing: 0.12em; }
+    .rail-btn { width: 36px; height: 36px; }
+    main { margin-left: 48px; width: calc(100% - 48px); padding: 16px 16px 0; }
+    .kpis { grid-template-columns: 1fr; }
+    .hero .huge { font-size: 40px; line-height: 48px; }
+    .top { align-items: flex-start; }
+  }
+  @media (max-width: 374px) {
+    main { padding: 12px 12px 0; }
+    .hero .huge { font-size: 32px; line-height: 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "tdesign-react": "https://esm.sh/tdesign-react@1.18.6?bundle&external=react,react-dom"
+  }
+}
+</script>
 </head>
 <body>
-<a class="skip" href="#main">跳到主内容</a>
+  <div id="root">正在载入数据…</div>
+  <script type="module">
+    import React, { useState, useMemo } from 'react'
+    import { createRoot } from 'react-dom/client'
+    import { Button, Select, Table, Tag, Dialog, MessagePlugin } from 'tdesign-react'
 
-<header class="top">
-  <div class="brand">
-    <span class="brand-name">MetricRail</span>
-    <span class="brand-sub">数据看板</span>
-  </div>
-  <div class="top-right">
-    <span class="stamp" id="stamp">数据截至 2026-11-07 09:00</span>
-    <button class="btn btn-primary" id="exportBtn" type="button" aria-haspopup="dialog">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M2 12v2h12v-2"/></svg>
-      导出结果
-    </button>
-  </div>
-</header>
+    const h = React.createElement
 
-<main id="main">
-  <div class="main-inner">
+    const NAV = [
+      { id: 'overview', label: '总览', current: true, path: 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm8 0h6V11h-6v9Zm0-16v5h6V4h-6Z' },
+      { id: 'reports', label: '报表', path: 'M5 3h14a1 1 0 0 1 1 1v16l-3-2-3 2-3-2-3 2V4a1 1 0 0 1 1-1Zm3 5h8v2H8V8Zm0 4h8v2H8v-2Z' },
+      { id: 'channels', label: '渠道', path: 'M4 18h4V8H4v10Zm6 0h4V4h-4v14Zm6 0h4v-7h-4v7Z' },
+      { id: 'settings', label: '设置', path: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-2a6 6 0 0 1 1.3.14l.6-1.7 2.5.68-.4 1.77a6 6 0 0 1 1.9 1.1l1.6-.9 1.3 2.22-1.5 1.02a6 6 0 0 1 0 2.2l1.5 1.02-1.3 2.22-1.6-.9a6 6 0 0 1-1.9 1.1l.4 1.77-2.5.68-.6-1.7A6 6 0 0 1 12 20a6 6 0 0 1-1.3-.14l-.6 1.7-2.5-.68.4-1.77a6 6 0 0 1-1.9-1.1l-1.6.9-1.3-2.22 1.5-1.02a6 6 0 0 1 0-2.2L3.2 12.45l1.3-2.22 1.6.9a6 6 0 0 1 1.9-1.1l-.4-1.77 2.5-.68.6 1.7A6 6 0 0 1 12 6Z' },
+    ]
 
-    <!-- 全局筛选栏：日期范围 + 渠道 + 已应用指示 + 一键清空（content/patterns/carbon--filtering.md:111-139） -->
-    <section class="filters" aria-labelledby="pageTitle">
-      <div class="filter-top">
-        <h1 class="page-title" id="pageTitle">经营总览</h1>
-        <div class="tabs" role="tablist" aria-label="分析周期" id="tabs">
-          <button class="tab" role="tab" id="tab7" aria-selected="true" tabindex="0" data-days="7">近 7 日</button>
-          <button class="tab" role="tab" id="tab30" aria-selected="false" tabindex="-1" data-days="30">近 30 日</button>
-          <button class="tab" role="tab" id="tab90" aria-selected="false" tabindex="-1" data-days="90">近 90 日</button>
-        </div>
-      </div>
-      <form class="form-row" id="filterForm" novalidate>
-        <div class="field">
-          <label for="startDate">开始日期</label>
-          <input type="date" id="startDate" name="start" data-state="idle" aria-describedby="formMsg">
-        </div>
-        <div class="field">
-          <label for="endDate">结束日期</label>
-          <input type="date" id="endDate" name="end" data-state="idle" aria-describedby="formMsg">
-        </div>
-        <div class="field">
-          <label for="channel">渠道</label>
-          <select id="channel" data-state="idle">
-            <option value="all">全部渠道</option>
-            <option value="organic">自然流量</option>
-            <option value="paid">付费投放</option>
-            <option value="social">社交媒体</option>
-            <option value="direct">直接访问</option>
-          </select>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-secondary" type="submit" id="applyBtn">应用筛选</button>
-          <button class="btn btn-tertiary" type="button" id="clearBtn" disabled>清空筛选</button>
-        </div>
-        <p class="form-msg" id="formMsg" role="status" aria-live="polite" data-state="idle">选择日期范围后应用，数字会跟着联动。</p>
-        <span class="applied" id="appliedChip" hidden>已应用 <b class="tnum" id="appliedCount">0</b> 项筛选</span>
-      </form>
-    </section>
+    const CHANNELS = [
+      { id: 'search', name: '自然搜索', visitors: 12480, rate: '4.1%', gmv: 486200, share: '37.8%', trend: '增长' },
+      { id: 'paid', name: '付费投放', visitors: 9320, rate: '3.2%', gmv: 352800, share: '27.5%', trend: '增长' },
+      { id: 'social', name: '社交', visitors: 6140, rate: '2.8%', gmv: 214600, share: '16.7%', trend: '持平' },
+      { id: 'email', name: '邮件', visitors: 3760, rate: '5.4%', gmv: 168400, share: '13.1%', trend: '增长' },
+      { id: 'direct', name: '直访', visitors: 1980, rate: '3.1%', gmv: 62600, share: '4.9%', trend: '下滑' },
+    ]
 
-    <!-- KPI 行：当日核心指标与环比；主数字一个（Stat-Led） -->
-    <section class="card kpi" aria-labelledby="kpiTitle">
-      <h2 class="sr-only" id="kpiTitle">当日核心指标</h2>
-      <div class="kpi-lead">
-        <span class="kpi-label">当日成交额（元）· 11 月 7 日</span>
-        <strong class="kpi-big tnum" id="kpiGmv">—</strong>
-        <span class="kpi-delta">环比昨日 <b id="kpiGmvDelta">—</b></span>
-      </div>
-      <dl class="kpi-list">
-        <div class="kpi-item"><dt>当日订单量</dt><dd class="tnum" id="kpiOrders">—</dd><span class="delta">环比 <span id="kpiOrdersDelta">—</span></span></div>
-        <div class="kpi-item"><dt>当日活跃用户</dt><dd class="tnum" id="kpiUsers">—</dd><span class="delta">环比 <span id="kpiUsersDelta">—</span></span></div>
-        <div class="kpi-item"><dt>当日客单价（元）</dt><dd class="tnum" id="kpiAov">—</dd><span class="delta">环比 <span id="kpiAovDelta">—</span></span></div>
-        <div class="kpi-item"><dt>当日退款率</dt><dd class="tnum" id="kpiRefund">—</dd><span class="delta">环比 <span id="kpiRefundDelta">—</span></span></div>
-      </dl>
-      <p class="kpi-period">当前周期合计 <b class="tnum" id="periodTotal">—</b> 元 · 共 <b class="tnum" id="periodDays">7</b> 天 · <span id="periodRange">—</span></p>
-    </section>
+    const TREND = [
+      { day: '11-04', value: 98 }, { day: '11-05', value: 106 }, { day: '11-06', value: 102 },
+      { day: '11-07', value: 118 }, { day: '11-08', value: 124 }, { day: '11-09', value: 121 },
+      { day: '11-10', value: 128 },
+    ]
 
-    <!-- 趋势图：本期 / 上期两条折线；图例悬停将其它系列降到 30%（Carbon legends :86） -->
-    <section class="card" aria-labelledby="chartTitle">
-      <div class="chart-head">
-        <h2 id="chartTitle">成交额按日走势</h2>
-        <span class="meta" id="chartMeta">近 7 日 · 全部渠道</span>
-      </div>
-      <div class="chart-body">
-        <div class="chart-grid">
-          <div class="y-axis" id="yAxis" aria-hidden="true"></div>
-          <div class="chart-box" id="chartBox">
-            <svg class="chart-svg" id="chart" role="img" aria-label="成交额按日走势折线图，本期与上期对比"></svg>
-            <div class="tip" id="tip" hidden></div>
-          </div>
-        </div>
-        <div class="x-axis" id="xAxis" aria-hidden="true"></div>
-      </div>
-      <div class="legend" id="legend" aria-label="图例">
-        <button class="legend-item" type="button" data-series="current" aria-pressed="true"><span class="swatch swatch-a"></span>本期</button>
-        <button class="legend-item" type="button" data-series="previous" aria-pressed="true"><span class="swatch swatch-b"></span>上期</button>
-      </div>
-      <p class="chart-note">折线图看趋势，数值轴按数据区间裁剪；同一数据系列全盘同色（content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md:45；dashboards.md:42）。</p>
-    </section>
+    const money = (n) => '¥' + n.toLocaleString('zh-CN')
+    const wan = (n) => n.toFixed(0) + ' 万'
 
-    <!-- 明细表：区域 × 渠道，支持下钻 -->
-    <section class="card" aria-labelledby="tableTitle">
-      <div class="table-tools">
-        <div class="card-head" style="margin-bottom:0">
-          <h2 id="tableTitle">区域与渠道明细</h2>
-          <span class="meta" id="tableCount">共 20 条</span>
-        </div>
-        <div class="kw-wrap"><input class="kw" type="search" id="keyword" placeholder="搜索区域或渠道" aria-label="搜索区域或渠道"></div>
-      </div>
-      <div class="table-scroll" id="tableScroll">
-        <table id="detailTable">
-          <caption class="sr-only">按区域与渠道汇总的成交额、订单量、客单价与环比，可逐行下钻</caption>
-          <thead><tr>
-            <th scope="col">区域</th><th scope="col">渠道</th>
-            <th scope="col" class="num">成交额</th><th scope="col" class="num">订单量</th>
-            <th scope="col" class="num">客单价</th><th scope="col" class="num">环比</th>
-            <th scope="col">操作</th>
-          </tr></thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-      <div class="empty" id="emptyState" hidden>
-        <p>没有匹配的明细。换个关键词，或清空筛选再看。</p>
-        <button class="btn btn-secondary" type="button" id="emptyClear">清空筛选</button>
-      </div>
-    </section>
+    function Rail() {
+      return h('aside', { className: 'rail' },
+        h('div', { className: 'brand' }, 'METRICRAIL'),
+        h('nav', { 'aria-label': '主导航' },
+          NAV.map((item) => h('button', {
+            key: item.id,
+            className: 'rail-btn',
+            type: 'button',
+            'aria-label': item.label,
+            'aria-current': item.current ? 'page' : undefined,
+            title: item.label,
+            onClick: () => MessagePlugin.info(`切换到${item.label}`),
+          }, h('svg', { width: 20, height: 20, viewBox: '0 0 24 24', 'aria-hidden': 'true' },
+            h('path', { d: item.path, fill: 'currentColor' })
+          )))
+        ),
+        h('div', { className: 'me', 'aria-label': '当前账号：林' }, '林')
+      )
+    }
 
-  </div>
-</main>
+    function Chart() {
+      const w = 720, hgt = 220, pad = { t: 16, r: 32, b: 28, l: 36 }
+      const max = 140, min = 80
+      const x = (i) => pad.l + (i * (w - pad.l - pad.r)) / (TREND.length - 1)
+      const y = (v) => pad.t + ((max - v) / (max - min)) * (hgt - pad.t - pad.b)
+      const line = TREND.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${y(d.value)}`).join(' ')
+      const area = `${line} L${x(TREND.length - 1)},${hgt - pad.b} L${x(0)},${hgt - pad.b} Z`
+      return h('svg', { className: 'chart', viewBox: `0 0 ${w} ${hgt}`, role: 'img', 'aria-label': '过去 7 天成交额走势，单位万元' },
+        [110, 95, 80].map((v) => h('g', { key: v },
+          h('line', { x1: pad.l, x2: w - pad.r, y1: y(v), y2: y(v), stroke: '#e8e8e8', 'stroke-width': 1 }),
+          h('text', { x: 0, y: y(v) + 4 }, String(v))
+        )),
+        h('path', { d: area, fill: '#001a57', opacity: 0.06 }),
+        h('path', { d: line, fill: 'none', stroke: '#001a57', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }),
+        TREND.map((d, i) => h('g', { key: d.day },
+          h('circle', { className: 'dot', cx: x(i), cy: y(d.value), r: 3.5, fill: '#fff', stroke: '#001a57', 'stroke-width': 2 },
+            h('title', null, `${d.day}：${wan(d.value)}元`)
+          ),
+          h('text', { x: x(i), y: hgt - 8, 'text-anchor': 'middle' }, d.day)
+        ))
+      )
+    }
 
-<footer>
-  <div class="foot-inner">
-    <b>MetricRail</b><span>·</span><span>演示数据，非真实经营数据</span><span>·</span><span>单文件案例，零外部请求</span><span>·</span><span>数据截至 2026-11-07 09:00</span>
-  </div>
-</footer>
+    function App() {
+      const [range, setRange] = useState('today')
+      const [open, setOpen] = useState(false)
+      const [loading, setLoading] = useState(false)
+      const [weekEmpty, setWeekEmpty] = useState(false)
 
-<!-- 下钻抽屉 -->
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
-  <div class="drawer-head">
-    <div>
-      <h2 id="drawerTitle">明细下钻</h2>
-      <p class="drawer-path" id="drawerPath">—</p>
-    </div>
-    <button class="icon-btn" type="button" id="drawerClose" aria-label="关闭下钻">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
-    </button>
-  </div>
-  <dl class="drawer-sum" id="drawerSum"></dl>
-  <h3 id="drawerDailyTitle">按日成交额（元）</h3>
-  <ul class="drawer-list" id="drawerList"></ul>
-</aside>
+      const data = weekEmpty ? [] : CHANNELS
+      const columns = useMemo(() => [
+        { colKey: 'name', title: '渠道', width: 140 },
+        { colKey: 'visitors', title: '访客', align: 'right', cell: ({ row }) => row.visitors.toLocaleString('zh-CN') },
+        { colKey: 'rate', title: '转化率', align: 'right' },
+        { colKey: 'gmv', title: '成交额', align: 'right', cell: ({ row }) => money(row.gmv) },
+        { colKey: 'share', title: '占比', align: 'right' },
+        {
+          colKey: 'trend', title: '趋势', width: 96,
+          cell: ({ row }) => h(Tag, {
+            theme: row.trend === '增长' ? 'success' : row.trend === '下滑' ? 'danger' : 'default',
+            variant: 'light',
+            size: 'small',
+          }, row.trend),
+        },
+      ], [])
 
-<!-- 导出对话框 -->
-<dialog id="exportDialog" aria-labelledby="exportTitle">
-  <div class="dialog-head">
-    <h2 id="exportTitle">导出当前结果</h2>
-    <button class="icon-btn" type="button" id="dialogClose" aria-label="关闭导出">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
-    </button>
-  </div>
-  <p class="dialog-meta" id="exportMeta">—</p>
-  <pre class="csv" id="csvText" tabindex="0"></pre>
-  <div class="dialog-actions">
-    <button class="btn btn-primary" type="button" id="copyBtn">复制 CSV</button>
-    <span class="copy-status" id="copyStatus" role="status" aria-live="polite" hidden></span>
-  </div>
-</dialog>
-
-<script>
-(function(){
-  'use strict';
-  var DAY_MS = 86400000;
-  var TODAY = new Date(2026, 10, 7);
-  var DAYS = 200;
-  var CH = [
-    {id:'organic', name:'自然流量', w:1.00, aov:96},
-    {id:'paid',    name:'付费投放', w:0.78, aov:88},
-    {id:'social',  name:'社交媒体', w:0.56, aov:79},
-    {id:'direct',  name:'直接访问', w:0.41, aov:112}
-  ];
-  var RG = [
-    {id:'east',    name:'华东', w:1.30},
-    {id:'north',   name:'华北', w:1.04},
-    {id:'south',   name:'华南', w:1.12},
-    {id:'sw',      name:'西南', w:0.71},
-    {id:'central', name:'华中', w:0.83}
-  ];
-  function pad(n){ return n < 10 ? '0'+n : ''+n; }
-  function iso(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-  function short(s){ var p=s.split('-'); return p[1]+' 月 '+p[2]+' 日'; }
-  function num(n){ return Math.round(n).toLocaleString('en-US'); }
-  function money(n){ return Math.round(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function pct(n){ return (n>=0?'+':'')+n.toFixed(1)+'%'; }
-
-  var DATES = [];
-  for (var i=DAYS-1;i>=0;i--){ DATES.push(iso(new Date(TODAY.getTime()-i*DAY_MS))); }
-  var DATE_INDEX = {}; DATES.forEach(function(s,i){ DATE_INDEX[s]=i; });
-
-  // 一份确定性自造数据：所有 KPI、图表、表格、下钻、导出都从它算出，前后自洽。
-  var CELL = [];
-  for (var d=0; d<DAYS; d++){
-    var dt = new Date(TODAY.getTime()-(DAYS-1-d)*DAY_MS);
-    var dow = dt.getDay();
-    var weekend = (dow===0||dow===6) ? 0.88 : 1;
-    var wave = 1 + 0.14*Math.sin(d/6.5) + 0.07*Math.cos(d/2.7);
-    var growth = 0.78 + 0.30*(d/(DAYS-1));
-    var row=[];
-    for (var c=0;c<CH.length;c++){
-      var col=[];
-      for (var r=0;r<RG.length;r++){
-        var wobble = 1 + 0.05*((((d*7+c*13+r*11)%9)-4)/4);
-        var gmv = Math.round(36000*CH[c].w*RG[r].w*weekend*wave*growth*wobble);
-        var aov = CH[c].aov + ((d+r*3)%12);
-        var orders = Math.max(1, Math.round(gmv/aov));
-        var users = Math.round(orders*(2.4+((d+c+r)%7)*0.12));
-        var refund = 1.1 + ((d*3+c*5+r*7)%13)*0.08;
-        col.push({gmv:gmv, orders:orders, users:users, refund:refund});
+      function changeRange(v) {
+        setRange(v)
+        setWeekEmpty(v === 'week')
+        if (v === 'week') MessagePlugin.info('本周渠道数据将在明早 8 点生成')
       }
-      row.push(col);
-    }
-    CELL.push(row);
-  }
-  function chIdx(id){ for (var i=0;i<CH.length;i++) if (CH[i].id===id) return i; return -1; }
-  function chList(k){ return k<0 ? [0,1,2,3] : [k]; }
-  function dayAgg(d, k){
-    var gmv=0, orders=0, users=0, rw=0;
-    chList(k).forEach(function(c){ for (var r=0;r<RG.length;r++){
-      var x=CELL[d][c][r]; gmv+=x.gmv; orders+=x.orders; users+=x.users; rw+=x.refund*x.gmv;
-    }});
-    return {gmv:gmv, orders:orders, users:users, aov:gmv/orders, refund:rw/gmv};
-  }
-  function rangeAgg(si, ei, k){
-    var gmv=0, orders=0, users=0, rw=0;
-    for (var d=si; d<=ei; d++){ chList(k).forEach(function(c){ for (var r=0;r<RG.length;r++){
-      var x=CELL[d][c][r]; gmv+=x.gmv; orders+=x.orders; users+=x.users; rw+=x.refund*x.gmv;
-    }}); }
-    return {gmv:gmv, orders:orders, users:users, aov:gmv/orders, refund:rw/gmv};
-  }
-  function cellRange(si, ei, c, r){
-    var gmv=0, orders=0, users=0;
-    for (var d=si; d<=ei; d++){ var x=CELL[d][c][r]; gmv+=x.gmv; orders+=x.orders; users+=x.users; }
-    return {gmv:gmv, orders:orders, users:users};
-  }
 
-  var DEFAULT_START = DAYS-7, DEFAULT_END = DAYS-1;
-  var state = {
-    start:DEFAULT_START, end:DEFAULT_END, channel:-1, keyword:'',
-    tab:'7', series:{current:true, previous:true}
-  };
-  var $ = function(id){ return document.getElementById(id); };
-  var el = {
-    start:$('startDate'), end:$('endDate'), channel:$('channel'), form:$('filterForm'),
-    formMsg:$('formMsg'), apply:$('applyBtn'), clear:$('clearBtn'), applied:$('appliedChip'), appliedCount:$('appliedCount'),
-    tabs:$('tabs'), keyword:$('keyword'), tableCount:$('tableCount'), tbody:$('tbody'), empty:$('emptyState'),
-    tableScroll:$('tableScroll'), chart:$('chart'), chartBox:$('chartBox'), yAxis:$('yAxis'), xAxis:$('xAxis'),
-    tip:$('tip'), legend:$('legend'), chartMeta:$('chartMeta'), periodTotal:$('periodTotal'),
-    periodDays:$('periodDays'), periodRange:$('periodRange'),
-    kpiGmv:$('kpiGmv'), kpiGmvDelta:$('kpiGmvDelta'), kpiOrders:$('kpiOrders'), kpiOrdersDelta:$('kpiOrdersDelta'),
-    kpiUsers:$('kpiUsers'), kpiUsersDelta:$('kpiUsersDelta'), kpiAov:$('kpiAov'), kpiAovDelta:$('kpiAovDelta'),
-    kpiRefund:$('kpiRefund'), kpiRefundDelta:$('kpiRefundDelta'),
-    exportBtn:$('exportBtn'), dialog:$('exportDialog'), dialogClose:$('dialogClose'), exportMeta:$('exportMeta'),
-    csvText:$('csvText'), copyBtn:$('copyBtn'), copyStatus:$('copyStatus'),
-    scrim:$('scrim'), drawer:$('drawer'), drawerClose:$('drawerClose'), drawerTitle:$('drawerTitle'),
-    drawerPath:$('drawerPath'), drawerSum:$('drawerSum'), drawerList:$('drawerList'), drawerDailyTitle:$('drawerDailyTitle')
-  };
-
-  function delta(a,b){ return b===0 ? 0 : (a-b)/b*100; }
-  function setDelta(node, v, invert){
-    node.textContent = pct(v);
-    var good = invert ? v<=0 : v>=0;
-    node.className = good ? 'up' : 'down';
-    node.setAttribute('data-value', v.toFixed(2));
-  }
-  function activeCount(){
-    var n = 0;
-    if (state.channel !== -1) n++;
-    if (state.start !== DEFAULT_START || state.end !== DEFAULT_END) n++;
-    if (state.keyword.trim() !== '') n++;
-    return n;
-  }
-  function channelLabel(){ return state.channel<0 ? '全部渠道' : CH[state.channel].name; }
-  function periodLabel(){
-    if (state.tab==='7') return '近 7 日';
-    if (state.tab==='30') return '近 30 日';
-    if (state.tab==='90') return '近 90 日';
-    return '自定义区间';
-  }
-  function syncInputs(){
-    el.start.value = DATES[state.start];
-    el.end.value = DATES[state.end];
-    el.channel.value = state.channel<0 ? 'all' : CH[state.channel].id;
-  }
-  function setFieldState(node, s){ if (node) node.setAttribute('data-state', s); }
-  function resetValidation(){
-    setFieldState(el.start,'idle'); setFieldState(el.end,'idle'); setFieldState(el.channel,'idle');
-    el.start.removeAttribute('aria-invalid'); el.end.removeAttribute('aria-invalid');
-    el.formMsg.setAttribute('data-state','idle');
-    el.formMsg.textContent = '选择日期范围后应用，数字会跟着联动。';
-  }
-  function markTab(days){
-    var tabs = el.tabs.querySelectorAll('[role="tab"]');
-    tabs.forEach(function(t){
-      var on = String(days)===t.getAttribute('data-days');
-      t.setAttribute('aria-selected', on?'true':'false');
-      t.tabIndex = on ? 0 : -1;
-    });
-  }
-
-  // ---- 渲染：KPI ----
-  function renderKpi(){
-    var today = dayAgg(DAYS-1, state.channel);
-    var yest = dayAgg(DAYS-2, state.channel);
-    el.kpiGmv.textContent = num(today.gmv);
-    setDelta(el.kpiGmvDelta, delta(today.gmv,yest.gmv));
-    el.kpiOrders.textContent = num(today.orders);
-    setDelta(el.kpiOrdersDelta, delta(today.orders,yest.orders));
-    el.kpiUsers.textContent = num(today.users);
-    setDelta(el.kpiUsersDelta, delta(today.users,yest.users));
-    el.kpiAov.textContent = money(today.aov);
-    setDelta(el.kpiAovDelta, delta(today.aov,yest.aov));
-    el.kpiRefund.textContent = today.refund.toFixed(2)+'%';
-    setDelta(el.kpiRefundDelta, delta(today.refund,yest.refund), true);
-    var agg = rangeAgg(state.start,state.end,state.channel);
-    el.periodTotal.textContent = num(agg.gmv);
-    el.periodDays.textContent = String(state.end-state.start+1);
-    el.periodRange.textContent = short(DATES[state.start])+' 至 '+short(DATES[state.end])+' · '+channelLabel();
-    el.chartMeta.textContent = periodLabel()+' · '+channelLabel();
-  }
-
-  // ---- 渲染：折线图（内联 SVG，全部文字走 HTML，保证行高公式全覆盖） ----
-  var chartData = null;
-  function seriesData(){
-    var len = state.end-state.start+1;
-    var cur=[], prev=[];
-    for (var i=0;i<len;i++){
-      var d = state.start+i;
-      cur.push({date:DATES[d], v:dayAgg(d,state.channel).gmv});
-      var pd = d-len;
-      prev.push({date:pd>=0?DATES[pd]:'—', v:pd>=0?dayAgg(pd,state.channel).gmv:0});
-    }
-    return {cur:cur, prev:prev, len:len};
-  }
-  function buildChart(){
-    var data = seriesData(); chartData = data;
-    var box = el.chartBox.getBoundingClientRect();
-    var W = Math.max(180, Math.round(box.width));
-    var H = 240, padX = 8, padY = 10;
-    var all = [];
-    if (state.series.current) data.cur.forEach(function(p){ all.push(p.v); });
-    if (state.series.previous) data.prev.forEach(function(p){ if (p.date!=='—') all.push(p.v); });
-    if (!all.length) all=[0,1];
-    var vmax = Math.max.apply(null, all), vmin = Math.min.apply(null, all.filter(function(v){return v>0;}));
-    if (!isFinite(vmin)) vmin = 0;
-    var lo = Math.max(0, Math.floor(vmin*0.88/1000)*1000);
-    var hi = Math.ceil(vmax*1.06/1000)*1000;
-    if (hi<=lo) hi = lo+1000;
-    function X(i){ return data.len===1 ? W/2 : padX + i*(W-2*padX)/(data.len-1); }
-    function Y(v){ return H-padY-(v-lo)/(hi-lo)*(H-2*padY); }
-    var svg = el.chart;
-    svg.setAttribute('viewBox','0 0 '+W+' '+H);
-    svg.setAttribute('width',W); svg.setAttribute('height',H);
-    svg.setAttribute('preserveAspectRatio','none');
-    var out = '';
-    // 网格与刻度（4 条，几何参数 derived）
-    for (var g=0; g<=3; g++){
-      var val = lo + (hi-lo)*g/3;
-      var y = Y(val);
-      out += '<line x1="0" y1="'+y.toFixed(1)+'" x2="'+W+'" y2="'+y.toFixed(1)+'" stroke="#e8e8e8" stroke-width="1"/>';
-    }
-    function path(arr, color, dash, op){
-      if (!arr.length) return '';
-      var pts = arr.map(function(p,i){ return X(i).toFixed(1)+','+Y(p.v).toFixed(1); }).join(' ');
-      return '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+' opacity="'+op+'" data-series="'+(dash?'previous':'current')+'"/>';
-    }
-    if (state.series.previous) out += path(data.prev,'#00668e',true,'1');
-    if (state.series.current) out += path(data.cur,'#0052d9',false,'1');
-    if (state.series.current && data.len<=30){
-      data.cur.forEach(function(p,i){
-        out += '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="2.5" fill="#0052d9"/>';
-      });
-    }
-    svg.innerHTML = out;
-    // Y 轴刻度用 HTML 文本
-    el.yAxis.innerHTML = '';
-    for (var g2=3; g2>=0; g2--){
-      var val2 = lo + (hi-lo)*g2/3;
-      var s = document.createElement('span');
-      s.textContent = num(val2/10000)+' 万';
-      s.style.top = (Y(val2)/H*100)+'%';
-      el.yAxis.appendChild(s);
-    }
-    // X 轴标签最多 5 个
-    el.xAxis.innerHTML = '';
-    var count = Math.min(5, data.len);
-    for (var q=0;q<count;q++){
-      var idx = count===1 ? 0 : Math.round(q*(data.len-1)/(count-1));
-      var xs = document.createElement('span');
-      xs.textContent = short(data.cur[idx].date);
-      el.xAxis.appendChild(xs);
-    }
-    el.chart.setAttribute('aria-label','成交额按日走势折线图，'+periodLabel()+'，'+channelLabel()+'，共 '+data.len+' 天，本期与上期对比');
-  }
-
-  // ---- 渲染：明细表 ----
-  function tableRows(){
-    var rows=[], len = state.end-state.start+1;
-    chList(state.channel).forEach(function(c){
-      for (var r=0;r<RG.length;r++){
-        var now = cellRange(state.start,state.end,c,r);
-        var before = cellRange(state.start-len>=0?state.start-len:0, state.end-len>=0?state.end-len:0, c,r);
-        rows.push({
-          region:RG[r].name, channel:CH[c].name, c:c, r:r,
-          gmv:now.gmv, orders:now.orders, users:now.users,
-          aov:now.gmv/now.orders,
-          delta:before.gmv>0 ? delta(now.gmv,before.gmv) : 0
-        });
+      function exportData() {
+        setLoading(true)
+        window.setTimeout(() => {
+          setLoading(false)
+          setOpen(false)
+          MessagePlugin.success('已导出 3,842 行，文件 metricrail-2026-11-10.csv')
+        }, 1200)
       }
-    });
-    var kw = state.keyword.trim();
-    if (kw) rows = rows.filter(function(x){ return (x.region+x.channel).indexOf(kw)>=0; });
-    return rows;
-  }
-  function renderTable(){
-    var rows = tableRows();
-    el.tbody.innerHTML = '';
-    rows.forEach(function(x){
-      var tr = document.createElement('tr');
-      var td1=document.createElement('td'); td1.textContent=x.region;
-      var td2=document.createElement('td'); td2.textContent=x.channel;
-      var td3=document.createElement('td'); td3.className='num tnum'; td3.textContent=num(x.gmv);
-      var td4=document.createElement('td'); td4.className='num tnum'; td4.textContent=num(x.orders);
-      var td5=document.createElement('td'); td5.className='num tnum'; td5.textContent=money(x.aov);
-      var td6=document.createElement('td'); td6.className='num tnum'; td6.textContent=pct(x.delta);
-      td6.className += x.delta>=0 ? ' up' : ' down';
-      var td7=document.createElement('td');
-      var b=document.createElement('button');
-      b.type='button'; b.className='drill'; b.textContent='下钻';
-      b.setAttribute('aria-label','下钻 '+x.region+' · '+x.channel);
-      b.dataset.c=String(x.c); b.dataset.r=String(x.r);
-      td7.appendChild(b);
-      [td1,td2,td3,td4,td5,td6,td7].forEach(function(td){ tr.appendChild(td); });
-      el.tbody.appendChild(tr);
-    });
-    el.tableCount.textContent = '共 '+rows.length+' 条';
-    el.tableScroll.hidden = rows.length===0;
-    el.empty.hidden = rows.length!==0;
-  }
 
-  function renderChrome(){
-    var n = activeCount();
-    el.applied.hidden = n===0;
-    el.appliedCount.textContent = String(n);
-    el.clear.disabled = n===0;
-  }
-  function render(){
-    renderKpi(); buildChart(); renderTable(); renderChrome();
-  }
+      return h(React.Fragment, null,
+        h(Rail),
+        h('main', null,
+          h('div', { className: 'wrap' },
+            h('header', { className: 'top' },
+              h('div', null,
+                h('p', { className: 'eyebrow' }, '今日 · 11 月 10 日 · 数据更新于 09:42'),
+                h('h1', null, '经营总览')
+              ),
+              h('div', { className: 'tools' },
+                h(Select, {
+                  value: range,
+                  onChange: changeRange,
+                  style: { width: 128 },
+                  'aria-label': '时间范围',
+                  options: [
+                    { label: '今日', value: 'today' },
+                    { label: '近 7 天', value: '7d' },
+                    { label: '本周', value: 'week' },
+                  ],
+                }),
+                h(Button, { theme: 'primary', onClick: () => setOpen(true) }, '导出数据')
+              )
+            ),
 
-  // ---- 表单校验三态：idle / error / success（content/patterns/govuk--validation.md:65-68、:80） ----
-  function validateAndApply(){
-    var s=el.start.value, e=el.end.value;
-    var si=DATE_INDEX[s], ei=DATE_INDEX[e];
-    var err='';
-    if (!s || !e) err='请选择开始日期和结束日期。';
-    else if (si===undefined || ei===undefined) err='日期不在数据范围内（最早 '+DATES[0]+'）。';
-    else if (si>ei) err='结束日期不能早于开始日期。';
-    else if (ei>DAYS-1) err='结束日期不能晚于 '+DATES[DAYS-1]+'。';
-    if (err){
-      setFieldState(el.start,'error'); setFieldState(el.end,'error');
-      el.start.setAttribute('aria-invalid','true'); el.end.setAttribute('aria-invalid','true');
-      el.formMsg.setAttribute('data-state','error');
-      el.formMsg.textContent = err;
-      return false;
+            h('section', { className: 'hero', 'aria-labelledby': 'hero-label' },
+              h('p', { className: 'label', id: 'hero-label' }, '今日成交额'),
+              h('p', { className: 'huge' }, '¥1,284,600'),
+              h('p', { className: 'delta' }, '比昨日 ', h('b', null, '+12.4%'), '，多 ¥141,700')
+            ),
+
+            h('section', { className: 'kpis', 'aria-label': '核心指标' },
+              [
+                ['订单量', '3,842', '比昨日 +9.8%'],
+                ['转化率', '3.6%', '比昨日 +0.2 个百分点'],
+                ['客单价', '¥334', '比昨日 +¥6'],
+              ].map(([k, v, m]) => h('div', { className: 'kpi', key: k },
+                h('p', { className: 'k' }, k),
+                h('p', { className: 'v' }, v),
+                h('p', { className: 'm' }, m)
+              ))
+            ),
+
+            h('div', { className: 'grid' },
+              h('section', { className: 'card', 'aria-labelledby': 'chart-title' },
+                h('h2', { id: 'chart-title' }, '成交额走势'),
+                h('p', { className: 'sub' }, '过去 7 天，按天汇总，单位万元'),
+                h(Chart)
+              ),
+              h('section', { className: 'card', 'aria-labelledby': 'mix-title' },
+                h('h2', { id: 'mix-title' }, '渠道结构'),
+                h('p', { className: 'sub' }, '按成交额占比，自然搜索仍是主入口'),
+                h('svg', { viewBox: '0 0 320 180', role: 'img', 'aria-label': '渠道成交额占比条形图', style: { width: '100%', height: 'auto' } },
+                  CHANNELS.map((c, i) => {
+                    const bw = Math.round((c.gmv / 486200) * 220)
+                    const yy = 8 + i * 34
+                    return h('g', { key: c.id },
+                      h('text', { x: 0, y: yy + 12, fontSize: 12, fill: 'rgba(0,0,0,.6)' }, c.name),
+                      h('rect', { x: 64, y: yy + 2, width: bw, height: 14, rx: 4, fill: i === 0 ? '#001a57' : '#d9e1ff' }),
+                      h('text', { x: 64 + bw + 8, y: yy + 13, fontSize: 12, fill: 'rgba(0,0,0,.6)' }, c.share)
+                    )
+                  })
+                )
+              )
+            ),
+
+            h('section', { className: 'card table-card', 'aria-labelledby': 'table-title' },
+              h('div', { className: 'table-head' },
+                h('div', null,
+                  h('h2', { id: 'table-title' }, '渠道明细'),
+                  h('p', { className: 'sub' }, weekEmpty ? '本周尚未生成，明早 8 点更新' : '今日 5 个渠道，按成交额排序')
+                ),
+                h(Button, { variant: 'outline', onClick: () => setOpen(true) }, '导出明细')
+              ),
+              weekEmpty
+                ? h('div', { className: 'empty' },
+                    h('b', null, '本周数据还没出来'),
+                    h('span', null, '周一的数据在周二早上 8 点生成，先看今日或近 7 天。')
+                  )
+                : h(Table, { data, columns, rowKey: 'id', size: 'medium', stripe: false, hover: true })
+            ),
+
+            h('footer', null,
+              h('div', { className: 'foot-cols' },
+                [
+                  ['产品', ['总览', '报表', '渠道']],
+                  ['数据', ['指标字典', '更新时间', '导出记录']],
+                  ['帮助', ['快捷键', '反馈', '状态页']],
+                ].map(([title, links]) => h('div', { key: title },
+                  h('h3', null, title),
+                  links.map((t) => h('a', { key: t, href: '#' }, t))
+                ))
+              ),
+              h('p', { className: 'foot-note' }, 'MetricRail · 数据每日 09:30 更新 · 仅供内部经营分析使用')
+            )
+          )
+        ),
+
+        h(Dialog, {
+          visible: open,
+          header: '导出今日数据',
+          onClose: () => setOpen(false),
+          onConfirm: exportData,
+          confirmBtn: { content: '导出 CSV', loading },
+          cancelBtn: '取消',
+          width: 420,
+        }, h('p', { style: { margin: 0, lineHeight: '22px' } },
+          '将导出今日 3,842 行渠道明细，包含访客、转化率与成交额。文件约 1.2 MB。'))
+      )
     }
-    setFieldState(el.start,'success'); setFieldState(el.end,'success'); setFieldState(el.channel,'idle');
-    el.start.removeAttribute('aria-invalid'); el.end.removeAttribute('aria-invalid');
-    el.formMsg.setAttribute('data-state','success');
-    el.formMsg.textContent = '日期范围有效，已应用筛选。';
-    state.start=si; state.end=ei;
-    var len = ei-si+1;
-    state.tab = (len===7 && ei===DAYS-1) ? '7' : (len===30 && ei===DAYS-1) ? '30' : (len===90 && ei===DAYS-1) ? '90' : 'custom';
-    markTab(state.tab==='custom' ? null : state.tab);
-    render();
-    return true;
-  }
-  el.form.addEventListener('submit', function(ev){ ev.preventDefault(); validateAndApply(); });
 
-  // 渠道即时联动（content/patterns/carbon--filtering.md:41 instant updates）
-  el.channel.addEventListener('change', function(){
-    state.channel = chIdx(el.channel.value);
-    render();
-  });
-  el.keyword.addEventListener('input', function(){ state.keyword = el.keyword.value; renderTable(); renderChrome(); });
-
-  // 周期切换：tablist 键盘（方向键 / Home / End）
-  function selectTab(btn){
-    var days = Number(btn.getAttribute('data-days'));
-    state.end = DAYS-1; state.start = DAYS-days;
-    state.tab = String(days);
-    markTab(days); syncInputs(); resetValidation(); render();
-  }
-  el.tabs.addEventListener('click', function(ev){
-    var b = ev.target.closest('[role="tab"]'); if (b) selectTab(b);
-  });
-  el.tabs.addEventListener('keydown', function(ev){
-    var tabs = Array.prototype.slice.call(el.tabs.querySelectorAll('[role="tab"]'));
-    var i = tabs.indexOf(document.activeElement);
-    if (i<0) return;
-    var j = null;
-    if (ev.key==='ArrowRight') j=(i+1)%tabs.length;
-    else if (ev.key==='ArrowLeft') j=(i-1+tabs.length)%tabs.length;
-    else if (ev.key==='Home') j=0;
-    else if (ev.key==='End') j=tabs.length-1;
-    if (j!==null){ ev.preventDefault(); tabs[j].focus(); selectTab(tabs[j]); }
-  });
-
-  function clearAll(){
-    state.start=DEFAULT_START; state.end=DEFAULT_END; state.channel=-1; state.keyword=''; state.tab='7';
-    el.keyword.value='';
-    markTab(7); syncInputs(); resetValidation();
-    el.formMsg.setAttribute('data-state','success');
-    el.formMsg.textContent = '已清空筛选，回到近 7 日 · 全部渠道。';
-    render();
-  }
-  el.clear.addEventListener('click', clearAll);
-  $('emptyClear').addEventListener('click', clearAll);
-
-  // ---- 图例：悬停将其它系列降到 30%（Carbon legends :86）；点击隔离（:90-98） ----
-  function applySeriesOpacity(){
-    var legendItems = el.legend.querySelectorAll('.legend-item');
-    legendItems.forEach(function(li){
-      var key = li.getAttribute('data-series');
-      var on = state.series[key];
-      li.setAttribute('aria-pressed', on?'true':'false');
-      var poly = el.chart.querySelector('polyline[data-series="'+key+'"]');
-      if (poly) poly.setAttribute('opacity', on?'1':'0');
-      var circles = el.chart.querySelectorAll('circle');
-      circles.forEach(function(c){ c.setAttribute('opacity', state.series.current?'1':'0'); });
-    });
-  }
-  el.legend.addEventListener('mouseover', function(ev){
-    var li = ev.target.closest('.legend-item'); if (!li) return;
-    var key = li.getAttribute('data-series'), other = key==='current'?'previous':'current';
-    var p = el.chart.querySelector('polyline[data-series="'+other+'"]');
-    if (p && state.series[other]) p.setAttribute('opacity','0.3');
-    el.chart.querySelectorAll('circle').forEach(function(c){ if (key!=='current') c.setAttribute('opacity','0.3'); });
-  });
-  el.legend.addEventListener('mouseout', function(ev){
-    var li = ev.target.closest('.legend-item'); if (!li) return;
-    if (li.contains(ev.relatedTarget)) return;
-    applySeriesOpacity();
-  });
-  el.legend.addEventListener('click', function(ev){
-    var li = ev.target.closest('.legend-item'); if (!li) return;
-    var key = li.getAttribute('data-series'), other = key==='current'?'previous':'current';
-    if (state.series[key] && !state.series[other]) return; // 至少留一条
-    state.series[key] = !state.series[key];
-    applySeriesOpacity();
-  });
-
-  // ---- 图表 tooltip：重复该点在两轴上的值（Carbon chart-anatomy :47） ----
-  el.chartBox.addEventListener('mousemove', function(ev){
-    if (!chartData || !chartData.len) return;
-    var box = el.chart.getBoundingClientRect();
-    var x = ev.clientX-box.left, W = box.width;
-    var i = chartData.len===1 ? 0 : Math.round((x-8)/(W-16)*(chartData.len-1));
-    i = Math.max(0, Math.min(chartData.len-1, i));
-    var a=chartData.cur[i], b=chartData.prev[i];
-    el.tip.hidden = false;
-    el.tip.innerHTML = '<b>'+short(a.date)+'</b><span>本期 '+num(a.v)+' 元</span><span>上期 '+(b.date==='—'?'—':num(b.v)+' 元')+'</span>';
-    var tw = el.tip.offsetWidth, left = Math.max(0, Math.min(box.width-tw, ev.clientX-box.left+12));
-    el.tip.style.left = left+'px';
-    el.tip.style.top = Math.max(0, ev.clientY-el.chartBox.getBoundingClientRect().top-70)+'px';
-  });
-  el.chartBox.addEventListener('mouseleave', function(){ el.tip.hidden = true; });
-
-  // ---- 下钻抽屉：Esc 挂 document，关闭回焦触发点 ----
-  var lastTrigger = null;
-  function openDrawer(c, r, trigger){
-    lastTrigger = trigger;
-    var len = state.end-state.start+1;
-    var now = cellRange(state.start,state.end,c,r);
-    var before = cellRange(state.start-len>=0?state.start-len:0, state.end-len>=0?state.end-len:0, c,r);
-    el.drawerPath.textContent = '总览 → '+RG[r].name+' → '+CH[c].name+' · '+periodLabel();
-    el.drawerSum.innerHTML = '';
-    var items = [
-      ['周期成交额（元）', num(now.gmv)],
-      ['周期订单量', num(now.orders)],
-      ['客单价（元）', money(now.gmv/now.orders)],
-      ['环比上期', pct(before.gmv>0?delta(now.gmv,before.gmv):0)]
-    ];
-    items.forEach(function(p){
-      var div=document.createElement('div');
-      var dt=document.createElement('dt'); dt.textContent=p[0];
-      var dd=document.createElement('dd'); dd.className='tnum'; dd.textContent=p[1];
-      div.appendChild(dt); div.appendChild(dd); el.drawerSum.appendChild(div);
-    });
-    var show = Math.min(14, len);
-    el.drawerDailyTitle.textContent = '按日成交额（元）· 最近 '+show+' 天';
-    el.drawerList.innerHTML = '';
-    for (var q=len-show; q<len; q++){
-      var d = state.start+q;
-      var li=document.createElement('li');
-      var s1=document.createElement('span'); s1.textContent=short(DATES[d]);
-      var s2=document.createElement('span'); s2.textContent=num(CELL[d][c][r].gmv);
-      li.appendChild(s1); li.appendChild(s2); el.drawerList.appendChild(li);
-    }
-    el.scrim.hidden = false; el.drawer.hidden = false;
-    // 同步强制一次布局后加类：无头/后台标签页会节流 requestAnimationFrame，
-    // 用 rAF 加类会让抽屉停在 translateX(100%) 的屏外状态（实测回炉）。
-    void el.drawer.offsetWidth;
-    el.drawer.classList.add('is-open');
-    el.drawerClose.focus();
-  }
-  function closeDrawer(){
-    if (el.drawer.hidden) return;
-    el.drawer.classList.remove('is-open');
-    el.scrim.hidden = true;
-    el.drawer.hidden = true;
-    if (lastTrigger) lastTrigger.focus();
-  }
-  el.tbody.addEventListener('click', function(ev){
-    var b = ev.target.closest('.drill');
-    if (b) openDrawer(Number(b.dataset.c), Number(b.dataset.r), b);
-  });
-  el.drawerClose.addEventListener('click', closeDrawer);
-  el.scrim.addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', function(ev){
-    if (ev.key==='Escape'){ closeDrawer(); }
-  });
-
-  // ---- 导出：CSV 由同一份数据生成；复制成功态真实写入 ----
-  function buildCsv(){
-    var rows = tableRows();
-    var lines = ['区域,渠道,成交额（元）,订单量,客单价（元）,环比'];
-    rows.forEach(function(x){
-      lines.push([x.region,x.channel,x.gmv,x.orders,x.aov.toFixed(2),pct(x.delta)].join(','));
-    });
-    return {text:lines.join('\n'), count:rows.length, rows:rows};
-  }
-  el.exportBtn.addEventListener('click', function(){
-    var out = buildCsv();
-    el.csvText.textContent = out.text;
-    el.exportMeta.textContent = periodLabel()+' · '+channelLabel()+' · '+short(DATES[state.start])+' 至 '+short(DATES[state.end])+' · 共 '+out.count+' 行';
-    el.copyStatus.hidden = true;
-    el.copyBtn.textContent = '复制 CSV';
-    el.copyBtn.removeAttribute('data-state');
-    el.dialog.showModal();
-    el.copyBtn.focus();
-  });
-  el.dialogClose.addEventListener('click', function(){ el.dialog.close(); });
-  el.dialog.addEventListener('close', function(){ el.exportBtn.focus(); });
-  // 页面内所有 innerHTML 只写入本文件确定性生成的内容（内部数字、固定字符串与 SVG 折线），
-  // 不拼接任何用户输入；关键词仅用于过滤数组，不进入 HTML。因此无外部可控注入面。
-  el.copyBtn.addEventListener('click', function(){
-    var text = el.csvText.textContent;
-    function execCopy(){
-      var ta = document.createElement('textarea');
-      ta.value = text; ta.setAttribute('readonly','');
-      ta.style.position='fixed'; ta.style.top='-1000px';
-      document.body.appendChild(ta); ta.select();
-      var ok=false;
-      try { ok = document.execCommand('copy'); } catch(e){ ok=false; }
-      document.body.removeChild(ta);
-      return ok;
-    }
-    function selectPre(){
-      var r=document.createRange(); r.selectNodeContents(el.csvText);
-      var s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
-      el.csvText.focus();
-    }
-    function done(ok){
-      if (ok){
-        el.copyBtn.setAttribute('data-state','success');
-        el.copyBtn.textContent = '已复制';
-        el.copyStatus.hidden = false;
-        el.copyStatus.textContent = '已复制 '+buildCsv().count+' 行到剪贴板';
-      } else {
-        el.copyBtn.removeAttribute('data-state');
-        el.copyStatus.hidden = false;
-        el.copyStatus.textContent = '复制未成功，已选中下方 CSV 文本，请手动复制。';
-        selectPre();
-      }
-    }
-    // 先走用户手势内的同步 execCommand：file:// 下 navigator.clipboard 常被拒；
-    // 失败再试异步 API，且 catch 里不抛未处理拒绝。
-    var ok = execCopy();
-    if (ok) done(true);
-    else if (navigator.clipboard && navigator.clipboard.writeText){
-      try {
-        var p = navigator.clipboard.writeText(text);
-        if (p && p.then) p.then(function(){ done(true); })['catch'](function(){ done(false); });
-        else done(false);
-      } catch(e){ done(false); }
-    } else done(false);
-  });
-
-  // ---- 初始化 ----
-  syncInputs();
-  render();
-  // 宽度变化时重画折线（几何 derived，随容器实际宽度走）
-  var lastW = Math.round(el.chartBox.getBoundingClientRect().width);
-  window.addEventListener('resize', function(){
-    var w = Math.round(el.chartBox.getBoundingClientRect().width);
-    if (w !== lastW){ lastW = w; buildChart(); applySeriesOpacity(); }
-  });
-})();
-</script>
+    createRoot(document.getElementById('root')).render(h(App))
+  </script>
 </body>
 </html>

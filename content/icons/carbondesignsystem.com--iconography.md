@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Iconography 图标"
+title: "IBM Carbon · Foundation · Iconography 图标"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/icons/usage.mdx
 section: icons
 tag: "规范"
@@ -9,20 +9,13 @@ id: icons-14
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Iconography 图标
+# IBM Carbon · Foundation · Iconography 图标
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/icons/usage.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/icons/usage.mdx)
 
 ---
 
 > Icons are visual symbols used to represent ideas, objects, or actions. They communicate messages at a glance, afford interactivity, and draw attention to important information.
-
-## Resources
-
-- [IBM® UI Icon Library](https://www.figma.com/design/J5c0d85dSJn9JnBhSYYLmD/IBM%C2%AE-UI-Icon-Library?m=auto)
-- [Elements package: Icons](https://github.com/carbon-design-system/carbon/tree/main/packages/icons)
-- [Elements package: Icons-React](https://github.com/carbon-design-system/carbon/tree/main/packages/icons-react)
-- [Carbon Animated Icons Collection](https://carbon-design-system.github.io/icons-motion/#/)
 
 ## Designing with icons
 

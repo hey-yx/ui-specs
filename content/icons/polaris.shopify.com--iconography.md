@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Iconography 图标"
+title: "Polaris · Foundation · Iconography 图标"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/icons/index.mdx
 section: icons
 tag: "规范"
@@ -9,7 +9,7 @@ id: icons-1
 publisher: "Shopify"
 ---
 
-# Polaris · Iconography 图标
+# Polaris · Foundation · Iconography 图标
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/icons/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/icons/index.mdx)
 

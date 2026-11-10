@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Contact a department or service team 联系部门"
 source: https://design-system.service.gov.uk/patterns/contact-a-department-or-service-team/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-22
 publisher: "GOV.UK Design System"
@@ -13,25 +13,11 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/contact-a-department-or-service-team/](https://design-system.service.gov.uk/patterns/contact-a-department-or-service-team/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
+## Help users to  Contact a department or service team
+
 Give users contact information within your service.
-
-**示例：default**
-
-```njk
-<h2 class="govuk-heading-m">Get help with your application</h2>
-
-<ul class="govuk-list">
-  <li>Phone: 020 7946 0101</li>
-  <li>Monday to Friday, 9am to 5pm (except public holidays)</li>
-</ul>
-<p class="govuk-body">
-  <a class="govuk-link" href="#">Find out about call charges</a>
-</p>
-```
 
 ## When to use this pattern
 
@@ -41,63 +27,9 @@ Read about how and why to [set up user support](https://www.gov.uk/service-manua
 
 ## How it works
 
-**示例：all-contact-information**
-
-```njk
-<h2 class="govuk-heading-m">Get help with your application</h2>
-
-<h3 class="govuk-heading-s">Phone</h3>
-
-<p class="govuk-body">If you have a unique reference number, have it with you when you call.</p>
-
-<ul class="govuk-list">
-  <li>Phone: 020 7946 0101</li>
-  <li>Textphone: 020 7946 0102</li>
-  <li>Monday to Friday, 8am to 6pm</li>
-  <li>Saturday and Sunday, 10am to 4pm</li>
-  <li class="govuk-!-margin-top-5">Welsh language: 020 7946 0103</li>
-  <li>Monday to Friday, 8:30am to 5pm</li>
-</ul>
-<p class="govuk-body">
-  <a class="govuk-link" href="#">Find out about call charges</a>
-</p>
-
-<h3 class="govuk-heading-s">Email</h3>
-
-<ul class="govuk-list">
-  <li><a class="govuk-link" href="#">name@example.com</a></li>
-  <li>We aim to respond within 2 working days</li>
-</ul>
-
-<h3 class="govuk-heading-s">Webchat</h3>
-
-<ul class="govuk-list">
-  <li><a class="govuk-link" href="#">Speak to an adviser now</a></li>
-  <li>Current waiting time is 17 minutes</li>
-</ul>
-
-<h3 class="govuk-heading-s">Address</h3>
-
-<p class="govuk-body">
-  49 to 53 Cherry Street<br>
-  London<br>
-  AB1 2DC
-</p>
-
-<h3 class="govuk-heading-s">Social media</h3>
-
-<p class="govuk-body">You can use Twitter to get general help. We cannot discuss specific cases or individual applications, so please do not give any personal details.</p>
-
-<p class="govuk-body">
-  Twitter: @GOVUK
-</p>
-```
-
 Order contact channels based on what research shows your users need, and what your service or department can best support.
 
 Show contact channels in the same order throughout your service. This helps users to find what they need more easily.
-
-### Social media
 
 If you have social media channels, list these channels last. Tell users not to share personal information where others can see it.
 
@@ -111,20 +43,6 @@ Tell users if they might have to pay to use any of your contact channels.
 
 For phone call charges, link to the GOV.UK page on [call charges](https://www.gov.uk/call-charges). Include the link after the contact channels list and opening hours.
 
-**示例：default**
-
-```njk
-<h2 class="govuk-heading-m">Get help with your application</h2>
-
-<ul class="govuk-list">
-  <li>Phone: 020 7946 0101</li>
-  <li>Monday to Friday, 9am to 5pm (except public holidays)</li>
-</ul>
-<p class="govuk-body">
-  <a class="govuk-link" href="#">Find out about call charges</a>
-</p>
-```
-
 ### Give opening hours
 
 Follow the GOV.UK style guide format for [time ranges](https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/a-to-z-style-guide/#times) and [date ranges](https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/style-guides/a-to-z-style-guide/#dates).
@@ -135,34 +53,19 @@ For example, ‘Monday to Friday, 9am to midday and 2pm to 4:30pm (closed on ban
 
 ### Tell users how long they’ll have to wait
 
-Tell users when you'll respond to them. This helps users choose which contact channel to use.
+Tell users when you’ll respond to them. This helps users choose which contact channel to use.
 
-For example, tell users how long it'll usually take to:
+For example, tell users how long it’ll usually take to:
 
-- receive a response to their email
-- get to the front of your webchat queue
+*   receive a response to their email
+*   get to the front of your webchat queue
 
 ### Inset contact information
 
 Use the [Inset text component](https://design-system.service.gov.uk/components/inset-text/) to display contact information when you want to differentiate it from the content that surrounds it.
 
-**示例：inset-contact-information**
-
-```njk
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
-{% call govukInsetText() %}
-  <h2 class="govuk-heading-m">Talk to an advisor</h2>
-  <ul class="govuk-list">
-    <li>Phone: 020 7946 0101</li>
-    <li>Textphone: 020 7946 0102</li>
-    <li>Monday to Friday, 9am to 5pm (except public holidays)</li>
-  </ul>
-  <p class="govuk-body">
-    <a class="govuk-link" href="#">Find out about call charges</a>
-  </p>
-{% endcall %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/contact-a-department-or-service-team/#contact-information-inset-text-contact-a-department-or-service-team-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/contact-a-department-or-service-team/#contact-information-inset-text-contact-a-department-or-service-team-example-nunjucks)
 
 ### Expanding contact information
 
@@ -171,29 +74,6 @@ If contact information is less important than other content on a page, you can e
 For example, if you need to provide contact information at the bottom of a form page for users who need help completing the form.
 
 Only do this when there’s a lot of contact information to display. When there are only 1 or 2 lines, include the contact information within the body of the page.
-
-**示例：expanding-contact-information**
-
-```njk
-{% from "govuk/components/details/macro.njk" import govukDetails %}
-
-{% call govukDetails({
-  summaryText: "If you need help completing this form"
-}) %}
-  <ul class="govuk-list">
-    <li>Phone: 020 7946 0101</li>
-    <li>Monday to Friday, 8am to 6pm (except public holidays)</li>
-    <li>Saturday and Sunday, 10am to 4pm</li>
-  </ul>
-  <p class="govuk-body">
-    <a class="govuk-link" href="#">Find out about call charges</a>
-  </p>
-  <ul class="govuk-list">
-    <li><a class="govuk-link" href="#">name@example.com</a></li>
-    <li>We aim to respond within 2 working days</li>
-  </ul>
-{% endcall %}
-```
 
 ## Research on this pattern
 
@@ -205,5 +85,5 @@ The examples and guidance here are based on patterns used by the Legal Aid Agenc
 
 Research is needed to work out:
 
-- if users who are signed into a service need a different approach
-- how to give contact information to users who need urgent help
+*   if users who are signed into a service need a different approach
+*   how to give contact information to users who need urgent help

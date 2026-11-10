@@ -3,7 +3,7 @@ title: "GOV.UK · Component · Language navigation 语言切换导航"
 source: https://design-system.service.gov.uk/components/language-navigation/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-29
 publisher: "GOV.UK Design System"
@@ -13,33 +13,21 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/language-navigation/](https://design-system.service.gov.uk/components/language-navigation/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+**Trial**
+
+This component is being developed and may change as we improve it. Read more about [the lifecycle of our components](https://design-system.service.gov.uk/community/component-lifecycle-statuses/).
+
+Read these sections to see why this component is in trial:
+
+*   [Research on this component](https://design-system.service.gov.uk/components/language-navigation/#research-on-this-component)
+*   [Help improve this component](https://design-system.service.gov.uk/components/language-navigation/#help-improve-this-page)
 
 The Language navigation component helps users choose and switch between languages when using a service.
 
-**示例：default**
-
-```njk
-{% from "govuk/components/language-navigation/macro.njk" import govukLanguageNavigation %}
-
-{{ govukLanguageNavigation({
-  items: [
-    {
-      text: "English",
-      lang: "en",
-      href: "#",
-      current: true
-    },
-    {
-      text: "Cymraeg",
-      lang: "cy",
-      href: "#"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/language-navigation/#language-navigation-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/language-navigation/#language-navigation-example-nunjucks)
 
 ## When to use this component
 
@@ -49,8 +37,8 @@ For example, to help users switch from a page in English to a version of the sam
 
 How you use this component will depend on whether you offer a choice of languages for:
 
-- [specific pages within your service](#if-you-only-offer-specific-pages-in-another-language)
-- [your whole service](#if-you-offer-your-whole-service-in-another-language)
+*   [specific pages within your service](https://design-system.service.gov.uk/components/language-navigation/#if-you-only-offer-specific-pages-in-another-language)
+*   [your whole service](https://design-system.service.gov.uk/components/language-navigation/#if-you-offer-your-whole-service-in-another-language)
 
 ## When not to use this component
 
@@ -60,13 +48,13 @@ Do not use this component unless you can provide all the same key information on
 
 The Language navigation component shows users a choice of languages and helps the user choose and switch between them.
 
-Use the native name of each language, such as <span lang="cy">Cymraeg</span> for Welsh. This helps speakers of that language recognise the link.
+Use the native name of each language, such as Cymraeg for Welsh. This helps speakers of that language recognise the link.
 
-The component does not translate content. You'll need to create, test and maintain content for all the languages you offer your service in.
+The component does not translate content. You’ll need to create, test and maintain content for all the languages you offer your service in.
 
-See some of the other things you might need to do as part of [designing services that offer multiple languages](#designing-services-that-offer-multiple-languages).
+See some of the other things you might need to do as part of [designing services that offer multiple languages](https://design-system.service.gov.uk/components/language-navigation/#designing-services-that-offer-multiple-languages).
 
-Make sure the user does not lose any data they've entered when they navigate to another language. Do not ask the user to re-enter information they've already given.
+Make sure the user does not lose any data they’ve entered when they navigate to another language. Do not ask the user to re-enter information they’ve already given.
 
 ### Placement on pages
 
@@ -82,44 +70,8 @@ You could place the language navigation at the top of a page, after the `h1` ele
 
 If you choose to place the language navigation elsewhere on a page, it should be in a sensible place in the page heading structure with its own visible or hidden heading.
 
-**示例：after-h1**
-
-```njk
-{% extends "example-wrappers/full-page.njk" %}
-
-{% from "govuk/components/language-navigation/macro.njk" import govukLanguageNavigation %}
-
-{% block content %}
-  <!--
-    Note the override class adding the same margin
-    as the heading would have to this `<div>`
-  -->
-  <div class="govuk-!-margin-bottom-8">
-    <!--
-      Note the override class setting a smaller margin between
-      the heading and the Language navigation
-    -->
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Find protected areas of countryside</h1>
-    {{ govukLanguageNavigation({
-      items: [
-        {
-          text: "English",
-          lang: "en",
-          href: "#",
-          current: true
-        },
-        {
-          text: "Cymraeg",
-          lang: "cy",
-          href: "#"
-        }
-      ]
-    }) }}
-  </div>
-  <p class="govuk-body">Nature sites and areas of countryside can be ‘designated’, which means they have special status as protected areas because of their natural and cultural importance.</p>
-  <p class="govuk-body">...</p>
-{% endblock %}
-```
+*   [HTML](https://design-system.service.gov.uk/components/language-navigation/#language-navigation-after-h1-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/language-navigation/#language-navigation-after-h1-example-nunjucks)
 
 ### If you offer your whole service in another language
 
@@ -127,89 +79,25 @@ If users can change the language for your whole service, you can place the [Lang
 
 The Service navigation component includes options to align the language navigation with navigation items as shown in this example.
 
-**示例：with-inline-end-slot**
-
-```njk
-{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-{% from "govuk/components/language-navigation/macro.njk" import govukLanguageNavigation %}
-
-{% set languageNavigationHtml %}
-  {{ govukLanguageNavigation({
-    items: [
-      {
-        text: "English",
-        lang: "en",
-        href: "#",
-        current: true
-      },
-      {
-        text: "Cymraeg",
-        lang: "cy",
-        href: "#"
-      }
-    ]
-  }) }}
-{% endset %}
-
-{{ govukServiceNavigation({
-  serviceName: "Service name",
-  serviceUrl: "#",
-  navigation: [
-    {
-      href: "#",
-      text: "Item 1"
-    },
-    {
-      href: "#",
-      text: "Item 2",
-      active: true
-    }
-  ],
-  slots: {
-    end: {
-      html: languageNavigationHtml,
-      align: 'inline'
-    }
-  }
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/language-navigation/#service-navigation-with-inline-end-slot-service-navigation-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/language-navigation/#service-navigation-with-inline-end-slot-service-navigation-example-nunjucks)
 
 ### Ensure hidden text and attributes are in the correct languages
 
 The code in this component contains a navigation landmark and some hidden text to help users, including users of assistive technology. Make sure to translate these attributes as needed.
 
-`aria-label` (or `ariaLabel` in Nunjucks) labels the component's navigation landmark. By default the label is 'language', which will be announced by a screen reader as 'language navigation'. Translate this label to the language of the page it's on.
+`aria-label` (or `ariaLabel` in Nunjucks) labels the component’s navigation landmark. By default the label is ‘language’, which will be announced by a screen reader as ‘language navigation’. Translate this label to the language of the page it’s on.
 
-Hidden text within the link for each language option (or `languageDescriptionText` in Nunjucks) explains what the link will do. For example, 'Change the language to English'. Translate these to the language you're linking to.
+Hidden text within the link for each language option (or `languageDescriptionText` in Nunjucks) explains what the link will do. For example, ‘Change the language to English’. Translate these to the language you’re linking to.
 
-### Language navigation on dark backgrounds
+### Language navigation on dark backgrounds
 
 Use the `govuk-language-navigation--inverse` modifier class to show white links and text on a dark background – for example, inside a Service navigation with a dark background.
 
 Make sure all users can see the language navigation – the background colour must have a contrast ratio of at least 4.5:1 with white to [meet WCAG 2.2 success criterion 1.4.3 Contrast (minimum), level AA](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
-**示例：inverse**
-
-```njk
-{% from "govuk/components/language-navigation/macro.njk" import govukLanguageNavigation %}
-
-{{ govukLanguageNavigation({
-  classes: 'govuk-language-navigation--inverse',
-  items: [
-    {
-      text: "English",
-      lang: "en",
-      href: "#",
-      current: true
-    },
-    {
-      text: "Cymraeg",
-      lang: "cy",
-      href: "#"
-    }
-  ]
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/components/language-navigation/#invers-language-navigation-language-navigation-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/language-navigation/#invers-language-navigation-language-navigation-example-nunjucks)
 
 ## Designing services that offer multiple languages
 
@@ -237,7 +125,21 @@ Thank you to the teams in departments across government who worked with us to co
 
 We know from research contributed that users:
 
-- want the option to change language to be easy to find and recognise
-- want data to persist so they can navigate between languages and understand unfamiliar words
-- want navigating languages across government services to be consistent
-- want to change the language for a whole journey or page whilst moving through a service
+*   want the option to change language to be easy to find and recognise
+*   want data to persist so they can navigate between languages and understand unfamiliar words
+*   want navigating languages across government services to be consistent
+*   want to change the language for a whole journey or page whilst moving through a service
+
+If you use this component, we’d like to get your feedback to help us improve it.
+
+We’d particularly like to know more about how different services use language navigation and how well users find it.
+
+Until we’re confident we’re providing well-defined guidance for services to use language navigation consistently in a way that meets user needs, we’ll keep this component in trial status.
+
+**Trial**
+
+In August 2026 we moved Language navigation to trial status so we can learn how well it works for services.
+
+See the information we're looking for and how you can help move this component into stable status:
+
+[Tell us how well Language navigation works in your service](https://github.com/alphagov/govuk-design-system/discussions/5620)

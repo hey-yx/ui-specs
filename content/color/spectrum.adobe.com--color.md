@@ -1,33 +1,41 @@
 ---
-title: "Spectrum · Color 色彩"
+title: "Spectrum · Foundation · Color 色彩"
 source: https://spectrum.adobe.com/foundations/color
 section: color
 tag: "规范"
-fetched: 2026-10-19
+fetched: 2026-11-09
 status: full
 id: color-5
 publisher: "Adobe Spectrum"
 ---
 
-# Spectrum · Color 色彩
+# Spectrum · Foundation · Color 色彩
 
 > 来源：[https://spectrum.adobe.com/foundations/color](https://spectrum.adobe.com/foundations/color)
 
 ---
 
+## Color
+
 Spectrum’s color system is used for all colored components, text, and icons, for both semantic and non-semantic usage. We also use colors in our data visualization color palettes.
 
-   ![Five circles in a row transitioning from a solid saturated blue on the left to a faint dotted outline on the right, illustrating a fading or transparency progression, on a matching blue-to-white gradient background.](https://spectrum.adobe.com/foundations/media_127f8d666908a0c5bb9520cfb763318ace12e2a14.png?width=750&format=png&optimize=medium)
+![Five circles in a row transitioning from a solid saturated blue on the left to a faint dotted outline on the right, illustrating a fading or transparency progression, on a matching blue-to-white gradient background.](https://spectrum.adobe.com/page/iconography/media_127f8d666908a0c5bb9520cfb763318ace12e2a14.png?width=750&format=png&optimize=medium)
 
 ## Principles
+
+### ![A green gradient circle icon, half outlined and half filled, representing accessibility.](https://spectrum.adobe.com/page/iconography/media_1c94508d2c8164b33419f7de3b02ce8d1743a2884.png?width=750&format=png&optimize=medium)
 
 ### Accessible
 
 Spectrum colors are purposefully chosen and combined with one another to create accessible experiences that work for all users across different products, devices, and settings.
 
+### ![A blue gradient icon of two diagonal arrows pointing away from each other, representing scalability.](https://spectrum.adobe.com/page/iconography/media_10985f419157e45e54cd587380a88c865e3ddca53.png?width=750&format=png&optimize=medium)
+
 ### Scalable
 
 Spectrum uses structured relationships between colors, grays, themes, and contrast ratios so it can work consistently across Adobe’s many apps, surfaces, and modes.
+
+### ![A purple-to-pink gradient icon of three interlocking rings, representing intentional or purposeful design.](https://spectrum.adobe.com/page/iconography/media_1bd273c6063e5b01f5c689a82cead8f8265f0714b.png?width=750&format=png&optimize=medium)
 
 ### Purposeful
 
@@ -37,7 +45,7 @@ Color is used to create hierarchy, signal meaning, and guide attention. Spectrum
 
 Spectrum’s color system helps you apply color to your UI in a consistent and visually harmonious way. Spectrum’s color system is based on a foundation of visual perception, inclusive design, and accessibility. Spectrum uses the relationships between colors and their properties to create a scalable foundation for color in the design system. Dark and light variants of each color can then be applied to your UI in different ways. Spectrum colors are generated using the Leonardo color tool, by plugging in hues and hue ranges through key colors and combined with target contrast ratios for each color.
 
-   ![A large grid of color swatches showing 15 hue rows (red, orange, yellow, brown, chartreuse, green, teal, cyan, blue, indigo, purple, magenta, fuchsia, pink, and crimson) each with 16 columns transitioning from light to dark.](https://spectrum.adobe.com/foundations/media_1b61b63c16d0c1bd67be971ead2447f6a4fb87a03.png?width=750&format=png&optimize=medium)
+![A large grid of color swatches showing 15 hue rows (red, orange, yellow, brown, chartreuse, green, teal, cyan, blue, indigo, purple, magenta, fuchsia, pink, and crimson) each with 16 columns transitioning from light to dark.](https://spectrum.adobe.com/page/iconography/media_1b61b63c16d0c1bd67be971ead2447f6a4fb87a03.png?width=750&format=png&optimize=medium)
 
 ## Application of brand color
 
@@ -45,17 +53,13 @@ Spectrum’s color system helps you apply color to your UI in a consistent and v
 
 ### Brand colors may differ from Spectrum colors
 
-   ![Six vertical color ramps labeled with Adobe app icons (Ai, Sg, Ps, Ae, Xd, Id), each transitioning from a light tint at top to a dark shade at bottom in the app's brand color: orange, green, blue, indigo, magenta, and pink/red.](https://spectrum.adobe.com/foundations/media_11dbaa344681e410a0abb24a800f8f99770341781.png?width=750&format=png&optimize=medium)
+![Six vertical color ramps labeled with Adobe app icons (Ai, Sg, Ps, Ae, Xd, Id), each transitioning from a light tint at top to a dark shade at bottom in the app's brand color: orange, green, blue, indigo, magenta, and pink/red.](https://spectrum.adobe.com/page/iconography/media_11dbaa344681e410a0abb24a800f8f99770341781.png?width=750&format=png&optimize=medium)
 
 ### Key colors (shown in hue)
 
-   ![Six horizontal gradient bars in Adobe app brand colors (orange/Ai, green/Sg, blue/Ps, indigo/Ae, magenta/Xd, pink/Xd), each labeled with numeric hue values marking key color stops along the gradient.](https://spectrum.adobe.com/foundations/media_1628ff4ce8ffc018fd2e2943fa27cb27302f9102f.png?width=750&format=png&optimize=medium)
+![Six horizontal gradient bars in Adobe app brand colors (orange/Ai, green/Sg, blue/Ps, indigo/Ae, magenta/Xd, pink/Xd), each labeled with numeric hue values marking key color stops along the gradient.](https://spectrum.adobe.com/page/iconography/media_1628ff4ce8ffc018fd2e2943fa27cb27302f9102f.png?width=750&format=png&optimize=medium)
 
-The Leonardo tool generates the color palette by using several key colors, including brand colors. Most color scales are not a single hue key color. Leonardo tends to darken and lighten on either end of the gradient by adding black and white to the key colors, so some are included to ensure a high degree of saturation in the palette. In other cases, some key colors shift the actual hue in order to keep colors bright or recognizable, or shift them to help most users avoid confusion with adjacent colors.
-
-Once the color scale is determined, lightness stops are input for each color in order to get aliased colors.
-
-   ![A blue gradient scale from light to dark with contrast ratio labels ranging from 1.06:1 to 19.5:1 at each stop, paired below with a matching swatch row numbered 100 through 1600 showing the corresponding blue shades.](https://spectrum.adobe.com/foundations/media_1b3856ffb32cd28a1427b18829e04a3ea760d4f74.png?width=750&format=png&optimize=medium)
+![A blue gradient scale from light to dark with contrast ratio labels ranging from 1.06:1 to 19.5:1 at each stop, paired below with a matching swatch row numbered 100 through 1600 showing the corresponding blue shades.](https://spectrum.adobe.com/page/iconography/media_1b3856ffb32cd28a1427b18829e04a3ea760d4f74.png?width=750&format=png&optimize=medium)
 
 ## Color backgrounds
 
@@ -65,9 +69,7 @@ Sometimes it’s necessary to use color for the background or fill of an object 
 
 For these scenarios, color must adhere to WCAG contrast minimums with the color of the text. Most colors have white text placed over the color. To maintain the identifiability of yellow, orange, chartreuse, and celery while still meeting these requirements, these colors must be used with black text. They must be fully opaque and should be referenced from the static color palette.
 
-   ![Two rows of solid-colored button-like labels grouped by text contrast: a top section 'Use with white text' showing red, brown, olive, green, teal, blue, indigo, purple, magenta, pink, dark gray, and gray backgrounds with white 'Label' text, and a bottom section 'Use with black text' showing orange, yellow, green, and lime backgrounds with black 'Label' text.](https://spectrum.adobe.com/foundations/media_130355598009d093c7bd1e12e42df413fee995fbe.png?width=750&format=png&optimize=medium)
-
-Do not use these colors without a text label representation of the color’s meaning in your application (e.g., “drafts,” “reviewed,” “new”). When using multiple colors and text labels cannot readily clarify color meaning — which is a common case in data visualization — use the categorical color palette.
+![Two rows of solid-colored button-like labels grouped by text contrast: a top section 'Use with white text' showing red, brown, olive, green, teal, blue, indigo, purple, magenta, pink, dark gray, and gray backgrounds with white 'Label' text, and a bottom section 'Use with black text' showing orange, yellow, green, and lime backgrounds with black 'Label' text.](https://spectrum.adobe.com/page/iconography/media_130355598009d093c7bd1e12e42df413fee995fbe.png?width=750&format=png&optimize=medium)
 
 ### Two-tone color pairing
 
@@ -75,7 +77,7 @@ To create two-tone color pairs, use the 100 index of your color for the backgrou
 
 Do not use these colors without a text label representation of the color’s significance in your application. These colors are not color vision deficiency safe, and could be confusing to some users.
 
-   ![Three pairs of icon swatches (a crop/sparkle tool, a PDF document stack, and a camera) shown first on light tinted backgrounds in purple, red, and green, then on matching dark backgrounds grouped within a black container.](https://spectrum.adobe.com/foundations/media_1000f1eb95187ddf34fbfdb0dd0a7b6c6d840aa28.png?width=750&format=png&optimize=medium)
+![Three pairs of icon swatches (a crop/sparkle tool, a PDF document stack, and a camera) shown first on light tinted backgrounds in purple, red, and green, then on matching dark backgrounds grouped within a black container.](https://spectrum.adobe.com/page/iconography/media_1000f1eb95187ddf34fbfdb0dd0a7b6c6d840aa28.png?width=750&format=png&optimize=medium)
 
 ## Usage guidelines
 
@@ -83,23 +85,23 @@ Do not use these colors without a text label representation of the color’s sig
 
 Every part of the interface should use a color defined by Spectrum to ensure consistency across products. Spectrum’s colors are carefully chosen and tested to ensure they meet accessibility standards.
 
-   ![Example of a correct usage. A purple pill-shaped 'Label' button next to a checklist labeled 'Interests' with a checked orange 'Travel' checkbox and unchecked 'Music' and 'Shopping' options, plus a helper text reading 'Select at least one interest.'](https://spectrum.adobe.com/foundations/media_13c6937cd9b5481376c50a5b6f4b418421f5e9253.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. A purple pill-shaped 'Label' button next to a checklist labeled 'Interests' with a checked orange 'Travel' checkbox and unchecked 'Music' and 'Shopping' options, plus a helper text reading 'Select at least one interest.'](https://spectrum.adobe.com/page/iconography/media_13c6937cd9b5481376c50a5b6f4b418421f5e9253.png?width=750&format=png&optimize=medium)
 
 ### Communicating with color
 
 In order to be accessible for as many users as possible, do not use color alone as a method of communication. For every usage of color as a feedback method, there should be an accompanying label and/or icon to communicate meaning.
 
-   ![Example of a correct usage. A text field with a red border and warning triangle icon, showing an error message 'Enter a valid email address.'](https://spectrum.adobe.com/foundations/media_130cdd17e3ef910ccab2221c2169bfd2b24189153.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. A text field with a red border and warning triangle icon, showing an error message 'Enter a valid email address.'](https://spectrum.adobe.com/page/iconography/media_130cdd17e3ef910ccab2221c2169bfd2b24189153.png?width=750&format=png&optimize=medium)
 
-   ![Example of a incorrect usage. The same text field with only a red border and no icon or error message, showing color alone without an accompanying explanation.](https://spectrum.adobe.com/foundations/media_1c9cefe91435c778a9966713132ffeb845940fbf7.png?width=750&format=png&optimize=medium)
+![Example of a incorrect usage. The same text field with only a red border and no icon or error message, showing color alone without an accompanying explanation.](https://spectrum.adobe.com/page/iconography/media_1c9cefe91435c778a9966713132ffeb845940fbf7.png?width=750&format=png&optimize=medium)
 
 ### Create hierarchy with background layer colors
 
 Use background layers for creating application hierarchy. This will ensure that dimensionality and visual/structural hierarchy is appropriately translated between light and dark themes.
 
-   ![Example of a correct usage. Two stacked panels, one light and one dark, each showing three layers labeled gray-200, gray-100, and gray-75 with minimal visual distinction between them.](https://spectrum.adobe.com/foundations/media_178653b2587e927b8a6e5c0b44d137af96530e4da.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. Two stacked panels, one light and one dark, each showing three layers labeled gray-200, gray-100, and gray-75 with minimal visual distinction between them.](https://spectrum.adobe.com/page/iconography/media_178653b2587e927b8a6e5c0b44d137af96530e4da.png?width=750&format=png&optimize=medium)
 
-   ![Example of a incorrect usage. Two stacked panels, one light and one dark, each showing three layers labeled Base, Layer 1, and Layer 2 with clear visual separation indicating hierarchy.](https://spectrum.adobe.com/foundations/media_1f9b9739c5896b12daf20a89b108ee81f1f3f8d9b.png?width=750&format=png&optimize=medium)
+![Example of a incorrect usage. Two stacked panels, one light and one dark, each showing three layers labeled Base, Layer 1, and Layer 2 with clear visual separation indicating hierarchy.](https://spectrum.adobe.com/page/iconography/media_1f9b9739c5896b12daf20a89b108ee81f1f3f8d9b.png?width=750&format=png&optimize=medium)
 
 ### Provide sufficient contrast
 
@@ -107,9 +109,9 @@ Use the appropriate gray tokens and color tokens for text, icons, and illustrati
 
 Choosing lower indexed color tokens, or using other colors for backgrounds, could result in insufficient contrast. When in doubt, check the contrast for text, icons, and UI components for all color themes supported by your product.
 
-   ![Example of a correct usage. Two cards, one light gray-200 and one black, each showing four lines of colored text (gray-600/700, red-800/900, blue-800/900, green-800/900) marked with a red 'Fail' warning icon, indicating insufficient contrast.](https://spectrum.adobe.com/foundations/media_15110077c3e594f9d8c9e58063e962e5108d0d62e.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. Two cards, one light gray-200 and one black, each showing four lines of colored text (gray-600/700, red-800/900, blue-800/900, green-800/900) marked with a red 'Fail' warning icon, indicating insufficient contrast.](https://spectrum.adobe.com/page/iconography/media_15110077c3e594f9d8c9e58063e962e5108d0d62e.png?width=750&format=png&optimize=medium)
 
-   ![Example of a incorrect usage. Two cards, one white and one black, each labeled 'Layer 1' and showing four lines of colored text (gray-700, red-900, blue-900, green-900) marked with a green 'Pass' checkmark icon, indicating sufficient contrast.](https://spectrum.adobe.com/foundations/media_1cf6f2433a57f6e0819eab3ddaf38308bf05dab80.png?width=750&format=png&optimize=medium)
+![Example of a incorrect usage. Two cards, one white and one black, each labeled 'Layer 1' and showing four lines of colored text (gray-700, red-900, blue-900, green-900) marked with a green 'Pass' checkmark icon, indicating sufficient contrast.](https://spectrum.adobe.com/page/iconography/media_1cf6f2433a57f6e0819eab3ddaf38308bf05dab80.png?width=750&format=png&optimize=medium)
 
 ### Hue and Saturation contrast
 
@@ -117,14 +119,14 @@ Avoid placing colors directly on top of or adjacent to other colors that have a 
 
 Use static white or static black components instead of colored components on top of color or image backgrounds.
 
-   ![Example of a correct usage. Two colored squares, one red and one light gray, each containing a pill-shaped 'Label' button in a matching or complementary hue with adequate contrast.](https://spectrum.adobe.com/foundations/media_15ca4c13d88e11dd08b4786512aa49253f1159101.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. Two colored squares, one red and one light gray, each containing a pill-shaped 'Label' button in a matching or complementary hue with adequate contrast.](https://spectrum.adobe.com/page/iconography/media_15ca4c13d88e11dd08b4786512aa49253f1159101.png?width=750&format=png&optimize=medium)
 
-   ![Example of a incorrect usage. A red rectangle containing a blue pill-shaped 'Label' button, showing a jarring hue and saturation clash between the background and button.](https://spectrum.adobe.com/foundations/media_1e8d1753ca0cb27e0406771145711cc317fd99e3a.png?width=750&format=png&optimize=medium)
+![Example of a incorrect usage. A red rectangle containing a blue pill-shaped 'Label' button, showing a jarring hue and saturation clash between the background and button.](https://spectrum.adobe.com/page/iconography/media_1e8d1753ca0cb27e0406771145711cc317fd99e3a.png?width=750&format=png&optimize=medium)
 
 ### Programmatic color changes
 
 Do not use color functions to modify Spectrum colors. The specific tints and shades of Spectrum’s themes were designed to be perceptually uniform. Modifying colors in the product or framework could result in undesirable colors.
 
-   ![Example of a correct usage. A code snippet reading 'color: $blue-300;' showing direct use of a color token variable.](https://spectrum.adobe.com/foundations/media_19ba20ccdb3e3fc3e9c9a566869ab3fff8945b562.png?width=750&format=png&optimize=medium)
+![Example of a correct usage. A code snippet reading 'color: $blue-300;' showing direct use of a color token variable.](https://spectrum.adobe.com/page/iconography/media_19ba20ccdb3e3fc3e9c9a566869ab3fff8945b562.png?width=750&format=png&optimize=medium)
 
-   ![Example of a incorrect usage. A code snippet reading 'color: lighten($blue-300, 15%);' showing a color token being programmatically modified rather than used as-is.](https://spectrum.adobe.com/foundations/media_1175eb8974edd034d8ed87844041434397f19af31.png?width=750&format=png&optimize=medium)
+![Example of a incorrect usage. A code snippet reading 'color: lighten($blue-300, 15%);' showing a color token being programmatically modified rather than used as-is.](https://spectrum.adobe.com/page/iconography/media_1175eb8974edd034d8ed87844041434397f19af31.png?width=750&format=png&optimize=medium)

@@ -1,5 +1,5 @@
 ---
-title: "Primer · Layout 布局"
+title: "GitHub Primer · Foundation · Layout 布局"
 source: https://raw.githubusercontent.com/primer/design/main/content/foundations/layout.mdx
 section: layout
 tag: "规范"
@@ -9,12 +9,11 @@ id: layout-19
 publisher: "Primer"
 ---
 
-# Primer · Layout 布局
+# GitHub Primer · Foundation · Layout 布局
 
 > 来源：[https://raw.githubusercontent.com/primer/design/main/content/foundations/layout.mdx](https://raw.githubusercontent.com/primer/design/main/content/foundations/layout.mdx)
 
 ---
-
 
 <p>
   <img
@@ -51,8 +50,6 @@ Pages should adapt to smaller screens, without loss of functionality. Multi-colu
 #### Consider consistency inside and outside GitHub
 
 Leverage existing mental models people have from using GitHub, the web, and other computer software. Use familiar patterns and conventions to create an experience that can be rationally understood.
-
-
 
 ## Responsive foundations
 
@@ -150,54 +147,33 @@ Don’t include custom interactive elements such as dropdown selectors or other 
 
 #### Repository context
 
-
-
-
 `:owner / :repository`
 
 Do represent repositories as direct sub-items of an organization or user in the Context region. 
-
-
 
 `:owner / :repository / Issues`
 
 Don’t use a Context region to show the full page’s path. A selected “Issues” item in the local navigation should provide enough complementary context.
 
-
-
 #### Owner context (organization or users)
-
-
-
 
 `:owner`
 
 Do represent top-level sections with a single Context region item.
 
-
-
 `:owner / Projects`
 
 Don’t use a Context region to show the full page’s path. A selected “Projects” item in the local navigation should provide enough complementary context.
 
-
-
 #### Other owned categories
-
-
-
 
 `:owner / Projects / :project`
 
 Do represent objects other than repositories as sub-items of a category. 
 
-
-
 `:owner / Projects / :project / Insights`
 
 Don’t display the full page’s path. The page should use local or in-page navigation elements to provide such context.
-
-
 
 ### App footer
 
@@ -208,7 +184,6 @@ The App footer should be present in all core pages. Experiences that require ric
 ## Page types
 
 Page layouts can have many different forms and needs. The list below contain common page types that can be used as a starting point for designing new experiences.
-
 
   
       <img
@@ -260,7 +235,6 @@ Interstitial pages usually have an `xsmall` (320px) maximum width.
 
   
 
-
 ## Layout regions
 
 Layout regions are the main structural building blocks of a page layout. They are the areas where content and components are placed, and group elements that share a common purpose.
@@ -290,7 +264,6 @@ Use it to display less important information, such as references, or links to ot
 ## Responsive behavior
 
 Narrow viewports support a single column when displaying page layouts. The list below contain common responsive adaptations to make sure experiences can remain usable on smaller screens.
-
 
   
       <img

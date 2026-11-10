@@ -21,12 +21,9 @@ Our quantitative usability testing of hidden menus (such as hamburger icons) and
     * When navigation is hidden, users are less likely to use navigation.
     * If people use hidden navigation, they do so later in the task than if it were visible.
 
-
   * **Hidden navigation** **provides a worse user experience than visible** or partially visible navigation does, in both mobile phones and desktop user interfaces. This finding holds true across multiple UX metrics including users’ assessment of task difficulty, time spent on task, and task success.
   * On desktops, hiding navigation degrades the experience and the navigation discoverability more than it does on the phones.
   * Hiding the navigation mostly affects content that is not directly accessible through an in-page link.
-
-
 
 ## Why Study Hidden and Visible Navigation
 
@@ -46,8 +43,6 @@ To determine the effectiveness and usability of the different menus, we ran usab
   2. **Visible navigation** : the main navigation links were shown in a visible navigation bar and could thus be seen by a simple glance without needing any prior action.
   3. **Combo navigation** : some of the main navigation links were visible and some were hidden under a menu.
 
-
-
 Note that, for mobile devices, we did not fully test the visible-navigation condition. (Visible navigation is less common on mobile devices, and, due to other constraints in our study, we were not able to include this condition.) We tested the hidden and combo navigation conditions on mobile.
 
 We wrote 2 simple tasks for each website. Some tasks could be completed without the use of the general site navigation, while other tasks required the use of navigation (or search). Here’s an example of a task: _“Go to http://www.bbc.com and see if there is any information on nature or wildlife you are interested in. Once you find a particular article that is interesting, please say which one it is.”_
@@ -59,8 +54,6 @@ To measure the effectiveness of these designs, we collected 5 metrics:
   3. Task difficulty: participants’ assessment of task difficulty
   4. Content discoverability: whether participants were able to discover the content on the site
   5. Task time: the time it took people to complete the tasks
-
-
 
 The first 2 metrics are related to navigation usage, while the last 3 refer to the quality of the user experience.
 
@@ -85,8 +78,6 @@ Our results indicate that, across both these measures, **hidden navigation was s
   * On desktop, people used the hidden menus in only 27% of the cases, while they used visible or combo navigation almost twice as much: in 48% and 50% of the cases, respectively.
   * On mobile people used the hidden navigation in 57% of the cases, and the combo navigation in 86% of the cases — 1.5 times more.
 
-
-
 We ran a mixed-effects logistic regression and found that these differences were statistically significant. This result is not surprising: when (all or some of) the navigation options are visible, they are more salient to users. If nothing else, the screen footprint of visible or combo navigation is larger than that of a menu represented by just an icon or a label, so people will notice it more.
 
 2\. **People were significantly more likely to use the navigation (whether hidden or partially visible) on mobile than on desktop.**
@@ -96,8 +87,6 @@ There are many potential explanations for this finding:
   * Navigation on mobile (whether hidden under a menu or partially visible) takes a larger proportion of the screen space than on the desktop, simply because the screen is smaller. Thus, people are more likely to notice it and use it. Indeed, on the desktop we witnessed many sessions where people did not even see the menu icon. Some test participants even said that the sites with hidden navigation didn’t have a menu.
   * Because hidden navigation is more common on mobile than on desktop, people may be more familiar with it and more likely to think of using it.
   * Mobile pages tend to require more scrolling, have less content [visible above the fold](https://www.nngroup.com/articles/page-fold-manifesto/), and sometimes be slower to load, so people may resort to using a menu instead of looking on the page and exploring whether there is any content that matches their interest. On the desktop, page-load speeds are high and the larger screen offers a better preview of the content of the page. (In other words, the [interaction cost](https://www.nngroup.com/articles/interaction-cost-definition/) of accessing a desired piece of information is higher on mobile than on the desktop.)
-
-
 
 Typing is harder and more error prone on mobile, and people may be more likely to prefer [navigation instead of searching](https://www.nngroup.com/articles/search-not-enough/), when the navigation is available.
 
@@ -117,8 +106,6 @@ The other 3 metrics that we collected focused on the quality of the user experie
   * **Task-difficulty rating**. At the end of each task, we asked participants to rate how easy or difficult the task was on a scale from 1 to 7, with 1 being easy and 7 being difficult. The task difficulty is a _subjective_ metric; it measures users’ self-reported assessment of the task. It usually reflects their overall experience in using the site, so a high estimated difficulty rating will _indirectly_ indicate actual difficulty in locating the navigation and navigating through the site.
   * **Time on task**. This metric represented the time it took participants to complete the task, whether successfully or not. A menu can add or decrease task time, if it is easy or difficult to find, open, or use, so longer task times also reflect the added interaction cost due to a less usable navigation.
 
-
-
 Our findings show that, across all 3 different metrics, **hidden navigation significantly decreases user experience both on mobile and on desktop**.
 
 **1.****Both on mobile and desktop, the content discoverability was significantly lower when the navigation was hidden**.**** This measure showed a more than 20% drop in discoverability on sites with hidden navigation, compared with sites with visible or combo navigation. In other words, visible or combo navigation made people more likely to complete the task successfully and without relying on search.
@@ -130,7 +117,6 @@ Our findings show that, across all 3 different metrics, **hidden navigation sign
 ![Bar chart showing task difficulty on a scale of 1 to 7. Hidden 2.6, Combo 2.3, Visible 2.1.](https://media.nngroup.com/media/editor/2016/06/25/difficulty-x3.PNG) _Task difficulty, as rated by users, saw a 21% increase in the hidden navigation condition, compared to the visible navigation condition. The increase over the combination condition was only 11%. (These numbers represent aggregated data over both mobile and desktop.) In this chart, lower numbers indicate a better user experience._
 
   1. **Users took significantly longer to complete tasks on sites with hidden navigation than they did on sites with visible or combo navigation on both desktop and mobile**.
-
 
   * On the **desktop** , people were at least **39% slower** when the navigation was hidden (compared with the visible or combo conditions).
   * On **mobile** people were **15% slower** when the navigation was hidden (compared with the combo condition).
@@ -144,8 +130,6 @@ In the first section of this article, we reported that mobile users were signifi
   1. **Hidden navigation is more likely to reduce content discoverability on desktop than on mobile**. In other words, when users had to discover content that required the use of navigation, they were more likely to fail on the desktop than on mobile. Moreover, the drop in success was greater when the navigation was hidden. This result can also be explained by desktop users’ increased propensity to use search: search is more salient (most of the time) on desktop and users may be more inclined to use it when a path to the content is not immediately apparent.
   2. **Desktop users were faster than mobile users (when combining all types of navigation)** On average, mobile users took 12% more time to complete the tasks. This result is not surprising: due to the small screen and the [narrow communication channel](https://www.nngroup.com/articles/scaling-user-interfaces) between the user and the device, getting the same content on mobile usually requires more interaction.
 
-
-
 ## Why Hidden Navigation Is Less Effective
 
 Why does hidden navigation have these effects? Throughout the article, we hinted at several answers:
@@ -155,8 +139,6 @@ Why does hidden navigation have these effects? Throughout the article, we hinted
   3. **Extra work** : To figure out what’s inside the menu, people must expand it. That increases the interaction cost for users and makes them less likely to do it, or, if they do it, they may take longer.
   4. **Lack of standards** : Hidden navigation is implemented in different ways by different sites. Some sites use it, some don’t. On mobile, patterns are starting to form, but on desktop there is a lot of variability and inconsistency in the placement and the labeling of hidden navigation.
   5. **Low familiarity** : Especially on desktops, hiding navigation is not a common pattern and people may not expect to find global navigation under an expandable menu. Some people may also still be unfamiliar with the hamburger icon that is frequently used for such menus. This low familiarity is exacerbated by the lack of standards which reduce long-term learnability (as further discussed in our course on [The Human Mind and Usability](https://www.nngroup.com/courses/human-mind/), learning is facilitated by repeated exposure to the same pattern.)
-
-
 
 Of these 5 points against hidden navigation, only the last one might decline in future years. Hypothetically, increased design standardization could also occur (which would also increase familiarity), but our experience observing the web design evolve over the decades doesn’t make us optimistic that strong design standards will emerge anytime soon. The 3 biggest points of low salience, low information scent, and extra work will always be a curse on hidden navigation that will reduce its usability.
 
@@ -169,14 +151,10 @@ What are the takeaways of this research for your next design project?
   * Do not use hidden navigation (such as hamburger icons) in desktop user interfaces.
   * Instead display the top-level navigation options, usually across the top of the page or down the left side.
 
-
-
 **Mobile** : For phones, there is no hard-and-fast rule. But our general recommendations are:
 
   * If your site has 4 or fewer top-level navigation links, display them as visible links.
   * If your site has more than 4 top-level navigation links, the only reasonable solution is to hide some of these. We did find that the usability penalty imposed by hidden navigation is very present on mobile, but it is smaller than on the desktop. Thus, we recommend making this design tradeoff because the usability of an expandable navigation menu is far better than that of alternative designs.
   * Provide in-page links to important information on your site, or use other methods of [supporting the hamburger](https://www.nngroup.com/articles/support-mobile-navigation/) (or some other hidden) menu.
-
-
 
 Remember: [_mobile-first_ is not the same as _mobile-only_](https://www.nngroup.com/articles/mobile-first-not-mobile-only/). Plus, of course, follow the other long-established [UX guidelines for menu design](https://www.nngroup.com/articles/menu-design/).

@@ -15,7 +15,6 @@ publisher: "Google web.dev"
 
 ---
 
-
 Think about your favorite website or app—what makes it your favorite? Now, think about a website or app you dislike—what
 do you not like about it? How users interact with your design and their experience on your website and app can vary.
 
@@ -74,11 +73,8 @@ add disabilities to existing user personas, or even create a persona spectrum to
 
 No matter how you incorporate people with disabilities into your personas, they should not be based on real people or stereotypes. And personas are never a substitute for user testing.
 
-
-
 Persona: Jane Bennet
 Check out an example of a persona that supports specific use cases.
-
 
 <figure data-float="right">
 
@@ -100,8 +96,6 @@ department when anything goes down unexpectedly.
 Losing her fine motor skills to tremors is making it increasingly difficult for her to use a mouse. She's been steadily relying on
 the keyboard more and more to navigate the web. Jane has always been dedicated to her physical fitness. She loves road racing and BMX.
 This made it all the more of a blow when she was diagnosed with Young Onset Parkinson's disease last year.
-
-
 
 ### Disability simulators
 
@@ -239,19 +233,19 @@ The following design illustrations examples are from [Indeed.com's accessibility
 
 <div class="auto-grid">
  <figure>
-    
+
    <figcaption>
      Action button design differs based on state: default, focus, hover, active, and disabled.
    </figcaption>
  </figure>
  <figure>
-    
+
    <figcaption>
      Three icons have alt text highlighted. The icons for "save job" and "not interested" act as buttons, therefore the alt text is critical to understanding action. The icon next to "Apply with your Indeed resume" is purely decorative and therefore doesn't need alt text.
    </figcaption>
  </figure>
  <figure>
-    
+
    <figcaption>
      Multiple input labels can be associated with each input, to help users understand context.
    </figcaption>

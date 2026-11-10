@@ -3,7 +3,7 @@ title: "GOV.UK · Component · GOV.UK header 页头"
 source: https://design-system.service.gov.uk/components/header/
 section: components
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: components-27
 publisher: "GOV.UK Design System"
@@ -13,31 +13,22 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/components/header/](https://design-system.service.gov.uk/components/header/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
 The GOV.UK header component tells users they’re using a service on GOV.UK and lets them use GOV.UK-wide tools. Also known as the GOV.UK masthead.
 
-**示例：default**
+*   [HTML](https://design-system.service.gov.uk/components/header/#default-1-html)
+*   [Nunjucks](https://design-system.service.gov.uk/components/header/#default-1-nunjucks)
 
-```njk
-{% from "govuk/components/header/macro.njk" import govukHeader %}
-
-{{ govukHeader({
-  homepageUrl: "#"
-}) }}
-```
-
-If you use the page template, you'll also get the GOV.UK header without having to add it, as it's included by default. However, if you want to customise the default GOV.UK header, read the [page template guidance about customising components](https://design-system.service.gov.uk/styles/page-template/#changing-template-content).
+If you use the page template, you’ll also get the GOV.UK header without having to add it, as it’s included by default. However, if you want to customise the default GOV.UK header, read the [page template guidance about customising components](https://design-system.service.gov.uk/styles/page-template/#changing-template-content).
 
 ## When to use this component
 
 If your service is being hosted on one of these domains, use the GOV.UK header component:
 
-- gov.uk/[myservice]
-- [myservice].service.gov.uk
-- [myblog].blog.gov.uk
+*   gov.uk/[myservice]
+*   [myservice].service.gov.uk
+*   [myblog].blog.gov.uk
 
 You must use the GOV.UK header component at the top of every page. This is to maintain user trust as they move around the GOV.UK website and other government websites and services.
 
@@ -57,29 +48,13 @@ This also assures users that they’re in the right place to use your service an
 
 For guidance on how to plan your header and navigation, see the [Help users navigate a service pattern](https://design-system.service.gov.uk/patterns/navigate-a-service).
 
-### Default GOV.UK header
-
 Most services on GOV.UK should use the default GOV.UK header.
 
 It should only show the GOV.UK logo and any GOV.UK-wide links and tools to help your users. [Do not add the menu of GOV.UK topic links](https://insidegovuk.blog.gov.uk/2021/11/11/launching-gov-uks-new-menu-bar/) to your service’s GOV.UK header.
 
-**示例：default (second)**
-
-```njk
-{% from "govuk/components/header/macro.njk" import govukHeader %}
-
-{{ govukHeader({
-  homepageUrl: "#"
-}) }}
-```
-
-### Do not show service name or navigation links in the GOV.UK header
-
 You can no longer use the GOV.UK header to show service name or navigation links. Use the [Service navigation component](https://design-system.service.gov.uk/components/service-navigation) instead.
 
 The [Help users navigate a service pattern](https://design-system.service.gov.uk/patterns/navigate-a-service) shows how the GOV.UK header and Service navigation components work together to help users know they’re using your service and navigate around it.
-
-### GOV.UK header with One Login
 
 GOV.UK One Login maintains their own header on the [Let users navigate to their GOV.UK One Login and sign out easily](https://www.sign-in.service.gov.uk/documentation/design-recommendations/let-users-navigate-sign-out) page.
 
@@ -94,3 +69,13 @@ With these changes, the GOV.UK header and GOV.UK footer components should now on
 ## Research on this component
 
 See the [research section in the Help users navigate a service pattern](https://design-system.service.gov.uk/patterns/navigate-a-service/#research-on-this-pattern) for a summary of our research on the GOV.UK header and navigation, and how you can share your feedback with us.
+
+## Recent changes
+
+| Date | Changed | Description |
+| --- | --- | --- |
+| Jun 2026 | Guidance | Added guidance to use the [Generic header](https://design-system.service.gov.uk/components/generic-header/) component if your service is not part of GOV.UK. |
+| Jun 2026 | [GOV.UK Frontend v6.2.0](https://github.com/alphagov/govuk-frontend/releases/tag/v6.2.0) | Fixed logo link hover state in Safari browsers. |
+| Feb 2026 | [GOV.UK Frontend v6.0.0](https://github.com/alphagov/govuk-frontend/releases/tag/v6.0.0) | Removed `rebrand` parameter to no longer allow use of the previous GOV.UK logo and colour palette. Changed containing HTML element from `header` to `div`. Changed naming of the GOV.UK logo link class. Removed parameters for setting service name and navigation. Removed `useTudorCrown` parameter so that only the Tudor crown logo can be used. |
+| Feb 2026 | Guidance | Updated guidance on service name and navigation to recommend using [Service navigation](https://design-system.service.gov.uk/components/service-navigation/) to show these in your service. |
+| Jan 2026 | [GOV.UK Frontend v5.14.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.14.0) | Fixed GOV.UK branded blue background being visible when printed. |

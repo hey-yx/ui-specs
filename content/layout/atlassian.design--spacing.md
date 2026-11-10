@@ -1,19 +1,25 @@
 ---
-title: "Atlassian · Spacing 间距"
+title: "Atlassian · Foundation · Spacing 间距"
 source: https://atlassian.design/foundations/spacing
 section: layout
 tag: "规范"
-fetched: 2026-10-20
+fetched: 2026-11-09
 status: full
 id: layout-22
 publisher: "Atlassian"
 ---
 
-# Atlassian · Spacing 间距
+# Atlassian · Foundation · Spacing 间距
 
 > 来源：[https://atlassian.design/foundations/spacing](https://atlassian.design/foundations/spacing)
 
 ---
+
+## Spacing
+
+![Banner for Spacing page](https://atlassian.design/assets/b2fdc5c48ef1/static/hero.light-8a24951129187495e676e1f5dfb8d4ef.png)
+
+![Banner for Spacing page](https://atlassian.design/assets/b2fdc5c48ef1/static/hero.dark-030f8ebd526a6c8b172d7428e0a387b4.png)
 
 The consistent and intentional use of a spacing system creates a more harmonious experience for the end user. A spacing system also lays a foundation for responsive design and customisable UI density in the future, which will enhance the overall quality and accessibility of our apps.
 
@@ -35,127 +41,22 @@ For example, `space.200` is 200% of the size of the base unit, therefore represe
 
 Each space token should be used in place of the raw pixel or REM values when adding space between components or objects on a page. Usage examples are detailed below.
 
-Token
-
-Base unit multiplier
-
-REM
-
-Pixels
-
-Visual representation
-
-`space.0`
-
-0×
-
-0rem
-
-0px
-
-`space.025`
-
-0.25×
-
-0.125rem
-
-2px
-
-`space.050`
-
-0.5×
-
-0.25rem
-
-4px
-
-`space.075`
-
-0.75×
-
-0.375rem
-
-6px
-
-`space.100`
-
-1×
-
-0.5rem
-
-8px
-
-`space.150`
-
-1.5×
-
-0.75rem
-
-12px
-
-`space.200`
-
-2×
-
-1rem
-
-16px
-
-`space.250`
-
-2.5×
-
-1.25rem
-
-20px
-
-`space.300`
-
-3×
-
-1.5rem
-
-24px
-
-`space.400`
-
-4×
-
-2rem
-
-32px
-
-`space.500`
-
-5×
-
-2.5rem
-
-40px
-
-`space.600`
-
-6×
-
-3rem
-
-48px
-
-`space.800`
-
-8×
-
-4rem
-
-64px
-
-`space.1000`
-
-10×
-
-5rem
-
-80px
+| Token | Base unit multiplier | REM | Pixels | Visual representation |
+| --- | --- | --- | --- | --- |
+| `space.0` | 0× | 0rem | 0px |  |
+| `space.025` | 0.25× | 0.125rem | 2px |  |
+| `space.050` | 0.5× | 0.25rem | 4px |  |
+| `space.075` | 0.75× | 0.375rem | 6px |  |
+| `space.100` | 1× | 0.5rem | 8px |  |
+| `space.150` | 1.5× | 0.75rem | 12px |  |
+| `space.200` | 2× | 1rem | 16px |  |
+| `space.250` | 2.5× | 1.25rem | 20px |  |
+| `space.300` | 3× | 1.5rem | 24px |  |
+| `space.400` | 4× | 2rem | 32px |  |
+| `space.500` | 5× | 2.5rem | 40px |  |
+| `space.600` | 6× | 3rem | 48px |  |
+| `space.800` | 8× | 4rem | 64px |  |
+| `space.1000` | 10× | 5rem | 80px |  |
 
 ### Negative values
 
@@ -165,7 +66,7 @@ Our space token system also includes [negative values](https://atlassian.design/
 
 Different use cases require different ranges of spacing units to achieve the best outcomes. Our spacing scale can be broken into three different size ranges:
 
-![A horizontal number scale diagram with 0 pixels on the left hand side and 80 pixels on the right hand side, these are the minimum and maximum values on the scale. The 8 pixel unit is highlighted as the space.100 base token. The scale is then broken up into three sections through purple highlighting. There are Small token values from 0 pixels to 8 pixels, Medium token values from 12 pixels to 24 pixels and Large token values from 32 pixels to 80 pixels.](https://atlassian.design/assets/6a5ce2564a5f/569853ee87243da57a3a588ac6094f7b/spacing-scale.png)
+![A horizontal number scale diagram with 0 pixels on the left hand side and 80 pixels on the right hand side, these are the minimum and maximum values on the scale. The 8 pixel unit is highlighted as the space.100 base token. The scale is then broken up into three sections through purple highlighting. There are Small token values from 0 pixels to 8 pixels, Medium token values from 12 pixels to 24 pixels and Large token values from 32 pixels to 80 pixels.](https://atlassian.design/assets/b2fdc5c48ef1/569853ee87243da57a3a588ac6094f7b/spacing-scale.png)
 
 ### Small values - 0px to 8px
 
@@ -173,12 +74,12 @@ Use the tokens from `space.0` to `space.100` (0px to 8px) for small and compact 
 
 #### Examples
 
-*   Gap between small icons and text
-*   Container padding of small components (ie badges, icon buttons, table cells)
-*   Gap between repeating elements (ie button groups)
-*   Padding within input components
-*   Vertical spacing between elements in a card (ie a title and description, a description and actions)
-*   Gap between the trigger and elevated element (ie between dropdown button & menu)
+           - Gap between small icons and text
+           - Container padding of small components (ie badges, icon buttons, table cells)
+           - Gap between repeating elements (ie button groups)
+           - Padding within input components
+           - Vertical spacing between elements in a card (ie a title and description, a description and actions)
+           - Gap between the trigger and elevated element (ie between dropdown button & menu)
 
 ### Medium values - 12px to 24px
 
@@ -186,10 +87,10 @@ Use the tokens `space.150` to `space.300` (12px to 24px) for larger and less den
 
 #### Examples
 
-*   Container padding of larger components (ie buttons)
-*   Space between avatar/large icon and content (ie section messages)
-*   Vertical spacing between elements in cards
-*   Spacing between items in less densely packed or larger components
+           - Container padding of larger components (ie buttons)
+           - Space between avatar/large icon and content (ie section messages)
+           - Vertical spacing between elements in cards
+           - Spacing between items in less densely packed or larger components
 
 ### Large values - 32px to 80px
 
@@ -197,8 +98,8 @@ Use the tokens `space.400` to `space.1000` (32px to 80px) for the largest pieces
 
 #### Examples
 
-*   The space between content on the page (ie spacing between top of page and header)
-*   Alignment within larger pieces of content (ie alignment of content in Flag)
+           - The space between content on the page (ie spacing between top of page and header)
+           - Alignment within larger pieces of content (ie alignment of content in Flag)
 
 ## Layout guidelines
 
@@ -212,13 +113,13 @@ Users expect elements to be grouped semantically, or grouped in such a way that 
 
 Using consistent spacing around elements lends them a visual similarity that helps the user understand their semantic relationship. For example, a table or list of items should be spaced consistently to create the sense of a cohesive unit or collection.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/similarity-do-caf5396cbe92865756efcc9a78bfaff0.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/similarity-do-caf5396cbe92865756efcc9a78bfaff0.png)
 
 #### Do
 
 Group similar items together using similar spacing.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/similarity-dont-5960953b1cf13d4a923a02a7f8951b60.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/similarity-dont-5960953b1cf13d4a923a02a7f8951b60.png)
 
 #### Don’t
 
@@ -230,13 +131,13 @@ The distance between elements creates semantic meaning, elements that are placed
 
 Use this principle to create meaning by placing more related objects closer together, and less related objects further apart. For example, place elements that are part of the same flow or user action closer together so users can understand their relation.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/proximity-do-f313cba5c2df405349a1e53b041c16ed.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/proximity-do-f313cba5c2df405349a1e53b041c16ed.png)
 
 #### Do
 
 Group related items close together so that users can scan the content more easily.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/proximity-dont-ded708a2ec2bf19b6ce7174ab3817808.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/proximity-dont-ded708a2ec2bf19b6ce7174ab3817808.png)
 
 #### Don’t
 
@@ -248,13 +149,13 @@ Users look for order in visual information to reduce the mental effort required 
 
 Hierarchy is used to rank elements and influence the order in which users view them. The sizing of different elements lends more importance to larger elements by drawing focus, and less to smaller-sized elements. Similarly, varying the amount of whitespace around an element can be used to group elements together or separate them to impart greater importance.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/hierarchy-do-0ff0a50a95bf2259f3ac84d19dc351f3.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/hierarchy-do-0ff0a50a95bf2259f3ac84d19dc351f3.png)
 
 #### Do
 
 Use scale and whitespace to rank elements.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/hierarchy-dont-baebf31d7dc9d67e8aa929d20883f1b7.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/hierarchy-dont-baebf31d7dc9d67e8aa929d20883f1b7.png)
 
 #### Don’t
 
@@ -268,7 +169,7 @@ Using a pattern of similar spacing between elements (such as in a table or list)
 
 Varying the spacing between and sizing of objects creates a more organic flow and guides the user through a page or experience naturally. Variation creates points of attention and contrast between objects on the page and improves scannability.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/2585d24bc0bde0466ac26345d4a6d798/visual-rhythm.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/2585d24bc0bde0466ac26345d4a6d798/visual-rhythm.png)
 
 ### Use optical adjustment
 
@@ -276,17 +177,14 @@ While using a spacing system improves consistency, the visual harmony of a page 
 
 Optical adjustments require using the spacing scale units and visual intuition to make minor changes to the spacing between objects in order to create visual harmony.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/optical-adjustment-do-3566e404b59487a03643fe420c2b3bf4.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/optical-adjustment-do-3566e404b59487a03643fe420c2b3bf4.png)
 
 #### Do
 
 Adjust spacing to create visual balance.
 
-![](https://atlassian.design/assets/6a5ce2564a5f/static/optical-adjustment-dont-c61905a6b792ccdc3ad2bf6f24162e04.png)
+![](https://atlassian.design/assets/b2fdc5c48ef1/static/optical-adjustment-dont-c61905a6b792ccdc3ad2bf6f24162e04.png)
 
 #### Don’t
 
 Use standard spacing without considering its alignment with other elements.
-
-*   Learn more about [design tokens](https://atlassian.design/tokens/design-tokens)
-*   [List of all design tokens](https://atlassian.design/components/tokens/all-tokens)

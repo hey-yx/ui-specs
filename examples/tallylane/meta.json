@@ -1,7 +1,7 @@
 {
   "name": "TallyLane",
-  "tagline": "个人记账移动站：记一笔、看分类、预算快超时提醒",
-  "accent": "Blue7 #0052d9",
-  "structure": "Ledger Column · N9 / Ft5",
-  "layout": "账本单栏"
+  "tagline": "十秒记一笔的记账站，到预算八成只提醒一次。",
+  "accent": "Yellow7 #8b6600",
+  "structure": "Bento Grid · N12 / Ft5",
+  "layout": "七块不等跨距的 Bento 栅格，首屏就能真记一笔，分类与预算同排，明细与批注收在第三行。"
 }

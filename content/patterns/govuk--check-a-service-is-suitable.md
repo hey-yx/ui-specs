@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Check a service is suitable 确认服务适用性"
 source: https://design-system.service.gov.uk/patterns/check-a-service-is-suitable/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-16
 publisher: "GOV.UK Design System"
@@ -13,9 +13,9 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/check-a-service-is-suitable/](https://design-system.service.gov.uk/patterns/check-a-service-is-suitable/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
+
+## Help users to  Check a service is suitable
 
 Ask users questions to help them work out if they can or should use your service.
 
@@ -23,7 +23,7 @@ Doing this helps users save time as it tells them upfront whether they are eligi
 
 It can also help reduce time and money spent processing queries from users confused about whether they’re eligible to use your service, or if it’s suitable for them.
 
-![‘Check a service is suitable’ flow diagram. Contains an introduction page followed by a series of simple questions. If at any point a user is deemed not eligible for the service they will be pointed to a page that explains why they are not eligible. Otherwise they will be presented an ‘application complete’ page. ](check-a-service-is-suitable-new.svg)
+![Image 1: ‘Check a service is suitable’ flow diagram. Contains an introduction page followed by a series of simple questions. If at any point a user is deemed not eligible for the service they will be pointed to a page that explains why they are not eligible. Otherwise they will be presented an ‘application complete’ page. ](/img/gov/0dab83f8b2b3.svg)
 
 ## When to use this pattern
 
@@ -31,10 +31,10 @@ If you have complicated eligibility requirements you should follow this pattern.
 
 Use this pattern to help users work out:
 
-- if they’re eligible to use your service
-- how much it will cost them to use
-- how much money they will get
-- how long it will take to get something
+*   if they’re eligible to use your service
+*   how much it will cost them to use
+*   how much money they will get
+*   how long it will take to get something
 
 Read guidance about designing your service so you [give users information at the point they need it](https://www.gov.uk/service-manual/design/govuk-content-transactions) in the GOV.UK Service Manual.
 
@@ -48,9 +48,9 @@ You should help people find out whether your service is right for them as soon a
 
 When using this pattern you need to:
 
-- ask a series of simple questions
-- automatically work out what a user needs to know
-- present the user with a ‘results’ page
+*   ask a series of simple questions
+*   automatically work out what a user needs to know
+*   present the user with a ‘results’ page
 
 If there are general rules about whether a service can or cannot be used such as an age limit or fixed deadline, include these on the start page.
 
@@ -60,49 +60,17 @@ Avoid asking questions the user will need to provide again when using your servi
 
 Your results page should show the user if they’re eligible to use it. Where applicable, it should also show them:
 
-- if they have to use your service
-- how much it will cost them to use it
-- how much money they’ll get from using it
-- how long the whole process will take
+*   if they have to use your service
+*   how much it will cost them to use it
+*   how much money they’ll get from using it
+*   how long the whole process will take
 
 If a user is not eligible to use your service, explain why and, if possible, tell them what they should do instead.
 
 Here’s an example of a results page:
 
-**示例：result**
-
-```njk
-{% extends "example-wrappers/full-page.njk" %}
-
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% block containerStart %}
-  {{ govukPhaseBanner({
-    tag: {
-      text: "Prototype"
-    },
-    html: "This isn't a real service – it is an example."
-  }) }}
-  {{ govukBackLink({
-    href: "#",
-    text: "Back"
-  }) }}
-{% endblock %}
-
-{% block content %}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">You're eligible to transport goods</h1>
-      <p class="govuk-body">Based on your answers, you are eligble to transport goods.</p>
-      {{ govukButton({
-      text: "Continue"
-      }) }}
-    </div>
-</div>
-{% endblock %}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/check-a-service-is-suitable/#result-check-a-service-is-suitable-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/check-a-service-is-suitable/#result-check-a-service-is-suitable-example-nunjucks)
 
 ## Research on this pattern
 

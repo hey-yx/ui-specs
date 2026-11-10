@@ -1,5 +1,5 @@
 ---
-title: "W3C · WCAG 2.2（无障碍标准）"
+title: "W3C · Standard · WCAG 2.2 无障碍标准"
 source: https://www.w3.org/TR/WCAG22/
 section: a11y
 tag: "规范"
@@ -10,7 +10,7 @@ publisher: "W3C"
 known: partial
 ---
 
-# W3C · WCAG 2.2（无障碍标准）
+# W3C · Standard · WCAG 2.2 无障碍标准
 
 > 来源：[https://www.w3.org/TR/WCAG22/](https://www.w3.org/TR/WCAG22/)
 

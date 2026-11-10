@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Data visualizations 数据可视化"
+title: "Polaris · Pattern · Data visualizations 数据可视化"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/data-visualizations.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-8
 publisher: "Shopify Polaris"
 ---
 
-# Polaris · Data visualizations 数据可视化
+# Polaris · Pattern · Data visualizations 数据可视化
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/data-visualizations.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/data-visualizations.mdx)
 

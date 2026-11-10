@@ -15,14 +15,7 @@ publisher: "Shopify Polaris"
 
 ---
 
-
-
-
-
-
 Use form layout to arrange fields within a form using standard spacing. By default it stacks fields vertically but also supports horizontal groups of fields.
-
-
 
 ## Best practices
 
@@ -48,8 +41,6 @@ A label is a short description of a field. Labels are not help text, and they sh
 - Short and succinct (1–3 words)
 - Written in sentence case (the first word capitalized, the rest lowercase)
 
-
-
 #### Do
 
 - Email address
@@ -58,10 +49,6 @@ A label is a short description of a field. Labels are not help text, and they sh
 
 - What is your email address?
 
-
-
-
-
 #### Do
 
 - Phone number
@@ -69,8 +56,6 @@ A label is a short description of a field. Labels are not help text, and they sh
 #### Don’t
 
 - My phone number is:
-
-
 
 ### Help text
 

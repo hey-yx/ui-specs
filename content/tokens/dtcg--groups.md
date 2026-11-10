@@ -1,5 +1,5 @@
 ---
-title: "DTCG · 分组（Groups）"
+title: "DTCG · Token · Groups 分组"
 source: https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/groups.md
 section: tokens
 tag: "语法标准"
@@ -9,7 +9,7 @@ id: dtcg-5
 publisher: "W3C DTCG"
 ---
 
-# DTCG · 分组（Groups）
+# DTCG · Token · Groups 分组
 
 > 来源：[https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/groups.md](https://raw.githubusercontent.com/design-tokens/community-group/main/technical-reports/format/groups.md)
 

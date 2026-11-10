@@ -11,7 +11,7 @@ const CONTENT_ROOT = fileURLToPath(new URL('../../content', import.meta.url))
  * 增量构建的缓存键只看正文原文，管线代码（清洗、去 h1、锚点改写）改了不会失效，
  * 会拿到上次渲染的旧 HTML；改了预处理逻辑就把它加一，逼全库重渲染。
  */
-const RENDER_VERSION = 2
+const RENDER_VERSION = 4
 
 /**
  * 正文集合的自定义 loader。
@@ -90,8 +90,8 @@ async function writeEntry(context, doc, absPath) {
   rendered.html = stripLeadingH1(rendered.html)
   // 正文里指向小章节的 #锚点改指回真实标题 id（采集丢了原站 heading id，见 resolveInPageAnchors）
   rendered.html = resolveInPageAnchors(rendered.html)
-  // 根相对路径 → 来源站点绝对地址（正文里的 /images/x.png 这类）
-  rendered.html = absolutizeLinks(rendered.html, doc.file)
+  // 正文里的相对链接与根相对路径 → 上游绝对地址（以该篇 source 为基准，代码块跳过）
+  rendered.html = absolutizeLinks(rendered.html, doc.source, doc.file)
   context.store.set({
     id: doc.id,
     data,
@@ -137,4 +137,22 @@ const examples = defineCollection({
   loader: glob({ pattern: '*/*.md', base: fileURLToPath(new URL('../../examples', import.meta.url)) }),
 })
 
-export const collections = { specs, examples }
+/**
+ * 建站需求集合：仓库根 briefs/ 的 Markdown 就是唯一真源，没有额外的配置文件。
+ *
+ * 新增一站＝丢一份 briefs/<slug>.md 进去：frontmatter 写 name / category / lang
+ * （可选 framework），正文写产品是什么、给谁用。dev 下 content 层会监听该目录，
+ * 文件增改即重载；不用跑生成脚本，也不用重启。
+ * layouts.md 是版式速查手册，同目录放着，靠 id 排除（见 data/case-briefs.ts）。
+ */
+const briefs = defineCollection({
+  loader: glob({ pattern: '*.md', base: fileURLToPath(new URL('../../briefs', import.meta.url)) }),
+  schema: z.object({
+    name: z.string().optional(),
+    category: z.string().optional(),
+    lang: z.string().optional(),
+    framework: z.enum(['react', 'vue']).optional(),
+  }),
+})
+
+export const collections = { specs, examples, briefs }

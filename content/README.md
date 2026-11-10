@@ -30,6 +30,8 @@ publisher: "发布方"
 
 八个 frontmatter 字段缺一不可（id、publisher 也要写），`status` 必须是 `full`（本库只收全文，导读卡已废除）。
 
+标题约定：选型方案专属文章的 `title` 与正文 H1 用 `来源 · 类型 · 英文标题 中文`，类型取 Foundation / Pattern / Component / Token / Standard / Style 等；例：`GOV.UK · Pattern · Addresses 地址`。Apple HIG 基础层 `Apple HIG · Foundation · ...`，模式 `... · Pattern · ...`，组件 `... · Component · ...`。
+
 > 库里有早期采集的文件只有 frontmatter、没有后面的「# 标题 / 来源行 / ---」三段。两种形状页面都能正确渲染（规范头由 stripMyHeader 整段剥掉，裸 frontmatter 由 cleanMarkdown 剥掉），不必回头改；**新文件一律按上面的完整格式写**。
 
 ## 二、来源配方（每类来源怎么取）
@@ -48,7 +50,17 @@ publisher: "发布方"
 | GoogleChrome/web.dev @main | `src/site/content/en/…` |
 | design-tokens/community-group @main | `technical-reports/format/<x>.md` |
 | VoltAgent/awesome-design-md @main | `design-md/<品牌>/DESIGN.md` |
+| Jakubantalik/transitions-dev @main | `skills/transitions-dev/<NN>-<slug>.md`（组件动效，MIT License；收前 12 条） |
+| Jakubantalik/transitions.dev @main | `transitions/<slug>/index.html`（组件动效，Transitions.dev License；收免费页 33 条，Pro 11 条未收） |
 | alphagov/govuk-design-system @main | `src/patterns/<slug>/index.md`（场景模式分区）；`src/styles/<slug>/index.md`（styles 同源，但库内 GOV.UK styles 已收） |
+
+Transitions.dev License 允许商用、修改、随产品发布，限制只有一条：不得把 transitions 库本身作为竞品再分发。Pro 11 条未收；3D tilt、accordion、toast 等 21 条免费页已按此许可收进 `content/motion/`。
+
+### glraw：GitLab 仓库同源 Markdown
+
+- GitLab API：`curl -sSL "https://gitlab.com/api/v4/projects/<项目路径 URL 编码>/repository/files/<文件路径 URL 编码>/raw?ref=main"`；`source` 仍写设计站公开页，不写 API 地址。
+- Pajamas（`gitlab-org/gitlab-services/design.gitlab.com`）的 `contents/product-foundations` 与 `contents/brand-design` 是完整 Markdown，色彩、字阶、间距、动效、层级、图标都能取到表值。
+- 清洗：剥顶部 `name:` frontmatter；删 `<design-tokens-*>`、`<component-api>`、`<figure-img>`、`<video>`、`<todo>`、`<do>`/`<dont>` 与 Vue live-example 标签；保留 HTML 表和代码块；相对链接补 `https://design.gitlab.com`；尾部 `## Resources` 站点链接块切掉。
 
 ### GOV.UK patterns 的清洗要点
 
@@ -62,6 +74,9 @@ publisher: "发布方"
 - **必须取渲染页、不能取仓库 raw 的**：USWDS（designsystem.digital.gov，raw 是 Liquid/include 碎片）
 - **GOV.UK 已有同源 raw**：patterns 走 `alphagov/govuk-design-system` 的 `src/patterns/<slug>/index.md`，样式页走 `src/styles/<slug>/index.md`；清洗要点见上一节
 - 其余网页源：service-manual.nhs.uk、atlassian.design、every-layout.dev、nngroup.com、developer.mozilla.org、practicaltypography.com
+- USWDS 渲染页只取 `main` 内的正文与表，剥 `.usa-banner`、`.usa-header`、`.usa-footer`、`.usa-in-page-nav` 与反馈条；NHS 同理剥 header、footer、cookie banner。当前 USWDS 7 篇、NHS 4 篇扫过，无站点块。
+- Fluent 2 官方站基础页取 `main .content-container .content`，剥 `.toc` 与视频控件残渣，保留文中表；`source` 写官方页，不写抽取脚本。
+- TDesign 基础页正文在 `Tencent/tdesign` 的 `site/src/pages/design/*.vue` 与 `site/src/locales/pages/design-*.ts`；当前 9 篇站点正文已扫过，无站点导航/页脚/反馈块。
 - W3C：`www.w3.org/TR` 单页 TR 文档；APG 交互模式在 `www.w3.org/WAI/ARIA/apg/patterns/<slug>/`
 
 ### plainx：AEM / Edge Delivery 分片页
@@ -79,8 +94,11 @@ publisher: "发布方"
 - 内嵌 base64 图片替换为 `（示例图见原文）`（体积会放大十几倍）
 - learnui.design 首篇开头有 "Skip to content / UI Course…" 导航残渣，人工清
 - 上游 GitHub 文件常自带 YAML frontmatter，落盘前剥掉，避免双 frontmatter
-- JS 渲染且无公开仓库源的站点不收录：M3 全系列、Apple HIG 总览、Fluent、Arco 字体/暗色页、Salesforce Lightning
+- JS 渲染且无公开仓库源的站点不整页收录：Apple HIG 总览、Arco 字体/暗色页、Salesforce Lightning；M3 与 Fluent 2 已改走官方仓库的 docs/token，站点正文仍不整页抓
+- Apple HIG 单篇是例外：总览页不收，单篇用浏览器取 `main.innerText`，切文首更新日期/变更提示、重复 H1、文末 `Change log` 与 `Resources/Related`；正文保留 `Platform considerations`。基础层、模式、组件都按此收；输入方式与技术特性待补
+- GitHub 直取只适用于正文本身是 Markdown/MDX 的来源（Carbon、Polaris、Primer、DTCG、GOV.UK 等）；Liquid/Nunjucks 模板与 `_data` 循环渲染的页面（USWDS、NHS、TDesign 基础页）raw 不是完整正文，仍需渲染页或解析模板
 - 部分条目 frontmatter 的 `source` 是 raw.githubusercontent 抓取地址而非网页展示地址（gh 配方「原始地址」约定），catalog 的 src 原样取用，阅读站「来源」链接点开是纯文本；要展示网页 URL 需人工定夺
+- `brands/designmd--slack.md` 上游是第三方再创作，不是 Slack 官方规范，引用时按这个口径说明
 
 ### 渠道清洗备忘（重抓同渠道条目时对齐）
 

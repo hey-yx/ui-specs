@@ -3,7 +3,7 @@ title: "GOV.UK · Pattern · Names 姓名"
 source: https://design-system.service.gov.uk/patterns/names/
 section: patterns
 tag: "规范"
-fetched: 2026-11-01
+fetched: 2026-11-09
 status: full
 id: patterns-2
 publisher: "GOV.UK Design System"
@@ -13,49 +13,30 @@ publisher: "GOV.UK Design System"
 
 > 来源：[https://design-system.service.gov.uk/patterns/names/](https://design-system.service.gov.uk/patterns/names/)
 
-> 版权：Crown copyright，按 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) 发布；本站代码 MIT 许可。本篇为 GOV.UK Design System 同源全文，引用时请署名 GOV.UK Design System。
-
 ---
 
-**示例：default**
-
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Full name"
-  },
-  id: "full-name",
-  name: "fullName",
-  autocomplete: "name",
-  spellcheck: false
-}) }}
-```
+*   [HTML](https://design-system.service.gov.uk/patterns/names/#names-example-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/names/#names-example-nunjucks)
 
 ## When to use this pattern
 
-You should follow this pattern whenever you need to ask for a user’s name as part of your service.
+You should follow this pattern whenever you need to ask for a user’s name as part of your service.  
 Only ask for people’s names if you need that information to deliver a service.
 
 ## How it works
 
 Make it as easy as possible for a user to enter their name.
 
-**示例：default**
+*   [HTML](https://design-system.service.gov.uk/patterns/names/#names-second-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/names/#names-second-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Full name"
-  },
-  id: "full-name",
-  name: "fullName",
-  autocomplete: "name",
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="full-name">
+    Full name
+  </label>
+  <input class="govuk-input" id="full-name" name="fullName" type="text" spellcheck="false" autocomplete="name">
+</div>
 ```
 
 ### Make sure the fields work for most of your users
@@ -74,19 +55,19 @@ A single name field can accommodate the broadest range of name types, but means 
 
 Label single name fields:
 
-- ‘Full name’
+*   ‘Full name’
 
 For multiple name fields, use:
 
-- ‘First name’
-- ‘Last name’
+*   ‘First name’
+*   ‘Last name’
 
 If users are from outside the UK, use the labels:
 
-- ‘Given names’
-- ‘Family name’
+*   ‘Given names’
+*   ‘Family name’
 
-Make it clear whether you need someone’s common name, or their name as it's written on official documents such as a passport or driving licence.
+Make it clear whether you need someone’s common name, or their name as it’s written on official documents such as a passport or driving licence.
 
 #### Middle names
 
@@ -94,7 +75,7 @@ Only ask for middle names if your service requires them.
 
 Use the label:
 
-- ’Middle names‘
+*   ’Middle names‘
 
 Make sure middle names are optional, as not everyone has them.
 
@@ -102,37 +83,33 @@ The label should not include `(optional)`. Users will enter their middle names i
 
 ### Use the autocomplete attribute on name fields
 
-Use the `autocomplete` attribute on the text input component when you're asking for a user's name. This lets browsers autofill the information on a user's behalf if they’ve entered it previously.
+Use the `autocomplete` attribute on the text input component when you’re asking for a user’s name. This lets browsers autofill the information on a user’s behalf if they’ve entered it previously.
 
-If you are asking for a user's full name in a single field, set the `autocomplete` attribute to `name`.
+If you are asking for a user’s full name in a single field, set the `autocomplete` attribute to `name`.
 
 If you are asking users to enter their name in multiple fields, set the `autocomplete` attribute on both fields using:
 
-- `given-name` for fields labelled 'First name' or 'Given name'
-- `family-name` for fields labelled 'Last name' or 'Family name'
+*   `given-name` for fields labelled ‘First name’ or ‘Given name’
+*   `family-name` for fields labelled ‘Last name’ or ‘Family name’
 
 If you are working in production you’ll need to do this to meet [WCAG 2.2 success criterion 1.3.5 Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html).
 
 You will not normally need to use the `autocomplete` attribute in prototypes, as users will not generally be using their own devices.
 
-### Do not spellcheck user's names
+### Do not spellcheck user’s names
 
-Sometimes, browsers will spellcheck the information a user enters into a text input. To make sure user's names will not be spellchecked, set the `spellcheck` attribute to `false` as shown in this example.
+Sometimes, browsers will spellcheck the information a user enters into a text input. To make sure user’s names will not be spellchecked, set the `spellcheck` attribute to `false` as shown in this example.
 
-**示例：default**
+*   [HTML](https://design-system.service.gov.uk/patterns/names/#names-third-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/names/#names-third-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Full name"
-  },
-  id: "full-name",
-  name: "fullName",
-  autocomplete: "name",
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group">
+  <label class="govuk-label" for="full-name">
+    Full name
+  </label>
+  <input class="govuk-input" id="full-name" name="fullName" type="text" spellcheck="false" autocomplete="name">
+</div>
 ```
 
 ### Avoid asking for a person’s title
@@ -159,23 +136,19 @@ Avoid making it hard for users to change their name. As well as causing them dis
 
 Error messages should be styled like this:
 
-**示例：error**
+*   [HTML](https://design-system.service.gov.uk/patterns/names/#name-input-with-errors-names-example-open-html)
+*   [Nunjucks](https://design-system.service.gov.uk/patterns/names/#name-input-with-errors-names-example-open-nunjucks)
 
-```njk
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
-{{ govukInput({
-  label: {
-    text: "Full name"
-  },
-  id: "full-name",
-  name: "fullName",
-  autocomplete: "name",
-  errorMessage: {
-    text: "Enter your full name"
-  },
-  spellcheck: false
-}) }}
+```
+<div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="full-name">
+    Full name
+  </label>
+  <p id="full-name-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Enter your full name
+  </p>
+  <input class="govuk-input govuk-input--error" id="full-name" name="fullName" type="text" spellcheck="false" aria-describedby="full-name-error" autocomplete="name">
+</div>
 ```
 
 Make sure errors follow the guidance in the [Error message component](https://design-system.service.gov.uk/components/error-message/) and have specific error messages for specific error states.
@@ -186,6 +159,6 @@ If you’ve used this pattern, get in touch to share your user research findings
 
 You can also read these articles to learn more about asking for users’ names:
 
-- [Personal names around the world (W3C)](https://www.w3.org/International/questions/qa-personal-names)
-- [Avoid splitting single input entities (Baymard)](https://baymard.com/blog/mobile-form-usability-single-input-fields)
-- [Falsehoods about names (Kalzumeus)](https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
+*   [Personal names around the world (W3C)](https://www.w3.org/International/questions/qa-personal-names)
+*   [Avoid splitting single input entities (Baymard)](https://baymard.com/blog/mobile-form-usability-single-input-fields)
+*   [Falsehoods about names (Kalzumeus)](https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)

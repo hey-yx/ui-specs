@@ -722,26 +722,6 @@ optional input, data formats, and other relevant information.
 
 See the [WCAG website](https://www.w3.org/WAI/tutorials/forms/instructions/) for
 in-depth accessibility guidance for each form element.
-
-## Related
-
-#### Components
-
-- [Button](https://carbondesignsystem.com/components/button/usage)
-- [Checkbox](https://carbondesignsystem.com/components/checkbox/usage)
-- [Combo box](https://carbondesignsystem.com/components/dropdown/usage/#combo-box)
-- [Multiselect](https://carbondesignsystem.com/components/dropdown/usage/#multiselect)
-- [Password input](https://carbondesignsystem.com/components/text-input/usage/#password-input)
-- [Radio button](https://carbondesignsystem.com/components/radio-button/usage)
-- [Text area](https://carbondesignsystem.com/components/text-input/usage/#text-area)
-- [Text input](https://carbondesignsystem.com/components/text-input/usage/#text-input)
-- [Toggle](https://carbondesignsystem.com/components/toggle/usage)
-
-#### Patterns
-
-- [Dialogs](https://carbondesignsystem.com/patterns/dialog-pattern)
-- [Notifications](https://carbondesignsystem.com/patterns/notification-pattern)
-
 ## References
 
 - Alita Joyce,

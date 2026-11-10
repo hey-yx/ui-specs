@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Flow charts 流向图"
+title: "IBM Carbon · Pattern · Flow charts 流向图"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-1
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Flow charts 流向图
+# IBM Carbon · Pattern · Flow charts 流向图
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/index.mdx)
 
@@ -18,11 +18,6 @@ publisher: "IBM Carbon"
 > Uncover intricate data relationships and flows, providing valuable insights into complex data sets.
 
 **Note:** Some of the charts below are not included in the carbon-charts repository yet. To see our roadmap, make feature requests, or contribute, please go to the [carbon-charts repository](https://github.com/carbon-design-system/carbon-charts).
-
-- Alluvial/sankey diagrams
-- Network diagrams
-- Parallel coordinates
-- Tree diagrams
 
 ## Alluvial/sankey diagrams
 
@@ -49,7 +44,7 @@ Note that Carbon Charts does not provide layouts for diagrams. You can utilize t
 
 Here's an [example using elkjs in react](https://codesandbox.io/p/sandbox/carbon-charts-react-elkjs-diagram-b9xyp?file=%2Fsrc%2Findex.js&from-embed).
 
-![Network diagram swimlane graph, organic view](images/06_adv_tree_928.png)
+![Network diagram swimlane graph, organic view](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/06_adv_tree_928.png)
 
 *Example of a network diagram in a swimlane graph from QRadar*
 
@@ -59,11 +54,11 @@ This specific network diagram is comprised of parent and child nodes. In the QRa
 
 Network diagrams use the same scale controls that apply to the rest of the data visualization components, however they appear in a floating tile, enabling the user to zoom and pan simultaneously. It’s also helpful to include the expand and collapse all nodes feature, which gives users the ability to easily navigate between detailed and high-level views of the diagram.
 
-![Floating zoom and pan detail](images/07_adv_tree_detail_288.png)
+![Floating zoom and pan detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/07_adv_tree_detail_288.png)
 
 *Detail of floating zoom and pan functionality*
 
-![Child nodes detail](images/08_adv_tree_detail_288.png)
+![Child nodes detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/08_adv_tree_detail_288.png)
 
 *Detail of child nodes clustered underneath master parent cluster*
 
@@ -73,17 +68,17 @@ Parallel coordinate charts visualize individual data elements across multiple va
 
 The parallel coordinate chart is the equivalent of a radar chart with axes — making it preferable for many use cases. Its strength is that each variable can be completely different and even have its own scale (the units can even be different).
 
-![Parallel coordinate plot](images/new_adv_parallel_928.png)
+![Parallel coordinate plot](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/new_adv_parallel_928.png)
 
 ### Parallel coordinate behaviors
 
 Hover effects that highlight a specific group or axis can be added to enhance basic parallel coordinate charts. These charts can also include interactive features like the brush component. By clicking and dragging along any axis, you can specify a filter for that dimension. The brush component is also used in the updated scatterplot matrix example. See the detail below.
 
-![Brush component detail](images/new_adv_parallel_detail_01_288.png)
+![Brush component detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/new_adv_parallel_detail_01_288.png)
 
 *Detail of brush component behavior*
 
-![Tooltip detail](images/new_adv_parallel_detail_02_288.png)
+![Tooltip detail](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/flow-charts/images/new_adv_parallel_detail_02_288.png)
 
 *Detail of a comparative tooltip interaction on hover*
 

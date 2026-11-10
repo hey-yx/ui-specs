@@ -1,7 +1,7 @@
 {
   "name": "SamePaper",
-  "tagline": "团队协作 SaaS 落地页：编辑式长页 + 可交互演示",
-  "accent": "Blue7 #0052d9",
-  "structure": "编辑式长页 · 吸顶页头 / 四列页脚",
-  "layout": "编辑式单列"
+  "tagline": "协作 SaaS 营销页：文档、讨论、任务写在同一张纸上",
+  "accent": "Purple7 #7137bf",
+  "structure": "Marquee Hero · 悬浮胶囊导航（N5）/ 页眉式页脚（Ft1）",
+  "layout": "满载线的大字首屏 + 文档与讨论双栏"
 }

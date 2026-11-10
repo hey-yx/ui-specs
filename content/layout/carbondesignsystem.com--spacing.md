@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Spacing 间距"
+title: "IBM Carbon · Foundation · Spacing 间距"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/overview.mdx
 section: layout
 tag: "规范"
@@ -9,35 +9,13 @@ id: layout-3
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Spacing 间距
+# IBM Carbon · Foundation · Spacing 间距
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/overview.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/overview.mdx)
 
 ---
 
----
-label:
-  Spacing is an important — and often overlooked — part of visual design. Carbon
-  takes a lot of the guesswork out of spacing to help designers deliver clear,
-  functional layouts.
-title: Spacing
-description:
-  Spacing is an important — and often overlooked — part of visual design. Carbon
-  takes a lot of the guesswork out of spacing to help designers deliver clear,
-  functional layouts.
-tabs: ['Overview', 'Code']
----
-
 > Spacing is an important — and often overlooked — part of product design. Carbon provides tokens and other utilities to take the guesswork out of spacing and help deliver clear, functional layouts
-
-
-
-Spacing
-Stacking
-Designing with space
-FAQ
-
-
 
 ## Introduction
 
@@ -65,19 +43,19 @@ designs. This scale is applied and used within all Carbon components.
 
 | Token         | rem   | px  | Example                                       |
 | ------------- | ----- | --- | --------------------------------------------- |
-| `$spacing-01` | 0.125 | 2   | ![spacing-3xs example](images/spacing-01.svg) |
-| `$spacing-02` | 0.25  | 4   | ![spacing-2xs example](images/spacing-02.svg) |
-| `$spacing-03` | 0.5   | 8   | ![spacing-xs example](images/spacing-03.svg)  |
-| `$spacing-04` | 0.75  | 12  | ![spacing-sm example](images/spacing-04.svg)  |
-| `$spacing-05` | 1     | 16  | ![spacing-md example](images/spacing-05.svg)  |
-| `$spacing-06` | 1.5   | 24  | ![spacing-lg example](images/spacing-06.svg)  |
-| `$spacing-07` | 2     | 32  | ![spacing-xl example](images/spacing-07.svg)  |
-| `$spacing-08` | 2.5   | 40  | ![spacing-2xl example](images/spacing-08.svg) |
-| `$spacing-09` | 3     | 48  | ![spacing-3xl example](images/spacing-09.svg) |
-| `$spacing-10` | 4     | 64  | ![spacing-4xl example](images/spacing-10.svg) |
-| `$spacing-11` | 5     | 80  | ![spacing-5xl example](images/spacing-11.svg) |
-| `$spacing-12` | 6     | 96  | ![spacing-6xl example](images/spacing-12.svg) |
-| `$spacing-13` | 10    | 160 | ![spacing-7xl example](images/spacing-13.svg) |
+| `$spacing-01` | 0.125 | 2   | ![spacing-3xs example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-01.svg) |
+| `$spacing-02` | 0.25  | 4   | ![spacing-2xs example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-02.svg) |
+| `$spacing-03` | 0.5   | 8   | ![spacing-xs example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-03.svg)  |
+| `$spacing-04` | 0.75  | 12  | ![spacing-sm example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-04.svg)  |
+| `$spacing-05` | 1     | 16  | ![spacing-md example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-05.svg)  |
+| `$spacing-06` | 1.5   | 24  | ![spacing-lg example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-06.svg)  |
+| `$spacing-07` | 2     | 32  | ![spacing-xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-07.svg)  |
+| `$spacing-08` | 2.5   | 40  | ![spacing-2xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-08.svg) |
+| `$spacing-09` | 3     | 48  | ![spacing-3xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-09.svg) |
+| `$spacing-10` | 4     | 64  | ![spacing-4xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-10.svg) |
+| `$spacing-11` | 5     | 80  | ![spacing-5xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-11.svg) |
+| `$spacing-12` | 6     | 96  | ![spacing-6xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-12.svg) |
+| `$spacing-13` | 10    | 160 | ![spacing-7xl example](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-13.svg) |
 
 </div>
 
@@ -100,15 +78,9 @@ padding: $spacing-05 $spacing-03;
 padding: $spacing-07 $spacing-04 0 $spacing-04;
 ```
 
-
-
-
-![Example of spacing tokens applied](images/spacing-1_revised.png)
+![Example of spacing tokens applied](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-1_revised.png)
 
 Example of spacing tokens applied
-
-
-
 
 ### Other spacing options
 
@@ -137,15 +109,9 @@ layout.
 For more information, see the `Stack` component in
 [React storybook](https://react.carbondesignsystem.com/?path=/docs/layout-stack--overview).
 
-
-
-
-![Example of spacing tokens applied with the stack component](images/spacing-stack.png)
+![Example of spacing tokens applied with the stack component](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/elements/spacing/images/spacing-stack.png)
 
 Example of spacing tokens applied with the stack component
-
-
-
 
 ## Designing with space
 

@@ -1,7 +1,0 @@
-{
-  "name": "PickBin",
-  "tagline": "临时文件快递柜：投柜、取码、取件收在一页三步",
-  "accent": "Blue7 #0052d9",
-  "structure": "柜面双栏 · 页头 / 简洁页脚",
-  "layout": "表单双栏 + 步骤说明"
-}

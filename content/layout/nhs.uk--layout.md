@@ -1,5 +1,5 @@
 ---
-title: "NHS.UK · Layout 布局"
+title: "NHS.UK · Foundation · Layout 布局"
 source: https://service-manual.nhs.uk/design-system/styles/layout
 section: layout
 tag: "规范"
@@ -9,7 +9,7 @@ id: layout-20
 publisher: "NHS.UK"
 ---
 
-# NHS.UK · Layout 布局
+# NHS.UK · Foundation · Layout 布局
 
 > 来源：[https://service-manual.nhs.uk/design-system/styles/layout](https://service-manual.nhs.uk/design-system/styles/layout)
 

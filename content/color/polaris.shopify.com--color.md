@@ -1,5 +1,5 @@
 ---
-title: "Polaris · Color 色彩"
+title: "Polaris · Foundation · Color 色彩"
 source: https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/colors/index.mdx
 section: color
 tag: "规范"
@@ -9,7 +9,7 @@ id: color-1
 publisher: "Shopify"
 ---
 
-# Polaris · Color 色彩
+# Polaris · Foundation · Color 色彩
 
 > 来源：[https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/colors/index.mdx](https://raw.githubusercontent.com/Shopify/polaris/main/polaris.shopify.com/content/design/colors/index.mdx)
 

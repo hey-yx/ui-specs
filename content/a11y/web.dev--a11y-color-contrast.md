@@ -15,7 +15,6 @@ publisher: "Google web.dev"
 
 ---
 
-
 Have you ever tried to read text on a screen and found it difficult to read due
 to the color scheme or struggled to see the screen in a very bright or
 low-light environment? Or maybe you are someone with a more permanent color
@@ -43,29 +42,21 @@ terms of hue, saturation, and lightness (HSL). The HSL model was created as an
 alternative to the RGB color model and more closely aligns with how a human
 perceives color.
 
-
 In CSS, a color can be specified in many ways, such as using color names, RGB,
 RGBa, HEX, HSL, HSLa, HSV, or HSVa values. HSLa is similar to HSL, only an
 alpha value has been added. Alpha is a measurement of opacity and is defined as
 a number between 0.0 (fully transparent) and 1.0 (fully opaque).
 
-
 _Hue_ is a qualitative way to describe a color, such as red, green, or blue,
 where each hue has a specific spot on the color spectrum with values ranging
 from 0 to 360, with red at 0, green at 120, and blue at 240.
-
-
 
 Saturation is the intensity of a color, measured in percentages ranging from 0%
 to 100%. A color with full saturation (100%) would be very vivid, while a color
 with no saturation (0%) would be grayscale or black and white.
 
-
-
 Lightness is a color's light or dark character, measured in percentages ranging
 from 0% (black) to 100% (white). 
-
-
 
 ## Measuring color contrast
 
@@ -81,13 +72,13 @@ would appear to those with specific forms of color blindness.
 
 <div class="switcher">
 <figure>
-  
+
     <figcaption>
       Photo by Alexander Grey on <a href="https://unsplash.com/photos/QGQz-IBBl5w">Unsplash</a>.
     </figcaption>
 </figure>
 <figure>
-    
+
       <figcaption>        
         Photo by Clark Van Der Beken on <a href="https://unsplash.com/photos/xFdrt8YIoJc">Unsplash</a>.
       </figcaption>
@@ -100,10 +91,10 @@ On the left, the image shows rainbow sand with purple, red, orange, yellow, aqua
 
 <div class="switcher">
 <figure>
-  
+
 </figure>
 <figure>
-     
+
 </figure>
 </div>
 
@@ -117,10 +108,10 @@ People with Deuteranopia have a reduced sensitivity to green light. This color b
 
 <div class="switcher">
 <figure>
-    
+
 </figure>
 <figure>
-     
+
 </figure>
 </div>
 
@@ -134,10 +125,10 @@ People with Protanopia have a reduced sensitivity to red light. This color blind
 
 <div class="switcher">
 <figure>
-  
+
 </figure>
 <figure>
-  
+
 </figure>
 </div>
 
@@ -178,8 +169,6 @@ do the color contrast calculations for you. Tools like
 can quickly tell you the color contrast ratios and offer suggestions to help
 create the most inclusive color pairs and palettes.
 
-
-
 ## Using color
 
 Without good color contrast levels in place, words, icons, and other graphical
@@ -198,8 +187,6 @@ crucial to help people understand the content.
 
 Reviewing your digital products in grayscale is a good way to detect potential color issues quickly.
 
-
-
 ## Color-focused media queries
 
 Beyond checking for color contrast ratios and the use of color on your screen,
@@ -209,16 +196,12 @@ more control over what is displayed on the screen.
 
 For example, using the [`@prefers-color-scheme`](https://drafts.csswg.org/mediaqueries-5/#descdef-media-prefers-color-scheme) media query, you can create a dark theme, which can be helpful to people with [photophobia](https://w3c.github.io/low-vision-a11y-tf/requirements.html#light-and-glare-sensitivity) or light sensitivity. You could also build a high contrast theme with [`@prefers-contrast`](https://drafts.csswg.org/mediaqueries-5/#descdef-media-prefers-contrast), which supports people with color deficiencies and [contrast sensitivity](https://w3c.github.io/low-vision-a11y-tf/requirements.html#contrast-sensitivity).
 
-
 There are additional media queries and OS settings to consider for color
 accessibility, but they are far less supported than the two listed in this
 module. See the article [Operating System and Browser Accessibility Display Modes](https://www.a11yproject.com/posts/operating-system-and-browser-accessibility-display-modes/)
 for more information on the various OS accessibility settings.
 
-
 ### Prefers color scheme
-
-
 
 The media query `@prefers-color-scheme` allows users to choose a light or
 dark-themed version of the website or app they are visiting. You can see this
@@ -232,30 +215,20 @@ navigating to a browser that supports this media query. Review the
 <figcaption>macOS general settings for appearance.</figcaption>
 </figure>
 
-
-
-
-
-
 Compare light and dark mode.
-
 
 <div class="switcher">
   <figure>
-    
+
     <figcaption>Light mode.</figcaption>
   </figure>
   <figure>
-    
+
     <figcaption>Dark mode.</figcaption>
   </figure>
 </div>
 
-
-
 ### Prefers contrast
-
-
 
 The [`@prefers-contrast`](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-contrast)
 media query checks the user's OS settings to see if high contrast is toggled on
@@ -263,25 +236,18 @@ or off. You can see this theme change in action by changing your contrast
 preference settings and navigating to a browser that supports this media query
 ([Mac](https://support.apple.com/lv-lv/guide/mac-help/unac089/mac) and [Windows](https://support.microsoft.com/windows/change-color-contrast-in-windows-fedc744c-90ac-69df-aed5-c8a90125e696) contrast mode settings).
 
-
-
-
-
 Compare regular and high contrast.
-
 
 <div class="switcher">
   <figure>
-    
+
     <figcaption>Light mode, no contrast preference.</figcaption>
   </figure>
   <figure>
-    
+
     <figcaption>Dark mode, high contrast preference.</figcaption>
   </figure>
 </div>
-
-
 
 ### Layering media queries
 
@@ -289,35 +255,26 @@ You can use multiple color-focused media queries to give your users even more
 choices. In this example, we stacked `@prefers-color-scheme` and
 `@prefers-contrast` together.
 
-
-
-
-
 Compare both color and contrast.
-
 
 <div class="switcher">
   <figure>
-    
+
     <figcaption>Light mode, no contrast preference.</figcaption>
   </figure>
   <figure>
-    
+
     <figcaption>Dark mode, no contrast preference.</figcaption>
   </figure>
 </div>
 
 <div class="switcher">
   <figure>
-    
+
     <figcaption>Light mode, high contrast preference.</figcaption>
   </figure>
   <figure>
-    
+
     <figcaption>Dark mode, high contrast preference.</figcaption>
   </figure>
 </div>
-
-
-
-

@@ -47,9 +47,6 @@ Without this special treatment, every such longhand would have to be defined wit
 
   5. Other non-terminals. These are written as the name of the non-terminal between < and >, as in <spacing-limit>. Notice the distinction between [<border-width>](https://www.w3.org/TR/CSS21/box.html#value-def-border-width) and [<'border-width'>](https://www.w3.org/TR/css-backgrounds-3/#propdef-border-width): the latter represents the grammar of the border-width property, the former requires an explicit expansion elsewhere. The definition of a non-terminal is typically located near its first appearance in the specification.
 
-
-
-
 Some property value definitions also include the slash (/), the comma (,), and/or parentheses as literals. These represent their corresponding tokens. Other non-keyword literal characters that may appear in a component value, such as “+”, must be written enclosed in single quotes.
 
 **Commas specified in the grammar are implicitly omissible** in some circumstances, when used to separate optional terms in the grammar. Within a top-level list in a property or other CSS value, or a function’s argument list, a comma specified in the grammar must be omitted if:
@@ -58,13 +55,9 @@ Some property value definitions also include the slash (/), the comma (,), and/o
   * all items following the comma have been omitted 
   * multiple commas would be adjacent (ignoring [white space](https://www.w3.org/TR/css-syntax/#whitespace)/comments), due to the items between the commas being omitted. 
 
-
-
 For example, if a function can accept three arguments in order, but all of them are optional, the grammar can be written like: 
-    
-    
+
     example( first? , second? , third? )
-    
 
 Given this grammar, writing example(first, second, third) is valid, as is example(first, second) or example(first, third) or example(second). However, example(first, , third) is invalid, as one of those commas are no longer separating two options; similarly, example(,second) and example(first,) are invalid. example(first second) is also invalid, as commas are still required to actually separate the options.
 
@@ -84,21 +77,15 @@ Component values can be arranged into property values as follows:
   * A bar (|) separates two or more alternatives: exactly one of them must occur. 
   * Brackets ([ ]) are for grouping. 
 
-
-
 Juxtaposition is stronger than the double ampersand, the double ampersand is stronger than the double bar, and the double bar is stronger than the bar. Thus, the following lines are equivalent:
-    
-    
+
       a b   |   c ||   d &&   e f
     [ a b ] | [ c || [ d && [ e f ]]]
-    
 
 For reorderable combinators (||, &&), ordering of the grammar does not matter: components in the same grouping may be interleaved in any order. Thus, the following lines are equivalent:
-    
-    
+
     a || b || c
     b || a || c
-    
 
 Note: Combinators are _not_ associative, so grouping is significant. For example, a || b || c and a || [ b || c ] are distinct grammars: the first allows a value like b a c, but the second does not.
 
@@ -113,8 +100,6 @@ Every type, keyword, or bracketed group may be followed by one of the following 
   * A comma-separated pair of numbers in curly braces ({A,B}) indicates that the preceding type, word, or group occurs at least A and at most B times. The B may be omitted ({A,}) to indicate that there must be at least A repetitions, with no upper bound on the number of repetitions. 
   * A hash mark (#) indicates that the preceding type, word, or group occurs one or more times, separated by comma tokens (which may optionally be surrounded by [white space](https://www.w3.org/TR/css-syntax/#whitespace) and/or comments). It may optionally be followed by the curly brace forms, above, to indicate precisely how many times the repetition occurs, like <length>#{1,4}. 
   * An exclamation point (!) after a group indicates that the group is required and must produce at least one value; even if the grammar of the items within the group would otherwise allow the entire contents to be omitted, at least one component value must not be omitted. 
-
-
 
 The + and # multipliers may be stacked as +#; similarly, the # and ? multipliers may be stacked as #?. These stacks each represent the later multiplier applied to the result of the earlier multiplier. (These same stacks can be represented using grouping, but in complex grammars this can push the number of brackets beyond readability.)
 
@@ -131,7 +116,7 @@ All of these can be easily expressed using simple patterns of combinators and mu
 zero or more | `A? B? C?` | `A? || B? || C?`  
 one or more | `[ A? B? C? ]!` | `A || B || C`  
 all | `A B C ` | `A && B && C`  
-  
+
 Note that all of the "any order" possibilities are expressed using combinators, while the "in order" possibilities are all variants on juxtaposition.
 
 ### 2.5.  Component Values and White Space
@@ -150,24 +135,17 @@ The syntax of a functional notation is defined as a sequence of:
 
   3. A literal closing parenthesis.
 
-
-
-
 The function’s arguments are considered _implicitly grouped_ , as if surrounded by brackets ([ ... ]).
 
 For example, a grammar like: 
-    
-    
+
     example( <length> , <length> )
-    
 
 will match a function whose name is "example" and whose arguments match "<length> , <length>".
 
 For example, the Selectors grammar defines pseudo-classes generically, allowing any possibly function name after the initial colon: 
-    
-    
+
     <pseudo-class-selector> = ':' <ident-token> | ':' <function-token> <any-value> ')'
-    
 
 This represents _any_ function name, with [<any-value>](https://www.w3.org/TR/css-syntax-3/#typedef-any-value) as the function arguments.
 
@@ -187,18 +165,16 @@ Property | Value definition field | Example value
 [font-family](https://www.w3.org/TR/css-fonts-4/#propdef-font-family) | [ <family-name> | <generic-family> ]# | "Gill Sans", Futura, sans-serif  
 [border-width](https://www.w3.org/TR/css-backgrounds-3/#propdef-border-width) | [ <length> | thick | medium | thin ]{1,4} | 2px medium 4px  
 [box-shadow](https://www.w3.org/TR/css-backgrounds-3/#propdef-box-shadow) | [ inset? && <length>{2,4} && <color>? ]# | none | 3px 3px rgba(50%, 50%, 50%, 50%), lemonchiffon 0 0 4px inset  
-  
+
 ### 2.8.  Non-Terminal Definitions and Grammar Production Blocks
 
 The precise grammar of non-terminals, like <position> or <calc()>, is often specified in a CSS grammar production block. These are conventionally represented in a preformatted block of definitions like this:
 
 The <foo> syntax is defined as follows: 
-    
-    
+
     <foo> = keyword | <bar> |
             some-really-long-pattern-of-stuff
     <bar> = <length>
-    
 
 Each definition starts on its own line, and consists of the non-terminal to be defined, followed by an `=`, followed by the fragment of value definition syntax to which it expands. A definition can stretch across multiple lines, and terminates before the next line that starts a new grammar production or at the end of the grammar production block (whichever comes first).
 
@@ -252,13 +228,11 @@ All textual data types interpolate as [discrete](https://www.w3.org/TR/web-anima
 In the value definition fields, keywords with a pre-defined meaning appear literally. Keywords are identifiers and are interpreted [ASCII case-insensitively](https://infra.spec.whatwg.org/#ascii-case-insensitive) (i.e., [a-z] and [A-Z] are equivalent).
 
 For example, here is the value definition for the [border-collapse](https://www.w3.org/TR/CSS21/tables.html#propdef-border-collapse) property: 
-    
-    
+
     Value: collapse | separate
 
 And here is an example of its use:
-    
-    
+
     table { border-collapse: separate }
 
 As defined above, all properties accept the CSS-wide keywords, which represent value computations common to all CSS properties. These keywords are normatively defined in the [CSS Cascading and Inheritance Module](https://www.w3.org/TR/css-cascade/#defaulting-keywords).
@@ -288,21 +262,17 @@ The <dashed-ident> production is a <custom-ident>, with all the case-sensitivity
 <dashed-ident>s are reserved solely for use as author-defined names. CSS will never define a <dashed-ident> for its own use.
 
 For example, [custom properties](https://www.w3.org/TR/css-variables-1/#custom-property) need to be distinguishable from CSS-defined properties, as new properties are added to CSS regularly. To allow this, custom property names are required to be <dashed-ident>s, as in this example: 
-    
-    
+
     .foo {
       --fg-color: blue;
     }
-    
 
 <dashed-ident>s are also used in the [@color-profile](https://www.w3.org/TR/css-color-5/#at-ruledef-profile) rule, to separate author-defined color profiles from pre-defined ones like device-cmyk, and allow CSS to define more pre-defined (but overridable) profiles in the future without fear of clashing with author-defined profiles: 
-    
-    
+
     @color-profile --foo { src: url(https://example.com/foo.icc); }
     .foo {
       color: color(--foo 1 0 .5 / .2);
     }
-    
 
 CSS will use <dashed-ident> more in the future, as more author-controlled syntax is added. CSS authoring tools, such as preprocessors that turn custom syntax into standard CSS, _should_ use <dashed-ident> as well, to avoid clashing with future CSS design. 
 
@@ -315,21 +285,17 @@ Even better, it should use @--library1-custom, so that if Library2 adds their ow
 [Strings](https://infra.spec.whatwg.org/#string) are denoted by <string>. When written literally, they consist of a sequence of characters delimited by double quotes or single quotes, corresponding to the [<string-token>](https://www.w3.org/TR/css-syntax-3/#typedef-string-token) production in the [CSS Syntax Module](https://www.w3.org/TR/css-syntax/) [CSS-SYNTAX-3].
 
 Double quotes cannot occur inside double quotes, unless [escaped](https://www.w3.org/TR/CSS2/syndata.html#escaped-characters) (as `"\""` or as `"\22"`). Analogously for single quotes (`'\''` or `'\27'`). 
-    
-    
+
     content: "this is a 'string'.";
     content: "this is a \"string\".";
     content: 'this is a "string".';
     content: 'this is a \'string\'.'
-    
 
 It is possible to break strings over several lines, for aesthetic or other reasons, but in such a case the newline itself has to be escaped with a backslash (\\). The newline is subsequently removed from the string. For instance, the following two selectors are exactly the same:
-    
-    
+
     a[title="a not s\
     o very long title"] {/*...*/}
     a[title="a not so very long title"] {/*...*/}
-    
 
 Since a string cannot directly represent a newline, to include a newline in a string, use the escape "\A". (Hexadecimal A is the line feed character in Unicode (U+000A), but represents the generic notion of "newline" in CSS.)
 
@@ -338,43 +304,33 @@ Since a string cannot directly represent a newline, to include a newline in a st
 The <url> type, written with the url() and src() functions, represents a [URL](https://url.spec.whatwg.org/#concept-url), which is a pointer to a resource.
 
 The syntax of <url> is:
-    
-    
+
     <url> = <url()> | <src()>
-    
+
     <url()> = url( <string> <url-modifier>* ) | [<url-token>](https://www.w3.org/TR/css-syntax-3/#typedef-url-token)
     <src()> = src( <string> <url-modifier>* )
-    
 
 This example shows a URL being used as a background image: 
-    
-    
+
     body { background: url("http://www.example.com/pinkish.gif") }
-    
 
 For legacy reasons, a url() can be written without quotation marks around the URL itself, in which case it is [specially-parsed](https://www.w3.org/TR/css-syntax-3/#consume-a-url-token) as a [<url-token>](https://www.w3.org/TR/css-syntax-3/#typedef-url-token) [CSS-SYNTAX-3]. Because of this special parsing, url() is only able to specify its URL literally; src() lacks this special parsing rule, and so its URL can be provided by functions, such as [var()](https://www.w3.org/TR/css-variables-1/#funcdef-var).
 
 For example, the following declarations are identical: 
-    
-    
+
     background: url("http://www.example.com/pinkish.gif");
     background: url(http://www.example.com/pinkish.gif);
-    
 
 And these have the same meaning as well:
-    
-    
+
     background: src("http://www.example.com/pinkish.gif");
     --foo: "http://www.example.com/pinkish.gif";
     background: src(var(--foo));
-    
 
 But this does _not_ work:
-    
-    
+
     --foo: "http://www.example.com/pinkish.gif";
     background: url(var(--foo));
-    
 
 ...because the unescaped "(" in the value causes a parse error, so the entire declaration is thrown out as invalid.
 
@@ -385,11 +341,9 @@ The precise requirements for parsing the unquoted url() syntax are normatively d
 Some CSS contexts (such as [@import](https://www.w3.org/TR/css-cascade-5/#at-ruledef-import)) also allow a <url> to be represented by a bare <string>, without the function wrapper. In such cases the string behaves identically to a url() function containing that string.
 
 For example, the following statements act identically: 
-    
-    
+
     @import url("base-theme.css");
     @import "base-theme.css";
-    
 
 #### 4.5.1.  Relative URLs
 
@@ -400,18 +354,15 @@ Note: For HTML documents, the [base URL is mutable](https://html.spec.whatwg.org
 When a <url> appears in the computed value of a property, it is resolved to an absolute URL, as described in the preceding paragraph. The computed value of a URL that the [UA](https://www.w3.org/TR/css-2023/#user-agent) cannot resolve to an absolute URL is the specified value.
 
 For example, suppose the following rule: 
-    
-    
+
     body { background: url("tile.png") }
 
 is located in a style sheet designated by the URL:
-    
-    
+
     http://www.example.org/style/basic.css
 
 The background of the source document’s `<body>` will be tiled with whatever image is described by the resource designated by the URL:
-    
-    
+
     http://www.example.org/style/tile.png
 
 The same image will be used regardless of the URL of the source document containing the `<body>`.
@@ -430,21 +381,16 @@ If no such element is found, the URL fails to resolve.
 
   * otherwise, resolve the fragment against the current document.
 
-
-
-
 Possibly reference [find a potential indicated element](https://html.spec.whatwg.org/multipage/browsing-the-web.html#find-a-potential-indicated-element), but that is defined specifically for `[Document](https://dom.spec.whatwg.org/#document)`s, not `[ShadowRoot](https://dom.spec.whatwg.org/#shadowroot)`s.
 
 Note: This means that such fragments will resolve against the contents of the current document (or whichever [node tree](https://dom.spec.whatwg.org/#concept-node-tree) the stylesheet lives in, if shadow DOM is involved) regardless of how such relative URLs would resolve elsewhere (ignoring, for example, `[base](https://html.spec.whatwg.org/multipage/semantics.html#the-base-element)` elements changing the base URL, or relative URLs in linked stylesheets resolving against the stylesheet’s URL).
 
 In the following example, `#anchor` will resolve against `http://example.com/` whereas `#image` will resolve against the elements in the HTML document itself: 
-    
-    
+
     <!DOCTYPE html>
     <base href="http://example.com/">
     ...
     <a href="#anchor" style="background-image: url(#image)">link</a>
-    
 
 When [serializing](https://www.w3.org/TR/cssom-1/#serializing-css-values) a url() with the local url flag set, it must serialize as just the fragment.
 
@@ -517,9 +463,6 @@ Note: This specification does not define any URL request modification steps, but
   7. If sheet’s [origin-clean flag](https://www.w3.org/TR/cssom-1/#concept-css-style-sheet-origin-clean-flag) is set, set req’s [initiator type](https://fetch.spec.whatwg.org/#request-initiator-type) to "css". [CSSOM]
 
   8. [Fetch](https://fetch.spec.whatwg.org/#concept-fetch) req, with [processresponseconsumebody](https://fetch.spec.whatwg.org/#process-response-end-of-body) set to processResponse.
-
-
-
 
 When interpreting [URLs](https://url.spec.whatwg.org/#concept-url) expressed in CSS, the [URL parser’s](https://url.spec.whatwg.org/#concept-url-parser) encoding argument must be omitted (i.e. use the default, UTF-8), regardless of the stylesheet encoding.
 
@@ -624,22 +567,18 @@ Addition of <percentage> is defined as Vresult = VA \+ VB
 In cases where a <percentage> can represent the same quantity as a dimension in the same [component value](https://www.w3.org/TR/css-syntax-3/#component-value) position, and can therefore be combined with them in a calc() expression, the following convenience notations may be used in the property grammar:
 
 <length-percentage>
-    
 
 Equivalent to `[ <length> | <percentage> ]`, where the <percentage> will resolve to a <length>.
 
 <frequency-percentage>
-    
 
 Equivalent to `[ <frequency> | <percentage> ]`, where the <percentage> will resolve to a <frequency>.
 
 <angle-percentage>
-    
 
 Equivalent to `[ <angle> | <percentage> ]`, where the <percentage> will resolve to an <angle>.
 
 <time-percentage>
-    
 
 Equivalent to `[ <time> | <percentage> ]`, where the <percentage> will resolve to a <time>.
 
@@ -661,16 +600,11 @@ The [computed value](https://www.w3.org/TR/css-cascade-5/#computed-value) of a p
 
   * a computed calc() expression otherwise
 
-
-
-
 Interpolation of percentage-dimension value combinations (e.g. <length-percentage>, <frequency-percentage>, <angle-percentage>, <time-percentage> or equivalent notations) is defined as
 
   * equivalent to interpolation of <length> if both VA and VB are pure <length> values 
   * equivalent to interpolation of <percentage> if both VA and VB are pure <percentage> values 
   * equivalent to converting both values into a calc() expression representing the sum of the dimension type and a percentage (each possibly zero) and interpolating each component individually (as a <length>/<frequency>/<angle>/<time> and as a <percentage>, respectively) 
-
-
 
 Addition of <percentage> is defined the same as interpolation except by adding each component rather than interpolating it.
 
@@ -679,10 +613,8 @@ Addition of <percentage> is defined the same as interpolation except by adding e
 Ratio values are denoted by <ratio>, and represent the ratio of two numeric values. It most often represents an aspect ratio, relating a width (first) to a height (second).
 
 When written literally, a ratio has the syntax:
-    
-    
+
     <ratio> = <number [0,∞]> [ / <number [0,∞]> ]?
-    
 
 The second <number> is optional, defaulting to 1. However, <ratio> is always serialized with both components.
 
@@ -699,13 +631,11 @@ The interpolation of a <ratio> is defined by converting each <ratio> to a number
 If either <ratio> is degenerate, the values cannot be interpolated.
 
 For example, halfway through a linear interpolation from 5 / 1 to 3 / 2, the result is approximately the ratio 2.73 / 1 (roughly 11 / 4, slightly taller than a 3 / 1 ratio): 
-    
-    
+
     start  = log(5);   // ≈ 0.69897
     end    = log(1.5); // ≈ 0.17609
     interp = 0.69897*.5 + 0.17609*.5; // ≈ 0.43753
     final  = 10^interp; // ≈ 2.73
-    
 
 Note: Interpolating over the logarithm of the ratio means the results are scale-independent (5 / 1 to 300 / 200 would give the same results as above), that they’re symmetrical over "wide" and "tall" variants (interpolating from 1 / 5 to 2 / 3 would give a ratio approximately equal to 1 / 2.73 at the halfway point), and that they’re symmetrical over whether the width is fixed and the height is based on the ratio or vice versa. These properties are not shared by many other possible interpolation strategies.
 
@@ -749,9 +679,6 @@ len
 
   4. If len is greater than 1 device pixel, round it down to the nearest integer number of device pixels.
 
-
-
-
 ### 6.1.  Relative Lengths
 
 Relative length units specify a length relative to another length. Style sheets that use relative units can more easily scale from one output environment to another.
@@ -774,24 +701,22 @@ vi | 1% of viewport’s size in the root element’s [inline axis](https://www.w
 vb | 1% of viewport’s size in the root element’s [block axis](https://www.w3.org/TR/css-writing-modes-4/#block-axis)  
 vmin | 1% of viewport’s smaller dimension   
 vmax | 1% of viewport’s larger dimension   
-  
+
 Child elements do not inherit the relative values as specified for their parent; they inherit the [computed values](https://www.w3.org/TR/css-cascade-5/#computed-value).
 
 The font-relative lengths refer to the font metrics either of the element on which they are used (for the local font-relative lengths) or of the root element (for the root font-relative lengths).
 
-![The word 'Sphinx' annotated with various font metrics: ascender height, to the top of the h's serif; cap height, to the visually approximate top of the S; the x height, to the visually approximate top of the x; the baseline, along the bottom of S, h, i, n, and x; and the descender height, to the bottom fo the p.](images/Typography_Line_Terms.svg) Common typographic metrics 
+![The word 'Sphinx' annotated with various font metrics: ascender height, to the top of the h's serif; cap height, to the visually approximate top of the S; the x height, to the visually approximate top of the x; the baseline, along the bottom of S, h, i, n, and x; and the descender height, to the bottom fo the p.](https://www.w3.org/TR/css-values-4/images/Typography_Line_Terms.svg) Common typographic metrics 
 
 em
      Equal to the computed value of the [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) property of the element on which it is used. 
 
 The rule: 
-    
-    
+
     h1 { line-height: 1.2em }
 
 means that the line height of `h1` elements will be 20% greater than the font size of `h1` element. On the other hand:
-    
-    
+
     h1 { font-size: 1.2em }
 
 means that the font size of `h1` elements will be 20% greater than the computed font size inherited by `h1` elements.
@@ -886,9 +811,6 @@ Whether the expansion/retraction of a particular interface (A) changes the sizes
 
   * Additionally, UAs may have some dynamically-shown interfaces that intentionally overlay content and do not cause any shifts in layout—​and therefore have no effect on any of the viewport-percentage lengths. (Typically on-screen keyboards will fit into this category.)
 
-
-
-
 In all cases, if the value of [overflow](https://www.w3.org/TR/css-overflow-3/#propdef-overflow) or [scrollbar-gutter](https://www.w3.org/TR/css-overflow-3/#propdef-scrollbar-gutter) on the [root element](https://www.w3.org/TR/css-display-3/#root-element) in either axis would cause scrollbars to appear (or space to be reserved for them) unconditionally (for example, overflow: scroll, but not overflow: auto), the [computed values](https://www.w3.org/TR/css-cascade-5/#computed-value) of the viewport-percentage lengths in that axis are reduced in accordance with the [initial containing block](https://www.w3.org/TR/css-display-3/#initial-containing-block). Otherwise, and always in the case of [media queries](https://www.w3.org/TR/mediaqueries-5/#media-query), the viewport-percentage lengths are sized assuming that scrollbars do not exist (even if this diverges from the initial containing block).
 
 Note: The value of [overflow](https://www.w3.org/TR/css-overflow-3/#propdef-overflow) on [the body element](https://html.spec.whatwg.org/multipage/dom.html#the-body-element-2) can sometimes affect the presence of scrollbars on the [root element](https://www.w3.org/TR/css-display-3/#root-element). This _does not_ affect the size of viewport units, however.
@@ -901,8 +823,7 @@ vw svw lvw dvw
      Equal to 1% of the width of the large viewport size, small viewport size, large viewport size, and dynamic viewport size, respectively. 
 
 In the example below, if the width of the viewport is 200mm, the font size of `h1` elements will be 16mm (i.e. (8×200mm)/100). 
-    
-    
+
     h1 { font-size: 8vw }
 
 vh svh lvh dvh
@@ -933,8 +854,7 @@ in | inches | 1in = 2.54cm = 96px
 pc | picas | 1pc = 1/6th of 1in   
 pt | points | 1pt = 1/72nd of 1in   
 px | pixels | 1px = 1/96th of 1in   
-      
-    
+
     h1 { margin: 0.5in }      /* inches  */
     h2 { line-height: 3cm }   /* centimeters */
     h3 { word-spacing: 4mm }  /* millimeters */
@@ -942,7 +862,6 @@ px | pixels | 1px = 1/96th of 1in
     h4 { font-size: 12pt }    /* points */
     h4 { font-size: 1pc }     /* picas */
     p  { font-size: 12px }    /* px */
-    
 
 Note: Lengths in publishing contexts are sometimes written like `2p3`, indicating a length of 2 picas and 3 points. These can be written in CSS as calc(2pc + 3pt) (see § 10.1 Basic Arithmetic: calc()).
 
@@ -952,8 +871,6 @@ For a CSS device, these dimensions are anchored either
 
   1. by relating the physical units to their physical measurements, or 
   2. by relating the pixel unit to the reference pixel. 
-
-
 
 For print media at typical viewing distances, the anchor unit should be one of the physical units (inches, centimeters, etc). For screen media (including high-resolution devices), low-resolution devices, and devices with unusual viewing distances, it is recommended instead that the anchor unit be the pixel unit. For such devices it is recommended that the pixel unit refer to the whole number of device pixels that best approximates the reference pixel.
 
@@ -967,7 +884,6 @@ The reference pixel is the visual angle of one pixel on a device with a device p
 
 The image below illustrates the effect of viewing distance on the size of a reference pixel: a reading distance of 71 cm (28 inches) results in a reference pixel of 0.26 mm, while a reading distance of 3.5 m (12 feet) results in a reference pixel of 1.3 mm.
 
-![This diagram illustrates how the definition of a pixel
 			depends on the users distance from the viewing surface
 			\(paper or screen\).
 			The image depicts the user looking at two planes, one
@@ -976,18 +892,17 @@ The image below illustrates the effect of viewing distance on the size of a refe
 			from the user's eye onto each plane. Where the cone
 			strikes the first plane, the projected pixel is 0.26 mm
 			high. Where the cone strikes the second plane, the
-			projected pixel is 1.4 mm high.](images/pixel1.png) Showing that pixels must become larger if the viewing distance increases
+			projected pixel is 1.4 mm high.](https://www.w3.org/TR/css-values-4/images/pixel1.png) Showing that pixels must become larger if the viewing distance increases
 
 This second image illustrates the effect of a device’s resolution on the pixel unit: an area of 1px by 1px is covered by a single dot in a low-resolution device (e.g. a typical computer display), while the same area is covered by 16 dots in a higher resolution device (such as a printer).
 
-![This diagram illustrates the relationship between the
 			reference pixel and device pixels \(called "dots" below\).
 			The image depicts a high resolution \(large dot density\)
 			laser printer output on the left and a low resolution
 			monitor screen on the right. For the laser printer, one
 			square reference pixel is implemented by 16 dots. For
 			the monitor screen, one square reference pixel is
-			implemented by a single dot.](images/pixel2.png) Showing that more device pixels (dots) are needed to cover a 1px by 1px area on a high-resolution device than on a lower-resolution one (of the same approximate viewing distance)
+			implemented by a single dot.](https://www.w3.org/TR/css-values-4/images/pixel2.png) Showing that more device pixels (dots) are needed to cover a 1px by 1px area on a high-resolution device than on a lower-resolution one (of the same approximate viewing distance)
 
 A device pixel is the smallest unit of area on the device output capable of displaying its full range of colors. For typical color screens, it’s a square or somewhat rectangular region containing a red, green, and blue subpixel. Many non-traditional outputs exist that can blur this definition, such as by displaying some colors at higher resolutions. Such devices still expose some equivalent notion of "device pixel", however.
 
@@ -1068,8 +983,7 @@ The allowed range of <resolution> values _always_ excludes negative values, in a
 Note that due to the 1:96 fixed ratio of CSS in to CSS px, 1dppx is equivalent to 96dpi. This corresponds to the default resolution of images displayed in CSS: see [image-resolution](https://www.w3.org/TR/css-images-4/#propdef-image-resolution). 
 
 The following @media rule uses Media Queries [MEDIAQ] to assign some special style rules to devices that use two or more device pixels per CSS px unit: 
-    
-    
+
     @media (min-resolution: 2dppx) { ... }
 
 ## 8\.  Data Types Defined Elsewhere
@@ -1101,8 +1015,7 @@ Images are not additive.
 ### 8.3.  2D Positioning: the <position> type
 
 The <position> value specifies the position of a object area (e.g. background image) inside a positioning area (e.g. background positioning area). It is computed and interpreted as specified for [background-position](https://www.w3.org/TR/css-backgrounds-3/#propdef-background-position). [CSS3-BACKGROUND]
-    
-    
+
     <position> = [
       [ left | center | right | top | bottom | <length-percentage> ]
     |
@@ -1114,7 +1027,6 @@ The <position> value specifies the position of a object area (e.g. background im
       [ [ left | right ] <length-percentage> ] &&
       [ [ top | bottom ] <length-percentage> ]
     ]
-    
 
 Note: The [background-position](https://www.w3.org/TR/css-backgrounds-3/#propdef-background-position) property also accepts a three-value syntax. This has been disallowed generically because it creates parsing ambiguities when combined with other length or percentage components in a property value.
 
@@ -1125,9 +1037,8 @@ For example, [transform-origin](https://www.w3.org/TR/css-transforms-1/#propdef-
 When serializing the [specified value](https://www.w3.org/TR/css-cascade-5/#specified-value) of a <position>:
 
 If only one component is specified: 
-    
+
 If two components are specified: 
-    
 
   * Keywords are serialized as keywords.
 
@@ -1135,10 +1046,7 @@ If two components are specified:
 
   * Components are serialized horizontal first, then vertical.
 
-
-
 If four components are specified: 
-    
 
 Note: <position> values are never serialized as a single value, even when a single value would produce the same behavior, to avoid causing parsing ambiguities in some grammars where a <position> is placed next to a <length>, such as [transform-origin](https://www.w3.org/TR/css-transforms-1/#propdef-transform-origin).
 
@@ -1155,13 +1063,11 @@ Addition of <position> is likewise defined as the independent addition each comp
 A functional notation is a type of component value that can represent more complex types or invoke special processing. The syntax starts with the name of the function immediately followed by a left parenthesis (i.e. a [<function-token>](https://www.w3.org/TR/css-syntax-3/#typedef-function-token)) followed by the argument(s) to the notation followed by a right parenthesis. Like keywords, function names are [ASCII case-insensitive](https://infra.spec.whatwg.org/#ascii-case-insensitive). [White space](https://www.w3.org/TR/css-syntax/#whitespace) is allowed, but optional, immediately inside the parentheses. Functions can take multiple arguments, which are formatted similarly to a CSS property value. See § 2.6 Functional Notation Definitions.
 
 Note: Some legacy functional notations, such as [rgba()](https://www.w3.org/TR/css-color-4/#funcdef-rgba), use commas unnecessarily, but generally commas are only used to separate items in a list, or pieces of a grammar that would be ambiguous otherwise. If a comma is used to separate arguments, [white space](https://www.w3.org/TR/css-syntax/#whitespace) is optional before and after the comma.
-    
-    
+
     background: url(http://www.example.org/image);
     color: rgb(100, 200, 50 );
     content: counter(list-item) ". ";
     width: calc(50% - 2em);
-    
 
 The math functions are defined below. Other functional notations are defined in their own modules; for example the [<color>](https://www.w3.org/TR/css-color-5/#typedef-color) functions are defined in [CSS-COLOR-4] and [CSS-COLOR-5].
 
@@ -1182,31 +1088,25 @@ A calc() function contains a single calculation, which is a sequence of values i
 Components of a calculation can be literal values (such as 5px), other math functions, or other expressions, such as [var()](https://www.w3.org/TR/css-variables-1/#funcdef-var), that evaluate to a valid argument type (like <length>).
 
 Math functions can be used to combine value that use different units. In this example the author wants the _margin box_ of each section to take up 1/3 of the space, so they start with 100%/3, then subtract the element’s borders and margins. ([box-sizing](https://www.w3.org/TR/css-sizing-3/#propdef-box-sizing) can automatically achieve this effect for borders and padding, but a math function is needed if you want to include margins.)
-    
-    
+
     section {
       float: left;
       margin: 1em; border: solid 1px;
       width: calc(100% / 3 - 2 * 1em - 2 * 1px);
     }
-    
 
 Similarly, in this example the gradient will show a color transition only in the first and last 20px of the element:
-    
-    
+
     .fade {
       background-image: linear-gradient(silver 0%, white 20px,
                                         white calc(100% - 20px), silver 100%);
     }
-    
 
 Math functions can also be useful just to express values in a more natural, readable fashion, rather than as an obscure decimal. For example, the following sets the [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) so that exactly 35em fits within the viewport, ensuring that roughly the same amount of text always fills the screen no matter the screen size.
-    
-    
+
     :root {
       font-size: calc(100vw / 35);
     }
-    
 
 Functionality-wise, this is identical to just writing [font-size: 2.857vw](https://www.w3.org/TR/css-fonts-5/#descdef-font-face-font-size), but then the intent (that 35em fills the viewport) is much less clear to someone reading the code; the later reader will have to reverse the math themselves to figure out that 2.857 is meant to approximate 100/35.
 
@@ -1215,8 +1115,7 @@ Standard mathematical precedence rules for the operators apply: calc(2 + 3 * 4) 
 Parentheses can be used to manipulate precedence: calc((2 + 3) * 4) is instead equal to 20.
 
 Parentheses and nesting additional calc() functions are equivalent; the preceding expression could equivalently have been written as calc(calc(2 + 3) * 4). This can be useful when building up values piecemeal via [var()](https://www.w3.org/TR/css-variables-1/#funcdef-var), such as in the following example:
-    
-    
+
     .aspect-ratio-box {
       --ar: calc(16 / 9);
       --w: calc(100% / 3);
@@ -1224,7 +1123,6 @@ Parentheses and nesting additional calc() functions are equivalent; the precedin
       width: var(--w);
       height: var(--h);
     }
-    
 
 Although \--ar _could_ have been written as simply \--ar: (16 / 9);, \--w is used both on its own (in [width](https://www.w3.org/TR/css-sizing-3/#propdef-width)) and as a calc() component (in \--h), so it has to be written as a full calc() function itself.
 
@@ -1241,46 +1139,38 @@ Either the min or max calculations (or even both) can instead be the keyword non
 For all three functions, the argument calculations can resolve to any <number>, <dimension>, or <percentage>, but must have a consistent type or else the function is invalid; the result’s type will be the consistent type.
 
 min(), max(), and clamp() can be used to make sure a value doesn’t exceed a "safe" limit: For example, "responsive type" that sets [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) with viewport units might still want a minimum size to ensure readability:
-    
-    
+
     .type {
       /* Set font-size to 10x the average of vw and vh,
          but don’t let it go below 12px. */
       font-size: max(10 * (1vw + 1vh) / 2, 12px);
     }
-    
 
 Note: Full math expressions are allowed in each of the arguments; there’s no need to nest a calc() inside! You can also provide more than two arguments, if you have multiple constraints to apply.
 
 An occasional point of confusion when using min()/max() is that you use max() to impose a minimum value on something (that is, properties like [min-width](https://www.w3.org/TR/css-sizing-3/#propdef-min-width) effectively use max()), and min() to impose a maximum value on something; it’s easy to accidentally reach for the opposite function and try to use min() to add a minimum size. Using clamp() can make the code read more naturally, as the value is nestled between its minimum and maximum: 
-    
-    
+
     .type {
       /* Force the font-size to stay between 12px and 100px */
       font-size: clamp(12px, 10 * (1vw + 1vh) / 2, 100px);
     }
-    
 
 Or, if you only wanted to impose a minimum size, but allow the font-size to grow as large as it wants:
-    
-    
+
     .type {
       /* Force the font-size to be at least 12px */
       font-size: clamp(12px, 10 * (1vw + 1vh) / 2, none);
     }
-    
 
 Note that clamp(), matching CSS conventions elsewhere, has its minimum value "win" over its maximum value if the two are in the "wrong order". That is, clamp(100px, ..., 50px) will resolve to 100px, exceeding its stated "max" value. 
 
 If alternate resolution mechanics are desired they can be achieved by combining clamp() with min() or max():
 
 To have MAX win over MIN: 
-    
 
 clamp(min(MIN, MAX), VAL, MAX). If you want to avoid repeating the MAX calculation, you can just reverse the nesting of functions that clamp() is defined against—​min(MAX, max(MIN, VAL)).
 
 To have MAX and MIN "swap" when they’re in the wrong order: 
-    
 
 clamp(min(MIN, MAX), VAL, max(MIN, MAX)). Unfortunately, there’s no easy way to do this without repeating the MIN and MAX terms.
 
@@ -1293,22 +1183,18 @@ The round(<rounding-strategy>?, A, B?) function contains an optional rounding st
 If A is exactly equal to an integer multiple of B, round() resolves to A exactly (preserving whether A is 0⁻ or 0⁺, if relevant). Otherwise, there are two integer multiples of B that are potentially "closest" to A, lower B which is closer to −∞ and upper B which is closer to +∞. The following <rounding-strategy>s dictate how to choose between them:
 
 nearest
-    
 
 Choose whichever of lower B and upper B that has the smallest absolute difference from A. If both have an equal difference (A is exactly between the two values), choose upper B.
 
 up
-    
 
 Choose upper B.
 
 down
-    
 
 Choose lower B.
 
 to-zero
-    
 
 Choose whichever of lower B and upper B that has the smallest absolute difference from 0.
 
@@ -1361,17 +1247,14 @@ If A is infinite but B is finite, the result is the same infinity.
 If A is finite but B is infinite, the result depends on the <rounding-strategy> and the sign of A:
 
 nearest to-zero
-    
 
 If A is positive or 0⁺, return 0⁺. Otherwise, return 0⁻.
 
 up
-    
 
 If A is positive (not zero), return +∞. If A is 0⁺, return 0⁺. Otherwise, return 0⁻.
 
 down
-    
 
 If A is negative (not zero), return −∞. If A is 0⁻, return 0⁻. Otherwise, return 0⁺.
 
@@ -1428,7 +1311,7 @@ Y | −∞ | -135deg | -90deg | -90deg | -90deg | -90deg | -45deg
 0⁺ | 180deg | 180deg | 180deg | 0⁺deg | 0⁺deg | 0⁺deg   
 +finite | 180deg | (normal) | 90deg | 90deg | (normal) | 0⁺deg   
 +∞ | 135deg | 90deg | 90deg | 90deg | 90deg | 45deg   
-  
+
 Note: All of these behaviors are intended to match the "standard" definitions of these functions as implemented by most programming languages, in particular as implemented in JS.
 
 The exponential functions—​pow(), sqrt(), hypot(), log(), and exp()—​compute various exponential functions with their arguments.
@@ -1466,8 +1349,7 @@ The exp(A) function contains one calculation which must resolve to a <number>, a
 The pow() function can be useful for strategies like [CSS Modular Scale](https://www.modularscale.com/), which relates all the font-sizes on a page to each other by a fixed ratio. 
 
 These sizes can be easily written into custom properties like:
-    
-    
+
     :root {
       --h6: calc(1rem * pow(1.5, -1));
       --h5: calc(1rem * pow(1.5, 0));
@@ -1476,7 +1358,6 @@ These sizes can be easily written into custom properties like:
       --h2: calc(1rem * pow(1.5, 3));
       --h1: calc(1rem * pow(1.5, 4));
     }
-    
 
 ...rather than writing out the values in pre-calculated numbers like 5.0625rem (what calc(1rem * pow(1.5, 4)) resolves to) which have less clear provenance when encountered in a stylesheet.
 
@@ -1505,7 +1386,7 @@ B is +finite | −∞ if B is an odd integer, +∞ otherwise | 0⁻ if B is an o
 ---|---|---|---|---|---  
 B is +∞ | result is +∞ | result is NaN | result is 0⁺ | result is NaN | result is +∞   
 B is −∞ | result is 0⁺ | result is NaN | result is +∞ | result is NaN | result is 0⁺   
-  
+
 In sqrt(A), if A is +∞, the result is +∞. If A is 0⁻, the result is 0⁻. If A is less than 0, the result is NaN.
 
 In hypot(A, …), if any of the inputs are infinite, the result is +∞.
@@ -1527,9 +1408,6 @@ There are two cases in JS where a NaN is not "infectious" to the math function i
   * `Math.hypot(Infinity, NaN)` will return `Infinity`.
 
   * `Math.pow(NaN, 0)` will return `1`.
-
-
-
 
 The logic appears to be that, if you replace the NaN with _any_ Number, the return value will be the same. However, this logic is not applied consistently to the `Math` functions: `Math.max(Infinity, NaN)` returns `NaN`, not `Infinity`; the same is true of `Math.min(-Infinity, NaN)`.
 
@@ -1556,12 +1434,10 @@ While the trigonometric and exponential functions handle many complex numeric op
 Rather than require authors to manually type out several digits of these constants, a few of them are provided directly:
 
 e
-    
 
 the base of the natural logarithm, approximately equal to 2.7182818284590452354.
 
 pi
-    
 
 the ratio of a circle’s circumference to its diameter, approximately equal to 3.1415926535897932.
 
@@ -1574,17 +1450,14 @@ Note: These keywords are only usable within a calculation, such as calc(pow(e, p
 When a calculation or a subtree of a calculation becomes infinite or NaN, representing it with a numeric value is no longer possible. To aid in serialization of these degenerate values, the following additional math constants are defined:
 
 infinity
-    
 
 the value positive infinity (+∞)
 
 -infinity
-    
 
 the value negative infinity (−∞)
 
 NaN
-    
 
 the value NaN
 
@@ -1608,14 +1481,10 @@ Each specifications defining such keywords must define for each keyword:
 
   * when it resolves (parse time, computed-value time, or used-value time)
 
-
-
-
 ### 10.8.  Syntax
 
 The syntax of a math function is:
-    
-    
+
     <calc()>  = calc( <calc-sum> )
     <min()>   = min( <calc-sum># )
     <max()>   = max( <calc-sum># )
@@ -1643,7 +1512,6 @@ The syntax of a math function is:
                    <calc-keyword> | ( <calc-sum> )
     <calc-keyword> = e | pi | infinity | -infinity | NaN
     <rounding-strategy> = nearest | up | down | to-zero
-    
 
 In some contexts, additional <calc-keyword> values can be defined to be valid. (For example, in [relative color](https://www.w3.org/TR/css-color-5/#relative-color) syntax, appropriate channel keywords are allowed.)
 
@@ -1682,59 +1550,46 @@ The sub-expression’s [type](https://drafts.css-houdini.org/css-typed-om-1/#css
   * Anything else is a terminal value, whose [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is determined based on its CSS type. (Unless otherwise specified, the type’s associated [percent hint](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-percent-hint) is null.)
 
 <number> <integer>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ ]» (empty map)
 
 <length>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "length" → 1 ]»
 
 <angle>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "angle" → 1 ]»
 
 <time>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "time" → 1 ]»
 
 <frequency>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "frequency" → 1 ]»
 
 <resolution>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "resolution" → 1 ]»
 
 [<flex>](https://www.w3.org/TR/css-grid-2/#typedef-flex)
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "flex" → 1 ]»
 
 <calc-keyword>
-    
 
 the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is as defined by the keyword
 
 <percentage>
-    
 
 If, in the context in which the math function containing this calculation is placed, <percentage>s are resolved relative to another type of value (such as in [width](https://www.w3.org/TR/css-sizing-3/#propdef-width), where <percentage> is resolved against a <length>), and that other type is _not_ <number>, the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is determined as the other type, but with a [percent hint](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-percent-hint) set to that other type.
 
 Otherwise, the [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "percent" → 1 ]».
 
 anything else 
-    
 
 The calculation’s type is failure.
-
-
-
 
 A value contains a percentage if its [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) is «[ "percent" → 1 ]», or its type’s [percent hint](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-percent-hint) is non-null. 
 
@@ -1756,28 +1611,21 @@ input
 
   3. Return base.
 
-
-
-
 Math functions themselves have [types](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type), according to their contained calculations:
 
 calc() abs()
-    
 
 The [type](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-type) of its contained calculation.
 
 min() max() clamp() hypot() round() mod() rem()
-    
 
 The result of [adding the types](https://drafts.css-houdini.org/css-typed-om-1/#cssnumericvalue-add-two-types) of its comma-separated calculations.
 
 asin() acos() atan() atan2()
-    
 
 «[ "angle" → 1 ]».
 
 sign() sin() cos() tan() pow() sqrt() log() exp()
-    
 
 «[ ]» (empty map).
 
@@ -1817,9 +1665,6 @@ Signed zeroes are produced in the following ways:
 
   * Certain argument combinations in math functions are defined to produce 0⁻ (for example, round(-1, infinity)). All other operations that produce a zero produce positive zero (0⁺).
 
-
-
-
 Signed zeroes do not escape a top-level calculation; they’re censored into the "unsigned" zero.
 
 Infinities (indicated here as +∞ or −∞) can be written directly using the math constants infinity and -infinity, or produced as a result of some calculations:
@@ -1833,9 +1678,6 @@ Infinities (indicated here as +∞ or −∞) can be written directly using the 
   * Dividing any value by ±∞ produces zero.
 
   * Certain argument combinations in math functions are defined to produce infinities (for example, pow(0, -1) produces +∞).
-
-
-
 
 Note: The rules for producing NaN, below, supersede the above rules for producing infinities.
 
@@ -1851,9 +1693,6 @@ These rules override any other result, if there’s a conflict. For example, 0 /
 
   * Any operation with at least one NaN argument produces NaN.
 
-
-
-
 NaN does not escape a top-level calculation; it’s censored into a zero value
 
 For example, calc(-5 * 0) produces an unsigned zero—​the calculation resolves to 0⁻, but as it’s a top-level calculation, it’s then censored to an unsigned zero. 
@@ -1867,12 +1706,10 @@ The [internal representation](https://drafts.css-houdini.org/css-typed-om-1/#css
 Math functions are turned into calculation trees depending on the function:
 
 calc() 
-    
 
 The [internal representation](https://drafts.css-houdini.org/css-typed-om-1/#css-internal-representation) of a calc() function is the result of parsing a calculation from its argument.
 
 any other math function
-    
 
 The [internal representation](https://drafts.css-houdini.org/css-typed-om-1/#css-internal-representation) is an operator node with the same name as the function, whose children are the result of parsing a calculation from each of the function’s arguments, in the order they appear.
 
@@ -1919,9 +1756,6 @@ For every leaf node leaf in values:
      2. If leaf is a math function, replace leaf with the [internal representation](https://drafts.css-houdini.org/css-typed-om-1/#css-internal-representation) of that math function.
 
   6. Return the result of simplifying a calculation tree from values.
-
-
-
 
 #### 10.10.1.  Simplification
 
@@ -2009,9 +1843,6 @@ Note: Zero-valued terms cannot be simply removed from a Sum; they can only be co
 
      5. Return root.
 
-
-
-
 ### 10.11.  Computed Value
 
 The [computed value](https://www.w3.org/TR/css-cascade-5/#computed-value) of a math function is its calculation tree simplified, using all the information available at computed value time. (Such as the em to px ratio, how to resolve percentages in some properties, etc.)
@@ -2033,12 +1864,10 @@ Note: By definition, ±∞ are outside the allowed range for any property, and w
 Additionally, if a math function that resolves to <number> is used somewhere that only accepts <integer>, the [computed value](https://www.w3.org/TR/css-cascade-5/#computed-value) and [used value](https://www.w3.org/TR/css-cascade-5/#used-value) are rounded to the nearest integer, in the same manner as clamping, above.
 
 Since widths smaller than 0px are not allowed, these three declarations are equivalent: 
-    
-    
+
     width: calc(5px - 10px);
     width: calc(-5px);
     width: 0px;
-    
 
 Note however that [width: -5px](https://www.w3.org/TR/css-sizing-3/#propdef-width) is not equivalent to width: calc(-5px)! Out-of-range values _outside_ calc() are syntactically invalid, and cause the entire declaration to be dropped.
 
@@ -2073,9 +1902,6 @@ Otherwise, let s be a string initially containing the name of the root node, low
   5. Append ")" (close parenthesis) to s.
 
   6. Return s.
-
-
-
 
 To 
 
@@ -2131,9 +1957,6 @@ Serialize root’s first child, and append it to s.
 
 Finally, append ")" to s and return it.
 
-
-
-
 To 
 
 sort a calculation’s children nodes
@@ -2151,9 +1974,6 @@ sort a calculation’s children nodes
   5. If nodes still contains any items, append them to ret in the same order.
 
   6. Return ret.
-
-
-
 
 For example, calc(20px + 30px) would serialize as calc(50px) as a specified value, or as 50px as a computed value. 
 
@@ -2192,7 +2012,7 @@ Registered Token | `invalid`
 Intended Usage |  The `about:invalid` URL references a non-existent document with a generic error condition. It can be used when a URL is necessary, but the default value shouldn’t be resolvable as any type of document.   
 Contact/Change controller | CSS WG <[www-style@w3.org](mailto:www-style@w3.org)> (on behalf of W3C)   
 Specification | [CSS Values and Units Module Level 3](https://www.w3.org/TR/css3-values/)  
-  
+
 ##  Appendix C: Quirky Lengths
 
 When CSS is being parsed in [quirks mode](https://dom.spec.whatwg.org/#concept-document-quirks), <quirky-length> is a type of <length> that is only valid in certain properties:
@@ -2237,8 +2057,6 @@ Changes since [7 July 2021 WD](https://www.w3.org/TR/2021/WD-css-values-4-202107
   * Defined generically the computation of <integer>, <number>, <percentage>, and <length>. 
   * Clarified that only non-zero lengths create a percentage+length mix that switches table cells to [auto](https://www.w3.org/TR/css-sizing-3/#valdef-width-auto) sizing. 
 
-
-
 Changes since [11 November 2020 WD](https://www.w3.org/TR/2020/WD-css-values-4-20201111/):
 
   * Updated interpolation of colors to reference [CSS-COLOR-4] instead of [CSS-COLOR-3]. 
@@ -2248,8 +2066,6 @@ Changes since [11 November 2020 WD](https://www.w3.org/TR/2020/WD-css-values-4-2
   * Specified that UA-imposed minimum font sizes apply to the used [font-size](https://www.w3.org/TR/css-fonts-4/#propdef-font-size) and not to resolution of font-relative lengths. ([Issue 5858](https://github.com/w3c/csswg-drafts/issues/5858)) 
   * Clarified how min() and max() percentages can partially simplify. ([Issue 6293](https://github.com/w3c/csswg-drafts/issues/6298)) 
 
-
-
 ###  Additions Since Level 3
 
 Changes since [CSS Values and Units Level 3](https://www.w3.org/TR/css-values-3/):
@@ -2257,8 +2073,6 @@ Changes since [CSS Values and Units Level 3](https://www.w3.org/TR/css-values-3/
   * Explicitly undefined numeric precision/range. 
   * Added rules for interpolation per value type, and their clarified computed values. 
   * Updated interpolation of colors to reference [CSS-COLOR-4]. 
-
-
 
 Additions since [CSS Values and Units Level 3](https://www.w3.org/TR/css-values-3/):
 
@@ -2275,8 +2089,6 @@ Additions since [CSS Values and Units Level 3](https://www.w3.org/TR/css-values-
   * A non-integer in a calc() automatically rounds to the nearest integer when used where an <integer> is required. 
   * Defined serialization of math functions. 
   * Added a genericized definition of coordinating list property groups, to make it easier to reference the coordinating behavior of the [background](https://www.w3.org/TR/css-backgrounds-3/#propdef-background) properties. 
-
-
 
 ##  Security Considerations
 
@@ -2313,4 +2125,3 @@ So that authors can exploit the forward-compatible parsing rules to assign fallb
 Once a specification reaches the Candidate Recommendation stage, non-experimental implementations are possible, and implementors should release an unprefixed implementation of any CR-level feature they can demonstrate to be correctly implemented according to spec. 
 
 To establish and maintain the interoperability of CSS across implementations, the CSS Working Group requests that non-experimental CSS renderers submit an implementation report (and, if necessary, the testcases used for that implementation report) to the W3C before releasing an unprefixed implementation of any CSS features. Testcases submitted to W3C are subject to review and correction by the CSS Working Group.
-

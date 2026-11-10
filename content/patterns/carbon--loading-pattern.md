@@ -146,21 +146,6 @@ For specific loading accessibility concerns, see the WCAG documentation for
 [Notification of Loading/Busy](https://www.w3.org/WAI/GL/wiki/Notification_of_Loading/Busy)
 and adhere to accessibility guidelines for the
 [loading component](https://carbondesignsystem.com/components/loading/accessibility).
-
-## Related
-
-#### Components
-
-- [Data table](https://carbondesignsystem.com/components/data-table/usage)
-- [Loading](https://carbondesignsystem.com/components/loading/usage)
-- [Pagination](https://carbondesignsystem.com/components/pagination/usage)
-
-#### Patterns
-
-- [Empty states](https://carbondesignsystem.com/patterns/empty-states-pattern)
-- [Forms](https://carbondesignsystem.com/patterns/forms-pattern)
-- [Notifications](https://carbondesignsystem.com/patterns/notification-pattern)
-
 ## References
 
 - Bill Chung,

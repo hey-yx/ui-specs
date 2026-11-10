@@ -1,5 +1,5 @@
 ---
-title: "IBM Carbon · Color palettes 数据可视化色板"
+title: "IBM Carbon · Pattern · Color palettes 数据可视化色板"
 source: https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/index.mdx
 section: dataviz
 tag: "规范"
@@ -9,7 +9,7 @@ id: dataviz-4
 publisher: "IBM Carbon"
 ---
 
-# IBM Carbon · Color palettes 数据可视化色板
+# IBM Carbon · Pattern · Color palettes 数据可视化色板
 
 > 来源：[https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/index.mdx](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/index.mdx)
 
@@ -18,12 +18,6 @@ publisher: "IBM Carbon"
 > The color palette for data visualizations is a select subset of the IBM Design Language color palette. It is designed to maximize accessibility and harmony within a page.
 
 **Note:** This guidance is a work in progress. To see our roadmap, make feature requests, or contribute, please go to carbon-charts [GitHub repository](https://github.com/carbon-design-system/carbon-charts).
-
-- Categorical palettes
-- Sequential palettes
-- Alert palette
-- Gradient use
-- Color in action
 
 ## Categorical palettes
 
@@ -73,22 +67,22 @@ Gradients are good for highlighting extremes in a range of values. Use a gradien
 
 For the full list of approved gradient options, see the IBM Design Language [Color page](https://www.ibm.com/design/language/color#gradients).
 
-![Gradient palette](images/gradient.png)
+![Gradient palette](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/gradient.png)
 
 ## Color in action
 
 See the IBM Design color palette in action across multiple business units and applications. Deliberate hits of color are composed with rich neutrals for a well-balanced cohesive experience.
 
-![example of a bubble chart](images/color_gallery_1.png)
+![example of a bubble chart](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_1.png)
 
-![example of a radar chart](images/color_gallery_2.png)
+![example of a radar chart](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_2.png)
 
-![example of a donut chart](images/color_gallery_3.png)
+![example of a donut chart](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_3.png)
 
-![example of a stream chart](images/color_gallery_4.png)
+![example of a stream chart](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_4.png)
 
-![example of a heat map](images/color_gallery_5.png)
+![example of a heat map](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_5.png)
 
-![example of a proportional diagram](images/color_gallery_6.png)
+![example of a proportional diagram](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_6.png)
 
-![example of an alluvial diagram](images/color_gallery_7.png)
+![example of an alluvial diagram](https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/images/color_gallery_7.png)
