@@ -8,6 +8,6 @@
 - 只引用规范、不照抄布局，用库的项目不能搬走本站版式。
 - 出稿分工：Hallmark 介入定版式（三件从它的 macrostructure / nav / footer 库选，写件名与理由），本库给版型原型与数值，两边共同作用；数值归本库（一个项目一个基准规范）。营销页与后台页不许共用一套默认骨架。
 - 需求层可开框架：每站选 React 或 Vue，开启时用该选型行配套的官方组件库，单文件经 import map 引入；不开启就按静态 HTML 手写。选型方案的文章只归该行的选型点，不进其他场景的设计点。
-- 跑批先分版式与配色：需求不写配色，开批前把每站的 macrostructure / nav / footer 与强调色写进 `briefs/rotation/<批次>.json`（旧批次在 `briefs/rotation.json`），跑 `node scripts/check-rotation.mjs` 通过再开批。
+- 版式与配色在生成时临时挑：需求不写配色，按 `briefs/layouts.md` 选 macrostructure / nav / footer 与强调色，选完直接用在这次生成里，不写进项目文件；一次生成多站时只约束批内不重复。
 - 要能测出 AI 学没学会：从全文抽事实题盲答，重点补场景级依据。
 - 验收：README 分开教 AI 与人怎么看；AI 与人进来都正确选择该用什么知识（场景/设计点 → 该读文章），而不是只收集零碎的知识。设计地图（`/starmap/`）承载设计点选择。AI 每次用规范拉 `/ai/design-points.json` 实时路由；与 hallmark 融合：hallmark 介入定版式与防模板化，本库给版型原型与数值，两边共同作用。
