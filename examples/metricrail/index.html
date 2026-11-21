@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MetricRail · 经营总览</title>
+<link rel="stylesheet" href="https://esm.sh/tdesign-react@1.18.6/dist/tdesign.min.css">
+<style>
+  :root {
+    /* TDesign 色板：Blue10 强调，Gray 系中性色（content/color/tdesign.tencent.com--color.md:51,95-104） */
+    --td-brand-color: #001a57;
+    --td-brand-color-hover: #002a7c;
+    --td-brand-color-active: #001a57;
+    --td-brand-color-focus: #d9e1ff;
+    --td-brand-color-disabled: #dddddd;
+    --td-success-color: #006c45;
+    --td-error-color: #ad352f;
+    --td-radius-default: 4px;
+    --td-radius-medium: 8px;
+    --td-font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+
+    --ink: rgba(0, 0, 0, 0.9);
+    --ink-2: rgba(0, 0, 0, 0.6);
+    --rule: #e8e8e8;
+    --paper: #ffffff;
+    --paper-2: #f3f3f3;
+    --accent: #001a57;
+    --green: #006c45;
+    --red: #d54941;
+    /* 动效：TDesign 桌面端 200 / 240 / 280ms（content/motion/tdesign.tencent.com--motion.md:101-103） */
+    --dur-base: 200ms;
+    --dur-moderate: 240ms;
+    --dur-slow: 280ms;
+    --ease: ease-out;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper-2); color: var(--ink); }
+  body {
+    font-family: var(--td-font-family);
+    font-size: 14px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app { display: flex; min-height: 100vh; }
+
+  /* N3：左缘竖条，品牌字旋转 */
+  .rail {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 64px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 8px;
+    z-index: 20;
+  }
+  .rail .brand {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 22px;
+    margin-bottom: 16px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 4px; }
+  .rail-btn {
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border: 0; border-radius: var(--td-radius-default);
+    background: transparent; color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+  }
+  .rail-btn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+  .rail-btn[aria-current="page"] { background: rgba(255, 255, 255, 0.18); color: #fff; }
+  .rail-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .rail .me {
+    margin-top: auto;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #d9e1ff; color: var(--accent);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 600; line-height: 20px;
+  }
+
+  main { margin-left: 64px; width: calc(100% - 64px); padding: 24px 32px 0; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+
+  .top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .eyebrow { margin: 0 0 4px; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+  h1 { margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; }
+  .tools { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+  /* Stat-Led：一个巨大数字打头 */
+  .hero { margin-top: 24px; padding: 24px 0 28px; border-bottom: 1px solid var(--rule); }
+  .hero .label { margin: 0; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .hero .huge {
+    margin: 4px 0 0;
+    font-size: 64px;
+    line-height: 72px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .hero .delta { margin: 4px 0 0; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+  .hero .delta b { color: var(--green); font-weight: 600; }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .kpi { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--td-radius-medium); padding: 16px 20px; }
+  .kpi .k { margin: 0; font-size: 12px; line-height: 20px; color: var(--ink); }
+  .kpi .v { margin: 4px 0 0; font-size: 28px; line-height: 36px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi .m { margin: 2px 0 0; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+
+  .grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .card { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--td-radius-medium); padding: 20px; min-width: 0; }
+  .card h2 { margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; }
+  .card .sub { margin: 2px 0 16px; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+  .chart { width: 100%; height: auto; display: block; }
+  .chart text { font-family: var(--td-font-family); font-size: 12px; fill: var(--ink-2); }
+  .chart .dot { transition: r var(--dur-base) var(--ease); cursor: default; }
+  .chart .dot:hover { r: 5; }
+
+  .table-card { margin-top: 16px; }
+  .table-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .empty { padding: 40px 0; text-align: center; color: var(--ink-2); }
+  .empty b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 4px; }
+
+  footer { margin-top: 32px; padding: 24px 0 32px; border-top: 1px solid var(--rule); }
+  .foot-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 720px; }
+  .foot-cols h3 { margin: 0 0 8px; font-size: 12px; line-height: 20px; color: var(--ink-2); font-weight: 600; }
+  .foot-cols a { display: block; color: var(--ink); text-decoration: none; font-size: 14px; line-height: 22px; }
+  .foot-cols a:hover { color: var(--accent); text-decoration: underline; }
+  .foot-note { margin: 24px 0 0; font-size: 12px; line-height: 20px; color: var(--ink-2); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .t-select .t-input:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rail :focus-visible { outline-color: #fff; }
+
+  @media (max-width: 991px) {
+    .grid { grid-template-columns: 1fr; }
+    main { padding: 20px 20px 0; }
+    .hero .huge { font-size: 48px; line-height: 56px; }
+  }
+  @media (max-width: 767px) {
+    .rail { width: 48px; padding: 16px 0; }
+    .rail .brand { font-size: 12px; letter-spacing: 0.12em; }
+    .rail-btn { width: 36px; height: 36px; }
+    main { margin-left: 48px; width: calc(100% - 48px); padding: 16px 16px 0; }
+    .kpis { grid-template-columns: 1fr; }
+    .hero .huge { font-size: 40px; line-height: 48px; }
+    .top { align-items: flex-start; }
+  }
+  @media (max-width: 374px) {
+    main { padding: 12px 12px 0; }
+    .hero .huge { font-size: 32px; line-height: 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "tdesign-react": "https://esm.sh/tdesign-react@1.18.6?bundle&external=react,react-dom"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root">正在载入数据…</div>
+  <script type="module">
+    import React, { useState, useMemo } from 'react'
+    import { createRoot } from 'react-dom/client'
+    import { Button, Select, Table, Tag, Dialog, MessagePlugin } from 'tdesign-react'
+
+    const h = React.createElement
+
+    const NAV = [
+      { id: 'overview', label: '总览', current: true, path: 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm8 0h6V11h-6v9Zm0-16v5h6V4h-6Z' },
+      { id: 'reports', label: '报表', path: 'M5 3h14a1 1 0 0 1 1 1v16l-3-2-3 2-3-2-3 2V4a1 1 0 0 1 1-1Zm3 5h8v2H8V8Zm0 4h8v2H8v-2Z' },
+      { id: 'channels', label: '渠道', path: 'M4 18h4V8H4v10Zm6 0h4V4h-4v14Zm6 0h4v-7h-4v7Z' },
+      { id: 'settings', label: '设置', path: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-2a6 6 0 0 1 1.3.14l.6-1.7 2.5.68-.4 1.77a6 6 0 0 1 1.9 1.1l1.6-.9 1.3 2.22-1.5 1.02a6 6 0 0 1 0 2.2l1.5 1.02-1.3 2.22-1.6-.9a6 6 0 0 1-1.9 1.1l.4 1.77-2.5.68-.6-1.7A6 6 0 0 1 12 20a6 6 0 0 1-1.3-.14l-.6 1.7-2.5-.68.4-1.77a6 6 0 0 1-1.9-1.1l-1.6.9-1.3-2.22 1.5-1.02a6 6 0 0 1 0-2.2L3.2 12.45l1.3-2.22 1.6.9a6 6 0 0 1 1.9-1.1l-.4-1.77 2.5-.68.6 1.7A6 6 0 0 1 12 6Z' },
+    ]
+
+    const CHANNELS = [
+      { id: 'search', name: '自然搜索', visitors: 12480, rate: '4.1%', gmv: 486200, share: '37.8%', trend: '增长' },
+      { id: 'paid', name: '付费投放', visitors: 9320, rate: '3.2%', gmv: 352800, share: '27.5%', trend: '增长' },
+      { id: 'social', name: '社交', visitors: 6140, rate: '2.8%', gmv: 214600, share: '16.7%', trend: '持平' },
+      { id: 'email', name: '邮件', visitors: 3760, rate: '5.4%', gmv: 168400, share: '13.1%', trend: '增长' },
+      { id: 'direct', name: '直访', visitors: 1980, rate: '3.1%', gmv: 62600, share: '4.9%', trend: '下滑' },
+    ]
+
+    const TREND = [
+      { day: '11-04', value: 98 }, { day: '11-05', value: 106 }, { day: '11-06', value: 102 },
+      { day: '11-07', value: 118 }, { day: '11-08', value: 124 }, { day: '11-09', value: 121 },
+      { day: '11-10', value: 128 },
+    ]
+
+    const money = (n) => '¥' + n.toLocaleString('zh-CN')
+    const wan = (n) => n.toFixed(0) + ' 万'
+
+    function Rail() {
+      return h('aside', { className: 'rail' },
+        h('div', { className: 'brand' }, 'METRICRAIL'),
+        h('nav', { 'aria-label': '主导航' },
+          NAV.map((item) => h('button', {
+            key: item.id,
+            className: 'rail-btn',
+            type: 'button',
+            'aria-label': item.label,
+            'aria-current': item.current ? 'page' : undefined,
+            title: item.label,
+            onClick: () => MessagePlugin.info(`切换到${item.label}`),
+          }, h('svg', { width: 20, height: 20, viewBox: '0 0 24 24', 'aria-hidden': 'true' },
+            h('path', { d: item.path, fill: 'currentColor' })
+          )))
+        ),
+        h('div', { className: 'me', 'aria-label': '当前账号：林' }, '林')
+      )
+    }
+
+    function Chart() {
+      const w = 720, hgt = 220, pad = { t: 16, r: 32, b: 28, l: 36 }
+      const max = 140, min = 80
+      const x = (i) => pad.l + (i * (w - pad.l - pad.r)) / (TREND.length - 1)
+      const y = (v) => pad.t + ((max - v) / (max - min)) * (hgt - pad.t - pad.b)
+      const line = TREND.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${y(d.value)}`).join(' ')
+      const area = `${line} L${x(TREND.length - 1)},${hgt - pad.b} L${x(0)},${hgt - pad.b} Z`
+      return h('svg', { className: 'chart', viewBox: `0 0 ${w} ${hgt}`, role: 'img', 'aria-label': '过去 7 天成交额走势，单位万元' },
+        [110, 95, 80].map((v) => h('g', { key: v },
+          h('line', { x1: pad.l, x2: w - pad.r, y1: y(v), y2: y(v), stroke: '#e8e8e8', 'stroke-width': 1 }),
+          h('text', { x: 0, y: y(v) + 4 }, String(v))
+        )),
+        h('path', { d: area, fill: '#001a57', opacity: 0.06 }),
+        h('path', { d: line, fill: 'none', stroke: '#001a57', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }),
+        TREND.map((d, i) => h('g', { key: d.day },
+          h('circle', { className: 'dot', cx: x(i), cy: y(d.value), r: 3.5, fill: '#fff', stroke: '#001a57', 'stroke-width': 2 },
+            h('title', null, `${d.day}：${wan(d.value)}元`)
+          ),
+          h('text', { x: x(i), y: hgt - 8, 'text-anchor': 'middle' }, d.day)
+        ))
+      )
+    }
+
+    function App() {
+      const [range, setRange] = useState('today')
+      const [open, setOpen] = useState(false)
+      const [loading, setLoading] = useState(false)
+      const [weekEmpty, setWeekEmpty] = useState(false)
+
+      const data = weekEmpty ? [] : CHANNELS
+      const columns = useMemo(() => [
+        { colKey: 'name', title: '渠道', width: 140 },
+        { colKey: 'visitors', title: '访客', align: 'right', cell: ({ row }) => row.visitors.toLocaleString('zh-CN') },
+        { colKey: 'rate', title: '转化率', align: 'right' },
+        { colKey: 'gmv', title: '成交额', align: 'right', cell: ({ row }) => money(row.gmv) },
+        { colKey: 'share', title: '占比', align: 'right' },
+        {
+          colKey: 'trend', title: '趋势', width: 96,
+          cell: ({ row }) => h(Tag, {
+            theme: row.trend === '增长' ? 'success' : row.trend === '下滑' ? 'danger' : 'default',
+            variant: 'light',
+            size: 'small',
+          }, row.trend),
+        },
+      ], [])
+
+      function changeRange(v) {
+        setRange(v)
+        setWeekEmpty(v === 'week')
+        if (v === 'week') MessagePlugin.info('本周渠道数据将在明早 8 点生成')
+      }
+
+      function exportData() {
+        setLoading(true)
+        window.setTimeout(() => {
+          setLoading(false)
+          setOpen(false)
+          MessagePlugin.success('已导出 3,842 行，文件 metricrail-2026-11-10.csv')
+        }, 1200)
+      }
+
+      return h(React.Fragment, null,
+        h(Rail),
+        h('main', null,
+          h('div', { className: 'wrap' },
+            h('header', { className: 'top' },
+              h('div', null,
+                h('p', { className: 'eyebrow' }, '今日 · 11 月 10 日 · 数据更新于 09:42'),
+                h('h1', null, '经营总览')
+              ),
+              h('div', { className: 'tools' },
+                h(Select, {
+                  value: range,
+                  onChange: changeRange,
+                  style: { width: 128 },
+                  'aria-label': '时间范围',
+                  options: [
+                    { label: '今日', value: 'today' },
+                    { label: '近 7 天', value: '7d' },
+                    { label: '本周', value: 'week' },
+                  ],
+                }),
+                h(Button, { theme: 'primary', onClick: () => setOpen(true) }, '导出数据')
+              )
+            ),
+
+            h('section', { className: 'hero', 'aria-labelledby': 'hero-label' },
+              h('p', { className: 'label', id: 'hero-label' }, '今日成交额'),
+              h('p', { className: 'huge' }, '¥1,284,600'),
+              h('p', { className: 'delta' }, '比昨日 ', h('b', null, '+12.4%'), '，多 ¥141,700')
+            ),
+
+            h('section', { className: 'kpis', 'aria-label': '核心指标' },
+              [
+                ['订单量', '3,842', '比昨日 +9.8%'],
+                ['转化率', '3.6%', '比昨日 +0.2 个百分点'],
+                ['客单价', '¥334', '比昨日 +¥6'],
+              ].map(([k, v, m]) => h('div', { className: 'kpi', key: k },
+                h('p', { className: 'k' }, k),
+                h('p', { className: 'v' }, v),
+                h('p', { className: 'm' }, m)
+              ))
+            ),
+
+            h('div', { className: 'grid' },
+              h('section', { className: 'card', 'aria-labelledby': 'chart-title' },
+                h('h2', { id: 'chart-title' }, '成交额走势'),
+                h('p', { className: 'sub' }, '过去 7 天，按天汇总，单位万元'),
+                h(Chart)
+              ),
+              h('section', { className: 'card', 'aria-labelledby': 'mix-title' },
+                h('h2', { id: 'mix-title' }, '渠道结构'),
+                h('p', { className: 'sub' }, '按成交额占比，自然搜索仍是主入口'),
+                h('svg', { viewBox: '0 0 320 180', role: 'img', 'aria-label': '渠道成交额占比条形图', style: { width: '100%', height: 'auto' } },
+                  CHANNELS.map((c, i) => {
+                    const bw = Math.round((c.gmv / 486200) * 220)
+                    const yy = 8 + i * 34
+                    return h('g', { key: c.id },
+                      h('text', { x: 0, y: yy + 12, fontSize: 12, fill: 'rgba(0,0,0,.6)' }, c.name),
+                      h('rect', { x: 64, y: yy + 2, width: bw, height: 14, rx: 4, fill: i === 0 ? '#001a57' : '#d9e1ff' }),
+                      h('text', { x: 64 + bw + 8, y: yy + 13, fontSize: 12, fill: 'rgba(0,0,0,.6)' }, c.share)
+                    )
+                  })
+                )
+              )
+            ),
+
+            h('section', { className: 'card table-card', 'aria-labelledby': 'table-title' },
+              h('div', { className: 'table-head' },
+                h('div', null,
+                  h('h2', { id: 'table-title' }, '渠道明细'),
+                  h('p', { className: 'sub' }, weekEmpty ? '本周尚未生成，明早 8 点更新' : '今日 5 个渠道，按成交额排序')
+                ),
+                h(Button, { variant: 'outline', onClick: () => setOpen(true) }, '导出明细')
+              ),
+              weekEmpty
+                ? h('div', { className: 'empty' },
+                    h('b', null, '本周数据还没出来'),
+                    h('span', null, '周一的数据在周二早上 8 点生成，先看今日或近 7 天。')
+                  )
+                : h(Table, { data, columns, rowKey: 'id', size: 'medium', stripe: false, hover: true })
+            ),
+
+            h('footer', null,
+              h('div', { className: 'foot-cols' },
+                [
+                  ['产品', ['总览', '报表', '渠道']],
+                  ['数据', ['指标字典', '更新时间', '导出记录']],
+                  ['帮助', ['快捷键', '反馈', '状态页']],
+                ].map(([title, links]) => h('div', { key: title },
+                  h('h3', null, title),
+                  links.map((t) => h('a', { key: t, href: '#' }, t))
+                ))
+              ),
+              h('p', { className: 'foot-note' }, 'MetricRail · 数据每日 09:30 更新 · 仅供内部经营分析使用')
+            )
+          )
+        ),
+
+        h(Dialog, {
+          visible: open,
+          header: '导出今日数据',
+          onClose: () => setOpen(false),
+          onConfirm: exportData,
+          confirmBtn: { content: '导出 CSV', loading },
+          cancelBtn: '取消',
+          width: 420,
+        }, h('p', { style: { margin: 0, lineHeight: '22px' } },
+          '将导出今日 3,842 行渠道明细，包含访客、转化率与成交额。文件约 1.2 MB。'))
+      )
+    }
+
+    createRoot(document.getElementById('root')).render(h(App))
+  </script>
+</body>
+</html>

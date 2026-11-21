@@ -1,0 +1,249 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import FootLine from '../components/FootLine.astro'
+import { buildModel } from '../lib/model'
+import { countSources } from '../lib/sources'
+import starData from '../data/star-points.json'
+import { loadCases } from '../data/examples'
+import { AI_PROMPT } from '../data/guide.ts'
+import { BASE_PREFIX, siteRoot, withBase } from '../lib/url'
+
+// 提示词按结构展示：总述段落 + 编号步骤，与复制内容完全一致
+const promptParagraphs = AI_PROMPT.split('\n\n')
+const promptIntro = promptParagraphs.filter((block) => !/^\d+\./.test(block))
+const promptSteps = promptParagraphs
+  .filter((block) => /^\d+\./.test(block))
+  .map((line) => {
+    const match = line.match(/^(\d+)\.\s*(.*)$/s)
+    return { n: match?.[1] ?? '', text: match?.[2] ?? line }
+  })
+const inlineParts = (text: string) =>
+  text.split('`').map((part, i) => ({ text: part, code: i % 2 === 1 }))
+
+const specs = await getCollection('specs')
+const model = buildModel(specs)
+
+const sources = countSources(model.all.map((s) => ({ publisher: s.data.publisher, source: s.data.source })))
+const pointCount = Object.keys(starData.points).length
+const taskCount = Object.keys(starData.tasks).length
+const caseCount = loadCases({ strict: false }).length
+
+const description = `以官方规范为主的 UI 设计规范库：${model.total} 篇，按 ${model.sections.length} 个分区组织，覆盖 Apple HIG、Fluent 2、Polaris、Primer、Carbon、TDesign 等官方规范，兼收方法文章与取值快照。`
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'UISpecs',
+  description,
+  inLanguage: 'zh-CN',
+  url: `${siteRoot(Astro.site)}/`,
+}
+---
+
+<Base title="UI 设计规范全文库 · UISpecs" description={description} jsonLd={jsonLd}>
+  <div class="page">
+    <div id="main">
+      <section class="home-intro" aria-labelledby="home-title">
+        <div class="home-head">
+          <h1 class="home-title" id="home-title">UI 设计规范全文库</h1>
+          <div class="home-ai-pop" id="homePromptPop">
+            <button class="home-ai-copy" id="homePromptBtn" type="button" aria-expanded="false" aria-controls="homePromptPanel">
+              复制提示词
+            </button>
+            <div class="home-ai-panel" id="homePromptPanel" role="group" aria-label="提示词全文" tabindex="0" hidden>
+              <template id="homePromptSrc" data-base={BASE_PREFIX}>{AI_PROMPT}</template>
+              <div class="prompt-head">
+                <span class="prompt-head-title">提示词全文</span>
+                <span class="prompt-head-actions">
+                  <span class="prompt-head-meta">{promptSteps.length} 步 · 现行版 · 复制后直接发给 AI</span>
+                  <button class="prompt-close" type="button">关闭</button>
+                </span>
+              </div>
+              <div class="prompt-body">
+                {
+                  promptIntro.map((para) => (
+                    <p class="prompt-lede">
+                      {inlineParts(para).map((part) => (part.code ? <code>{part.text}</code> : part.text))}
+                    </p>
+                  ))
+                }
+                <ol class="prompt-steps">
+                  {
+                    promptSteps.map((step) => (
+                      <li class="prompt-step">
+                        <span class="prompt-step-no" aria-hidden="true">{step.n.padStart(2, '0')}</span>
+                        <div class="prompt-step-main">
+                          <p class="prompt-step-desc">
+                            {inlineParts(step.text).map((part) => (part.code ? <code>{part.text}</code> : part.text))}
+                          </p>
+                        </div>
+                      </li>
+                    ))
+                  }
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="home-lede">
+          以官方规范为主，兼收方法文章与取值快照。规范原文里的数值都标文件和行号。
+        </p>
+        <button class="home-search" type="button" data-home-search aria-label="搜索全文">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg
+          >
+          <span class="home-search-text">搜索标题、来源、标签</span>
+          <kbd>⌘K</kbd>
+          <span class="home-search-go" aria-hidden="true">搜索</span>
+        </button>
+        <p class="home-stats">
+          <span class="stat"><b>{model.total}</b> 篇内容</span>
+          <span class="stat"><b>{model.sections.length}</b> 分区</span>
+          <span class="stat"><b>{pointCount}</b> 设计点</span>
+          <span class="stat"><b>{taskCount}</b> 设计场景</span>
+          <span class="stat"><b>{caseCount}</b> 案例站</span>
+        </p>
+        <p class="home-sample">
+          取值示例：Apple HIG · xSmall · Title 3 17pt / 行高 22pt ·
+          <a href={withBase('/a/type/developer.apple.com--typography/')}>typography.md:434-438</a>
+        </p>
+      </section>
+
+      <section class="home-index" aria-labelledby="index-title">
+        <h2 class="home-index-head" id="index-title">按分区读</h2>
+        <p class="home-index-note">{model.sections.length} 个分区，按标签顺序从入门到专题。</p>
+        <ul class="section-rows">
+          {
+            model.sections.map((section, i) => (
+              <li>
+                <a class="section-row" href={withBase(`/s/${section.key}/`)}>
+                  <span class="section-row-no">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="section-row-name">{section.title}</span>
+                  <span class="section-row-note">{section.note}</span>
+                  <span class="section-row-count">{section.items.length} 篇</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+
+    <script>
+      // 提示词：悬停或聚焦展开全文，点击复制；站点地址运行时替换成当前域名
+      const pop = document.getElementById('homePromptPop')
+      const btn = document.getElementById('homePromptBtn') as HTMLButtonElement | null
+      const panel = document.getElementById('homePromptPanel')
+      const src = document.getElementById('homePromptSrc') as HTMLTemplateElement | null
+      if (pop && btn && panel && src) {
+        const siteBase = location.origin + (src.dataset.base ?? '')
+        const rawPrompt = () => (src.content.textContent ?? '').replaceAll('<站点地址>', siteBase)
+        // 面板里可见文案中的站点地址同样换成当前域名
+        const walker = document.createTreeWalker(panel, NodeFilter.SHOW_TEXT)
+        while (walker.nextNode()) {
+          const node = walker.currentNode
+          if (node.nodeValue?.includes('<站点地址>')) {
+            node.nodeValue = node.nodeValue.replaceAll('<站点地址>', siteBase)
+          }
+        }
+
+        // 面板朝下放不下时翻到按钮上方，并按可用高度收 max-height
+        const place = () => {
+          const r = btn.getBoundingClientRect()
+          const width = Math.min(880, window.innerWidth - 32)
+          panel.style.width = `${width}px`
+          const below = window.innerHeight - r.bottom - 24
+          const above = r.top - 24
+          // 上下都放不下 480 时改为视口居中的大面板，避免只剩一小条可读区
+          const centred = Math.max(below, above) < 480
+          const up = !centred && below < 480 && above > below
+          panel.classList.toggle('is-up', up)
+          panel.classList.toggle('is-centred', centred)
+          // 右边放不下就把面板往左挪，别让页面横向裁掉
+          const over = r.left + width + 16 - window.innerWidth
+          panel.style.left = centred ? '' : over > 0 ? `${-over}px` : '0px'
+          panel.style.maxHeight = centred
+            ? 'min(80vh, 720px)'
+            : `${Math.min(720, Math.max(240, up ? above : below))}px`
+        }
+        const setOpen = (open: boolean) => {
+          if (open && panel.hidden) place()
+          panel.hidden = !open
+          btn.setAttribute('aria-expanded', String(open))
+          if (!open) document.querySelector('.prompt-copy-fallback')?.remove()
+        }
+        const isOpen = () => !panel.hidden
+        const canHover = matchMedia('(hover: hover)').matches
+        panel.querySelector<HTMLButtonElement>('.prompt-close')?.addEventListener('click', () => {
+          setOpen(false)
+          btn.focus({ preventScroll: true })
+        })
+
+        if (canHover) {
+          pop.addEventListener('pointerenter', () => setOpen(true))
+          pop.addEventListener('pointerleave', () => {
+            if (!pop.contains(document.activeElement)) setOpen(false)
+          })
+        }
+        window.addEventListener('resize', () => {
+          if (isOpen()) place()
+        })
+        btn.addEventListener('click', async () => {
+          const done = (msg: string) => {
+            btn.textContent = msg
+            setTimeout(() => (btn.textContent = '复制提示词'), 2400)
+          }
+          setOpen(true)
+          try {
+            await Promise.race([
+              navigator.clipboard.writeText(rawPrompt()),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1200)),
+            ])
+            done('已复制')
+          } catch {
+            // 剪贴板被禁：放一个不可见输入框选中全文，⌘C 也能走
+            const ta = document.createElement('textarea')
+            ta.className = 'prompt-copy-fallback'
+            ta.value = rawPrompt()
+            ta.setAttribute('readonly', '')
+            ta.setAttribute('aria-hidden', 'true')
+            ta.tabIndex = -1
+            document.body.appendChild(ta)
+            ta.select()
+            ta.setSelectionRange(0, ta.value.length)
+            done('剪贴板受限，已选中')
+          }
+        })
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && isOpen()) {
+            setOpen(false)
+            btn.focus({ preventScroll: true })
+          }
+        })
+        document.addEventListener('pointerdown', (e) => {
+          if (isOpen() && !pop.contains(e.target as Node)) setOpen(false)
+        })
+      }
+    </script>
+
+    <FootLine>
+      <span><b>{model.total}</b> 篇内容</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{sources.length} 个来源，原文链接逐篇可查</span>
+    </FootLine>
+  </div>
+</Base>
+
+<script>
+  document.querySelector('[data-home-search]')?.addEventListener('click', (event) => {
+    const trigger = event.currentTarget as HTMLElement
+    window.dispatchEvent(new CustomEvent('ui-specs:open-search', { detail: { trigger } }))
+  })
+</script>

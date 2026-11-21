@@ -1,0 +1,7 @@
+{
+  "name": "SwimBoard",
+  "tagline": "四列冲刺看板，按成员和状态找任务，认领后往前推。",
+  "accent": "Orange7 #954500",
+  "structure": "Workbench 05 · N13 / Ft4",
+  "layout": "四列看板：待办、进行中、评审、完成；顶部筛选与 ⌘K 搜索，窄屏收成单列。"
+}

@@ -1,0 +1,119 @@
+---
+title: "GitHub Primer · Component · Nav list"
+source: https://raw.githubusercontent.com/primer/design/main/content/components/nav-list.mdx
+section: components
+tag: "规范"
+fetched: 2026-11-14
+status: full
+id: comp-primer-nav-list
+publisher: "GitHub Primer"
+---
+
+# GitHub Primer · Component · Nav list
+
+> 来源：https://primer.style/components/nav-list
+
+![](https://user-images.githubusercontent.com/2313998/226925586-19a376a1-7430-410f-b060-5e77fae41933.png)
+
+## Usage
+
+A nav list organizes navigation links for the user's current context and indicates which view they're currently on. It is typically used as a sidebar that changes what is rendered in the main content area.
+
+### States
+
+![](https://github.com/primer/design/assets/2313998/a3d4180b-239e-40a8-8a11-d7cf40405159)
+
+**Resting:** The default state. The link is not the one currently being shown.
+
+**Current:** Indicates that this link is the current view being shown.
+
+**Inactive:** Indicates that the link href is unavailable due to a system error. See [degraded experience guidelines](https://primer.style/ui-patterns/degraded-experiences#degraded-navigation) for more information.
+
+**Loading:** Indicates that the link href is still being calculated. See [loading guidelines](https://primer.style/ui-patterns/loading#navigation) for more information.
+
+**Expanded sub-items:** The item is expanded to show its sub-items.
+
+**Collapsed sub-items:** The item has sub-items, but they are hidden.
+
+**Action list item interactive states:** Hover and focus states match the action list items.
+
+### Best practices
+
+- Nav list items should only ever be links. Do not try and add items to the nav list that are buttons or non-interactive content.
+  - If you need to render a list of actions or a list of actions mixed with links, use the [action list](https://primer.style/components/action-list) instead
+- Avoid inconsistent use of leading visuals. Ideally all items have a leading visual, or no items have them. This keeps the link text aligned at the start of the item, making the links easier to scan.
+- Associate related items using a [group](https://primer.style/components/nav-list#group-list-sections) or [divider](https://primer.style/components/nav-list#pseudo-grouping-using-a-divider) when it makes the content easier to understand.
+- Items should be listed in a logical or intuitive order.
+
+    ![](https://user-images.githubusercontent.com/2313998/226925595-ab08263b-600d-43be-b56a-c9b6af8950a1.png)
+    Use leading visuals consistently.
+
+    ![](https://user-images.githubusercontent.com/2313998/226925597-717c5e21-5792-4d4c-94bc-5a798ca486ce.png)
+    Avoid mixing items that have leading visuals with items that don't.
+
+    ![](https://user-images.githubusercontent.com/2313998/226925601-ad39870d-56d4-4696-911b-5f05ccd436d4.png)
+    Only use dividers to visually group items.
+
+    ![](https://user-images.githubusercontent.com/2313998/226925603-d17f11b7-1c80-42d8-bd0e-4fc329ac6e2b.png)
+    Don't use dividers to separate individual items.
+
+## Anatomy
+
+Nav list items are rendered using [action list](https://primer.style/components/action-list) items, so they share anatomy, styles, and some options.
+
+## Options
+
+### Leading and trailing visuals
+
+![](https://user-images.githubusercontent.com/2313998/226925606-c1d6d354-5692-410e-a27e-4e25f1c264ca.png)
+
+**Leading visuals** are commonly used to show a visual hint for what the item is. For example, an icon or avatar that represents the view being linked to.
+
+**Trailing visuals** are commonly used to show auxiliary information about the item. For example, a count of unread notifications on the page.
+
+Nav list items may have both a leading and a trailing visual.
+
+### Grouped list sections
+
+![](https://user-images.githubusercontent.com/2313998/226925613-71c86520-394d-46b7-a29d-090268d4e0cb.png)
+
+You can semantically group your nav list into multiple lists using groups. You can choose whether or not to show a label for each group.
+
+If you want to visually group your nav list into sections but don't want the semantics of nested ``s, you may use dividers to visually break your list into sections.
+
+Grouping should be used to make long or complex nav lists easier to comprehend.
+
+### Sub-items
+
+![](https://user-images.githubusercontent.com/2313998/226925617-c5a27545-905f-491e-9059-6389264ab77d.png)
+
+Sub-items may be collapsed or expanded under a top-level nav list item.
+
+The top-level nav list item cannot be a link; it only behaves as a toggle that expands and collapses the sub-items.
+
+Sub-items may be used to render nested navigation structures. Up to 4 levels of nesting are supported. If you need to handle a more deeply-nested navigation structure, reconsider the design of your navigation or the information hierarchy.
+
+Do not replace your NavList with a [tree view](https://primer.style/components/tree-view) to support a deeply nested navigation structure. A tree view is never an accessible replacement for navigation, as it serves a different purpose and is not recognized as navigation by assistive technologies.
+
+## Responsive layout
+
+For information on responsive layout of a nav list that is used in a sidebar, see the [responsive sidebar navigation patterns](https://primer.style/navigation#responsive-sidebar-navigation-patterns) section of our navigation guidelines for more information.
+
+## Accessibility
+
+Nav lists should always be labeled for assistive technologies, even if the label is visually hidden. Nav list items are links, so they should never contain buttons or other clickable elements.
+
+### Inactive Items
+
+Inactive nav list items are not rendered as `` tags since we don't know the href value. The only focusabe part of the item is the leading visual. See the [action list accessibility guidelines](https://primer.style/components/action-list#tooltips-and-dialogs-on-inactive-items) for more details.
+
+### Leading Visuals
+
+Leading visuals are intended to be decorative only; the context of the leading visual should be provided in the text of `NavList.Item`. Only the text in `NavList.item` and any trailing visuals within `NavList.Item` are included in its accessible name, while anything inside `NavList.LeadingVisual` will be ignored.
+
+### Known accessibility issues (GitHub staff only)
+
+## Related links
+
+- [Action list](https://primer.style/components/action-list)
+- [Tree view](https://primer.style/components/tree-view)

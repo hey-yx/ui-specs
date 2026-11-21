@@ -1,0 +1,7 @@
+{
+  "name": "PickBin",
+  "tagline": "把文件存进临时柜子，拿 6 位取件码，让对方凭码取走。",
+  "accent": "TDesign Green7 #006c45",
+  "structure": "Narrative Workflow · N9 / Ft2",
+  "layout": "首屏左文右柜；01 投柜、02 拿码、03 取件纵向推进；窄屏单列，柜口就是上传入口。"
+}

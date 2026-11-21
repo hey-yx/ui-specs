@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=N8; footer=Ft1; base=#ffffff">
+<meta name="description" content="PromptShelf 词架：8 类 120 条 AI 页面设计提示词画廊（含 16 条完整样本），支持变量实时填词预览、示例输出对照、一键复制与免登录本地收藏。">
+<title>PromptShelf 词架 - AI 页面设计提示词工作台</title>
+<style>
+/* 数值来源：project-primer (Primer GitHub)
+ * 色彩：content/tokens/primer.style--color-themes.md (#ffffff, #f6f8fa, #25292e, #1f2328, #59636e, #0969da, #1a7f37, #1f883d, #9a6700, #d1242f, #cf222e, #d1d9e0)
+ * 字阶：content/patterns/primer--notification-messaging.md:107 (12px/14px) + 缺口回源 TDesign 字阶 content/type/tdesign.tencent.com--fonts.md (12/14/16/20/24/28/36)
+ * 间距与动效：GAP_RULES content/layout/uisdc.com--code-for-design-of-spacing.md (8/16/24/32/48/64) & content/motion/nngroup.com--animation-duration.md (200/300ms)
+ */
+:root {
+  --bg: #ffffff;
+  --bg-muted: #f6f8fa;
+  --bg-emphasis: #25292e;
+  --fg: #1f2328;
+  --fg-muted: #59636e;
+  --fg-on-dark: #ffffff;
+  --accent: #0969da;
+  --accent-tint: rgba(9, 105, 218, 0.08);
+  --success: #1a7f37;
+  --success-emphasis: #1f883d;
+  --success-hover: #1c8139;
+  --success-tint: rgba(26, 127, 55, 0.1);
+  --attention: #9a6700;
+  --attention-tint: rgba(154, 103, 0, 0.1);
+  --danger: #d1242f;
+  --danger-emphasis: #cf222e;
+  --danger-tint: rgba(209, 36, 47, 0.08);
+  --border: #d1d9e0;
+  --border-muted: rgba(209, 217, 224, 0.7);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-pill: 999px;
+  --dur: 200ms;
+  --shadow-card: 0 1px 3px rgba(31, 35, 40, 0.06);
+  --shadow-modal: 0 16px 40px rgba(31, 35, 40, 0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, pre { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, select, textarea { font-family: inherit; }
+a { color: var(--accent); text-decoration: none; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 100;
+  background: var(--bg-emphasis); color: var(--fg-on-dark);
+  padding: 10px 16px; border-radius: var(--r-md); font-weight: 600;
+}
+.skip:focus { left: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
+}
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 24px; }
+
+/* N8 终端命令面包屑深色顶栏 (#25292e) */
+.gh-header {
+  background: var(--bg-emphasis);
+  color: var(--fg-on-dark);
+  padding: 12px 0;
+}
+.gh-header-in {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.nav-term-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--fg-on-dark);
+  min-height: 36px;
+}
+.nav-term-prompt {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 600;
+}
+.nav-term-path a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  color: var(--fg-on-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gh-crumb-sep { color: rgba(255, 255, 255, 0.55); font-weight: 400; }
+.nav-term-cat {
+  padding: 1px 8px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--fg-on-dark);
+  font-size: 13px;
+  line-height: 20px;
+}
+.nav-term-caret {
+  display: inline-block;
+  width: 1ch;
+  color: #ffffff;
+  animation: termBlink 1.05s steps(2) infinite;
+}
+@keyframes termBlink { 50% { opacity: 0; } }
+.gh-search-wrap {
+  flex: 1;
+  min-width: 220px;
+  max-width: 420px;
+  display: flex;
+  gap: 8px;
+}
+.gh-search {
+  width: 100%;
+  min-height: 34px;
+  padding: 4px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--fg-on-dark);
+  font-size: 14px;
+  line-height: 20px;
+}
+.gh-search::placeholder { color: rgba(255, 255, 255, 0.72); }
+.gh-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* Primer UnderlineNav & Subnav (#f6f8fa) */
+.subnav {
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border);
+  padding-top: 16px;
+}
+.subnav-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.subnav-title { font-size: 20px; line-height: 28px; font-weight: 600; color: var(--fg); }
+.subnav-desc { font-size: 14px; line-height: 22px; color: var(--fg-muted); margin-top: 2px; }
+.subnav-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg);
+}
+.counter-num { font-weight: 600; color: var(--accent); }
+
+.tab-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-strip::-webkit-scrollbar { display: none; }
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--dur), border-color var(--dur);
+}
+.tab-btn .count-pill {
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  background: rgba(31, 35, 40, 0.08);
+  color: var(--fg);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.tab-btn[aria-pressed="true"] {
+  color: var(--fg);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+.tab-btn[aria-pressed="true"] .count-pill {
+  background: var(--accent);
+  color: var(--fg-on-dark);
+}
+
+/* 按钮 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--bg-muted);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--dur), border-color var(--dur);
+}
+.btn-lg { min-height: 44px; padding: 0 16px; }
+.btn-primary {
+  background: var(--success-emphasis);
+  border-color: var(--success-emphasis);
+  color: var(--fg-on-dark);
+}
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--fg-on-dark);
+}
+.btn-dark {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--fg-on-dark);
+}
+.btn-dark[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.btn[aria-pressed="true"]:not(.btn-dark) {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: #eaeef2; }
+  .btn-primary:hover:not(:disabled) { background: var(--success-hover); }
+  .btn-accent:hover:not(:disabled) { background: #0550ae; }
+  .btn-dark:hover:not(:disabled) { background: rgba(255, 255, 255, 0.22); }
+}
+
+/* 主两栏工作台 (Left Catalog + Right Sticky Live Variable Workbench) */
+.main-wrap { padding: 24px 0 64px; }
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 392px;
+  gap: 24px;
+  align-items: start;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.filter-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.sel {
+  min-height: 36px;
+  padding: 0 28px 0 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--bg-muted);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+/* Primer 变量使用说明横幅 + SVG 结构流程图 */
+.primer-banner {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r-md);
+  background: var(--bg-muted);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+  gap: 16px;
+  align-items: center;
+}
+.primer-banner h2 { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--fg); }
+.primer-banner p { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--fg-muted); }
+.banner-pills { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.guide-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.pill-ready { background: var(--success-emphasis); color: var(--fg-on-dark); }
+.pill-vars { background: var(--bg); color: var(--attention); border: 1px solid var(--attention); }
+.pill-accent { background: var(--accent); color: var(--fg-on-dark); }
+
+/* 提示词卡片列表 (Primer Box Style) */
+.card-grid { display: grid; gap: 12px; }
+.p-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  overflow: hidden;
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.p-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-card);
+}
+.p-card-head {
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.p-card-title-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.p-card-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--fg); }
+.p-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg-muted);
+}
+.p-card-body { padding: 14px 16px; display: grid; gap: 10px; }
+.p-card-scene { font-size: 14px; line-height: 22px; color: var(--fg); }
+.p-card-vars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg-muted);
+}
+.var-token {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+.p-code-preview {
+  background: var(--bg-muted);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.p-card-foot {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.p-out-note { font-size: 12px; line-height: 20px; color: var(--fg-muted); flex: 1; min-width: 180px; }
+.p-card-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* 右栏吸顶变量调试与整段复制器 */
+.inspector {
+  position: sticky;
+  top: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-muted);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.inspector-head {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+}
+.inspector-head h2 { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--fg); }
+.inspector-head p { margin-top: 2px; font-size: 12px; line-height: 20px; color: var(--fg-muted); }
+.inspector-body { padding: 16px; display: grid; gap: 14px; }
+.var-form { display: grid; gap: 10px; }
+.field label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.field label span { font-family: var(--font-mono); color: var(--accent); font-weight: 400; }
+.field input {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 20px;
+}
+.field input:disabled { background: var(--bg-muted); color: var(--fg-muted); }
+.preview-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
+.ptab {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ptab[aria-pressed="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.live-prompt {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.inspector-actions { display: grid; gap: 8px; }
+.copy-status {
+  min-height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* 状态条、错误与空态 */
+.status-bar, .alert-box, .empty-box {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.status-bar { background: var(--bg-muted); display: flex; align-items: center; gap: 10px; }
+.alert-box {
+  background: var(--danger-tint);
+  border-color: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.alert-title { font-weight: 600; color: var(--danger); font-size: 16px; }
+.empty-box { background: var(--bg-muted); text-align: center; padding: 40px 24px; }
+.empty-box h3 { font-size: 18px; color: var(--fg); }
+.empty-box p { margin-top: 6px; color: var(--fg-muted); }
+
+/* 弹窗 */
+.backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(31, 35, 40, 0.48);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.dialog {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal); width: min(640px, 100%); max-height: 86vh; overflow-y: auto; padding: 20px;
+}
+.dialog-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.dialog-body { padding-top: 14px; display: grid; gap: 12px; font-size: 14px; line-height: 22px; }
+
+/* Ft1 词标标语页脚（GitHub Primer 水平分割排布） */
+.gh-colophon {
+  border-top: 1px solid var(--border);
+  background: var(--bg-muted);
+  padding: 24px 0 28px;
+  color: var(--fg-muted);
+}
+.gh-colophon__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.gh-colophon__brand { display: grid; gap: 4px; }
+.gh-colophon__mark { font-family: var(--font-mono); font-size: 14px; line-height: 22px; font-weight: 600; color: var(--fg); }
+.gh-colophon__tag { font-size: 13px; line-height: 20px; color: var(--fg-muted); }
+.gh-colophon__nav { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.gh-colophon__nav a, .gh-colophon__nav button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+.gh-colophon__note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--fg-muted);
+}
+
+@media (max-width: 980px) {
+  .workbench { grid-template-columns: 1fr; }
+  .inspector { position: static; }
+  .primer-banner { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; }
+  .gh-actions { width: 100%; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .nav-term-caret { animation: none; opacity: 1; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#promptCatalog">跳到提示词目录</a>
+
+<header class="gh-header">
+  <div class="wrap gh-header-in">
+    <nav class="nav-term-path" aria-label="仓库路径导航">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="20" height="18" rx="4" stroke="#ffffff" stroke-width="1.8"/>
+        <path d="M7 9l4 3-4 3M13 15h4" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="nav-term-prompt" aria-hidden="true">$</span>
+      <a href="#top">promptshelf</a>
+      <span class="gh-crumb-sep">/</span>
+      <a href="#promptCatalog">词架</a>
+      <span class="gh-crumb-sep">/</span>
+      <span class="nav-term-cat" id="termCatCrumb">全部类别</span>
+      <span class="nav-term-caret" aria-hidden="true">_</span>
+    </nav>
+    <div class="gh-search-wrap">
+      <label class="sr-only" for="kwInput">按标题或场景关键词搜索提示词</label>
+      <input class="gh-search" id="kwInput" type="search" placeholder="搜标题、页面类型或适用场景（如 表格 / 表单 / 对比度）">
+    </div>
+    <div class="gh-actions">
+      <button class="btn btn-dark" id="savedToggleBtn" type="button" aria-pressed="false">本地收藏 (0)</button>
+      <button class="btn btn-dark" id="guideModalBtn" type="button">使用说明</button>
+    </div>
+  </div>
+</header>
+
+<section class="subnav" id="top" aria-label="分类与仓库概览">
+  <div class="wrap">
+    <div class="subnav-top">
+      <div>
+        <h1 class="subnav-title">AI 页面设计提示词库（8 类 · 16 条完整样本与变量说明）</h1>
+        <p class="subnav-desc">按类别挑一条现成模板，核对适用场景与需补充的产品变量，一键复制整段直接贴进 AI 编程或设计工具。</p>
+      </div>
+      <div class="subnav-stats">
+        <span class="counter-badge">全库总量 <span class="counter-num">120 条</span></span>
+        <span class="counter-badge">完整样本 <span class="counter-num">8 类 × 2 条</span></span>
+        <span class="counter-badge">累计复制 <span class="counter-num" id="totalCopiesNum">28,490</span></span>
+      </div>
+    </div>
+    <div class="tab-strip" id="catTabs" role="group" aria-label="按 8 个设计类别筛选"></div>
+  </div>
+</section>
+
+<main class="main-wrap wrap">
+  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+
+  <div class="status-bar" id="busyBar" aria-busy="true" hidden>
+    <span>正在检索词架本地索引并整理变量占位符...</span>
+  </div>
+
+  <div class="alert-box" id="errorBox" role="alert" hidden>
+    <div>
+      <div class="alert-title">提示词索引拉取失败</div>
+      <div style="margin-top:4px;font-size:14px;color:var(--fg)">仓库快照暂未响应，避免复制不完整模板，请点击重试。</div>
+    </div>
+    <button class="btn btn-accent" id="retryBtn" type="button">重试加载</button>
+  </div>
+
+  <div class="workbench">
+    <section id="promptCatalog" aria-labelledby="catalogHeading">
+      <div class="primer-banner">
+        <div>
+          <h2 id="catalogHeading">哪些直接复制？哪些需要先补产品信息？</h2>
+          <p>标「需先补产品变量」的模板含 <code>{{产品名}}</code>、<code>{{受众}}</code>、<code>{{页面类型}}</code> 三个占位符，在右侧调试台填好后复制；标「可直接用」的模板（如评审清单与配色自检）可零改动直接粘贴。</p>
+          <div class="banner-pills">
+            <span class="guide-pill pill-vars">需先补产品变量（12 条）</span>
+            <span class="guide-pill pill-ready">免改直接复制（4 条）</span>
+            <span class="guide-pill pill-accent">免账号 · 本地收藏</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 280 96" role="img" aria-label="提示词装配流程：选类别 -> 填变量 -> 复制整段">
+          <rect x="4" y="18" width="76" height="60" rx="6" fill="#ffffff" stroke="#d1d9e0"/>
+          <text x="42" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2328">1. 挑类别</text>
+          <text x="42" y="62" text-anchor="middle" font-size="10" fill="#59636e">8 类画廊</text>
+          <path d="M84 48h16" stroke="#0969da" stroke-width="2" marker-end="none"/>
+          <rect x="102" y="18" width="76" height="60" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+          <text x="140" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#0969da">2. 填变量</text>
+          <text x="140" y="62" text-anchor="middle" font-size="10" fill="#59636e">产品/受众</text>
+          <path d="M182 48h16" stroke="#1a7f37" stroke-width="2"/>
+          <rect x="200" y="18" width="76" height="60" rx="6" fill="#1f883d"/>
+          <text x="238" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff">3. 整段复制</text>
+          <text x="238" y="62" text-anchor="middle" font-size="10" fill="#ffffff">附示例输出</text>
+        </svg>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-controls">
+          <label class="sr-only" for="modeSelect">使用前提筛选</label>
+          <select class="sel" id="modeSelect">
+            <option value="all">全部使用前提 (16)</option>
+            <option value="vars">需要先补产品信息 (12)</option>
+            <option value="direct">可直接复制使用 (4)</option>
+          </select>
+          <label class="sr-only" for="sortSelect">排序方式</label>
+          <select class="sel" id="sortSelect">
+            <option value="copies">按复制次数从高到低</option>
+            <option value="updated">按更新时间最新</option>
+          </select>
+        </div>
+        <span style="font-size:12px;color:var(--fg-muted)" id="matchCountText">当前展示 16 条完整样本（8 类各 2 条）</span>
+      </div>
+
+      <div class="card-grid" id="cardGrid"></div>
+    </section>
+
+    <aside class="inspector" aria-label="右栏变量填充与预览调试台">
+      <div class="inspector-head">
+        <h2 id="inspTitle">未选择模板</h2>
+        <p id="inspMeta">点击左侧任意提示词即可预览整段内容与变量说明</p>
+      </div>
+      <div class="inspector-body">
+        <div class="var-form" aria-label="变量填充区">
+          <div class="field">
+            <label for="varProduct">产品名与核心任务 <span>{{产品名}}</span></label>
+            <input id="varProduct" type="text" value="账单明细核对台" placeholder="输入产品名或一句话功能">
+          </div>
+          <div class="field">
+            <label for="varAudience">目标受众与场景 <span>{{受众}}</span></label>
+            <input id="varAudience" type="text" value="每天核对多笔流水的中小企业财务人员" placeholder="输入使用者与使用场景">
+          </div>
+          <div class="field">
+            <label for="varPageType">页面类型 <span>{{页面类型}}</span></label>
+            <input id="varPageType" type="text" value="双栏审核工作台首页" placeholder="输入页面形态">
+          </div>
+        </div>
+
+        <div class="preview-tabs" role="group" aria-label="预览模式切换">
+          <button class="ptab" type="button" id="tabPrompt" aria-pressed="true">完整提示词预览</button>
+          <button class="ptab" type="button" id="tabSample" aria-pressed="false">示例输出说明</button>
+        </div>
+
+        <pre class="live-prompt" id="livePromptBox"></pre>
+
+        <div class="inspector-actions">
+          <button class="btn btn-primary btn-lg" id="copyInspBtn" type="button">一键复制整段提示词</button>
+          <button class="btn" id="saveInspBtn" type="button" aria-pressed="false">加入本地收藏</button>
+          <div class="copy-status" id="copyStatus" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="gh-colophon">
+  <div class="wrap">
+    <div class="gh-colophon__bar">
+      <div class="gh-colophon__brand">
+        <strong class="gh-colophon__mark">PromptShelf / 词架</strong>
+        <span class="gh-colophon__tag">GitHub Primer 规范提示词仓库 · 8 类 120 条摘要与 16 条完整变量模板</span>
+      </div>
+      <nav class="gh-colophon__nav" aria-label="页脚链接">
+        <a href="#top">回到顶部分类</a>
+        <a href="#promptCatalog">提示词目录</a>
+        <button type="button" id="footGuideBtn">使用说明</button>
+      </nav>
+    </div>
+    <p class="gh-colophon__note">PromptShelf 词架 · 共 8 类 120 条（当前展示各 2 条完整样本）；提示词文本、复制次数与示例输出均为本地演示数据，不接账号系统。</p>
+  </div>
+</footer>
+
+<div class="backdrop" id="guideModal" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+  <div class="dialog">
+    <div class="dialog-head">
+      <h2 id="guideTitle" style="font-size:18px;font-weight:600">词架使用说明：直接用 vs 先补变量</h2>
+      <button class="btn" id="guideCloseBtn" type="button">关闭</button>
+    </div>
+    <div class="dialog-body">
+      <p><strong>1. 需要先补产品信息的提示词（落地页、后台、移动端、表单、图表、文案 6 类）：</strong><br>
+      因为布局顺序和字段由真实业务决定，模板内部留有 <code>{{产品名}}</code>、<code>{{受众}}</code>、<code>{{页面类型}}</code>。在右侧调试台填好这三项，系统会实时把占位符替换成完整可执行提示词。</p>
+      <p><strong>2. 可直接复制使用的提示词（配色、评审 2 类）：</strong><br>
+      用于对已有界面稿做对比度核算、字号层级收敛、响应式与四态验收清单检查，无需修改变量即可直接粘贴给 AI 审阅当前页面源码。</p>
+      <p><strong>3. 本地收藏保存方式：</strong><br>
+      无需注册或登录账号，收藏状态与复制计数保存在当前浏览器会话内，点击顶栏「本地收藏」可单独筛出常用模板。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CATEGORIES = [
+    { id: "全部", name: "全部", total: 120 },
+    { id: "落地页", name: "落地页", total: 18 },
+    { id: "后台", name: "后台", total: 20 },
+    { id: "移动端", name: "移动端", total: 14 },
+    { id: "表单", name: "表单", total: 16 },
+    { id: "图表", name: "图表", total: 12 },
+    { id: "文案", name: "文案", total: 14 },
+    { id: "配色", name: "配色", total: 12 },
+    { id: "评审", name: "评审", total: 14 }
+  ];
+
+  var PROMPTS = [
+    {
+      id: "pr1", cat: "落地页", title: "软件产品首屏价值主张与无框工作区演示", needsVars: true,
+      scene: "用于开发者工具或效率 SaaS 官网首页：上半屏大字短句说清解决什么事，下半屏直接嵌入可切换的真工作台微界面，禁用假浏览器外壳。",
+      updated: "2026-11-19", copies: 3420,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "为 {{产品名}} 设计一个面向 {{受众}} 的 {{页面类型}}：\n1. 顶栏采用紧凑单行结构，左放品牌，右放 3 个锚点与 1 个主转化按钮。\n2. 首屏主标题控制在 12 字以内（36-64px），旁附 3 条硬事实对照表（适用团队、数据存放、导出能力）。\n3. 首屏下方不画假浏览器窗口框，直接放一个三栏可点选产品工作台 slice（左列表、中详情、右动态）。\n4. 后接零描边能力 Bento 网格与按月/按年切换定价卡，配色全站限定单主色相。",
+      sampleOut: "示例输出：生成包含三栏实时文档切换演示、无 1px 杂乱边框的浅灰-纯白分层着陆页，移动端自动折成单栏且保留价格切换器。"
+    },
+    {
+      id: "pr2", cat: "落地页", title: "独立顾问 / 工作室接单与项目边界官网", needsVars: true,
+      scene: "用于技术顾问、设计工作室或小团队服务首页：首屏说清代表案例与可量化前后对比，明确列出不承接的范围避免无效询盘。",
+      updated: "2026-11-16", copies: 2180,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "构建 {{产品名}} 的 {{页面类型}}，目标读者为正在筛选外包/顾问的 {{受众}}：\n1. 首屏用「行业 + 角色 + 周期 + 量化改善」结构展示 4 到 6 个已交付项目，配合内联 SVG 交付前后柱图。\n2. 中段专设「可承担范围 vs 明确不接类型」双列清单与 2 种合作方式切换（按项目 / 按月顾问）。\n3. 文末提供邮箱与时区回复承诺表单，不写「一站式赋能」空话。",
+      sampleOut: "示例输出：产出自带 6 项目切换索引、性能对照 SVG 图表与真实联系方式占位的接单落地页。"
+    },
+    {
+      id: "pr3", cat: "后台", title: "双栏明细审核与固定存根控制台", needsVars: true,
+      scene: "用于报销审核、订单退款、工单审批、临床复核等「左看长详情、右定最终裁决」类后台页。",
+      updated: "2026-11-20", copies: 2940,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "为 {{产品名}} 生成面向 {{受众}} 的 {{页面类型}}：\n1. 桌面端采用 1fr + 340px 吸顶右栏布局；DOM 顺序先排头部摘要与右栏操作存根，保障读屏器与窄屏用户先看到合计与主按钮。\n2. 左侧连续排放明细表格（tabular-nums 等距对齐、单向发丝横线、无竖线无斑马纹）与处理时间轴。\n3. 右侧灰底无框存根只放核对合计、必填备注与全页唯一主按钮（如「确认打款」），同步实现空态与失败重试。",
+      sampleOut: "示例输出：包含左栏金额表+时间轴、右栏粘性票据存根及完整单选拒绝原因表单的工作台源码。"
+    },
+    {
+      id: "pr4", cat: "后台", title: "高密度监控数据表与实时筛选工具栏", needsVars: true,
+      scene: "用于多账号网关、运维节点或电商库存台：强调即时筛选、状态徽标总量控制 (<5%) 与行操作撤销。",
+      updated: "2026-11-15", copies: 2410,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "针对 {{产品名}} 设计供 {{受众}} 使用的 {{页面类型}}：\n1. 首屏顶部仅留一条关键状态横幅加 4 张 KPI 概览瓦片，下方紧接内联 SVG 趋势图（Y 轴必须从 0 起且缺失点不插值）。\n2. 表格顶部给出一行即时筛选（关键词 + 状态标签 + 排序），不叠两行过滤表单。\n3. 表格支持关键操作就地执行与 5 秒撤销提示条，重绘表格后必须保持原操作元素的键盘焦点。",
+      sampleOut: "示例输出：生成带实时过滤、零基线 SVG 折线与支持聚焦还原的紧凑型数据管理界面。"
+    },
+    {
+      id: "pr5", cat: "移动端", title: "移动浏览器打开即用的 AI 对话与配额壳", needsVars: true,
+      scene: "用于手机端免安装工具、AI 轻助手与随手查工具：开门直接进核心输入或对话区，不做占满首屏的宣传标语。",
+      updated: "2026-11-18", copies: 1890,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "面向 {{受众}} 构建 {{产品名}} 的 {{页面类型}}，按 320px/375px 移动端优先排版：\n1. 首屏砍掉营销大标题，顶部只留极简助手选择器与剩余额度提示，中部直接是开场白与预设话题卡片。\n2. 所有按钮、输入框与标签触控高度严格 >= 44px，悬停态必须包裹在 @media (hover: hover) 内防止手机粘滞。\n3. 底部固定对话输入舱并处理超长代码块的横向不溢出（overflow-wrap: anywhere）。",
+      sampleOut: "示例输出：在 375px 手机视口下无需滚动即可完成点选话题、发送消息与查看剩余体验次数的轻量壳。"
+    },
+    {
+      id: "pr6", cat: "移动端", title: "通勤碎片化课程目录与试听断点续学页", needsVars: true,
+      scene: "用于移动学习与碎片任务工具：突出上次学习进度断点、免费试听开关与一键下载讲义包。",
+      updated: "2026-11-14", copies: 1450,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "为 {{产品名}} 设计适合 {{受众}} 在碎片时间操作的 {{页面类型}}：\n1. 顶部直接亮出「上次学到第 X 节 XX 分钟 · 继续学习」断点卡与总章节时长摘要。\n2. 大纲列表采用折叠章组，标明「免费试听」胶囊标签，点中后在视听窗内切换字幕与讲义预览。\n3. 保证 320px 窄屏无截断、无横向滚动，讲义清单与练习样本支持一键展开预览。",
+      sampleOut: "示例输出：移动端单手可点的 24 节折叠大纲与同步高亮试听字幕区。"
+    },
+    {
+      id: "pr7", cat: "表单", title: "三步直达社区医疗预约与时段号源矩阵", needsVars: true,
+      scene: "用于挂号、场地预约、维修派单等「选类 -> 选时间 -> 填人信息 -> 拿凭条」确定性流式表单。",
+      updated: "2026-11-17", copies: 2050,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "请设计 {{产品名}} 的 {{页面类型}}，协助 {{受众}} 在 2 分钟内完成下单：\n1. 顶部给出 3 步状态导航（选服务与时段 -> 核对填写人 -> 获取可取消电子凭条）。\n2. 时间段选择用明确余号数字按钮（如「09:30-10:00 · 余 4」），已满档期禁用并给出原因说明。\n3. 所有表单校验在失焦与提交时同步用 aria-invalid + 行内红字解释怎么改，提交后支持一键撤回取消。",
+      sampleOut: "示例输出：生成含多就诊人切换、30 分钟时段网格与可取消预约二维码凭条的完整流程。"
+    },
+    {
+      id: "pr8", cat: "表单", title: "短链接粘贴提取与 4 类报错就地排障表单", needsVars: true,
+      scene: "用于工具型输入框首页（如链接解析、文件转码、格式验证）：围绕唯一大输入框与详尽失败兜底构建。",
+      updated: "2026-11-12", copies: 1760,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "围绕 {{产品名}} 的单一主任务构造 {{页面类型}}，面向 {{受众}}：\n1. 页面顶部只留隐私/额度提示与极简导航，焦点立即落在一个高对比圆角输入区 + 一键粘贴示例链接胶囊。\n2. 为失效输入设计 4 种可验证的就地提示文案（格式无效、原内容已删、触发风控、当日额度用尽）及对应解决按钮。\n3. 成功解析后就地展开结果预览卡、大小口径与 2 小时直链有效期提醒。",
+      sampleOut: "示例输出：单一输入框主导首屏，自带 4 种失败场景模拟器与多格式文件提取结果卡。"
+    },
+    {
+      id: "pr9", cat: "图表", title: "基于 IBM 图表解剖的零基线内联 SVG 趋势与占比", needsVars: true,
+      scene: "用于在面板内手写无外部依赖的业务趋势图、柱图与堆叠分布条。",
+      updated: "2026-11-19", copies: 1680,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "为 {{产品名}} 中面向 {{受众}} 的 {{页面类型}} 生成纯内联 SVG 数据可视化：\n1. 严格遵循数据墨水最大化：纵轴坐标必须从 0 起步，遇到缺数时间点直接断开折线，禁止人为插值平滑假连接。\n2. 关键拐点与最新端点直接标注具体数值，图例统一置于图表下方居中。\n3. 所有 SVG 必须配 `role=\"img\"` 与精准中文 `aria-label`，颜色使用单一主色阶深浅或高对比双色，绝不堆砌彩虹配色。",
+      sampleOut: "示例输出：一段可直接贴入页面的自适应 SVG 趋势图代码，纵轴从 0 起，端点标数值且对比度 >= 4.5:1。"
+    },
+    {
+      id: "pr10", cat: "图表", title: "无图表重库的纯 CSS 分段比例尺与市场分布卡", needsVars: true,
+      scene: "用于在搜索目录与招聘列表页右侧，紧凑总结当前筛选结果的结构分布。",
+      updated: "2026-11-10", copies: 1510,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "为 {{产品名}} 的 {{页面类型}} 右栏写一个轻量级比例分布组件，辅助 {{受众}} 判断当前市场结构：\n1. 顶部排 3 个关键匹配数字（如总数、精选比、高档占比），采用等宽数字 tabular-nums。\n2. 下方用纯 CSS Flexbox 圆角分段条按实时百分比渲染 3 到 4 个区间段，图例点与数字紧跟在条下。\n3. 每次列表筛选后实时重算百分比与计数，总数归零时平顺显示全灰空槽。",
+      sampleOut: "示例输出：仅 20 行 CSS 的纯静态比例分布卡，随左侧搜索条件实时重算占比宽度。"
+    },
+    {
+      id: "pr11", cat: "文案", title: "去「赋能/一站式」虚词：写给 B 端用户看的微文案改写", needsVars: true,
+      scene: "把 AI 常写的「智能赋能」「全方位一站式体验」改写成真实业务产品口吻与清楚的四态报错。",
+      updated: "2026-11-15", copies: 2320,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "请重写 {{产品名}}（面向 {{受众}}）{{页面类型}} 中的所有界面文案：\n1. 彻底删除「智能」「赋能」「一站式」「颠覆」「生态闭环」及类似空洞装饰词。\n2. 所有按钮改成「动词 + 宾语」（如「导出本月账单」「锁号并生成凭条」），拒绝模糊的「确认」「提交」。\n3. 补全 4 套微文案：空状态（说明为什么空+下一步按钮）、报错态（说清故障点+重试方式）、表单校验错误与硬事实缺失的「[待确认]」标注。",
+      sampleOut: "示例输出：一份可直接替换 JSON/HTML 文案的对照表，去除了全部虚词且明确了 4 态用户指引。"
+    },
+    {
+      id: "pr12", cat: "文案", title: "中英文混排排版规则与数字/金额格式统一检查", needsVars: true,
+      scene: "用于在项目上线前统一表格金额、时间格式、中英文间空格及禁用符号检查。",
+      updated: "2026-11-11", copies: 1290,
+      vars: ["产品名", "受众", "页面类型"],
+      text: "审校 {{产品名}}（{{受众}}）{{页面类型}} 的全部数字、金额与中文标点规则：\n1. 金额统一采用两位小数加千分位，负号必须置于币种符号前（如 `-¥128.00`），字重采用 tabular-nums。\n2. 中文标题上方禁止挂全大写英文装饰眉题（如 `01 / FEATURE OVERVIEW`）。\n3. 全站清理不规范的英文连接号 U+2013 与破折号 U+2014，区间改用半角连字符 `-` 或中文「到」，说明句改用中文逗号或括注。",
+      sampleOut: "示例输出：列出所有不合规范的数字与标点位置及一键替换后的合规文本清单。"
+    },
+    {
+      id: "pr13", cat: "配色", title: "基于 TDesign / Primer 色板的单色相 + AA 对比度复算表", needsVars: false,
+      scene: "【可直接复制】给定设计系统主色相后，生成严格满足 WCAG 4.5:1 / 3:1 的语义 Token。",
+      updated: "2026-11-20", copies: 3110,
+      vars: [],
+      text: "请检查并收口当前页面 CSS 中的全部色值：\n1. 只保留中性黑白灰打底加 1 个主交互色相；成功、告警、错误三种语义色总面积必须控制在首屏的 5% 以内，绝不用高饱和渐变填充整张卡片。\n2. 对页面内所有文字（含灰底标签、卡片说明、页脚链接与禁用外唯一文字）按其真实渲染祖先背景色做相对亮度对比度计算：14px 及以下常规文字 >= 4.5:1，>= 24px 大字或 >= 19px 粗体 >= 3.0:1。\n3. 若发现某浅灰字压浅灰底低于 4.5:1（例如 #777777 压 #f3f3f3），同族向深调一级至 #5e5e5e。",
+      sampleOut: "示例输出：直接附带对比度实算比率与 `:root` CSS Token 修复表。"
+    },
+    {
+      id: "pr14", cat: "配色", title: "浅色画布零描边分层 vs 工程/表单必要边界判定", needsVars: false,
+      scene: "【可直接复制】判断是否该删除页面里多余的 1px 灰黑卡片框线，靠底色差与留白拉出层次。",
+      updated: "2026-11-13", copies: 1640,
+      vars: [],
+      text: "审查当前页面所有容器边框与阴影用法：\n1. 若页面属于现代 SaaS 展示、目录或工作台，优先靠白纸 `#ffffff` 压浅灰 `#f3f3f3`/`#f6f8fa` 分层与 >= 16px 内边距拉出边界，移除三层嵌套外框与纯装饰性发光。\n2. 若属于表格数据行或需要明确输入靶标的表单输入框，仅保留单向 1px 发丝分割线或满足 3:1 非文本对比度的输入框边界。\n3. 输出需要删除或降噪的 CSS 选择器列表及替代方案。",
+      sampleOut: "示例输出：标出存在冗余边框套娃的卡片规则，给出保留必要输入框描边、简化展示卡片的样式替换。"
+    },
+    {
+      id: "pr15", cat: "评审", title: "交付前四视口（320/375/768/1280）与键盘无障碍门禁清单", needsVars: false,
+      scene: "【可直接复制】用于前端完工自查或代码 Review 时逐项核对溢出、焦点环、44px 触控与减弱动效。",
+      updated: "2026-11-21", copies: 3890,
+      vars: [],
+      text: "对当前单页源码或组件做上线前门禁逐条检查并只指出实际存在的问题（附选择器与行号）：\n1. 在 320px、375px、768px、1280px 四个视口下 `documentElement.scrollWidth === clientWidth`，且长文本与长数字不会撑破网格。\n2. 全部 `:focus-visible` 具有 >= 2px 实线高对比焦点环，页首包含 `.skip` 跳到正文锚点。\n3. 全部按钮与交互图标触控靶标高 >= 44px（次要页脚文字链 >= 24px）。\n4. 弹窗开启时焦点自动进弹窗、`Esc` 可关、关闭后焦点归还原触发元素；`prefers-reduced-motion` 下动画归零。\n5. 检验 `?empty=1`、`?fail=1`、`?slow=1`、`?long=1` 四种 url 查询参数状态是否全部生效且可恢复。",
+      sampleOut: "示例输出：按 5 条底线逐项输出 Pass/Fail 及具体行号修改建议，不讲空泛好评。"
+    },
+    {
+      id: "pr16", cat: "评审", title: "去 Logo 与主色复判：识别「千站一面模板味」自检规则", needsVars: false,
+      scene: "【可直接复制】把成品截图隐去品牌名与主题色后，自问用户是否还能一眼认出属于哪个行业产品。",
+      updated: "2026-11-19", copies: 2740,
+      vars: [],
+      text: "执行一次「去 Logo 与主色」严格评审：\n1. 假设把页面左上角的网站名字盖住、把所有主题按钮变回中性黑灰，仅凭页面核心数据部件与首屏结构，能否区分它是招聘板、医疗挂号、情报日报还是 AI 聊天馆？\n2. 检查是否存在千站共用的三列居中大图标卡、黑底 JSON 终端装饰框、以及「标题 + 两按钮」千篇一律营销首屏。\n3. 若像通用后台壳，提出 2 个必须落进首屏的「产品专用物件」替换掉泛化卡片（如挂号选时格、行情分布尺、变量调试台）。",
+      sampleOut: "示例输出：指出具体泛化模板区块，并给出最适配该产品形态的首屏专属部件重构思路。"
+    }
+  ];
+
+  var state = {
+    cat: "全部",
+    kw: "",
+    mode: "all",
+    sort: "copies",
+    savedOnly: false,
+    saved: {},
+    selectedId: "pr1",
+    previewTab: "prompt",
+    copyCounts: {},
+    failed: params.get("fail") === "1",
+    forceEmpty: params.get("empty") === "1",
+    slow: params.get("slow") === "1",
+    longMode: params.get("long") === "1"
+  };
+
+  PROMPTS.forEach(function (p) { state.copyCounts[p.id] = p.copies; });
+
+  if (state.longMode) {
+    PROMPTS[0].title = "跨设备企业级多角色软件首屏价值主张与实时三栏可交互演示工作台提示词规范";
+    PROMPTS[0].scene = "用于大型 SaaS 控制台、多端工程底座或全链路设计工具官网首页：同时覆盖超长标题折行与多维度变量占位校验。";
+  }
+
+  function announce(msg) {
+    $("liveMsg").textContent = "";
+    requestAnimationFrame(function () { $("liveMsg").textContent = msg; });
+  }
+
+  function filterPrompts() {
+    if (state.forceEmpty) return [];
+    var kw = state.kw.trim().toLowerCase();
+    var list = PROMPTS.filter(function (p) {
+      if (state.cat !== "全部" && p.cat !== state.cat) return false;
+      if (state.mode === "vars" && !p.needsVars) return false;
+      if (state.mode === "direct" && p.needsVars) return false;
+      if (state.savedOnly && !state.saved[p.id]) return false;
+      if (kw) {
+        var hay = (p.title + " " + p.cat + " " + p.scene + " " + p.text).toLowerCase();
+        if (hay.indexOf(kw) === -1) return false;
+      }
+      return true;
+    });
+    list.sort(function (a, b) {
+      if (state.sort === "updated") return b.updated.localeCompare(a.updated);
+      return state.copyCounts[b.id] - state.copyCounts[a.id];
+    });
+    return list;
+  }
+
+  function assemblePrompt(p) {
+    var prod = $("varProduct").value.trim() || "你的产品名";
+    var aud = $("varAudience").value.trim() || "目标用户群";
+    var ptype = $("varPageType").value.trim() || "Web 工作台首页";
+    return p.text
+      .replace(/\{\{产品名\}\}/g, prod)
+      .replace(/\{\{受众\}\}/g, aud)
+      .replace(/\{\{页面类型\}\}/g, ptype);
+  }
+
+  function renderTabs() {
+    $("catTabs").innerHTML = CATEGORIES.map(function (c) {
+      var active = state.cat === c.id;
+      return '<button class="tab-btn" type="button" data-cat="' + c.id + '" aria-pressed="' + active + '">' +
+        '<span>' + c.name + '</span><span class="count-pill">' + c.total + '</span>' +
+      '</button>';
+    }).join("");
+  }
+
+  function renderCards() {
+    var savedCnt = Object.keys(state.saved).filter(function (k) { return state.saved[k]; }).length;
+    $("savedToggleBtn").textContent = "本地收藏 (" + savedCnt + ")";
+    $("savedToggleBtn").setAttribute("aria-pressed", String(state.savedOnly));
+
+    var sumCopies = Object.keys(state.copyCounts).reduce(function (acc, k) { return acc + state.copyCounts[k]; }, 0);
+    $("totalCopiesNum").textContent = sumCopies.toLocaleString("en-US");
+
+    if (state.failed) {
+      $("errorBox").hidden = false;
+      $("cardGrid").innerHTML = "";
+      $("matchCountText").textContent = "0 条";
+      return;
+    }
+    $("errorBox").hidden = true;
+
+    var list = filterPrompts();
+    $("matchCountText").textContent = "当前展示 " + list.length + " 条完整样本" + (state.cat === "全部" ? "（全库共 120 条）" : "");
+
+    if (!list.length) {
+      $("cardGrid").innerHTML = '<div class="empty-box">' +
+        '<h3>没有找到符合条件的提示词模板</h3>' +
+        '<p>试试清空搜索词或切回全部分类，恢复 8 类 16 条完整样本。</p>' +
+        '<div style="margin-top:16px"><button class="btn btn-accent" id="resetBtn" type="button">恢复全库模板</button></div>' +
+      '</div>';
+      var rb = $("resetBtn");
+      if (rb) {
+        rb.addEventListener("click", function () {
+          state.cat = "全部"; state.kw = ""; state.mode = "all"; state.savedOnly = false; state.forceEmpty = false;
+          $("kwInput").value = ""; $("modeSelect").value = "all";
+          renderAll();
+        });
+      }
+      return;
+    }
+
+    $("cardGrid").innerHTML = list.map(function (p) {
+      var sel = p.id === state.selectedId;
+      var saved = !!state.saved[p.id];
+      var cnt = state.copyCounts[p.id];
+      return '<article class="p-card' + (sel ? ' is-selected' : '') + '">' +
+        '<div class="p-card-head">' +
+          '<div class="p-card-title-group">' +
+            '<span class="guide-pill ' + (p.needsVars ? 'pill-vars' : 'pill-ready') + '">' + (p.needsVars ? '需填产品变量' : '可直接复制') + '</span>' +
+            '<h3 class="p-card-title">' + p.title + '</h3>' +
+          '</div>' +
+          '<div class="p-card-meta">' +
+            '<span>' + p.cat + '</span>' +
+            '<span>' + p.text.length + ' 字</span>' +
+            '<span>更新 ' + p.updated + '</span>' +
+            '<span>复制 ' + cnt.toLocaleString("en-US") + ' 次</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="p-card-body">' +
+          '<p class="p-card-scene">适用场景：' + p.scene + '</p>' +
+          (p.vars.length ? '<div class="p-card-vars"><span>变量占位：</span>' + p.vars.map(function (v) { return '<span class="var-token">{{' + v + '}}</span>'; }).join("") + '</div>' : '<div class="p-card-vars"><span>无需变量：可直接贴给 AI 用于现有代码复核。</span></div>') +
+          '<pre class="p-code-preview">' + p.text.replace(/</g, "&lt;") + '</pre>' +
+        '</div>' +
+        '<div class="p-card-foot">' +
+          '<span class="p-out-note">' + p.sampleOut + '</span>' +
+          '<div class="p-card-actions">' +
+            '<button class="btn" type="button" data-fav="' + p.id + '" aria-pressed="' + saved + '">' + (saved ? '已收藏' : '收藏') + '</button>' +
+            '<button class="btn" type="button" data-select="' + p.id + '">' + (sel ? '正在右栏预览' : '在右栏填词') + '</button>' +
+            '<button class="btn btn-primary" type="button" data-copy="' + p.id + '">一键复制</button>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    }).join("");
+  }
+
+  function renderInspector() {
+    var p = PROMPTS.find(function (x) { return x.id === state.selectedId; }) || PROMPTS[0];
+    $("inspTitle").textContent = p.title;
+    $("inspMeta").textContent = p.cat + " · " + (p.needsVars ? "包含 3 个产品变量，建议先在下表填写" : "免填变量，可直接整段复制");
+    $("varProduct").disabled = !p.needsVars;
+    $("varAudience").disabled = !p.needsVars;
+    $("varPageType").disabled = !p.needsVars;
+
+    $("tabPrompt").setAttribute("aria-pressed", String(state.previewTab === "prompt"));
+    $("tabSample").setAttribute("aria-pressed", String(state.previewTab === "sample"));
+    $("livePromptBox").textContent = state.previewTab === "prompt"
+      ? assemblePrompt(p)
+      : "【" + p.sampleOut + "】\n\n提示词预期效果：强制先确立页面骨架与可访问性对比度，避免出现无数据占位块或假终端卡片。";
+
+    var isSaved = !!state.saved[p.id];
+    $("saveInspBtn").textContent = isSaved ? "已存入本地收藏" : "加入本地收藏";
+    $("saveInspBtn").setAttribute("aria-pressed", String(isSaved));
+  }
+
+  function copyPromptById(id, fromInspector) {
+    var p = PROMPTS.find(function (x) { return x.id === id; });
+    if (!p) return;
+    state.selectedId = id;
+    var finalText = assemblePrompt(p);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(finalText).catch(function () {});
+    }
+    state.copyCounts[id] = (state.copyCounts[id] || 0) + 1;
+    renderAll();
+    $("copyStatus").textContent = "已复制「" + p.title + "」（" + finalText.length + " 字符 · 第 " + state.copyCounts[id] + " 次）";
+    announce("已复制整段提示词：" + p.title);
+    if (!fromInspector) {
+      var btn = document.querySelector('[data-copy="' + id + '"]');
+      if (btn) btn.textContent = "已复制!";
+    }
+  }
+
+  function runBusy(cb) {
+    $("busyBar").hidden = false;
+    setTimeout(function () { $("busyBar").hidden = true; cb(); }, state.slow ? 1200 : 120);
+  }
+
+  function renderAll() {
+    if ($("termCatCrumb")) $("termCatCrumb").textContent = state.cat === "全部" ? "全部类别" : state.cat;
+    renderTabs();
+    renderCards();
+    renderInspector();
+  }
+
+  $("catTabs").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cat]");
+    if (!b) return;
+    state.cat = b.getAttribute("data-cat");
+    state.forceEmpty = false;
+    renderAll();
+    announce("切换到分类：" + state.cat);
+  });
+
+  $("kwInput").addEventListener("input", function (e) {
+    state.kw = e.target.value;
+    state.forceEmpty = false;
+    renderAll();
+  });
+  $("modeSelect").addEventListener("change", function () { state.mode = $("modeSelect").value; renderAll(); });
+  $("sortSelect").addEventListener("change", function () { state.sort = $("sortSelect").value; renderAll(); });
+  $("savedToggleBtn").addEventListener("click", function () { state.savedOnly = !state.savedOnly; state.forceEmpty = false; renderAll(); });
+
+  [$("varProduct"), $("varAudience"), $("varPageType")].forEach(function (inp) {
+    inp.addEventListener("input", renderInspector);
+  });
+  $("tabPrompt").addEventListener("click", function () { state.previewTab = "prompt"; renderInspector(); });
+  $("tabSample").addEventListener("click", function () { state.previewTab = "sample"; renderInspector(); });
+
+  $("copyInspBtn").addEventListener("click", function () { copyPromptById(state.selectedId, true); });
+  $("saveInspBtn").addEventListener("click", function () {
+    state.saved[state.selectedId] = !state.saved[state.selectedId];
+    renderAll();
+  });
+
+  document.addEventListener("click", function (e) {
+    var sel = e.target.closest("[data-select]");
+    if (sel) { state.selectedId = sel.getAttribute("data-select"); renderAll(); $("varProduct").focus(); return; }
+    var fav = e.target.closest("[data-fav]");
+    if (fav) {
+      var fid = fav.getAttribute("data-fav");
+      state.saved[fid] = !state.saved[fid];
+      renderAll();
+      return;
+    }
+    var cp = e.target.closest("[data-copy]");
+    if (cp) copyPromptById(cp.getAttribute("data-copy"), false);
+  });
+
+  $("retryBtn").addEventListener("click", function () {
+    state.failed = false;
+    runBusy(renderAll);
+  });
+
+  var lastGuideFocus = null;
+  $("guideModalBtn").addEventListener("click", function () {
+    lastGuideFocus = document.activeElement;
+    $("guideModal").hidden = false;
+    $("guideCloseBtn").focus();
+  });
+  function closeGuide() {
+    $("guideModal").hidden = true;
+    if (lastGuideFocus) lastGuideFocus.focus();
+  }
+  $("guideCloseBtn").addEventListener("click", closeGuide);
+  $("guideModal").addEventListener("click", function (e) { if (e.target === $("guideModal")) closeGuide(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("guideModal").hidden) closeGuide(); });
+
+  if ($("footGuideBtn")) $("footGuideBtn").addEventListener("click", function () { $("guideModalBtn").click(); });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

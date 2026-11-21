@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="zh-CN" id="top">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AnnualDesk · 工商年报与注销代办</title>
+<meta name="description" content="填企业名称与统一社会信用代码，核对登记信息与经营提示，选服务方案，看到一口价并完成演示付款。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2300668e'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='600' fill='white' text-anchor='middle'%3EAD%3C/text%3E%3C/svg%3E">
+<style>
+/* Hallmark · macrostructure: Service Document (bespoke) · tone: utilitarian · anchor hue: 墨青
+ * 候选与淘汰：Stat-Led（上一版骨架，且页面没有真实统计口径，淘汰）· Workbench（会把交易页做成后台表单，淘汰）· Narrative Workflow（阶段是交互步骤，不是营销时间线，淘汰）
+ * Nav: N2 floating chip · Footer: Ft2 inline rule · 强调色: Cyan7 #00668e，公文气质、比品牌蓝更沉，承担盖章、选中行与主按钮
+ * UISpecs · baseline: TDesign · 视觉主张: 一页单据，左边摘要联、右边正文，核对、报价、付款、回执在同一条纸面上完成；记忆点是撕口、盖章与单据编号
+ * pre-emit critique: P5 H4 E5 S4 R5 V4
+ * 读的篇目与用途: howto/learnui.design--color-in-ui-design-a-practical-framework.md（主辅与面积）
+ *   howto/nngroup.com--visual-hierarchy-ux-definition.md（三档层级）
+ *   layout/every-layout.dev--stack.md（纵向间距只由一层给）
+ *   motion/ui-specs--motion-implementation.md（入场初态与出场保留）
+ *   markdown/github.com--chinese-copywriting-guidelines.md（中文排版）
+ *   patterns/ui-specs--test-walkthrough.md（等待分档与通过标准）
+ *   a11y/web.dev--a11y-color-contrast.md · web.dev--a11y-focus.md（对比度与焦点）
+ *   a11y/w3c--apg-dialog-modal.md（弹层焦点）· patterns/ux-rules-checklist.md（评审底线）
+ *   components/tdesign.tencent.com--button.md · --input.md · --dialog.md（组件形态）
+ *
+ * 取值记录（用途 | 值 | 出处）
+ * 页面底色 | #ffffff | content/color/tdesign.tencent.com--color.md:93
+ * 分区底色 | #f3f3f3 | content/color/tdesign.tencent.com--color.md:95
+ * 分隔线 | #e8e8e8 | content/color/tdesign.tencent.com--color.md:97
+ * 控件边界 | #dddddd | content/color/tdesign.tencent.com--color.md:98
+ * 正文色 | rgba(0,0,0,.9) | content/type/tdesign.tencent.com--fonts.md:104
+ * 次要文字 | rgba(0,0,0,.6) | content/type/tdesign.tencent.com--fonts.md:105
+ * 字号 12 / 14 / 20 / 28 / 36 | 分别 | content/type/tdesign.tencent.com--fonts.md:53 · 54 · 56 · 58 · 59
+ * 行高 | 字号 + 8 | content/type/tdesign.tencent.com--fonts.md:69
+ * 字重 | 400 / 600 | content/type/tdesign.tencent.com--fonts.md:87
+ * 强调色 | #00668e Cyan7 | content/color/tdesign.tencent.com--color.md:186
+ * 强调深档 | #004e6d Cyan8 | content/color/tdesign.tencent.com--color.md:187
+ * 强调浅底 | #e8f5ff Cyan1 | content/color/tdesign.tencent.com--color.md:180
+ * 错误文字 | #881f1c Red8 | content/color/tdesign.tencent.com--color.md:61
+ * 错误浅底 | #fff0ed Red1 | content/color/tdesign.tencent.com--color.md:54
+ * 告警文字 | #954500 Orange7 | content/color/tdesign.tencent.com--color.md:72
+ * 告警浅底 | #fff1e9 Orange1 | content/color/tdesign.tencent.com--color.md:66
+ * 成功文字 | #006c45 Green7 | content/color/tdesign.tencent.com--color.md:84
+ * 成功浅底 | #e3f9e9 Green1 | content/color/tdesign.tencent.com--color.md:78
+ * 间距 4 / 8 / 12 / 16 / 24 / 32 / 48 | 同上 | content/layout/tdesign.tencent.com--layout.md:138
+ * 槽宽 | 16 | content/layout/tdesign.tencent.com--layout.md:92
+ * 页边距 | 24 | content/layout/tdesign.tencent.com--layout.md:96
+ * 断点 | 768 / 992 / 1200 | content/layout/tdesign.tencent.com--layout.md:154
+ * 动效时长 | 200 / 240 / 280 | content/motion/tdesign.tencent.com--motion.md:101
+ * 缓动 | cubic-bezier(.38,0,.24,1) / (0,0,.15,1) / (.82,0,1,.9) | content/motion/tdesign.tencent.com--motion.md:115
+ * 控件高 | 40 桌面 / 44 移动 | derived（缺口：组件尺寸）
+ * 圆角 | 4 控件 / 8 容器 | derived（缺口：圆角）
+ * 焦点环 | 2px 实线 + 2px 偏移 | derived（缺口：触控目标与焦点环，WCAG 2.2）
+ * 遮罩 | rgba(0,0,0,.45) | derived（缺口：弹层遮罩）
+ */
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+
+  --paper:#ffffff;
+  --paper-2:#f3f3f3;
+  --line:#e8e8e8;
+  --line-strong:#dddddd;
+  --line-control:#8b8b8b;
+
+  --ink-1:rgba(0,0,0,.9);
+  --ink-2:rgba(0,0,0,.6);
+  --ink-3:rgba(0,0,0,.4);
+
+  --accent:#00668e;
+  --accent-strong:#004e6d;
+  --accent-tint:#e8f5ff;
+
+  --danger:#881f1c;
+  --danger-tint:#fff0ed;
+  --danger-line:#d54941;
+  --warn:#954500;
+  --warn-tint:#fff1e9;
+  --ok:#006c45;
+  --ok-tint:#e3f9e9;
+
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+
+  --text-xs:12px;
+  --text-sm:14px;
+  --text-md:20px;
+  --text-lg:28px;
+  --text-xl:36px;
+
+  --lh-xs:20px;
+  --lh-sm:22px;
+  --lh-md:28px;
+  --lh-lg:36px;
+  --lh-xl:44px;
+
+  --control:40px;
+  --radius-control:4px;
+  --radius-box:8px;
+
+  --dur-base:200ms;
+  --dur-moderate:240ms;
+  --ease-standard:cubic-bezier(.38,0,.24,1);
+  --ease-out:cubic-bezier(0,0,.15,1);
+  --ease-in:cubic-bezier(.82,0,1,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{
+  margin:0;
+  overflow-x:clip;
+  background:var(--paper);
+  color:var(--ink-1);
+  font-family:var(--font-sans);
+  font-size:var(--text-sm);
+  line-height:var(--lh-sm);
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,p,dl,dd,dt,ol,ul{margin:0}
+ol,ul{padding:0;list-style:none}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+b,strong{font-weight:600}
+.tnum{font-variant-numeric:tabular-nums}
+.nowrap{white-space:nowrap}
+p,h1,h2{text-wrap:pretty}
+h1{text-wrap:balance}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.skip{position:absolute;left:16px;top:-64px;z-index:80;background:var(--accent);color:#fff;padding:8px 12px;border-radius:var(--radius-control);font-size:var(--text-sm);line-height:var(--lh-sm)}
+.skip:focus{top:12px}
+
+.topbar{height:4px;background:var(--accent)}
+
+.nav-chip{
+  position:fixed;top:var(--space-4);left:var(--space-4);z-index:50;
+  display:inline-flex;align-items:center;gap:var(--space-3);
+  padding:6px 12px;
+  background:var(--paper);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius-box);
+}
+.nav-chip .brand{display:inline-flex;align-items:center;gap:8px;min-height:24px;color:var(--ink-1);font-weight:600;font-size:var(--text-sm);line-height:var(--lh-sm)}
+.nav-chip .brand:hover{text-decoration:none;color:var(--accent)}
+.nav-chip .brand svg{display:block}
+.nav-chip .chip-link{font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2);min-height:24px;display:inline-flex;align-items:center}
+.nav-chip .chip-link:hover{color:var(--accent)}
+
+.page{
+  max-width:1160px;
+  margin:0 auto;
+  padding:var(--space-7) var(--space-5) 64px;
+  display:grid;
+  grid-template-columns:208px minmax(0,1fr);
+  gap:var(--space-7);
+}
+
+.stub{
+  position:sticky;top:88px;align-self:start;
+  padding:var(--space-4);
+  background:var(--paper-2);
+  border-radius:var(--radius-box) 0 0 var(--radius-box);
+  border-right:2px dashed #a6a6a6;
+}
+.stub-label{font-size:var(--text-xs);line-height:var(--lh-xs);font-weight:600;color:var(--ink-2);letter-spacing:.32em}
+.stub-list{margin-top:var(--space-4);display:grid;gap:var(--space-3)}
+.stub-row{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2);font-size:var(--text-sm);line-height:var(--lh-sm)}
+.stub-row dt{color:var(--ink-2);flex:0 0 auto}
+.stub-row dd{color:var(--ink-1);text-align:right;min-width:0;overflow-wrap:anywhere}
+.stub-row dd b{font-weight:600}
+.stub-note{margin-top:var(--space-5);font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+.stub::after{content:"";position:absolute;top:8px;bottom:8px;right:0;width:10px;background-image:radial-gradient(circle at 5px 5px,var(--paper) 3.2px,transparent 3.6px);background-size:10px 20px;background-repeat:repeat-y}
+
+.doc{min-width:0}
+
+.doc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2) var(--space-3);font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+header.doc-head{padding-bottom:var(--space-5);border-bottom:1px solid var(--ink-1)}
+.doc-meta .dot{color:var(--ink-2)}
+.doc-meta>span:first-child{font-size:var(--text-sm);line-height:var(--lh-sm);font-weight:600;color:var(--ink-1);letter-spacing:.06em}
+.doc-meta b{color:var(--ink-1);font-weight:600}
+.status{display:inline-flex;align-items:center;padding:0 6px;border-radius:2px;font-weight:600;line-height:var(--lh-xs);background:var(--paper-2);color:var(--ink-1)}
+.status[data-state="checked"]{background:var(--accent-tint);color:var(--accent-strong)}
+.status[data-state="payable"]{background:var(--warn-tint);color:var(--warn)}
+.status[data-state="done"]{background:var(--ok-tint);color:var(--ok)}
+
+h1{margin-top:var(--space-3);font-size:var(--text-lg);line-height:var(--lh-lg);font-weight:600;letter-spacing:.01em}
+.lede{margin-top:var(--space-3);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2);max-width:34em}
+
+.deadline{
+  margin-top:var(--space-5);
+  padding:var(--space-3) var(--space-4);
+  display:flex;align-items:baseline;gap:var(--space-3);flex-wrap:wrap;
+  background:var(--warn-tint);
+  border-left:4px solid var(--warn);
+  border-radius:0 var(--radius-control) var(--radius-control) 0;
+  font-size:var(--text-sm);line-height:var(--lh-sm);
+  color:var(--warn);
+}
+.deadline b{font-size:var(--text-md);line-height:var(--lh-md);font-weight:600;font-variant-numeric:tabular-nums}
+.deadline span{flex:1 1 220px;min-width:0}
+
+.sec{margin-top:var(--space-7);padding-top:var(--space-6);border-top:1px solid var(--line-strong)}
+.sec:first-of-type{border-top:0;padding-top:0}
+.h2{display:flex;align-items:baseline;gap:var(--space-2);font-size:var(--text-md);line-height:var(--lh-md);font-weight:600}
+.h2::after{content:"";flex:1 1 40px;height:1px;background:var(--line);transform:translateY(-6px)}
+.h2-num{flex:0 0 auto;font-size:var(--text-xs);line-height:var(--lh-xs);font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.sec-note{margin-top:var(--space-2);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+
+.fields{margin-top:var(--space-4);display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--space-4)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+.field input{
+  height:var(--control);
+  width:100%;
+  padding:0 var(--space-3);
+  font-family:inherit;
+  font-size:var(--text-sm);
+  line-height:var(--lh-sm);
+  color:var(--ink-1);
+  background:var(--paper);
+  border:1px solid var(--line-control);
+  border-radius:var(--radius-control);
+  transition:border-color var(--dur-base) var(--ease-standard);
+}
+.field input::placeholder{color:var(--ink-2)}
+.field input:hover{border-color:var(--ink-2)}
+.field input:focus{border-color:var(--accent);outline:2px solid var(--accent);outline-offset:2px}
+.field input[aria-invalid="true"]{border-color:var(--danger-line)}
+.field input:disabled{background:var(--paper-2);color:var(--ink-2);cursor:not-allowed}
+.plan:has(input:disabled){cursor:default}
+.plan:has(input:disabled):hover{background:transparent}
+.plan:has(input:checked):has(input:disabled):hover{background:var(--accent-tint)}
+.err{margin:0;font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--danger)}
+
+.form-actions{margin-top:var(--space-4);display:flex;align-items:center;gap:var(--space-5);flex-wrap:wrap}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:var(--control);
+  padding:0 var(--space-5);
+  font-family:inherit;font-size:var(--text-sm);line-height:var(--lh-sm);font-weight:600;
+  border-radius:var(--radius-control);
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:background-color var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard);
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover,.btn-primary:active{background:var(--accent-strong)}
+.btn-primary:disabled{background:var(--line);color:var(--ink-2);cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--ink-1);border-color:var(--line-strong)}
+.btn-ghost:hover{background:var(--paper-2)}
+.btn-ghost:disabled{color:var(--ink-3);cursor:not-allowed}
+.btn-link{
+  display:inline-flex;align-items:center;min-height:40px;
+  background:none;border:0;padding:0;cursor:pointer;
+  font-family:inherit;font-size:var(--text-sm);line-height:var(--lh-sm);
+  color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;
+}
+.btn-link:hover{color:var(--accent-strong)}
+.btn[aria-busy="true"]{cursor:progress}
+
+#check{margin-top:var(--space-6);padding-top:var(--space-5);border-top:1px dashed var(--line-strong)}
+.check-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap}
+.check-head h3{font-size:var(--text-sm);line-height:var(--lh-sm);font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ok);background:var(--ok-tint);padding:2px 8px;border-radius:2px}
+
+.kv{margin-top:var(--space-3);display:grid;grid-template-columns:150px minmax(0,1fr);gap:var(--space-2) var(--space-4)}
+.kv dt{font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+.kv dd{font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-1);min-width:0;overflow-wrap:anywhere}
+
+.notices{margin-top:var(--space-4);display:grid;gap:var(--space-2)}
+.notice{
+  display:flex;align-items:baseline;gap:var(--space-3);
+  padding:var(--space-2) var(--space-3);
+  border-radius:var(--radius-control);
+  font-size:var(--text-sm);line-height:var(--lh-sm);
+}
+.notice .tag{flex:0 0 auto;font-size:var(--text-xs);line-height:var(--lh-xs);font-weight:600;padding:1px 6px;border-radius:2px;background:rgba(255,255,255,.7)}
+.notice-warn{background:var(--warn-tint);color:var(--warn)}
+.notice-ok{background:var(--ok-tint);color:var(--ok)}
+.notice-plain{background:var(--paper-2);color:var(--ink-1)}
+
+.plans{margin-top:var(--space-4);border-top:1px solid var(--line-strong);border-left:0;border-right:0;border-bottom:0;padding:0}
+.plan{
+  position:relative;
+  display:grid;grid-template-columns:24px auto minmax(24px,1fr) auto;align-items:center;gap:var(--space-3);
+  padding:var(--space-4) var(--space-3);
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  transition:background-color var(--dur-base) var(--ease-standard);
+}
+.plan:hover{background:var(--paper-2)}
+.plan:has(input:checked){background:var(--accent-tint)}
+.plan:has(input:checked)::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.plan:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:-2px}
+.plan input{position:absolute;opacity:0;width:1px;height:1px}
+.radio{
+  width:20px;height:20px;border:1px solid var(--line-control);border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:border-color var(--dur-base) var(--ease-standard);
+}
+.plan:has(input:checked) .radio{border-color:var(--accent)}
+.plan:has(input:checked) .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.plan-main{min-width:0}
+.plan-name{display:block;font-size:var(--text-sm);line-height:var(--lh-sm);font-weight:600}
+.plan-desc{display:block;margin-top:2px;font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+.leader{align-self:center;height:1px;border-bottom:1px dotted var(--line-strong);margin-bottom:2px}
+.plan-price{font-size:var(--text-md);line-height:var(--lh-md);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plan:has(input:checked) .plan-price{color:var(--accent)}
+.plan-note{margin-top:var(--space-2);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+
+.cost{margin-top:var(--space-4);border-top:1px solid var(--line-strong)}
+.cost-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-4);padding:var(--space-2) 0;font-size:var(--text-sm);line-height:var(--lh-sm)}
+.cost-row dt{color:var(--ink-2)}
+.cost-row dd{color:var(--ink-1);font-variant-numeric:tabular-nums;text-align:right}
+.cost-total{margin-top:var(--space-2);padding-top:var(--space-3);border-top:1px solid var(--line-strong)}
+.cost-total dt{color:var(--ink-1);font-weight:600}
+.cost-total dd{font-size:var(--text-lg);line-height:var(--lh-lg);font-weight:600}
+.cost-total dd.is-empty{font-size:var(--text-md);line-height:var(--lh-md);color:var(--ink-2)}
+.total-price{display:inline-block;min-width:4ch}
+
+.rules{margin-top:var(--space-4);display:grid;gap:var(--space-1)}
+.rules li{position:relative;padding-left:var(--space-4);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+.rules li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:var(--ink-3)}
+
+.pay{margin-top:var(--space-5);display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.pay-hint{font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+
+.receipt{margin-top:var(--space-4);background:var(--paper-2);border-radius:var(--radius-box);padding:var(--space-5);position:relative}
+.receipt-head{display:flex;align-items:center;gap:var(--space-4);justify-content:space-between;flex-wrap:wrap}
+.receipt-title{font-size:var(--text-md);line-height:var(--lh-md);font-weight:600}
+.receipt-id{margin-top:var(--space-1);font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+.receipt-id b{color:var(--ink-1);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.stamp{
+  flex:0 0 auto;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:64px;height:64px;
+  border:2px solid var(--accent);
+  border-radius:50%;
+  color:var(--accent);
+  font-size:var(--text-xs);line-height:var(--lh-xs);font-weight:600;letter-spacing:.18em;
+  transform:rotate(-8deg);
+}
+.stamp span{padding-left:.18em}
+.receipt .kv{grid-template-columns:110px minmax(0,1fr)}
+.receipt .kv dt,.receipt .kv dd{font-size:var(--text-sm);line-height:var(--lh-sm)}
+.receipt .kv dd{color:var(--ink-1)}
+.receipt-note{margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px dashed var(--line-strong);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2)}
+.receipt-actions{margin-top:var(--space-4);display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+
+.help{margin-top:var(--space-4);border-top:1px solid var(--line)}
+.help details{border-bottom:1px solid var(--line)}
+.help summary{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  padding:var(--space-3) 0;
+  font-size:var(--text-sm);line-height:var(--lh-sm);font-weight:400;
+  cursor:pointer;list-style:none;
+}
+.help summary::-webkit-details-marker{display:none}
+.help summary::after{content:"";flex:0 0 auto;width:8px;height:8px;border-right:1px solid var(--ink-2);border-bottom:1px solid var(--ink-2);transform:rotate(45deg);transition:transform var(--dur-base) var(--ease-standard)}
+.help details[open] summary::after{transform:rotate(-135deg)}
+.help .answer{margin:0 0 var(--space-3);padding:0 0 0 var(--space-4);border-left:2px solid var(--line-strong);font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--ink-2);max-width:40em}
+
+.site{border-top:1px solid var(--line);max-width:1160px;margin:0 auto;padding:var(--space-5);display:grid;grid-template-columns:208px minmax(0,1fr);gap:var(--space-7)}
+.site-body{grid-column:2;display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;font-size:var(--text-xs);line-height:var(--lh-xs);color:var(--ink-2)}
+
+.dialog{
+  width:min(440px,calc(100vw - 32px));
+  padding:0;border:0;border-radius:var(--radius-box);
+  background:var(--paper);color:var(--ink-1);
+  box-shadow:0 8px 32px rgba(0,0,0,.16);
+}
+.dialog::backdrop{background:rgba(0,0,0,.45)}
+.dialog[open]{animation:dialog-in var(--dur-moderate) var(--ease-out) both}
+.dialog.is-closing{animation:dialog-out var(--dur-base) var(--ease-in) both}
+.dialog-body{padding:var(--space-5)}
+.dialog h2{font-size:var(--text-md);line-height:var(--lh-md);font-weight:600}
+.dialog .kv{grid-template-columns:96px minmax(0,1fr);margin-top:var(--space-4)}
+.dialog .kv dt,.dialog .kv dd{font-size:var(--text-sm);line-height:var(--lh-sm)}
+.dialog-actions{margin-top:var(--space-5);display:flex;justify-content:flex-end;gap:var(--space-3)}
+
+@keyframes dialog-in{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes dialog-out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(8px) scale(.98)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes price-in{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes stamp-in{from{opacity:0;transform:rotate(-8deg) scale(1.08)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+
+.reveal{animation:fade-up var(--dur-base) var(--ease-out) both}
+.is-bump{animation:price-in var(--dur-base) var(--ease-out)}
+.receipt .stamp{animation:stamp-in var(--dur-moderate) var(--ease-out) both}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media (max-width:991px){
+  .page{grid-template-columns:minmax(0,1fr);gap:var(--space-5);padding-top:72px}
+  .stub{display:none}
+  .fields{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:767px){
+  .page{padding:56px var(--space-4) var(--space-7)}
+  .nav-chip{top:var(--space-3);left:var(--space-3);padding:4px 8px;gap:var(--space-2)}
+  .nav-chip .chip-link{display:none}
+  .nav-chip .brand{min-height:32px}
+  h1{font-size:24px;line-height:32px}
+  .deadline{margin-top:var(--space-4);padding:var(--space-2) var(--space-3);gap:var(--space-2);border-left-width:4px}
+  .deadline b{font-size:16px;line-height:24px}
+  .sec{margin-top:var(--space-6);padding-top:var(--space-5)}
+  .site{font-size:12px;line-height:20px}
+  .field input,.btn{height:44px}
+  .form-actions{margin-top:var(--space-3)}
+  .btn-link{min-height:44px}
+  .plan{grid-template-columns:24px minmax(0,1fr) auto;padding:var(--space-4) var(--space-2)}
+  .leader{display:none}
+  .plan-price{font-size:var(--text-sm);line-height:var(--lh-sm)}
+  .cost-total dd{font-size:var(--text-md);line-height:var(--lh-md)}
+  .receipt{padding:var(--space-4)}
+  .stamp{width:56px;height:56px}
+  .site{padding:var(--space-4);max-width:none;grid-template-columns:minmax(0,1fr);gap:0}
+  .site-body{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+<div class="topbar" aria-hidden="true"></div>
+
+<aside class="nav-chip" aria-label="站点">
+  <a class="brand" href="#top">
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="1.5" width="16" height="17" rx="2" fill="none" stroke="#00668e" stroke-width="1.5"/><path d="M6 7h8M6 10.5h8M6 14h5" stroke="#00668e" stroke-width="1.5" stroke-linecap="round"/></svg>
+    AnnualDesk
+  </a>
+  <a class="chip-link" href="#help">办理须知</a>
+</aside>
+
+<div class="page">
+  <aside class="stub" aria-label="单据存根">
+    <p class="stub-label">单据摘要</p>
+    <dl class="stub-list">
+      <div class="stub-row"><dt>状态</dt><dd id="s-state">待核对</dd></div>
+      <div class="stub-row"><dt>服务</dt><dd id="s-service">未选</dd></div>
+      <div class="stub-row"><dt>合计</dt><dd id="s-total" class="tnum">待选</dd></div>
+      <div class="stub-row"><dt>受理单号</dt><dd id="s-no" class="tnum">未生成</dd></div>
+    </dl>
+    <p class="stub-note">演示页：不扣款，不收材料。</p>
+  </aside>
+
+  <main class="doc" id="main">
+    <header class="doc-head">
+      <div class="doc-meta">
+        <span>企业服务核对单 · 演示</span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>状态 <b class="status" id="statusChip" data-state="draft">待核对</b></span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>三档演示价 <b class="tnum">¥680 / ¥980 / ¥1,280</b></span>
+      </div>
+      <h1>工商年报与注销代办</h1>
+      <p class="lede">填企业名称与统一社会信用代码，核对后选服务；<span class="nowrap">一口价</span>在核对后给出，付款前不收材料文件。</p>
+      <p class="deadline">
+        <b class="tnum">6 月 30 日</b>
+        <span>年报截止日。核对后显示企业是否<span class="nowrap">列入经营异常</span>；注销前需先清税。</span>
+      </p>
+    </header>
+
+    <section class="sec" id="step1" aria-labelledby="step1-h">
+      <h2 class="h2" id="step1-h"><span class="h2-num tnum">01</span>核对登记信息</h2>
+      <p class="sec-note">填营业执照上的名称与代码。演示页不保存、不上传。</p>
+
+      <form id="lookup" novalidate>
+        <div class="fields">
+          <div class="field">
+            <label for="f-name">企业名称</label>
+            <input id="f-name" name="name" type="text" autocomplete="organization" maxlength="60" placeholder="营业执照上的完整名称" aria-describedby="name-err">
+            <p class="err" id="name-err" role="alert" hidden></p>
+          </div>
+          <div class="field">
+            <label for="f-code">统一社会信用代码</label>
+            <input id="f-code" name="code" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="18" placeholder="18 位数字或大写字母" aria-describedby="code-err">
+            <p class="err" id="code-err" role="alert" hidden></p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" id="lookupBtn">查询登记信息</button>
+          <button class="btn-link" type="button" id="sampleBtn">填入示例企业</button>
+        </div>
+        <p class="sr-only" id="lookupStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div id="check" hidden>
+        <div class="check-head">
+          <h3>企业核对结果</h3>
+          <span class="badge">演示数据</span>
+        </div>
+        <dl class="kv">
+          <dt>企业名称</dt><dd id="k-name"></dd>
+          <dt>统一社会信用代码</dt><dd id="k-code" class="tnum"></dd>
+          <dt>登记状态</dt><dd id="k-status">存续（在营）</dd>
+          <dt>上次年报</dt><dd id="k-last">2024 年度 · 已报</dd>
+        </dl>
+        <div class="notices">
+          <p class="notice notice-warn"><span class="tag">截止</span><span>年报截止日 6 月 30 日</span></p>
+          <p class="notice notice-ok"><span class="tag">登记</span><span id="k-abnormal">未列入经营异常</span></p>
+          <p class="notice notice-plain"><span class="tag">注销</span><span>注销前需先清税，注销代办含清税材料整理</span></p>
+        </div>
+        <p class="sec-note">登记信息与经营提示均为演示口径，不连接登记机关。</p>
+      </div>
+    </section>
+
+    <section class="sec" id="step2" aria-labelledby="step2-h">
+      <h2 class="h2" id="step2-h"><span class="h2-num tnum">02</span>选服务方案</h2>
+      <p class="sec-note">演示价，真实价格待确认；材料不齐不收费。</p>
+      <fieldset class="plans" id="plans">
+        <legend class="sr-only">服务方案</legend>
+        <label class="plan">
+          <input type="radio" name="service" value="annual" data-price="680" data-name="工商年报">
+          <span class="radio" aria-hidden="true"></span>
+          <span class="plan-main">
+            <span class="plan-name">工商年报</span>
+            <span class="plan-desc">材料整理、申报、回执下载</span>
+          </span>
+          <span class="leader" aria-hidden="true"></span>
+          <span class="plan-price tnum">¥680</span>
+        </label>
+        <label class="plan">
+          <input type="radio" name="service" value="rush" data-price="980" data-name="年报加急">
+          <span class="radio" aria-hidden="true"></span>
+          <span class="plan-main">
+            <span class="plan-name">年报加急</span>
+            <span class="plan-desc">优先申报、回执下载</span>
+          </span>
+          <span class="leader" aria-hidden="true"></span>
+          <span class="plan-price tnum">¥980</span>
+        </label>
+        <label class="plan">
+          <input type="radio" name="service" value="cancel" data-price="1280" data-name="注销代办">
+          <span class="radio" aria-hidden="true"></span>
+          <span class="plan-main">
+            <span class="plan-name">注销代办</span>
+            <span class="plan-desc">含清税材料整理、申报、回执下载</span>
+          </span>
+          <span class="leader" aria-hidden="true"></span>
+          <span class="plan-price tnum">¥1,280</span>
+        </label>
+      </fieldset>
+    </section>
+
+    <section class="sec" id="step3" aria-labelledby="step3-h">
+      <h2 class="h2" id="step3-h"><span class="h2-num tnum">03</span>费用与付款</h2>
+      <dl class="cost">
+        <div class="cost-row"><dt>服务方案</dt><dd id="c-name">未选</dd></div>
+        <div class="cost-row"><dt>材料整理</dt><dd id="c-mat">含在服务费内</dd></div>
+        <div class="cost-row cost-total"><dt>合计</dt><dd><span class="total-price tnum" id="c-total" aria-live="polite">待选</span></dd></div>
+      </dl>
+      <ul class="rules">
+        <li>材料不齐不收费；付款前不收集材料文件。</li>
+        <li>未向登记机关申报可全款退，已申报不退。</li>
+      </ul>
+      <div class="pay">
+        <button class="btn btn-primary" type="button" id="payBtn" disabled>去付款</button>
+        <p class="pay-hint" id="payHint" aria-live="polite">先核对登记信息，再选服务方案。</p>
+      </div>
+    </section>
+
+    <section class="sec" id="step4" aria-labelledby="step4-h" hidden>
+      <h2 class="h2" id="step4-h" tabindex="-1"><span class="h2-num tnum">04</span>受理回执</h2>
+      <div class="receipt">
+        <div class="receipt-head">
+          <div>
+            <p class="receipt-title">AnnualDesk 受理回执</p>
+            <p class="receipt-id">受理单号 <b id="r-no"></b></p>
+          </div>
+          <div class="stamp" aria-label="演示用章"><span>演示</span></div>
+        </div>
+        <dl class="kv">
+          <dt>企业名称</dt><dd id="r-name"></dd>
+          <dt>服务方案</dt><dd id="r-service"></dd>
+          <dt>订单金额</dt><dd id="r-amount" class="tnum"></dd>
+          <dt>支付方式</dt><dd>演示支付（未扣款）</dd>
+          <dt>受理时间</dt><dd id="r-time" class="tnum"></dd>
+          <dt>服务流程</dt><dd>材料整理 → 申报 → 下载申报回执</dd>
+        </dl>
+        <p class="receipt-note">演示回执：未真实扣款，不收集材料，不产生真实回执。</p>
+        <div class="receipt-actions">
+          <button class="btn btn-ghost" type="button" id="resetBtn">重新办理</button>
+          <a class="btn-link" href="#help">看办理须知</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="help" aria-labelledby="help-h">
+      <h2 class="h2" id="help-h"><span class="h2-num">附录</span>办理须知</h2>
+      <div class="help">
+        <details open>
+          <summary>年报什么时候截止？</summary>
+          <p class="answer">每年 6 月 30 日。核对后会显示企业是否被列入经营异常。</p>
+        </details>
+        <details>
+          <summary>注销前要做什么？</summary>
+          <p class="answer">先清税。注销代办含清税材料整理，申报与回执下载也在服务里。</p>
+        </details>
+        <details>
+          <summary>材料不齐会收费吗？</summary>
+          <p class="answer">不收费。材料不齐时不进入申报，付款前也不收集材料文件。</p>
+        </details>
+        <details>
+          <summary>多久能拿到回执？</summary>
+          <p class="answer">演示页不承诺时效，加急档只代表优先申报；正式受理后以通知为准。</p>
+        </details>
+        <details>
+          <summary>这个页面会真实扣款吗？</summary>
+          <p class="answer">不会。演示页不真实扣款、不收集材料、不产生真实回执。</p>
+        </details>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="site">
+  <div class="site-body">
+    <span>AnnualDesk · 演示页：价格、登记信息与回执均为演示口径，不真实扣款、不收集材料</span>
+    <span>© 2026 AnnualDesk</span>
+  </div>
+</footer>
+
+<dialog class="dialog" id="payDialog" aria-labelledby="payTitle" aria-describedby="payDesc">
+  <div class="dialog-body">
+    <h2 id="payTitle">确认演示付款</h2>
+    <dl class="kv">
+      <dt>企业名称</dt><dd id="d-name"></dd>
+      <dt>服务方案</dt><dd id="d-service"></dd>
+      <dt>合计</dt><dd id="d-amount" class="tnum"></dd>
+    </dl>
+    <p class="sec-note" id="payDesc">这是演示付款，不会扣款。确认后生成演示回执，也不收集材料。</p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" type="button" id="payCancel">取消</button>
+      <button class="btn btn-primary" type="button" id="payConfirm">确认演示付款</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (sel) { return document.querySelector(sel); };
+  var form = $('#lookup');
+  var nameInput = $('#f-name');
+  var codeInput = $('#f-code');
+  var nameErr = $('#name-err');
+  var codeErr = $('#code-err');
+  var lookupBtn = $('#lookupBtn');
+  var sampleBtn = $('#sampleBtn');
+  var lookupStatus = $('#lookupStatus');
+  var checkBox = $('#check');
+  var plans = $('#plans');
+  var payBtn = $('#payBtn');
+  var payHint = $('#payHint');
+  var totalEl = $('#c-total');
+  var costName = $('#c-name');
+  var statusChip = $('#statusChip');
+  var stubState = $('#s-state');
+  var stubService = $('#s-service');
+  var stubTotal = $('#s-total');
+  var stubNo = $('#s-no');
+  var step4 = $('#step4');
+  var dlg = $('#payDialog');
+  var payCancel = $('#payCancel');
+  var payConfirm = $('#payConfirm');
+  var resetBtn = $('#resetBtn');
+
+  var SAMPLE = { name: '示例 · 济宁晨光商贸有限公司', code: '91370811' + 'MA3D2K8X4N' };
+  var state = { checked: false, service: null, paid: false, busy: false, serial: '' };
+  var lastFocus = null;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function money(n) { return '¥' + n.toLocaleString('zh-CN'); }
+
+  function showBlock(el) {
+    el.hidden = false;
+    el.classList.remove('reveal');
+    void el.offsetWidth;
+    el.classList.add('reveal');
+  }
+
+  function setError(input, errEl, msg) {
+    if (msg) {
+      errEl.textContent = msg;
+      errEl.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+    } else {
+      errEl.textContent = '';
+      errEl.hidden = true;
+      input.removeAttribute('aria-invalid');
+    }
+  }
+
+  function validate() {
+    var ok = true;
+    var name = nameInput.value.trim();
+    var code = codeInput.value.trim().toUpperCase();
+
+    if (!name) {
+      setError(nameInput, nameErr, '请填写企业名称');
+      ok = false;
+    } else {
+      setError(nameInput, nameErr, '');
+    }
+
+    if (!code) {
+      setError(codeInput, codeErr, '请填写统一社会信用代码');
+      ok = false;
+    } else if (!/^[0-9A-Z]{18}$/.test(code)) {
+      setError(codeInput, codeErr, '统一社会信用代码为 18 位数字或大写字母');
+      ok = false;
+    } else {
+      setError(codeInput, codeErr, '');
+    }
+
+    if (!ok) {
+      var first = form.querySelector('[aria-invalid="true"]');
+      if (first) first.focus();
+    }
+    return ok;
+  }
+
+  function setFormLocked(locked) {
+    [nameInput, codeInput, sampleBtn, lookupBtn].forEach(function (el) { el.disabled = locked; });
+    Array.prototype.forEach.call(plans.querySelectorAll('input[name="service"]'), function (r) { r.disabled = locked; });
+  }
+
+  function renderStatus() {
+    var text, key;
+    if (!state.checked) { text = '待核对'; key = 'draft'; }
+    else if (!state.service) { text = '已核对'; key = 'checked'; }
+    else if (!state.paid) { text = '待付款'; key = 'payable'; }
+    else { text = '已出演示回执'; key = 'done'; }
+
+    statusChip.textContent = text;
+    statusChip.dataset.state = key;
+    stubState.textContent = text;
+    stubService.textContent = state.service ? state.service.name : '未选';
+    stubTotal.textContent = state.service ? money(state.service.price) : '待选';
+    stubNo.textContent = state.paid && state.serial ? state.serial : '未生成';
+  }
+
+  function updateCosts(bump) {
+    var radio = plans.querySelector('input[name="service"]:checked');
+    state.service = radio
+      ? { value: radio.value, name: radio.dataset.name, price: Number(radio.dataset.price) }
+      : null;
+
+    if (state.service) {
+      costName.textContent = state.service.name;
+      totalEl.textContent = money(state.service.price);
+      costName.classList.add('tnum');
+    } else {
+      costName.textContent = '未选';
+      totalEl.textContent = '待选';
+    }
+    totalEl.parentElement.classList.toggle('is-empty', !state.service);
+
+    if (bump && !reduceMotion.matches) {
+      totalEl.classList.remove('is-bump');
+      void totalEl.offsetWidth;
+      totalEl.classList.add('is-bump');
+    }
+    updatePay();
+    renderStatus();
+  }
+
+  function updatePay() {
+    if (state.paid) {
+      payBtn.disabled = true;
+      payBtn.textContent = '演示付款完成';
+      payHint.textContent = '已生成受理回执，可在下方查看。';
+      return;
+    }
+    payBtn.textContent = '去付款';
+    if (!state.checked && !state.service) {
+      payBtn.disabled = true;
+      payHint.textContent = '先核对登记信息，再选服务方案。';
+    } else if (!state.checked) {
+      payBtn.disabled = true;
+      payHint.textContent = '先核对登记信息才能付款。';
+    } else if (!state.service) {
+      payBtn.disabled = true;
+      payHint.textContent = '选一个服务方案后就能付款。';
+    } else {
+      payBtn.disabled = false;
+      payHint.textContent = '合计 ' + money(state.service.price) + '，付款前不收集材料。';
+    }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (state.busy) return;
+    if (!validate()) return;
+
+    var name = nameInput.value.trim();
+    var code = codeInput.value.trim().toUpperCase();
+
+    state.busy = true;
+    lookupBtn.disabled = true;
+    lookupBtn.setAttribute('aria-busy', 'true');
+    lookupBtn.textContent = '核对中…';
+    lookupStatus.textContent = '正在核对登记信息';
+
+    wait(900).then(function () {
+      $('#k-name').textContent = name;
+      $('#k-code').textContent = code;
+      state.checked = true;
+      state.busy = false;
+      lookupBtn.disabled = false;
+      lookupBtn.removeAttribute('aria-busy');
+      lookupBtn.textContent = '查询登记信息';
+      showBlock(checkBox);
+      lookupStatus.textContent = '核对完成，已显示登记信息与经营提示';
+      updateCosts(false);
+    });
+  });
+
+  sampleBtn.addEventListener('click', function () {
+    nameInput.value = SAMPLE.name;
+    codeInput.value = SAMPLE.code;
+    setError(nameInput, nameErr, '');
+    setError(codeInput, codeErr, '');
+    lookupStatus.textContent = '已填入示例企业';
+    lookupBtn.focus();
+  });
+
+  nameInput.addEventListener('input', function () {
+    if (nameInput.getAttribute('aria-invalid') === 'true') setError(nameInput, nameErr, '');
+  });
+  codeInput.addEventListener('input', function () {
+    codeInput.value = codeInput.value.toUpperCase().replace(/\s+/g, '');
+    if (codeInput.getAttribute('aria-invalid') === 'true') setError(codeInput, codeErr, '');
+  });
+
+  plans.addEventListener('change', function () { updateCosts(true); });
+
+  function openDialog() {
+    if (payBtn.disabled || !state.service) return;
+    $('#d-name').textContent = nameInput.value.trim() || '未填';
+    $('#d-service').textContent = state.service.name;
+    $('#d-amount').textContent = money(state.service.price);
+    payConfirm.disabled = false;
+    payCancel.disabled = false;
+    payConfirm.textContent = '确认演示付款';
+    payConfirm.removeAttribute('aria-busy');
+    lastFocus = (document.activeElement && document.activeElement !== document.body) ? document.activeElement : payBtn;
+    dlg.showModal();
+    payCancel.focus();
+  }
+
+  function closeDialog(restoreFocus) {
+    if (!dlg.open || dlg.classList.contains('is-closing')) return;
+    if (reduceMotion.matches) {
+      dlg.close();
+      if (restoreFocus !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+      return;
+    }
+    dlg.classList.add('is-closing');
+    wait(200).then(function () {
+      dlg.close();
+      dlg.classList.remove('is-closing');
+      if (restoreFocus !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+    });
+  }
+
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var items = Array.prototype.slice.call(dlg.querySelectorAll('button:not([disabled]),[href],input:not([disabled]),[tabindex]:not([tabindex="-1"])'));
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  payBtn.addEventListener('click', openDialog);
+  payCancel.addEventListener('click', closeDialog);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); closeDialog(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) closeDialog(); });
+
+  payConfirm.addEventListener('click', function () {
+    if (payConfirm.getAttribute('aria-busy') === 'true') return;
+    payConfirm.setAttribute('aria-busy', 'true');
+    payConfirm.disabled = true;
+    payCancel.disabled = true;
+    payConfirm.textContent = '付款中…';
+
+    wait(900).then(function () {
+      if (!reduceMotion.matches) dlg.classList.add('is-closing');
+      wait(reduceMotion.matches ? 0 : 200).then(function () {
+        dlg.close();
+        dlg.classList.remove('is-closing');
+        state.paid = true;
+        setFormLocked(true);
+        renderReceipt();
+        showBlock(step4);
+        updatePay();
+        renderStatus();
+        var h = $('#step4-h');
+        h.focus({ preventScroll: true });
+        step4.scrollIntoView({ block: 'start' });
+      });
+    });
+  });
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function renderReceipt() {
+    var now = new Date();
+    state.serial = 'AD' + String(now.getFullYear()).slice(2) + pad(now.getMonth() + 1) + '-' + String(Math.floor(1000 + Math.random() * 9000));
+    $('#r-no').textContent = state.serial;
+    $('#r-name').textContent = nameInput.value.trim();
+    $('#r-service').textContent = state.service ? state.service.name : '';
+    $('#r-amount').textContent = state.service ? money(state.service.price) : '';
+    $('#r-time').textContent = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  }
+
+  function resetAll() {
+    state = { checked: false, service: null, paid: false, busy: false, serial: '' };
+    form.reset();
+    Array.prototype.forEach.call(plans.querySelectorAll('input[name="service"]'), function (r) { r.checked = false; });
+    setFormLocked(false);
+    setError(nameInput, nameErr, '');
+    setError(codeInput, codeErr, '');
+    checkBox.hidden = true;
+    step4.hidden = true;
+    checkBox.classList.remove('reveal');
+    step4.classList.remove('reveal');
+    lookupStatus.textContent = '';
+    updateCosts(false);
+    $('#step1').scrollIntoView({ block: 'start' });
+    nameInput.focus({ preventScroll: true });
+  }
+
+  resetBtn.addEventListener('click', resetAll);
+
+  renderStatus();
+  updatePay();
+})();
+</script>
+</body>
+</html>

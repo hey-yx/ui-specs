@@ -1,0 +1,7 @@
+{
+  "name": "ProbeShelf",
+  "tagline": "Adobe Spectrum 科研仪器与中试产线共享索引，含四维档期筛选、对比与预约回执。",
+  "accent": "#0054b6",
+  "structure": "Split Studio（N9 极简两极顶栏 + 32px 工控过滤带 + 左名录右档期快览 + Ft6）",
+  "layout": "Adobe Spectrum · Split Workbench / N9 / Ft6"
+}

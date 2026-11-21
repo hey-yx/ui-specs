@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="frame" content="batch=2026-11-21-b; nav=N13; footer=Ft2; base=#ffffff">
+<title>ChillGauge · IBM Carbon 冷链温控调度中台</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --layer:#f4f4f4;
+  --shell:#161616;
+  --shell-hover:#262626;
+  --ink:#161616;
+  --ink-2:#5e5e5e;
+  --line:#dddddd;
+  --line-soft:#e8e8e8;
+  --blue:#0052d9;
+  --blue-hover:#003cab;
+  --blue-soft:#f2f3ff;
+  --green:#006c45;
+  --green-soft:#e3f9e9;
+  --warn:#954500;
+  --warn-soft:#fff1e9;
+  --red:#ad352f;
+  --red-soft:#fff0ed;
+  --sp-02:4px;
+  --sp-03:8px;
+  --sp-04:12px;
+  --sp-05:16px;
+  --sp-06:24px;
+  --dur-fast:110ms;
+  --dur-mod:150ms;
+  --ease:cubic-bezier(0.2,0,0.38,0.9);
+  --font-sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-sans);font-size:14px;line-height:22px;
+  -webkit-font-smoothing:antialiased;
+}
+.skip-link{
+  position:absolute;left:-9999px;top:4px;z-index:100;
+  background:var(--blue);color:#ffffff;padding:8px 14px;font-weight:600;text-decoration:none;
+}
+.skip-link:focus{left:12px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+
+/* Carbon 48px Global UI Shell Header (N13 栏内检索) */
+.bx-header{
+  position:sticky;top:0;z-index:40;background:var(--shell);color:#ffffff;
+  border-bottom:1px solid #393939;
+}
+.bx-header-in{
+  max-width:1312px;margin:0 auto;padding:0 var(--sp-06);
+  min-height:48px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.bx-brand{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#ffffff;
+  font-size:14px;line-height:22px;font-weight:600;white-space:nowrap;min-height:32px;
+}
+.bx-brand span{font-weight:400;color:#c6c6c6}
+.bx-nav{display:flex;align-items:center;height:48px}
+.bx-nav a{
+  height:48px;padding:0 14px;display:inline-flex;align-items:center;color:#c6c6c6;
+  text-decoration:none;font-size:13px;line-height:20px;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease);
+}
+.bx-nav a.active{color:#ffffff;border-bottom-color:#78a9ff;background:var(--shell-hover)}
+.bx-search-wrap{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bx-search{
+  height:32px;min-width:210px;padding:0 10px;background:#262626;border:1px solid #525252;
+  color:#ffffff;font-size:12px;line-height:20px;
+}
+.bx-search::placeholder{color:#c6c6c6}
+.bx-head-btn{
+  height:48px;padding:0 16px;border:0;background:var(--blue);color:#ffffff;
+  font-size:13px;line-height:20px;font-weight:600;white-space:nowrap;
+}
+
+@media (hover:hover){
+  .bx-nav a:hover{background:var(--shell-hover);color:#ffffff}
+  .bx-head-btn:hover{background:var(--blue-hover)}
+  .zone-link:hover{text-decoration:underline}
+  .depot-btn:hover{background:#ebebeb}
+  tbody tr:hover{background:var(--layer)}
+}
+
+.wrap{max-width:1312px;margin:0 auto;padding:0 var(--sp-06)}
+
+/* Inline Notification（单行紧凑告警） */
+.bx-notice{
+  margin-top:var(--sp-04);padding:8px 14px;background:var(--warn-soft);border-left:3px solid var(--red);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;line-height:20px;
+}
+.bx-notice.is-fail{background:var(--red-soft)}
+.bx-notice strong{font-weight:600}
+
+/* 顶部工作台标题与时间窗切换 */
+main{padding:var(--sp-04) 0 var(--sp-06)}
+.page-row{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-bottom:var(--sp-04);
+}
+.page-row h1{margin:0;font-size:24px;line-height:32px;font-weight:400;letter-spacing:-.01em}
+.page-sub{font-size:12px;line-height:20px;color:var(--ink-2);margin-top:2px}
+.ctrl-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.switcher{display:inline-flex;border:1px solid var(--ink)}
+.sw-btn{
+  min-height:32px;padding:0 12px;border:0;border-right:1px solid var(--line);
+  background:var(--bg);color:var(--ink);font-size:12px;line-height:20px;font-weight:500;
+}
+.sw-btn:last-child{border-right:0}
+.sw-btn[aria-pressed="true"]{background:var(--ink);color:#ffffff;font-weight:600}
+.btn{
+  min-height:32px;padding:0 12px;border:1px solid var(--line);background:var(--layer);
+  color:var(--ink);font-size:12px;line-height:20px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;
+}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#ffffff}
+.btn[aria-pressed="true"]{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+
+/* Flush 4 栏 Carbon 数据指标带（无双层灰框） */
+.metric-band{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  border:1px solid var(--line);background:var(--bg);margin-bottom:var(--sp-04);
+}
+.metric-cell{padding:12px 16px;border-right:1px solid var(--line);min-width:0}
+.metric-cell:last-child{border-right:0}
+.metric-label{font-size:12px;line-height:18px;color:var(--ink-2)}
+.metric-val{font-size:28px;line-height:36px;font-weight:400;margin:2px 0;letter-spacing:-.02em}
+.metric-sub{font-size:12px;line-height:18px;color:var(--ink-2);display:flex;gap:8px;flex-wrap:wrap}
+.zone-link{
+  border:0;background:none;padding:0;min-height:24px;display:inline-flex;align-items:center;
+  font-size:12px;line-height:18px;color:var(--blue);font-weight:600;
+}
+.zone-link[aria-pressed="true"]{background:var(--blue-soft);padding:0 6px}
+
+/* 双栏可视化区：左 1.65fr 走势，右 1fr 区域仓水平条 */
+.viz-grid{display:grid;grid-template-columns:1.65fr 1fr;gap:var(--sp-04);margin-bottom:var(--sp-04)}
+.tile{border:1px solid var(--line);background:var(--bg);padding:14px 16px;min-width:0}
+.tile-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tile-head h2{margin:0;font-size:14px;line-height:22px;font-weight:600}
+.tile-note{font-size:12px;line-height:18px;color:var(--ink-2)}
+.svg-wrap svg{display:block;width:100%;height:auto}
+.chart-legend{
+  margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;line-height:18px;color:var(--ink-2);
+}
+.legend-items{display:flex;gap:12px;flex-wrap:wrap}
+.legend-it{display:inline-flex;align-items:center;gap:6px}
+.swatch{width:12px;height:3px;display:inline-block}
+
+.depot-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.depot-btn{
+  width:100%;text-align:left;min-height:36px;padding:6px 8px;border:1px solid transparent;
+  background:var(--layer);display:grid;grid-template-columns:84px 1fr auto;align-items:center;gap:10px;font-size:12px;
+}
+.depot-btn[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft)}
+.bar-bg{height:8px;background:#e0e0e0;position:relative}
+.bar-bg i{display:block;height:100%;background:var(--blue)}
+
+/* Carbon DataTable（紧贴首屏底部露头） */
+.dt-wrap{border:1px solid var(--line);background:var(--bg)}
+.dt-toolbar{
+  background:var(--layer);border-bottom:1px solid var(--line);padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.dt-scroll{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;line-height:20px}
+th{
+  background:#ececec;text-align:left;padding:8px 12px;font-size:12px;line-height:18px;font-weight:600;
+  border-bottom:1px solid var(--line);white-space:nowrap;
+}
+th button{background:none;border:0;padding:0;font-weight:600;min-height:24px}
+td{padding:8px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+body.is-long td{white-space:normal;word-break:break-word}
+.tag{display:inline-flex;align-items:center;padding:1px 8px;font-size:12px;line-height:18px;font-weight:600}
+.t-ok{background:var(--green-soft);color:var(--green)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.t-crit{background:var(--red-soft);color:var(--red)}
+.empty-cell{padding:24px 12px;text-align:center;color:var(--ink-2)}
+
+/* Ft2 极简 Carbon 页脚 */
+footer.cg-shift-foot{
+  border-top:1px solid var(--line);background:var(--layer);padding:var(--sp-04) 0;
+  font-size:12px;line-height:20px;color:var(--ink-2);
+}
+.cg-foot-in{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cg-foot-in a{color:var(--blue);text-decoration:none;min-height:24px;display:inline-flex;align-items:center}
+
+dialog{
+  border:1px solid var(--ink);background:var(--bg);color:var(--ink);padding:0;
+  width:min(540px,calc(100vw - 24px));max-height:85vh;
+}
+dialog::backdrop{background:rgba(22,22,22,.55)}
+.dlg-head{
+  background:var(--shell);color:#ffffff;padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.dlg-head h3{margin:0;font-size:14px;line-height:22px;font-weight:600}
+.dlg-close{min-height:32px;padding:0 10px;background:#262626;color:#ffffff;border:1px solid #525252}
+.dlg-body{padding:14px;overflow-y:auto;max-height:calc(85vh - 110px)}
+.dlg-body dl{margin:0;display:grid;grid-template-columns:110px 1fr;gap:8px 10px;font-size:13px;line-height:20px}
+.dlg-body dt{color:var(--ink-2);font-weight:600}
+.dlg-body dd{margin:0}
+.dlg-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.csv-box{width:100%;min-height:140px;font-family:var(--font-mono);font-size:12px;line-height:18px;padding:8px;border:1px solid var(--ink);background:var(--layer)}
+.toast{
+  position:fixed;right:16px;bottom:16px;z-index:80;padding:8px 14px;
+  background:var(--shell);color:#ffffff;font-weight:600;font-size:13px;display:none;
+}
+.toast.show{display:block}
+
+@media (max-width:1056px){
+  .metric-band{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metric-cell{border-bottom:1px solid var(--line)}
+  .viz-grid{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .bx-header-in,.wrap{padding-left:var(--sp-05);padding-right:var(--sp-05)}
+  .bx-search-wrap{width:100%;margin-left:0;padding-bottom:8px}
+  .bx-search{flex:1 1 auto;min-height:44px}
+  .bx-head-btn,.sw-btn,.btn,.depot-btn,.dlg-close{min-height:44px}
+  .metric-band{grid-template-columns:1fr}
+  .metric-cell{border-right:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到调度台主内容</a>
+
+<header class="bx-header">
+  <div class="bx-header-in">
+    <a class="bx-brand" href="#overview">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 1h6v6H1V1Zm8 0h6v6H9V1ZM1 9h6v6H1V9Zm8 2h6v2H9v-2Z"/></svg>
+      <span>Carbon /</span> ChillGauge
+    </a>
+    <nav class="bx-nav" aria-label="主导航">
+      <a class="active" href="#overview">温控总览</a>
+      <a href="#trends">走势与区域仓</a>
+      <a href="#trips">车次处置</a>
+    </nav>
+    <div class="bx-search-wrap">
+      <input type="search" class="bx-search" id="tripSearch" placeholder="搜索车牌 / 区域仓 / 驾驶员" aria-label="搜索车次">
+      <button type="button" class="bx-head-btn" id="exportBtn">导出班次摘要</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="bx-notice" id="noticeBar" role="status">
+    <span id="noticeText"><strong>04:00 同步断点提醒：</strong>网关中断 18 分钟已保留空白未插值；3 车严重超温待处置；车载传感器型号及赔付标准 [待确认]。</span>
+    <button type="button" class="btn" id="noticeActBtn">清除筛选</button>
+  </div>
+</div>
+
+<main id="main" tabindex="-1">
+  <div class="wrap">
+    <div class="page-row" id="overview">
+      <div>
+        <h1>生鲜冷链物流温控调度中台</h1>
+        <div class="page-sub">监控冷冻（-18℃）、冷藏（0~4℃）、恒温（12~15℃）在途车次，支持区域仓占比下钻与异常处理（演示数据，未接真实网关）</div>
+      </div>
+      <div class="ctrl-group">
+        <div class="switcher" role="group" aria-label="时间范围切换">
+          <button type="button" class="sw-btn" data-win="today" aria-pressed="true">今日实时</button>
+          <button type="button" class="sw-btn" data-win="7d" aria-pressed="false">近 7 天</button>
+          <button type="button" class="sw-btn" data-win="30d" aria-pressed="false">近 30 天</button>
+        </div>
+        <button type="button" class="btn" id="compareBtn" aria-pressed="false">对比上期叠层</button>
+      </div>
+    </div>
+
+    <!-- Carbon 4 格齐平 hairline 指标带 -->
+    <section class="metric-band" aria-label="冷链核心运行指标与温区筛选项">
+      <div class="metric-cell">
+        <div class="metric-label" id="winTitle">今日实时在途车次</div>
+        <div class="metric-val num" id="mTrips">486 车</div>
+        <div class="metric-sub" id="zoneFilterLinks"></div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-label">全网准温达标率</div>
+        <div class="metric-val num" id="mRate">96.8%</div>
+        <div class="metric-sub" id="zoneRatesSub">冷冻 96.0% · 冷藏 97.2% · 恒温 98.6%</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-label">超温预警车次</div>
+        <div class="metric-val num" id="mWarn" style="color:var(--red)">15 车</div>
+        <div class="metric-sub" id="mWarnSub">3 车严重超温 · 12 车一般异常</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-label">冷链准时履约率</div>
+        <div class="metric-val num" id="mOnTime">98.4%</div>
+        <div class="metric-sub">延误 &lt; 15 分钟 · 传感器 [待确认]</div>
+      </div>
+    </section>
+
+    <!-- 可视化并列区 -->
+    <section class="viz-grid" id="trends" aria-label="双小时走势与区域仓下钻">
+      <div class="tile">
+        <div class="tile-head">
+          <h2>双小时准温达标率与超温预警走势</h2>
+          <span class="tile-note">纵轴从 0 起步 · 04:00 断口不插值 · 跨周期节点加粗</span>
+        </div>
+        <div class="svg-wrap">
+          <svg id="trendSvg" viewBox="0 0 680 185" role="img" aria-label="准温率与超温预警双小时走势图"></svg>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-items">
+            <span class="legend-it"><i class="swatch" style="background:#0052d9"></i>准温达标率（%）</span>
+            <span class="legend-it"><i class="swatch" style="background:#ad352f;height:6px"></i>超温预警车次</span>
+            <span class="legend-it" id="cmpLegend" style="display:none"><i class="swatch" style="border-top:2px dashed #5e5e5e"></i>上期走势</span>
+          </div>
+          <span class="mono">实心黑框点 = 00:00 跨日交接</span>
+        </div>
+      </div>
+
+      <div class="tile" id="depots">
+        <div class="tile-head">
+          <h2>五大区域仓车队结构（点击下钻）</h2>
+          <button type="button" class="btn" id="emptyDepotBtn">西北空仓态</button>
+        </div>
+        <ul class="depot-list" id="depotList"></ul>
+      </div>
+    </section>
+
+    <!-- Carbon DataTable（紧贴首屏可见前几行） -->
+    <section class="dt-wrap" id="trips" aria-labelledby="tripsHeading">
+      <div class="dt-toolbar">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h2 id="tripsHeading" style="margin:0;font-size:14px;line-height:22px;font-weight:600">车次异常明细与处置</h2>
+          <span class="tile-note" id="tripCountLabel">显示 12 / 12 条</span>
+        </div>
+        <div class="switcher" role="group" aria-label="异常等级过滤">
+          <button type="button" class="sw-btn" data-sev="all" aria-pressed="true">全部 12</button>
+          <button type="button" class="sw-btn" data-sev="异常" aria-pressed="false">异常 7</button>
+          <button type="button" class="sw-btn" data-sev="严重超温" aria-pressed="false">严重超温 3</button>
+        </div>
+      </div>
+      <div class="dt-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>车牌 / 驾驶员</th>
+              <th>区域仓</th>
+              <th>温区</th>
+              <th><button type="button" data-sort="temp">实测 / 阈值 ↑↓</button></th>
+              <th><button type="button" data-sort="dur">偏离时长 ↑↓</button></th>
+              <th>状态</th>
+              <th>门封 / 处置</th>
+            </tr>
+          </thead>
+          <tbody id="tripsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="cg-shift-foot">
+  <div class="wrap cg-foot-in">
+    <span>ChillGauge 生鲜冷链温控中台 · 车牌、温度与驾驶员均为演示样本 · 传感器型号与赔付 [待确认]</span>
+    <a href="#overview">回到监控台顶部</a>
+  </div>
+</footer>
+
+<dialog id="tripDialog" aria-labelledby="tripDlgTitle">
+  <div class="dlg-head">
+    <h3 id="tripDlgTitle">车次异常处置详情</h3>
+    <button type="button" class="dlg-close" id="closeTripBtn">关闭</button>
+  </div>
+  <div class="dlg-body" id="tripDlgBody"></div>
+  <div class="dlg-foot">
+    <button type="button" class="btn btn-primary" id="resolveTripBtn">标记为已核查处置</button>
+  </div>
+</dialog>
+
+<dialog id="exportDialog" aria-labelledby="expDlgTitle">
+  <div class="dlg-head">
+    <h3 id="expDlgTitle">导出班次摘要 CSV</h3>
+    <button type="button" class="dlg-close" id="closeExpBtn">关闭</button>
+  </div>
+  <div class="dlg-body">
+    <p style="margin-top:0">当前共 <strong id="expCount">0</strong> 条记录：</p>
+    <textarea class="csv-box" id="csvText" readonly aria-label="CSV 文本"></textarea>
+  </div>
+  <div class="dlg-foot">
+    <button type="button" class="btn" id="copyCsvBtn">复制文本</button>
+    <button type="button" class="btn btn-primary" id="dlCsvBtn">下载 CSV</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const isEmpty = qs.get('empty') === '1';
+  const isFail = qs.get('fail') === '1';
+  const isSlow = qs.get('slow') === '1';
+  const isLong = qs.get('long') === '1';
+  if (isLong) document.body.classList.add('is-long');
+
+  const WINDOWS = {
+    today: {
+      title: '今日实时在途车次', total: '486 车', rate: '96.8%', warn: '15 车', warnSub: '3 严重超温 · 12 一般异常', ontime: '98.4%',
+      zones: [
+        { name: '冷冻', range: '-18°C', count: 198, rate: '96.0%' },
+        { name: '冷藏', range: '0~4°C', count: 214, rate: '97.2%' },
+        { name: '恒温', range: '12~15°C', count: 74, rate: '98.6%' }
+      ],
+      series: [
+        { t: '00:00', rate: 97.2, prev: 96.4, warn: 6, cross: true },
+        { t: '02:00', rate: 97.5, prev: 96.7, warn: 5 },
+        { t: '04:00', rate: null, prev: 96.1, warn: null, gap: true },
+        { t: '06:00', rate: 96.1, prev: 95.8, warn: 12 },
+        { t: '08:00', rate: 96.4, prev: 96.0, warn: 10 },
+        { t: '10:00', rate: 97.1, prev: 96.5, warn: 8 },
+        { t: '12:00', rate: 96.6, prev: 96.2, warn: 11 },
+        { t: '14:00', rate: 96.8, prev: 96.5, warn: 15, cross: true }
+      ]
+    },
+    '7d': {
+      title: '近 7 天累计冷链车次', total: '3,248 车', rate: '97.4%', warn: '84 车', warnSub: '12 严重超温 · 日均 464 车', ontime: '98.7%',
+      zones: [
+        { name: '冷冻', range: '-18°C', count: 1320, rate: '96.9%' },
+        { name: '冷藏', range: '0~4°C', count: 1412, rate: '97.6%' },
+        { name: '恒温', range: '12~15°C', count: 516, rate: '98.3%' }
+      ],
+      series: [
+        { t: '周一', rate: 97.1, prev: 96.6, warn: 14, cross: true },
+        { t: '周二', rate: 97.4, prev: 96.8, warn: 12 },
+        { t: '周三', rate: null, prev: 96.9, warn: null, gap: true },
+        { t: '周四', rate: 97.6, prev: 97.0, warn: 11 },
+        { t: '周五', rate: 97.2, prev: 96.5, warn: 13 },
+        { t: '周六', rate: 97.8, prev: 97.1, warn: 9 },
+        { t: '周日', rate: 97.4, prev: 96.8, warn: 15, cross: true }
+      ]
+    },
+    '30d': {
+      title: '近 30 天累计冷链车次', total: '13,620 车', rate: '97.9%', warn: '286 车', warnSub: '处置率 99.3% · 趋势向好', ontime: '98.9%',
+      zones: [
+        { name: '冷冻', range: '-18°C', count: 5520, rate: '97.5%' },
+        { name: '冷藏', range: '0~4°C', count: 5980, rate: '98.1%' },
+        { name: '恒温', range: '12~15°C', count: 2120, rate: '98.4%' }
+      ],
+      series: [
+        { t: 'W1', rate: 97.5, prev: 97.1, warn: 76, cross: true },
+        { t: 'W2', rate: 97.8, prev: 97.3, warn: 72 },
+        { t: 'W3', rate: null, prev: 97.2, warn: null, gap: true },
+        { t: 'W4', rate: 98.1, prev: 97.6, warn: 68 },
+        { t: '当前', rate: 97.9, prev: 97.4, warn: 70, cross: true }
+      ]
+    }
+  };
+
+  const DEPOTS = [
+    { name: '华东上海仓', count: 168, color: '#0052d9' },
+    { name: '华南广州仓', count: 114, color: '#006c45' },
+    { name: '华北北京仓', count: 96, color: '#954500' },
+    { name: '西南成都仓', count: 64, color: '#5e5e5e' },
+    { name: '西北西安仓', count: 44, color: '#ad352f' }
+  ];
+
+  const TRIPS = [
+    { plate: '沪A·9C214', driver: '陈志远', depot: '华东上海仓', zone: '冷冻', temp: -12.4, limit: -18.0, diff: 5.6, dur: 42, status: '严重超温', door: '尾门微开 3 分钟 · 需复核回风', longNote: '昆山中转装卸后尾门密封条未压实，冷机蒸发器结霜告警已触发', resolved: false },
+    { plate: '粤B·7K108', driver: '林伟强', depot: '华南广州仓', zone: '冷藏', temp: 7.2, limit: 4.0, diff: 3.2, dur: 28, status: '严重超温', door: '冷机压缩机低压保护停机', longNote: '广深高速服务区临时停靠后压缩机低压报警，已通知备车转运', resolved: false },
+    { plate: '京A·4M832', driver: '张晓东', depot: '华北北京仓', zone: '冷冻', temp: -13.1, limit: -18.0, diff: 4.9, dur: 35, status: '严重超温', door: '除霜周期超长未恢复', longNote: '大兴分拨中心出库前除霜未归零即发车，需人工复检探头', resolved: false },
+    { plate: '川A·6F319', driver: '罗建华', depot: '西南成都仓', zone: '冷藏', temp: 5.4, limit: 4.0, diff: 1.4, dur: 16, status: '异常', door: '门封正常 · 预冷略不足', longNote: '双流冷库直发预冷时长仅 20 分钟，车厢正在持续降温中', resolved: false },
+    { plate: '沪D·2W905', driver: '周海涛', depot: '华东上海仓', zone: '恒温', temp: 16.3, limit: 15.0, diff: 1.3, dur: 14, status: '异常', door: '门封正常 · 外温升高', longNote: '午间城市配送连续开闭车门 4 次导致箱内温度短时上浮', resolved: false },
+    { plate: '粤A·1P542', driver: '黄明哲', depot: '华南广州仓', zone: '冷藏', temp: 5.1, limit: 4.0, diff: 1.1, dur: 11, status: '异常', door: '探头读数漂移待校准', longNote: '2 号后部探头读数较主控屏偏高 1.1°C，回库后校验', resolved: false },
+    { plate: '陕A·3H771', driver: '杨磊', depot: '西北西安仓', zone: '冷冻', temp: -16.8, limit: -18.0, diff: 1.2, dur: 9, status: '异常', door: '门封正常 · 刚完成装柜', longNote: '刚刚完成装柜发车，设定 -18°C 降温曲线正常', resolved: true },
+    { plate: '沪B·5T610', driver: '吴建军', depot: '华东上海仓', zone: '冷藏', temp: 2.1, limit: 4.0, diff: 0, dur: 0, status: '正常', door: '门封紧闭 · 平稳运行', longNote: '全程 0~4°C 达标区间运行', resolved: true },
+    { plate: '京N·8R209', driver: '赵国强', depot: '华北北京仓', zone: '冷冻', temp: -19.2, limit: -18.0, diff: 0, dur: 0, status: '正常', door: '门封紧闭 · 制冷达标', longNote: '京津冀干线温度稳定 -19°C', resolved: true },
+    { plate: '粤E·9L415', driver: '梁志成', depot: '华南广州仓', zone: '恒温', temp: 13.5, limit: 15.0, diff: 0, dur: 0, status: '正常', door: '门封紧闭 · 恒温平稳', longNote: '进口水果恒温运单达标', resolved: true },
+    { plate: '川B·4N128', driver: '唐勇', depot: '西南成都仓', zone: '冷冻', temp: -18.6, limit: -18.0, diff: 0, dur: 0, status: '正常', door: '门封紧闭 · 制冷达标', longNote: '成渝冷链干线全程温度平稳', resolved: true },
+    { plate: '陕A·6K902', driver: '马振华', depot: '西北西安仓', zone: '冷藏', temp: 2.8, limit: 4.0, diff: 0, dur: 0, status: '正常', door: '门封紧闭 · 运行正常', longNote: '关中配送干线全程达标', resolved: true }
+  ];
+
+  let state = { win: 'today', compare: false, zone: null, depot: null, emptyNw: false, sev: 'all', q: '', sortKey: 'dur', sortDir: -1, activePlate: null };
+  const el = (id) => document.getElementById(id);
+  const toast = (m) => { const t = el('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2200); };
+
+  const renderNotice = () => {
+    const bar = el('noticeBar');
+    if (isFail) {
+      bar.className = 'bx-notice is-fail';
+      el('noticeText').innerHTML = '<strong>网关拉取失败：</strong>实时流暂不可用，当前显示最近一次成功快照。';
+    } else if (isSlow) {
+      el('noticeBar').className = 'bx-notice';
+      el('noticeText').innerHTML = '<strong>正在同步车载遥测包：</strong>当前展示缓存切片，可筛选或等待更新。';
+    }
+  };
+
+  const renderMetrics = () => {
+    const w = WINDOWS[state.win];
+    el('winTitle').textContent = w.title;
+    el('mTrips').textContent = isEmpty ? '0 车' : w.total;
+    el('mRate').textContent = isEmpty ? '0.0%' : w.rate;
+    el('mWarn').textContent = isEmpty ? '0 车' : w.warn;
+    el('mWarnSub').textContent = isEmpty ? '无超温异常' : w.warnSub;
+    el('mOnTime').textContent = isEmpty ? '0.0%' : w.ontime;
+    el('zoneRatesSub').textContent = isEmpty ? '暂无温区统计' : w.zones.map((z) => `${z.name} ${z.rate}`).join(' · ');
+
+    el('zoneFilterLinks').innerHTML = w.zones.map((z) => `<button type="button" class="zone-link" data-zone="${z.name}" aria-pressed="${state.zone === z.name ? 'true' : 'false'}">${z.name} ${isEmpty ? 0 : z.count}</button>`).join('');
+    el('zoneFilterLinks').querySelectorAll('.zone-link').forEach((b) => {
+      b.addEventListener('click', () => { state.zone = state.zone === b.dataset.zone ? null : b.dataset.zone; renderAll(); });
+    });
+  };
+
+  const renderTrend = () => {
+    const svg = el('trendSvg');
+    el('cmpLegend').style.display = state.compare ? 'inline-flex' : 'none';
+    if (isEmpty) { svg.innerHTML = '<text x="340" y="92" text-anchor="middle" fill="#5e5e5e" font-size="13">当前无冷链遥测曲线</text>'; return; }
+
+    const pts = WINDOWS[state.win].series;
+    const W = 680, H = 185, pL = 46, pR = 16, pT = 14, pB = 24;
+    const plotL = pL + 14, plotR = W - pR - 10;
+    const cw = plotR - plotL, ch = H - pT - pB;
+    const maxWarn = Math.max(...pts.map((d) => d.warn || 0), 20);
+    const out = ['<defs><linearGradient id="cbBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0052d9" stop-opacity="0.16"/><stop offset="100%" stop-color="#0052d9" stop-opacity="0.01"/></linearGradient></defs>'];
+
+    [0, 50, 100].forEach((val) => {
+      const y = pT + ch * (1 - val / 100);
+      out.push(`<line x1="${pL}" y1="${y.toFixed(1)}" x2="${W - pR}" y2="${y.toFixed(1)}" stroke="${val ? '#e0e0e0' : '#161616'}" stroke-dasharray="${val ? '3 3' : ''}"/>`);
+      out.push(`<text x="${pL - 6}" y="${(y + 4).toFixed(1)}" text-anchor="end" fill="#5e5e5e" font-size="11" font-family="IBM Plex Mono,monospace">${val}%</text>`);
+    });
+
+    const stepX = cw / (pts.length - 1);
+    pts.forEach((d, i) => {
+      const x = plotL + i * stepX;
+      if (d.gap) {
+        out.push(`<line x1="${x.toFixed(1)}" y1="${pT + 18}" x2="${x.toFixed(1)}" y2="${pT + ch}" stroke="#ad352f" stroke-dasharray="4 3"/>`);
+        out.push(`<text x="${x.toFixed(1)}" y="${pT + 12}" text-anchor="middle" fill="#ad352f" font-size="11" font-weight="600">04:00 中断</text>`);
+      } else {
+        const bh = (d.warn / maxWarn) * (ch * 0.36);
+        out.push(`<rect x="${(x - 6).toFixed(1)}" y="${(pT + ch - bh).toFixed(1)}" width="12" height="${bh.toFixed(1)}" fill="rgba(173,53,47,.65)"/>`);
+      }
+      out.push(`<text x="${x.toFixed(1)}" y="${H - 6}" text-anchor="middle" fill="#5e5e5e" font-size="11" font-family="IBM Plex Mono,monospace">${d.t}</text>`);
+    });
+
+    if (state.compare) {
+      const prevD = pts.map((d, i) => `${i === 0 ? 'M' : 'L'}${(plotL + i * stepX).toFixed(1)},${(pT + ch * (1 - d.prev / 100)).toFixed(1)}`).join(' ');
+      out.push(`<path d="${prevD}" fill="none" stroke="#5e5e5e" stroke-width="1.5" stroke-dasharray="5 4"/>`);
+    }
+
+    const segs = [[]];
+    pts.forEach((d, i) => {
+      if (d.gap) segs.push([]);
+      else segs[segs.length - 1].push({ x: plotL + i * stepX, y: pT + ch * (1 - d.rate / 100), d });
+    });
+    segs.forEach((seg) => {
+      if (seg.length > 1) {
+        const path = seg.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+        const area = `${path} L${seg[seg.length - 1].x.toFixed(1)},${(pT + ch).toFixed(1)} L${seg[0].x.toFixed(1)},${(pT + ch).toFixed(1)} Z`;
+        out.push(`<path d="${area}" fill="url(#cbBlue)"/>`);
+        out.push(`<path d="${path}" fill="none" stroke="#0052d9" stroke-width="2.2"/>`);
+      }
+      seg.forEach((p) => {
+        out.push(`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.d.cross ? 5 : 3.5}" fill="${p.d.cross ? '#161616' : '#ffffff'}" stroke="#0052d9" stroke-width="2"/>`);
+      });
+    });
+    svg.innerHTML = out.join('');
+  };
+
+  const renderDepots = () => {
+    const list = DEPOTS.map((d, idx) => idx === 4 && state.emptyNw ? { ...d, count: 0 } : d);
+    const total = isEmpty ? 0 : list.reduce((a, b) => a + b.count, 0);
+    el('depotList').innerHTML = list.map((d) => {
+      const pct = total ? ((d.count / total) * 100).toFixed(1) : '0.0';
+      return `<li><button type="button" class="depot-btn" data-depot="${d.name}" aria-pressed="${state.depot === d.name ? 'true' : 'false'}">
+        <span style="font-weight:600">${d.name}</span>
+        <span class="bar-bg"><i style="width:${pct}%;background:${d.color}"></i></span>
+        <span class="mono num">${d.count ? `${d.count} (${pct}%)` : '空仓 0 车'}</span>
+      </button></li>`;
+    }).join('');
+    el('depotList').querySelectorAll('.depot-btn').forEach((b) => {
+      b.addEventListener('click', () => { state.depot = state.depot === b.dataset.depot ? null : b.dataset.depot; renderAll(); });
+    });
+  };
+
+  const getRows = () => {
+    if (isEmpty) return [];
+    const q = state.q.trim().toLowerCase();
+    return TRIPS.filter((t) => {
+      if (state.zone && t.zone !== state.zone) return false;
+      if (state.depot && t.depot !== state.depot) return false;
+      if (state.sev === '异常' && t.status === '正常') return false;
+      if (state.sev === '严重超温' && t.status !== '严重超温') return false;
+      if (q && !`${t.plate} ${t.driver} ${t.depot} ${t.door}`.toLowerCase().includes(q)) return false;
+      return true;
+    }).sort((a, b) => ((state.sortKey === 'temp' ? a.diff - b.diff : a.dur - b.dur) * state.sortDir));
+  };
+
+  const renderTrips = () => {
+    const rows = getRows();
+    el('tripCountLabel').textContent = `显示 ${rows.length} / ${TRIPS.length} 条${state.zone ? ` · 温区：${state.zone}` : ''}${state.depot ? ` · ${state.depot}` : ''}`;
+    const body = el('tripsBody');
+    if (!rows.length) {
+      body.innerHTML = '<tr><td colspan="7" class="empty-cell">当前筛选条件下暂无符合车次</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map((t) => {
+      const cls = t.status === '严重超温' ? 't-crit' : t.status === '异常' ? 't-warn' : 't-ok';
+      return `<tr>
+        <td><strong class="mono">${t.plate}</strong> · <span style="color:var(--ink-2)">${t.driver}</span></td>
+        <td>${t.depot}</td>
+        <td>${t.zone}</td>
+        <td class="mono">${t.temp.toFixed(1)}°C / ${t.limit.toFixed(1)}°C</td>
+        <td class="num">${t.dur} 分钟</td>
+        <td><span class="tag ${cls}">${t.status}</span></td>
+        <td>
+          <span>${isLong ? t.longNote : t.door}</span>
+          <button type="button" class="btn trip-open" data-plate="${t.plate}" style="margin-left:8px">${t.resolved ? '查看' : '处置'}</button>
+        </td>
+      </tr>`;
+    }).join('');
+    body.querySelectorAll('.trip-open').forEach((b) => b.addEventListener('click', () => openTrip(b.dataset.plate)));
+  };
+
+  const openTrip = (plate) => {
+    const t = TRIPS.find((x) => x.plate === plate);
+    if (!t) return;
+    state.activePlate = t.plate;
+    el('tripDlgBody').innerHTML = `<dl>
+      <dt>车牌 / 驾驶员</dt><dd class="mono">${t.plate} · ${t.driver}</dd>
+      <dt>区域仓 / 温区</dt><dd>${t.depot} · ${t.zone}</dd>
+      <dt>实测 / 阈值</dt><dd class="mono">${t.temp.toFixed(1)}°C / ${t.limit.toFixed(1)}°C</dd>
+      <dt>异常详情</dt><dd>${t.longNote}</dd>
+      <dt>传感器型号</dt><dd>[待确认]</dd>
+      <dt>超温赔付标准</dt><dd>[待确认]</dd>
+    </dl>`;
+    el('resolveTripBtn').disabled = t.resolved;
+    el('resolveTripBtn').textContent = t.resolved ? '已处置归档' : '标记为已核查处置';
+    el('tripDialog').showModal();
+  };
+
+  const renderAll = () => { renderNotice(); renderMetrics(); renderTrend(); renderDepots(); renderTrips(); };
+
+  document.querySelectorAll('[data-win]').forEach((b) => b.addEventListener('click', () => {
+    state.win = b.dataset.win;
+    document.querySelectorAll('[data-win]').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    renderAll();
+  }));
+  el('compareBtn').addEventListener('click', () => { state.compare = !state.compare; el('compareBtn').setAttribute('aria-pressed', state.compare ? 'true' : 'false'); renderTrend(); });
+  el('emptyDepotBtn').addEventListener('click', () => { state.emptyNw = !state.emptyNw; el('emptyDepotBtn').textContent = state.emptyNw ? '恢复西北仓' : '西北空仓态'; renderDepots(); });
+  document.querySelectorAll('[data-sev]').forEach((b) => b.addEventListener('click', () => {
+    state.sev = b.dataset.sev;
+    document.querySelectorAll('[data-sev]').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    renderTrips();
+  }));
+  el('tripSearch').addEventListener('input', (e) => { state.q = e.target.value; renderTrips(); });
+  el('noticeActBtn').addEventListener('click', () => {
+    state.zone = null; state.depot = null; state.sev = 'all'; state.q = ''; el('tripSearch').value = '';
+    document.querySelectorAll('[data-sev]').forEach((x) => x.setAttribute('aria-pressed', x.dataset.sev === 'all' ? 'true' : 'false'));
+    renderAll(); toast('已清除所有筛选条件');
+  });
+  document.querySelectorAll('th button[data-sort]').forEach((b) => b.addEventListener('click', () => {
+    state.sortDir = state.sortKey === b.dataset.sort ? state.sortDir * -1 : -1;
+    state.sortKey = b.dataset.sort; renderTrips();
+  }));
+  el('closeTripBtn').addEventListener('click', () => el('tripDialog').close());
+  el('resolveTripBtn').addEventListener('click', () => {
+    const t = TRIPS.find((x) => x.plate === state.activePlate);
+    if (t) { t.resolved = true; if (t.status !== '正常') t.door = '已核查处置'; el('tripDialog').close(); renderTrips(); toast(`${t.plate} 已处置`); }
+  });
+  el('exportBtn').addEventListener('click', () => {
+    const rows = getRows(); el('expCount').textContent = String(rows.length);
+    el('csvText').value = '车牌,驾驶员,区域仓,温区,实测温度,偏离分钟,状态,备注\n' + rows.map((r) => `${r.plate},${r.driver},${r.depot},${r.zone},${r.temp},${r.dur},${r.status},${r.door}`).join('\n');
+    el('exportDialog').showModal();
+  });
+  el('closeExpBtn').addEventListener('click', () => el('exportDialog').close());
+  el('copyCsvBtn').addEventListener('click', () => { navigator.clipboard?.writeText(el('csvText').value).catch(() => {}); toast('已复制 CSV 文本'); });
+  el('dlCsvBtn').addEventListener('click', () => {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([el('csvText').value], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'chillgauge-summary.csv'; a.click(); toast('已下载 CSV');
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1577 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CartLane 家居小件 · 演示案例</title>
+<meta name="description" content="CartLane 家居小件演示店：26 件商品、5 个房间分类，含筛选、规格、库存、购物车与结算流程。演示数据，不收款不发货。">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tdesign-vue-next@1.20.11/dist/tdesign.css">
+<script type="importmap">
+{
+  "imports": {
+    "vue": "https://esm.sh/vue@3.5.45/dist/vue.esm-browser.prod.js",
+    "tdesign-vue-next": "https://esm.sh/tdesign-vue-next@1.20.11?external=vue&bundle"
+  }
+}
+</script>
+<style>
+/* Hallmark · macrostructure: Ecosystem Index · nav: N13 Inline ⌘K pill · footer: Ft4 Dense typographic
+ * tone: 实用、克制、以信息密度取胜 · anchor hue: #0052d9（TDesign 腾讯蓝）
+ * theme: TDesign 官方色板（白纸 + 中性灰 + 单一品牌蓝）
+ * pre-emit critique: P5 H4 E5 S5 R5 V5
+ */
+:root {
+  --td-brand-color: #0052d9;
+  --td-brand-color-hover: #366ef4;
+  --paper: #ffffff;
+  --paper-2: #f3f3f3;
+  --paper-3: #e8e8e8;
+  --rule: #e8e8e8;
+  --rule-strong: #8b8b8b;
+  --ink: #181818;
+  --ink-2: #5e5e5e;
+  --ink-3: #5e5e5e;
+  --ok: #006c45;
+  --ok-bg: #e3f9e9;
+  --warn: #954500;
+  --warn-bg: #fff1e9;
+  --danger: #ad352f;
+  --danger-bg: #fff0ed;
+  --brand-soft: #f2f3ff;
+  --brand-deep: #003cab;
+  --focus: #0052d9;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --text-xs: 12px;
+  --text-s: 14px;
+  --text-m: 16px;
+  --text-l: 20px;
+  --text-xl: 24px;
+
+  --lh-xs: 20px;
+  --lh-s: 22px;
+  --lh-m: 24px;
+  --lh-l: 28px;
+  --lh-xl: 32px;
+
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --dur-fast: 200ms;
+  --dur-mid: 240ms;
+  --dur-slow: 280ms;
+  --ease-standard: cubic-bezier(.38, 0, .24, 1);
+  --ease-out: cubic-bezier(0, 0, .15, 1);
+  --ease-in: cubic-bezier(.82, 0, 1, .9);
+  --wrap: 1200px;
+
+  --td-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans GB",
+    "Microsoft YaHei UI", "Microsoft YaHei", "Source Han Sans CN", sans-serif;
+  --td-text-color-primary: rgba(0, 0, 0, .9);
+  --td-text-color-secondary: rgba(0, 0, 0, .6);
+  --td-text-color-placeholder: #5e5e5e;
+  --td-brand-color-focus: #0052d9;
+  --td-radius-default: 4px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--td-font-family);
+  font-size: var(--text-s);
+  line-height: var(--lh-s);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { font-weight: 400; }
+
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+h1 { font-size: var(--text-xl); line-height: var(--lh-xl); font-weight: 600; letter-spacing: -.2px; }
+h2 { font-size: var(--text-l); line-height: var(--lh-l); font-weight: 600; }
+h3 { font-size: var(--text-s); line-height: var(--lh-s); font-weight: 600; }
+
+a { color: var(--td-brand-color); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--space-5); }
+.mono-num { font-variant-numeric: tabular-nums; }
+
+.skip {
+  position: absolute; left: var(--space-4); top: -48px; z-index: 60;
+  background: var(--td-brand-color); color: #ffffff; padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-s); transition: top var(--dur-fast) var(--ease-out);
+}
+.skip:focus { top: var(--space-2); }
+
+/* ---------- N13 搜索胶囊页头 ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__inner {
+  display: flex; align-items: center; gap: var(--space-4);
+  max-width: var(--wrap); margin-inline: auto;
+  padding: var(--space-3) var(--space-5);
+  min-height: 64px;
+}
+.brand {
+  font-size: var(--text-m); line-height: var(--lh-m); font-weight: 600;
+  color: var(--ink); letter-spacing: .2px; white-space: nowrap;
+}
+.brand:hover { text-decoration: none; color: var(--td-brand-color); }
+.brand span { color: var(--ink-2); font-weight: 400; margin-left: var(--space-2); font-size: var(--text-xs); }
+
+.pill {
+  display: flex; align-items: center; gap: var(--space-2);
+  flex: 1 1 320px; min-width: 0; max-width: 420px;
+  height: 40px; padding-inline: var(--space-3);
+  background: var(--paper); color: var(--ink-2);
+  border: 1px solid var(--rule-strong); border-radius: 999px;
+  font: inherit; text-align: left; cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+}
+.pill:hover { border-color: var(--td-brand-color); background: var(--brand-soft); }
+.pill__ico { flex: none; width: 16px; height: 16px; }
+.pill__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pill__kbd { display: flex; gap: 2px; flex: none; }
+kbd {
+  font-family: inherit; font-size: var(--text-xs); line-height: 16px;
+  padding: 1px 5px; border: 1px solid var(--rule-strong); border-radius: var(--radius-s);
+  color: var(--ink-2); background: var(--paper-2);
+}
+
+.nav__links { display: flex; align-items: center; gap: var(--space-4); margin-left: auto; }
+.nav__links a { display: inline-flex; align-items: center; min-height: 24px; color: var(--ink); white-space: nowrap; }
+.nav__links a:hover { color: var(--td-brand-color); }
+
+.cartlink {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: 40px; padding-inline: var(--space-3);
+  background: var(--paper-2); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-s);
+  font: inherit; cursor: pointer; white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.cartlink:hover { background: var(--paper-3); }
+.cartlink__n {
+  min-width: 20px; height: 20px; padding-inline: 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--td-brand-color); color: #ffffff;
+  border-radius: 10px; font-size: var(--text-xs); font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 定位段（Ecosystem Index：无大标题） ---------- */
+.intro { padding-block: var(--space-7) var(--space-6); border-bottom: 1px solid var(--rule); }
+.intro__kicker {
+  font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2);
+  letter-spacing: .4px; margin-bottom: var(--space-3);
+}
+.intro__h { max-width: 34ch; margin-bottom: var(--space-4); }
+.intro__p { max-width: 68ch; color: var(--ink-2); margin-bottom: var(--space-3); }
+.intro__demo {
+  display: inline-block; max-width: 68ch;
+  padding: var(--space-2) var(--space-3);
+  background: var(--warn-bg); color: var(--warn);
+  border-radius: var(--radius-s); font-size: var(--text-xs); line-height: var(--lh-xs);
+}
+
+/* ---------- 发现面 ---------- */
+.rail { padding-block: var(--space-6); border-bottom: 1px solid var(--rule); }
+.rail__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-4); margin-bottom: var(--space-4);
+}
+.rail__k { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); margin-bottom: var(--space-1); }
+.rail__more { display: inline-flex; align-items: center; min-height: 24px; font-size: var(--text-s); white-space: nowrap; }
+
+.picks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.pick {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4); border: 1px solid var(--rule); border-radius: var(--radius-m);
+  background: var(--paper); min-width: 0;
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.pick:hover { border-color: var(--rule-strong); }
+.pick__top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.pick__name { font-weight: 600; overflow-wrap: anywhere; }
+.pick__meta { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.pick__price { font-size: var(--text-l); line-height: var(--lh-l); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.swatch { display: flex; gap: var(--space-1); height: 6px; border-radius: 3px; overflow: hidden; }
+.swatch i { flex: 1; display: block; }
+
+.rooms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.room {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-4); border: 1px solid var(--rule); border-radius: var(--radius-m);
+  background: var(--paper); color: var(--ink); text-align: left; font: inherit; cursor: pointer;
+  min-width: 0;
+  transition: border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+}
+.room:hover { border-color: var(--rule-strong); background: var(--paper-2); }
+.room__name { font-weight: 600; }
+.room__note { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.room__foot { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); margin-top: var(--space-1); }
+
+.bands { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.band {
+  min-height: 36px; padding-inline: var(--space-3);
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  border: 1px solid var(--rule-strong); border-radius: 999px;
+  background: var(--paper); color: var(--ink); font: inherit; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+.band:hover { background: var(--paper-2); }
+.band[aria-pressed="true"] { background: var(--td-brand-color); border-color: var(--td-brand-color); color: #ffffff; }
+.band__n { font-size: var(--text-xs); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.band[aria-pressed="true"] .band__n { color: #ffffff; }
+
+/* ---------- 目录：筛选条 ---------- */
+.catalogue { padding-block: var(--space-6) var(--space-7); }
+.toolbar {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3);
+  align-items: center; padding: var(--space-4);
+  border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--paper-2);
+  margin-bottom: var(--space-4);
+}
+.toolbar__search { min-width: 0; }
+.toolbar__right { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.toolbar__sort { width: 200px; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); grid-column: 1 / -1; }
+.chip {
+  min-height: 32px; padding-inline: var(--space-3);
+  border: 1px solid var(--rule-strong); border-radius: 999px;
+  background: var(--paper); color: var(--ink); font: inherit; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+.chip:hover { background: var(--paper-3); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #ffffff; }
+
+.countbar {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-3);
+}
+.countbar__n { font-weight: 600; font-variant-numeric: tabular-nums; }
+.countbar__hint { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.linkish {
+  display: inline-flex; align-items: center; min-height: 24px;
+  background: none; border: 0; padding: 0; font: inherit; color: var(--td-brand-color);
+  cursor: pointer; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap;
+}
+
+/* ---------- 商品网格 ---------- */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4); border: 1px solid var(--rule); border-radius: var(--radius-m);
+  min-width: 0; background: var(--paper);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.card:hover { border-color: var(--rule-strong); }
+.card__room { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.card__name { font-size: var(--text-s); line-height: var(--lh-s); font-weight: 600; overflow-wrap: anywhere; }
+.card__mat { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); overflow-wrap: anywhere; }
+.card__facts { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.card__price { font-size: var(--text-l); line-height: var(--lh-l); font-weight: 600; font-variant-numeric: tabular-nums; margin-top: auto; }
+.card__stock { font-size: var(--text-xs); line-height: var(--lh-xs); font-weight: 600; }
+.card__act { display: grid; grid-template-columns: 1fr; gap: var(--space-2); }
+
+.stock-in { color: var(--ok); }
+.stock-low { color: var(--warn); }
+.stock-out { color: var(--ink-3); }
+
+.tag { display: inline-flex; align-items: center; height: 22px; padding-inline: var(--space-2);
+  border-radius: var(--radius-s); font-size: var(--text-xs); line-height: var(--lh-xs); white-space: nowrap; }
+.tag--in { background: var(--ok-bg); color: var(--ok); }
+.tag--low { background: var(--warn-bg); color: var(--warn); }
+.tag--out { background: var(--paper-2); color: var(--ink-3); }
+.tag--brand { background: var(--brand-soft); color: var(--brand-deep); }
+
+/* ---------- 骨格占位 ---------- */
+.sk { background: var(--paper-2); border-radius: var(--radius-s); }
+.sk--line { height: 12px; }
+.sk--title { height: 16px; width: 72%; }
+.sk--price { height: 20px; width: 38%; }
+.sk--btn { height: 32px; }
+.sk-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4);
+  border: 1px solid var(--rule); border-radius: var(--radius-m); min-width: 0; }
+.sk-card .sk { animation: sk-breathe var(--dur-slow) var(--ease-standard) infinite alternate; }
+@keyframes sk-breathe { from { opacity: 1; } to { opacity: .55; } }
+
+.empty {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-6); border: 1px dashed var(--rule-strong); border-radius: var(--radius-m);
+  background: var(--paper);
+}
+.empty__h { font-weight: 600; }
+.empty__p { color: var(--ink-2); max-width: 52ch; }
+
+/* ---------- 详情 ---------- */
+.detail { padding-block: var(--space-7); border-top: 1px solid var(--rule); }
+.secthead { display: flex; flex-direction: column; gap: var(--space-1); margin-bottom: var(--space-5); }
+.secthead__k { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); letter-spacing: .4px; }
+.secthead h2:focus-visible { outline-offset: 4px; }
+#catalogue:focus-visible { outline: 2px solid var(--focus); outline-offset: 6px; }
+h1, h2, h3, [id] { scroll-margin-top: 88px; }
+.detail__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+
+.facts { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: var(--space-2) var(--space-3); margin-block: var(--space-3) var(--space-4); }
+.facts dt { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.facts dd { font-size: var(--text-s); overflow-wrap: anywhere; }
+
+.price { display: flex; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-1); }
+.price__n { font-size: var(--text-xl); line-height: var(--lh-xl); font-weight: 600; font-variant-numeric: tabular-nums; }
+.price__u { font-size: var(--text-xs); color: var(--ink-2); }
+.stockline { font-size: var(--text-s); font-weight: 600; margin-bottom: var(--space-4); }
+
+.spec { border-top: 1px solid var(--rule); padding-top: var(--space-4); margin-top: var(--space-4); }
+.spec__label { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); margin-bottom: var(--space-2); }
+.spec__opts { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.opt {
+  min-height: 36px; padding-inline: var(--space-3);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-s);
+  background: var(--paper); color: var(--ink); font: inherit; cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+}
+.opt:hover:not(:disabled) { border-color: var(--td-brand-color); }
+.opt[aria-pressed="true"] { border-color: var(--td-brand-color); box-shadow: inset 0 0 0 1px var(--td-brand-color); color: var(--td-brand-color); font-weight: 600; }
+.opt:disabled { background: var(--paper-2); color: var(--ink-3); border-color: var(--rule); cursor: not-allowed; text-decoration: line-through; }
+
+.qty { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-block: var(--space-4); }
+.qty__label { font-size: var(--text-s); }
+.qty__hint { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.detail__act { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+.panel { border: 1px solid var(--rule); border-radius: var(--radius-m); padding: var(--space-4); margin-bottom: var(--space-4); }
+.panel h3 { margin-bottom: var(--space-3); }
+.panel__note { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); margin-top: var(--space-3); }
+.rules { display: grid; gap: var(--space-2); }
+.rules li { padding-left: var(--space-4); position: relative; }
+.rules li::before { content: "·"; position: absolute; left: var(--space-1); color: var(--ink-2); }
+
+.revs { display: grid; gap: var(--space-3); }
+.rev { display: grid; gap: var(--space-1); padding-top: var(--space-3); border-top: 1px solid var(--rule); }
+.rev:first-child { border-top: 0; padding-top: 0; }
+.rev__meta { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.rev__text { overflow-wrap: anywhere; }
+
+.combos { width: 100%; border-collapse: collapse; font-size: var(--text-xs); line-height: var(--lh-xs); }
+.combos th, .combos td { text-align: left; padding: var(--space-2); border-bottom: 1px solid var(--rule); }
+.combos th { color: var(--ink-2); font-weight: 600; background: var(--paper-2); }
+.combos td:last-child, .combos th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- 购物车 ---------- */
+.cart { padding-block: var(--space-7); border-top: 1px solid var(--rule); }
+.lines { display: grid; gap: var(--space-3); margin-block: var(--space-4); }
+.line {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3) var(--space-4);
+  align-items: center; padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule); border-radius: var(--radius-m);
+}
+.line__name { font-weight: 600; overflow-wrap: anywhere; }
+.line__spec { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.line__price, .line__sub { font-variant-numeric: tabular-nums; }
+.line__sub { font-weight: 600; }
+.line__sub::before { content: "小计 "; font-weight: 400; font-size: var(--text-xs); color: var(--ink-2); }
+.line__rm {
+  justify-self: start; min-height: 32px; padding-inline: var(--space-3);
+  background: var(--paper); color: var(--danger); border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-s); font: inherit; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.line__rm:hover { background: var(--danger-bg); }
+
+.ship { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; padding: var(--space-4);
+  border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--paper-2); }
+.ship__label { font-size: var(--text-xs); color: var(--ink-2); }
+.radio { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 36px; cursor: pointer; }
+.radio input {
+  appearance: none; -webkit-appearance: none; margin: 0;
+  width: 20px; height: 20px; flex: none;
+  border: 1.5px solid var(--rule-strong); border-radius: 50%; background: var(--paper);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.radio input:checked { border-color: var(--td-brand-color); box-shadow: inset 0 0 0 3.5px var(--paper), inset 0 0 0 12px var(--td-brand-color); }
+.radio input:disabled { background: var(--paper-2); border-color: var(--rule); }
+
+.check { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 36px; cursor: pointer; }
+.check input {
+  appearance: none; -webkit-appearance: none; margin: 0;
+  width: 20px; height: 20px; flex: none;
+  border: 1.5px solid var(--rule-strong); border-radius: var(--radius-s); background: var(--paper);
+  display: inline-grid; place-content: center;
+  transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+.check input::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #ffffff; border-bottom: 2px solid #ffffff;
+  transform: rotate(-45deg) translateY(-1px); opacity: 0; transition: opacity var(--dur-fast) var(--ease-standard); }
+.check input:checked { background: var(--td-brand-color); border-color: var(--td-brand-color); }
+.check input:checked::after { opacity: 1; }
+
+.sum { display: grid; gap: var(--space-2); margin-top: var(--space-4); padding: var(--space-4);
+  border: 1px solid var(--rule); border-radius: var(--radius-m); }
+.sum__row { display: flex; justify-content: space-between; gap: var(--space-4); font-variant-numeric: tabular-nums; }
+.sum__row--total { border-top: 1px solid var(--rule); padding-top: var(--space-2); font-weight: 600; font-size: var(--text-m); }
+.sum__hint { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.sum__act { display: flex; justify-content: flex-end; margin-top: var(--space-2); }
+
+/* ---------- 结算 ---------- */
+.checkout { padding-block: var(--space-7) var(--space-8); border-top: 1px solid var(--rule); }
+.form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); max-width: 720px; }
+.field { display: grid; gap: var(--space-2); min-width: 0; }
+.field__label { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.field__req { color: var(--danger); }
+.field__err { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--danger); display: flex; gap: var(--space-1); }
+.field__help { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); }
+.form__act { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-top: var(--space-2); }
+
+.done { display: grid; gap: var(--space-3); max-width: 720px; padding: var(--space-5);
+  border: 1px solid var(--rule); border-radius: var(--radius-m); background: var(--paper-2); }
+.done__t { font-size: var(--text-l); line-height: var(--lh-l); font-weight: 600; }
+.done__k { font-variant-numeric: tabular-nums; }
+
+/* ---------- 页脚 · Ft4 ---------- */
+.foot { border-top: 1px solid var(--rule-strong); background: var(--paper); padding-block: var(--space-6) var(--space-7); }
+.foot__dense { display: grid; gap: var(--space-3); max-width: 88ch; font-size: var(--text-xs); line-height: 18px; color: var(--ink-2); }
+.foot__brand { color: var(--ink); font-weight: 600; font-size: var(--text-s); line-height: var(--lh-s); }
+.foot__dense a { display: inline-flex; align-items: center; min-height: 24px; color: var(--td-brand-color); }
+.foot__meta { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.foot__rule { height: 1px; background: var(--rule); }
+
+/* ---------- ⌘K 搜索面板 ---------- */
+.cmdk { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: center; align-items: flex-start; }
+.cmdk__bg { position: absolute; inset: 0; background: rgba(0, 0, 0, .45); }
+.cmdk__panel {
+  position: relative; z-index: 1; width: min(560px, calc(100vw - 32px));
+  margin-top: 12vh; padding: var(--space-4);
+  background: var(--paper); border: 1px solid var(--rule-strong); border-radius: var(--radius-m);
+  box-shadow: 0 24px 48px -32px rgba(0, 0, 0, .5);
+  animation: cmdk-in var(--dur-mid) var(--ease-out) both;
+}
+@keyframes cmdk-in { from { opacity: 0; transform: translateY(-8px) scale(.98); } to { opacity: 1; transform: none; } }
+.cmdk__h { font-size: var(--text-s); line-height: var(--lh-s); margin-bottom: var(--space-3); }
+.cmdk__field { display: flex; align-items: center; gap: var(--space-2); }
+.cmdk__field .t-input__wrap { flex: 1; }
+.cmdk__hint { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-2); margin-block: var(--space-3) var(--space-2); }
+.cmdk__list { display: grid; gap: var(--space-1); max-height: 46vh; overflow-y: auto; }
+.cmdk__item {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  width: 100%; min-height: 40px; padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent; border-radius: var(--radius-s);
+  background: var(--paper); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.cmdk__item:hover { background: var(--paper-2); }
+.cmdk__item.is-on { background: var(--brand-soft); border-color: var(--td-brand-color); }
+.cmdk__item small { color: var(--ink-2); font-size: var(--text-xs); }
+.cmdk__empty { padding: var(--space-3) 0; color: var(--ink-2); }
+
+/* ---------- 提示条 ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: var(--space-5); transform: translateX(-50%);
+  z-index: 60; max-width: calc(100vw - 32px);
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--ink); color: #ffffff; border-radius: var(--radius-s);
+  animation: toast-in var(--dur-mid) var(--ease-out) both;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* ---------- TDesign 组件落到本页 ---------- */
+.t-button { font-family: inherit; }
+.t-button--variant-outline { border-color: var(--rule-strong); color: var(--ink); }
+.t-button--variant-outline:hover { border-color: var(--td-brand-color); color: var(--td-brand-color); }
+.t-button--variant-base.t-button--theme-primary { background: var(--td-brand-color); border-color: var(--td-brand-color); }
+.t-button--variant-base.t-button--theme-primary:hover { background: #003cab; border-color: #003cab; }
+.t-button.t-button--variant-base.t-button--theme-primary.is-disabled,
+.t-button.t-button--variant-base.t-button--theme-primary:disabled,
+.t-button.t-button--variant-outline.is-disabled,
+.t-button.t-button--variant-outline:disabled,
+.t-button.is-disabled, .t-button:disabled {
+  background: var(--paper-2); border-color: var(--rule); color: var(--ink-2);
+}
+.t-button.is-disabled:hover, .t-button:disabled:hover { background: var(--paper-2); color: var(--ink-2); }
+.t-input__wrap { border-color: var(--rule-strong); }
+.t-input__wrap:hover { border-color: var(--td-brand-color); }
+.t-input__inner:focus-visible, .t-input__inner:focus { outline: none; box-shadow: inset 0 0 0 2px var(--td-brand-color); border-radius: 2px; }
+.t-input-number { border-color: var(--rule-strong); }
+.t-input-number__decrease, .t-input-number__increase { color: var(--ink); }
+.t-input-number__decrease:hover, .t-input-number__increase:hover { background: var(--paper-2); }
+.t-input-number .t-input__inner:focus, .t-input-number .t-input__inner:focus-visible { box-shadow: inset 0 0 0 2px var(--td-brand-color); }
+.t-select .t-input__wrap { border-color: var(--rule-strong); }
+.t-select .t-input__inner:focus, .t-select .t-input__inner:focus-visible { box-shadow: inset 0 0 0 2px var(--td-brand-color); }
+.t-select__dropdown { border: 1px solid var(--rule-strong); }
+.t-select-option:hover, .t-select-option.t-is-hover { background: var(--paper-2); }
+.t-select-option.t-is-selected { color: var(--td-brand-color); font-weight: 600; }
+.t-tag { border-radius: var(--radius-s); }
+.t-loading__text { color: var(--ink-2); font-size: var(--text-xs); }
+.t-is-disabled .t-input__inner, .t-input.is-disabled .t-input__inner { color: var(--ink-2); }
+.t-checkbox__label { color: var(--ink); }
+
+/* ---------- 断点 ---------- */
+@media (min-width: 768px) {
+  .nav__inner { padding-inline: var(--space-5); }
+  .picks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .rooms { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field--wide { grid-column: 1 / -1; }
+  .detail__grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  .line { grid-template-columns: minmax(0, 1fr) auto auto auto auto; }
+}
+@media (min-width: 992px) {
+  .rooms { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .detail__grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: var(--space-6); }
+}
+@media (min-width: 1200px) {
+  .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+  .wrap { padding-inline: var(--space-4); }
+  .nav__inner { padding-inline: var(--space-4); gap: var(--space-2); }
+  .nav__links { display: none; }
+  .brand span { display: none; }
+  .pill { flex: 0 0 40px; max-width: 40px; padding: 0; justify-content: center; }
+  .pill__text, .pill__kbd { display: none; }
+  .intro { padding-block: var(--space-6) var(--space-5); }
+  .intro__h { font-size: var(--text-l); line-height: var(--lh-l); }
+  .toolbar { grid-template-columns: minmax(0, 1fr); }
+  .toolbar__sort { width: 100%; }
+  .toolbar__right { justify-content: space-between; }
+  .card__act { grid-template-columns: 1fr; }
+  .cmdk__panel { margin-top: 6vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<div id="app"><p style="padding:24px">页面正在载入 Vue 与 TDesign，载入完成后这里会换成商品清单。</p></div>
+<script>
+  window.addEventListener('error', function (e) {
+    var box = document.getElementById('app');
+    if (box && !window.__mounted) box.innerHTML = '<p style="padding:24px">组件库没有载入成功，请检查网络后刷新。</p>';
+  });
+</script>
+<script type="module">
+
+import * as Vue from "vue";
+import * as TDesign from "tdesign-vue-next";
+
+const { createApp, ref, reactive, computed, watch, nextTick, onMounted } = Vue;
+const TD = TDesign;
+const DATA = {"rooms":[{"id":"living","name":"客厅","note":"边几、靠垫、落地灯，沙发周围那一圈"},{"id":"bedroom","name":"卧室","note":"床品、收纳、窗帘，睡前碰得到的东西"},{"id":"kitchen","name":"厨房","note":"锅、砧板、罐子，台面上的常用件"},{"id":"bath","name":"浴室","note":"浴巾、地垫、浴凳，防潮优先"},{"id":"study","name":"书房","note":"书立、桌垫、阅读架，桌面秩序"}],"products":[{"id":"CL-01","name":"白蜡木折叠边几","room":"living","material":"白蜡木 + 粉末喷涂钢架","dims":"长 42 × 宽 38 × 高 52 cm","weight":"4.6 kg","blurb":"折起来只有 9 cm 厚，塞在沙发扶手边上不挡路，展开能放一杯茶和一本书。","care":"湿布擦净后阴干，避免长时间浸水或暴晒。","specs":[{"name":"台面","values":["圆角方台","正圆台"]},{"name":"颜色","values":["原木色","雾白"]}],"combos":[{"v":["圆角方台","原木色"],"price":328,"stock":12},{"v":["圆角方台","雾白"],"price":328,"stock":0},{"v":["正圆台","原木色"],"price":358,"stock":4},{"v":["正圆台","雾白"],"price":358,"stock":9}],"reviewCount":46,"reviews":[{"who":"阿岚","date":"2026-10-28","text":"圆角打磨得干净，孩子跑过来碰到边也不会刮。"},{"who":"陈默","date":"2026-10-11","text":"折起来靠墙放，租房搬家用得上。"},{"who":"小满","date":"2026-09-30","text":"雾白那款比我预期更偏暖，配原木地板好看。"}],"stockTotal":25,"state":"partial","specCount":4,"priceFrom":328},{"id":"CL-02","name":"藤编收纳筐 三件套","room":"living","material":"印尼竹藤","dims":"大 38 × 28 × 24 cm / 中 32 × 24 × 20 cm / 小 26 × 20 × 16 cm","weight":"1.9 kg","blurb":"三个尺寸套着放，玩具、遥控器、毛线各归一堆，筐口卷边不硌手。","care":"干布除尘，梅雨季放在通风处，不要用水冲。","specs":[{"name":"组合","values":["三件套","两只装"]}],"combos":[{"v":["三件套"],"price":168,"stock":4},{"v":["两只装"],"price":128,"stock":15}],"reviewCount":38,"reviews":[{"who":"木子","date":"2026-11-02","text":"藤条粗细均匀，没有毛刺，装玩具够结实。"},{"who":"老周","date":"2026-10-19","text":"三件套正好塞进电视柜下面那一格。"},{"who":"阿禾","date":"2026-09-27","text":"颜色比图片略深，跟藤椅很搭。"}],"stockTotal":19,"state":"in","specCount":2,"priceFrom":128},{"id":"CL-03","name":"亚麻沙发靠垫 45cm","room":"living","material":"亚麻混纺外套 + 羽绒芯","dims":"45 × 45 cm","weight":"0.8 kg","blurb":"外套可拆洗，羽绒芯回弹慢，靠着不塌。","care":"外套 30 度机洗，芯体只晒不洗。","specs":[{"name":"颜色","values":["燕麦","藏青","砖红"]}],"combos":[{"v":["燕麦"],"price":89,"stock":26},{"v":["藏青"],"price":89,"stock":11},{"v":["砖红"],"price":89,"stock":0}],"reviewCount":52,"reviews":[{"who":"林一","date":"2026-11-06","text":"燕麦色很耐看，洗过一次没有缩水。"},{"who":"苏叶","date":"2026-10-22","text":"羽绒芯偏软，喜欢硬一点的要换芯。"},{"who":"何川","date":"2026-10-03","text":"砖红卖完了，先买了藏青，实物颜色够沉。"}],"stockTotal":37,"state":"partial","specCount":3,"priceFrom":89},{"id":"CL-04","name":"铁艺落地灯 单头","room":"living","material":"铁艺灯身 + 亚麻灯罩","dims":"直径 32 × 高 158 cm","weight":"3.4 kg","blurb":"灯罩朝下，光落在沙发和地板上，不刺眼。","care":"干布擦灰，灯罩不可水洗。","specs":[{"name":"灯身","values":["哑黑","砂白"]},{"name":"光源","values":["暖光 2700K","中性光 4000K"]}],"combos":[{"v":["哑黑","暖光 2700K"],"price":459,"stock":7},{"v":["哑黑","中性光 4000K"],"price":479,"stock":3},{"v":["砂白","暖光 2700K"],"price":459,"stock":6},{"v":["砂白","中性光 4000K"],"price":479,"stock":0}],"reviewCount":29,"reviews":[{"who":"江舟","date":"2026-10-30","text":"底座够重，猫撞了一下没倒。"},{"who":"沈青","date":"2026-10-08","text":"暖光档很柔和，看书看久了眼睛不累。"},{"who":"亦南","date":"2026-09-21","text":"砂白偏冷一点，比想象中更像灰白。"}],"stockTotal":16,"state":"partial","specCount":4,"priceFrom":459},{"id":"CL-05","name":"橡木两层小推车","room":"living","material":"橡木 + 万向轮","dims":"长 46 × 宽 36 × 高 68 cm","weight":"6.2 kg","blurb":"两层都能放，轮子带刹车，推到餐桌边当临时餐边柜。","care":"木蜡油面，半年补一次油。","specs":[{"name":"层板","values":["两层","三层"]}],"combos":[{"v":["两层"],"price":596,"stock":3},{"v":["三层"],"price":688,"stock":5}],"reviewCount":21,"reviews":[{"who":"许棠","date":"2026-10-25","text":"轮子推起来很轻，锁住之后不滑。"},{"who":"阿冰","date":"2026-09-18","text":"三层比两层实用，锅也能放。"},{"who":"罗雀","date":"2026-10-14","text":"边角是圆角，撞到小腿不疼。"}],"stockTotal":8,"state":"low","specCount":2,"priceFrom":596},{"id":"BD-01","name":"全棉水洗四件套","room":"bedroom","material":"长绒棉 60 支","dims":"被套 200 × 230 cm","weight":"2.4 kg","blurb":"水洗过一遍再出厂，第一次用就不硬。","care":"40 度以下机洗，反面阴干。","specs":[{"name":"床型","values":["1.5 m 床","1.8 m 床"]},{"name":"颜色","values":["燕麦","灰蓝"]}],"combos":[{"v":["1.5 m 床","燕麦"],"price":429,"stock":9},{"v":["1.5 m 床","灰蓝"],"price":429,"stock":5},{"v":["1.8 m 床","燕麦"],"price":469,"stock":0},{"v":["1.8 m 床","灰蓝"],"price":469,"stock":4}],"reviewCount":88,"reviews":[{"who":"秋白","date":"2026-11-08","text":"洗了三次还是软的，没有起球。"},{"who":"陈默","date":"2026-10-27","text":"灰蓝比屏幕里浅一点，配白墙合适。"},{"who":"小满","date":"2026-10-05","text":"1.8 m 的被套偏大，装 200 × 230 的被子刚好。"}],"stockTotal":18,"state":"partial","specCount":4,"priceFrom":429},{"id":"BD-02","name":"香樟木衣物收纳箱","room":"bedroom","material":"香樟木实木","dims":"70 L：长 60 × 宽 40 × 高 30 cm","weight":"7.8 kg","blurb":"盖板带透气孔，换季衣物直接塞进去。","care":"每季度通风一次，不要贴墙放。","specs":[{"name":"容量","values":["45 L","70 L"]}],"combos":[{"v":["45 L"],"price":219,"stock":8},{"v":["70 L"],"price":268,"stock":12}],"reviewCount":34,"reviews":[{"who":"何川","date":"2026-10-20","text":"樟木味不冲，放毛衣很放心。"},{"who":"林一","date":"2026-09-29","text":"70 L 装两床夏被还有空。"},{"who":"木子","date":"2026-10-09","text":"盖板有点紧，第一次开要用力。"}],"stockTotal":20,"state":"in","specCount":2,"priceFrom":219},{"id":"BD-03","name":"亚麻遮光窗帘 单片","room":"bedroom","material":"亚麻混纺 + 遮光涂层","dims":"1.5 × 2.6 m","weight":"1.3 kg","blurb":"单片挂，遮光约七成，早上不会被晒醒。","care":"冷水手洗，不可漂白。","specs":[{"name":"尺寸","values":["1.5 × 2.6 m","2 × 2.6 m"]},{"name":"颜色","values":["米白","雾灰"]}],"combos":[{"v":["1.5 × 2.6 m","米白"],"price":219,"stock":14},{"v":["1.5 × 2.6 m","雾灰"],"price":219,"stock":2},{"v":["2 × 2.6 m","米白"],"price":259,"stock":6},{"v":["2 × 2.6 m","雾灰"],"price":259,"stock":0}],"reviewCount":41,"reviews":[{"who":"苏叶","date":"2026-11-01","text":"米白透光但不透人，白天也不用拉严。"},{"who":"沈青","date":"2026-10-16","text":"挂钩孔位规整，穿杆很顺。"},{"who":"阿岚","date":"2026-09-24","text":"遮光七成是真的，夏天可能要加一层。"}],"stockTotal":22,"state":"partial","specCount":4,"priceFrom":219},{"id":"BD-04","name":"羊毛混纺床边毯","room":"bedroom","material":"羊毛 60% + 棉","dims":"60 × 90 cm","weight":"1.1 kg","blurb":"床边踩上去不冰脚，底面有防滑点。","care":"干洗或冷水轻揉，平铺阴干。","specs":[{"name":"尺寸","values":["60 × 90 cm","80 × 150 cm"]}],"combos":[{"v":["60 × 90 cm"],"price":356,"stock":5},{"v":["80 × 150 cm"],"price":528,"stock":7}],"reviewCount":26,"reviews":[{"who":"罗雀","date":"2026-10-23","text":"掉毛很少，吸尘器走一遍就干净。"},{"who":"许棠","date":"2026-09-16","text":"80 × 150 铺在床尾刚好。"},{"who":"江舟","date":"2026-10-12","text":"颜色偏灰不偏米，跟木地板很配。"}],"stockTotal":12,"state":"in","specCount":2,"priceFrom":356},{"id":"BD-05","name":"榉木床头置物架","room":"bedroom","material":"榉木","dims":"长 40 × 宽 16 × 高 22 cm","weight":"1.6 kg","blurb":"夹在床头板内侧，手机、眼镜、水杯都有地方放。","care":"干布擦，避免积水。","specs":[{"name":"层数","values":["单层","双层"]}],"combos":[{"v":["单层"],"price":189,"stock":0},{"v":["双层"],"price":249,"stock":0}],"reviewCount":19,"reviews":[{"who":"阿冰","date":"2026-10-02","text":"尺寸刚好卡住床头板，不用打孔。"},{"who":"秋白","date":"2026-09-12","text":"双层的上层放水杯略浅，容易碰倒。"},{"who":"木子","date":"2026-08-30","text":"装的时候要量床头板厚度。"}],"stockTotal":0,"state":"soldout","specCount":2,"priceFrom":189},{"id":"KT-01","name":"铸铁珐琅炖锅 20cm","room":"kitchen","material":"铸铁 + 内外珐琅","dims":"口径 20 cm / 容量 2.5 L","weight":"4.2 kg","blurb":"炖汤、烧肉都能上桌，锅壁厚，小火也能滚。","care":"不可空烧，用木铲或硅胶铲。","specs":[{"name":"颜色","values":["奶油白","墨绿"]},{"name":"容量","values":["2.5 L","3.5 L"]}],"combos":[{"v":["奶油白","2.5 L"],"price":468,"stock":8},{"v":["奶油白","3.5 L"],"price":558,"stock":4},{"v":["墨绿","2.5 L"],"price":468,"stock":11},{"v":["墨绿","3.5 L"],"price":558,"stock":0}],"reviewCount":63,"reviews":[{"who":"老周","date":"2026-11-04","text":"炖牛腩一个半小时，锅边没糊。"},{"who":"林一","date":"2026-10-21","text":"墨绿很沉，端上桌像餐厅里的锅。"},{"who":"何川","date":"2026-09-26","text":"空锅有点重，洗的时候要两只手。"}],"stockTotal":23,"state":"partial","specCount":4,"priceFrom":468},{"id":"KT-02","name":"白橡木砧板 中号","room":"kitchen","material":"白橡木整木","dims":"中号 38 × 26 × 2.4 cm","weight":"1.5 kg","blurb":"整木不开胶，背面有导水槽，洗完立着晾。","care":"每月涂一次食用级木蜡油。","specs":[{"name":"尺寸","values":["小号 30 × 20 cm","中号 38 × 26 cm","大号 45 × 30 cm"]}],"combos":[{"v":["小号 30 × 20 cm"],"price":88,"stock":21},{"v":["中号 38 × 26 cm"],"price":128,"stock":9},{"v":["大号 45 × 30 cm"],"price":168,"stock":6}],"reviewCount":47,"reviews":[{"who":"沈青","date":"2026-10-29","text":"厚度够，切排骨不晃。"},{"who":"陈默","date":"2026-10-07","text":"第一次用有木味，涂油之后就好了。"},{"who":"亦南","date":"2026-09-19","text":"大号比想象中宽，水槽放不下。"}],"stockTotal":36,"state":"in","specCount":3,"priceFrom":88},{"id":"KT-03","name":"玻璃密封储物罐","room":"kitchen","material":"高硼硅玻璃 + 硅胶圈","dims":"500 ml：直径 9 × 高 12 cm","weight":"0.4 kg","blurb":"扣锁加硅胶圈，咖啡豆和杂粮都能密封。","care":"可进洗碗机，硅胶圈建议手洗。","specs":[{"name":"容量","values":["500 ml","750 ml","1 L"]}],"combos":[{"v":["500 ml"],"price":39,"stock":40},{"v":["750 ml"],"price":49,"stock":22},{"v":["1 L"],"price":59,"stock":0}],"reviewCount":71,"reviews":[{"who":"阿禾","date":"2026-11-03","text":"装咖啡豆两周还脆，密封圈没味。"},{"who":"许棠","date":"2026-10-15","text":"1 L 那款断货了，750 装米少了点。"},{"who":"江舟","date":"2026-09-22","text":"玻璃很厚，摔过一次没碎。"}],"stockTotal":62,"state":"partial","specCount":3,"priceFrom":39},{"id":"KT-04","name":"不锈钢沥水篮","room":"kitchen","material":"304 不锈钢","dims":"直径 24 cm","weight":"0.5 kg","blurb":"细网眼，洗米不漏米，洗完直接当果盘。","care":"可进洗碗机。","specs":[{"name":"尺寸","values":["20 cm","24 cm"]}],"combos":[{"v":["20 cm"],"price":86,"stock":13},{"v":["24 cm"],"price":96,"stock":3}],"reviewCount":33,"reviews":[{"who":"木子","date":"2026-10-26","text":"网眼细，洗藜麦也不漏。"},{"who":"罗雀","date":"2026-09-28","text":"24 cm 放水槽有点占地方。"},{"who":"秋白","date":"2026-10-18","text":"把手焊得牢，装满菜不软。"}],"stockTotal":16,"state":"in","specCount":2,"priceFrom":86},{"id":"KT-05","name":"棉麻围裙 交叉背","room":"kitchen","material":"棉麻 + 皮革扣","dims":"均码，长 86 cm","weight":"0.3 kg","blurb":"交叉背带不压脖子，前片有两只深口袋。","care":"40 度机洗，皮扣手擦。","specs":[{"name":"颜色","values":["靛蓝","砖红","本白"]}],"combos":[{"v":["靛蓝"],"price":78,"stock":17},{"v":["砖红"],"price":78,"stock":0},{"v":["本白"],"price":78,"stock":24}],"reviewCount":58,"reviews":[{"who":"阿岚","date":"2026-11-05","text":"系在背后，弯腰不掉肩。"},{"who":"苏叶","date":"2026-10-13","text":"口袋够深，手机放进去不会滑。"},{"who":"老周","date":"2026-09-25","text":"本白容易脏，洗完有点皱。"}],"stockTotal":41,"state":"partial","specCount":3,"priceFrom":78},{"id":"KT-06","name":"竹制刀架 六格","room":"kitchen","material":"楠竹","dims":"长 24 × 宽 11 × 高 22 cm","weight":"0.9 kg","blurb":"斜插式，刀柄朝上，台面不积水。","care":"通风晾干，不要长时间泡水。","specs":[{"name":"格数","values":["六格","八格"]}],"combos":[{"v":["六格"],"price":112,"stock":7},{"v":["八格"],"price":138,"stock":5}],"reviewCount":24,"reviews":[{"who":"何川","date":"2026-10-24","text":"斜插之后刀刃不碰底，用着放心。"},{"who":"阿冰","date":"2026-09-17","text":"八格多出来的两格放剪刀刚好。"},{"who":"林一","date":"2026-10-06","text":"底座有点轻，抽刀时会被带起来。"}],"stockTotal":12,"state":"in","specCount":2,"priceFrom":112},{"id":"BA-01","name":"长绒棉浴巾 两条装","room":"bath","material":"长绒棉 600 gsm","dims":"70 × 140 cm","weight":"1.2 kg","blurb":"吸水快，两条装够轮换。","care":"首次使用前单独冷水洗一遍。","specs":[{"name":"尺寸","values":["70 × 140 cm","80 × 160 cm"]},{"name":"颜色","values":["本白","浅灰"]}],"combos":[{"v":["70 × 140 cm","本白"],"price":139,"stock":18},{"v":["70 × 140 cm","浅灰"],"price":139,"stock":9},{"v":["80 × 160 cm","本白"],"price":169,"stock":4},{"v":["80 × 160 cm","浅灰"],"price":169,"stock":0}],"reviewCount":66,"reviews":[{"who":"小满","date":"2026-11-07","text":"吸水比之前的旧浴巾快很多，不掉毛。"},{"who":"许棠","date":"2026-10-20","text":"浅灰偏冷，配瓷砖好看。"},{"who":"沈青","date":"2026-09-30","text":"80 × 160 对 170 身高够长。"}],"stockTotal":31,"state":"partial","specCount":4,"priceFrom":139},{"id":"BA-02","name":"竹纤维地垫","room":"bath","material":"竹纤维 + 防滑底","dims":"40 × 60 cm","weight":"0.7 kg","blurb":"踩上去凉而不冰，底面有硅胶点。","care":"机洗轻柔档，不可烘干。","specs":[{"name":"尺寸","values":["40 × 60 cm","50 × 80 cm"]}],"combos":[{"v":["40 × 60 cm"],"price":69,"stock":25},{"v":["50 × 80 cm"],"price":89,"stock":12}],"reviewCount":37,"reviews":[{"who":"江舟","date":"2026-10-31","text":"洗完很快就干，南方梅雨季也不发霉。"},{"who":"秋白","date":"2026-10-10","text":"防滑底确实不打滑。"},{"who":"木子","date":"2026-09-20","text":"颜色比图深半档，可以接受。"}],"stockTotal":37,"state":"in","specCount":2,"priceFrom":69},{"id":"BA-03","name":"陶瓷漱口杯架","room":"bath","material":"哑光陶瓷","dims":"长 18 × 宽 8 × 高 11 cm","weight":"0.6 kg","blurb":"两只杯位加一个牙刷孔，杯底不积水。","care":"手洗，避免硬物刮擦。","specs":[{"name":"釉色","values":["白釉","灰釉"]}],"combos":[{"v":["白釉"],"price":58,"stock":19},{"v":["灰釉"],"price":58,"stock":8}],"reviewCount":22,"reviews":[{"who":"陈默","date":"2026-10-17","text":"杯架深度够，杯子不会晃。"},{"who":"阿禾","date":"2026-09-23","text":"灰釉有细微颗粒感，比纯白耐脏。"},{"who":"亦南","date":"2026-10-04","text":"孔位偏紧，粗柄牙刷插不进。"}],"stockTotal":27,"state":"in","specCount":2,"priceFrom":58},{"id":"BA-04","name":"榉木浴凳","room":"bath","material":"榉木 + 防水涂层","dims":"长 38 × 宽 26 × 高 45 cm","weight":"2.8 kg","blurb":"给孩子洗澡时坐着用，四角有防滑垫。","care":"用完擦干，不要长期放在积水处。","specs":[{"name":"高度","values":["32 cm","45 cm"]}],"combos":[{"v":["32 cm"],"price":238,"stock":2},{"v":["45 cm"],"price":268,"stock":2}],"reviewCount":18,"reviews":[{"who":"罗雀","date":"2026-10-21","text":"32 cm 给四岁孩子坐刚好。"},{"who":"何川","date":"2026-09-15","text":"涂层做得细，洗完不留水痕。"},{"who":"阿岚","date":"2026-10-08","text":"凳面偏窄，大人坐着要小心。"}],"stockTotal":4,"state":"low","specCount":2,"priceFrom":238},{"id":"BA-05","name":"亚麻浴帘","room":"bath","material":"亚麻混纺 + 防水内衬","dims":"180 × 200 cm","weight":"0.9 kg","blurb":"外层亚麻手感，内衬防水，挂环已配好。","care":"机洗轻柔档，挂起阴干。","specs":[{"name":"尺寸","values":["180 × 200 cm","200 × 200 cm"]}],"combos":[{"v":["180 × 200 cm"],"price":158,"stock":11},{"v":["200 × 200 cm"],"price":178,"stock":6}],"reviewCount":27,"reviews":[{"who":"苏叶","date":"2026-10-27","text":"内衬挡水很到位，外面不湿。"},{"who":"许棠","date":"2026-09-29","text":"挂环给足了 12 个，不用另买。"},{"who":"江舟","date":"2026-10-11","text":"亚麻那面容易挂灰，要常抖。"}],"stockTotal":17,"state":"in","specCount":2,"priceFrom":158},{"id":"ST-01","name":"黑胡桃木书立 一对","room":"study","material":"黑胡桃木","dims":"高 20 cm","weight":"0.9 kg","blurb":"L 形整木，底部贴毡，推书不打滑。","care":"干布擦拭，避免酒精。","specs":[{"name":"高度","values":["15 cm","20 cm"]}],"combos":[{"v":["15 cm"],"price":98,"stock":5},{"v":["20 cm"],"price":118,"stock":14}],"reviewCount":31,"reviews":[{"who":"林一","date":"2026-11-02","text":"20 cm 撑得住画册，木头有分量。"},{"who":"阿冰","date":"2026-09-27","text":"底部毡垫不刮桌面。"},{"who":"木子","date":"2026-10-13","text":"一对的高度有点误差，1 mm 左右。"}],"stockTotal":19,"state":"in","specCount":2,"priceFrom":98},{"id":"ST-02","name":"羊毛毡桌面垫","room":"study","material":"羊毛毡 3 mm","dims":"90 × 45 cm","weight":"0.5 kg","blurb":"垫在键盘和笔记本下面，打字声变小。","care":"干洗，或冷水轻压。","specs":[{"name":"尺寸","values":["90 × 45 cm","120 × 60 cm"]},{"name":"颜色","values":["炭灰","驼色"]}],"combos":[{"v":["90 × 45 cm","炭灰"],"price":96,"stock":16},{"v":["90 × 45 cm","驼色"],"price":96,"stock":7},{"v":["120 × 60 cm","炭灰"],"price":136,"stock":3},{"v":["120 × 60 cm","驼色"],"price":136,"stock":0}],"reviewCount":43,"reviews":[{"who":"沈青","date":"2026-10-30","text":"厚度刚好，鼠标在上面也能滑。"},{"who":"亦南","date":"2026-10-09","text":"炭灰吸灰，抖一抖就干净。"},{"who":"何川","date":"2026-09-21","text":"120 × 60 铺满整张桌子还有余。"}],"stockTotal":26,"state":"partial","specCount":4,"priceFrom":96},{"id":"ST-03","name":"铁艺桌面夹灯","room":"study","material":"铁艺 + 磨砂玻璃罩","dims":"灯罩直径 14 cm / 臂长 42 cm","weight":"1.4 kg","blurb":"夹在桌沿，灯头可转 180 度。","care":"干布擦灰，灯泡 5 W 以内。","specs":[{"name":"颜色","values":["哑黑","砂白"]}],"combos":[{"v":["哑黑"],"price":179,"stock":0},{"v":["砂白"],"price":179,"stock":0}],"reviewCount":17,"reviews":[{"who":"许棠","date":"2026-10-05","text":"夹口有胶垫，桌子没留印。"},{"who":"罗雀","date":"2026-09-11","text":"臂长够，能照到键盘。"},{"who":"秋白","date":"2026-08-29","text":"灯头转轴偏紧，调角度要用点力。"}],"stockTotal":0,"state":"soldout","specCount":2,"priceFrom":179},{"id":"ST-04","name":"亚克力笔筒 三层","room":"study","material":"浇筑亚克力","dims":"长 12 × 宽 12 × 高 14 cm","weight":"0.4 kg","blurb":"三层错位，笔、尺、剪刀分开插。","care":"湿布擦，避免酒精和香蕉水。","specs":[{"name":"层数","values":["三层","五层"]}],"combos":[{"v":["三层"],"price":45,"stock":32},{"v":["五层"],"price":65,"stock":15}],"reviewCount":29,"reviews":[{"who":"阿禾","date":"2026-10-19","text":"透光度好，放彩笔一目了然。"},{"who":"陈默","date":"2026-09-24","text":"五层更实用，尺子有地方放。"},{"who":"小满","date":"2026-10-02","text":"边角有轻微合模线，不影响用。"}],"stockTotal":47,"state":"in","specCount":2,"priceFrom":45},{"id":"ST-05","name":"桉木升降阅读架","room":"study","material":"桉木","dims":"长 34 × 宽 24 cm","weight":"1.7 kg","blurb":"六档角度，摊开的书不用手扶。","care":"干布擦，避免暴晒。","specs":[{"name":"角度","values":["固定 45 度","六档可调"]}],"combos":[{"v":["固定 45 度"],"price":236,"stock":4},{"v":["六档可调"],"price":296,"stock":5}],"reviewCount":25,"reviews":[{"who":"江舟","date":"2026-10-26","text":"六档调到最后能站着看谱。"},{"who":"苏叶","date":"2026-09-19","text":"压书条够紧，厚书也不翻。"},{"who":"阿冰","date":"2026-10-07","text":"木纹比图片深，接受。"}],"stockTotal":9,"state":"low","specCount":2,"priceFrom":236}]};
+
+const PRODUCTS = DATA.products.map((p) => {
+  const room = DATA.rooms.find((r) => r.id === p.room);
+  return Object.assign({}, p, { roomName: room ? room.name : p.room });
+});
+
+const PALETTE = {
+  wood: "#c8a97e", white: "#f3efe6", dark: "#2c2c2c", linen: "#d9cfc0",
+  green: "#3f5f4a", clay: "#b06a4a", grey: "#8b8b8b", blue: "#2f4b6b",
+  steel: "#9aa2a8", glass: "#dce6ea", rattan: "#c9a86a", cream: "#f0e6d2",
+};
+
+const SWATCH_RULES = {
+  "CL-01": ["wood", "white"], "CL-02": ["rattan", "wood"], "CL-03": ["linen", "blue", "clay"],
+  "CL-04": ["dark", "cream"], "CL-05": ["wood", "dark"],
+  "BD-01": ["cream", "blue"], "BD-02": ["wood", "cream"], "BD-03": ["cream", "grey"],
+  "BD-04": ["grey", "cream"], "BD-05": ["wood", "wood"],
+  "KT-01": ["cream", "green"], "KT-02": ["wood", "wood"], "KT-03": ["glass", "glass"],
+  "KT-04": ["steel", "steel"], "KT-05": ["blue", "clay", "cream"], "KT-06": ["rattan", "rattan"],
+  "BA-01": ["cream", "grey"], "BA-02": ["glass", "linen"], "BA-03": ["white", "grey"],
+  "BA-04": ["wood", "wood"], "BA-05": ["linen", "grey"],
+  "ST-01": ["dark", "dark"], "ST-02": ["grey", "clay"], "ST-03": ["dark", "cream"],
+  "ST-04": ["glass", "glass"], "ST-05": ["wood", "cream"],
+};
+
+const BANDS = [
+  { id: "lt100", label: "¥99 以下", lo: 0, hi: 99 },
+  { id: "mid", label: "¥100 到 ¥299", lo: 100, hi: 299 },
+  { id: "high", label: "¥300 以上", lo: 300, hi: Infinity },
+];
+
+const SORTS = [
+  { label: "推荐排序：有货优先", value: "recommend" },
+  { label: "价格从低到高", value: "price-asc" },
+  { label: "价格从高到低", value: "price-desc" },
+  { label: "评价数从多到少", value: "review" },
+  { label: "规格数从多到少", value: "spec" },
+];
+
+const CITIES = ["北京", "上海", "广州", "深圳", "杭州", "成都", "乌鲁木齐", "拉萨"].map((c) => ({ label: c, value: c }));
+
+const SHIP_MODES = [
+  { id: "std", label: "标准配送", rule: "满 ¥199 免运费，未满 ¥12，2 到 4 个工作日" },
+  { id: "exp", label: "加急配送", rule: "每单 ¥18，1 到 2 个工作日" },
+  { id: "pickup", label: "到店自提", rule: "¥0，下单后 48 小时内取货" },
+];
+
+const STATE_TEXT = {
+  soldout: "已售罄",
+  low: "仅剩个位数",
+  partial: "部分规格售罄",
+  in: "现货",
+};
+
+function shipFeeOf(mode, subtotal) {
+  if (subtotal === 0) return 0;
+  if (mode === "exp") return 18;
+  if (mode === "pickup") return 0;
+  return subtotal >= 199 ? 0 : 12;
+}
+
+const App = {
+  components: {
+    TButton: TD.Button,
+    TInput: TD.Input,
+    TInputNumber: TD.InputNumber,
+    TSelect: TD.Select,
+  },
+  setup() {
+    const rooms = DATA.rooms;
+    const total = PRODUCTS.length;
+
+    const query = ref("");
+    const room = ref("all");
+    const band = ref("all");
+    const sort = ref("recommend");
+    const inStockOnly = ref(false);
+    const loading = ref(true);
+
+    const selectedId = ref(PRODUCTS[0].id);
+    const chosen = reactive({});
+    const qty = ref(1);
+
+    const cart = ref([]);
+    const shipMode = ref("std");
+
+    const form = reactive({ name: "", phone: "", city: "", addr: "", note: "", agree: false });
+    const errors = reactive({ name: "", phone: "", city: "", addr: "", agree: "" });
+    const order = ref(null);
+
+    const paletteOpen = ref(false);
+    const paletteQuery = ref("");
+    const paletteIndex = ref(0);
+    const paletteInput = ref(null);
+    const paletteTrigger = ref(null);
+
+    const toast = ref("");
+    let toastTimer = null;
+    let loadTimer = null;
+
+    function say(msg) {
+      toast.value = msg;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => (toast.value = ""), 2600);
+    }
+
+    const roomName = (id) => {
+      const r = rooms.find((x) => x.id === id);
+      return r ? r.name : id;
+    };
+
+    const roomCount = (id) => PRODUCTS.filter((p) => p.room === id).length;
+    const roomFrom = (id) => Math.min.apply(null, PRODUCTS.filter((p) => p.room === id).map((p) => p.priceFrom));
+
+    const bands = BANDS;
+    const sortOptions = SORTS;
+    const cities = CITIES;
+    const shipModes = SHIP_MODES;
+
+    function bandMatch(p, id) {
+      if (id === "all") return true;
+      const b = BANDS.find((x) => x.id === id);
+      return p.priceFrom >= b.lo && p.priceFrom <= b.hi;
+    }
+    const bandCount = (id) => PRODUCTS.filter((p) => bandMatch(p, id)).length;
+
+    const filtered = computed(() => {
+      const q = query.value.trim().toLowerCase();
+      return PRODUCTS.filter((p) => {
+        if (room.value !== "all" && p.room !== room.value) return false;
+        if (!bandMatch(p, band.value)) return false;
+        if (inStockOnly.value && p.state === "soldout") return false;
+        if (q) {
+          const hay = (p.name + " " + p.material + " " + p.blurb + " " + p.roomName + " " + p.id).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+    });
+
+    const visible = computed(() => {
+      const arr = filtered.value.slice();
+      if (sort.value === "price-asc") arr.sort((a, b) => a.priceFrom - b.priceFrom);
+      else if (sort.value === "price-desc") arr.sort((a, b) => b.priceFrom - a.priceFrom);
+      else if (sort.value === "review") arr.sort((a, b) => b.reviewCount - a.reviewCount);
+      else if (sort.value === "spec") arr.sort((a, b) => b.specCount - a.specCount);
+      else arr.sort((a, b) => (a.state === "soldout" ? 1 : 0) - (b.state === "soldout" ? 1 : 0) || b.reviewCount - a.reviewCount);
+      return arr;
+    });
+
+    const resultCount = computed(() => filtered.value.length);
+
+    const filtersOn = computed(
+      () => query.value.trim() !== "" || room.value !== "all" || band.value !== "all" || inStockOnly.value
+    );
+    const filterChips = computed(() => {
+      const out = [];
+      if (room.value !== "all") out.push("房间 " + roomName(room.value));
+      if (band.value !== "all") out.push("价位 " + BANDS.find((b) => b.id === band.value).label);
+      if (query.value.trim()) out.push("关键词「" + query.value.trim() + "」");
+      if (inStockOnly.value) out.push("只看有货");
+      return out.join(" · ");
+    });
+
+    const picks = computed(() =>
+      PRODUCTS.slice()
+        .filter((p) => p.state !== "soldout")
+        .sort((a, b) => b.reviewCount - a.reviewCount)
+        .slice(0, 4)
+    );
+
+    const current = computed(() => PRODUCTS.find((p) => p.id === selectedId.value) || PRODUCTS[0]);
+
+    function syncChosen(p) {
+      p.specs.forEach((dim) => {
+        if (!dim.values.some((v) => v === chosen[dim.name])) chosen[dim.name] = dim.values[0];
+        const live = dim.values.filter((v) => optionLive(dim.name, v));
+        if (live.length && !live.some((v) => v === chosen[dim.name])) chosen[dim.name] = live[0];
+      });
+    }
+
+    const combo = computed(() => {
+      const p = current.value;
+      const vals = p.specs.map((d) => chosen[d.name]);
+      const found = p.combos.find((c) => c.v.every((v, i) => v === vals[i]));
+      return found || p.combos[0];
+    });
+
+    const chosenText = computed(() => current.value.specs.map((d) => chosen[d.name]).filter(Boolean).join(" / "));
+
+    const stockState = computed(() => {
+      if (combo.value.stock === 0) return "out";
+      if (combo.value.stock <= 5) return "low";
+      return "in";
+    });
+
+    const comboText = computed(() => {
+      if (combo.value.stock === 0) return "这个规格已售罄，换一个规格看看";
+      if (combo.value.stock <= 5) return "仅剩 " + combo.value.stock + " 件";
+      return "现货 " + combo.value.stock + " 件";
+    });
+
+    function optionLive(dimName, value) {
+      const p = current.value;
+      return p.combos.some((c) => {
+        const idx = p.specs.findIndex((d) => d.name === dimName);
+        return c.v[idx] === value && c.stock > 0;
+      });
+    }
+
+    function choose(dimName, value) {
+      if (!optionLive(dimName, value)) return;
+      chosen[dimName] = value;
+      qty.value = 1;
+      nextTick(() => {
+        if (combo.value.stock === 0) say("这个规格已售罄");
+      });
+    }
+
+    watch(current, (p) => {
+      Object.keys(chosen).forEach((k) => delete chosen[k]);
+      syncChosen(p);
+    }, { immediate: true });
+    watch(
+      () => combo.value.stock,
+      (s) => {
+        if (qty.value > Math.max(1, s)) qty.value = Math.max(1, s);
+      }
+    );
+
+    const stockText = (p) => {
+      if (p.state === "soldout") return "已售罄";
+      if (p.state === "low") return "仅剩个位数";
+      if (p.state === "partial") return "部分规格售罄";
+      return "现货";
+    };
+
+    const swatchLabel = (p) => "可选配色：" + p.specs.map((d) => d.name + " " + d.values.join("、")).join("；");
+
+    const swatches = (p) => {
+      const names = SWATCH_RULES[p.id] || ["wood"];
+      return names.map((n) => PALETTE[n] || PALETTE.wood);
+    };
+
+    function reload() {
+      loading.value = true;
+      clearTimeout(loadTimer);
+      loadTimer = setTimeout(() => (loading.value = false), 280);
+    }
+
+    watch([query, room, band, inStockOnly], () => reload());
+
+    function pickRoom(id) {
+      room.value = id;
+      document.getElementById("catalogue").scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+    function setBand(id) {
+      band.value = id;
+      document.getElementById("catalogue").scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+    function resetFilters() {
+      query.value = "";
+      room.value = "all";
+      band.value = "all";
+      inStockOnly.value = false;
+      say("筛选已清空");
+    }
+
+    function focusEl(id) {
+      nextTick(() => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const inner = el.matches("input, select, textarea, button") ? el : el.querySelector("input, select, textarea, button");
+        const target = inner || el;
+        if (target === el && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+        target.focus({ preventScroll: true });
+        el.scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+    }
+
+    function openDetail(p) {
+      selectedId.value = p.id;
+      qty.value = 1;
+      focusEl("detail-h");
+    }
+
+    // ---------- 购物车 ----------
+    const cartLines = computed(() =>
+      cart.value.map((item) => {
+        const p = PRODUCTS.find((x) => x.id === item.pid);
+        const c = p.combos.find((x) => x.v.join("/") === item.key);
+        return {
+          key: item.pid + "|" + item.key,
+          pid: p.id,
+          name: p.name,
+          room: p.room,
+          spec: item.key,
+          price: c.price,
+          stock: c.stock,
+          qty: item.qty,
+        };
+      })
+    );
+    const cartCount = computed(() => cart.value.reduce((s, i) => s + i.qty, 0));
+    const subtotal = computed(() => cartLines.value.reduce((s, l) => s + l.price * l.qty, 0));
+    const shipLabel = computed(() => (SHIP_MODES.find((m) => m.id === shipMode.value) || SHIP_MODES[0]).label);
+    const shipFee = computed(() => shipFeeOf(shipMode.value, subtotal.value));
+    const grandTotal = computed(() => subtotal.value + shipFee.value);
+
+    function addToCart(pid, key, n) {
+      const hit = cart.value.find((i) => i.pid === pid && i.key === key);
+      const p = PRODUCTS.find((x) => x.id === pid);
+      const c = p.combos.find((x) => x.v.join("/") === key);
+      const cap = c.stock;
+      if (cap === 0) {
+        say("这个规格已售罄");
+        return false;
+      }
+      if (hit) hit.qty = Math.min(cap, hit.qty + n);
+      else cart.value.push({ pid: pid, key: key, qty: Math.min(cap, n) });
+      return true;
+    }
+
+    function addCurrent() {
+      const p = current.value;
+      if (combo.value.stock === 0) {
+        say("这个规格已售罄，换一个规格");
+        return;
+      }
+      if (addToCart(p.id, combo.value.v.join("/"), qty.value)) {
+        say("已加入购物车：" + p.name + " × " + qty.value);
+      }
+    }
+
+    function quickAdd(p) {
+      if (p.state === "soldout") {
+        say(p.name + " 已售罄");
+        return;
+      }
+      const live = p.combos.filter((c) => c.stock > 0);
+      const c = live[0];
+      if (addToCart(p.id, c.v.join("/"), 1)) say("已加入购物车：" + p.name);
+    }
+
+    function setQty(line, v) {
+      const item = cart.value.find((i) => i.pid + "|" + i.key === line.key);
+      if (!item) return;
+      const n = Number(v) || 1;
+      item.qty = Math.max(1, Math.min(line.stock, n));
+    }
+
+    function removeLine(line) {
+      cart.value = cart.value.filter((i) => i.pid + "|" + i.key !== line.key);
+      say("已移除 " + line.name);
+      if (!cart.value.length) focusEl("cart-h");
+    }
+
+    function goCart() {
+      focusEl("cart-h");
+    }
+    function goCatalogue() {
+      focusEl("cat-h");
+    }
+    function goCheckout() {
+      if (!cart.value.length) {
+        say("购物车是空的，先加一件");
+        return;
+      }
+      focusEl(order.value ? "co-h" : "f-name");
+    }
+
+    // ---------- 结算 ----------
+    function validate() {
+      errors.name = form.name.trim().length >= 2 ? "" : "请填收货人姓名，至少 2 个字";
+      errors.phone = /^1[3-9]\d{9}$/.test(form.phone.trim()) ? "" : "请填 11 位手机号，例如 13800138000";
+      if (!form.city) errors.city = "请选择城市";
+      else if (form.city === "乌鲁木齐" || form.city === "拉萨") errors.city = "这两个城市暂不配送，换一个城市试试";
+      else errors.city = "";
+      errors.addr = form.addr.trim().length >= 6 ? "" : "请填详细地址，至少 6 个字";
+      errors.agree = form.agree ? "" : "下单前请先确认这是演示页面";
+      return !Object.keys(errors).some((k) => errors[k]);
+    }
+
+    function submitOrder() {
+      if (!cart.value.length) {
+        say("购物车是空的，先加一件");
+        focusEl("cart-h");
+        return;
+      }
+      if (!validate()) {
+        const order = ["name", "phone", "city", "addr", "agree"];
+        const first = order.find((k) => errors[k]);
+        const map = { name: "f-name", phone: "f-phone", city: "f-city", addr: "f-addr", agree: "f-agree" };
+        const holder = document.getElementById(map[first]);
+        const target = holder ? (holder.matches("input, button") ? holder : holder.querySelector("input, button")) : null;
+        if (target) target.focus();
+        say("表单还有 " + order.filter((k) => errors[k]).length + " 处要改");
+        return;
+      }
+      const stamp = new Date();
+      order.value = {
+        id: "DEMO-" + stamp.getFullYear() + String(stamp.getMonth() + 1).padStart(2, "0") + String(stamp.getDate()).padStart(2, "0") + "-" + String(1000 + Math.floor(Math.random() * 9000)),
+        count: cartCount.value,
+        subtotal: subtotal.value,
+        fee: shipFee.value,
+        total: grandTotal.value,
+        shipLabel: shipLabel.value,
+        name: form.name.trim(),
+        city: form.city,
+        addr: form.addr.trim(),
+      };
+      cart.value = [];
+      focusEl("co-h");
+      say("订单已提交（演示，不收款不发货）");
+    }
+
+    function resetOrder() {
+      order.value = null;
+      Object.assign(errors, { name: "", phone: "", city: "", addr: "", agree: "" });
+      focusEl("f-name");
+    }
+
+    // ---------- ⌘K ----------
+    const paletteResults = computed(() => {
+      const q = paletteQuery.value.trim().toLowerCase();
+      const base = q
+        ? PRODUCTS.filter((p) => (p.name + p.material + p.roomName + p.blurb).toLowerCase().indexOf(q) !== -1)
+        : PRODUCTS.slice().sort((a, b) => b.reviewCount - a.reviewCount);
+      return base.slice(0, 6);
+    });
+
+    function openPalette() {
+      paletteTrigger.value = document.activeElement;
+      paletteOpen.value = true;
+      paletteQuery.value = "";
+      paletteIndex.value = 0;
+      nextTick(() => {
+        const c = paletteInput.value;
+        if (c && c.focus) c.focus();
+      });
+    }
+
+    function closePalette() {
+      paletteOpen.value = false;
+      nextTick(() => {
+        const t = paletteTrigger.value;
+        if (t && t.focus) t.focus();
+      });
+    }
+
+    function pickPalette(p) {
+      const trigger = paletteTrigger.value;
+      paletteOpen.value = false;
+      selectedId.value = p.id;
+      qty.value = 1;
+      nextTick(() => {
+        if (trigger && trigger.focus) trigger.focus();
+        focusEl("detail-h");
+      });
+    }
+
+    function onPaletteKey(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closePalette();
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const n = paletteResults.value.length;
+        if (!n) return;
+        paletteIndex.value = (paletteIndex.value + (e.key === "ArrowDown" ? 1 : n - 1)) % n;
+        return;
+      }
+      if (e.key === "Enter") {
+        const p = paletteResults.value[paletteIndex.value];
+        if (p) {
+          e.preventDefault();
+          pickPalette(p);
+        }
+        return;
+      }
+      if (e.key === "Tab") {
+        const panel = e.currentTarget;
+        const items = Array.prototype.slice
+          .call(panel.querySelectorAll("input, button, [tabindex]:not([tabindex='-1'])"))
+          .filter((el) => !el.disabled && el.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    onMounted(() => {
+      setTimeout(() => (loading.value = false), 420);
+      window.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+          e.preventDefault();
+          if (paletteOpen.value) closePalette();
+          else openPalette();
+        }
+      });
+    });
+
+    return {
+      rooms, total, bands, sortOptions, cities, shipModes,
+      query, room, band, sort, inStockOnly, loading,
+      visible, resultCount, filtersOn, filterChips, picks,
+      current, chosen, combo, chosenText, comboText, stockState, qty,
+      cart, cartLines, cartCount, subtotal, shipFee, grandTotal, shipLabel, shipMode,
+      form, errors, order,
+      paletteOpen, paletteQuery, paletteIndex, paletteResults, paletteInput,
+      toast,
+      roomName, roomCount, roomFrom, bandCount, stockText, swatches, swatchLabel,
+      optionLive, choose, pickRoom, setBand, resetFilters, openDetail,
+      addCurrent, quickAdd, setQty, removeLine, goCart, goCatalogue, goCheckout,
+      submitOrder, resetOrder, openPalette, closePalette, pickPalette, onPaletteKey,
+    };
+  },
+  template: `
+<a class="skip" href="#catalogue">跳到商品目录</a>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top">CartLane<span>家居小件</span></a>
+    <button type="button" class="pill" id="search-pill" @click="openPalette"
+            :aria-expanded="paletteOpen ? 'true' : 'false'" aria-haspopup="dialog"
+            aria-label="搜索商品，快捷键 Command 加 K">
+      <svg class="pill__ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        <path d="M10.6 10.6 L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+      <span class="pill__text">搜索 {{ total }} 件商品</span>
+      <span class="pill__kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+    </button>
+    <nav class="nav__links" aria-label="主导航">
+      <a href="#rooms">按房间</a>
+      <a href="#catalogue">全部商品</a>
+      <a href="#detail">商品详情</a>
+      <a href="#checkout">结算</a>
+    </nav>
+    <button type="button" class="cartlink" id="cart-link" @click="goCart"
+            :aria-label="'购物车，' + cartCount + ' 件'">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M1.5 2.5h2l1.6 7.2h7.1l1.3-5.2H4" fill="none" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="6.4" cy="13" r="1.1" fill="currentColor"></circle>
+        <circle cx="11.3" cy="13" r="1.1" fill="currentColor"></circle>
+      </svg>
+      购物车<span class="cartlink__n" aria-hidden="true">{{ cartCount }}</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="intro wrap">
+    <p class="intro__kicker">家居小件 · {{ rooms.length }} 个房间分类 · {{ total }} 件（演示数据）</p>
+    <h1 class="intro__h">先看评价再下单，一间一间把小件挑齐</h1>
+    <p class="intro__p">CartLane 只做实木、藤编、棉麻与铁艺小件。清单按房间分开：主推、价位带、完整目录三条入口都落到同一批货上，规格、库存、运费与结算按真实网店的做法走一遍。</p>
+    <p class="intro__demo">演示说明：数据、评价与库存都是示例，页面不收款、不发货，刷新后购物车与订单都会清空。</p>
+  </section>
+
+  <section class="rail wrap" id="picks" aria-labelledby="picks-h">
+    <div class="rail__head">
+      <div>
+        <p class="rail__k">主推</p>
+        <h2 id="picks-h">这一批里评价最多的 {{ picks.length }} 件</h2>
+      </div>
+      <a class="rail__more" href="#catalogue">看全部 {{ total }} 件</a>
+    </div>
+    <ul class="picks">
+      <li class="pick" v-for="p in picks" :key="p.id">
+        <div class="pick__top">
+          <span class="tag tag--brand">{{ roomName(p.room) }}</span>
+          <span class="pick__meta">{{ p.specCount }} 种规格</span>
+        </div>
+        <p class="pick__name">{{ p.name }}</p>
+        <p class="pick__meta">{{ p.material }}</p>
+        <div class="swatch" role="img" :aria-label="swatchLabel(p)">
+          <i v-for="(c, i) in swatches(p)" :key="i" :style="{ background: c }"></i>
+        </div>
+        <p class="pick__price">¥{{ p.priceFrom }}<span class="pick__meta"> 起</span></p>
+        <p class="pick__meta">{{ p.reviewCount }} 条评价 · {{ stockText(p) }}</p>
+        <button type="button" class="linkish" :aria-label="'打开 ' + p.name + ' 的详情'" @click="openDetail(p)">
+          打开详情
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <section class="rail wrap" id="rooms" aria-labelledby="rooms-h">
+    <div class="rail__head">
+      <div>
+        <p class="rail__k">按房间</p>
+        <h2 id="rooms-h">{{ rooms.length }} 个房间，{{ total }} 件货</h2>
+      </div>
+      <span class="rail__more" aria-hidden="true">点一个房间就筛到目录</span>
+    </div>
+    <div class="rooms">
+      <button type="button" class="room" v-for="r in rooms" :key="r.id"
+              :aria-pressed="room === r.id ? 'true' : 'false'" @click="pickRoom(r.id)">
+        <span class="room__name">{{ r.name }}</span>
+        <span class="room__note">{{ r.note }}</span>
+        <span class="room__foot">{{ roomCount(r.id) }} 件 · ¥{{ roomFrom(r.id) }} 起</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="rail wrap" id="bands" aria-labelledby="bands-h">
+    <div class="rail__head">
+      <div>
+        <p class="rail__k">按价位带</p>
+        <h2 id="bands-h">三段价格，落回同一张目录</h2>
+      </div>
+    </div>
+    <div class="bands">
+      <button type="button" class="band" :aria-pressed="band === 'all' ? 'true' : 'false'" @click="setBand('all')">
+        全部价位 <span class="band__n">{{ total }} 件</span>
+      </button>
+      <button type="button" class="band" v-for="b in bands" :key="b.id"
+              :aria-pressed="band === b.id ? 'true' : 'false'" @click="setBand(b.id)">
+        {{ b.label }} <span class="band__n">{{ bandCount(b.id) }} 件</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="catalogue wrap" id="catalogue" tabindex="-1" aria-labelledby="cat-h">
+    <div class="secthead">
+      <p class="secthead__k">完整目录</p>
+      <h2 id="cat-h">{{ total }} 件商品，按房间、价位、库存、关键词一起筛</h2>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar__search">
+        <t-input id="q" v-model="query" placeholder="搜名称、材质或房间，比如「藤编」" clearable
+                 aria-label="搜索商品"></t-input>
+      </div>
+      <div class="toolbar__right">
+        <div class="toolbar__sort">
+          <t-select v-model="sort" :options="sortOptions" aria-label="排序方式"></t-select>
+        </div>
+        <label class="check">
+          <input type="checkbox" v-model="inStockOnly">
+          <span>只看有货</span>
+        </label>
+      </div>
+      <div class="chips" role="group" aria-label="按房间筛选">
+        <button type="button" class="chip" :aria-pressed="room === 'all' ? 'true' : 'false'" @click="pickRoom('all')">
+          全部房间
+        </button>
+        <button type="button" class="chip" v-for="r in rooms" :key="r.id"
+                :aria-pressed="room === r.id ? 'true' : 'false'" @click="pickRoom(r.id)">
+          {{ r.name }}
+        </button>
+      </div>
+    </div>
+
+    <div class="countbar">
+      <p class="countbar__n" aria-live="polite">
+        {{ loading ? '正在筛选' : (resultCount + ' 件符合条件') }}
+        <span class="countbar__hint" v-if="!loading">／ 共 {{ total }} 件</span>
+      </p>
+      <p class="countbar__hint" v-if="filtersOn">
+        筛选中：{{ filterChips }}　
+        <button type="button" class="linkish" @click="resetFilters">清空全部筛选</button>
+      </p>
+      <p class="countbar__hint" v-else>没有筛选，显示全部商品</p>
+    </div>
+
+    <div class="sk-grid grid" v-if="loading" aria-hidden="true">
+      <div class="sk-card" v-for="n in 10" :key="n">
+        <div class="sk sk--line" style="width: 40%"></div>
+        <div class="sk sk--title"></div>
+        <div class="sk sk--line"></div>
+        <div class="sk sk--price"></div>
+        <div class="sk sk--line" style="width: 55%"></div>
+        <div class="sk sk--btn"></div>
+      </div>
+    </div>
+
+    <div class="empty" v-else-if="!resultCount" role="status">
+      <p class="empty__h">没有匹配的商品</p>
+      <p class="empty__p">当前条件组合下来一件都没有。可以少勾一个筛选，或者换个关键词，比如「亚麻」「藤」「木」。</p>
+      <t-button variant="outline" @click="resetFilters">清空全部筛选</t-button>
+    </div>
+
+    <ul class="grid" v-else>
+      <li class="card" v-for="p in visible" :key="p.id">
+        <p class="card__room">{{ roomName(p.room) }} · {{ p.specCount }} 种规格</p>
+        <h3 class="card__name">{{ p.name }}</h3>
+        <p class="card__mat">{{ p.material }}</p>
+        <div class="swatch" role="img" :aria-label="swatchLabel(p)">
+          <i v-for="(c, i) in swatches(p)" :key="i" :style="{ background: c }"></i>
+        </div>
+        <p class="card__facts">{{ p.reviewCount }} 条评价 · {{ p.weight }}</p>
+        <p class="card__price">¥{{ p.priceFrom }}<span class="card__facts"> 起</span></p>
+        <p class="card__stock" :class="'stock-' + p.state">{{ stockText(p) }}</p>
+        <div class="card__act">
+          <t-button variant="outline" @click="openDetail(p)">查看详情</t-button>
+          <t-button theme="primary" :disabled="p.state === 'soldout'" @click="quickAdd(p)">
+            {{ p.state === 'soldout' ? '已售罄' : '加入购物车' }}
+          </t-button>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="detail wrap" id="detail" aria-labelledby="detail-h">
+    <div class="secthead">
+      <p class="secthead__k">商品详情 · {{ current.id }}</p>
+      <h2 id="detail-h" tabindex="-1">{{ current.name }}</h2>
+    </div>
+
+    <div class="detail__grid">
+      <div>
+        <div class="swatch" role="img" :aria-label="swatchLabel(current)" style="height: 10px">
+          <i v-for="(c, i) in swatches(current)" :key="i" :style="{ background: c }"></i>
+        </div>
+        <p style="margin-top: 12px">{{ current.blurb }}</p>
+        <dl class="facts">
+          <dt>材质</dt><dd>{{ current.material }}</dd>
+          <dt>尺寸</dt><dd>{{ current.dims }}</dd>
+          <dt>重量</dt><dd>{{ current.weight }}</dd>
+          <dt>规格</dt><dd>{{ current.specCount }} 种组合</dd>
+          <dt>评价</dt><dd>{{ current.reviewCount }} 条（示例文本）</dd>
+          <dt>保养</dt><dd>{{ current.care }}</dd>
+        </dl>
+
+        <div class="price">
+          <span class="price__n">¥{{ combo.price }}</span>
+          <span class="price__u">{{ chosenText }}</span>
+        </div>
+        <p class="stockline" :class="'stock-' + stockState">
+          {{ comboText }}
+        </p>
+
+        <div class="spec" v-for="dim in current.specs" :key="dim.name">
+          <p class="spec__label" :id="'dim-' + dim.name">{{ dim.name }}</p>
+          <div class="spec__opts" role="group" :aria-labelledby="'dim-' + dim.name">
+            <button type="button" class="opt" v-for="v in dim.values" :key="v"
+                    :aria-pressed="chosen[dim.name] === v ? 'true' : 'false'"
+                    :disabled="!optionLive(dim.name, v)"
+                    @click="choose(dim.name, v)">
+              {{ v }}{{ optionLive(dim.name, v) ? '' : '（售罄）' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="qty">
+          <span class="qty__label" id="qty-label">数量</span>
+          <t-input-number v-model="qty" :min="1" :max="Math.max(1, combo.stock)"
+                          aria-labelledby="qty-label"></t-input-number>
+          <span class="qty__hint">这一规格库存 {{ combo.stock }} 件</span>
+        </div>
+
+        <div class="detail__act">
+          <t-button theme="primary" size="large" :disabled="combo.stock === 0" @click="addCurrent">
+            加入购物车
+          </t-button>
+          <t-button variant="outline" size="large" @click="goCart">去看购物车（{{ cartCount }}）</t-button>
+        </div>
+      </div>
+
+      <aside>
+        <section class="panel" aria-labelledby="ship-h">
+          <h3 id="ship-h">配送与运费</h3>
+          <ul class="rules">
+            <li>标准配送：满 ¥199 免运费，未满收 ¥12，2 到 4 个工作日送达。</li>
+            <li>加急配送：每单 ¥18，1 到 2 个工作日送达。</li>
+            <li>到店自提：¥0，下单后 48 小时内到门店取货。</li>
+            <li>乌鲁木齐、拉萨暂不配送，结算时选到这两个城市会直接报错。</li>
+            <li>整单免运费只按商品小计算，不含加急附加费。</li>
+          </ul>
+        </section>
+
+        <section class="panel" aria-labelledby="rev-h">
+          <h3 id="rev-h">评价 {{ current.reviewCount }} 条（示例文本）</h3>
+          <ul class="revs">
+            <li class="rev" v-for="(r, i) in current.reviews" :key="i">
+              <p class="rev__text">{{ r.text }}</p>
+              <p class="rev__meta">{{ r.who }} · {{ r.date }}</p>
+            </li>
+          </ul>
+          <p class="panel__note">评价是演示文本，没有评分、好评率与销量数字，页面也不展示这类指标。</p>
+        </section>
+
+        <section class="panel" aria-labelledby="combo-h">
+          <h3 id="combo-h">规格组合与库存</h3>
+          <table class="combos">
+            <thead>
+              <tr><th scope="col">规格</th><th scope="col">价格</th><th scope="col">库存</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="c in current.combos" :key="c.v.join('/')">
+                <td>{{ c.v.join(' / ') }}</td>
+                <td>¥{{ c.price }}</td>
+                <td>{{ c.stock === 0 ? '售罄' : c.stock + ' 件' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </aside>
+    </div>
+  </section>
+
+  <section class="cart wrap" id="cart" aria-labelledby="cart-h">
+    <div class="secthead">
+      <p class="secthead__k">购物车</p>
+      <h2 id="cart-h" tabindex="-1">购物车 {{ cartCount }} 件</h2>
+    </div>
+
+    <div class="empty" v-if="!cartCount" role="status">
+      <p class="empty__h">购物车是空的</p>
+      <p class="empty__p">上面 {{ total }} 件商品都能加进来，先挑规格再看库存，加购之后这里会出现数量与小计。</p>
+      <t-button variant="outline" @click="goCatalogue">回目录挑一件</t-button>
+    </div>
+
+    <template v-else>
+      <ul class="lines">
+        <li class="line" v-for="l in cartLines" :key="l.key">
+          <div>
+            <p class="line__name">{{ l.name }}</p>
+            <p class="line__spec">{{ roomName(l.room) }} · {{ l.spec }} · 单价 ¥{{ l.price }} · 库存 {{ l.stock }}</p>
+          </div>
+          <p class="line__price">¥{{ l.price }}</p>
+          <t-input-number :model-value="l.qty" :min="1" :max="l.stock"
+                          :aria-label="'调整 ' + l.name + ' 数量'"
+                          @change="(v) => setQty(l, v)"></t-input-number>
+          <p class="line__sub">¥{{ l.price * l.qty }}</p>
+          <button type="button" class="line__rm" @click="removeLine(l)">移除</button>
+        </li>
+      </ul>
+
+      <div class="ship">
+        <span class="ship__label" id="ship-mode-label">配送方式</span>
+        <label class="radio" v-for="m in shipModes" :key="m.id">
+          <input type="radio" name="ship" :value="m.id" v-model="shipMode" :aria-describedby="'ship-rule-' + m.id">
+          <span>{{ m.label }}</span>
+        </label>
+      </div>
+      <ul class="rules" style="margin-top: 12px">
+        <li v-for="m in shipModes" :key="m.id" :id="'ship-rule-' + m.id" class="countbar__hint">
+          {{ m.label }}：{{ m.rule }}
+        </li>
+      </ul>
+
+      <div class="sum">
+        <p class="sum__row"><span>商品小计</span><span>¥{{ subtotal }}</span></p>
+        <p class="sum__row"><span>运费（{{ shipLabel }}）</span><span>¥{{ shipFee }}</span></p>
+        <p class="sum__row sum__row--total"><span>合计</span><span>¥{{ grandTotal }}</span></p>
+        <p class="sum__hint" v-if="shipMode === 'std' && subtotal > 0 && subtotal < 199">
+          标准配送满 ¥199 免运费，还差 ¥{{ 199 - subtotal }}。
+        </p>
+        <p class="sum__hint" v-else-if="shipMode === 'std' && subtotal >= 199">标准配送已免运费。</p>
+        <p class="sum__hint">演示页面不收款，也不会生成真实运单。</p>
+        <div class="sum__act">
+          <t-button theme="primary" size="large" @click="goCheckout">去结算</t-button>
+        </div>
+      </div>
+    </template>
+  </section>
+
+  <section class="checkout wrap" id="checkout" aria-labelledby="co-h">
+    <div class="secthead">
+      <p class="secthead__k">结算</p>
+      <h2 id="co-h" tabindex="-1">{{ order ? '订单已提交' : '收货信息与提交' }}</h2>
+    </div>
+
+    <div class="done" v-if="order" role="status">
+      <p class="done__t">订单已提交（演示）</p>
+      <p>订单号 <span class="done__k">{{ order.id }}</span>，{{ order.count }} 件，商品小计 ¥{{ order.subtotal }}，运费 ¥{{ order.fee }}，合计 ¥{{ order.total }}。</p>
+      <p>配送方式：{{ order.shipLabel }}；收货人：{{ order.name }}，{{ order.city }}{{ order.addr }}。</p>
+      <p class="sum__hint">本页不收款、不发货，没有支付与物流；购物车已清空，刷新后这条订单也会消失。</p>
+      <div class="detail__act">
+        <t-button variant="outline" @click="resetOrder">再下一单</t-button>
+        <t-button theme="primary" @click="goCatalogue">回目录</t-button>
+      </div>
+    </div>
+
+    <form v-else class="form" novalidate @submit.prevent="submitOrder">
+      <div class="field">
+        <label class="field__label" for="f-name">收货人 <span class="field__req">*</span></label>
+        <t-input id="f-name" v-model="form.name" :status="errors.name ? 'error' : 'default'"
+                 placeholder="怎么称呼" :aria-describedby="errors.name ? 'e-name' : undefined"></t-input>
+        <p class="field__err" id="e-name" role="alert" v-if="errors.name">{{ errors.name }}</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-phone">手机号 <span class="field__req">*</span></label>
+        <t-input id="f-phone" v-model="form.phone" :status="errors.phone ? 'error' : 'default'"
+                 placeholder="11 位手机号" inputmode="numeric"
+                 :aria-describedby="errors.phone ? 'e-phone' : undefined"></t-input>
+        <p class="field__err" id="e-phone" role="alert" v-if="errors.phone">{{ errors.phone }}</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-city">城市 <span class="field__req">*</span></label>
+        <t-select id="f-city" v-model="form.city" :options="cities" placeholder="选一个城市"
+                  :status="errors.city ? 'error' : 'default'"></t-select>
+        <p class="field__err" id="e-city" role="alert" v-if="errors.city">{{ errors.city }}</p>
+        <p class="field__help">乌鲁木齐、拉萨为不配送地区，选中后会报错。</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-addr">详细地址 <span class="field__req">*</span></label>
+        <t-input id="f-addr" v-model="form.addr" :status="errors.addr ? 'error' : 'default'"
+                 placeholder="街道、门牌号、楼层"
+                 :aria-describedby="errors.addr ? 'e-addr' : undefined"></t-input>
+        <p class="field__err" id="e-addr" role="alert" v-if="errors.addr">{{ errors.addr }}</p>
+      </div>
+      <div class="field field--wide">
+        <label class="field__label" for="f-note">备注（选填）</label>
+        <t-input id="f-note" v-model="form.note" placeholder="比如放门口、需要电话联系"></t-input>
+      </div>
+      <div class="field field--wide">
+        <label class="check">
+          <input type="checkbox" id="f-agree" v-model="form.agree" :aria-describedby="errors.agree ? 'e-agree' : undefined">
+          <span>我知道这是演示页面：不收款、不发货，刷新后订单消失</span>
+        </label>
+        <p class="field__err" id="e-agree" role="alert" v-if="errors.agree">{{ errors.agree }}</p>
+      </div>
+      <div class="form__act field--wide">
+        <t-button theme="primary" size="large" type="submit">提交订单</t-button>
+        <span class="sum__hint">合计 ¥{{ grandTotal }} · {{ cartCount }} 件 · {{ shipLabel }}</span>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__dense">
+      <p class="foot__brand">CartLane 家居小件 · 演示案例</p>
+      <p>这是一个界面规范案例，商品、价格、库存、评价与订单全部是演示数据，页面不收款、不发货、不接支付，刷新后购物车与订单都会清空。页面不展示销量、评分、好评率与用户数这类无法核实的指标。</p>
+      <p>技术栈：Vue 3.5.45 与 TDesign Vue Next 1.20.11，经 import map 从 esm.sh 引入，样式为 tdesign-vue-next 1.20.11 的 dist 样式文件。除这两个 CDN 之外不加载字体、图片与统计脚本，色块与图标都是页面内联的 CSS 与 SVG。</p>
+      <p>数值来源：TDesign 设计规范（颜色、字体、布局、动效四篇）与 UISpecs 项目库的场景点；每个数值都记在 DECISIONS.md 的取值记录里，带 content/ 完整路径与行号。</p>
+      <div class="foot__rule" aria-hidden="true"></div>
+      <p class="foot__meta">
+        <span>版本 2026.11.14 · 案例稿</span>
+        <span>26 件商品 / 5 个房间分类</span>
+        <span>无障碍：正文对比度 ≥ 4.5:1，键盘可走完全流程</span>
+        <span>数据不落地，不做持久化</span>
+      </p>
+      <p class="foot__meta">
+        <a href="#top">回到页头</a>
+        <a href="#catalogue">商品目录</a>
+        <a href="#checkout">结算</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<div class="cmdk" v-if="paletteOpen" role="dialog" aria-modal="true" aria-labelledby="cmdk-h" @keydown="onPaletteKey">
+  <div class="cmdk__bg" @click="closePalette" aria-hidden="true"></div>
+  <div class="cmdk__panel">
+    <h2 class="cmdk__h" id="cmdk-h">搜索商品</h2>
+    <div class="cmdk__field">
+      <t-input ref="paletteInput" id="palette-q" v-model="paletteQuery" clearable
+               placeholder="名称、材质或房间" aria-label="搜索关键词"></t-input>
+      <kbd>esc</kbd>
+    </div>
+    <p class="cmdk__hint">{{ paletteResults.length }} 条匹配 · ↑↓ 选 · Enter 打开 · Esc 关闭</p>
+    <ul class="cmdk__list" role="listbox" aria-label="搜索结果">
+      <li v-for="(p, i) in paletteResults" :key="p.id" role="none">
+        <button type="button" class="cmdk__item" role="option" :aria-selected="i === paletteIndex ? 'true' : 'false'"
+                :class="{ 'is-on': i === paletteIndex }"
+                @click="pickPalette(p)" @mousemove="paletteIndex = i">
+          <span>{{ p.name }}</span>
+          <small>¥{{ p.priceFrom }} · {{ roomName(p.room) }}</small>
+        </button>
+      </li>
+    </ul>
+    <p class="cmdk__empty" v-if="!paletteResults.length">没有匹配的商品，换个词试试，比如「藤」「木」「亚麻」。</p>
+  </div>
+</div>
+
+<div class="toast" role="status" aria-live="polite" v-if="toast">{{ toast }}</div>
+`,
+};
+
+const app = createApp(App);
+app.mount("#app");
+
+</script>
+</body>
+</html>

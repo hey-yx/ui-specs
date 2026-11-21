@@ -1,0 +1,91 @@
+{
+  "version": 3,
+  "versioning": "项目内版本统一 0.x，不跟随上游大版本；上游版本见 skills/SOURCES.md。",
+  "skills": [
+    {
+      "name": "hallmark",
+      "version": "0.1",
+      "upstream_version": "2.0.0",
+      "layer": "generate",
+      "path": "hallmark",
+      "source": "https://github.com/Nutlope/hallmark",
+      "commit": "04977e1",
+      "license": "MIT",
+      "role": "新形状、app screens 分支、防模板化门禁",
+      "requires": [
+        "SKILL.md",
+        "LICENSE",
+        "references/flow.md",
+        "references/gates.md",
+        "references/craft.md",
+        "references/patterns.md",
+        "scripts/sloplint.mjs"
+      ],
+      "assets_excluded": [
+        "references/themes/*.jpg"
+      ]
+    },
+    {
+      "name": "ui-ux-design",
+      "version": "0.1",
+      "upstream_version": "3.0.0",
+      "layer": "generate",
+      "path": "ui-ux-design",
+      "source": "https://github.com/AntJanus/skillbox",
+      "commit": "3de351c",
+      "license": "MIT",
+      "role": "状态、ARIA、信息架构、四态与设计 token",
+      "requires": [
+        "SKILL.md",
+        "references/INTERACTION.md",
+        "references/COMPONENTS.md",
+        "references/LAYOUT.md",
+        "references/SYSTEMS.md",
+        "references/VISUAL.md"
+      ]
+    },
+    {
+      "name": "interfaces",
+      "version": "0.1",
+      "upstream_version": "2026-11-19",
+      "layer": "review",
+      "path": "interfaces",
+      "source": "https://github.com/jakubkrehel/skills",
+      "commit": "672ae44",
+      "license": "MIT",
+      "role": "评审层：better-interface 七域评审、interface-review 改动评审、explain-interface 拆解参考站",
+      "requires": [
+        "SKILL.md",
+        "LICENSE",
+        "better-interface/SKILL.md",
+        "interface-review/SKILL.md",
+        "better-accessibility/SKILL.md",
+        "better-layout/SKILL.md"
+      ],
+      "excluded": [
+        "afk",
+        "break",
+        "upskill",
+        "state-machine",
+        "variant"
+      ]
+    },
+    {
+      "name": "impeccable",
+      "version": "0.1",
+      "upstream_version": "2026-11-18",
+      "layer": "review",
+      "path": "impeccable",
+      "source": "https://github.com/pbakaus/impeccable",
+      "commit": "b49177d",
+      "license": "Apache 2.0",
+      "role": "质量底线与评审量规（craft-floor、critique-rubric）；检测器不入库，按上游 CLI 用",
+      "requires": [
+        "SKILL.md",
+        "LICENSE",
+        "references/craft-floor.md",
+        "references/critique-rubric.md"
+      ]
+    }
+  ]
+}

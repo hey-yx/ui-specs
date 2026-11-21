@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=N9; footer=Ft4; base=#ffffff">
+<meta name="description" content="ALLParse 万析：支持 9 个短视频与图文平台去水印直链提取工具，免登录每日 5 条、登录 20 条、直链 2 小时有效，含 9 图图集预览与 4 类失败原因诊断。">
+<title>ALLParse 万析 - 多平台无水印视频与图集直链提取</title>
+<style>
+/* 数值来源：project-spectrum (Adobe Spectrum) + 触觉产品物件工具流结构
+ * 色彩：content/tokens/spectrum.adobe.com--tokens.md:23-33 (#222222, #000000, #464646, #F8F8F8, #909090, #E6E6E6, #147AF3, #0054B6, #D31510, #007A4D)
+ * 字阶：spectrum.adobe.com--tokens.md:40-54 (11/12/14/15/16/18/20/22/25/28/32/36/40px, weight 400/700)
+ * 间距/圆角/控件高度/动效：spectrum.adobe.com--tokens.md:60-96 (4/8/16/24/32/40/48/64px, radius 2/4/8/16px, single-line-height 32px, duration 160/220/300ms)
+ */
+:root {
+  --s-bg: #F8F8F8;
+  --s-paper: #FFFFFF;
+  --s-ink: #222222;
+  --s-heading: #000000;
+  --s-label: #464646;
+  --s-border: #909090;
+  --s-border-light: #E6E6E6;
+  --s-focus: #147AF3;
+  --s-accent: #0054B6;
+  --s-accent-hover: #003e88;
+  --s-accent-soft: rgba(20, 122, 243, 0.08);
+  --s-danger: #D31510;
+  --s-danger-soft: rgba(211, 21, 16, 0.08);
+  --s-success: #007A4D;
+  --s-success-soft: rgba(0, 122, 77, 0.09);
+  --s-font: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --s-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --s-dur: 220ms;
+  --s-ease: cubic-bezier(0, 0, 0.4, 1);
+  --s-r-sm: 4px;
+  --s-r-md: 8px;
+  --s-r-lg: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--s-paper);
+  color: var(--s-ink);
+  font-family: var(--s-font);
+  font-size: 14px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, select { font-family: inherit; }
+a { color: var(--s-accent); text-decoration: none; }
+svg { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--s-focus); outline-offset: 2px; border-radius: var(--s-r-sm); }
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 100;
+  background: var(--s-heading); color: var(--s-paper);
+  padding: 10px 16px; border-radius: var(--s-r-md); font-weight: 700;
+}
+.skip:focus { left: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 24px; }
+
+/* N9 极简两极顶栏：品牌词标硬左、单一行动按钮硬右、中间留空 */
+.nav-edge {
+  background: var(--s-paper);
+  border-bottom: 1px solid var(--s-border-light);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.nav-edge-in {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-block: 8px;
+}
+@media (max-width: 420px) {
+  .nav-edge .wordmark { font-size: 16px; gap: 8px; }
+  .nav-edge .sp-btn-lg { min-height: 44px; padding: 0 12px; font-size: 13px; }
+}
+.nav-edge .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--s-heading);
+  min-height: 44px;
+}
+.sp-quota-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  background: var(--s-paper);
+  border: 1px solid var(--s-border-light);
+  border-radius: 9999px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--s-label);
+}
+
+/* Spectrum 按钮（单行默认高度 32px，主触控扩展 40/44px） */
+.sp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--s-r-sm);
+  border: 1px solid var(--s-border);
+  background: var(--s-paper);
+  color: var(--s-ink);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--s-dur) var(--s-ease), border-color var(--s-dur) var(--s-ease);
+}
+.sp-btn-lg { min-height: 44px; padding: 0 18px; border-radius: var(--s-r-md); }
+.sp-btn-pill { border-radius: 9999px; }
+.sp-btn-accent {
+  background: var(--s-accent);
+  border-color: var(--s-accent);
+  color: var(--s-paper);
+}
+.sp-btn-dark {
+  background: var(--s-heading);
+  border-color: var(--s-heading);
+  color: var(--s-paper);
+}
+.sp-btn[aria-pressed="true"] {
+  background: var(--s-accent-soft);
+  border-color: var(--s-accent);
+  color: var(--s-accent);
+}
+@media (hover: hover) {
+  .sp-btn:hover:not(:disabled) { background: var(--s-bg); border-color: var(--s-ink); }
+  .sp-btn-accent:hover:not(:disabled) { background: var(--s-accent-hover); border-color: var(--s-accent-hover); }
+  .sp-btn-dark:hover:not(:disabled) { background: #333333; }
+}
+
+/* Hero：Spectrum 蓝浅色带 + 左栏直接输入粘贴 + 右栏 tool-flow 3D 分层解封装矢量图与实时状态标签 */
+.hero-sec {
+  background: var(--s-accent-soft);
+  border-bottom: 1px solid var(--s-border-light);
+  padding: 36px 0 40px;
+}
+.hero-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 40px;
+  align-items: center;
+}
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--s-label);
+  margin-bottom: 10px;
+}
+.hero-kicker i { width: 8px; height: 8px; border-radius: 50%; background: var(--s-focus); display: inline-block; }
+.hero h1 {
+  font-size: clamp(28px, 3.8vw, 40px);
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--s-heading);
+  letter-spacing: -0.02em;
+}
+.hero-lede {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--s-label);
+  max-width: 44em;
+}
+.paste-box {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--s-paper);
+  border: 2px solid var(--s-ink);
+  border-radius: var(--s-r-md);
+  padding: 6px;
+}
+.paste-box:focus-within { border-color: var(--s-focus); }
+.paste-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--s-heading);
+  outline: none;
+}
+.sample-strip {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sample-label { font-size: 12px; line-height: 18px; color: var(--s-label); font-weight: 700; }
+.sample-chip {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--s-border);
+  background: var(--s-paper);
+  color: var(--s-ink);
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+}
+.sample-chip[aria-pressed="true"] { background: var(--s-accent); border-color: var(--s-accent); color: #FFFFFF; font-weight: 700; }
+.sample-chip--err { color: var(--s-danger); border-color: rgba(211, 21, 16, 0.5); background: var(--s-paper); }
+
+.facts-line {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--s-label);
+}
+.facts-line a { display: inline-flex; align-items: center; min-height: 24px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+/* 工作台与结果展示区 */
+.main-area { padding: 32px 0 64px; display: grid; gap: 24px; }
+.sp-card {
+  background: var(--s-paper);
+  border: 1px solid var(--s-border-light);
+  border-radius: var(--s-r-md);
+  padding: 24px;
+}
+.sp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--s-border-light);
+  margin-bottom: 18px;
+}
+.sp-card-title { font-size: 20px; line-height: 28px; font-weight: 700; color: var(--s-heading); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--s-r-sm);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+}
+.badge-ok { background: var(--s-success); color: var(--s-paper); }
+.badge-accent { background: var(--s-accent-soft); color: var(--s-accent); }
+.badge-err { background: var(--s-danger-soft); color: var(--s-danger); }
+
+/* 视频结果双栏 */
+.video-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+.video-preview-box {
+  background: #1A1A1A;
+  border-radius: var(--s-r-md);
+  overflow: hidden;
+  padding: 16px;
+}
+.meta-list { display: grid; gap: 10px; }
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--s-border-light);
+  font-size: 14px;
+  line-height: 20px;
+}
+.meta-k { color: var(--s-label); }
+.meta-v { font-weight: 700; color: var(--s-heading); font-family: var(--s-mono); text-align: right; overflow-wrap: anywhere; }
+.direct-url-box {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--s-bg);
+  border: 1px solid var(--s-border);
+  border-radius: var(--s-r-sm);
+  font-family: var(--s-mono);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--s-ink);
+  overflow-wrap: anywhere;
+}
+
+/* 9 张图集网格 (3x3 Spectrum Asset Grid) */
+.atlas-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.atlas-item {
+  border: 1px solid var(--s-border-light);
+  border-radius: var(--s-r-md);
+  background: var(--s-bg);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+.atlas-item.is-picked { border-color: var(--s-accent); background: var(--s-accent-soft); }
+.atlas-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* 4 类失败状态卡 + 等待状态 */
+.err-panel {
+  border: 2px solid var(--s-danger);
+  border-left: 6px solid var(--s-danger);
+  border-radius: var(--s-r-md);
+  background: var(--s-paper);
+  padding: 20px;
+  display: grid;
+  gap: 10px;
+}
+.err-panel h3 { font-size: 18px; line-height: 24px; font-weight: 700; color: var(--s-danger); }
+.busy-panel {
+  border: 1px solid var(--s-focus);
+  border-radius: var(--s-r-md);
+  background: var(--s-accent-soft);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.empty-panel {
+  text-align: center;
+  padding: 36px 24px;
+  background: var(--s-bg);
+  border-radius: var(--s-r-md);
+  border: 1px solid var(--s-border-light);
+}
+
+/* 9 平台能力矩阵与合规条 */
+.plat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.plat-card {
+  background: var(--s-bg);
+  border: 1px solid var(--s-border-light);
+  border-radius: var(--s-r-md);
+  padding: 14px;
+}
+.plat-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.plat-name { font-size: 15px; font-weight: 700; color: var(--s-heading); }
+.plat-fmt { font-family: var(--s-mono); font-size: 12px; color: var(--s-label); margin-top: 4px; overflow-wrap: anywhere; }
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.terms-box {
+  background: var(--s-bg);
+  border-radius: var(--s-r-md);
+  padding: 16px;
+  border: 1px solid var(--s-border-light);
+}
+.terms-box h3 { font-size: 15px; font-weight: 700; color: var(--s-heading); margin-bottom: 8px; }
+.terms-box li { font-size: 13px; line-height: 20px; color: var(--s-ink); padding: 3px 0; }
+
+/* Ft4 密集等宽版式页脚：整块版本说明与合规口径，无链接横栏 */
+.foot-dense.mono {
+  background: var(--s-bg);
+  border-top: 1px solid var(--s-border-light);
+  padding: 24px 0 32px;
+  font-family: var(--s-mono);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--s-label);
+}
+.foot-dense__block {
+  max-width: 78ch;
+  margin: 0;
+}
+.foot-dense__block a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--s-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 920px) {
+  .hero-grid, .video-split, .terms-grid { grid-template-columns: 1fr; }
+  .plat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; }
+  .paste-box { flex-wrap: wrap; }
+  .paste-box .sp-btn-accent { width: 100%; }
+  .atlas-grid, .plat-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#resultSection">跳到解析结果区</a>
+
+<header class="nav-edge">
+  <div class="wrap nav-edge-in">
+    <a class="wordmark" href="#top">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="20" height="18" rx="4" fill="#0054B6"/>
+        <path d="M9.5 8.5l6 3.5-6 3.5v-7z" fill="#FFFFFF"/>
+      </svg>
+      <span>ALLParse 万析</span>
+    </a>
+    <button class="sp-btn sp-btn-accent sp-btn-lg" type="button" id="loginToggleBtn" aria-pressed="false">登录领每日 20 条（演示）</button>
+  </div>
+</header>
+
+<section class="hero hero-sec" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-meta-row">
+        <div class="hero-kicker" style="margin-bottom:0"><i aria-hidden="true"></i>支持抖音、快手、小红书、B 站、视频号、微博、西瓜视频、YouTube、TikTok</div>
+        <div class="sp-quota-bar" id="quotaBar">
+          <span id="quotaText">游客免登录：今日剩余 5 / 5 条</span>
+          <span>·</span>
+          <span>单条 <= 500 MB / <= 30 分钟</span>
+        </div>
+      </div>
+      <h1>贴一条分享口令，<br>拿回无水印原文件与直链。</h1>
+      <p class="hero-lede">自动剥离分享文本里的中文前缀，3 到 8 秒输出视频无水印 MP4 或 9 图图集原图。服务端不长期保存文件，直链有效期 2 小时。</p>
+
+      <form class="paste-box" id="parseForm" role="search" aria-label="分享链接解析">
+        <label class="sr-only" for="urlInput">粘贴视频或图集分享链接</label>
+        <input class="paste-input" id="urlInput" type="text" value="5.89 复制打开抖音，看看【林野航拍】的 4K 高清作品 https://v.douyin.example/iRNB8xQ/" placeholder="粘贴 9 平台任意分享口令或 https 链接（免注册直接解析）">
+        <button class="sp-btn sp-btn-accent sp-btn-lg" id="parseSubmitBtn" type="submit">立即解析</button>
+      </form>
+
+      <div class="sample-strip" aria-label="快捷示例与故障模拟">
+        <span class="sample-label">试一试结果：</span>
+        <button class="sample-chip" type="button" data-sample="video" aria-pressed="true">抖音 4K 视频样例</button>
+        <button class="sample-chip" type="button" data-sample="atlas" aria-pressed="false">小红书 9 图图集样例</button>
+        <button class="sample-chip sample-chip--err" type="button" data-sample="invalid">模拟：链接无效</button>
+        <button class="sample-chip sample-chip--err" type="button" data-sample="deleted">模拟：作品已删除</button>
+        <button class="sample-chip sample-chip--err" type="button" data-sample="risk">模拟：平台风控</button>
+        <button class="sample-chip sample-chip--err" type="button" data-sample="quota">模拟：超出额度</button>
+      </div>
+
+      <ul class="facts-line">
+        <li>仅处理本人作品或已授权素材</li>
+        <li>不支持付费、私密内容及直播回放</li>
+        <li>常规解析耗时 3 到 8 秒（高峰期提示排队）</li>
+        <li><a href="#platforms">查看 9 平台清单</a></li>
+        <li><a href="#terms">合规条款与 4 类失败说明</a></li>
+      </ul>
+    </div>
+
+    <!-- tool-flow 核心可视化产品物件：立体解封装流水容器 + 动态标签 -->
+    <div aria-hidden="true">
+      <svg id="demuxSvg" viewBox="0 0 420 290" fill="none">
+        <rect x="12" y="16" width="396" height="258" rx="16" fill="#F8F8F8" stroke="#E6E6E6"/>
+        <rect x="44" y="54" width="236" height="184" rx="12" fill="#FFFFFF" stroke="#909090" stroke-width="1.5"/>
+        <rect x="64" y="76" width="196" height="40" rx="6" fill="#F8F8F8" stroke="#E6E6E6"/>
+        <text x="78" y="100" font-size="12" font-weight="700" fill="#222222">视频轨 · H.264 / MP4 (去水印)</text>
+        <rect x="64" y="126" width="196" height="40" rx="6" fill="#F8F8F8" stroke="#E6E6E6"/>
+        <text x="78" y="150" font-size="12" font-weight="700" fill="#222222">图集原图 · 2160px × 9 张</text>
+        <rect x="64" y="176" width="196" height="40" rx="6" fill="#F8F8F8" stroke="#E6E6E6"/>
+        <text x="78" y="200" font-size="12" font-weight="700" fill="#464646">剥离分享前缀 · 校验时效 2h</text>
+        <path d="M280 118h36" stroke="#147AF3" stroke-width="2"/>
+        <rect x="302" y="88" width="96" height="60" rx="8" fill="#0054B6"/>
+        <text id="svgBadgeTop" x="350" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">4.2 秒</text>
+        <text id="svgBadgeBot" x="350" y="133" text-anchor="middle" font-size="11" fill="#FFFFFF">直链 2h</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main class="main-area wrap">
+  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+
+  <section id="resultSection" aria-label="解析结果工作区"></section>
+
+  <section class="sp-card" id="platforms" aria-labelledby="platHeading">
+    <div class="sp-card-head">
+      <div>
+        <h2 class="sp-card-title" id="platHeading">支持 9 个平台与常见链接格式</h2>
+        <p style="font-size:13px;color:var(--s-label);margin-top:2px">单条上限 500 MB、时长上限 30 分钟；付费课程、私密仅自己可见与直播回放不支持解析。</p>
+      </div>
+      <span class="badge badge-accent">9 平台统一引擎</span>
+    </div>
+    <div class="plat-grid" id="platGrid"></div>
+  </section>
+
+  <section class="sp-card" id="terms" aria-labelledby="termsHeading">
+    <div class="sp-card-head">
+      <h2 class="sp-card-title" id="termsHeading">合规边界与失败原因说明</h2>
+    </div>
+    <div class="terms-grid">
+      <div class="terms-box">
+        <h3>使用条款摘要</h3>
+        <ul>
+          <li>1. 仅限创作者本人备份原片，或已取得版权方授权的公开素材存档。</li>
+          <li>2. 直链有效期统一为 2 小时，过期须重新提交链接提取，服务端不长期存放文件。</li>
+          <li>3. 严禁用于批量抓取商业竞品、绕过付费墙或二次侵权分发。</li>
+        </ul>
+      </div>
+      <div class="terms-box">
+        <h3>4 类常见解析失败原因</h3>
+        <ul>
+          <li>1. 链接无效：短链被截断、缺少协议头或不属于支持的 9 平台域。</li>
+          <li>2. 作品已删除：原作者下架、设私密或付费可见内容，直接拦截。</li>
+          <li>3. 平台风控：源站高峰期频控，通常等待 1 到 3 分钟后重试可恢复。</li>
+          <li>4. 超出额度：游客每日 5 条已用尽，可登录扩充到每日 20 条（演示口径）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot-dense mono">
+  <div class="wrap">
+    <p class="foot-dense__block">ALLParse 万析（Adobe Spectrum 选型方案 · project-spectrum）。覆盖抖音、快手、小红书、B 站、视频号、微博、西瓜视频、YouTube、TikTok 共 9 个平台无水印直链提取；游客每日 5 条、模拟登录每日 20 条；单条限制 500 MB 与 30 分钟内，服务端不持久化原文件，生成直链统一 2 小时有效。页面所载平台能力、额度计数、耗时与 9 图图集结果均为本地演示数据，不连接真实解析后端。站内直达：<a href="#top">回到输入框</a>、<a href="#platforms">9 平台清单</a>、<a href="#terms">合规条款</a>。</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var PLATFORMS = [
+    { name: "抖音", cap: "无水印 1080P/4K 视频 + 图集", fmt: "v.douyin.example/xxxx（支持整段口令粘贴）" },
+    { name: "快手", cap: "无水印原画视频 + 封面原图", fmt: "v.kuaishou.example/xxxx" },
+    { name: "小红书", cap: "最多 18 张去水印原图与 LivePhoto", fmt: "xhslink.example/xxxx（图集可单张或全选）" },
+    { name: "B 站", cap: "MP4 音视频合流 + 封面帧提取", fmt: "b23.tv.example/xxxx（<= 30 分钟）" },
+    { name: "视频号", cap: "公开动态无水印原片直链", fmt: "channels.weixin.example/s/xxxx" },
+    { name: "微博", cap: "秒拍与博文 9 图原图打包", fmt: "weibo.example/detail/xxxx" },
+    { name: "西瓜视频", cap: "横屏中长视频最高 1080P60", fmt: "ixigua.example/xxxx（<= 500 MB）" },
+    { name: "YouTube", cap: "Shorts 与常规教程直链 + 缩略图", fmt: "youtu.be.example/xxxx（<= 30 分钟）" },
+    { name: "TikTok", cap: "国际版无水印 MP4 原声轨提取", fmt: "vt.tiktok.example/xxxx" }
+  ];
+
+  var ATLAS_ITEMS = [
+    { id: 1, label: "图 1 · 清晨山雾全景", res: "2160×2880", size: "3.4 MB", c1: "#0054B6", c2: "#E6E6E6" },
+    { id: 2, label: "图 2 · 木质桌面静物", res: "2160×2880", size: "2.8 MB", c1: "#222222", c2: "#F8F8F8" },
+    { id: 3, label: "图 3 · 咖啡萃取特写", res: "2160×1440", size: "2.1 MB", c1: "#464646", c2: "#E6E6E6" },
+    { id: 4, label: "图 4 · 手写手账构图", res: "2160×2880", size: "3.0 MB", c1: "#007A4D", c2: "#F8F8F8" },
+    { id: 5, label: "图 5 · 建筑光影几何", res: "2160×1440", size: "2.6 MB", c1: "#147AF3", c2: "#E6E6E6" },
+    { id: 6, label: "图 6 · 雨后街道倒影", res: "2160×2880", size: "3.7 MB", c1: "#222222", c2: "#E6E6E6" },
+    { id: 7, label: "图 7 · 复古胶片人像", res: "2160×2880", size: "2.9 MB", c1: "#D31510", c2: "#F8F8F8" },
+    { id: 8, label: "图 8 · 书店陈列细节", res: "2160×1440", size: "2.4 MB", c1: "#464646", c2: "#F8F8F8" },
+    { id: 9, label: "图 9 · 晚霞天际线", res: "2160×2880", size: "3.2 MB", c1: "#0054B6", c2: "#F8F8F8" }
+  ];
+
+  var state = {
+    mode: params.get("empty") === "1" ? "empty" : (params.get("fail") === "1" ? "risk" : "video"),
+    loggedIn: false,
+    usedCount: 1,
+    busy: !!params.get("slow"),
+    longMode: params.get("long") === "1",
+    pickedAtlas: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  };
+
+  $("platGrid").innerHTML = PLATFORMS.map(function (p) {
+    return '<div class="plat-card">' +
+      '<div class="plat-head"><span class="plat-name">' + p.name + '</span><span class="badge badge-ok">可用</span></div>' +
+      '<div style="font-size:13px;color:var(--s-ink)">' + p.cap + '</div>' +
+      '<div class="plat-fmt">' + p.fmt + '</div>' +
+    '</div>';
+  }).join("");
+
+  function updateQuota() {
+    var limit = state.loggedIn ? 20 : 5;
+    var left = Math.max(0, limit - state.usedCount);
+    $("quotaText").textContent = (state.loggedIn ? "已登录额度" : "游客免登录") + "：今日剩余 " + left + " / " + limit + " 条";
+    $("loginToggleBtn").textContent = state.loggedIn ? "已模拟登录（20 条/日）" : "登录领每日 20 条（演示）";
+    $("loginToggleBtn").setAttribute("aria-pressed", String(state.loggedIn));
+  }
+
+  function renderResult() {
+    updateQuota();
+    var slot = $("resultSection");
+
+    if (state.busy) {
+      slot.innerHTML = '<div class="busy-panel" role="status" aria-busy="true">' +
+        '<div><strong>正在流式解封装并剥离平台水印...</strong><div style="font-size:13px;color:var(--s-label);margin-top:2px">常规解析耗时 3 到 8 秒；当前高峰期预计等待 5 秒，直链生成后保留 2 小时。</div></div>' +
+        '<span class="badge badge-accent">处理中</span>' +
+      '</div>';
+      $("svgBadgeTop").textContent = "解析中...";
+      $("svgBadgeBot").textContent = "约 5 秒";
+      return;
+    }
+
+    if (state.mode === "empty") {
+      slot.innerHTML = '<div class="empty-panel">' +
+        '<h2 style="font-size:20px;color:var(--s-heading)">还没有待解析的分享链接</h2>' +
+        '<p style="margin-top:6px;color:var(--s-label)">把抖音、小红书或 B 站的分享文字直接整段贴进顶部输入框，或先点一条官方样本看效果。</p>' +
+        '<div style="margin-top:16px"><button class="sp-btn sp-btn-accent sp-btn-lg" type="button" id="loadSampleNowBtn">载入抖音 4K 视频样例</button></div>' +
+      '</div>';
+      var lsb = $("loadSampleNowBtn");
+      if (lsb) lsb.addEventListener("click", function () { triggerSample("video"); });
+      return;
+    }
+
+    var errMap = {
+      invalid: { title: "链接无效 · 无法识别平台域名", desc: "检测到粘贴文本中缺少有效的 9 平台短链（如 v.douyin.example / xhslink.example）。请检查复制是否漏掉网址后缀，本条不扣减今日额度。", btn: "填入标准抖音口令重试" },
+      deleted: { title: "作品已删除或作者设为私密", desc: "原平台返回 404/私密不可见，按规定不支持抓取非公开内容与付费课程。本次未扣除额度。", btn: "换一条公开图集样本试看" },
+      risk: { title: "触发源站平台频控", desc: "源站节点临时限流，预计 1 分钟后恢复。为防直链损坏已中断解析。", btn: "立即重新尝试解析" },
+      quota: { title: "已超出游客今日 5 条免登录额度", desc: "当前游客配额（5/5）已用尽。可点击上方「登录领每日 20 条」，或明日 00:00 自动重置。", btn: "立即模拟登录提升到 20 条/日" }
+    };
+
+    if (errMap[state.mode]) {
+      var er = errMap[state.mode];
+      slot.innerHTML = '<div class="err-panel" role="alert">' +
+        '<h3>' + er.title + '</h3>' +
+        '<p style="font-size:14px;color:var(--s-ink)">' + er.desc + '</p>' +
+        '<div><button class="sp-btn sp-btn-dark" type="button" id="errActionBtn">' + er.btn + '</button></div>' +
+      '</div>';
+      $("svgBadgeTop").textContent = "已拦截";
+      $("svgBadgeBot").textContent = "未扣额";
+      $("errActionBtn").addEventListener("click", function () {
+        if (state.mode === "quota") { state.loggedIn = true; triggerSample("video"); }
+        else if (state.mode === "deleted") triggerSample("atlas");
+        else triggerSample("video");
+      });
+      return;
+    }
+
+    if (state.mode === "video") {
+      var vTitle = state.longMode
+        ? "【超长标题测试】横断山脉冬季高海拔实拍 4K 60fps 无损航拍调色对比全纪录（已剥离分享前缀）"
+        : "林野航拍 · 冬季横断山脉云海 4K 原画无水印直链";
+      $("svgBadgeTop").textContent = "4.2 秒";
+      $("svgBadgeBot").textContent = "直链 2h";
+      slot.innerHTML = '<article class="sp-card">' +
+        '<div class="sp-card-head">' +
+          '<h2 class="sp-card-title">' + vTitle + '</h2>' +
+          '<span class="badge badge-ok">解析成功 · 耗时 4.2 秒 · 有效期还剩 119 分钟</span>' +
+        '</div>' +
+        '<div class="video-split">' +
+          '<div class="video-preview-box">' +
+            '<svg viewBox="0 0 460 240" role="img" aria-label="解析出的视频无水印原片预览帧">' +
+              '<rect width="460" height="240" fill="#222222"/>' +
+              '<path d="M0 170 L110 110 L210 155 L320 85 L460 155 L460 240 L0 240 Z" fill="#0054B6" opacity="0.55"/>' +
+              '<path d="M0 190 L140 135 L270 180 L380 120 L460 175 L460 240 L0 240 Z" fill="#147AF3" opacity="0.45"/>' +
+              '<circle cx="370" cy="56" r="24" fill="#FFFFFF" opacity="0.18"/>' +
+              '<rect x="16" y="16" width="110" height="24" rx="4" fill="#000000" opacity="0.72"/>' +
+              '<text x="71" y="32" text-anchor="middle" font-size="11" fill="#FFFFFF" font-weight="700">1920x1080 · 60fps</text>' +
+              '<circle cx="230" cy="120" r="26" fill="#0054B6"/>' +
+              '<path d="M223 108l18 12-18 12v-24z" fill="#FFFFFF"/>' +
+            '</svg>' +
+          '</div>' +
+          '<div>' +
+            '<div class="meta-list">' +
+              '<div class="meta-row"><span class="meta-k">来源平台</span><span class="meta-v">抖音（无水印原画）</span></div>' +
+              '<div class="meta-row"><span class="meta-k">文件体积</span><span class="meta-v">128.4 MB（上限 500 MB）</span></div>' +
+              '<div class="meta-row"><span class="meta-k">视频时长</span><span class="meta-v">02:44（上限 30 分钟）</span></div>' +
+              '<div class="meta-row"><span class="meta-k">编码格式</span><span class="meta-v">MP4 (HEVC + AAC 320k)</span></div>' +
+              '<div class="meta-row"><span class="meta-k">直链生命周期</span><span class="meta-v">2 小时（服务端不持久化）</span></div>' +
+            '</div>' +
+            '<div class="direct-url-box">https://cdn-edge.allparse.example/temp/2h/douyin_4k_88210.mp4</div>' +
+            '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">' +
+              '<button class="sp-btn sp-btn-accent sp-btn-lg" type="button" id="copyVidUrlBtn">复制无水印直链</button>' +
+              '<button class="sp-btn sp-btn-lg" type="button" id="saveCoverBtn">模拟保存封面原图</button>' +
+            '</div>' +
+            '<p id="resActionMsg" style="margin-top:8px;font-size:12px;color:var(--s-success);font-weight:700" role="status" aria-live="polite"></p>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+      $("copyVidUrlBtn").addEventListener("click", function () { $("resActionMsg").textContent = "已复制 2 小时有效直链到剪贴板（本地演示）。"; });
+      $("saveCoverBtn").addEventListener("click", function () { $("resActionMsg").textContent = "已触发无水印首帧 JPG 保存（1920x1080）。"; });
+      return;
+    }
+
+    // 9 图图集视图
+    $("svgBadgeTop").textContent = "3.6 秒";
+    $("svgBadgeBot").textContent = "9 张原图";
+    var cards = ATLAS_ITEMS.map(function (it) {
+      var picked = state.pickedAtlas.indexOf(it.id) > -1;
+      return '<div class="atlas-item' + (picked ? ' is-picked' : '') + '">' +
+        '<svg viewBox="0 0 240 150" role="img" aria-label="' + it.label + '">' +
+          '<rect width="240" height="150" rx="4" fill="' + it.c2 + '"/>' +
+          '<circle cx="' + (40 + it.id * 16) + '" cy="54" r="24" fill="' + it.c1 + '" opacity="0.85"/>' +
+          '<path d="M0 116 Q70 ' + (70 + it.id * 4) + ' 140 110 T240 100 L240 150 L0 150 Z" fill="' + it.c1 + '" opacity="0.55"/>' +
+          '<rect x="8" y="8" width="76" height="20" rx="4" fill="#000000" opacity="0.72"/>' +
+          '<text x="46" y="21" text-anchor="middle" font-size="10" fill="#FFFFFF" font-weight="700">' + it.res + '</text>' +
+        '</svg>' +
+        '<div class="atlas-foot">' +
+          '<div><strong>' + it.label + '</strong><div style="color:var(--s-label)">' + it.size + '</div></div>' +
+          '<button class="sp-btn" type="button" data-pick-img="' + it.id + '" aria-pressed="' + picked + '">' + (picked ? '已选' : '选择') + '</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+
+    slot.innerHTML = '<article class="sp-card">' +
+      '<div class="sp-card-head">' +
+        '<div><h2 class="sp-card-title">小红书 9 图无水印原图图集（全部 9 张）</h2>' +
+        '<p style="font-size:13px;color:var(--s-label);margin-top:2px">作者：@日常摄影日记 · 共 26.1 MB · 原图直链有效期 2 小时</p></div>' +
+        '<span class="badge badge-ok">解析成功 · 耗时 3.6 秒</span>' +
+      '</div>' +
+      '<div class="atlas-toolbar">' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button class="sp-btn" type="button" id="pickAllImgBtn">全选 9 张</button>' +
+          '<button class="sp-btn" type="button" id="clearImgBtn">清空勾选</button>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+          '<span style="font-size:13px;color:var(--s-label)">已选 <strong style="color:var(--s-heading)">' + state.pickedAtlas.length + '</strong> / 9 张</span>' +
+          '<button class="sp-btn sp-btn-accent" type="button" id="copyAtlasBtn">导出所选直链列表</button>' +
+        '</div>' +
+      '</div>' +
+      '<p id="atlasMsg" style="margin-bottom:12px;font-size:12px;color:var(--s-success);font-weight:700" role="status" aria-live="polite"></p>' +
+      '<div class="atlas-grid">' + cards + '</div>' +
+    '</article>';
+
+    $("pickAllImgBtn").addEventListener("click", function () { state.pickedAtlas = [1,2,3,4,5,6,7,8,9]; renderResult(); });
+    $("clearImgBtn").addEventListener("click", function () { state.pickedAtlas = []; renderResult(); });
+    $("copyAtlasBtn").addEventListener("click", function () {
+      $("atlasMsg").textContent = "已生成并复制 " + state.pickedAtlas.length + " 张无水印原图直链清单（2 小时内有效，本地演示）。";
+    });
+  }
+
+  function triggerSample(mode) {
+    document.querySelectorAll("[data-sample]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-sample") === mode));
+    });
+    if (mode === "video") $("urlInput").value = "5.89 复制打开抖音，看看【林野航拍】的 4K 高清作品 https://v.douyin.example/iRNB8xQ/";
+    if (mode === "atlas") $("urlInput").value = "76 【秋日桌面摄影9图合集】发布了一篇小红书笔记 http://xhslink.example/m9xLp2";
+    if (mode === "invalid") $("urlInput").value = "https://unknown-link-truncated";
+    if (mode === "deleted") $("urlInput").value = "https://v.douyin.example/deleted-post-404";
+    if (mode === "risk") $("urlInput").value = "https://b23.tv.example/rate-limited-99";
+    if (mode === "quota") { state.loggedIn = false; state.usedCount = 5; }
+
+    state.busy = true;
+    renderResult();
+    setTimeout(function () {
+      state.busy = false;
+      state.mode = mode;
+      if (mode === "video" || mode === "atlas") state.usedCount = Math.min(state.loggedIn ? 20 : 5, state.usedCount + 1);
+      renderResult();
+    }, params.get("slow") === "1" ? 1300 : 180);
+  }
+
+  $("parseForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = $("urlInput").value.trim().toLowerCase();
+    if (!v || v.indexOf("http") === -1) { triggerSample("invalid"); return; }
+    if (v.indexOf("xhs") > -1 || v.indexOf("图") > -1) triggerSample("atlas");
+    else triggerSample("video");
+  });
+
+  document.addEventListener("click", function (e) {
+    var sb = e.target.closest("[data-sample]");
+    if (sb) { triggerSample(sb.getAttribute("data-sample")); return; }
+    var pi = e.target.closest("[data-pick-img]");
+    if (pi) {
+      var id = Number(pi.getAttribute("data-pick-img"));
+      var idx = state.pickedAtlas.indexOf(id);
+      if (idx > -1) state.pickedAtlas.splice(idx, 1);
+      else state.pickedAtlas.push(id);
+      renderResult();
+    }
+  });
+
+  $("loginToggleBtn").addEventListener("click", function () {
+    state.loggedIn = !state.loggedIn;
+    if (state.mode === "quota" && state.loggedIn) state.mode = "video";
+    renderResult();
+  });
+
+  if (state.busy) {
+    setTimeout(function () { state.busy = false; renderResult(); }, 1300);
+  }
+  renderResult();
+})();
+</script>
+</body>
+</html>

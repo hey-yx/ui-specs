@@ -1,0 +1,30 @@
+---
+import type { Spec } from '../lib/model'
+import { specPath } from '../lib/model'
+
+export interface Props {
+  spec: Spec
+  sectionTitle: string
+  /** 学习路径分区的真实阅读序号 */
+  step?: number
+}
+
+const { spec, sectionTitle, step } = Astro.props
+const { title, publisher, tag, chars, imgs, known } = spec.data
+const stat = chars >= 10000 ? Math.round(chars / 1000) + 'k 字' : chars + ' 字'
+---
+
+<div class:list={['item', step !== undefined && 'is-step']}>
+  <a
+    class="item-row"
+    href={specPath(spec)}
+    data-search={`${title} ${publisher} ${tag} ${sectionTitle}`.toLowerCase()}
+  >
+    {step !== undefined && <span class="stepno" aria-hidden="true">{String(step).padStart(2, '0')}</span>}
+    <span class="title">{title}</span>
+    <span class="meta">{publisher}</span>
+    <span class="tag">{tag}</span>
+    <span class="stat">{stat}{imgs > 0 ? ' · ' + imgs + ' 图' : ' · 纯文字'}</span>
+    {known && <span class="known-flag">{known === 'full' ? '通用知识' : '部分通用'}</span>}
+  </a>
+</div>

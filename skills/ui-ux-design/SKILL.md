@@ -1,0 +1,169 @@
+---
+name: ui-ux-design
+description: UI/UX design — interaction states, accessibility contracts, information architecture, visual hierarchy, and design tokens. Use this skill whenever the user wants to design or critique an interface, asks to "design this screen", "what states does this button need", "what ARIA does this menu need", "make this accessible", "how should I structure the navigation", "is this UI any good", "set up design tokens", "review my UX", "mock up design options", or "make this convert better" — even if they never say design and only describe a cluttered screen, a flow users abandon, or a component that breaks on real data. Covers type and color as applied to a UI; send pure type-scale or palette-contrast questions to typography and color-system. Route signups, conversion, retention, and pricing-presentation asks here. Do NOT use for aesthetic direction and polish (see frontend-design), charts (see dataviz), React hooks (see ideal-react-component), A/B testing, or writing the copy itself (headlines, taglines, pricing text).
+license: MIT
+argument-hint: "[screen | flow | states | components | tokens | ethics | audit]"
+metadata:
+  author: Antonin Januska
+  version: "0.1"
+  tags: [ux, ui, interaction-design, information-architecture, design-tokens, accessibility, usability, deceptive-patterns, aria]
+---
+
+# UI/UX Design
+
+## Overview
+
+An interface is judged on whether a person can accomplish their goal, not on whether it looks finished. Most defects an agent ships are not ugly — they are the states nobody drew, the flow that assumed the happy path, and the label that broke when the data got long.
+
+Two habits below prevent most of them: ship four states per surface, and name tokens for their role.
+
+## Navigation
+
+**Read the project's or user's own pattern library first**, if one exists — a design-references folder, a component gallery, a saved set of screens they like. It encodes taste this file cannot, and it outranks the defaults below wherever the two disagree. With no project library to read, [antjanus.com/patterns](https://antjanus.com/patterns) holds 40 component patterns and [antjanus.com/page-designs](https://antjanus.com/page-designs) holds 46 whole-page designs, each with a prompt written to rebuild it without the source.
+
+| Load | When |
+|---|---|
+| **[references/INTERACTION.md](references/INTERACTION.md)** | Building a control or a route's states — the nine control states, latency, save feedback, undo, delete confirms, motion, forms |
+| **[references/COMPONENTS.md](references/COMPONENTS.md)** | Building a named component — the ARIA, keyboard, and focus contract for tabs, menus, tables, tooltips, cards, plus batch bars, parsed search, the command palette, and data-display surfaces |
+| **[references/EXPLORATION.md](references/EXPLORATION.md)** | Generating many design options to choose between — the builder brief, structured review verdicts, and narrowing rounds to one design |
+| **[references/LAYOUT.md](references/LAYOUT.md)** | Grids, responsive behavior, and the section recipes for landing, pricing, and portfolio pages |
+| **[references/SYSTEMS.md](references/SYSTEMS.md)** | Design tokens, design systems, and design-to-code handoff |
+| **[references/VISUAL.md](references/VISUAL.md)** | Applying type, color, and images to a UI, palette retunes, and the brand style guide |
+| Rarely: **[ETHICS.md](references/ETHICS.md)** · **[PROCESS.md](references/PROCESS.md)** | Conversion, signups, retention, or pricing presentation — the deceptive-pattern catalogue and where the persuasion line sits · planning research, wireframe fidelity, usability tests, launch checklists |
+
+## Audit mode
+
+`audit` reviews an app that already exists rather than designing a surface that doesn't. Five phases, each gated on something outside this file.
+
+1. **Scope from the repo, not from the brief.** Read the project's own agent doc, then enumerate every route and the components each one renders. A brief that describes the wrong app still yields the right audit when the surface list comes from the code.
+2. **Build the state matrix before judging anything.** One row per surface, one column per state from the four below. A cell you can't fill by reading the code is itself a finding — that state doesn't exist.
+3. **Audit inline up to about fifteen surfaces. Past that, split into three or four read-only lanes** by surface family (lists, forms, chrome, accessibility), each carrying the four-states table and the floor inline so a lane doesn't depend on loading this file. A lane starts with none of this context and re-reads the routes it covers, so on a small app it costs more than it saves. Always fewer lanes than surfaces; never one per route. Cap each lane's report so it arrives whole: every finding gets a one-line headline, its file and line, and why it matters; code excerpts only for that lane's top three.
+4. **Publish one report, ranked by consequence, and stop.** Every visual change gets a **rendered before and after** — real markup at real sizes, side by side, with the difference named underneath. A description of a change is not a before and after. Size the report to the finding count; one longer than the fix list it produces goes unread.
+5. **Get approval per finding before implementing.** Present the ranked list and let the user accept, cut, or reorder it — audits reliably surface items the user considers not worth the pixels, and shipping those spends the credibility the real findings earned. Record what was approved, and what was cut, where the project already tracks work.
+
+**A passing verdict is a legitimate outcome.** If the surfaces hold up, say so and name what was checked. An audit that always finds ten things isn't measuring.
+
+## Presenting concept options
+
+Show each option as a **full screen in the app's own chrome** — its real nav, header, and a plausible amount of real data — not as thumbnails, isolated components, or fragments. A user cannot judge a layout they have to assemble in their head, and fragments get rejected on that ground alone. Within each screen, default to the fewest elements that answer the question being asked; add density only when the user asks for it, because a concept that reads as complex gets rejected before its idea is considered. Generating many options at once — dozens of directions, review rounds, narrowing to one — has its own method in [EXPLORATION.md](references/EXPLORATION.md).
+
+## An approved mockup is the spec
+
+**On approval, write it into the project's tracked plan.** Add the approved design as its own task in `SESSION_PROGRESS.md` or `ROADMAP.md` — what was approved, and the artifact URL or file path where it lives. The session that implements it may never load this skill, and a plan it reads is the only way the approval reaches it; an approval that lives only in a chat transcript gets silently dropped while every listed task still reports done.
+
+For any implementation of a design the user signed off on, put the approved artifact and the running screen side by side before reporting done, and list every element that differs — the hero that isn't full-bleed, the strip that stopped short of the edge, the card layout that got simplified, the data that landed in a different section than agreed. Fix each one or say which differences you're keeping and why. Drift concentrates in whatever nobody re-opened: the sections further down the page, the second posture of a two-mode screen, the component specified last.
+
+## The floor
+
+Non-negotiable, and cheap to get right at build time rather than in an audit later.
+
+- **4.5:1 contrast for normal text, 3:1 for large — in every state, in both color schemes.** Hover, pressed, and disabled fills are where this silently breaks; nobody rechecks them. A dark scheme built after the light one breaks all three at once, so it ships with the surface or the surface isn't done.
+- **44×44px minimum touch target.** Grow it with padding, not font size.
+- **Never let color alone carry meaning.** Pair every color shift with an icon, a border-weight change, or an underline, or the state is invisible to colorblind users.
+- **Visible focus, via `:focus-visible`.** Never `outline: none` without a replacement ring — that cuts off keyboard and assistive-tech users entirely.
+- **Native semantic HTML before ARIA.** ARIA layered onto generic markup adds errors rather than removing them. `<header>`, `<nav>`, `<main>`, `<footer>`, and native `dialog`/`popover` carry accessibility for free.
+- **`aria-disabled` rather than the `disabled` attribute.** A natively disabled control leaves the tab order and is exempt from contrast requirements — so the control *and* any explanation next to it become unreachable for exactly the people who needed the explanation. Set `aria-disabled="true"`, block the action in the handler, and keep the text contrast-passing. The split is by cause: a precondition the user can fix gets `aria-disabled` and a stated reason; a write already in flight gets native `disabled` plus `aria-busy`, since there is nothing to explain and it lasts a moment.
+- **Every interactive element is reachable and operable without a mouse**, in a tab order that matches reading order.
+
+## Every surface ships four states
+
+The single highest-value habit in this file. For each screen, list, and control, decide what renders when:
+
+| State | What it must do |
+|---|---|
+| **Loading** | A skeleton in the page's real shape, labelled with what is loading — not one shared spinner. A progress bar only when the total is known. The triggering control disables so the action can't be submitted twice. |
+| **Empty** | Say *why* it's empty and offer the action that fixes that cause. Five causes, checked in this order: failed to load (an error, never rendered as an empty list) · filtered to zero (clear the filter, show the unfiltered total) · hidden by a setting · everything in the trash · never had any (create one). |
+| **Error** | Say what failed and what to do about it, inline. Offer a retry **and** a way out — retry alone traps the user on a record that will never load. The control returns to clickable. |
+| **Success** | Confirm immediately and unambiguously, then get out of the way. |
+
+A detail route adds **not found**, naming what wasn't found and linking to its list. The full contract for each, including the root-level failure page, is in [INTERACTION.md](references/INTERACTION.md).
+
+**Latency decides whether a loading state is needed at all** — under 100ms it isn't; past 10s it needs progress *and* a cancel. The four budgets are in [INTERACTION.md](references/INTERACTION.md).
+
+Then vary those by **permission and user type** — an admin, a read-only viewer, and a signed-out visitor see three different renderings of the same route.
+
+**Then break it with real data**, because placeholder content hides the failures: a label three times longer than the mock, a list with 10,000 rows, a list with one row, an image that 404s, a name with diacritics, a translated string that runs 40% longer than the English, and the narrowest container the component actually renders in — a sidebar, a card column, a split pane — rather than the width it was tuned at. If a component collapses when the list is empty or overflows when the label runs long, that is worth knowing before it ships.
+
+**Guard the states with a test, or the next route drops them** — a logic gap costs minutes at design time and days in implementation. A route registry test that fails when a data-reading route lacks its loading, error, or not-found state; a source test that fails on a `disabled` with no stated reason; a smoke test that requests every page, because a route can answer 200 and render nothing.
+
+## Interactive element states
+
+Nine, not five: default, hover, pressed, focus, disabled, loading, success, error, selected. The last four are the ones that get skipped, and each carries a behavioral rule rather than just a style — the full table, its CSS hooks, and a reference implementation are in [INTERACTION.md](references/INTERACTION.md).
+
+- **Transitions run 100–200ms**, 150ms as the default — slower reads as sluggish, faster gets missed.
+- **On touch, active and loading carry the whole feedback burden**, since hover never fires. An affordance that only appears on hover is invisible on a phone, and hover-triggered tooltips need a tap-triggered equivalent.
+- **Primary and secondary actions must be distinguishable at a glance**, or users hesitate on every choice.
+
+## Visual hierarchy has six levers
+
+Size, weight, color and contrast, spacing, position, and **time**. The last one is the one that gets treated as decoration: a transition, a reveal, or a progressive disclosure sequence orders attention exactly the way size does.
+
+- **Proximity works in both directions** — closeness asserts a relationship, and whitespace between groups asserts that there isn't one. Use it defensively: keep a destructive or exit control physically apart from the cluster it would be misclicked into.
+- **Contrast is a consequence signal, not just an emphasis one.** A destructive action gets the high-contrast treatment so the weight of it registers; its safe sibling stays quiet.
+- **When everything is emphasized, nothing is.** The common failure is too many competing levers, not too few.
+- **Progressive disclosure requires an orientation cue.** Staging a long form across steps only works if each step says where the user is and how many remain — hiding steps without that is how people abandon.
+- **Precision is a claim.** An uncalibrated score — model confidence, OCR quality, a match percentage — shows as a labelled band that says what to check, never a bare decimal, which reads as a measurement.
+- Users need **agency over text size**. A layout that breaks at 200% zoom fails the people who need it most.
+
+## Information architecture
+
+Three structures, chosen by how people actually look for the thing:
+
+- **Hierarchical** — a tree with a main menu and subpages. The default for content that has a natural taxonomy.
+- **Sequential** — one linear path, for checkout, onboarding, and tutorials. The user should not be able to wander off it.
+- **Matrix** — navigate by attribute, filtering the same set by price, size, status, or date. The right answer when there is no single correct taxonomy. **Filter state lives in the URL, and every active filter shows as a removable chip** — a filter a link can apply but the screen can't display is one the user can neither see nor clear.
+
+**Every aggregate links to the rows behind it.** A month bar, a heatmap day, a status count: each is a link or a filter into the list that produced the number. The chart shows the shape and the link does the work. If an aggregate can't link anywhere, ask whether it belongs on the page. When the counts double as filter controls, compute them from the unfiltered set, so pressing one tile doesn't change the numbers on the others.
+
+A sitemap is one component of information architecture, not a synonym for it — IA is organization plus labeling plus navigation plus search.
+
+**Any page can be the entry point.** Deep links, search results, and shared URLs mean every route has to stand on its own: it explains what it is, and offers a way up and out. Design for growth too — a category scheme that only works at today's content volume will need re-cutting.
+
+**One goal per flow.** Map the entry point, the meaningful steps, the decision forks, and the endpoint — and stop there. Do not capture every click; model the moments where the user could go wrong.
+
+## Design tokens
+
+Three tiers, in this order:
+
+1. **Primitive** — raw values with no usage context. `blue-500`, `gray-300`, `space-4`.
+2. **Semantic** — the role a value plays. `action-color`, `text-primary`, `color/text/disabled`. A developer reading `action-color` knows its purpose without tracing it back to a hex.
+3. **Component** — bound to one element. A primary button's background, a card's radius, an input's padding.
+
+- **Semantic tokens point at primitives, never at other semantic tokens.** Chaining aliases is the thing that makes a token system unmaintainable.
+- **Themes are modes on one token set, not a duplicate set per theme.** `text-primary` resolves differently in light and dark; a parallel `.dark .button {}` override tree is the failure mode.
+- Name for what it does, not what it is — `text-secondary`, not `gray-text`. Cover text, background, border, and action first.
+- Skipping the semantic tier means every primitive change turns into a hunt through every component.
+
+## Examples
+
+- ✅ A list route rendering first-run empty, filtered-to-zero, loading, error-with-retry, and populated — ❌ a list that renders rows and nothing else
+- ✅ "Everything here is in the trash" with an Open trash button — ❌ "No items yet. Create one" shown to someone who has forty, all trashed
+- ✅ OCR quality shown as "fair — check pages 3 and 7" — ❌ "OCR confidence: 0.83"
+- ✅ "Couldn't save — the title is already taken" with the button clickable again — ❌ a button stuck in a red error state
+- ✅ Delete disabled with "You need admin access to delete this" beside it — ❌ a grayed-out button with no explanation
+- ✅ Status shown as a colored dot **plus** a label — ❌ a red dot and a green dot as the only difference
+- ✅ `--color-action-primary: var(--blue-500)` — ❌ `--button-bg: var(--action-color)` chaining through a second semantic token
+- ✅ Checkout as a sequential flow with "Step 2 of 4" — ❌ a four-step form that hides where you are
+- ✅ Padding raising a 20px icon button to a 44px target — ❌ bumping the icon to 44px to hit the number
+- ✅ Testing the card with a 120-character title and a missing image — ❌ shipping against the 3-word mock title
+- ✅ Before reporting done: the approved mockup and the running screen side by side, every difference listed and either fixed or kept on purpose
+- ✅ Three concept options, each a full screen inside the app's real nav with only the elements the question needs — ❌ a grid of thumbnail fragments, each packed with every widget the screen might one day hold
+
+## Gotchas
+
+- **Symptom:** Layout is fine in review, broken in production. **Cause:** Designed against placeholder content. **Fix:** Re-render every component with a long label, an empty collection, a failed image, and a translated string before calling it done.
+- **Symptom:** Feature works for the author, unusable on a phone. **Cause:** The affordance lives in a hover state. **Fix:** Move it into the default state; hover never fires on touch.
+- **Symptom:** Contrast passes but the UI is still unreadable somewhere. **Cause:** Only the default state, in one color scheme, was checked. **Fix:** Measure hover, pressed, and disabled fills, in light and dark.
+- **Symptom:** A control explains why it's unavailable, and users still ask why it's unavailable. **Cause:** The native `disabled` attribute took it out of the tab order, so keyboard and screen-reader users never reach the control or the explanation. **Fix:** `aria-disabled="true"` with a guarded handler.
+- **Symptom:** An implementation is reported done and the reply is that it looks nothing like what was agreed. **Cause:** It was checked against the running app rather than against the approved mockup. **Fix:** Open both side by side and list the differences before reporting done.
+- **Symptom:** A later session reports every plan task done, and the approved design was never built. **Cause:** The approval was recorded only in conversation; the implementing session never loaded this skill and its plan had no task for the design. **Fix:** On approval, add the design and its artifact location to the tracked plan as its own task.
+- **Symptom:** A stat strip or card row looks right in review and wraps or clips in the app. **Cause:** It was tuned at one width, wider than the container it really renders in. **Fix:** Render it at the narrowest real container before calling it done, and where it doesn't fit, reflow it into stacked label–value rows rather than shrinking the text.
+- **Symptom:** The whole page scrolls sideways on a phone. **Cause:** One child is wider than the viewport — a wide table, an unwrapped header action row, or a visually-hidden element with no positioned ancestor. **Fix:** Tables scroll inside their own wrapper, header rows wrap, hidden elements sit in a `position: relative` parent.
+- **Symptom:** After a restyle, text on a page nobody touched is unreadable. **Cause:** It inherited link and heading colors from the changed base styles — light text on a dark band became dark on dark. **Fix:** Any non-default surface sets its own text colors; re-open every route in both schemes after a base-style change.
+
+## Integration
+
+- **typography** for type scales, line-height, and font pairing · **color-system** for palette construction and contrast math
+- **frontend-design** for layout execution and visual polish · **dataviz** for charts
+- **ideal-react-component** when the states land in React · **local-first-app** for the app-shaped feature set these patterns fill in
+- **track-roadmap** for the manual checks — states, zoom, keyboard paths — that automated tests can't cover; file them as roadmap sign-off items

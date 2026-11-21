@@ -1,0 +1,7 @@
+{
+  "name": "TallyLane",
+  "tagline": "十秒记一笔的记账站，到预算八成只提醒一次。",
+  "accent": "Yellow7 #8b6600",
+  "structure": "Bento Grid · N12 / Ft5",
+  "layout": "七块不等跨距的 Bento 栅格，首屏就能真记一笔，分类与预算同排，明细与批注收在第三行。"
+}

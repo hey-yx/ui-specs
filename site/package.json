@@ -1,0 +1,17 @@
+{
+  "name": "ui-specs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "UISpecs：UI 设计规范全文库（本地可读 + 框架站点）",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "0.4.6",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.4"
+  }
+}

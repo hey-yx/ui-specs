@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ListenRail · 把科技圈的新鲜事讲成人话</title>
+<meta name="description" content="ListenRail 是一档每周四更新的中文对谈播客，两位主播把科技与互联网的新鲜事讲成人话。往期单集、主播介绍与订阅入口。">
+<link rel="icon" href="data:,">
+<style>
+/* ============================================================
+   ListenRail · 单文件官网（UISpecs 真实建站测试样张）
+   数值主源：TDesign（content/type/tdesign.tencent.com--fonts.md、
+   content/color/tdesign.tencent.com--color.md），逐条出处见 DECISIONS.md。
+   版型：Newsletter / Content First（content/layouts/layout--newsletter-content-first.md）
+   风格：由项目选型定（产品语境 → 主源），本站取 TDesign 主源
+   零外部请求：CSS/JS 全内联，无外链字体、无外链图片。
+   ============================================================ */
+:root{
+  /* 纸与墨 —— TDesign 中性色 White / Gray1 / Gray3 / Gray7 / Gray14 */
+  --paper:#ffffff;
+  --paper-2:#f3f3f3;
+  --ink:#181818;            /* Gray14，小字高对比 */
+  --text-1:rgba(0,0,0,.9);  /* Font Gy1（fonts.md:96） */
+  --text-2:rgba(0,0,0,.6);  /* Font Gy2（fonts.md:98） */
+  --text-3:rgba(0,0,0,.4);  /* Font Gy3，仅禁用（fonts.md:100） */
+  --line:#e8e8e8;           /* Gray3，1px 发丝装饰线 */
+  --line-strong:#8b8b8b;    /* Gray7，控件边界（非文本 3:1） */
+  /* 强调色 —— TDesign 扩展色 Yellow 系，只用于订阅 CTA 与少量信号位 */
+  --accent:#f5ba18;         /* Yellow4 */
+  --accent-hover:#ffd36d;   /* Yellow3，hover 只动亮度方向 */
+  --accent-active:#d8a100;  /* Yellow5，active 降亮度 */
+  --accent-text:#8b6600;    /* Yellow7，浅底上的强调文字 */
+  --accent-tint:#fff5e4;    /* Yellow1，浅底带 */
+  /* 功能色（只进状态） */
+  --ok:#006c45;             /* Green7 */
+  --err:#ad352f;            /* Red7（Red6 4.32 不达标，见 DECISIONS） */
+  /* 字体：UI 用 TDesign 系统栈（fonts.md:34）；长文正文用衬线（clreq + USWDS） */
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  --font-serif:Georgia,"Times New Roman","Songti SC",STSong,"Source Han Serif SC","Noto Serif CJK SC",SimSun,serif;
+  /* 字阶（fonts.md:48-60）：12 / 14 / 16 / 20 / 24 / 28 / 36 / 64；行高 = 字号 + 8 */
+  /* 间距刻度：8px 增量（content/layout/uisdc.com--code-for-design-of-spacing.md:42） */
+  --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:32px; --sp-6:48px; --sp-8:64px; --sp-12:96px;
+  /* 圆角：库内无通用 radius 规范，派生 4/8 两档（GAP_RULES） */
+  --r-1:4px; --r-2:8px;
+  /* 动效：NN/g 时长档位（content/motion/nngroup.com--animation-duration.md:78-92） */
+  --t-micro:100ms; --t-ui:200ms; --t-reveal:300ms;
+  --ease-out:cubic-bezier(0,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+html,body{overflow-x:clip}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--text-1);
+  font-family:var(--font-ui);
+  font-size:16px;      /* fonts.md:53 正文档 */
+  line-height:24px;    /* 行高 = 16 + 8（fonts.md:67） */
+}
+h1,h2,h3{margin:0;font-weight:600;color:var(--ink)}
+p{margin:0}
+a{color:var(--accent-text);text-underline-offset:3px}
+a:hover{color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:100}
+.skip:focus{left:8px;top:8px}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+/* ---------- 页头（导航规则：content/patterns/carbon--global-header.md:42-44,150）---------- */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+}
+.site-header .wrap{display:flex;align-items:center;gap:24px;height:72px}
+.brand{
+  font-size:28px;line-height:36px;font-weight:600;   /* 品牌字样（fonts.md:57 档） */
+  letter-spacing:.02em;color:var(--ink);text-decoration:none;
+}
+.nav-links{display:flex;gap:24px;margin-right:auto}   /* 产品级链接左对齐 */
+.nav-links a{font-size:14px;line-height:22px;color:var(--text-2);text-decoration:none}
+.nav-links a:hover{color:var(--ink);text-decoration:underline}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 24px;border:0;border-radius:var(--r-2);
+  font-family:var(--font-ui);font-size:16px;font-weight:600;line-height:24px;
+  cursor:pointer;text-decoration:none;
+  transition:background-color var(--t-ui) var(--ease-out);
+}
+.btn-subscribe{background:var(--accent);color:var(--ink)}      /* 墨字压黄底 10.08:1 */
+.btn-subscribe:hover{background:var(--accent-hover);color:var(--ink)}
+.btn-subscribe:active{background:var(--accent-active)}
+.btn-subscribe[disabled]{background:var(--paper-2);color:var(--text-3);cursor:default}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+.btn-ghost:hover{background:var(--paper-2)}
+
+/* ---------- Hero（版型 Hero = 价值主张 + 表单，layout--newsletter-content-first.md:53）---------- */
+.hero{padding:96px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:48px;align-items:center}
+.hero h1{
+  font-size:64px;line-height:72px;letter-spacing:.02em;  /* 顶档（fonts.md:60） */
+  margin-bottom:24px;
+}
+.hero .lead{
+  font-family:var(--font-serif);
+  font-size:20px;line-height:34px;                        /* 叙事正文行高 1.7（Spectrum CJK） */
+  color:var(--text-1);max-width:34em;margin-bottom:32px;
+}
+.hero .form-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.hero .field{flex:1 1 260px;max-width:340px}
+.hero input[type=email]{
+  width:100%;min-height:44px;padding:0 14px;
+  border:1px solid var(--line-strong);border-radius:var(--r-1);
+  font-family:var(--font-ui);font-size:16px;color:var(--ink);background:var(--paper);
+  transition:border-color var(--t-micro) linear;
+}
+.hero input[type=email]:hover{border-color:var(--ink)}
+.hero input[aria-invalid=true]{border-color:var(--err);border-width:2px}
+.form-note{font-size:14px;line-height:22px;color:var(--text-2);margin-top:8px}
+.form-status{font-size:14px;line-height:22px;margin-top:8px;min-height:22px}
+.form-status.is-error{color:var(--err)}
+.form-status.is-ok{color:var(--ok)}
+.sample-link{display:inline-block;margin-top:24px;font-size:14px;line-height:22px}
+.platforms{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.platform{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 16px;
+  border:1px solid var(--line);border-radius:var(--r-2);
+  font-size:14px;line-height:22px;color:var(--ink);text-decoration:none;background:var(--paper);
+  transition:background-color var(--t-micro) linear;
+}
+.platform:hover{background:var(--paper-2);color:var(--ink)}
+.cover{width:220px;height:220px;flex:none}
+
+/* ---------- 叙事段落（节目介绍，版型段落块 :25） ---------- */
+.intro{padding:72px 0;background:var(--accent-tint)}   /* 分节配色（交替带，见 DECISIONS §3） */
+.intro .wrap{max-width:880px}
+.section-title{font-size:24px;line-height:32px;margin-bottom:24px}   /* 分区标题（fonts.md:56） */
+.prose{font-family:var(--font-serif);font-size:16px;line-height:27px;max-width:36em}  /* CJK 长文 1.7 倍 */
+.prose+.prose{margin-top:16px}
+.stats{display:flex;gap:32px;flex-wrap:wrap;margin-top:32px}
+.stats div{font-size:14px;line-height:22px;color:var(--text-2)}
+.stats b{display:block;font-size:20px;line-height:28px;color:var(--ink);font-weight:600;
+  font-variant-numeric:tabular-nums}   /* 数字等距（fonts.md:37） */
+
+/* ---------- 往期单集（Recent Issues/Archives，版型 :54） ---------- */
+.episodes{padding:96px 0}
+.ep-list{list-style:none;margin:32px 0 0;padding:0;border-top:1px solid var(--line)}
+.ep{padding:32px 0;border-bottom:1px solid var(--line)}
+.ep .meta{
+  font-size:14px;line-height:22px;color:var(--text-2);
+  font-variant-numeric:tabular-nums;margin-bottom:8px;
+  display:flex;gap:16px;flex-wrap:wrap;
+}
+.ep .meta .ep-no{color:var(--accent-text);font-weight:600}
+.ep h3{font-size:20px;line-height:28px;margin-bottom:8px}   /* 单集标题（fonts.md:54） */
+.ep h3 a{color:var(--ink);text-decoration:none}
+.ep h3 a:hover{text-decoration:underline}
+.ep .summary{color:var(--text-2);max-width:40em}
+.disclosure{
+  margin-top:16px;display:inline-flex;align-items:center;gap:8px;
+  min-height:44px;padding:0 14px;background:transparent;
+  border:1px solid var(--line-strong);border-radius:var(--r-1);
+  font-family:var(--font-ui);font-size:14px;line-height:22px;color:var(--ink);cursor:pointer;
+  transition:background-color var(--t-micro) linear;
+}
+.disclosure:hover{background:var(--paper-2)}
+.disclosure .mark{font-size:14px;width:14px;text-align:center}
+.disclosure[aria-expanded=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ep-notes{margin:16px 0 0 0;padding:0 0 0 20px;color:var(--text-2);max-width:40em}
+.ep-notes li{margin:4px 0}
+.ep-notes[hidden]{display:none}
+
+/* ---------- 社交证明（Social Proof = 订阅数，版型 :55；只展示带日期的数 :63） ---------- */
+.proof{padding:96px 0;background:var(--paper-2)}
+.proof .count{font-size:14px;line-height:22px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.quote{background:var(--paper);border-radius:var(--r-2);padding:24px}
+.quote p{font-family:var(--font-serif);line-height:27px}
+.quote footer{margin-top:16px;font-size:14px;line-height:22px;color:var(--text-2);font-style:normal}
+
+/* ---------- 主播（About Author，版型 :56） ---------- */
+.hosts{padding:96px 0}
+.host-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
+.host{border:1px solid var(--line);border-radius:var(--r-2);padding:32px;
+  transition:box-shadow var(--t-ui) var(--ease-out)}
+.host:hover{box-shadow:0 0 0 4px var(--paper-2)}   /* hover 用投影（components/inclusive-components.design--cards.md:237-241） */
+.host h3{font-size:20px;line-height:28px}
+.host .role{font-size:14px;line-height:22px;color:var(--accent-text);margin:4px 0 16px}
+.host .bio{font-family:var(--font-serif);line-height:27px;color:var(--text-2)}
+.host .said{margin-top:16px;font-family:var(--font-serif);line-height:27px;color:var(--ink)}
+
+/* ---------- 结尾订阅带 ---------- */
+.cta-band{padding:96px 0;background:var(--accent-tint);text-align:center}
+.cta-band h2{font-size:24px;line-height:32px;margin-bottom:16px}
+.cta-band p{color:var(--text-2);margin-bottom:32px}
+
+/* ---------- 页脚（一行小字） ---------- */
+.site-footer{padding:32px 0;border-top:1px solid var(--line)}
+.site-footer p{font-size:12px;line-height:20px;color:var(--text-2)}  /* fonts.md:51 最小档 */
+
+/* ---------- 滚动进场（NN/g 300ms 档，见 DECISIONS §4） ---------- */
+.js .reveal{opacity:0;transform:translateY(12px)}
+.js .reveal.in{
+  opacity:1;transform:none;
+  transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);
+}
+
+@media (max-width:880px){
+  .hero .wrap{grid-template-columns:1fr}
+  .cover{width:160px;height:160px}
+  .quotes{grid-template-columns:1fr}
+  .host-grid{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .site-header .wrap{gap:12px}
+  .nav-links{display:none}
+  .hero{padding:56px 0 48px}
+  .hero h1{font-size:36px;line-height:44px}     /* 降档到 36（fonts.md:58 原档） */
+  .hero .lead{font-size:20px;line-height:34px}
+  .intro,.episodes,.proof,.hosts,.cta-band{padding:48px 0}
+  .ep .meta{gap:8px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none}
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#main">跳到主内容</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">ListenRail</a>
+    <nav class="nav-links" aria-label="站内导航">
+      <a href="#episodes">往期单集</a>
+      <a href="#hosts">主播</a>
+      <a href="#proof">听友说</a>
+    </nav>
+    <button class="btn btn-subscribe" id="header-cta" type="button">订阅</button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- Hero：价值主张 + 订阅表单（版型区块 1） -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>ListenRail</h1>
+        <p class="lead">把科技圈的新鲜事讲成人话，把老话题聊出新意思。每周四更新，两位主播对谈，单集 40 到 70 分钟。</p>
+        <form class="form-row" id="sub-form" novalidate>
+          <div class="field">
+            <label for="email" class="form-note" style="display:block;margin:0 0 8px">邮箱地址</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com"
+                   aria-describedby="sub-status">
+          </div>
+          <button class="btn btn-subscribe" id="sub-btn" type="submit" style="margin-top:30px">订阅更新</button>
+          <p class="form-status" id="sub-status" role="status"></p>
+        </form>
+        <a class="sample-link" href="#ep-24">先听一期：EP.24 订阅制退潮之后，我们还会为什么买单 →</a>
+        <div class="platforms" aria-label="收听平台">
+          <a class="platform" href="https://www.xiaoyuzhoufm.com/" rel="noopener noreferrer">小宇宙</a>
+          <a class="platform" href="https://podcasts.apple.com/" rel="noopener noreferrer">Apple Podcasts</a>
+          <a class="platform" href="https://www.ximalaya.com/" rel="noopener noreferrer">喜马拉雅</a>
+        </div>
+      </div>
+      <svg class="cover" viewBox="0 0 220 220" role="img" aria-label="ListenRail 节目封面：一组由疏到密再归于疏的声波竖线">
+        <rect width="220" height="220" rx="8" fill="#fff5e4"></rect>
+        <g stroke="#f5ba18" stroke-width="6" stroke-linecap="round">
+          <line x1="34" y1="96" x2="34" y2="124"></line>
+          <line x1="52" y1="80" x2="52" y2="140"></line>
+          <line x1="70" y1="62" x2="70" y2="158"></line>
+          <line x1="88" y1="88" x2="88" y2="132"></line>
+        </g>
+        <g stroke="#181818" stroke-width="6" stroke-linecap="round">
+          <line x1="106" y1="46" x2="106" y2="174"></line>
+          <line x1="124" y1="70" x2="124" y2="150"></line>
+        </g>
+        <g stroke="#d8a100" stroke-width="6" stroke-linecap="round">
+          <line x1="142" y1="84" x2="142" y2="136"></line>
+          <line x1="160" y1="66" x2="160" y2="154"></line>
+          <line x1="178" y1="92" x2="178" y2="128"></line>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 节目介绍：叙事段落（版型段落块） -->
+  <section class="intro reveal">
+    <div class="wrap">
+      <h2 class="section-title">这是一档什么节目</h2>
+      <p class="prose">ListenRail 不追热点的速度，只追讲清楚的耐心。每期挑一件科技与互联网圈正在发生的事——一次改版、一场发布会、一条让人皱眉的新规——由两位主播把它拆开、讲透，再聊回普通人的日常。</p>
+      <p class="prose">我们相信「讲成人话」不是把内容做浅，而是把来龙去脉补齐。你不需要懂技术也能听懂，听完还能在饭桌上转述给别人听。</p>
+      <div class="stats">
+        <div><b>每周四</b>固定更新</div>
+        <div><b>40–70 分钟</b>单集时长</div>
+        <div><b>24 期</b>已连续更新</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 往期单集：Recent Issues/Archives（版型区块 2） -->
+  <section class="episodes" id="episodes">
+    <div class="wrap">
+      <h2 class="section-title reveal">往期单集</h2>
+      <ol class="ep-list">
+        <li class="ep reveal" id="ep-24">
+          <p class="meta"><span class="ep-no">EP.24</span><span>2026-11-05</span><span>58 分钟</span></p>
+          <h3><a href="#ep-24">订阅制退潮之后，我们还会为什么买单</a></h3>
+          <p class="summary">从三家内容平台同时调价说起，聊聊订阅疲劳到底是谁的疲劳。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-24">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-24" hidden>
+            <li>三家平台的调价公告原文对比</li>
+            <li>「连续包月」的续费提醒新规</li>
+            <li>听友投稿：我的六个订阅砍到两个</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-23">
+          <p class="meta"><span class="ep-no">EP.23</span><span>2026-10-29</span><span>64 分钟</span></p>
+          <h3><a href="#ep-23">AI 助手住进系统之后</a></h3>
+          <p class="summary">当助手变成操作系统的一部分，App 的边界在哪里结束。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-23">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-23" hidden>
+            <li>两家手机厂商的系统级助手实测</li>
+            <li>「帮你点单」的权限弹窗到底该长什么样</li>
+            <li>一个被误删又找回的日历事件</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-22">
+          <p class="meta"><span class="ep-no">EP.22</span><span>2026-10-22</span><span>47 分钟</span></p>
+          <h3><a href="#ep-22">小厂做设计系统的勇气</a></h3>
+          <p class="summary">五个人的团队要不要维护组件库？请来一位独立开发者聊他的取舍。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-22">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-22" hidden>
+            <li>从「复制粘贴」到「两个变量」的半年</li>
+            <li>什么时候该停止维护自己的组件</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-21">
+          <p class="meta"><span class="ep-no">EP.21</span><span>2026-10-15</span><span>71 分钟</span></p>
+          <h3><a href="#ep-21">技术书为什么越来越难卖</a></h3>
+          <p class="summary">和一位技术书译者对谈：选题、翻译周期，以及读者都去了哪里。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-21">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-21" hidden>
+            <li>一本译著从签约到上市的 14 个月</li>
+            <li>样章试读数据背后的取舍</li>
+            <li>译者推荐：三本被低估的入门书</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-20">
+          <p class="meta"><span class="ep-no">EP.20</span><span>2026-10-08</span><span>52 分钟</span></p>
+          <h3><a href="#ep-20">我们做过的最失败的三个选题</a></h3>
+          <p class="summary">两周年特辑不谈成绩，复盘三次「录完就后悔」的选题会。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-20">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-20" hidden>
+            <li>被砍掉的「智能硬件横评」企划书</li>
+            <li>为什么嘉宾档期不该成为选题理由</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-19">
+          <p class="meta"><span class="ep-no">EP.19</span><span>2026-10-01</span><span>45 分钟</span></p>
+          <h3><a href="#ep-19">手机厂商又开始卷相机了</a></h3>
+          <p class="summary">影像联名、计算摄影、样张争议，一场发布会引发的连锁反应。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-19">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-19" hidden>
+            <li>同一场景五款旗舰的直出样张对比</li>
+            <li>「联名色彩」到底调了什么</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-18">
+          <p class="meta"><span class="ep-no">EP.18</span><span>2026-09-24</span><span>61 分钟</span></p>
+          <h3><a href="#ep-18">独立开发者的一天有多长</a></h3>
+          <p class="summary">上架、客服、记账、写更新日志：一个人做产品的真实时间表。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-18">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-18" hidden>
+            <li>一份被公开的周度时间开销表</li>
+            <li>定价从 18 元改到 28 元的那一周</li>
+          </ul>
+        </li>
+        <li class="ep reveal" id="ep-17">
+          <p class="meta"><span class="ep-no">EP.17</span><span>2026-09-17</span><span>56 分钟</span></p>
+          <h3><a href="#ep-17">当博物馆开始做小程序</a></h3>
+          <p class="summary">预约、导览、数字藏品，一家省级博物馆的线上化第一年。</p>
+          <button class="disclosure" type="button" aria-expanded="false" aria-controls="notes-17">
+            <span class="mark" aria-hidden="true">+</span>本期提到
+          </button>
+          <ul class="ep-notes" id="notes-17" hidden>
+            <li>老年观众占比 37% 的预约界面改版</li>
+            <li>语音导览的三个被投诉点</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 社交证明：订阅数只在带日期时展示（layout--newsletter-content-first.md:63） -->
+  <section class="proof" id="proof">
+    <div class="wrap">
+      <h2 class="section-title reveal">听友说</h2>
+      <p class="count reveal">截至 2026 年 11 月 7 日 · 全平台订阅 32,000+</p>
+      <div class="quotes">
+        <blockquote class="quote reveal">
+          <p>通勤路上听，两站地铁刚好听完一段，讲得清楚又不啰嗦。</p>
+          <footer>阿舟 · 后端工程师</footer>
+        </blockquote>
+        <blockquote class="quote reveal">
+          <p>主播提问的方式很舒服，像聊天不像审人，嘉宾也敢说真话。</p>
+          <footer>Mia · 产品经理</footer>
+        </blockquote>
+        <blockquote class="quote reveal">
+          <p>把发布会翻译成人话那期，我在工位上笑出声，同事以为我在看综艺。</p>
+          <footer>老周 · 硬件测试</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主播：About Author（版型区块 4） -->
+  <section class="hosts" id="hosts">
+    <div class="wrap">
+      <h2 class="section-title reveal">主播</h2>
+      <div class="host-grid">
+        <article class="host reveal">
+          <h3>陈野</h3>
+          <p class="role">科技记者 · 产业报道 8 年</p>
+          <p class="bio">跑过手机、汽车和芯片三条线，擅长把发布会和财报翻译成人话。节目里负责把「是不是」先问清楚。</p>
+          <p class="said">「先问是不是，再问为什么。」</p>
+        </article>
+        <article class="host reveal">
+          <h3>林晚</h3>
+          <p class="role">产品设计师 · 工具与内容产品</p>
+          <p class="bio">做过效率工具，也做过内容产品，习惯从一个按钮的文案追问到整条业务线。节目里负责把「为什么」聊出意思。</p>
+          <p class="said">「好用的东西值得多聊两句。」</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾订阅带（CTA 复述，版型 Hero inline form 的页尾呼应） -->
+  <section class="cta-band reveal">
+    <div class="wrap">
+      <h2>每周四，ListenRail</h2>
+      <p>留个邮箱，新一期上线时提醒你。不发广告，只发节目。</p>
+      <button class="btn btn-subscribe" id="band-cta" type="button">订阅更新</button>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 ListenRail · 每周四更新 · 本页是 UISpecs 设计规范库的真实建站测试样张，节目、主播与数据均为虚构示意。</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* 展开/收起：disclosure 规范（button + aria-expanded + aria-controls，Esc 关闭并回焦） */
+document.querySelectorAll('.disclosure').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    var open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    panel.hidden = open;
+    btn.querySelector('.mark').textContent = open ? '+' : '−';
+  });
+  btn.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      btn.click();
+      btn.focus();
+    }
+  });
+});
+
+/* 订阅表单：校验 → 错误（aria-invalid + 状态文案）→ 成功 */
+var form = document.getElementById('sub-form');
+var email = document.getElementById('email');
+var statusEl = document.getElementById('sub-status');
+var subBtn = document.getElementById('sub-btn');
+function setStatus(msg, cls) {
+  statusEl.textContent = msg;
+  statusEl.className = 'form-status' + (cls ? ' ' + cls : '');
+}
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var v = email.value.trim();
+  if (!v) {
+    email.setAttribute('aria-invalid', 'true');
+    setStatus('请填写邮箱地址', 'is-error');
+    email.focus();
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+    email.setAttribute('aria-invalid', 'true');
+    setStatus('邮箱格式看起来不对，请检查后再试', 'is-error');
+    email.focus();
+    return;
+  }
+  email.removeAttribute('aria-invalid');
+  setStatus('订阅成功，新一期上线时会提醒你。', 'is-ok');
+  subBtn.disabled = true;
+  subBtn.textContent = '已订阅 ✓';
+});
+email.addEventListener('input', function () {
+  if (email.getAttribute('aria-invalid') === 'true') {
+    email.removeAttribute('aria-invalid');
+    setStatus('');
+  }
+});
+
+/* 页头与页尾订阅按钮：滚到表单并聚焦输入框（版型「Hero inline form + Sticky header form」的单文件变体） */
+function focusForm() {
+  form.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  email.focus({ preventScroll: true });
+}
+document.getElementById('header-cta').addEventListener('click', focusForm);
+document.getElementById('band-cta').addEventListener('click', focusForm);
+
+/* 滚动进场（300ms ease-out；prefers-reduced-motion 时 CSS 已兜底为直接可见） */
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+}
+</script>
+</body>
+</html>

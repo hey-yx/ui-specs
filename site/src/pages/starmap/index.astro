@@ -1,0 +1,586 @@
+---
+// 设计地图（设计点选用图）：分区 × 设计场景的交叉矩阵，格子是该组合下的设计点数。
+// 数据在 site/src/data/star-points.json（手工维护，构建期校验引用）。
+// 矩阵是服务端渲染的表格；展开区与对话框数据来自构建期序列化的 JSON 岛（#star-data）。
+import { getCollection } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { buildModel } from '../../lib/model'
+import { SECTIONS } from '../../data/sections.ts'
+import starData from '../../data/star-points.json'
+import { REQUIRED_RULES, requiredRulesFor } from '../../data/guide.ts'
+import { buildProjectPoints } from '../../data/project-points.ts'
+import { canonicalUrl, siteRoot, withBase } from '../../lib/url'
+
+interface StarPoint {
+  id: string
+  name: string
+  domain: string
+  /** 可选：设计地图分区名，覆盖默认的分区标题（项目选型方案用） */
+  group?: string
+  /** 选型行标记：弹窗里标「基准规范」 */
+  kind?: 'source'
+  select: string
+  /** 该行支持的框架与官方组件库，弹窗里单独一块 */
+  stacks?: { framework: string; pkg: string }[]
+  /** 适用场景与换用条件 */
+  scenario?: { use: string; switchTo: string }
+  /** 官方库但不分 React / Vue */
+  libs?: { name: string; kind: string }[]
+  checks?: { q: string; a: string; cite: string }[]
+  tasks: string[]
+  articles: string[]
+  /** 项目选型行的主题系统截图 */
+  shot?: { src: string; caption: string; source: string }
+}
+
+const TASKS = starData.tasks as Record<string, { name: string; short: string }>
+const MOTION_RULE = REQUIRED_RULES.find((r) => r.pointPrefix)
+const MOTION_SCENES = (MOTION_RULE?.tasks ?? []).map((t) => TASKS[t]?.short ?? t).join('、')
+const BUILD_RULE_TITLES = REQUIRED_RULES.filter((r) => r.stage === 'build').map((r) => r.title).join('、')
+const BUILD_RULE_COUNT = REQUIRED_RULES.filter((r) => r.stage === 'build').length
+const REVIEW_RULE_TITLES = REQUIRED_RULES.filter((r) => r.stage === 'review').map((r) => r.title).join('、')
+
+const taskIds = Object.keys(TASKS)
+const taskCount = taskIds.length
+const PROJECT_POINTS = buildProjectPoints()
+const POINTS = [...starData.points, ...PROJECT_POINTS] as StarPoint[]
+const DESIGN_POINT_COUNT = starData.points.length
+const PROJECT_POINT_COUNT = PROJECT_POINTS.length
+
+const specs = await getCollection('specs')
+const model = buildModel(specs)
+const byFile = new Map(specs.map((s) => [s.data.file, s]))
+const sectionTitle = new Map(SECTIONS.map((s) => [s.key, s.title]))
+
+function articleInfo(file: string) {
+  const spec = byFile.get(file)
+  if (!spec) return null
+  return {
+    title: spec.data.title,
+    publisher: spec.data.publisher,
+    sectionTitle: sectionTitle.get(spec.data.section) ?? spec.data.section,
+    url: withBase(`/a/${file.replace(/\.md$/, '')}/`),
+    source: spec.data.source as string,
+  }
+}
+
+// 自测题出处：content/<分区>/<文件>.md:<行号> → 站内文章链接 + 文件:行号 展示
+function citeInfo(cite: string) {
+  const m = /^(.+)\.md:(\d+)$/.exec(cite)
+  if (!m) return { label: cite, url: '' }
+  const path = m[1].replace(/^content\//, '')
+  return {
+    label: `${path.split('/').pop()}.md:${m[2]}`,
+    url: withBase(`/a/${path}/`),
+  }
+}
+
+const points = POINTS.map((p) => ({
+  ...p,
+  checks: (p.checks ?? []).map((c) => ({ ...c, ...citeInfo(c.cite) })),
+  articles: p.articles.map(articleInfo).filter((a): a is NonNullable<typeof a> => a !== null),
+}))
+
+// 相关点：共享任务的其他点，按共享任务数取前 5
+const byTask = new Map<string, string[]>()
+for (const p of points) for (const t of p.tasks) byTask.set(t, [...(byTask.get(t) ?? []), p.id])
+const related = new Map<string, { id: string; name: string }[]>()
+for (const p of points) {
+  const shared = new Map<string, number>()
+  for (const t of p.tasks) {
+    for (const id of byTask.get(t) ?? []) {
+      if (id !== p.id) shared.set(id, (shared.get(id) ?? 0) + 1)
+    }
+  }
+  related.set(
+    p.id,
+    [...shared.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 5)
+      .map(([id]) => ({ id, name: points.find((q) => q.id === id)?.name ?? id })),
+  )
+}
+
+// ── 矩阵行：项目选型方案排最前，其余按 sections.ts 的配置顺序（与左栏一致） ──
+const sectionGroups: { key: string; title: string; items: typeof points }[] = []
+for (const s of SECTIONS) {
+  const items = points.filter((p) => !p.group && p.domain === s.key)
+  if (items.length) sectionGroups.push({ key: s.key, title: s.title, items })
+}
+const customGroups = new Map<string, { key: string; title: string; items: typeof points }>()
+for (const p of points) {
+  if (!p.group) continue
+  const key = `group:${p.group}`
+  if (!customGroups.has(key)) customGroups.set(key, { key, title: p.group, items: [] })
+  customGroups.get(key)!.items.push(p)
+}
+const groups = [...customGroups.values(), ...sectionGroups]
+
+// 行序跟左栏分区一致：项目选型方案排最前，其余按 sections.ts 的配置顺序
+function cellPoints(g: { items: typeof points }, task: string) {
+  return g.items.filter((p) => p.tasks.includes(task))
+}
+const colTotal = new Map(taskIds.map((t) => [t, points.filter((p) => p.tasks.includes(t)).length]))
+const MAX_CELL = Math.max(1, ...groups.flatMap((g) => taskIds.map((t) => cellPoints(g, t).length)))
+// 热力底色 10% 到 60%：平方根压长尾，最密的格子（品牌 × 品牌语言，22 个点）最深
+function heat(n: number) {
+  return Math.round(10 + 50 * Math.sqrt(n / MAX_CELL))
+}
+
+const defaultGroup = groups[0]
+const defaultDomainTags = new Set(defaultGroup.items.map((p) => p.group ?? sectionTitle.get(p.domain) ?? p.domain))
+const showDefaultTags = defaultDomainTags.size > 1
+
+// 弹窗数据岛：对话框与矩阵展开区的唯一数据源（构建期从同一份数据序列化）
+const dialogData = points.map((p) => ({
+  id: p.id,
+  name: p.name,
+  kind: p.kind,
+  domainTitle: p.group ?? sectionTitle.get(p.domain) ?? p.domain,
+  select: p.select,
+  stacks: p.stacks,
+  scenario: p.scenario,
+  libs: p.libs,
+  checks: p.checks,
+  taskLabels: p.tasks.map((t) => TASKS[t]?.name ?? t),
+  articles: p.articles,
+  related: related.get(p.id) ?? [],
+  shot: p.shot,
+  required: requiredRulesFor(p).map((r) => ({ title: r.title, stage: r.stage })),
+}))
+
+const description = `设计地图：分区与设计场景的交叉图，${DESIGN_POINT_COUNT} 个设计点与 ${PROJECT_POINT_COUNT} 个选型点，点格子看该组合下的设计点与选点标准。`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '设计地图 · UISpecs',
+  description,
+  inLanguage: 'zh-CN',
+  url: canonicalUrl('/starmap/', Astro.site),
+  isPartOf: { '@type': 'WebSite', name: 'UISpecs', url: `${siteRoot(Astro.site)}/` },
+}
+---
+
+<Base title="设计地图 · UISpecs" description={description} jsonLd={jsonLd} path="/starmap/">
+  <div class="page">
+    <div id="main">
+      <section class="sec">
+        <div class="sec-head">
+          <h1 class="sec-title">设计地图</h1>
+          <span class="sec-count">{DESIGN_POINT_COUNT} 个设计点 · {PROJECT_POINT_COUNT} 个选型 · {taskCount} 个场景</span>
+        </div>
+        <p class="sec-note">
+          横轴是设计场景，纵轴是分区，格子里是这个分区在该场景下有几个点。点格子看具体是哪几个点。
+        </p>
+
+        <section class="map-block is-flush" aria-label="设计地图">
+
+          <div class="star-legend">
+            <span class="star-legend-dot" aria-hidden="true"></span>
+            <div>
+              <p>
+                出稿必选 {BUILD_RULE_COUNT} 类：{BUILD_RULE_TITLES}
+                {MOTION_RULE ? `（动效点在${MOTION_SCENES}里找）` : ''}，各至少一个点；验收必选 {REVIEW_RULE_TITLES}。
+              </p>
+            </div>
+          </div>
+
+          <p class="star-matrix-hint">窄屏左右滑动表格看全部场景。</p>
+
+          <div class="star-matrix-wrap" tabindex="0" role="region" aria-label="分区与设计场景矩阵，窄屏可横向滚动">
+            <table class="star-matrix">
+              <caption class="visually-hidden">分区与设计场景的交叉数量表，格子里的数字是这个分区在该场景下的设计点数。</caption>
+              <thead>
+                <tr>
+                  <th class="star-matrix-corner" scope="col"><span>分区 / 场景</span></th>
+                  {
+                    taskIds.map((t) => (
+                      <th scope="col">
+                        <button
+                          class="star-matrix-col"
+                          type="button"
+                          data-task={t}
+                          data-title={TASKS[t].name}
+                          data-points={points.filter((p) => p.tasks.includes(t)).map((p) => p.id).join(' ')}
+                          aria-label={`${t}，${TASKS[t].name}，${colTotal.get(t)} 个点`}
+                          aria-pressed="false"
+                          aria-controls="starPanel"
+                        >
+                          <b class="star-matrix-taskid">{t}</b>
+                          <span>{TASKS[t].short}</span>
+                          <em>{colTotal.get(t)}</em>
+                        </button>
+                      </th>
+                    ))
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  groups.map((g, gi) => (
+                    <tr>
+                      <th scope="row">
+                        <button
+                          class="star-matrix-row"
+                          type="button"
+                          data-row={g.key}
+                          data-title={g.title}
+                          data-points={g.items.map((p) => p.id).join(' ')}
+                          aria-pressed={gi === 0 ? 'true' : 'false'}
+                          aria-controls="starPanel"
+                        >
+                          <span>{g.title}</span>
+                          <em>{g.items.length} 点</em>
+                        </button>
+                      </th>
+                      {taskIds.map((t) => {
+                        const cells = cellPoints(g, t)
+                        return cells.length ? (
+                          <td>
+                            <button
+                              class="star-matrix-cell"
+                              type="button"
+                              data-row={g.key}
+                              data-task={t}
+                              data-title={`${g.title} × ${TASKS[t].name}`}
+                              data-points={cells.map((p) => p.id).join(' ')}
+                              aria-pressed="false"
+                              aria-controls="starPanel"
+                              aria-label={`${g.title} × ${TASKS[t].name}：${cells.length} 个点`}
+                              style={`--heat: ${heat(cells.length)}%`}
+                            >
+                              {cells.length}
+                            </button>
+                          </td>
+                        ) : (
+                          <td class="is-empty"></td>
+                        )
+                      })}
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="star-panel" id="starPanel" aria-live="polite">
+            <h2 class="star-panel-title"><span>{defaultGroup.title}</span><em>{defaultGroup.items.length} 个点</em></h2>
+            <ol class="star-panel-list">
+              {
+                defaultGroup.items.map((p) => (
+                  <li>
+                    <a href={`#point-${p.id}`} data-star={p.id}>{p.name}</a>
+                    {showDefaultTags && <span class="star-panel-domain">{p.group ?? sectionTitle.get(p.domain) ?? p.domain}</span>}
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <div class="star-tip" id="starTip" aria-hidden="true"></div>
+
+    <dialog class="star-dialog" id="starDialog" aria-labelledby="starDialogTitle">
+      <div class="star-dialog-head">
+        <h2 id="starDialogTitle"></h2>
+        <button class="star-dialog-close" id="starDialogClose" aria-label="关闭">✕</button>
+      </div>
+      <div class="star-dialog-body" id="starDialogBody"></div>
+    </dialog>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{model.total}</b> 篇内容</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>来源为各官方站点与公开文章，原文链接逐篇可查</span>
+    </FootLine>
+  </div>
+
+
+  <script is:inline type="application/json" id="star-data" set:html={JSON.stringify(dialogData).replace(/</g, '\\u003c')}></script>
+  <script>
+    // 点矩阵 → 下方展开点清单；点名字 → 大对话框。详情渲染自 #star-data 数据岛。
+    const dlg = document.getElementById('starDialog') as HTMLDialogElement
+    const titleEl = document.getElementById('starDialogTitle') as HTMLElement
+    const bodyEl = document.getElementById('starDialogBody') as HTMLElement
+    let trigger: HTMLElement | null = null
+
+    interface DialogPoint {
+      id: string
+      name: string
+      kind?: 'source'
+      domainTitle?: string
+      select: string
+      stacks?: { framework: string; pkg: string }[]
+      scenario?: { use: string; switchTo: string }
+      libs?: { name: string; kind: string }[]
+      checks?: { q: string; a: string; cite: string; label: string; url: string }[]
+      taskLabels: string[]
+      articles: { title: string; publisher: string; sectionTitle: string; url: string; source: string }[]
+      related: { id: string; name: string }[]
+      shot?: { src: string; caption: string; source: string }
+      required?: { title: string; stage: string }[]
+    }
+    const starData = new Map<string, DialogPoint>(
+      (JSON.parse(document.getElementById('star-data')?.textContent ?? '[]') as DialogPoint[]).map((p) => [p.id, p]),
+    )
+
+    function el(tag: string, cls?: string, text?: string): HTMLElement {
+      const node = document.createElement(tag)
+      if (cls) node.className = cls
+      if (text !== undefined) node.textContent = text
+      return node
+    }
+
+    const STACK_ICONS: Record<string, string> = {
+      react:
+        '<svg viewBox="-11.5 -10.232 23 20.464" aria-hidden="true"><circle r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>',
+      vue:
+        '<svg viewBox="0 0 128 128" aria-hidden="true"><path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110C128,10,78.8,10,78.8,10z"/><path fill="#35495e" d="M78.8,10L64,35.4L49.2,10H25.6L64,76l38.4-66H78.8z"/></svg>',
+      tmpl:
+        '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M5 5 2 8l3 3M11 5l3 3-3 3M9.5 3l-3 10"/></svg>',
+      wc:
+        '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8.5" y="8.5" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+    }
+
+    function renderDetail(p: DialogPoint): HTMLElement {
+      const wrap = el('div', 'star-detail')
+      if (p.kind === 'source') wrap.append(el('p', 'star-badge', '基准规范 · 选型方案，不是设计点'))
+      if (p.kind === 'source' && p.scenario) {
+        const box = el('dl', 'star-scenario')
+        box.append(el('dt', 'star-scenario-label', '适用场景'))
+        box.append(el('dd', 'star-scenario-text', p.scenario.use))
+        box.append(el('dt', 'star-scenario-label', '什么时候换用'))
+        box.append(el('dd', 'star-scenario-text', p.scenario.switchTo))
+        wrap.append(box)
+      }
+      if (p.kind === 'source') {
+        const rows: { label: string; pkg: string; icon: string }[] = []
+        for (const s of p.stacks ?? []) rows.push({ label: s.framework === 'react' ? 'React' : 'Vue', pkg: s.pkg, icon: s.framework })
+        for (const l of p.libs ?? []) rows.push({ label: l.kind, pkg: l.name, icon: l.kind.includes('Web Components') ? 'wc' : 'tmpl' })
+        if (rows.length) {
+          const box = el('div', 'star-stacks')
+          box.append(el('p', 'star-stacks-head', '官方组件库与框架'))
+          const list = el('ul', 'star-stacks-list')
+          for (const r of rows) {
+            const li = el('li')
+            const icon = el('span', 'star-stack-icon')
+            // STACK_ICONS 是本文件内的静态常量，不含外部输入，innerHTML 安全
+            icon.innerHTML = STACK_ICONS[r.icon] ?? ''
+            li.append(icon, el('span', 'star-stack-fw', r.label), el('code', 'star-stack-pkg', r.pkg))
+            list.append(li)
+          }
+          box.append(list)
+          wrap.append(box)
+        } else {
+          wrap.append(el('p', 'star-stacks-empty', '没有官方组件库，按规范手写 HTML 与 CSS。'))
+        }
+      }
+      if (p.shot) {
+        const fig = el('figure', 'star-shot')
+        const img = document.createElement('img')
+        img.src = p.shot.src
+        img.alt = p.shot.caption
+        img.loading = 'lazy'
+        img.decoding = 'async'
+        const open = document.createElement('a')
+        open.className = 'star-shot-link'
+        open.href = p.shot.src
+        open.target = '_blank'
+        open.rel = 'noopener'
+        open.setAttribute('aria-label', `查看大图：${p.shot.caption}`)
+        open.append(img)
+        fig.append(open)
+        const cap = el('figcaption', 'star-shot-cap', p.shot.caption)
+        const a = document.createElement('a')
+        a.href = p.shot.source
+        a.target = '_blank'
+        a.rel = 'noopener'
+        a.textContent = '原页'
+        cap.append(' ', a)
+        fig.append(cap)
+        wrap.append(fig)
+      }
+      const buildReq = p.required?.filter((r) => r.stage === 'build') ?? []
+      const reviewReq = p.required?.filter((r) => r.stage === 'review') ?? []
+      if (buildReq.length) wrap.append(el('p', 'star-req-note', '必选：' + buildReq.map((r) => r.title).join('、')))
+      if (reviewReq.length) wrap.append(el('p', 'star-req-note', '验收：' + reviewReq.map((r) => r.title).join('、')))
+      wrap.append(el('p', 'star-blurb', p.select))
+      if (p.checks?.length) {
+        const box = el('div', 'star-checks')
+        box.append(el('p', 'star-checks-head', '自测题 · 出稿前逐题自查，答不出回原文'))
+        const list = el('ol', 'star-checks-list')
+        for (const c of p.checks) {
+          const li = el('li', 'star-check')
+          li.append(el('p', 'star-check-q', c.q), el('p', 'star-check-a', c.a))
+          const cite = el(c.url ? 'a' : 'span', 'star-check-cite', c.label)
+          if (c.url) {
+            ;(cite as HTMLAnchorElement).href = c.url
+            cite.title = c.cite
+          }
+          li.append(cite)
+          list.append(li)
+        }
+        box.append(list)
+        wrap.append(box)
+      }
+      const tasks = el('p', 'star-tasks')
+      for (const label of p.taskLabels) tasks.append(el('span', 'star-chip', label))
+      wrap.append(tasks)
+      const arts = el('ul', 'star-articles')
+      for (const a of p.articles) {
+        const li = el('li')
+        const link = el('a', '', a.title) as HTMLAnchorElement
+        link.href = a.url
+        const meta = el('span', 'star-art-meta', a.publisher + ' · ' + a.sectionTitle)
+        const ext = el('a', 'star-ext', '原文') as HTMLAnchorElement
+        ext.href = a.source
+        ext.target = '_blank'
+        ext.rel = 'noopener noreferrer'
+        li.append(link, meta, ext)
+        arts.append(li)
+      }
+      wrap.append(arts)
+      if (p.related.length) {
+        const rel = el('p', 'star-related')
+        rel.append('相关点：')
+        p.related.forEach((r, i) => {
+          if (i > 0) rel.append('、')
+          const a = el('a', '', r.name) as HTMLAnchorElement
+          a.href = '#point-' + r.id
+          a.dataset.star = r.id
+          rel.append(a)
+        })
+        wrap.append(rel)
+      }
+      return wrap
+    }
+
+    function openPoint(id: string) {
+      const p = starData.get(id)
+      if (!p) return
+      titleEl.textContent = p.name
+      bodyEl.replaceChildren(renderDetail(p))
+      bodyEl.scrollTop = 0
+      if (!dlg.open) dlg.showModal()
+    }
+
+    // 直接带 #point-<id> 锚点进来时也开弹窗
+    const hashId = location.hash.match(/^#point-(.+)$/)?.[1]
+    if (hashId) openPoint(hashId)
+
+    document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest('a[data-star]') as HTMLAnchorElement | null
+      if (!link || !link.dataset.star) return
+      e.preventDefault()
+      trigger = link
+      openPoint(link.dataset.star)
+    })
+
+    document.getElementById('starDialogClose')?.addEventListener('click', () => dlg.close())
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close()
+    })
+    dlg.addEventListener('close', () => {
+      trigger?.focus({ preventScroll: true })
+      trigger = null
+    })
+
+    // ── 矩阵：点格子、行头或列头，在下方展开该组合的设计点；再点一次收起 ──
+    const panel = document.getElementById('starPanel') as HTMLElement
+    const matrix = document.querySelector('.star-matrix') as HTMLElement
+    let activeBtn = matrix.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
+
+    function renderPanel(btn: HTMLButtonElement | null) {
+      if (!btn) {
+        panel.replaceChildren(el('p', 'star-panel-empty', '点格子或行、列标题，看这个组合下有哪些设计点。'))
+        return
+      }
+      const ids = (btn.dataset.points ?? '').split(' ').filter(Boolean)
+      const heading = el('h2', 'star-panel-title')
+      heading.append(el('span', '', btn.dataset.title ?? ''), el('em', '', `${ids.length} 个点`))
+      const list = el('ol', 'star-panel-list')
+      const tags = new Set(ids.map((id) => starData.get(id)?.domainTitle ?? ''))
+      const showTags = tags.size > 1
+      for (const id of ids) {
+        const p = starData.get(id)
+        if (!p) continue
+        const li = el('li')
+        const a = el('a', '', p.name) as HTMLAnchorElement
+        a.href = '#point-' + id
+        a.dataset.star = id
+        li.append(a)
+        if (showTags) li.append(el('span', 'star-panel-domain', p.domainTitle ?? ''))
+        list.append(li)
+      }
+      panel.replaceChildren(heading, list)
+    }
+
+    matrix.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button[data-points]') as HTMLButtonElement | null
+      if (!btn) return
+      if (activeBtn === btn) {
+        btn.setAttribute('aria-pressed', 'false')
+        activeBtn = null
+      } else {
+        activeBtn?.setAttribute('aria-pressed', 'false')
+        btn.setAttribute('aria-pressed', 'true')
+        activeBtn = btn
+      }
+      renderPanel(activeBtn)
+    })
+
+    // ── 列名竖排看不清，悬停或聚焦时弹出全名 ──
+    const tip = document.getElementById('starTip') as HTMLElement
+    let tipTimer = 0
+
+    function showTip(btn: HTMLElement) {
+      const name = btn.dataset.title
+      if (!name) return
+      tip.textContent = name
+      tip.classList.add('is-on')
+      const r = btn.getBoundingClientRect()
+      const t = tip.getBoundingClientRect()
+      const left = Math.max(8, Math.min(r.left + r.width / 2 - t.width / 2, innerWidth - t.width - 8))
+      let top = r.top - t.height - 8
+      if (top < 8) top = r.bottom + 8
+      tip.style.left = `${left}px`
+      tip.style.top = `${top}px`
+    }
+
+    function hideTip() {
+      window.clearTimeout(tipTimer)
+      tip.classList.remove('is-on')
+    }
+
+    matrix.addEventListener('pointerover', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.star-matrix-col')
+      if (!btn || (e.relatedTarget instanceof Node && btn.contains(e.relatedTarget))) return
+      window.clearTimeout(tipTimer)
+      tipTimer = window.setTimeout(() => showTip(btn), 120)
+    })
+
+    matrix.addEventListener('pointerout', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.star-matrix-col')
+      if (!btn || (e.relatedTarget instanceof Node && btn.contains(e.relatedTarget))) return
+      hideTip()
+    })
+
+    matrix.addEventListener('focusin', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.star-matrix-col')
+      if (btn) showTip(btn)
+    })
+
+    matrix.addEventListener('focusout', hideTip)
+    matrix.addEventListener('click', hideTip)
+    document.addEventListener('scroll', hideTip, true)
+    window.addEventListener('resize', hideTip)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideTip()
+    })
+  </script>
+</Base>

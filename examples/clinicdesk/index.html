@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=N6; footer=Ft6; base=#ebf3fc">
+<meta name="description" content="ClinicDesk 晴川社区医院预约挂号台：6 大科室 12 位医生排班、提前 7 天 08:00 放号、30 分钟精准时段号源、多家人就诊人管理与可取消电子凭条存根。">
+<title>ClinicDesk 晴川社区门诊 - 科室排班与预约挂号凭条台</title>
+<style>
+/* 数值来源：project-fluent-2 (Microsoft Fluent 2) + 固定存根分栏骨架
+ * 色彩：content/tokens/fluent-2--tokens.md:88 (brandWeb #0c3b5e, #115ea3, #0f6cbd, #b4d6fa, #cfe4fa, #ebf3fc) + GAP_RULES 中性语义回源 TDesign (#ffffff, #f3f3f3, #e8e8e8, #5e5e5e, #181818, #006c45, #e3f9e9, #954500, #fff1e9, #ad352f, #fff0ed)
+ * 字阶：content/tokens/fluent-2--tokens.md:22-28 (12/16, 14/20, 16/22, 20/28, 24/32, 28/36, 32/40, weight 400/600)
+ * 间距/圆角/动效：fluent-2--tokens.md:40-82 (4/8/12/16/20/24/32px, radius 4/8/12/16px, duration 150/200ms)
+ */
+:root {
+  --f-brand: #0f6cbd;
+  --f-brand-hover: #115ea3;
+  --f-brand-pressed: #0c3b5e;
+  --f-brand-soft: #ebf3fc;
+  --f-brand-ring: #cfe4fa;
+  --f-brand-mid: #b4d6fa;
+  --f-paper: #ffffff;
+  --f-band: #f3f3f3;
+  --f-hair: #e8e8e8;
+  --f-ink: #181818;
+  --f-ink-2: #5e5e5e;
+  --f-ok: #006c45;
+  --f-ok-soft: #e3f9e9;
+  --f-warn: #954500;
+  --f-warn-soft: #fff1e9;
+  --f-err: #ad352f;
+  --f-err-soft: #fff0ed;
+  --f-font: "Segoe UI", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --f-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --f-dur: 150ms;
+  --f-ease: cubic-bezier(0.33, 0, 0.67, 1);
+  --f-shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --f-shadow-modal: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--f-brand-soft);
+  color: var(--f-ink);
+  font-family: var(--f-font);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, select { font-family: inherit; }
+a { color: var(--f-brand); text-decoration: none; }
+svg { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--f-brand); outline-offset: 2px; border-radius: 4px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 100;
+  background: var(--f-brand); color: var(--f-paper);
+  padding: 10px 16px; border-radius: 8px; font-weight: 600;
+}
+.skip:focus { left: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 24px; }
+
+/* N6 报头式居中院名顶栏（窄屏收成单行院名加菜单按钮） */
+.nav-mast {
+  background: var(--f-paper);
+  padding-top: 14px;
+}
+.mast-top {
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  justify-items: center;
+}
+.mast-line {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--f-brand-pressed);
+  font-weight: 600;
+}
+.mast-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+.mast-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(24px, 3.6vw, 32px);
+  line-height: 40px;
+  font-weight: 600;
+  color: var(--f-ink);
+  letter-spacing: -0.01em;
+}
+.f-btn.mast-toggle { display: none; }
+.mast-nav {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.mast-nav a, .mast-nav button {
+  min-height: 36px;
+}
+.mast-rule-double {
+  border: 0;
+  border-top: 1px solid var(--f-brand-mid);
+  border-bottom: 1px solid var(--f-brand-mid);
+  height: 4px;
+  margin: 12px 0 0;
+}
+
+/* Fluent Buttons */
+.f-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid var(--f-hair);
+  background: var(--f-paper);
+  color: var(--f-ink);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--f-dur) var(--f-ease), border-color var(--f-dur) var(--f-ease);
+}
+.f-btn-lg { min-height: 44px; padding: 0 18px; border-radius: 8px; }
+.f-btn-primary {
+  background: var(--f-brand);
+  border-color: var(--f-brand);
+  color: var(--f-paper);
+}
+.f-btn-danger {
+  background: var(--f-err-soft);
+  border-color: var(--f-err);
+  color: var(--f-err);
+}
+.f-btn[aria-pressed="true"] {
+  background: var(--f-brand-soft);
+  border-color: var(--f-brand);
+  color: var(--f-brand-pressed);
+}
+.f-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+@media (hover: hover) {
+  .f-btn:hover:not(:disabled) { background: var(--f-band); border-color: #c6c6c6; }
+  .f-btn-primary:hover:not(:disabled) { background: var(--f-brand-hover); border-color: var(--f-brand-hover); }
+  .f-btn-danger:hover:not(:disabled) { background: #fadad4; }
+}
+
+/* 主双栏结构（左长内容分步选择，右吸顶挂号凭条存根） */
+.main-area { padding: 24px 0 64px; }
+.split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+.split-grid > * { min-width: 0; }
+
+.page-intro {
+  background: var(--f-paper);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: var(--f-shadow-card);
+  margin-bottom: 16px;
+}
+.page-intro h1 { font-size: 24px; line-height: 32px; font-weight: 600; color: var(--f-ink); }
+.page-intro p { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--f-ink-2); }
+.intro-tags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.f-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+.tag-blue { background: var(--f-brand-soft); color: var(--f-brand-pressed); }
+.tag-ok { background: var(--f-ok-soft); color: var(--f-ok); }
+.tag-warn { background: var(--f-warn-soft); color: var(--f-warn); }
+
+.f-card {
+  background: var(--f-paper);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: var(--f-shadow-card);
+  margin-bottom: 16px;
+}
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.sec-title { font-size: 16px; line-height: 22px; font-weight: 600; color: var(--f-ink); }
+.sec-sub { font-size: 12px; line-height: 16px; color: var(--f-ink-2); }
+
+/* 步骤 1：6 科室矩阵 */
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.dept-btn {
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--f-hair);
+  background: var(--f-paper);
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  min-height: 64px;
+  transition: border-color var(--f-dur), background-color var(--f-dur);
+}
+.dept-btn strong { font-size: 14px; line-height: 20px; color: var(--f-ink); }
+.dept-btn span { font-size: 12px; line-height: 16px; color: var(--f-ink-2); }
+.dept-btn[aria-pressed="true"] {
+  background: var(--f-brand-soft);
+  border-color: var(--f-brand);
+  box-shadow: inset 3px 0 0 var(--f-brand);
+}
+.dept-btn[aria-pressed="true"] strong { color: var(--f-brand-pressed); }
+
+/* 7 天日期条 & 医生排班 */
+.date-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.date-strip::-webkit-scrollbar { display: none; }
+.date-pill {
+  flex: none;
+  min-width: 82px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--f-hair);
+  background: var(--f-band);
+  color: var(--f-ink);
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+.date-pill strong { display: block; font-size: 13px; line-height: 18px; }
+.date-pill[aria-pressed="true"] {
+  background: var(--f-brand);
+  border-color: var(--f-brand);
+  color: var(--f-paper);
+}
+
+.doc-grid { display: grid; gap: 10px; }
+.doc-card {
+  border: 1px solid var(--f-hair);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: var(--f-paper);
+}
+.doc-card.is-picked {
+  border-color: var(--f-brand);
+  background: var(--f-brand-soft);
+}
+.doc-left { display: flex; gap: 12px; align-items: flex-start; min-width: 0; flex: 1; }
+.doc-av {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--f-brand-ring);
+  color: var(--f-brand-pressed);
+  font-size: 16px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.doc-name { font-size: 16px; line-height: 22px; font-weight: 600; color: var(--f-ink); }
+.doc-meta { font-size: 12px; line-height: 16px; color: var(--f-ink-2); margin-top: 2px; }
+.doc-good { font-size: 13px; line-height: 18px; color: var(--f-ink); margin-top: 4px; }
+.doc-right { display: flex; align-items: center; gap: 12px; flex: none; }
+.doc-fee { text-align: right; }
+.doc-fee strong { font-size: 16px; line-height: 22px; color: var(--f-ink); display: block; }
+.doc-fee span { font-size: 12px; line-height: 16px; color: var(--f-ok); font-weight: 600; }
+
+/* 30 分钟时段网格 */
+.slot-group-title { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--f-ink-2); margin: 10px 0 8px; }
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.slot-btn {
+  min-height: 48px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--f-hair);
+  background: var(--f-paper);
+  color: var(--f-ink);
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+.slot-btn strong { font-size: 13px; line-height: 18px; font-family: var(--f-mono); }
+.slot-btn span { font-size: 12px; line-height: 16px; color: var(--f-ok); }
+.slot-btn:disabled { background: var(--f-band); color: var(--f-ink-2); cursor: not-allowed; }
+.slot-btn:disabled span { color: var(--f-ink-2); }
+.slot-btn[aria-pressed="true"] {
+  background: var(--f-brand);
+  border-color: var(--f-brand);
+  color: var(--f-paper);
+}
+.slot-btn[aria-pressed="true"] span { color: #ffffff; }
+
+/* 就诊人选择与表单校验 */
+.patient-list { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.p-chip {
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--f-hair);
+  background: var(--f-band);
+  color: var(--f-ink);
+  font-size: 13px;
+  line-height: 18px;
+  cursor: pointer;
+}
+.p-chip[aria-pressed="true"] {
+  background: var(--f-brand-soft);
+  border-color: var(--f-brand);
+  color: var(--f-brand-pressed);
+  font-weight: 600;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.field label {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--f-ink);
+  margin-bottom: 4px;
+}
+.field input {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #8b8b8b;
+  background: var(--f-paper);
+  color: var(--f-ink);
+  font-size: 14px;
+  line-height: 20px;
+}
+.field input[aria-invalid="true"] { border-color: var(--f-err); }
+.field-err { font-size: 12px; line-height: 16px; color: var(--f-err); margin-top: 4px; }
+
+/* 右栏吸顶挂号凭条存根 */
+.rail-sticky { position: sticky; top: 80px; }
+.stub {
+  background: var(--f-paper);
+  border: 1px solid var(--f-brand-mid);
+  border-top: 4px solid var(--f-brand);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--f-shadow-card);
+}
+.stub-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.stub-amount { font-size: 32px; line-height: 40px; font-weight: 600; color: var(--f-ink); }
+.stub-dash { border: 0; border-top: 1px dashed #c6c6c6; margin: 14px 0; }
+.stub-kv { display: grid; gap: 8px; }
+.stub-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; line-height: 18px; }
+.stub-k { color: var(--f-ink-2); }
+.stub-v { font-weight: 600; color: var(--f-ink); text-align: right; overflow-wrap: anywhere; }
+
+.ticket-box {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--f-ok-soft);
+  border: 1px solid rgba(0, 108, 69, 0.35);
+  border-radius: 8px;
+  text-align: center;
+}
+.ticket-no { font-family: var(--f-mono); font-size: 24px; line-height: 32px; font-weight: 600; color: var(--f-ok); }
+.sms-box {
+  margin-top: 12px;
+  background: var(--f-band);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--f-ink);
+}
+
+/* 状态与弹窗 */
+.f-banner {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.f-banner-busy { background: var(--f-brand-soft); border: 1px solid var(--f-brand); }
+.f-banner-err { background: var(--f-err-soft); border: 1px solid var(--f-err); color: var(--f-err); }
+
+.backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.dialog {
+  background: var(--f-paper); border-radius: 12px; box-shadow: var(--f-shadow-modal);
+  width: min(560px, 100%); max-height: 86vh; overflow-y: auto; padding: 20px;
+}
+
+/* Ft6 落款式页脚：门诊致患者提示 + 院方落款 + 热线附言 */
+.foot-letter {
+  background: var(--f-paper);
+  border-top: 1px solid var(--f-brand-mid);
+  padding: 28px 0 36px;
+  color: var(--f-ink);
+}
+.foot-letter__in {
+  max-width: 62ch;
+}
+.foot-letter__close {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--f-ink);
+  margin: 0;
+}
+.foot-letter__sign {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--f-brand-pressed);
+}
+.foot-letter__ps {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--f-ink-2);
+}
+.foot-letter__ps a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 960px) {
+  .split-grid { grid-template-columns: 1fr; }
+  .rail-sticky { position: static; }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; }
+  .mast-top { text-align: left; justify-items: stretch; }
+  .mast-bar { justify-content: space-between; }
+  .mast-name { font-size: 20px; line-height: 28px; }
+  .f-btn.mast-toggle { display: inline-flex; }
+  .mast-nav { display: none; justify-content: flex-start; padding-top: 4px; }
+  .mast-nav.is-open { display: flex; }
+  .dept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .slot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#bookingMain">跳到科室与医生排班区</a>
+
+<header class="nav-mast">
+  <div class="wrap mast-top">
+    <p class="mast-line">晴川社区卫生服务中心 · 提前 7 天 08:00 放新号 · 就诊前 2 小时可取消</p>
+    <div class="mast-bar">
+      <a class="mast-name" href="#top">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" fill="#0f6cbd"/>
+          <path d="M12 7v10M7 12h10" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+        <span>晴川社区医院</span>
+      </a>
+      <button class="f-btn mast-toggle" type="button" id="mastMenuBtn" aria-expanded="false" aria-controls="mastNav">菜单</button>
+    </div>
+    <nav class="mast-nav" id="mastNav" aria-label="门诊快捷导航">
+      <a class="f-btn" href="#bookingMain">科室与排班</a>
+      <button class="f-btn" type="button" id="noticeModalBtn">就诊须知与退号规则</button>
+      <a class="f-btn f-btn-primary" href="#stubRail">查看当前凭条</a>
+    </nav>
+  </div>
+  <hr class="mast-rule-double" aria-hidden="true">
+</header>
+
+<main class="main-area wrap" id="top">
+  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+
+  <div class="f-banner f-banner-busy" id="busyBar" aria-busy="true" hidden>
+    <span>正在向门诊号池校验实时余号与排班状态...</span>
+  </div>
+  <div class="f-banner f-banner-err" id="errorBox" role="alert" hidden>
+    <div>
+      <strong style="font-size:15px">门诊号源池连接超时</strong>
+      <div style="margin-top:2px;font-size:13px;color:var(--f-ink)">为避免锁定无效时段，暂未显示号源余额，请点击重新查询。</div>
+    </div>
+    <button class="f-btn f-btn-primary" id="retryBtn" type="button">重新拉取号源</button>
+  </div>
+
+  <div class="split-grid">
+    <section id="bookingMain" aria-label="分步预约挂号主区">
+      <div class="page-intro">
+        <h1 id="pageTitle">社区门诊在线预约挂号（6 科室 · 12 位医生）</h1>
+        <p>为自己或父母、孩子预约专科号：先选科室和医生，再挑 30 分钟到院时段与就诊人，提交即生成带二维码的挂号凭条。</p>
+        <div class="intro-tags">
+          <span class="f-tag tag-blue">普通号 ¥10 · 专家号 ¥30 · 中医 ¥20</span>
+          <span class="f-tag tag-ok">提前 15 分钟到院取号</span>
+          <span class="f-tag tag-warn">爽约 3 次限制预约 30 天（演示口径）</span>
+        </div>
+      </div>
+
+      <article class="f-card">
+        <div class="sec-head">
+          <h2 class="sec-title">1. 选择门诊科室（6 个）</h2>
+          <span class="sec-sub">全科、儿科、内科、外科、中医、口腔 · 每科 2 位在诊医生</span>
+        </div>
+        <div class="dept-grid" id="deptGrid" role="group" aria-label="选择门诊科室"></div>
+      </article>
+
+      <article class="f-card">
+        <div class="sec-head">
+          <h2 class="sec-title">2. 选择就诊日期与出诊医生</h2>
+          <span class="sec-sub">每日 08:00 放未来第 7 天号源</span>
+        </div>
+        <div class="date-strip" id="dateStrip" role="group" aria-label="未来 7 天日期"></div>
+        <div class="doc-grid" id="docGrid"></div>
+      </article>
+
+      <article class="f-card">
+        <div class="sec-head">
+          <h2 class="sec-title">3. 选择 30 分钟就诊时段</h2>
+          <span class="sec-sub">上午 08:00-11:30 · 下午 13:30-17:00</span>
+        </div>
+        <div id="slotWrap"></div>
+      </article>
+
+      <article class="f-card">
+        <div class="sec-head">
+          <h2 class="sec-title">4. 核对就诊人与家人信息</h2>
+          <span class="sec-sub">可切换常用家人或新增一位家属</span>
+        </div>
+        <div class="patient-list" id="patientChips" role="group" aria-label="切换已存就诊人"></div>
+        <div class="form-grid" id="patientForm">
+          <div class="field">
+            <label for="pName">就诊人姓名 *</label>
+            <input id="pName" type="text" value="王知夏">
+            <div class="field-err" id="errName"></div>
+          </div>
+          <div class="field">
+            <label for="pId">身份证号 *</label>
+            <input id="pId" type="text" value="310104199208162418">
+            <div class="field-err" id="errId"></div>
+          </div>
+          <div class="field">
+            <label for="pPhone">接收短信手机号 *</label>
+            <input id="pPhone" type="tel" value="13800138219">
+            <div class="field-err" id="errPhone"></div>
+          </div>
+          <div class="field">
+            <label for="pMed">医保卡号（选填）</label>
+            <input id="pMed" type="text" value="YB-3100-984210" placeholder="到院刷卡减免可留空">
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="f-btn" type="button" id="addFamilyBtn">+ 存为新常用家人</button>
+          <span id="familyMsg" style="font-size:12px;color:var(--f-ok);line-height:36px"></span>
+        </div>
+      </article>
+    </section>
+
+    <!-- 右栏固定挂号存根 (detail-split 黄金槽位) -->
+    <aside class="rail-sticky" id="stubRail" aria-label="右侧挂号凭条存根">
+      <div class="stub">
+        <div class="stub-head">
+          <span style="font-size:13px;color:var(--f-ink-2);font-weight:600">社区医院预约凭条</span>
+          <span class="f-tag" id="stubBadge">待提交确认</span>
+        </div>
+        <div class="stub-amount" id="stubFee">¥10.00</div>
+        <p style="font-size:12px;color:var(--f-ink-2)" id="stubFeeNote">普通门诊挂号费（到院窗口或自助机支付）</p>
+
+        <hr class="stub-dash">
+
+        <div class="stub-kv">
+          <div class="stub-row"><span class="stub-k">预约科室</span><span class="stub-v" id="stDept">-</span></div>
+          <div class="stub-row"><span class="stub-k">接诊医生</span><span class="stub-v" id="stDoc">-</span></div>
+          <div class="stub-row"><span class="stub-k">就诊日期</span><span class="stub-v" id="stDate">-</span></div>
+          <div class="stub-row"><span class="stub-k">30 分钟时段</span><span class="stub-v" id="stSlot">-</span></div>
+          <div class="stub-row"><span class="stub-k">就诊人</span><span class="stub-v" id="stPatient">-</span></div>
+          <div class="stub-row"><span class="stub-k">医保凭证</span><span class="stub-v" id="stMed">-</span></div>
+        </div>
+
+        <div id="confirmedArea" hidden>
+          <div class="ticket-box">
+            <div style="font-size:12px;color:var(--f-ok);font-weight:600">预约成功 · 排队取号码</div>
+            <div class="ticket-no" id="ticketNo">A-024</div>
+            <svg viewBox="0 0 180 76" style="margin:8px auto 4px;width:180px" role="img" aria-label="门诊自助机核验二维码与条码">
+              <rect width="180" height="76" rx="4" fill="#ffffff"/>
+              <g fill="#181818">
+                <rect x="14" y="10" width="22" height="22"/><rect x="18" y="14" width="14" height="14" fill="#ffffff"/><rect x="21" y="17" width="8" height="8"/>
+                <rect x="14" y="44" width="22" height="22"/><rect x="18" y="48" width="14" height="14" fill="#ffffff"/><rect x="21" y="51" width="8" height="8"/>
+                <rect x="44" y="10" width="22" height="22"/><rect x="48" y="14" width="14" height="14" fill="#ffffff"/><rect x="51" y="17" width="8" height="8"/>
+                <rect x="44" y="38" width="6" height="6"/><rect x="54" y="38" width="12" height="6"/><rect x="44" y="50" width="12" height="16"/>
+                <rect x="82" y="14" width="4" height="48"/><rect x="90" y="14" width="2" height="48"/><rect x="96" y="14" width="6" height="48"/>
+                <rect x="106" y="14" width="3" height="48"/><rect x="114" y="14" width="5" height="48"/><rect x="124" y="14" width="2" height="48"/>
+                <rect x="132" y="14" width="6" height="48"/><rect x="144" y="14" width="3" height="48"/><rect x="152" y="14" width="5" height="48"/>
+                <rect x="162" y="14" width="4" height="48"/>
+              </g>
+            </svg>
+            <div style="font-size:12px;color:var(--f-ink-2)">请提前 15 分钟到院，携带医保卡与病历本</div>
+          </div>
+
+          <div class="sms-box" id="smsPreview"></div>
+        </div>
+
+        <div style="margin-top:16px;display:grid;gap:8px">
+          <button class="f-btn f-btn-primary f-btn-lg" type="button" id="confirmBookBtn">确认提交预约并生成凭条</button>
+          <button class="f-btn f-btn-danger f-btn-lg" type="button" id="cancelBookBtn" hidden>取消本次预约（号源即时退回）</button>
+        </div>
+        <p style="margin-top:10px;font-size:12px;line-height:18px;color:var(--f-ink-2)">就诊前 2 小时以前支持免费取消或改约；爽约累计 3 次将限制预约 30 天。</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot-letter">
+  <div class="wrap">
+    <div class="foot-letter__in">
+      <p class="foot-letter__close">就诊提醒：如为家中长辈或儿童代为挂号，请核对医保电子凭证与常用接收短信手机号；遇急性高热、外伤请直接前往一楼急诊分诊台，无需等待线上排队。</p>
+      <p class="foot-letter__sign">晴川社区医院门诊预约服务台 · ClinicDesk</p>
+      <p class="foot-letter__ps">附言：咨询热线 021-5550-0120（模拟演示） · 出诊时段 上午 08:00-11:30 / 下午 13:30-17:00 · 6 科室 12 位医生、号源余量与挂号价格均为本地演示数据，不接真实医院 HIS。直达：<a href="#top">回到顶部</a> · <a href="#bookingMain">科室排班</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="backdrop" id="noticeModal" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
+  <div class="dialog">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--f-hair)">
+      <h2 class="sec-title" id="noticeTitle">社区门诊就诊须知与退号规范</h2>
+      <button class="f-btn" id="noticeCloseBtn" type="button">关闭</button>
+    </div>
+    <div style="padding-top:12px;display:grid;gap:10px;font-size:14px;line-height:20px">
+      <p><strong>1. 放号时间：</strong>每日早晨 08:00 开放未来第 7 天号源；上午接诊 08:00 到 11:30，下午 13:30 到 17:00，每 30 分钟为一个取号时段。</p>
+      <p><strong>2. 到院证件：</strong>请于预约时段前 15 分钟到达对应科室分诊台，携带实体医保卡或医保电子凭证及纸质病历本。</p>
+      <p><strong>3. 取消与爽约：</strong>就诊开始前 2 小时均可在线取消并即时退回号源；无故未取号爽约达 3 次，系统将自动限制线上预约 30 天。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var DEPTS = [
+    { id: "全科", desc: "常见慢性病、体检报告解惑", floor: "1F 西区诊室" },
+    { id: "儿科", desc: "儿童呼吸消化、生长发育评估", floor: "2F 东区诊室" },
+    { id: "内科", desc: "心血管、高血压与胃肠调理", floor: "2F 西区诊室" },
+    { id: "外科", desc: "清创换药、体表肿物及普外", floor: "3F 东区诊室" },
+    { id: "中医", desc: "脾胃调理、体质辨识与针灸", floor: "3F 国医馆" },
+    { id: "口腔", desc: "洁牙补牙、智齿拔除与正畸", floor: "1F 南区诊室" }
+  ];
+
+  var DOCTORS = [
+    { id: "d1", dept: "全科", name: "林文博", title: "主治医师", kind: "普通", fee: 10, days: [0,1,2,3,4,5,6], good: "社区慢病随访、三高长期用药调整与多症状初筛", left: 12 },
+    { id: "d2", dept: "全科", name: "陈舒雅", title: "副主任医师", kind: "专家", fee: 30, days: [0,1,3,5,6], good: "老年共病综合用药梳理、甲状腺结节定期复查", left: 6 },
+    { id: "d3", dept: "儿科", name: "周婉清", title: "主治医师", kind: "普通", fee: 10, days: [0,1,2,3,4,5,6], good: "小儿发热咳嗽护理、秋季腹泻与儿童常规保健", left: 9 },
+    { id: "d4", dept: "儿科", name: "郑明远", title: "主任医师", kind: "专家", fee: 30, days: [0,2,4,6], good: "儿童过敏性鼻炎、哮喘阶梯控制与矮小症评估", left: 3 },
+    { id: "d5", dept: "内科", name: "沈立群", title: "副主任医师", kind: "专家", fee: 30, days: [0,1,2,4,5], good: "原发性高血压波动排查、早搏随访与消化胃炎", left: 5 },
+    { id: "d6", dept: "内科", name: "许佳宁", title: "主治医师", kind: "普通", fee: 10, days: [0,1,3,4,6], good: "糖尿病日常饮食血糖管理与血脂异常干预", left: 14 },
+    { id: "d7", dept: "外科", name: "韩志刚", title: "主治医师", kind: "普通", fee: 10, days: [0,1,2,3,5,6], good: "外伤缝合拆线、甲沟炎处理与静脉曲张初诊", left: 11 },
+    { id: "d8", dept: "外科", name: "吴峻峰", title: "副主任医师", kind: "专家", fee: 30, days: [0,2,4,5], good: "甲状腺乳腺B超复诊评估与胆囊结石择期咨询", left: 4 },
+    { id: "d9", dept: "中医", name: "苏佩兰", title: "中医主治", kind: "中医", fee: 20, days: [0,1,2,3,4,5,6], good: "失眠脾虚食疗调理、冬季膏方与颈肩劳损针灸", left: 7 },
+    { id: "d10", dept: "中医", name: "方仲景", title: "名中医传承", kind: "中医", fee: 20, days: [0,1,3,5], good: "慢性胃肠功能紊乱、亚健康疲劳与妇科经期调理", left: 4 },
+    { id: "d11", dept: "口腔", name: "罗嘉诚", title: "主治医师", kind: "普通", fee: 10, days: [0,1,2,4,5,6], good: "龋齿树脂充填、牙周洁治上药与儿童涂氟防龋", left: 8 },
+    { id: "d12", dept: "口腔", name: "唐思齐", title: "副主任医师", kind: "专家", fee: 30, days: [0,2,3,6], good: "复杂阻生智齿微创拔除及成人牙列缺损修复方案", left: 3 }
+  ];
+
+  var DATES = [
+    { idx: 0, day: "11-21", wk: "今天 周六" },
+    { idx: 1, day: "11-22", wk: "明天 周日" },
+    { idx: 2, day: "11-23", wk: "周一" },
+    { idx: 3, day: "11-24", wk: "周二" },
+    { idx: 4, day: "11-25", wk: "周三" },
+    { idx: 5, day: "11-26", wk: "周四" },
+    { idx: 6, day: "11-27", wk: "周五（08:00新号）" }
+  ];
+
+  var SLOTS_AM = [
+    { t: "08:00-08:30", rem: 0 },
+    { t: "08:30-09:00", rem: 2 },
+    { t: "09:00-09:30", rem: 4 },
+    { t: "09:30-10:00", rem: 3 },
+    { t: "10:00-10:30", rem: 5 },
+    { t: "10:30-11:00", rem: 1 },
+    { t: "11:00-11:30", rem: 3 }
+  ];
+  var SLOTS_PM = [
+    { t: "13:30-14:00", rem: 4 },
+    { t: "14:00-14:30", rem: 6 },
+    { t: "14:30-15:00", rem: 2 },
+    { t: "15:00-15:30", rem: 0 },
+    { t: "15:30-16:00", rem: 3 },
+    { t: "16:00-16:30", rem: 2 },
+    { t: "16:30-17:00", rem: 1 }
+  ];
+
+  var PATIENTS = [
+    { id: "p1", label: "王知夏（本人）", name: "王知夏", pid: "310104199208162418", phone: "13800138219", med: "YB-3100-984210" },
+    { id: "p2", label: "李淑芬（母亲 · 慢病）", name: "李淑芬", pid: "310104196403120822", phone: "13900139540", med: "YB-3100-331094" },
+    { id: "p3", label: "王小安（孩子 · 儿保）", name: "王小安", pid: "310104201909040015", phone: "13800138219", med: "" }
+  ];
+
+  var state = {
+    dept: "全科",
+    dateIdx: 0,
+    docId: "d1",
+    slot: "09:00-09:30",
+    patientId: "p1",
+    booked: false,
+    slotDelta: 0,
+    failed: params.get("fail") === "1",
+    forceEmpty: params.get("empty") === "1",
+    slow: params.get("slow") === "1",
+    longMode: params.get("long") === "1"
+  };
+
+  if (state.longMode) {
+    $("pageTitle").textContent = "晴川社区卫生服务中心多院区专科联合在线预约挂号与电子凭条发放管理服务台";
+  }
+
+  function renderDepts() {
+    $("deptGrid").innerHTML = DEPTS.map(function (d) {
+      var active = d.id === state.dept;
+      return '<button class="dept-btn" type="button" data-dept="' + d.id + '" aria-pressed="' + active + '">' +
+        '<strong>' + d.id + '（' + d.floor + '）</strong>' +
+        '<span>' + d.desc + '</span>' +
+      '</button>';
+    }).join("");
+  }
+
+  function renderDatesAndDoctors() {
+    $("dateStrip").innerHTML = DATES.map(function (d) {
+      var active = d.idx === state.dateIdx;
+      return '<button class="date-pill" type="button" data-date="' + d.idx + '" aria-pressed="' + active + '">' +
+        '<strong>' + d.day + '</strong><span>' + d.wk + '</span>' +
+      '</button>';
+    }).join("");
+
+    if (state.failed) {
+      $("errorBox").hidden = false;
+      $("docGrid").innerHTML = "";
+      return;
+    }
+    $("errorBox").hidden = true;
+
+    if (state.forceEmpty) {
+      $("docGrid").innerHTML = '<div style="padding:24px;text-align:center;background:var(--f-band);border-radius:8px">' +
+        '<p style="color:var(--f-ink-2)">当日该科室暂无可预约余号，可换选明日或切换全科</p>' +
+        '<button class="f-btn f-btn-primary" style="margin-top:10px" id="emptyResetBtn" type="button">查看明日全部排班</button>' +
+      '</div>';
+      var erb = $("emptyResetBtn");
+      if (erb) erb.addEventListener("click", function () { state.forceEmpty = false; renderAll(); });
+      return;
+    }
+
+    var docs = DOCTORS.filter(function (doc) { return doc.dept === state.dept; });
+    if (!docs.some(function (x) { return x.id === state.docId; })) state.docId = docs[0].id;
+
+    $("docGrid").innerHTML = docs.map(function (doc) {
+      var picked = doc.id === state.docId;
+      var remTotal = Math.max(0, doc.left + state.slotDelta);
+      var onDuty = doc.days.indexOf(state.dateIdx) > -1;
+      return '<div class="doc-card' + (picked ? ' is-picked' : '') + '">' +
+        '<div class="doc-left">' +
+          '<div class="doc-av" aria-hidden="true">' + doc.name.slice(0, 1) + '</div>' +
+          '<div>' +
+            '<div class="doc-name">' + doc.name + ' <span class="f-tag tag-blue">' + doc.title + ' · ' + doc.kind + '号</span></div>' +
+            '<div class="doc-meta">出诊科室：' + doc.dept + ' · 今日余号 ' + (onDuty ? remTotal : 0) + ' 个</div>' +
+            '<div class="doc-good">擅长：' + doc.good + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="doc-right">' +
+          '<div class="doc-fee"><strong>¥' + doc.fee + '</strong><span>' + (onDuty ? '可预约' : '本日休诊') + '</span></div>' +
+          '<button class="f-btn' + (picked ? ' f-btn-primary' : '') + '" type="button" data-doc="' + doc.id + '" ' + (onDuty ? '' : 'disabled') + '>' + (picked ? '已选此医生' : '选此医生') + '</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function renderSlots() {
+    if (state.failed || state.forceEmpty) { $("slotWrap").innerHTML = ""; return; }
+    function makeGroup(label, list) {
+      return '<div class="slot-group-title">' + label + '</div><div class="slot-grid">' +
+        list.map(function (s) {
+          var rem = s.rem === 0 ? 0 : Math.max(0, s.rem + (state.slot === s.t ? state.slotDelta : 0));
+          var active = state.slot === s.t && !state.booked ? true : (state.slot === s.t && state.booked);
+          return '<button class="slot-btn" type="button" data-slot="' + s.t + '" aria-pressed="' + active + '" ' + (s.rem === 0 || state.booked ? 'disabled' : '') + '>' +
+            '<strong>' + s.t + '</strong>' +
+            '<span>' + (rem > 0 ? '余 ' + rem + ' 号' : '已约满') + '</span>' +
+          '</button>';
+        }).join("") + '</div>';
+    }
+    $("slotWrap").innerHTML = makeGroup("上午时段（08:00 - 11:30）", SLOTS_AM) + makeGroup("下午时段（13:30 - 17:00）", SLOTS_PM);
+  }
+
+  function renderPatients() {
+    $("patientChips").innerHTML = PATIENTS.map(function (p) {
+      return '<button class="p-chip" type="button" data-pat="' + p.id + '" aria-pressed="' + (p.id === state.patientId) + '">' + p.label + '</button>';
+    }).join("");
+  }
+
+  function fillPatientInputs(id) {
+    var p = PATIENTS.find(function (x) { return x.id === id; });
+    if (!p) return;
+    $("pName").value = p.name;
+    $("pId").value = p.pid;
+    $("pPhone").value = p.phone;
+    $("pMed").value = p.med;
+  }
+
+  function renderStub() {
+    var deptObj = DEPTS.find(function (d) { return d.id === state.dept; }) || DEPTS[0];
+    var docObj = DOCTORS.find(function (d) { return d.id === state.docId; }) || DOCTORS[0];
+    var dateObj = DATES[state.dateIdx] || DATES[0];
+
+    $("stubFee").textContent = "¥" + docObj.fee + ".00";
+    $("stubFeeNote").textContent = docObj.kind + "门诊挂号费（到院取号支付）";
+    $("stDept").textContent = deptObj.id + "（" + deptObj.floor + "）";
+    $("stDoc").textContent = docObj.name + " · " + docObj.title;
+    $("stDate").textContent = dateObj.day + "（" + dateObj.wk + "）";
+    $("stSlot").textContent = state.slot;
+    $("stPatient").textContent = ($("pName").value.trim() || "未填写");
+    $("stMed").textContent = $("pMed").value.trim() || "未绑医保（自费取号）";
+
+    $("stubBadge").className = "f-tag " + (state.booked ? "tag-ok" : "tag-blue");
+    $("stubBadge").textContent = state.booked ? "已生成挂号凭条" : "待提交确认";
+    $("confirmedArea").hidden = !state.booked;
+    $("confirmBookBtn").hidden = state.booked;
+    $("cancelBookBtn").hidden = !state.booked;
+
+    if (state.booked) {
+      $("smsPreview").textContent = "【短信提醒样例】" + ($("pName").value.trim() || "就诊人") + "您好，您已成功预约晴川社区医院 " +
+        dateObj.day + " " + state.slot + " " + deptObj.id + "（" + docObj.name + "），取号码 A-024，请提前 15 分钟携带医保卡与病历本到 " + deptObj.floor + " 取号。";
+    }
+  }
+
+  function validateForm() {
+    var ok = true;
+    var name = $("pName").value.trim();
+    var pid = $("pId").value.trim();
+    var phone = $("pPhone").value.trim();
+    if (!name) {
+      $("pName").setAttribute("aria-invalid", "true");
+      $("errName").textContent = "请填写就诊人姓名。";
+      ok = false;
+    } else {
+      $("pName").removeAttribute("aria-invalid");
+      $("errName").textContent = "";
+    }
+    if (pid.length < 15) {
+      $("pId").setAttribute("aria-invalid", "true");
+      $("errId").textContent = "请输入有效身份证号（15 或 18 位）。";
+      ok = false;
+    } else {
+      $("pId").removeAttribute("aria-invalid");
+      $("errId").textContent = "";
+    }
+    if (!/^1\d{10}$/.test(phone)) {
+      $("pPhone").setAttribute("aria-invalid", "true");
+      $("errPhone").textContent = "请输入 11 位手机号以便接收挂号与退号短信提醒。";
+      ok = false;
+    } else {
+      $("pPhone").removeAttribute("aria-invalid");
+      $("errPhone").textContent = "";
+    }
+    return ok;
+  }
+
+  function renderAll() {
+    renderDepts();
+    renderDatesAndDoctors();
+    renderSlots();
+    renderPatients();
+    renderStub();
+  }
+
+  document.addEventListener("click", function (e) {
+    var db = e.target.closest("[data-dept]");
+    if (db) {
+      if (state.booked) return;
+      state.dept = db.getAttribute("data-dept");
+      var firstDoc = DOCTORS.find(function (d) { return d.dept === state.dept && d.days.indexOf(state.dateIdx) > -1; });
+      if (firstDoc) state.docId = firstDoc.id;
+      renderAll();
+      return;
+    }
+    var dt = e.target.closest("[data-date]");
+    if (dt) {
+      if (state.booked) return;
+      state.dateIdx = Number(dt.getAttribute("data-date"));
+      renderAll();
+      return;
+    }
+    var dc = e.target.closest("[data-doc]");
+    if (dc) {
+      if (state.booked) return;
+      state.docId = dc.getAttribute("data-doc");
+      renderAll();
+      return;
+    }
+    var sl = e.target.closest("[data-slot]");
+    if (sl) {
+      if (state.booked) return;
+      state.slot = sl.getAttribute("data-slot");
+      renderAll();
+      return;
+    }
+    var pt = e.target.closest("[data-pat]");
+    if (pt) {
+      state.patientId = pt.getAttribute("data-pat");
+      fillPatientInputs(state.patientId);
+      renderPatients();
+      renderStub();
+    }
+  });
+
+  [$("pName"), $("pId"), $("pPhone"), $("pMed")].forEach(function (inp) {
+    inp.addEventListener("input", renderStub);
+  });
+
+  $("addFamilyBtn").addEventListener("click", function () {
+    if (!validateForm()) return;
+    var nid = "p" + (PATIENTS.length + 1);
+    var nm = $("pName").value.trim();
+    PATIENTS.push({
+      id: nid,
+      label: nm + "（新增家属）",
+      name: nm,
+      pid: $("pId").value.trim(),
+      phone: $("pPhone").value.trim(),
+      med: $("pMed").value.trim()
+    });
+    state.patientId = nid;
+    $("familyMsg").textContent = "已添加常用就诊人：" + nm;
+    renderPatients();
+  });
+
+  $("confirmBookBtn").addEventListener("click", function () {
+    if (!validateForm()) return;
+    $("busyBar").hidden = false;
+    setTimeout(function () {
+      $("busyBar").hidden = true;
+      state.booked = true;
+      state.slotDelta = -1;
+      renderAll();
+    }, state.slow ? 1200 : 180);
+  });
+
+  $("cancelBookBtn").addEventListener("click", function () {
+    state.booked = false;
+    state.slotDelta = 0;
+    renderAll();
+  });
+
+  $("retryBtn").addEventListener("click", function () {
+    state.failed = false;
+    $("busyBar").hidden = false;
+    setTimeout(function () { $("busyBar").hidden = true; renderAll(); }, 180);
+  });
+
+  var lastNoticeFocus = null;
+  $("noticeModalBtn").addEventListener("click", function () {
+    lastNoticeFocus = document.activeElement;
+    $("noticeModal").hidden = false;
+    $("noticeCloseBtn").focus();
+  });
+  function closeNotice() { $("noticeModal").hidden = true; if (lastNoticeFocus) lastNoticeFocus.focus(); }
+  $("noticeCloseBtn").addEventListener("click", closeNotice);
+  $("noticeModal").addEventListener("click", function (e) { if (e.target === $("noticeModal")) closeNotice(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("noticeModal").hidden) closeNotice(); });
+
+  var mastMenuBtn = $("mastMenuBtn");
+  if (mastMenuBtn) {
+    mastMenuBtn.addEventListener("click", function () {
+      var open = $("mastNav").classList.toggle("is-open");
+      mastMenuBtn.setAttribute("aria-expanded", String(open));
+    });
+  }
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

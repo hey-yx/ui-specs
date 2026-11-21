@@ -1,0 +1,52 @@
+---
+// 建站需求总览：真源是仓库根 briefs/*.md（经 src/data/case-briefs.ts 读取），没有额外配置
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { loadBriefs } from '../../data/case-briefs'
+import { briefLead } from '../../data/brief-body'
+import { withBase } from '../../lib/url'
+
+const { briefs } = await loadBriefs()
+const description =
+  '建站需求：产品、用户、主任务与关键内容。配色、数值、页面区块与版式都在生成时定，不写进需求。'
+---
+
+<Base title="建站需求 · UISpecs" description={description} path="/briefs/">
+  <div class="page">
+    <div id="main">
+      <section class="sec">
+        <div class="sec-head">
+          <h1 class="sec-title">建站需求</h1>
+          <span class="sec-count">{briefs.length} 份</span>
+        </div>
+        <p class="brief-lead">
+          每份需求写产品是什么、给谁用、主任务、关键内容与假设。
+        </p>
+
+        <ol class="brief-list brief-index">
+          {
+            briefs.map((b) => (
+              <li class="brief-row">
+                <a class="brief-head" href={withBase(`/briefs/${b.slug}/`)}>
+                  <span class="brief-id">
+                    <span class="brief-name">{b.name}</span>
+                    <span class="brief-slug">{b.category}</span>
+                  </span>
+                  <span class="brief-product">{briefLead(b.product)}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+    </div>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{briefs.length}</b> 份建站需求</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>结构化数据，可直接引用</span>
+    </FootLine>
+  </div>
+</Base>

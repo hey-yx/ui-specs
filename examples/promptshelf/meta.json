@@ -1,0 +1,7 @@
+{
+  "name": "PromptShelf",
+  "tagline": "AI 页面设计提示词仓库：GitHub Primer 深色顶栏、8 类 120 条目录与右栏变量填充调试台",
+  "accent": "Primer Accent #0969da / Header #25292e",
+  "structure": "Primer Explorer · N8 #25292e 终端面包屑顶栏 + #f6f8fa 右栏填词台 + Ft1 Primer 水平词标页脚",
+  "layout": "GitHub Primer project-primer 规范（8 类 120 条摘要与每类 2 条完整提示词、清晰区分「需补 {{产品名}}/{{受众}}/{{页面类型}}」与「免改直接复制」、SVG 装配流程图、右栏实时替换变量装配预览与示例输出）"
+}

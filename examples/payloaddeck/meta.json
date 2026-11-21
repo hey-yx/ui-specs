@@ -1,0 +1,7 @@
+{
+  "name": "PayloadDeck",
+  "tagline": "日志解析 API 的开发者文档：发一条原始日志，拿回结构化 JSON。",
+  "accent": "Primer blue #0969da",
+  "structure": "Component Playground · N13 / Ft4",
+  "layout": "左侧文档目录 + 主栏快速开始：三步接入、在线试解析、端点与错误码表格。"
+}

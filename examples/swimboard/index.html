@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SwimBoard · 第 46 周冲刺</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tdesign-vue-next@1.20.11/dist/tdesign.css">
+<style>
+/* Hallmark · macrostructure: Workbench (app-as-workbench) · nav: N13 Inline ⌘K search pill · footer: Ft4 Dense typographic
+ * tone: utilitarian · anchor hue: orange-deep (#954500) · paper: light · display: TDesign system stack
+ * pre-emit critique: P5 H4 E4 S5 R5 V5
+ * UISpecs base: TDesign（腾讯） · values from content/... cited in DECISIONS.md
+ *
+ * 内联 token：所有颜色/字号/间距/圆角/时长只在这里出现一次。provenance 见注释行尾的 content 路径。
+ */
+:root{
+  /* —— 色板：TDesign 官方色板（content/color/tdesign.tencent.com--color.md） —— */
+  --c-accent:            #954500; /* Orange7 强调色：白字 6.71:1  color.md:72 */
+  --c-accent-hover:      #713300; /* Orange8 hover 深档（同族加深）  color.md:73 */
+  --c-accent-active:     #532300; /* Orange9 按下                      color.md:74 */
+  --c-accent-tint:       #fff1e9; /* Orange1 浅底                      color.md:66 */
+  --c-accent-tint-2:     #ffd9c2; /* Orange2 浅底描边                  color.md:67 */
+  --c-ok:                #006c45; /* Green7 成功文字 5.88:1            color.md:84 */
+  --c-ok-tint:           #e3f9e9; /* Green1                            color.md:78 */
+  --c-warn:              #954500; /* Orange7 告警文字（默认 Orange5 3.12:1 不达 AA） color.md:64,72 */
+  --c-warn-tint:         #fff1e9; /* Orange1                           color.md:66 */
+  --c-danger:            #ad352f; /* Red7 错误文字 5.69:1              color.md:60 */
+  --c-danger-tint:       #fff0ed; /* Red1                              color.md:54 */
+  --c-page:              #f3f3f3; /* Gray1 页面底                      color.md:95 */
+  --c-surface:           #ffffff; /* White 内容面                      color.md:93 */
+  --c-surface-2:         #f3f3f3; /* Gray1 次级面                      color.md:95 */
+  --c-rule:              #e8e8e8; /* Gray3 分隔线（装饰，不承担边界）   color.md:97 */
+  --c-border:            #8b8b8b; /* Gray7 控件边界 3.41:1             color.md:101 */
+  --c-text:              rgba(0,0,0,.9);   /* Font Gy1 15.8:1        fonts.md:104 */
+  --c-text-2:            rgba(0,0,0,.6);   /* Font Gy2 5.7:1         fonts.md:105 */
+  --c-text-3:            #5e5e5e; /* Font Gy3（0.4）实测约 2.9:1 不达 AA，文字降 Gray9 6.49:1  color.md:103 */
+  --c-ink:               #393939; /* Gray11 进度轨已过档                color.md:105 */
+  --c-inverse:           #ffffff; /* 深色条上的文字                    color.md:93 */
+  --c-scrim:             rgba(0,0,0,.6);      /* 遮罩一档，与库弹窗同值 */
+  --c-inverse-rule:      rgba(255,255,255,.55); /* 深色条上的描边 */
+  --c-inverse-hover:     rgba(255,255,255,.14);
+  --shadow-panel:        0 24px 48px -24px rgba(0,0,0,.5);   /* derived：面板一层 */
+  --shadow-bar:          0 8px 24px -12px rgba(0,0,0,.45);   /* derived：回执条一层 */
+
+  /* —— 字阶：TDesign 字阶（fonts.md:52-59），全站只用 12 / 14 / 24 三档 —— */
+  --fs-1: 12px;  --lh-1: 20px;  /* 12+8  fonts.md:54,69 */
+  --fs-2: 14px;  --lh-2: 22px;  /* 14+8  fonts.md:54,69 */
+  --fs-3: 24px;  --lh-3: 32px;  /* 24+8  fonts.md:57,69 */
+  --font-body: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; /* fonts.md:35 */
+  --font-mono: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  /* —— 间距：8px 基数 + 4/12 两档（layout.md:78,138）；槽 16、侧边距 24（layout.md:92,96） —— */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px;
+  --gutter: 16px; --page-x: 24px;
+
+  /* —— 圆角：基准规范无通用 radius，按缺口规则派生 4/8 两档（GAP_RULES 圆角） —— */
+  --r-1: 4px; --r-2: 8px; --r-pill: 999px;
+
+  /* —— 动效：TDesign 桌面端时长（motion.md:101-103）与缓动（motion.md:115-117） —— */
+  --dur-fast: 200ms;  /* @duration-desktop-base  motion.md:101 */
+  --dur-mid: 240ms;   /* @duration-desktop-moderate  motion.md:102 */
+  --dur-slow: 280ms;  /* @duration-desktop-slow  motion.md:103 */
+  --ease-out: cubic-bezier(0,0,.15,1);   /* motion.md:116 */
+  --ease-in: cubic-bezier(.82,0,1,.9);   /* motion.md:117 */
+  --ease-std: cubic-bezier(.38,0,.24,1); /* motion.md:115 */
+
+  /* —— 组件库主题映射：不只是主色 —— */
+  --td-brand-color-1: #fff1e9;
+  --td-brand-color-2: #ffd9c2;
+  --td-brand-color-3: #ffb98c;
+  --td-brand-color-4: #fa9550;
+  --td-brand-color-5: #e37318;
+  --td-brand-color-6: #be5a00;
+  --td-brand-color-7: #954500;
+  --td-brand-color-8: #713300;
+  --td-brand-color-9: #532300;
+  --td-brand-color-10: #3b1700;
+  --td-brand-color-hover: var(--td-brand-color-8);  /* 库默认 7→6 变浅，白字 4.52:1 压线；改同族深档 */
+  --td-brand-color-active: var(--td-brand-color-9);
+  --td-brand-color-focus: var(--td-brand-color-2);
+  --td-success-color: #006c45;   /* 库默认 Green5 #2ba471 作文字 3.16:1，不达 AA  color.md:76,84 */
+  --td-warning-color: #954500;   /* 库默认 Orange5 #e37318 3.12:1  color.md:64 */
+  --td-error-color: #ad352f;     /* 库默认 Red6 #d54941 4.32:1（小字不达 AA）  color.md:52,60 */
+  --td-text-color-primary: var(--c-text);
+  --td-text-color-secondary: var(--c-text-2);
+  --td-text-color-placeholder: #5e5e5e;  /* 库默认 0.4 黑 ≈2.9:1，占位文字也按正文算 */
+  --td-border-level-1-color: #8b8b8b;    /* 库默认 Gray3 1.23:1，控件边界需 3:1 */
+  --td-border-level-2-color: #8b8b8b;
+  --td-bg-color-page: #f3f3f3;
+  --td-radius-default: 4px;   /* 派生 4/8 */
+  --td-radius-medium: 4px;
+  --td-radius-large: 8px;
+  --td-font-family: var(--font-body);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}                     /* Hallmark gate 34：clip，不用 hidden */
+html{-webkit-text-size-adjust:100%; font-family:var(--font-body)}
+body{
+  margin:0; background:var(--c-page); color:var(--c-text);
+  font-family:var(--font-body); font-size:var(--fs-2); line-height:var(--lh-2);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,p,ol,ul{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--c-accent); outline-offset:2px}  /* 缺口规则：2px 实线 + 2px 偏移 */
+.skip{
+  position:fixed; left:var(--s-4); top:var(--s-4); z-index:900;
+  transform:translateY(-160%); background:var(--c-surface); color:var(--c-accent);
+  padding:var(--s-2) var(--s-4); border:2px solid var(--c-accent); border-radius:var(--r-1);
+  font-size:var(--fs-2); line-height:var(--lh-2); text-decoration:none;
+  transition:transform var(--dur-fast) var(--ease-out);
+}
+.skip:focus-visible{transform:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;font-size:var(--fs-2);line-height:var(--lh-2)}
+
+/* ── 顶栏 N13：可见搜索 pill + 快捷键 ─────────────────────────── */
+.bar{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; gap:var(--s-4);
+  min-height:56px; padding:var(--s-2) var(--page-x);
+  background:var(--c-surface); border-bottom:1px solid var(--c-rule);
+}
+.bar__brand{display:flex; align-items:baseline; gap:var(--s-2); flex:none}
+.bar__mark{
+  width:10px; height:10px; border-radius:2px; background:var(--c-accent);
+  align-self:center;
+}
+.bar__name{font-size:var(--fs-2); line-height:var(--lh-2); font-weight:600; letter-spacing:.01em}
+.bar__sub{font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3)}
+
+.pill{
+  display:flex; align-items:center; gap:var(--s-2);
+  flex:1 1 auto; max-width:420px; min-width:0; height:40px;
+  padding:0 var(--s-2) 0 var(--s-3);
+  background:var(--c-surface-2); border:1px solid var(--c-border); border-radius:var(--r-pill);
+  color:var(--c-text-2); cursor:text;
+  transition:background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.pill:hover{background:var(--c-surface); border-color:var(--c-accent)}
+.pill__ico{flex:none; width:14px; height:14px; color:var(--c-text-3)}
+.pill__text{
+  flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  text-align:left; font-size:var(--fs-2); line-height:var(--lh-2);
+}
+.pill__kbd{display:flex; gap:2px; flex:none}
+kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:20px; height:20px; padding:0 var(--s-1);
+  font-family:var(--font-mono); font-size:var(--fs-1); line-height:var(--lh-1);
+  color:var(--c-text-2); background:var(--c-surface);
+  border:1px solid var(--c-border); border-radius:3px;
+}
+.bar__right{display:flex; align-items:center; gap:var(--s-4); margin-left:auto; flex:none}
+.bar__me{font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-3); white-space:nowrap}
+
+/* ── 冲刺带：小号功能性标题（Workbench），无营销首屏 ─────────────── */
+.wrap{max-width:1440px; margin:0 auto; padding:0 var(--page-x)}
+.sprint{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-5);
+  padding:var(--s-5) 0 var(--s-4);
+}
+.sprint__eyebrow{
+  display:flex; align-items:center; gap:var(--s-2);
+  font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-accent); font-weight:600;
+}
+.sprint__eyebrow::before{content:""; width:12px; height:2px; background:var(--c-accent)}
+h1.sprint__title{font-size:var(--fs-3); line-height:var(--lh-3); font-weight:600; letter-spacing:-.01em; overflow-wrap:anywhere; min-width:0}
+.sprint__meta{font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3); margin-top:var(--s-1)}
+.sprint__meta b{color:var(--c-text); font-weight:600}
+.filters{display:flex; align-items:center; gap:var(--s-3); flex:none}
+.filters__label{font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3); white-space:nowrap; flex:none}
+.filters .t-select__wrap{width:168px; flex:none}
+.filters .t-select__wrap.t-select--status{width:168px}
+.filters .t-select-input{width:100%}
+
+/* ── 看板 ─────────────────────────────────────────────────────── */
+.board{
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--gutter);
+  align-items:start; padding-bottom:var(--s-7);
+}
+.col{min-width:0}
+.col__head{
+  display:flex; align-items:center; gap:var(--s-2);
+  min-height:36px; padding:0 0 var(--s-2);
+  border-bottom:2px solid var(--c-rule);
+}
+.col__head::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--c-border); flex:none}
+.col--doing .col__head::before{background:var(--c-accent)}
+.col--review .col__head::before{background:var(--c-warn); box-shadow:inset 0 0 0 2px var(--c-surface)}
+.col--done .col__head::before{background:var(--c-ok)}
+.col__title{font-size:var(--fs-2); line-height:var(--lh-2); font-weight:600}
+.col__count{
+  margin-left:auto; font-family:var(--font-mono); font-size:var(--fs-2); line-height:var(--lh-2);
+  color:var(--c-text-2); background:var(--c-surface); border:1px solid var(--c-rule);
+  border-radius:var(--r-pill); padding:0 var(--s-2); min-width:28px; text-align:center;
+}
+.col__body{display:flex; flex-direction:column; gap:var(--s-3); padding-top:var(--s-3)}
+.col__empty{
+  font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3);
+  border:1px dashed var(--c-rule); border-radius:var(--r-1); padding:var(--s-3);
+}
+
+/* ── 任务卡（桌面） ───────────────────────────────────────────── */
+.task{
+  background:var(--c-surface); border:1px solid var(--c-rule);
+  border-radius:var(--r-1); padding:var(--s-3);
+  display:flex; flex-direction:column; gap:var(--s-2);
+}
+.task--done .task__title{color:var(--c-text-2)}
+.task__top{display:flex; align-items:center; gap:var(--s-2); min-width:0}
+.task__type{flex:none}
+.task__id{
+  font-family:var(--font-mono); font-size:var(--fs-2); line-height:var(--lh-2);
+  color:var(--c-text-3); margin-left:auto; flex:none;
+}
+.task__title{
+  font-size:var(--fs-2); line-height:var(--lh-2); font-weight:600;
+  overflow-wrap:anywhere; min-width:0; min-height:44px;
+}
+.task__meta{
+  display:flex; align-items:center; gap:var(--s-2); flex-wrap:wrap;
+  font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-2);
+}
+.task__dates{font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-3); min-width:0}
+.task__foot{display:flex; align-items:center; justify-content:space-between; gap:var(--s-2); min-height:32px}
+.task__act{display:flex; align-items:center; gap:var(--s-2); flex:none}
+
+/* 进度轨：4 段，已过/当前/未到 三态；文字状态与它并列，颜色不是唯一载体 */
+.rail{display:inline-flex; align-items:center; gap:4px; flex:none}
+.rail i{display:block; width:12px; height:3px; border-radius:2px; background:var(--c-border)}
+.rail i:nth-child(n+2){width:8px}
+.rail--s1 i:nth-child(1){background:var(--c-accent)}
+.rail--s2 i:nth-child(-n+1){background:var(--c-ink)}
+.rail--s2 i:nth-child(2){background:var(--c-accent)}
+.rail--s3 i:nth-child(-n+2){background:var(--c-ink)}
+.rail--s3 i:nth-child(3){background:var(--c-accent)}
+.rail--s4 i:nth-child(-n+3){background:var(--c-ink)}
+.rail--s4 i:nth-child(4){background:var(--c-ok)}
+
+.task--enter{animation:task-in var(--dur-mid) var(--ease-out) both}
+@keyframes task-in{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+.task.is-hit{border-color:var(--c-accent); box-shadow:0 0 0 3px var(--c-accent-tint-2)}
+
+/* 组件根容器：触控目标 44px（缺口规则）；不动库内部子件 */
+.t-button{min-height:32px; white-space:nowrap}
+.dlg__err{min-height:20px; font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-danger); margin-top:var(--s-1)}
+@media (pointer:coarse),(max-width:991px){
+  .t-button{min-height:44px}
+  .t-select__wrap .t-input{min-height:44px}
+  .t-dialog .t-input{min-height:44px}      /* 弹窗里的文本输入与选择器同高；只抬根容器，不压库内部子件 */
+}
+
+/* ── 窄屏：任务列折叠为紧凑列表（≤991px，TDesign md 断点） ──────── */
+.mlist{display:none; flex-direction:column; gap:var(--s-2); padding-bottom:var(--s-6)}
+.mlist__head{
+  display:flex; align-items:center; gap:var(--s-2);
+  padding:var(--s-3) 0 var(--s-2); border-bottom:2px solid var(--c-rule);
+}
+.mlist__title{font-size:var(--fs-2); line-height:var(--lh-2); font-weight:600}
+.mlist__count{font-family:var(--font-mono); font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-2); margin-left:auto}
+.task--compact{
+  flex-direction:row; align-items:center; gap:var(--s-3);
+  padding:var(--s-3); min-height:68px;
+}
+.task--compact .task__main{flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px}
+.task--compact .task__title{
+  min-height:0;
+  font-size:var(--fs-2); line-height:var(--lh-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.task--compact .task__meta{flex-wrap:nowrap; overflow:hidden}
+.task--compact .task__meta span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.task--compact .task__act{margin:0; flex:none}
+
+/* ── 页脚 Ft4：一行紧凑注记，不做营销收尾 ─────────────────────── */
+.colophon{
+  border-top:1px solid var(--c-rule); padding:var(--s-4) 0 var(--s-6);
+  font-family:var(--font-mono); font-size:var(--fs-1); line-height:var(--lh-1);
+  color:var(--c-text-2); display:flex; flex-wrap:wrap; gap:var(--s-1) var(--s-4);
+}
+.colophon b{color:var(--c-text); font-weight:600}
+.colophon span{min-width:0;white-space:normal;overflow-wrap:anywhere}
+
+/* ── 底部动作回执（固定，不挤动列表；transform/opacity 过渡） ────── */
+.notice{
+  position:fixed; left:50%; bottom:max(var(--s-5), env(safe-area-inset-bottom)); z-index:70;
+  width:min(560px,calc(100% - 2*var(--page-x)));
+  transform:translate(-50%,16px); opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity var(--dur-fast) var(--ease-in), transform var(--dur-fast) var(--ease-in), visibility var(--dur-fast);
+}
+.notice.is-open{
+  transform:translate(-50%,0); opacity:1; visibility:visible; pointer-events:auto;
+  transition:opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out), visibility var(--dur-mid);
+}
+.notice__bar{
+  display:flex; align-items:center; gap:var(--s-3);
+  background:var(--c-text); color:var(--c-inverse); border-radius:var(--r-2);
+  padding:var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+  box-shadow:var(--shadow-bar);
+}
+.notice__text{font-size:var(--fs-2); line-height:var(--lh-2); flex:1 1 auto; min-width:0}
+.notice__act{
+  flex:none; background:none; border:1px solid var(--c-inverse-rule); color:var(--c-inverse);
+  border-radius:var(--r-1); min-height:32px; padding:0 var(--s-3);
+  font-size:var(--fs-2); line-height:1; cursor:pointer;
+}
+.notice__act:hover{background:var(--c-inverse-hover)}
+.notice__close{
+  flex:none; width:32px; height:32px; display:grid; place-items:center;
+  background:none; border:0; color:var(--c-inverse); cursor:pointer; border-radius:var(--r-1);
+}
+
+/* ── ⌘K 搜索面板（N13 自建浮层，无库对应件） ───────────────────── */
+.palette{
+  position:fixed; inset:0; z-index:200;
+  opacity:0; visibility:hidden;
+  transition:opacity var(--dur-fast) var(--ease-in), visibility var(--dur-fast);
+}
+.palette.is-open{
+  opacity:1; visibility:visible;
+  transition:opacity var(--dur-mid) var(--ease-out), visibility var(--dur-mid);
+}
+.palette__scrim{position:absolute; inset:0; background:var(--c-scrim)} /* 与 TDesign Dialog 官方遮罩同值（实测），全站一档 */
+.palette__panel{
+  position:absolute; top:12vh; left:50%; width:min(560px,calc(100% - 2*var(--page-x)));
+  transform:translateX(-50%) translateY(-8px) scale(.97);
+  background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--r-2);
+  box-shadow:var(--shadow-panel);
+  display:flex; flex-direction:column; overflow:hidden;
+  transition:transform var(--dur-fast) var(--ease-in);
+}
+.palette.is-open .palette__panel{transform:translateX(-50%) translateY(0) scale(1); transition:transform var(--dur-mid) var(--ease-out)}
+.palette__field{display:flex; align-items:center; gap:var(--s-2); padding:var(--s-2) var(--s-2) var(--s-2) var(--s-3); border-bottom:1px solid var(--c-rule)}
+.palette__field .t-input{border:0; box-shadow:none; background:transparent}
+.palette__close{
+  flex:none; width:32px; height:32px; display:grid; place-items:center;
+  background:none; border:1px solid var(--c-rule); border-radius:var(--r-1); color:var(--c-text-2); cursor:pointer;
+}
+.palette__close:hover{border-color:var(--c-accent); color:var(--c-accent)}
+.palette__results{
+  list-style:none; margin:0; padding:var(--s-2); max-height:min(56vh,420px); overflow-y:auto;
+}
+.palette__group{
+  font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3);
+  padding:var(--s-2) var(--s-2) var(--s-1);
+}
+.palette__item{
+  display:flex; align-items:center; gap:var(--s-2); width:100%;
+  padding:var(--s-2); border:0; border-radius:var(--r-1); background:none; text-align:left; cursor:pointer;
+  font-size:var(--fs-2); line-height:var(--lh-2);
+}
+.palette__item[aria-selected="true"]{background:var(--c-accent-tint); box-shadow:inset 0 0 0 1px var(--c-accent-tint-2)}
+.palette__item .pid{font-family:var(--font-mono); font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-3); flex:none}
+.palette__item .ptitle{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.palette__item .pstat{font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-2); flex:none}
+.palette__empty{padding:var(--s-4) var(--s-2); font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-2)}
+.palette__foot{
+  display:flex; gap:var(--s-4); flex-wrap:wrap;
+  padding:var(--s-2) var(--s-3); border-top:1px solid var(--c-rule);
+  font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3);
+}
+.palette__foot span{display:flex; align-items:center; gap:var(--s-1)}
+
+/* ── 新建任务弹窗（TDesign Dialog，只改根容器宽度） ─────────────── */
+.t-dialog{max-width:calc(100% - 2*var(--page-x))}
+.t-dialog__header-content{font-size:var(--fs-2); line-height:var(--lh-2); font-weight:600}
+.dlg__stack{display:flex; flex-direction:column; gap:var(--s-4)}
+.dlg__row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s-4)}
+.dlg__label{display:grid; gap:var(--s-1); font-size:var(--fs-2); line-height:var(--lh-2); color:var(--c-text-2)}
+.dlg__hint{font-size:var(--fs-1); line-height:var(--lh-1); color:var(--c-text-3)}
+
+@media (max-width:991px){
+  .bar{flex-wrap:nowrap; gap:var(--s-2)}
+  .bar__sub,.bar__me{display:none}
+  .pill{max-width:none}
+  .pill__text,.pill__kbd{display:none}       /* N13：窄屏收起为图标 */
+  .pill{flex:0 0 40px; width:40px; padding:0; justify-content:center}
+  .bar__right{gap:var(--s-2)}
+  .sprint{flex-direction:column; align-items:stretch; gap:var(--s-3); padding:var(--s-4) 0 var(--s-3)}
+  .filters{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-2)}
+  .filters > *{min-width:0}
+  .filters .t-select__wrap,.filters .t-select-input{width:100%; min-width:0}
+  .filters__label{display:none}
+  .filters .t-select__wrap,.filters .t-select__wrap.t-select--status{width:100%}
+  .mlist{display:flex}
+  .sprint__meta{display:none}
+  .palette__panel{top:0; left:0; width:100%; height:100%; max-height:100dvh; border-radius:0; transform:translateY(8px) scale(1)}
+  .palette.is-open .palette__panel{transform:none}
+  .palette__results{max-height:none; flex:1 1 auto}
+  .palette__esc,.palette__foot{display:none}
+  .palette__close{width:44px; height:44px}
+  .dlg__row{grid-template-columns:1fr}
+  .colophon{padding-bottom:calc(var(--s-6) + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms !important; animation-iteration-count:1 !important; transition-duration:1ms !important}
+}
+</style>
+<script type="importmap">
+{"imports":{
+  "vue":"https://esm.sh/vue@3.5.45/dist/vue.esm-browser.prod.js",
+  "tdesign-vue-next":"https://esm.sh/tdesign-vue-next@1.20.11?bundle&external=vue"
+}}
+</script>
+</head>
+<body>
+<a class="skip" href="#board">跳到任务列表</a>
+<div id="app" v-cloak>
+  <header class="bar">
+    <div class="bar__brand">
+      <span class="bar__mark" aria-hidden="true"></span>
+      <span class="bar__name">SwimBoard</span>
+      <span class="bar__sub">产品设计组 · 演示项目</span>
+    </div>
+
+    <button class="pill" id="search-pill" type="button" aria-haspopup="dialog" aria-label="搜索任务，快捷键 Command 加 K" @click="openPalette()">
+      <svg class="pill__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.6"/><path d="M10.6 10.6 14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="pill__text">搜任务、成员或编号</span>
+      <span class="pill__kbd" aria-hidden="true"><kbd>⌘</kbd><kbd>K</kbd></span>
+    </button>
+
+    <div class="bar__right">
+      <span class="bar__me">林乔 · 设计</span>
+      <t-button theme="primary" size="medium" @click="openDialog">新建任务</t-button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="sprint" aria-labelledby="sprint-title">
+      <div>
+        <p class="sprint__eyebrow">11 月 9 日至 11 月 15 日</p>
+        <h1 class="sprint__title" id="sprint-title">第 46 周冲刺</h1>
+        <p class="sprint__meta">共 <b>{{ total }}</b> 项 · 未认领 <b>{{ counts.todo_unclaimed }}</b> 项 · 你本周动过 <b>{{ myTouched }}</b> 项 · 今天 11 月 14 日</p>
+      </div>
+      <div class="filters" role="group" aria-label="筛选任务">
+        <span class="filters__label" aria-hidden="true">筛选</span>
+        <t-select v-model="member" :options="memberOptions" size="medium" aria-label="按成员筛选" :popup-props="{attach: attachTarget}"></t-select>
+        <t-select v-model="status" :options="statusOptions" size="medium" class="t-select--status" aria-label="按状态筛选" :popup-props="{attach: attachTarget}"></t-select>
+        <t-button v-if="isFiltered" variant="text" theme="primary" size="medium" @click="clearFilters">清除筛选</t-button>
+      </div>
+    </section>
+
+    <section class="board" id="board" aria-label="任务看板" v-if="!narrow">
+      <div class="col" :class="'col--'+s.key" v-for="s in statuses" :key="s.key">
+        <div class="col__head">
+          <h2 class="col__title">{{ s.label }}</h2>
+          <span class="col__count" :aria-label="s.label+' '+tasksIn(s.key).length+' 项'">{{ tasksIn(s.key).length }}</span>
+        </div>
+        <div class="col__body">
+          <article class="task" v-for="t in tasksIn(s.key)" :key="t.id" :data-task="t.id"
+                   :class="['task--'+toneOf(t), {'is-hit':hit===t.id, 'task--enter':lastMoved===t.id}]" tabindex="-1">
+            <div class="task__top">
+              <t-tag class="task__type" variant="light" theme="default">{{ t.type }}</t-tag>
+              <span class="task__id">{{ t.id }}</span>
+            </div>
+            <h3 class="task__title">{{ t.title }}</h3>
+            <p class="task__meta">
+              <span class="rail" :class="'rail--s'+stepOf(t)" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span>{{ statusLabel(t.status) }} · {{ ownerName(t) }}</span>
+            </p>
+            <div class="task__foot">
+              <p class="task__dates">创建 {{ fmtDate(t.created) }}<br>更新 {{ fmtDate(t.updated, true) }}</p>
+              <div class="task__act">
+                <t-button v-if="nextAction(t)" theme="primary" variant="outline" size="medium" @click="act(t)">
+                  {{ nextAction(t).label }}
+                </t-button>
+              </div>
+            </div>
+          </article>
+          <p class="col__empty" v-if="!tasksIn(s.key).length">
+            这一列没有符合条件的任务<span v-if="isFiltered">，<t-button variant="text" theme="primary" size="small" @click="clearFilters">清除筛选</t-button></span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mlist" aria-label="任务列表" v-if="narrow">
+      <div class="mlist__head">
+        <h2 class="mlist__title">{{ narrowTitle }}</h2>
+        <span class="mlist__count">{{ flatTasks.length }} 项</span>
+      </div>
+      <article class="task task--compact" v-for="t in flatTasks" :key="t.id" :data-task="t.id"
+               :class="['task--'+toneOf(t), {'is-hit':hit===t.id, 'task--enter':lastMoved===t.id}]" tabindex="-1">
+        <div class="task__main">
+          <h3 class="task__title">{{ t.title }}</h3>
+          <p class="task__meta">
+            <span class="rail" :class="'rail--s'+stepOf(t)" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span>{{ statusLabel(t.status) }} · {{ ownerName(t) }} · {{ t.id }}</span>
+          </p>
+        </div>
+        <div class="task__act">
+          <t-button v-if="nextAction(t)" theme="primary" variant="outline" size="medium" @click="act(t)">{{ nextAction(t).label }}</t-button>
+        </div>
+      </article>
+      <p class="col__empty" v-if="!flatTasks.length">没有符合条件的任务，换个成员或状态看看。</p>
+    </section>
+
+    <footer class="colophon">
+      <span><b>SwimBoard</b> 演示项目 · 团队 4 人 · 本周 {{ total }} 项</span>
+      <span>数据为虚构示例，改动不保存，刷新后恢复 · 2026-11-14 生成</span>
+    </footer>
+  </main>
+
+  <!-- 动作回执 / 撤销 -->
+  <div class="notice" :class="{'is-open':!!notice}" role="status" aria-live="polite">
+    <div class="notice__bar" v-if="notice">
+      <span class="notice__text">{{ notice.text }}</span>
+      <button class="notice__act" type="button" v-if="notice.action" @click="notice.action.run()">{{ notice.action.label }}</button>
+      <button class="notice__close" type="button" aria-label="关闭提示" @click="dismiss()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ⌘K 搜索面板 -->
+  <div class="palette" :class="{'is-open':paletteOpen}" role="dialog" aria-modal="true" aria-labelledby="palette-title" ref="paletteRoot">
+    <div class="palette__scrim" @click="closePalette()"></div>
+    <div class="palette__panel">
+      <div class="palette__field">
+        <svg class="pill__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.6"/><path d="M10.6 10.6 14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h2 class="sr" id="palette-title">搜索任务</h2>
+        <t-input ref="paletteInput" v-model="query" placeholder="搜任务、成员或编号" :clearable="false"
+                 role="combobox" aria-autocomplete="list" aria-controls="palette-list"
+                 :aria-activedescendant="activeId" :aria-expanded="paletteOpen"></t-input>
+        <kbd class="palette__esc" aria-hidden="true">esc</kbd>
+        <button class="palette__close" type="button" aria-label="关闭搜索" @click="closePalette()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <ul class="palette__results" id="palette-list" role="listbox" aria-label="搜索结果">
+        <template v-for="g in groups" :key="g.key">
+          <li class="palette__group" role="presentation">{{ g.label }}</li>
+          <li v-for="t in g.items" :key="t.id">
+            <div class="palette__item" role="option" :id="'opt-'+t.id" :aria-selected="activeId==='opt-'+t.id"
+                 @mouseenter="activeIndex = indexOf(t.id)" @click="choose(t.id)">
+              <span class="pid">{{ t.id }}</span>
+              <span class="ptitle">{{ t.title }}</span>
+              <span class="pstat">{{ ownerName(t) }}</span>
+            </div>
+          </li>
+        </template>
+        <li class="palette__empty" v-if="!groups.length">没有匹配的任务。试试编号（如 SB-124）或成员名字。</li>
+      </ul>
+      <div class="palette__foot">
+        <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+        <span><kbd>↵</kbd> 定位任务</span>
+        <span><kbd>esc</kbd> 关闭</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新建任务 -->
+  <t-dialog v-model:visible="dialogOpen" header="新建任务" width="480px" :close-on-overlay-click="true">
+    <div class="dlg__stack">
+      <div>
+        <label class="dlg__label">任务标题
+          <t-input ref="titleInput" v-model="draft.title" placeholder="一句话说清要交付什么" :maxlength="40"
+                   :status="draftError ? 'error' : 'default'"></t-input>
+        </label>
+        <p class="dlg__err" role="alert">{{ draftError }}</p>
+      </div>
+      <div class="dlg__row">
+        <label class="dlg__label">类型
+          <t-select v-model="draft.type" :options="typeOptions" :popup-props="{attach: attachTarget}"></t-select>
+        </label>
+        <label class="dlg__label">认领人
+          <t-select v-model="draft.assignee" :options="ownerOptions" :popup-props="{attach: attachTarget}"></t-select>
+        </label>
+      </div>
+      <p class="dlg__hint">新建的任务进入「待开始」，编号按当前最大号往后取。认领人可以稍后再定。</p>
+    </div>
+    <template #footer>
+      <div style="display:flex;justify-content:flex-end;gap:var(--s-3)">
+        <t-button variant="outline" size="medium" @click="closeDialog">取消</t-button>
+        <t-button theme="primary" size="medium" @click="submitDraft">创建任务</t-button>
+      </div>
+    </template>
+  </t-dialog>
+</div>
+
+<script type="module">
+import { createApp, ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
+import { Button, Select, Input, Dialog, Tag } from 'tdesign-vue-next';
+
+const ME = 'me';
+const STATUSES = [
+  { key:'todo',   label:'待开始' },
+  { key:'doing',  label:'进行中' },
+  { key:'review', label:'待验收' },
+  { key:'done',   label:'已完成' },
+];
+const OWNERS = {
+  me:      { name:'林乔' },
+  zhaolan: { name:'赵岚' },
+  zhouyu:  { name:'周予' },
+  chenmo:  { name:'陈默' },
+};
+
+/* 演示数据：虚构团队，字段 created / updated 分开，状态互斥 */
+const seed = () => ([
+  { id:'SB-128', title:'375 下列表卡片间距不一致', type:'交互', assignee:null,       status:'todo',   created:'2026-11-12', updated:'2026-11-13 09:40' },
+  { id:'SB-131', title:'空状态插图补三张',         type:'视觉', assignee:null,       status:'todo',   created:'2026-11-13', updated:'2026-11-14 08:15' },
+  { id:'SB-119', title:'认领流程走查（5 位受访者）', type:'研究', assignee:'zhaolan', status:'doing',  created:'2026-11-10', updated:'2026-11-14 09:05' },
+  { id:'SB-124', title:'任务详情字段对齐评审稿',   type:'交互', assignee:'me',       status:'doing',  created:'2026-11-11', updated:'2026-11-14 08:40' },
+  { id:'SB-126', title:'周报导出模板',             type:'文案', assignee:'zhouyu',   status:'doing',  created:'2026-11-11', updated:'2026-11-13 18:50' },
+  { id:'SB-117', title:'看板列宽断点表',           type:'交互', assignee:'me',       status:'review', created:'2026-11-09', updated:'2026-11-13 16:10' },
+  { id:'SB-121', title:'图标线性风格统一',         type:'视觉', assignee:'chenmo',   status:'review', created:'2026-11-10', updated:'2026-11-12 15:30' },
+  { id:'SB-112', title:'冲刺回顾记录整理',         type:'文案', assignee:'zhaolan', status:'done',   created:'2026-11-09', updated:'2026-11-11 11:00' },
+  { id:'SB-115', title:'组件库升级说明',           type:'文案', assignee:'zhouyu',   status:'done',   created:'2026-11-09', updated:'2026-11-10 17:45' },
+  { id:'SB-108', title:'移动端列表密度测量',       type:'研究', assignee:'chenmo',   status:'done',   created:'2026-11-09', updated:'2026-11-10 10:20' },
+]);
+
+const App = {
+  components: { 't-button': Button, 't-select': Select, 't-input': Input, 't-dialog': Dialog, 't-tag': Tag },
+  setup() {
+    const tasks   = ref(seed());
+    const member  = ref('all');
+    const status  = ref('all');
+    const notice  = ref(null);
+    const hit     = ref('');
+    const lastMoved = ref('');
+    const narrow  = ref(window.matchMedia('(max-width: 991px)').matches);
+    const paletteOpen = ref(false);
+    const query   = ref('');
+    const activeIndex = ref(0);
+    const paletteInput = ref(null);
+    const paletteRoot  = ref(null);
+    const dialogOpen = ref(false);
+    const titleInput = ref(null);
+    const draft = ref({ title:'', type:'交互', assignee:'me' });
+    const draftError = ref('');
+    const attachTarget = () => document.body;
+    let lastFocus = null, noticeTimer = 0, hitTimer = 0;
+
+    const statuses = STATUSES;
+    const statusOrder = k => STATUSES.findIndex(s => s.key === k);
+    const statusLabel = k => (STATUSES.find(s => s.key === k) || {}).label || k;
+    const stepOf = t => statusOrder(t.status) + 1;
+    const ownerName = t => t.assignee ? OWNERS[t.assignee].name : '未认领';
+    const toneOf = t => t.assignee === ME ? 'mine' : (t.assignee ? t.status : 'unclaimed');
+
+    const memberOptions = [
+      { label:'全部成员', value:'all' },
+      { label:'林乔（我）', value:'me' },
+      { label:'赵岚', value:'zhaolan' },
+      { label:'周予', value:'zhouyu' },
+      { label:'陈默', value:'chenmo' },
+      { label:'未认领', value:'none' },
+    ];
+    const statusOptions = [{ label:'全部状态', value:'all' }, ...STATUSES.map(s => ({ label:s.label, value:s.key }))];
+    const typeOptions = ['视觉','交互','研究','文案'].map(v => ({ label:v, value:v }));
+    const ownerOptions = [{ label:'未认领（先放着）', value:'' }, { label:'林乔（我）', value:'me' },
+      { label:'赵岚', value:'zhaolan' }, { label:'周予', value:'zhouyu' }, { label:'陈默', value:'chenmo' }];
+
+    const count = k => tasks.value.filter(t => t.status === k).length;
+    const counts = computed(() => ({
+      todo_unclaimed: tasks.value.filter(t => t.status === 'todo' && !t.assignee).length,
+      byStatus: Object.fromEntries(STATUSES.map(s => [s.key, count(s.key)])),
+    }));
+    const total = computed(() => tasks.value.length);
+    const myTouched = computed(() => tasks.value.filter(t => t.assignee === ME && t.updated.startsWith('2026-11-14')).length);
+    const isFiltered = computed(() => member.value !== 'all' || status.value !== 'all');
+
+    const matches = t =>
+      (member.value === 'all' || (member.value === 'none' ? !t.assignee : t.assignee === member.value)) &&
+      (status.value === 'all' || t.status === status.value);
+
+    const tasksIn = k => tasks.value.filter(t => t.status === k && matches(t));
+    /* 窄屏：我的与未认领排前面，先给能立刻动手的任务 */
+    const flatTasks = computed(() => {
+      const rank = t => (t.assignee === ME ? 0 : (t.assignee ? 2 : 1));
+      return tasks.value.filter(matches).slice().sort((a,b) =>
+        rank(a) - rank(b) || statusOrder(a.status) - statusOrder(b.status) || (a.updated < b.updated ? 1 : -1));
+    });
+    const narrowTitle = computed(() => {
+      if (status.value !== 'all') return statusLabel(status.value);
+      return isFiltered.value ? '筛选结果' : '本周任务';
+    });
+
+    const nextAction = t => {
+      if (!t.assignee) return { kind:'claim', label:'认领' };
+      if (t.assignee !== ME) return null;
+      if (t.status === 'todo')   return { kind:'advance', label:'开始' };
+      if (t.status === 'doing')  return { kind:'advance', label:'提交验收' };
+      if (t.status === 'review') return { kind:'advance', label:'标记完成' };
+      return null;
+    };
+
+    const fmtDate = (v, withTime) => {
+      const [d, time] = String(v).split(' ');
+      const [y, m, day] = d.split('-');
+      const date = (d === '2026-11-14') ? '今天' : `${Number(m)}-${day}`;
+      return withTime && time ? `${date} ${time}` : date;
+    };
+    const nowStamp = () => {
+      const d = new Date();
+      const p = n => String(n).padStart(2,'0');
+      return `2026-11-14 ${p(d.getHours())}:${p(d.getMinutes())}`;
+    };
+
+    const showNotice = (text, action, ms = 9000) => {
+      notice.value = { text, action };
+      clearTimeout(noticeTimer);
+      noticeTimer = setTimeout(() => (notice.value = null), ms);
+    };
+    const dismiss = () => { clearTimeout(noticeTimer); notice.value = null; };
+
+    const flash = id => {
+      hit.value = id;
+      clearTimeout(hitTimer);
+      hitTimer = setTimeout(() => (hit.value = ''), 1800);
+    };
+
+    const act = t => {
+      const a = nextAction(t);
+      if (!a) return;
+      if (a.kind === 'claim') {
+        t.assignee = ME;
+        t.updated = nowStamp();
+        markMoved(t.id);
+        showNotice(`已认领「${t.title}」，它现在算你的活儿。`, { label:'撤销', run: () => { t.assignee = null; t.updated = nowStamp(); dismiss(); } });
+        return;
+      }
+      const from = t.status;
+      const next = STATUSES[statusOrder(from) + 1].key;
+      t.status = next;
+      t.updated = nowStamp();
+      markMoved(t.id);
+      const offscreen = status.value !== 'all' && status.value !== next;
+      if (offscreen) {
+        showNotice(`「${t.title}」已移到${statusLabel(next)}，当前筛选里看不到它了。`, {
+          label: `切到${statusLabel(next)}`,
+          run: () => { status.value = next; dismiss(); },
+        });
+      } else if (member.value === 'none' && t.assignee) {
+        showNotice(`「${t.title}」已认领，「未认领」筛选里不再显示。`, { label:'看全部成员', run: () => { member.value = 'all'; dismiss(); } });
+      } else {
+        showNotice(`「${t.title}」推进到${statusLabel(next)}。`, { label:'撤销', run: () => { t.status = from; t.updated = nowStamp(); dismiss(); } });
+      }
+    };
+
+    const clearFilters = () => { member.value = 'all'; status.value = 'all'; };
+
+    /* 移动/新建的那一张播一次入场：元素重新创建时才有初态 */
+    const markMoved = id => {
+      lastMoved.value = id;
+      setTimeout(() => { if (lastMoved.value === id) lastMoved.value = ''; }, 500);
+    };
+
+    /* —— 搜索面板 —— */
+    const haystack = t => `${t.id} ${t.title} ${t.type} ${ownerName(t)} ${statusLabel(t.status)}`;
+    const results = computed(() => {
+      const q = query.value.trim().toLowerCase();
+      const pool = q ? tasks.value.filter(t => haystack(t).toLowerCase().includes(q)) : tasks.value;
+      return pool.slice().sort((a,b) => statusOrder(a.status) - statusOrder(b.status));
+    });
+    const groups = computed(() => {
+      const out = [];
+      for (const s of STATUSES) {
+        const items = results.value.filter(t => t.status === s.key);
+        if (items.length) out.push({ key:s.key, label:s.label, items });
+      }
+      return out;
+    });
+    const flatResults = computed(() => groups.value.flatMap(g => g.items));
+    const activeId = computed(() => {
+      const t = flatResults.value[activeIndex.value];
+      return t ? `opt-${t.id}` : '';
+    });
+    const indexOf = id => Math.max(0, flatResults.value.findIndex(t => t.id === id));
+
+    watch([query, () => groups.value.length], () => { activeIndex.value = 0; });
+
+    const openPalette = () => {
+      lastFocus = document.activeElement;
+      paletteOpen.value = true;
+      document.body.style.overflow = 'hidden';
+      query.value = '';
+      activeIndex.value = 0;
+      nextTick(() => { const el = paletteRoot.value && paletteRoot.value.querySelector('input'); if (el) el.focus(); });
+    };
+    const closePalette = (restore = true) => {
+      if (!paletteOpen.value) return;
+      paletteOpen.value = false;
+      document.body.style.overflow = '';
+      if (restore && lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    const choose = id => {
+      closePalette(false);
+      member.value = 'all'; status.value = 'all';
+      nextTick(() => {
+        const el = document.querySelector(`[data-task="${id}"]`);
+        if (!el) return;
+        el.scrollIntoView({ block:'center', behavior:'smooth' });
+        flash(id);
+        el.focus({ preventScroll:true });
+      });
+    };
+    const chooseActive = () => { const t = flatResults.value[activeIndex.value]; if (t) choose(t.id); };
+    /* 面板开着时键盘归面板：↑↓ 选、↵ 定位、esc 关、Tab 不出面板 */
+    const onPaletteKey = e => {
+      const n = flatResults.value.length;
+      if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex.value = n ? (activeIndex.value + 1) % n : 0; return true; }
+      if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex.value = n ? (activeIndex.value - 1 + n) % n : 0; return true; }
+      if (e.key === 'Escape') { e.preventDefault(); closePalette(); return true; }
+      if (e.key === 'Enter') { e.preventDefault(); chooseActive(); return true; }
+      if (e.key === 'Tab') {
+        const f = [...paletteRoot.value.querySelectorAll('input,button,[tabindex]:not([tabindex="-1"])')];
+        if (!f.length) return true;
+        const first = f[0], last = f[f.length - 1], a = document.activeElement;
+        const outside = !paletteRoot.value.contains(a);
+        if (e.shiftKey ? (a === first || outside) : (a === last || outside)) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+        return true;
+      }
+      return false;
+    };
+
+    /* —— 新建任务 —— */
+    const openDialog = () => { draft.value = { title:'', type:'交互', assignee:'me' }; draftError.value = ''; dialogOpen.value = true; };
+    const closeDialog = () => { dialogOpen.value = false; };
+    /* 一开始输入就撤掉上一轮的错误提示：错误提示跟着状态走，不靠再点一次按钮 */
+    watch(() => draft.value && draft.value.title, v => { if (v && v.trim()) draftError.value = ''; });
+    const submitDraft = () => {
+      const title = draft.value.title.trim();
+      if (!title) { draftError.value = '写一句标题再创建，20 字以内最好记。'; nextTick(() => titleInput.value?.focus()); return; }
+      draftError.value = '';
+      const nextId = `SB-${Math.max(...tasks.value.map(t => Number(t.id.slice(3)))) + 2}`;
+      tasks.value.unshift({ id:nextId, title, type:draft.value.type, assignee:draft.value.assignee || null,
+        status:'todo', created:'2026-11-14', updated:nowStamp() });
+      markMoved(nextId);
+      dialogOpen.value = false;
+      showNotice(`已新建「${title}」，放在待开始。`, null, 6000);
+      nextTick(() => flash(nextId));
+    };
+
+    /* —— 全局键 —— */
+    const onKey = e => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); paletteOpen.value ? closePalette() : openPalette(); return; }
+      if (paletteOpen.value && onPaletteKey(e)) return;
+      if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) { e.preventDefault(); openPalette(); }
+    };
+    const mq = window.matchMedia('(max-width: 991px)');
+    const onMq = e => { narrow.value = e.matches; };
+    onMounted(() => { window.addEventListener('keydown', onKey); mq.addEventListener('change', onMq); });
+    onUnmounted(() => { window.removeEventListener('keydown', onKey); mq.removeEventListener('change', onMq); });
+
+    return { tasks, member, status, notice, hit, narrow, lastMoved, paletteOpen, query, activeIndex, activeId,
+      paletteInput, paletteRoot, dialogOpen, draft, draftError, attachTarget,
+      statuses, memberOptions, statusOptions, typeOptions, ownerOptions,
+      counts, total, myTouched, isFiltered, tasksIn, flatTasks, narrowTitle,
+      statusLabel, ownerName, toneOf, stepOf, nextAction, fmtDate,
+      act, clearFilters, dismiss, openPalette, closePalette, choose, chooseActive, onPaletteKey,
+      openDialog, closeDialog, submitDraft, groups, titleInput };
+  },
+};
+
+const app = createApp(App);
+app.mount('#app');
+window.__swim = { app };
+</script>
+</body>
+</html>

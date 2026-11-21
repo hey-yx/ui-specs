@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="zh-CN" id="top">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TallyLane · 十秒，记一笔</title>
+<meta name="description" content="TallyLane 个人记账：单手十秒记一笔，本月分类支出和预算提醒都在这儿。">
+<style>
+/* ---------------------------------------------------------------
+   TallyLane · 单文件案例
+   基准规范 TDesign（site/dist/ai/guide.md:24 中文产品 UI 行）
+   版式 Bento Grid · 导航 N12 · 页脚 Ft5 · 强调色 Yellow7 #8b6600
+   零外部请求：字体用系统栈，图形全部 CSS 绘制
+   --------------------------------------------------------------- */
+
+:root{
+  /* 色：content/color/tdesign.tencent.com--color.md:210 Yellow7 / :211 Yellow8 /
+     :204 Yellow1 / :205 Yellow2 / :207 Yellow4 / :108 Gray14 / :103 Gray9 /
+     :95 Gray1 / :97 Gray3 / :100 Gray6 / :93 White */
+  --accent:#8b6600;
+  --accent-deep:#654900;
+  --accent-wash:#fff5e4;
+  --accent-soft:#ffe7b5;
+  --accent-on-dark:#f5ba18;
+  --ink:#181818;
+  --ink-2:#5e5e5e;
+  --line:#e8e8e8;
+  --line-2:#dddddd;
+  --paper:#ffffff;
+  --paper-2:#f3f3f3;
+  --inv-ink:#ffffff;
+  --inv-ink-2:#a6a6a6;
+
+  /* 间距：8px 网格（content/layout/tdesign.tencent.com--layout.md:65），
+     槽 16（:77），安全边距 24（:81） */
+  --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:32px; --s6:48px; --s7:64px;
+
+  /* 圆角：库无通用 radius 规范，按 GAP_RULES 派生两档 */
+  --r-cell:8px;
+  --r-ctl:4px;
+  --r-pill:999px;
+
+  --banner-h:44px;
+  --bar-h:60px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+/* 行高 = 字号 + 8，逐元素计算（content/type/tdesign.tencent.com--fonts.md:67）
+   零特异性通配，em 按各自字号算，不向下继承固定 px */
+:where(body, body *){line-height:calc(1em + 8px)}
+
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  padding-top:calc(var(--banner-h) + var(--bar-h));
+  background:var(--paper);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px;
+  font-weight:400;
+  text-rendering:optimizeLegibility;
+}
+
+/* 表单重置只用长属性，不用 font 简写（否则把 line-height 一起重置） */
+input,button,textarea,select{
+  font-family:inherit;
+  font-size:100%;
+  font-weight:400;
+  color:inherit;
+  margin:0;
+}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--inv-ink);padding:12px 16px;z-index:900}
+.skip:focus{left:8px;top:8px}
+
+/* ------------------------------ N12 公告条 + 可收起导航 */
+.nav{position:fixed;inset:0 0 auto;z-index:200;transform:translateY(0);transition:transform 240ms var(--ease)}
+.nav.is-compact{transform:translateY(calc(var(--banner-h) * -1))}
+
+.banner{height:var(--banner-h);background:var(--accent);color:var(--inv-ink);font-size:14px}
+.banner__in{
+  max-width:1180px;margin:0 auto;height:100%;
+  display:flex;align-items:center;gap:var(--s2);
+  padding:0 var(--s3);
+}
+.banner__text{
+  margin:0;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.banner__dot{
+  display:inline-block;width:6px;height:6px;border-radius:var(--r-pill);
+  background:var(--accent-soft);vertical-align:2px;margin-right:var(--s2);
+}
+.banner__link{
+  flex:none;color:var(--inv-ink);text-decoration:underline;text-underline-offset:3px;
+  padding:0 var(--s2);min-height:44px;display:inline-flex;align-items:center;
+}
+.banner__x{
+  flex:none;position:relative;width:44px;height:44px;min-height:44px;
+  background:none;border:0;border-radius:var(--r-ctl);color:var(--inv-ink);
+}
+.banner__x span,.banner__x span::after{
+  position:absolute;left:50%;top:50%;width:14px;height:1.5px;background:currentColor;content:"";
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+.banner__x span::after{left:0;top:0;transform:rotate(90deg)}
+.banner__x:hover{background:rgba(255,255,255,.14)}
+
+.bar{background:var(--paper);border-bottom:1px solid var(--line);position:relative}
+.bar__in{
+  max-width:1180px;margin:0 auto;height:var(--bar-h);
+  display:flex;align-items:center;gap:var(--s3);
+  padding:0 var(--s3);
+}
+.brand{
+  font-size:24px;font-weight:600;letter-spacing:-.02em;text-decoration:none;
+  color:var(--ink);flex:none;
+}
+.brand:hover{color:var(--accent)}
+.links{display:none}
+.links.is-open{
+  display:flex;flex-direction:column;gap:var(--s1);
+  position:absolute;left:0;right:0;top:100%;
+  background:var(--paper);border-bottom:1px solid var(--line);
+  padding:var(--s2) var(--s3) var(--s3);
+}
+.links a{
+  display:flex;align-items:center;min-height:44px;padding:0 var(--s2);
+  font-size:14px;text-decoration:none;border-radius:var(--r-ctl);
+}
+.links a:hover{background:var(--paper-2);color:var(--accent)}
+.bar__spacer{flex:1}
+.bar__cta{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 var(--s4);
+  border:1px solid var(--accent);border-radius:var(--r-ctl);
+  color:var(--accent);text-decoration:none;font-size:14px;font-weight:600;
+  background:var(--paper);
+}
+.bar__cta:hover{background:var(--accent-wash)}
+.bar__toggle{
+  flex:none;width:44px;height:44px;min-height:44px;
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  background:none;border:1px solid var(--line-2);border-radius:var(--r-ctl);
+}
+.bar__toggle span{display:block;width:16px;height:1.5px;background:var(--ink)}
+.bar__toggle[aria-expanded="true"]{background:var(--paper-2)}
+
+/* ------------------------------ Bento 骨架 */
+main{padding:var(--s5) 0 0}
+.bento{
+  max-width:1180px;margin:0 auto;
+  padding:0 var(--s3);
+  display:grid;grid-template-columns:1fr;gap:var(--s3);
+}
+.cell{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--r-cell);
+  padding:var(--s4);
+  display:flex;flex-direction:column;gap:var(--s3);
+  min-width:0;
+}
+.cell__label{
+  margin:0;font-size:12px;letter-spacing:.04em;color:var(--ink-2);
+}
+.cell h2{margin:0;font-size:20px;font-weight:600}
+.cell p{margin:0;max-width:26em}
+.muted{color:var(--ink-2)}
+.cell--hero{background:var(--paper-2);border-color:transparent;gap:var(--s3)}
+.cell--entry{background:var(--accent-wash);border-color:var(--accent-soft)}
+.cell--note{background:var(--ink);border-color:var(--ink);color:var(--inv-ink)}
+.cell--total .total__meta,.cell--note .note__meta{margin-top:auto}
+.budget__foot{
+  margin-top:auto;padding-top:var(--s3);border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:var(--s2);
+}
+.hint-inline{font-size:12px;font-weight:400;color:var(--ink-2);letter-spacing:0}
+
+.eyebrow{
+  margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent);font-weight:600;
+}
+h1{
+  margin:0;font-size:36px;font-weight:600;letter-spacing:-.01em;text-wrap:balance;
+}
+.hero__sub{margin:0;font-size:16px;color:var(--ink-2);max-width:22em}
+.chip-link{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:var(--s2);
+  min-height:44px;padding:0 var(--s4);
+  border:1px solid var(--ink);border-radius:var(--r-ctl);
+  font-size:14px;font-weight:600;text-decoration:none;color:var(--ink);
+}
+.chip-link:hover{background:var(--ink);color:var(--inv-ink)}
+
+/* 本月数字 */
+.total__num{
+  font-size:36px;font-weight:600;letter-spacing:-.01em;color:var(--accent);
+  font-variant-numeric:tabular-nums;margin:0;
+}
+.total__meta,.total__max{margin:0;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* 记一笔 */
+form{display:flex;flex-direction:column;gap:var(--s3)}
+.field{display:flex;flex-direction:column;gap:var(--s2)}
+.field__label{font-size:12px;letter-spacing:.04em;color:var(--ink-2)}
+.amt{
+  display:flex;align-items:center;gap:var(--s2);
+  background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r-ctl);
+  padding:0 var(--s3);min-height:56px;
+}
+.amt:focus-within{border-color:var(--accent)}
+.amt__cur{font-size:20px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.amt input{
+  flex:1;min-width:0;border:0;background:none;padding:0;
+  font-size:24px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.amt input:focus{outline:none}
+.amt input::placeholder{color:var(--ink-2);font-weight:400}
+.hint{margin:0;font-size:12px;color:var(--ink-2)}
+.hint.is-error{color:#ad352f}
+.chips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s2)}
+.chip{
+  min-height:44px;padding:0 var(--s1);min-width:0;
+  background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r-pill);
+  font-size:14px;color:var(--ink);white-space:nowrap;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed="true"]{
+  background:var(--accent-wash);border-color:var(--accent);color:var(--accent-deep);font-weight:600;
+}
+.btn{
+  width:100%;min-height:48px;padding:0 var(--s4);border-radius:var(--r-ctl);
+  border:1px solid transparent;font-size:16px;font-weight:600;
+}
+.btn--accent{background:var(--accent);color:var(--inv-ink)}
+.btn--accent:hover{background:var(--accent-deep)}
+.saved{margin:0;font-size:14px;color:var(--accent)}
+.saved:empty{display:none}
+
+/* 预算 */
+.meter{
+  position:relative;height:8px;border-radius:var(--r-pill);background:var(--accent-soft);
+}
+.meter__fill{display:block;height:100%;width:75%;background:var(--accent);border-radius:var(--r-pill);transition:width 200ms var(--ease)}
+.meter__tick{
+  position:absolute;top:-6px;left:80%;width:2px;height:20px;
+  background:var(--ink);border-radius:1px;
+}
+
+.numline{
+  margin:0;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums;
+}
+.numline b{color:var(--ink);font-weight:600}
+.budget__pct{font-size:36px;font-weight:600;letter-spacing:-.01em;color:var(--accent);font-variant-numeric:tabular-nums}
+.budget__note{margin:0;font-size:14px;color:var(--ink-2)}
+.budget__daily,.budget__proj{margin:0;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.alert{
+  margin:0;padding:var(--s3);border-radius:var(--r-ctl);
+  background:var(--accent-wash);border:1px solid var(--accent-soft);
+  color:var(--accent-deep);font-size:14px;
+}
+.alert[hidden]{display:none}
+
+/* 分类 */
+.cats{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s1)}
+.cat{
+  width:100%;display:grid;grid-template-columns:1fr auto;gap:var(--s1) var(--s2);
+  grid-template-areas:"n v" "bar bar";
+  align-items:center;min-height:44px;padding:var(--s1) 0;
+  background:none;border:0;border-radius:var(--r-ctl);text-align:left;
+}
+.cat:hover .cat__n,.cat:hover .cat__v{color:var(--accent)}
+.cat__n{grid-area:n;font-size:14px}
+.cat__v{grid-area:v;font-size:14px;font-variant-numeric:tabular-nums}
+.cat__bar{grid-area:bar;display:block;height:4px;border-radius:var(--r-pill);background:var(--paper-2);overflow:hidden}
+.cat__bar i{display:block;height:100%;background:var(--accent);border-radius:var(--r-pill)}
+.cat__p{
+  display:inline-block;min-width:40px;text-align:right;
+  font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-left:var(--s2);
+}
+.cat[aria-pressed="true"]{background:var(--paper-2);box-shadow:inset 2px 0 0 var(--accent)}
+.cat[aria-pressed="true"] .cat__n{font-weight:600}
+
+/* 明细 */
+.list__head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2)}
+.list__status{margin:0;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+
+.row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--s3);
+  align-items:baseline;padding:var(--s2) 0;border-top:1px solid var(--line);
+  font-size:14px;
+}
+.row:first-child{border-top:0}
+.row__t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row__d{color:var(--ink-2);font-size:14px;font-variant-numeric:tabular-nums}
+.row__a{font-variant-numeric:tabular-nums;text-align:right}
+.empty{margin:0;padding:var(--s3) 0;font-size:14px;color:var(--ink-2)}
+
+/* 批注 */
+.cell--note .cell__label{color:var(--inv-ink-2)}
+.note__line{margin:0;font-size:20px;max-width:20em}
+.note__line em{font-style:normal;color:var(--accent-on-dark)}
+.note__meta{margin:0;font-size:14px;color:var(--inv-ink-2);font-variant-numeric:tabular-nums}
+
+/* Ft5 一句大字收尾 */
+.foot{
+  margin-top:var(--s6);
+  border-top:1px solid var(--line);
+  padding:var(--s6) 0 var(--s5);
+}
+.foot__in{max-width:1180px;margin:0 auto;padding:0 var(--s3);display:flex;flex-direction:column;gap:var(--s5)}
+.foot__line{
+  margin:0;font-size:36px;font-weight:600;letter-spacing:-.01em;max-width:18em;text-wrap:balance;
+}
+.foot__meta{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s3) var(--s4);
+  padding-top:var(--s3);border-top:1px solid var(--line);
+  font-size:14px;color:var(--ink-2);
+}
+.foot__brand{font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.foot__meta a{text-decoration:none;border-bottom:1px solid var(--line-2)}
+.foot__meta a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ---------------- 断点：640 两栏、1000 六栏 Bento */
+@media (min-width:640px){
+  .bento{padding:0 var(--s4);gap:var(--s3)}
+  .total__num{font-size:48px}
+  .foot__line{font-size:48px}
+  .cell{padding:var(--s4)}
+  .bento{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:
+      "hero hero"
+      "total total"
+      "entry entry"
+      "budget cats"
+      "list list"
+      "note note";
+  }
+  .cell--hero{grid-area:hero}
+  .cell--entry{grid-area:entry}
+  .cell--total{grid-area:total}
+  .cell--budget{grid-area:budget}
+  .cell--cats{grid-area:cats}
+  .cell--list{grid-area:list}
+  .cell--note{grid-area:note}
+}
+@media (min-width:768px) and (max-width:999px){
+  .bento{
+    grid-template-areas:
+      "hero total"
+      "entry entry"
+      "budget cats"
+      "list list"
+      "note note";
+  }
+}
+@media (min-width:1000px){
+  h1{font-size:48px}
+  .bento{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    grid-template-areas:
+      "hero hero hero total total total"
+      "entry entry budget budget cats cats"
+      "list list list list note note";
+  }
+  .rows{display:block;columns:2;column-gap:var(--s4)}
+  .row{break-inside:avoid}
+  .links{display:flex;flex-direction:row;gap:var(--s4);position:static;padding:0;border:0;background:none}
+  .bar__toggle{display:none}
+}
+@media (max-width:480px){
+  .banner__link{display:none}
+}
+@media (max-width:359px){
+  .bar__cta{padding:0 var(--s3)}
+  .brand{font-size:20px}
+  .cell{padding:var(--s3)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">跳到正文</a>
+
+<!-- N12：公告条 + 可收起导航 -->
+<header class="nav" id="nav">
+  <div class="banner" id="banner">
+    <div class="banner__in">
+      <p class="banner__text"><span class="banner__dot" aria-hidden="true"></span>预算提醒线设在 80%：到了只提醒一次，不追着念。</p>
+      <a class="banner__link" href="#budget">看预算</a>
+      <button class="banner__x" id="banner-x" type="button" aria-label="关闭这条公告"><span aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <div class="bar">
+    <div class="bar__in">
+      <a class="brand" href="#top">TallyLane</a>
+      <nav class="links" id="links" aria-label="主导航">
+        <a href="#entry">记一笔</a>
+        <a href="#total">本月</a>
+        <a href="#cats">分类</a>
+        <a href="#budget">预算</a>
+      </nav>
+      <span class="bar__spacer"></span>
+      <a class="bar__cta" href="#entry">开始记</a>
+      <button class="bar__toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="links" aria-label="打开导航">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="bento">
+
+    <!-- 1 · 主张 -->
+    <article class="cell cell--hero">
+      <p class="eyebrow">个人记账 · 单手十秒</p>
+      <h1>十秒，记一笔。</h1>
+      <p class="hero__sub">外卖到了、地铁出站，掏出手机点三下。分类、合计、超支提醒，我替你算。</p>
+      <a class="chip-link" href="#entry">记今天第一笔 <span aria-hidden="true">↓</span></a>
+    </article>
+
+    <!-- 2 · 记一笔（核心动作） -->
+    <article class="cell cell--entry" id="entry">
+      <p class="cell__label">记一笔</p>
+      <h2>多少钱，花在哪</h2>
+      <form id="entry-form" novalidate>
+        <div class="field">
+          <label class="field__label" for="amt">金额</label>
+          <div class="amt">
+            <span class="amt__cur" aria-hidden="true">¥</span>
+            <input id="amt" name="amt" type="text" inputmode="decimal" autocomplete="off"
+                   placeholder="0.00" aria-describedby="amt-hint">
+          </div>
+          <p class="hint" id="amt-hint">金额、分类两下填完，日期就是今天。</p>
+        </div>
+        <div class="chips" role="group" aria-label="分类">
+          <button class="chip" type="button" data-cat="餐饮" aria-pressed="true">餐饮</button>
+          <button class="chip" type="button" data-cat="交通" aria-pressed="false">交通</button>
+          <button class="chip" type="button" data-cat="居住" aria-pressed="false">居住</button>
+          <button class="chip" type="button" data-cat="购物" aria-pressed="false">购物</button>
+          <button class="chip" type="button" data-cat="其他" aria-pressed="false">其他</button>
+        </div>
+        <button class="btn btn--accent" type="submit">记下这笔</button>
+        <p class="saved" id="saved" role="status" aria-live="polite"></p>
+      </form>
+    </article>
+
+    <!-- 3 · 本月合计 -->
+    <article class="cell cell--total" id="total">
+      <p class="cell__label">本月已记</p>
+      <p class="total__num" id="total-num">¥3,760.00</p>
+      <p class="total__meta" id="total-meta">16 笔 · 日均 ¥470.00 · 还剩 22 天</p>
+      <p class="total__max" id="total-max">最大一笔：房租 ¥3,200.00</p>
+    </article>
+
+    <!-- 4 · 预算 -->
+    <article class="cell cell--budget" id="budget">
+      <p class="cell__label">预算</p>
+      <h2>用了 <span class="budget__pct" id="pct">75%</span></h2>
+      <div class="meter" id="meter" role="progressbar" aria-label="本月预算使用比例"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="75">
+        <span class="meter__fill" id="meter-fill"></span>
+        <span class="meter__tick" aria-hidden="true"></span>
+      </div>
+      <p class="numline"><b id="spent">¥3,760.00</b> / ¥5,000.00</p>
+      <p class="budget__note" id="budget-note">还差 ¥240.00 到刻度那条 80% 提醒线。</p>
+      <p class="alert" id="budget-alert" role="status" aria-live="polite" hidden></p>
+      <div class="budget__foot">
+        <p class="budget__daily" id="budget-daily">剩 22 天，一天 ¥56.36。</p>
+        <p class="budget__proj" id="budget-proj">不含房租，这 8 天花了 ¥560.00，一天 ¥70.00。</p>
+      </div>
+    </article>
+
+    <!-- 5 · 分类 -->
+    <article class="cell cell--cats" id="cats">
+      <p class="cell__label">本月分类</p>
+      <h2>钱去哪了 <span class="hint-inline">点一行只看这一类</span></h2>
+      <ul class="cats" id="cats-list"></ul>
+    </article>
+
+    <!-- 6 · 明细 -->
+    <article class="cell cell--list" id="list">
+      <div class="list__head">
+        <p class="cell__label">本月明细</p>
+        <p class="list__status" id="list-status">全部 · 16 笔</p>
+      </div>
+      <ul class="rows" id="rows"></ul>
+      <p class="empty" id="rows-empty" hidden>这个分类这个月还没有账。</p>
+    </article>
+
+    <!-- 7 · 批注 -->
+    <article class="cell cell--note">
+      <p class="cell__label">账本边上</p>
+      <p class="note__line">房租吃掉 <em id="note-share">85%</em>。剩下的，吃饭、坐车、偶尔看场电影，够。</p>
+      <p class="note__meta" id="note-meta">餐饮 6 笔 · ¥176.00</p>
+    </article>
+
+  </div>
+
+  <!-- Ft5：一句大字收尾 -->
+  <footer class="foot">
+    <div class="foot__in">
+      <p class="foot__line">记明白，就不慌了。</p>
+      <div class="foot__meta">
+        <span class="foot__brand">TallyLane</span>
+        <span>© 2026 · 无广告，不推分期</span>
+        <a href="#top">回到顶部</a>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* 数字只此一份：合计、分类、明细、批注全部从这里算，页面静态值与之一致 */
+  var BUDGET = 5000;
+  var ALERT_PCT = 80;
+  var ELAPSED_DAYS = 8;
+  var DAYS_LEFT = 22;
+  var CATS = ["餐饮","交通","居住","购物","其他"];
+
+  var entries = [
+    {t:"咖啡",  c:"餐饮", a:22,   d:"11-08"},
+    {t:"地铁",  c:"交通", a:6,    d:"11-08"},
+    {t:"外卖",  c:"餐饮", a:38,   d:"11-07"},
+    {t:"洗衣液",c:"购物", a:45,   d:"11-07"},
+    {t:"午饭",  c:"餐饮", a:32,   d:"11-06"},
+    {t:"打车",  c:"交通", a:27,   d:"11-06"},
+    {t:"话费",  c:"其他", a:58,   d:"11-05"},
+    {t:"电影",  c:"其他", a:45,   d:"11-05"},
+    {t:"晚饭",  c:"餐饮", a:46,   d:"11-04"},
+    {t:"袜子",  c:"购物", a:39,   d:"11-04"},
+    {t:"房租",  c:"居住", a:3200, d:"11-03"},
+    {t:"早餐",  c:"餐饮", a:12,   d:"11-03"},
+    {t:"理发",  c:"其他", a:58,   d:"11-02"},
+    {t:"厨房纸",c:"购物", a:88,   d:"11-02"},
+    {t:"地铁",  c:"交通", a:18,   d:"11-01"},
+    {t:"早餐",  c:"餐饮", a:26,   d:"11-01"}
+  ];
+
+  var selectedCat = "餐饮";
+  var activeFilter = null;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var money = function(n){
+    return "¥" + n.toLocaleString("zh-CN",{minimumFractionDigits:2, maximumFractionDigits:2});
+  };
+  var sumOf = function(list){ return list.reduce(function(s,e){ return s + e.a; }, 0); };
+
+  function aggregate(){
+    var total = sumOf(entries);
+    var byCat = {};
+    CATS.forEach(function(c){ byCat[c] = {sum:0, n:0}; });
+    entries.forEach(function(e){
+      if(!byCat[e.c]) byCat[e.c] = {sum:0, n:0};
+      byCat[e.c].sum += e.a;
+      byCat[e.c].n += 1;
+    });
+    return {total:total, byCat:byCat};
+  }
+
+  function renderTotal(agg){
+    $("total-num").textContent = money(agg.total);
+    $("total-meta").textContent =
+      entries.length + " 笔 · 日均 " + money(agg.total / ELAPSED_DAYS) + " · 还剩 " + DAYS_LEFT + " 天";
+    var max = entries.reduce(function(m,e){ return e.a > m.a ? e : m; }, entries[0]);
+    $("total-max").textContent = "最大一笔：" + max.t + " " + money(max.a);
+  }
+
+  function renderBudget(agg){
+    var pct = Math.round(agg.total / BUDGET * 100);
+    $("pct").textContent = pct + "%";
+    $("spent").textContent = money(agg.total);
+    $("meter-fill").style.width = Math.min(100, pct) + "%";
+    $("meter").setAttribute("aria-valuenow", String(Math.min(100, pct)));
+
+    var left = BUDGET - agg.total;
+    $("budget-daily").textContent = left > 0
+      ? "剩 " + DAYS_LEFT + " 天，一天 " + money(left / DAYS_LEFT) + "。"
+      : "剩 " + DAYS_LEFT + " 天，一天 " + money(0) + "。";
+    var rent = agg.byCat["居住"] ? agg.byCat["居住"].sum : 0;
+    $("budget-proj").textContent = "不含房租，这 " + ELAPSED_DAYS + " 天花了 " +
+      money(agg.total - rent) + "，一天 " + money((agg.total - rent) / ELAPSED_DAYS) + "。";
+
+    var alertEl = $("budget-alert");
+    var noteEl = $("budget-note");
+    if(pct >= ALERT_PCT){
+      var perDay = left > 0 ? left / DAYS_LEFT : 0;
+      noteEl.hidden = true;
+      alertEl.hidden = false;
+      alertEl.textContent = left > 0
+        ? "到 " + ALERT_PCT + "% 了。剩 " + money(left) + "，还有 " + DAYS_LEFT + " 天，一天别超过 " + money(perDay) + "。"
+        : "预算用完了，超 " + money(-left) + "。这个月剩下的日子，慢一点。";
+    }else{
+      noteEl.hidden = false;
+      alertEl.hidden = true;
+      alertEl.textContent = "";
+      noteEl.textContent = "还差 " + money(BUDGET * ALERT_PCT / 100 - agg.total) + " 到刻度那条 " + ALERT_PCT + "% 提醒线。";
+    }
+  }
+
+  function renderCats(agg){
+    var list = $("cats-list");
+    var rows = CATS.slice().sort(function(a,b){ return agg.byCat[b].sum - agg.byCat[a].sum; });
+    list.textContent = "";
+    rows.forEach(function(c){
+      var d = agg.byCat[c];
+      var pct = agg.total ? d.sum / agg.total * 100 : 0;
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cat";
+      btn.dataset.cat = c;
+      btn.setAttribute("aria-pressed", activeFilter === c ? "true" : "false");
+      btn.setAttribute("aria-label", "只看" + c + "，" + d.n + " 笔，" + money(d.sum));
+      btn.innerHTML =
+        '<span class="cat__n">' + c + '</span>' +
+        '<span class="cat__v">' + money(d.sum) + '<span class="cat__p">' + Math.round(pct) + '%</span></span>' +
+        '<span class="cat__bar"><i style="width:' + Math.max(pct, 2).toFixed(1) + '%"></i></span>';
+      /* innerHTML 只拼固定分类名与已格式化的金额，无用户输入 */
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+  }
+
+  function renderList(agg){
+    var rowsEl = $("rows");
+    var shown = activeFilter ? entries.filter(function(e){ return e.c === activeFilter; }) : entries;
+    rowsEl.textContent = "";
+    shown.forEach(function(e){
+      var li = document.createElement("li");
+      li.className = "row";
+      li.innerHTML =
+        '<span class="row__t">' + e.t + " · " + e.c + '</span>' +
+        '<span class="row__d">' + e.d + '</span>' +
+        '<span class="row__a">' + money(e.a) + '</span>';
+      rowsEl.appendChild(li);
+    });
+    $("rows-empty").hidden = shown.length !== 0;
+    $("list-status").textContent = (activeFilter ? activeFilter : "全部") + " · " + shown.length + " 笔";
+  }
+
+  function renderNote(agg){
+    var food = agg.byCat["餐饮"];
+    var share = agg.total ? Math.round(agg.byCat["居住"].sum / agg.total * 100) : 0;
+    $("note-share").textContent = share + "%";
+    $("note-meta").textContent =
+      "餐饮 " + food.n + " 笔 · " + money(food.sum) + " —— 记在 11 月 8 日";
+  }
+
+  function renderAll(){
+    var agg = aggregate();
+    renderTotal(agg);
+    renderBudget(agg);
+    renderCats(agg);
+    renderList(agg);
+    renderNote(agg);
+  }
+
+  /* ---------------- 记一笔 */
+  var form = $("entry-form");
+  var amt = $("amt");
+  var hint = $("amt-hint");
+  var hintDefault = hint.textContent;
+
+  form.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var raw = amt.value.replace(/[^0-9.]/g, "");
+    var v = parseFloat(raw);
+    if(!raw || isNaN(v) || v <= 0 || v > 99999){
+      hint.textContent = "填个 0 到 99999 之间的金额。";
+      hint.classList.add("is-error");
+      amt.setAttribute("aria-invalid", "true");
+      amt.focus();
+      return;
+    }
+    hint.textContent = hintDefault;
+    hint.classList.remove("is-error");
+    amt.removeAttribute("aria-invalid");
+
+    entries.unshift({t:"随手记", c:selectedCat, a:Math.round(v * 100) / 100, d:"11-08"});
+    amt.value = "";
+    $("saved").textContent = "已记：" + selectedCat + " " + money(v) + " · 本月 " + entries.length + " 笔";
+    renderAll();
+  });
+
+  /* ---------------- 分类切换 */
+  $("cats-list").addEventListener("click", function(ev){
+    var btn = ev.target.closest(".cat");
+    if(!btn) return;
+    activeFilter = (activeFilter === btn.dataset.cat) ? null : btn.dataset.cat;
+    renderAll();
+  });
+
+  /* ---------------- 记录分类选择 */
+  document.querySelector(".chips").addEventListener("click", function(ev){
+    var btn = ev.target.closest(".chip");
+    if(!btn) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(c){
+      c.setAttribute("aria-pressed", c === btn ? "true" : "false");
+    });
+    selectedCat = btn.dataset.cat;
+  });
+
+  /* ---------------- N12：滚动收起公告条、关闭公告 */
+  var nav = $("nav");
+  var dismissed = false;
+  var lastY = window.pageYOffset;
+
+  window.addEventListener("scroll", function(){
+    if(dismissed) return;
+    var y = window.pageYOffset;
+    if(y < 24){ nav.classList.remove("is-compact"); }
+    else if(y > lastY + 6){ nav.classList.add("is-compact"); }
+    else if(y < lastY - 6){ nav.classList.remove("is-compact"); }
+    lastY = y;
+  }, {passive:true});
+
+  $("banner-x").addEventListener("click", function(){
+    dismissed = true;
+    nav.classList.add("is-dismissed");
+    nav.classList.remove("is-compact");
+    document.documentElement.style.setProperty("--banner-h", "0px");
+    $("banner").hidden = true;
+  });
+
+  /* ---------------- 移动端导航 */
+  var toggle = $("nav-toggle");
+  var links = $("links");
+
+  function closeNav(){
+    links.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "打开导航");
+  }
+
+  toggle.addEventListener("click", function(){
+    var open = links.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute("aria-label", open ? "收起导航" : "打开导航");
+  });
+
+  links.addEventListener("click", function(ev){
+    if(ev.target.tagName === "A") closeNav();
+  });
+
+  document.addEventListener("keydown", function(ev){
+    if(ev.key === "Escape" && toggle.getAttribute("aria-expanded") === "true"){
+      closeNav();
+      toggle.focus();
+    }
+  });
+
+  /* 跳到最后一次记的金额框 */
+  Array.prototype.forEach.call(document.querySelectorAll('a[href="#entry"]'), function(a){
+    a.addEventListener("click", function(){ amt.focus({preventScroll:true}); });
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

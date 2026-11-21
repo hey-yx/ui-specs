@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=N12; footer=Ft1; base=#ffffff">
+<meta name="description" content="CourseDeck 课栈 · 上班族碎片化数据分析实战营：6 章 24 节（总长 6 小时 40 分）、前 2 节免费试听、断点续学、12 份练习数据与结课证书进度。">
+<title>CourseDeck 课栈 - 上班族碎片化数据分析实战课</title>
+<style>
+/* 数值来源：project-polaris (Shopify Polaris)
+ * 色彩：content/tokens/polaris.shopify.com--tokens.md:23-38 (#303030, #616161, #005BD3, #8E0B21, #4F4700, #014B40, #FFFFFF, #F7F7F7, #1A1A1A, #E3E3E3, #CCCCCC, #FEC1C7, #FFEB78, #92FCAC)
+ * 字阶：polaris.shopify.com--tokens.md:44-59 (12/13/14/16/18/20/22/24/30/32px, line-height 16/20/24/28/32/40px, weight 450/550/650/700)
+ * 间距/圆角/动效/阴影：polaris.shopify.com--tokens.md:67-115 (4/8/12/16/20/24/32/48px, radius 4/6/8/12/16px, duration 150/200ms)
+ */
+:root {
+  --p-text: #303030;
+  --p-text-secondary: #616161;
+  --p-emphasis: #005BD3;
+  --p-emphasis-soft: rgba(0, 91, 211, 0.08);
+  --p-critical: #8E0B21;
+  --p-critical-border: #FEC1C7;
+  --p-critical-soft: rgba(254, 193, 199, 0.35);
+  --p-caution: #4F4700;
+  --p-caution-border: #FFEB78;
+  --p-caution-soft: rgba(255, 235, 120, 0.35);
+  --p-success: #014B40;
+  --p-success-border: #92FCAC;
+  --p-success-soft: rgba(146, 252, 172, 0.28);
+  --p-surface: #FFFFFF;
+  --p-surface-secondary: #F7F7F7;
+  --p-brand-bg: #303030;
+  --p-brand-hover: #1A1A1A;
+  --p-border: #E3E3E3;
+  --p-border-hover: #CCCCCC;
+  --p-font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --p-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --p-r-sm: 4px;
+  --p-r-md: 8px;
+  --p-r-lg: 12px;
+  --p-shadow-100: 0 1px 0 0 rgba(26, 26, 26, 0.07);
+  --p-shadow-400: 0 8px 16px -4px rgba(26, 26, 26, 0.22);
+  --p-dur: 200ms;
+  --p-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--p-surface);
+  color: var(--p-text);
+  font-family: var(--p-font);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, pre { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, select { font-family: inherit; }
+a { color: var(--p-emphasis); text-decoration: none; }
+svg { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--p-emphasis); outline-offset: 2px; border-radius: var(--p-r-sm); }
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 100;
+  background: var(--p-brand-bg); color: #FFFFFF;
+  padding: 10px 16px; border-radius: var(--p-r-md); font-weight: 650;
+}
+.skip:focus { left: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
+}
+
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: 24px; }
+
+/* N12 可收起公告条 + Polaris #303030 深色顶栏 */
+.nav-n12 {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.nav-n12__banner {
+  background: var(--p-emphasis);
+  color: #FFFFFF;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 6px 48px 6px 16px;
+  font-size: 13px;
+  line-height: 18px;
+  position: relative;
+  overflow: hidden;
+  transition: max-height var(--p-dur) var(--p-ease), padding var(--p-dur) var(--p-ease), opacity var(--p-dur) var(--p-ease);
+  max-height: 80px;
+}
+.nav-n12.is-compact .nav-n12__banner {
+  max-height: 0;
+  padding-block: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-n12.is-dismissed .nav-n12__banner { display: none; }
+.nav-n12__close {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 32px;
+  min-height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--p-r-sm);
+  background: transparent;
+  color: #FFFFFF;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+}
+.nav-n12__bar {
+  background: var(--p-brand-bg);
+  color: #FFFFFF;
+  border-bottom: 1px solid var(--p-brand-hover);
+}
+.p-header-in {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 8px;
+}
+.p-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  min-height: 40px;
+}
+.p-resume-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 12px;
+  background: var(--p-brand-hover);
+  border: 1px solid #4d4d4d;
+  border-radius: var(--p-r-md);
+  font-size: 13px;
+  line-height: 20px;
+  color: #FFFFFF;
+}
+.p-resume-banner .p-btn {
+  background: var(--p-surface);
+  color: var(--p-text);
+  border-color: var(--p-surface);
+}
+.p-header-act { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.p-header-act .p-btn-dark-ghost {
+  background: var(--p-brand-hover);
+  border-color: #616161;
+  color: #FFFFFF;
+}
+.aside-rail .p-card {
+  background: var(--p-surface-secondary);
+}
+
+/* Polaris Buttons */
+.p-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--p-r-md);
+  border: 1px solid var(--p-border);
+  background: var(--p-surface);
+  color: var(--p-text);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--p-shadow-100);
+  transition: background-color var(--p-dur) var(--p-ease), border-color var(--p-dur) var(--p-ease);
+}
+.p-btn-lg { min-height: 44px; padding: 0 18px; font-size: 14px; }
+.p-btn-primary {
+  background: var(--p-brand-bg);
+  border-color: var(--p-brand-bg);
+  color: #FFFFFF;
+}
+.p-btn-emphasis {
+  background: var(--p-emphasis);
+  border-color: var(--p-emphasis);
+  color: #FFFFFF;
+}
+.p-btn[aria-pressed="true"] {
+  background: var(--p-emphasis-soft);
+  border-color: var(--p-emphasis);
+  color: var(--p-emphasis);
+}
+.p-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+@media (hover: hover) {
+  .p-btn:hover:not(:disabled) { border-color: var(--p-border-hover); background: var(--p-surface-secondary); }
+  .p-btn-primary:hover:not(:disabled) { background: var(--p-brand-hover); border-color: var(--p-brand-hover); }
+  .p-btn-emphasis:hover:not(:disabled) { background: #0047a8; border-color: #0047a8; }
+}
+
+/* Polaris Badge */
+.p-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 650;
+}
+.badge-free { background: var(--p-success-soft); color: var(--p-success); border: 1px solid var(--p-success-border); }
+.badge-lock { background: var(--p-surface-secondary); color: var(--p-text-secondary); border: 1px solid var(--p-border); }
+.badge-info { background: var(--p-emphasis-soft); color: var(--p-emphasis); border: 1px solid rgba(0, 91, 211, 0.25); }
+.badge-warn { background: var(--p-caution-soft); color: var(--p-caution); border: 1px solid var(--p-caution-border); }
+
+/* 课程标题头 + 双栏主学习区 */
+.main-area { padding: 24px 0 64px; }
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.page-title { font-size: 24px; line-height: 32px; font-weight: 700; color: var(--p-text); }
+.page-sub { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--p-text-secondary); max-width: 48em; }
+.page-meta-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 20px;
+  align-items: start;
+}
+.grid-2 > * { min-width: 0; }
+
+/* Polaris Card */
+.p-card {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r-lg);
+  box-shadow: var(--p-shadow-100);
+  overflow: hidden;
+}
+.p-card + .p-card { margin-top: 16px; }
+.p-card-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--p-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.p-card-title { font-size: 16px; line-height: 24px; font-weight: 650; color: var(--p-text); }
+.p-card-body { padding: 18px; }
+
+/* 视频与幻灯片试听区 */
+.player-stage {
+  background: #1A1A1A;
+  color: #FFFFFF;
+  border-radius: var(--p-r-md);
+  padding: 16px;
+}
+.player-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 20px;
+}
+.slide-canvas {
+  background: #252525;
+  border-radius: var(--p-r-md);
+  padding: 14px;
+  border: 1px solid #3d3d3d;
+}
+.player-controls {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.scrubber { flex: 1; min-width: 140px; min-height: 28px; accent-color: var(--p-success-border); cursor: pointer; }
+.time-readout { font-family: var(--p-mono); font-size: 12px; line-height: 16px; color: #E3E3E3; }
+.speed-group { display: flex; gap: 4px; }
+.speed-btn {
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: var(--p-r-sm);
+  border: 1px solid #555555;
+  background: #303030;
+  color: #FFFFFF;
+  font-size: 12px;
+  cursor: pointer;
+}
+.speed-btn[aria-pressed="true"] { background: var(--p-emphasis); border-color: var(--p-emphasis); }
+
+/* 课节辅助 Tab（字幕 / 12 份练习数据 / 讲师与证书 / 学员评价） */
+.p-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--p-border);
+  padding: 0 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.p-tabs::-webkit-scrollbar { display: none; }
+.p-tab {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--p-text-secondary);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.p-tab[aria-pressed="true"] {
+  color: var(--p-text);
+  font-weight: 650;
+  border-bottom-color: var(--p-emphasis);
+}
+
+.cue-list { display: grid; gap: 6px; }
+.cue-btn {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--p-r-md);
+  background: var(--p-surface-secondary);
+  color: var(--p-text);
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+.cue-btn[aria-current="true"] {
+  background: var(--p-emphasis-soft);
+  border-color: var(--p-emphasis);
+}
+.cue-time { font-family: var(--p-mono); font-size: 12px; color: var(--p-emphasis); font-weight: 650; }
+
+/* Index Table：练习数据样例 & 课件文件清单 */
+.p-table-wrap { overflow-x: auto; }
+.p-table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 20px; }
+.p-table th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--p-border);
+  background: var(--p-surface-secondary);
+  font-weight: 650;
+  color: var(--p-text-secondary);
+  font-size: 12px;
+}
+.p-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--p-border);
+  color: var(--p-text);
+  vertical-align: middle;
+}
+.p-table tr:last-child td { border-bottom: 0; }
+
+/* 讲师与学员评价 */
+.review-grid { display: grid; gap: 12px; }
+.review-card {
+  background: var(--p-surface-secondary);
+  border-radius: var(--p-r-md);
+  padding: 14px;
+  border: 1px solid var(--p-border);
+}
+.review-head { display: flex; justify-content: space-between; font-size: 13px; font-weight: 650; margin-bottom: 6px; }
+
+/* 右栏：6 章 24 节大纲 + 定价买断/会员对比卡 */
+.syllabus-filters { display: flex; gap: 6px; padding: 12px 18px; border-bottom: 1px solid var(--p-border); flex-wrap: wrap; }
+.chip-sm {
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: var(--p-r-md);
+  border: 1px solid var(--p-border);
+  background: var(--p-surface);
+  color: var(--p-text);
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+}
+.chip-sm[aria-pressed="true"] { background: var(--p-brand-bg); border-color: var(--p-brand-bg); color: #FFFFFF; font-weight: 650; }
+
+.chap-item { border-bottom: 1px solid var(--p-border); }
+.chap-item:last-child { border-bottom: 0; }
+.chap-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 0;
+  background: var(--p-surface-secondary);
+  color: var(--p-text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 650;
+  cursor: pointer;
+  text-align: left;
+}
+.lesson-list { padding: 6px 10px; display: grid; gap: 4px; background: var(--p-surface); }
+.lesson-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--p-r-md);
+  border: 1px solid transparent;
+}
+.lesson-row.is-active { background: var(--p-emphasis-soft); border-color: rgba(0, 91, 211, 0.35); }
+.lesson-main {
+  border: 0; background: transparent; padding: 0; text-align: left; cursor: pointer;
+  color: var(--p-text); font-size: 13px; line-height: 20px; flex: 1; min-width: 0; min-height: 28px;
+}
+.lesson-right { display: flex; align-items: center; gap: 6px; flex: none; }
+.done-btn {
+  min-height: 28px; padding: 0 8px; border-radius: var(--p-r-sm);
+  border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-text);
+  font-size: 12px; cursor: pointer;
+}
+.done-btn[aria-pressed="true"] { background: var(--p-success-soft); border-color: var(--p-success-border); color: var(--p-success); font-weight: 650; }
+
+/* Polaris 结课进度与买断卡 */
+.prog-track {
+  height: 10px;
+  background: var(--p-surface-secondary);
+  border: 1px solid var(--p-border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.prog-fill { height: 100%; background: var(--p-success); transition: width var(--p-dur) var(--p-ease); }
+
+.tier-opt {
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r-md);
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: var(--p-surface);
+}
+.tier-opt[aria-pressed="true"] {
+  border-color: var(--p-emphasis);
+  background: var(--p-emphasis-soft);
+}
+.price-big { font-size: 20px; line-height: 28px; font-weight: 700; color: var(--p-text); }
+
+/* 状态横幅 */
+.p-banner {
+  border-radius: var(--p-r-lg);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.p-banner-busy { background: var(--p-emphasis-soft); border: 1px solid var(--p-emphasis); color: var(--p-text); }
+.p-banner-err { background: var(--p-critical-soft); border: 1px solid var(--p-critical-border); color: var(--p-critical); }
+
+/* 弹窗 */
+.backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(26, 26, 26, 0.45);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.dialog {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r-lg);
+  box-shadow: var(--p-shadow-400);
+  width: min(600px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Ft1 词标标语页脚 */
+.foot-mast {
+  border-top: 1px solid var(--p-border);
+  background: var(--p-surface-secondary);
+  padding: 24px 0 28px;
+  color: var(--p-text-secondary);
+}
+.foot-mast__in { display: grid; gap: 6px; }
+.foot-mast__wordmark { font-size: 15px; line-height: 22px; font-weight: 700; color: var(--p-text); margin: 0; }
+.foot-mast__tagline { font-size: 13px; line-height: 20px; color: var(--p-text-secondary); margin: 0; }
+.foot-mast__links { font-size: 12px; line-height: 18px; color: var(--p-text-secondary); display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 2px 0 0; }
+.foot-mast__links a { display: inline-flex; align-items: center; min-height: 24px; color: var(--p-emphasis); font-weight: 650; }
+
+@media (max-width: 960px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; }
+  .p-resume-banner { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#playerStage">跳到试听与学习工作台</a>
+
+<header class="nav-n12" id="navN12">
+  <div class="nav-n12__banner" id="promoBanner">
+    <span>第 1 至 2 节免登录试听 · 单课 ¥299 永久买断或 ¥39/月平台会员（12 份练习数据同步解锁）</span>
+    <button class="nav-n12__close" type="button" id="dismissPromoBtn" aria-label="关闭试听公告">×</button>
+  </div>
+  <div class="nav-n12__bar">
+    <div class="wrap p-header-in">
+      <a class="p-brand" href="#top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="18" rx="4" fill="#1A1A1A" stroke="#616161"/>
+          <path d="M7 15v-4M12 15V8M17 15v-6" stroke="#92FCAC" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span>CourseDeck 课栈</span>
+      </a>
+      <div class="p-resume-banner" id="resumeBanner">
+        <span id="resumeText">上次学到：第 1 章第 2 节 · 04:15</span>
+        <button class="p-btn" type="button" id="resumeBtn">接着学</button>
+      </div>
+      <div class="p-header-act">
+        <button class="p-btn p-btn-dark-ghost" type="button" id="certPreviewBtn">结课证书预览</button>
+        <button class="p-btn p-btn-emphasis" type="button" id="unlockToggleBtn">解锁全课（¥299 买断）</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-area wrap" id="top">
+  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+
+  <div class="p-banner p-banner-busy" id="busyBar" aria-busy="true" hidden>
+    <span>正在切换课时讲义并同步练习数据样例...</span>
+  </div>
+  <div class="p-banner p-banner-err" id="errorBox" role="alert" hidden>
+    <div>
+      <strong style="font-size:15px">课时大纲与试听流加载超时</strong>
+      <div style="margin-top:2px;font-size:13px;color:var(--p-text)">学习进度已安全保留在本地，请重试连接视频节点。</div>
+    </div>
+    <button class="p-btn p-btn-primary" id="retryBtn" type="button">重试加载</button>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1 class="page-title" id="courseTitle">上班族碎片化数据分析：每天 25 分钟拿下业务看板与 SQL 实战</h1>
+      <p class="page-sub">全课 6 章共 24 节（总时长 6 小时 40 分），配 12 份真实业务 CSV 练习数据、PDF 讲义与参考答案。前 2 节免费试听，通勤 20-40 分钟即可学完 1 节。</p>
+      <div class="page-meta-pills">
+        <span class="p-badge badge-free">前 2 节免登录试听</span>
+        <span class="p-badge badge-info">6 章 24 节 · 6h 40m</span>
+        <span class="p-badge badge-warn">12 份练习数据 + 参考答案</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <section class="p-card" id="playerStage" aria-label="试听与课时播放窗口">
+        <div class="p-card-head">
+          <div>
+            <h2 class="p-card-title" id="activeLessonTitle">1.2 为什么指标总是对不上：口径拆解三步法（免费试听）</h2>
+            <p style="font-size:12px;color:var(--p-text-secondary)" id="activeLessonSub">第 1 章 · 本节时长 15 分钟 · 配套数据：orders_day1.csv</p>
+          </div>
+          <span class="p-badge badge-free" id="activeBadge">免费试听</span>
+        </div>
+        <div class="p-card-body">
+          <div class="player-stage" id="playerContainer">
+            <div class="player-head">
+              <span id="playerHint">视频占位播放器（本地交互示范，点击时间轴或下方字幕均可跳转）</span>
+              <span class="p-badge" id="playerStatusPill" style="background:#005BD3;color:#FFFFFF;border:0">试听中</span>
+            </div>
+            <div class="slide-canvas">
+              <svg id="slideSvg" viewBox="0 0 640 200" role="img" aria-label="课程演示幻灯片画面"></svg>
+            </div>
+            <div class="player-controls">
+              <button class="p-btn" type="button" id="playPauseBtn">播放 / 暂停</button>
+              <label class="sr-only" for="scrubber">播放进度条</label>
+              <input class="scrubber" id="scrubber" type="range" min="0" max="900" value="255">
+              <span class="time-readout" id="timeDisplay">04:15 / 15:00</span>
+              <div class="speed-group" role="group" aria-label="倍速选择">
+                <button class="speed-btn" type="button" data-speed="1.0" aria-pressed="true">1.0x</button>
+                <button class="speed-btn" type="button" data-speed="1.25" aria-pressed="false">1.25x</button>
+                <button class="speed-btn" type="button" data-speed="1.5" aria-pressed="false">1.5x</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-tabs" role="group" aria-label="讲义与练习切换">
+          <button class="p-tab" type="button" data-panel="subtitles" aria-pressed="true">试听字幕导航</button>
+          <button class="p-tab" type="button" data-panel="files" aria-pressed="false">课件与 12 份练习数据</button>
+          <button class="p-tab" type="button" data-panel="dataset" aria-pressed="false">数据集样例预览</button>
+          <button class="p-tab" type="button" data-panel="reviews" aria-pressed="false">讲师履历与学员评价</button>
+        </div>
+
+        <div class="p-card-body" id="tabPanelBody"></div>
+      </section>
+    </div>
+
+    <aside class="aside-rail" aria-label="大纲目录与报名买断区">
+      <div class="p-card">
+        <div class="p-card-head">
+          <h2 class="p-card-title">学习进度与结课证书</h2>
+          <span class="p-badge badge-info" id="certStateBadge">进行中</span>
+        </div>
+        <div class="p-card-body">
+          <div style="display:flex;justify-content:space-between;font-size:13px">
+            <span>已完成课时：<strong id="doneLessonsCnt">1</strong> / 24 节</span>
+            <span>章末练习：<strong id="doneExCnt">1</strong> / 6 次</span>
+          </div>
+          <div class="prog-track" aria-hidden="true"><div class="prog-fill" id="progFill" style="width:12%"></div></div>
+          <p style="margin-top:8px;font-size:12px;color:var(--p-text-secondary)">规则（演示口径）：学完 24 节全部课程并提交 6 次章节练习答案，即可生成电子结课证书。</p>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="p-btn" type="button" id="markDoneBtn">标记本节已学完</button>
+            <button class="p-btn" type="button" id="submitExBtn">打卡 1 次章末练习</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-card">
+        <div class="p-card-head">
+          <h2 class="p-card-title">课程大纲（6 章 · 24 节）</h2>
+          <span style="font-size:12px;color:var(--p-text-secondary)">共 6h 40m</span>
+        </div>
+        <div class="syllabus-filters" id="sylFilters" role="group" aria-label="筛选大纲">
+          <button class="chip-sm" type="button" data-sfilter="all" aria-pressed="true">全部 24 节</button>
+          <button class="chip-sm" type="button" data-sfilter="free" aria-pressed="false">仅看免费试听 (2)</button>
+          <button class="chip-sm" type="button" data-sfilter="todo" aria-pressed="false">尚未学完</button>
+        </div>
+        <div id="syllabusContainer"></div>
+      </div>
+
+      <div class="p-card">
+        <div class="p-card-head">
+          <h2 class="p-card-title">入手方式（演示口径）</h2>
+        </div>
+        <div class="p-card-body">
+          <button type="button" class="tier-opt" style="width:100%;text-align:left" data-plan="buyout" aria-pressed="true">
+            <div>
+              <strong>单课永久买断</strong>
+              <div style="font-size:12px;color:var(--p-text-secondary)">24 节永久回放 + 12 份练习数据与答案</div>
+            </div>
+            <span class="price-big">¥299</span>
+          </button>
+          <button type="button" class="tier-opt" style="width:100%;text-align:left" data-plan="member" aria-pressed="false">
+            <div>
+              <strong>平台月度会员</strong>
+              <div style="font-size:12px;color:var(--p-text-secondary)">可看平台全部数据分析与工具课程</div>
+            </div>
+            <span class="price-big">¥39/月</span>
+          </button>
+          <button class="p-btn p-btn-emphasis p-btn-lg" style="width:100%" type="button" id="checkoutBtn">确认模拟下单并解锁全 24 节</button>
+          <p id="buyStatus" style="margin-top:8px;font-size:12px;color:var(--p-success);font-weight:650" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot-mast">
+  <div class="wrap foot-mast__in">
+    <p class="foot-mast__wordmark">CourseDeck 课栈</p>
+    <p class="foot-mast__tagline">上班族碎片化数据分析实战课 · 6 章 24 节（6h 40m），配 12 份真实业务 CSV 与参考答案。</p>
+    <p class="foot-mast__links">
+      <a href="#top">回到顶部</a>
+      <span>·</span>
+      <a href="#playerStage">试听与课件</a>
+      <span>·</span>
+      <a href="#syllabusContainer">课程大纲</a>
+      <span>·</span>
+      <span>课程时长、¥299/¥39 价格与结课证书规则均为本地演示口径，不接真实播放器与支付网关。</span>
+    </p>
+  </div>
+</footer>
+
+<div class="backdrop" id="certModal" hidden role="dialog" aria-modal="true" aria-labelledby="certTitle">
+  <div class="dialog">
+    <div class="p-card-head" style="padding:0 0 12px 0;border-bottom:1px solid var(--p-border)">
+      <h2 class="p-card-title" id="certTitle">结课证书规则与样张预览</h2>
+      <button class="p-btn" type="button" id="certCloseBtn">关闭</button>
+    </div>
+    <div style="padding-top:14px;display:grid;gap:12px">
+      <svg viewBox="0 0 540 240" role="img" aria-label="数据分析实战课结课证书样张">
+        <rect x="4" y="4" width="532" height="232" rx="8" fill="#F7F7F7" stroke="#303030" stroke-width="2"/>
+        <rect x="16" y="16" width="508" height="208" rx="4" fill="#FFFFFF" stroke="#E3E3E3"/>
+        <text x="270" y="54" text-anchor="middle" font-size="13" fill="#616161">COURSEDECK 数据分析实战训练营</text>
+        <text x="270" y="88" text-anchor="middle" font-size="22" font-weight="700" fill="#303030">数据分析与经营看板结业证明</text>
+        <text x="270" y="122" text-anchor="middle" font-size="14" fill="#005BD3">颁发条件：完成 6 章 24 节课程学习 + 提交 6 次练习答案</text>
+        <line x1="80" y1="154" x2="460" y2="154" stroke="#E3E3E3"/>
+        <text x="120" y="184" font-size="12" fill="#303030">主讲讲师：陆知行</text>
+        <text x="340" y="184" font-size="12" fill="#014B40" font-weight="700" id="certSvgStatus">当前进度：未达成（演示样张）</text>
+      </svg>
+      <p style="font-size:13px;color:var(--p-text-secondary)">点击右栏进度条的「标记本节已学完」或使用演示解锁即可实时查看进度变化。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CHAPTERS = [
+    {
+      id: "c1", title: "第 1 章：上班族数据分析工作流与口径思维", mins: 58, ex: "第 1 章练习：对齐 GMV 与实付口径.pdf",
+      lessons: [
+        { id: "1.1", title: "1.1 先定业务决策，再拉表画图", dur: "14 分钟", sec: 840, free: true, file: "01_口径自查表.pdf" },
+        { id: "1.2", title: "1.2 为什么指标总是对不上：口径拆解三步法", dur: "15 分钟", sec: 900, free: true, file: "orders_day1.csv" },
+        { id: "1.3", title: "1.3 原始表结构巡检：主键、脏数据与空值", dur: "15 分钟", sec: 900, free: false, file: "orders_dirty_sample.csv" },
+        { id: "1.4", title: "1.4 周度经营指标树拆解练习", dur: "14 分钟", sec: 840, free: false, file: "ch1_metric_tree.csv" }
+      ]
+    },
+    {
+      id: "c2", title: "第 2 章：零基础 SQL 查询与多表关联实战", mins: 70, ex: "第 2 章练习：订单用户四表关联核对.pdf",
+      lessons: [
+        { id: "2.1", title: "2.1 SELECT / WHERE / GROUP BY 的高频写法", dur: "18 分钟", sec: 1080, free: false, file: "users_cohort.csv" },
+        { id: "2.2", title: "2.2 INNER 与 LEFT JOIN 防止数据翻倍的核对法", dur: "17 分钟", sec: 1020, free: false, file: "payments_log.csv" },
+        { id: "2.3", title: "2.3 日期截断与同环比时间口子写法", dur: "18 分钟", sec: 1080, free: false, file: "daily_revenue.csv" },
+        { id: "2.4", title: "2.4 写出团队新人也看得懂的 CTE 子查询", dur: "17 分钟", sec: 1020, free: false, file: "sql_style_guide.pdf" }
+      ]
+    },
+    {
+      id: "c3", title: "第 3 章：窗口函数、留存漏斗与 RFM 用户分层", mins: 72, ex: "第 3 章练习：7 日留存率三角表与答案.pdf",
+      lessons: [
+        { id: "3.1", title: "3.1 ROW_NUMBER 去重取最近一笔订单", dur: "18 分钟", sec: 1080, free: false, file: "dedup_orders.csv" },
+        { id: "3.2", title: "3.2 用 SUM OVER 做累计贡献与帕累托 80/20", dur: "18 分钟", sec: 1080, free: false, file: "sku_sales.csv" },
+        { id: "3.3", title: "3.3 七日次月留存三角阵一次跑通", dur: "18 分钟", sec: 1080, free: false, file: "retention_events.csv" },
+        { id: "3.4", title: "3.4 结合复购频次与客单价的 RFM 实战", dur: "18 分钟", sec: 1080, free: false, file: "rfm_customers.csv" }
+      ]
+    },
+    {
+      id: "c4", title: "第 4 章：异常波动诊断与 A/B 实验基础判读", mins: 68, ex: "第 4 章练习：转化率突降归因排查.pdf",
+      lessons: [
+        { id: "4.1", title: "4.1 辛普森悖论：为什么总转化涨了分渠道却全跌", dur: "17 分钟", sec: 1020, free: false, file: "channel_mix.csv" },
+        { id: "4.2", title: "4.2 漏斗转化逐层拆解定位真正卡点", dur: "17 分钟", sec: 1020, free: false, file: "funnel_steps.csv" },
+        { id: "4.3", title: "4.3 看懂 p 值与样本量：实验什么时候能下结论", dur: "17 分钟", sec: 1020, free: false, file: "ab_test_raw.csv" },
+        { id: "4.4", title: "4.4 退款飙升的维度下钻实战", dur: "17 分钟", sec: 1020, free: false, file: "refund_claims.csv" }
+      ]
+    },
+    {
+      id: "c5", title: "第 5 章：不用写前端代码，也能做出干净的周报图表", mins: 64, ex: "第 5 章练习：双轴陷阱与图表重排.pdf",
+      lessons: [
+        { id: "5.1", title: "5.1 为什么截断 Y 轴和双坐标轴容易误导老板", dur: "16 分钟", sec: 960, free: false, file: "05_图表自查清单.pdf" },
+        { id: "5.2", title: "5.2 从数据问题到图型选表（趋势/对比/结构）", dur: "16 分钟", sec: 960, free: false, file: "05_图表选型手册.pdf" },
+        { id: "5.3", title: "5.3 用免费本地表格跑出自动刷新经营看板", dur: "16 分钟", sec: 960, free: false, file: "weekly_board_template.csv" },
+        { id: "5.4", title: "5.4 高亮异常标注而不堆砌 8 种颜色", dur: "16 分钟", sec: 960, free: false, file: "05_看板配色样例.pdf" }
+      ]
+    },
+    {
+      id: "c6", title: "第 6 章：把分析写成能批预算的一页结论报告", mins: 68, ex: "第 6 章结课综合作业：复盘报告参考答案.pdf",
+      lessons: [
+        { id: "6.1", title: "6.1 结论前置金字塔：第一屏让管理层批钱或叫停", dur: "17 分钟", sec: 1020, free: false, file: "06_报告骨架模板.pdf" },
+        { id: "6.2", title: "6.2 没有完美数据时怎么在报告里标注边界与假设", dur: "17 分钟", sec: 1020, free: false, file: "06_边界说明示例.pdf" },
+        { id: "6.3", title: "6.3 全栈大作业演练：电商季末清仓策略复盘", dur: "17 分钟", sec: 1020, free: false, file: "q3_clearance_case.csv" },
+        { id: "6.4", title: "6.4 结课复习、证书核验与职场作品集包装", dur: "17 分钟", sec: 1020, free: false, file: "06_面试作品集清单.pdf" }
+      ]
+    }
+  ];
+
+  var CUES = [
+    { t: 45, label: "00:45", text: "业务口说「看下昨天销量」，可能分别指下单口径、支付口径或签收剔除退货口径。" },
+    { t: 255, label: "04:15", text: "对齐三步法第一步：先锁定统计时间基准是创建时间还是支付完成时间戳。" },
+    { t: 480, label: "08:00", text: "第二步：用 DISTINCT 核查 JOIN 前后行数是否因为一对多明细表而发生静默翻倍。" },
+    { t: 720, label: "12:00", text: "第三步：把剔除测试账号、内部员工单和已退款单写进统一的 WHERE 标准注释块。" }
+  ];
+
+  var FILES = [
+    { name: "orders_day1.csv", type: "练习数据 (1/12)", size: "1.8 MB", note: "3.2 万行电商订单流水，含支付、取消与部分退款" },
+    { name: "users_cohort.csv", type: "练习数据 (2/12)", size: "640 KB", note: "新客首单日期与渠道归因表" },
+    { name: "retention_events.csv", type: "练习数据 (3/12)", size: "2.4 MB", note: "用户 7 日与 30 日回访行为样本" },
+    { name: "rfm_customers.csv", type: "练习数据 (4/12)", size: "910 KB", note: "用于计算最近一次下单与复购分层的脱敏样本" },
+    { name: "ab_test_raw.csv", type: "练习数据 (5/12)", size: "1.2 MB", note: "双版本实验分流命中与下单转化表" },
+    { name: "第 1-6 章讲义与参考答案合集.pdf", type: "PDF 讲义 + 答案", size: "14.6 MB", note: "含每章 2 道练习原题与逐行 SQL/思考答案" }
+  ];
+
+  var state = {
+    activeLessonId: "1.2",
+    unlocked: false,
+    playing: false,
+    playTimer: null,
+    currentSec: 255,
+    speed: "1.0",
+    activeTab: "subtitles",
+    sylFilter: "all",
+    openChaps: { c1: true, c2: true, c3: false, c4: false, c5: false, c6: false },
+    doneLessons: { "1.1": true },
+    doneEx: 1,
+    selectedPlan: "buyout",
+    failed: params.get("fail") === "1",
+    forceEmpty: params.get("empty") === "1",
+    slow: params.get("slow") === "1",
+    longMode: params.get("long") === "1"
+  };
+
+  if (state.longMode) {
+    $("courseTitle").textContent = "上班族碎片化业务数据分析与经营看板实战训练营：从零学会 SQL 口径核对、留存漏斗、RFM 分层与可落地的周度决策复盘报告";
+  }
+
+  function findLesson(id) {
+    for (var i = 0; i < CHAPTERS.length; i++) {
+      for (var j = 0; j < CHAPTERS[i].lessons.length; j++) {
+        if (CHAPTERS[i].lessons[j].id === id) return { chap: CHAPTERS[i], lesson: CHAPTERS[i].lessons[j] };
+      }
+    }
+    return { chap: CHAPTERS[0], lesson: CHAPTERS[0].lessons[1] };
+  }
+
+  function fmtTime(sec) {
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function renderSlideSvg(lesson, sec) {
+    var pct = Math.min(100, Math.round((sec / lesson.sec) * 100));
+    $("slideSvg").innerHTML =
+      '<rect x="12" y="12" width="616" height="176" rx="6" fill="#1F2328"/>' +
+      '<text x="32" y="42" font-size="13" fill="#92FCAC" font-weight="650">LESSON ' + lesson.id + ' · ' + (lesson.free || state.unlocked ? '可播放试听' : '完整版解锁后可播') + '</text>' +
+      '<text x="32" y="72" font-size="18" fill="#FFFFFF" font-weight="700">' + lesson.title.slice(0, 26) + '</text>' +
+      '<rect x="32" y="96" width="176" height="68" rx="6" fill="#303030" stroke="#555555"/>' +
+      '<text x="48" y="122" font-size="12" fill="#CCCCCC">1. 口径定义</text>' +
+      '<text x="48" y="144" font-size="13" fill="#FFFFFF" font-weight="650">剔除测试与退款单</text>' +
+      '<path d="M214 130h24" stroke="#92FCAC" stroke-width="2"/>' +
+      '<rect x="242" y="96" width="176" height="68" rx="6" fill="#303030" stroke="#555555"/>' +
+      '<text x="258" y="122" font-size="12" fill="#CCCCCC">2. 表连接核查</text>' +
+      '<text x="258" y="144" font-size="13" fill="#FFFFFF" font-weight="650">主键粒度对齐 1:1</text>' +
+      '<path d="M424 130h24" stroke="#92FCAC" stroke-width="2"/>' +
+      '<rect x="452" y="96" width="156" height="68" rx="6" fill="#014B40" stroke="#92FCAC"/>' +
+      '<text x="468" y="122" font-size="12" fill="#92FCAC">3. 当日进度</text>' +
+      '<text x="468" y="144" font-size="15" fill="#FFFFFF" font-weight="700">' + pct + '% 字幕同步</text>';
+  }
+
+  function renderPlayer() {
+    var found = findLesson(state.activeLessonId);
+    var l = found.lesson;
+    var canWatch = l.free || state.unlocked;
+    $("activeLessonTitle").textContent = l.title;
+    $("activeLessonSub").textContent = found.chap.title + " · 本节时长 " + l.dur + " · 配套数据：" + l.file;
+    $("activeBadge").className = "p-badge " + (canWatch ? "badge-free" : "badge-lock");
+    $("activeBadge").textContent = l.free ? "免费试听" : (state.unlocked ? "已解锁观看" : "买断或会员后观看");
+    $("scrubber").max = String(l.sec);
+    if (state.currentSec > l.sec) state.currentSec = 0;
+    $("scrubber").value = String(state.currentSec);
+    $("timeDisplay").textContent = fmtTime(state.currentSec) + " / " + fmtTime(l.sec);
+    $("playerStatusPill").textContent = canWatch ? (state.playing ? "正在播放 (" + state.speed + "x)" : "试听就绪") : "试听受限（请解锁或切回前 2 节）";
+    $("resumeText").textContent = "上次学到：第 " + l.id + " 节 · " + fmtTime(state.currentSec);
+    renderSlideSvg(l, state.currentSec);
+  }
+
+  function renderTabPanel() {
+    var html = "";
+    if (state.activeTab === "subtitles") {
+      html = '<div class="cue-list">' + CUES.map(function (c, idx) {
+        var nextT = CUES[idx + 1] ? CUES[idx + 1].t : 9999;
+        var cur = state.currentSec >= c.t && state.currentSec < nextT;
+        return '<button class="cue-btn" type="button" data-seek="' + c.t + '"' + (cur ? ' aria-current="true"' : '') + '>' +
+          '<span class="cue-time">' + c.label + '</span><span>' + c.text + '</span></button>';
+      }).join("") + '</div>';
+    } else if (state.activeTab === "files") {
+      html = '<p style="font-size:13px;color:var(--p-text-secondary);margin-bottom:10px">课程共配套 12 份练习数据（下表列出前 5 份核心样例与完整 PDF 讲义合集，含每章练习与参考答案）：</p>' +
+        '<div class="p-table-wrap"><table class="p-table"><thead><tr><th>文件名</th><th>类别</th><th>大小</th><th>说明</th><th>操作</th></tr></thead><tbody>' +
+        FILES.map(function (f) {
+          return '<tr><td><code style="font-family:var(--p-mono)">' + f.name + '</code></td><td>' + f.type + '</td><td>' + f.size + '</td><td>' + f.note + '</td>' +
+            '<td><button class="p-btn" type="button" data-dl="' + f.name + '">模拟下载</button></td></tr>';
+        }).join("") + '</tbody></table></div>';
+    } else if (state.activeTab === "dataset") {
+      html = '<p style="font-size:13px;color:var(--p-text-secondary);margin-bottom:10px">练习数据样例预览：<code>orders_day1.csv</code>（脱敏真实业务字段结构）</p>' +
+        '<div class="p-table-wrap"><table class="p-table"><thead><tr><th>order_id</th><th>created_at</th><th>pay_status</th><th>amount_yuan</th><th>refund_yuan</th></tr></thead><tbody>' +
+        '<tr><td>OD-88201</td><td>2026-11-18 09:14</td><td>paid</td><td>¥398.00</td><td>¥0.00</td></tr>' +
+        '<tr><td>OD-88202</td><td>2026-11-18 09:22</td><td>refunded</td><td>¥199.00</td><td>¥199.00</td></tr>' +
+        '<tr><td>OD-88203</td><td>2026-11-18 09:45</td><td>paid</td><td>¥620.00</td><td>¥0.00</td></tr>' +
+        '<tr><td>OD-88204</td><td>2026-11-18 10:03</td><td>test_internal</td><td>¥1.00</td><td>¥0.00</td></tr>' +
+        '</tbody></table></div>';
+    } else {
+      html = '<div style="margin-bottom:16px;padding:14px;background:var(--p-surface-secondary);border-radius:8px;border:1px solid var(--p-border)">' +
+        '<strong>主讲讲师：陆知行</strong> · 10 年消费互联网数据分析与经营看板负责人<br>' +
+        '<span style="font-size:13px;color:var(--p-text-secondary)">代表项目：主导某全国连锁零售多渠道指标口径统一与每日早间自动复盘体系，培养 1,400+ 业务分析师转型独立写数。</span>' +
+      '</div>' +
+      '<div class="review-grid">' +
+        '<div class="review-card"><div class="review-head"><span>周敏 · 电商运营主管（评分 4.9 / 5.0）</span><span>已结课</span></div><p style="font-size:13px">以前找研发提数总要等三天，学到第 3 章自己照着练习数据写出了 7 日留存 SQL，现在开周会前 20 分钟自己核完。</p></div>' +
+        '<div class="review-card"><div class="review-head"><span>陈启 · B 端产品经理（评分 5.0 / 5.0）</span><span>学完 24 节</span></div><p style="font-size:13px">每节正好 15 分钟左右，早高峰地铁上戴耳机听完一节，午休拿参考答案对一遍练习，非常适合在职时间碎的人。</p></div>' +
+        '<div class="review-card"><div class="review-head"><span>林楠 · 财务 BP（评分 4.8 / 5.0）</span><span>进行中</span></div><p style="font-size:13px">讲得很实，尤其是 JOIN 翻倍和剔除异常测试单那两段直接解决了我们每月对账对不上的老毛病。</p></div>' +
+      '</div>';
+    }
+    $("tabPanelBody").innerHTML = html;
+  }
+
+  function renderSyllabus() {
+    var box = $("syllabusContainer");
+    if (state.forceEmpty) {
+      box.innerHTML = '<div style="padding:28px 18px;text-align:center"><p style="color:var(--p-text-secondary)">当前筛选下没有匹配的课时</p>' +
+        '<button class="p-btn" style="margin-top:10px" type="button" id="sylResetBtn">显示全部 24 节</button></div>';
+      var srb = $("sylResetBtn");
+      if (srb) srb.addEventListener("click", function () { state.forceEmpty = false; state.sylFilter = "all"; renderAll(); });
+      return;
+    }
+
+    box.innerHTML = CHAPTERS.map(function (c) {
+      var lessons = c.lessons.filter(function (l) {
+        if (state.sylFilter === "free") return l.free;
+        if (state.sylFilter === "todo") return !state.doneLessons[l.id];
+        return true;
+      });
+      if (!lessons.length) return "";
+      var isOpen = !!state.openChaps[c.id];
+      return '<div class="chap-item">' +
+        '<button class="chap-toggle" type="button" data-chap="' + c.id + '" aria-expanded="' + isOpen + '">' +
+          '<span>' + c.title + '</span><span style="font-size:12px;color:var(--p-text-secondary)">' + c.mins + ' 分钟</span>' +
+        '</button>' +
+        (isOpen ? '<ul class="lesson-list">' + lessons.map(function (l) {
+          var active = l.id === state.activeLessonId;
+          var done = !!state.doneLessons[l.id];
+          return '<li class="lesson-row' + (active ? ' is-active' : '') + '">' +
+            '<button class="lesson-main" type="button" data-lesson="' + l.id + '">' + l.title + ' <span style="color:var(--p-text-secondary)">(' + l.dur + ')</span></button>' +
+            '<div class="lesson-right">' +
+              (l.free ? '<span class="p-badge badge-free">试听</span>' : (state.unlocked ? '<span class="p-badge badge-info">已购</span>' : '<span class="p-badge badge-lock">会员</span>')) +
+              '<button class="done-btn" type="button" data-done="' + l.id + '" aria-pressed="' + done + '">' + (done ? '已学' : '打卡') + '</button>' +
+            '</div>' +
+          '</li>';
+        }).join("") + '</ul>' : '') +
+      '</div>';
+    }).join("") || '<div style="padding:24px;text-align:center;color:var(--p-text-secondary)">全部 24 节已学习完成！</div>';
+  }
+
+  function renderProgress() {
+    var doneCnt = Object.keys(state.doneLessons).filter(function (k) { return state.doneLessons[k]; }).length;
+    $("doneLessonsCnt").textContent = String(doneCnt);
+    $("doneExCnt").textContent = String(state.doneEx);
+    var pct = Math.min(100, Math.round(((doneCnt + state.doneEx * 4) / 48) * 100));
+    $("progFill").style.width = pct + "%";
+    var ready = doneCnt >= 24 && state.doneEx >= 6;
+    $("certStateBadge").className = "p-badge " + (ready ? "badge-free" : "badge-info");
+    $("certStateBadge").textContent = ready ? "已达标可领证书" : "完成 24 节 + 6 练习";
+    $("certSvgStatus").textContent = ready ? "状态：已达标签发结课证书" : "当前进度：" + doneCnt + "/24 节 · " + state.doneEx + "/6 次练习";
+    $("unlockToggleBtn").textContent = state.unlocked ? "已模拟解锁全 24 节" : "解锁全课（¥299 买断）";
+  }
+
+  function renderAll() {
+    if (state.failed) {
+      $("errorBox").hidden = false;
+    } else {
+      $("errorBox").hidden = true;
+    }
+    renderPlayer();
+    renderTabPanel();
+    renderSyllabus();
+    renderProgress();
+  }
+
+  $("playPauseBtn").addEventListener("click", function () {
+    var l = findLesson(state.activeLessonId).lesson;
+    if (!l.free && !state.unlocked) {
+      $("buyStatus").textContent = "该节需解锁后试看，当前支持第 1.1、1.2 节免费试听或点右侧模拟解锁。";
+      return;
+    }
+    state.playing = !state.playing;
+    if (state.playTimer) { clearInterval(state.playTimer); state.playTimer = null; }
+    if (state.playing) {
+      state.playTimer = setInterval(function () {
+        state.currentSec = Math.min(l.sec, state.currentSec + 5);
+        renderPlayer();
+        renderTabPanel();
+      }, 1000);
+    }
+    renderPlayer();
+  });
+
+  $("scrubber").addEventListener("input", function (e) {
+    state.currentSec = Number(e.target.value);
+    renderPlayer();
+    renderTabPanel();
+  });
+
+  document.querySelectorAll(".speed-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.speed = b.getAttribute("data-speed");
+      document.querySelectorAll(".speed-btn").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      renderPlayer();
+    });
+  });
+
+  document.querySelectorAll(".p-tab").forEach(function (t) {
+    t.addEventListener("click", function () {
+      state.activeTab = t.getAttribute("data-panel");
+      document.querySelectorAll(".p-tab").forEach(function (x) { x.setAttribute("aria-pressed", String(x === t)); });
+      renderTabPanel();
+    });
+  });
+
+  $("sylFilters").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-sfilter]");
+    if (!b) return;
+    state.sylFilter = b.getAttribute("data-sfilter");
+    $("sylFilters").querySelectorAll(".chip-sm").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    renderSyllabus();
+  });
+
+  document.addEventListener("click", function (e) {
+    var seek = e.target.closest("[data-seek]");
+    if (seek) { state.currentSec = Number(seek.getAttribute("data-seek")); renderPlayer(); renderTabPanel(); return; }
+    var dl = e.target.closest("[data-dl]");
+    if (dl) {
+      dl.textContent = "已触发样例下载";
+      return;
+    }
+    var ch = e.target.closest("[data-chap]");
+    if (ch) {
+      var cid = ch.getAttribute("data-chap");
+      state.openChaps[cid] = !state.openChaps[cid];
+      renderSyllabus();
+      return;
+    }
+    var les = e.target.closest("[data-lesson]");
+    if (les) {
+      state.activeLessonId = les.getAttribute("data-lesson");
+      state.currentSec = 0;
+      state.playing = false;
+      if (state.playTimer) clearInterval(state.playTimer);
+      renderAll();
+      return;
+    }
+    var dn = e.target.closest("[data-done]");
+    if (dn) {
+      var did = dn.getAttribute("data-done");
+      state.doneLessons[did] = !state.doneLessons[did];
+      renderSyllabus();
+      renderProgress();
+      return;
+    }
+    var pl = e.target.closest("[data-plan]");
+    if (pl) {
+      state.selectedPlan = pl.getAttribute("data-plan");
+      document.querySelectorAll("[data-plan]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === pl)); });
+    }
+  });
+
+  $("markDoneBtn").addEventListener("click", function () {
+    state.doneLessons[state.activeLessonId] = true;
+    renderAll();
+  });
+  $("submitExBtn").addEventListener("click", function () {
+    state.doneEx = Math.min(6, state.doneEx + 1);
+    renderProgress();
+  });
+
+  function unlockDemo() {
+    state.unlocked = true;
+    $("buyStatus").textContent = state.selectedPlan === "buyout"
+      ? "已模拟通过「¥299 单课买断」解锁全部 24 节及 12 份练习数据。"
+      : "已模拟开通「¥39/月平台会员」，全站课程与本课 24 节均已解锁。";
+    renderAll();
+  }
+  $("unlockToggleBtn").addEventListener("click", unlockDemo);
+  $("checkoutBtn").addEventListener("click", unlockDemo);
+  $("resumeBtn").addEventListener("click", function () {
+    $("playerStage").scrollIntoView();
+    $("playPauseBtn").focus();
+  });
+
+  $("retryBtn").addEventListener("click", function () {
+    state.failed = false;
+    $("busyBar").hidden = false;
+    setTimeout(function () { $("busyBar").hidden = true; renderAll(); }, state.slow ? 1200 : 150);
+  });
+
+  var lastCertBtn = null;
+  $("certPreviewBtn").addEventListener("click", function () {
+    lastCertBtn = document.activeElement;
+    $("certModal").hidden = false;
+    $("certCloseBtn").focus();
+  });
+  function closeCert() { $("certModal").hidden = true; if (lastCertBtn) lastCertBtn.focus(); }
+  $("certCloseBtn").addEventListener("click", closeCert);
+  $("certModal").addEventListener("click", function (e) { if (e.target === $("certModal")) closeCert(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("certModal").hidden) closeCert(); });
+
+  var promoDismissed = false;
+  var lastScrollY = window.scrollY || 0;
+  var navN12 = $("navN12");
+  if ($("dismissPromoBtn") && navN12) {
+    $("dismissPromoBtn").addEventListener("click", function () {
+      promoDismissed = true;
+      navN12.classList.add("is-dismissed");
+    });
+    window.addEventListener("scroll", function () {
+      if (promoDismissed) return;
+      var y = window.scrollY || 0;
+      if (y > 48 && y > lastScrollY) navN12.classList.add("is-compact");
+      else if (y < lastScrollY || y <= 24) navN12.classList.remove("is-compact");
+      lastScrollY = y;
+    }, { passive: true });
+  }
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

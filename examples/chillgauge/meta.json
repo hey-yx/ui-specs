@@ -1,0 +1,7 @@
+{
+  "name": "ChillGauge",
+  "tagline": "IBM Carbon 0px 工业冷链温控台：48px 全局头、04:00 中断走势与首屏车次处置表。",
+  "accent": "#0052d9",
+  "structure": "Stat-Led（N13 Carbon 全局顶栏内检索 + 齐平指标带 + Ft2 线脚）",
+  "layout": "IBM Carbon · UI Shell / N13 / Ft2"
+}

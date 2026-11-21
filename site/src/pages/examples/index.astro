@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { loadCases } from '../../data/examples'
+import { USAGE_STEPS } from '../../data/guide.ts'
+import { canonicalUrl, siteRoot, withBase } from '../../lib/url'
+
+/** 每次请求重扫目录：还没放齐五件的站不占位，删站后刷新即消失 */
+const cases = loadCases({ strict: false })
+
+
+const description =
+  `设计案例成品：给定建站需求，按指南 ${USAGE_STEPS.length} 步选点、定版式与取值，数值全部取自库内原文并逐条标行号。每个案例附 DECISIONS 取值出处与 FINDINGS 缺口记录。`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '设计案例 · UISpecs',
+  description,
+  inLanguage: 'zh-CN',
+  url: canonicalUrl('/examples/', Astro.site),
+  isPartOf: { '@type': 'WebSite', name: 'UISpecs', url: `${siteRoot(Astro.site)}/` },
+}
+---
+
+<Base title="设计案例 · UISpecs" description={description} jsonLd={jsonLd} path="/examples/">
+  <div class="page">
+    <div id="main">
+      <section class="sec">
+        <div class="sec-head">
+          <h1 class="sec-title">设计案例</h1>
+          <span class="sec-count">{cases.length} 站</span>
+        </div>
+        <p class="sec-note">
+          用本库的流程走出来的成品。给定建站需求，按指南 {USAGE_STEPS.length} 步选点、定版式与取值，数值全部取自库内原文，逐条标行号。成品是单文件 HTML：未开框架的零外部请求，开了框架的只引 esm.sh 的框架与组件库。每个案例的 <code>DECISIONS.md</code> 记每个数值的出处，<code>FINDINGS.md</code> 记数值文章覆盖不到的量怎么派生。
+        </p>
+
+        {
+          cases.length > 0 && (
+            <ol class="case-list">
+              {cases.map((c) => (
+                <li class="case-row">
+                  <a class="case-thumb" href={withBase(`/examples/${c.slug}/index.html`)} target="_blank" rel="noopener noreferrer">
+                    {/* 缩略图不是截图：iframe 直接加载成品，按 1280×800 桌面视口排版后缩放，
+                        改版自动跟着变，不用重出 preview.png */}
+                    <iframe
+                      src={withBase(`/examples/${c.slug}/index.html`)}
+                      title={`${c.name} 成品实时预览`}
+                      loading="lazy"
+                      tabindex="-1"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <div class="case-main">
+                    <h2 class="case-title">
+                      <a href={withBase(`/examples/${c.slug}/index.html`)} target="_blank" rel="noopener noreferrer">{c.name}</a>
+                    </h2>
+                    <p class="case-tagline">{c.tagline}</p>
+                    <dl class="case-meta">
+                      <div><dt>主色</dt><dd>{c.accent}</dd></div>
+                      <div><dt>结构</dt><dd>{c.structure}</dd></div>
+                      <div><dt>版型</dt><dd>{c.layout}</dd></div>
+                    </dl>
+                    <p class="case-links">
+                      <a class="case-open" href={withBase(`/examples/${c.slug}/index.html`)} target="_blank" rel="noopener noreferrer">打开成品</a>
+                      <a href={withBase(`/briefs/${c.slug}/`)}>需求</a>
+                      <a href={withBase(`/examples/${c.slug}/decisions/`)}>DECISIONS</a>
+                      <a href={withBase(`/examples/${c.slug}/findings/`)}>FINDINGS</a>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )
+        }
+
+        <p class="sec-note">
+          工作流与取值路径见<a href={withBase('/')}>首页</a>的提示词。
+        </p>
+      </section>
+    </div>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{cases.length}</b> 个设计案例</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>取值出处逐条标文件行号</span>
+    </FootLine>
+  </div>
+</Base>

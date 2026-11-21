@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="frame" content="batch=2026-11-21-b; nav=N9; footer=Ft6; base=#ffffff">
+<title>ProbeShelf · 高校科研仪器与中试产线档期台</title>
+<style>
+:root{
+  --bg-page:#ffffff;
+  --bg-subtle:#f8f8f8;
+  --ink-heading:#000000;
+  --ink-body:#222222;
+  --ink-label:#464646;
+  --border:#909090;
+  --border-light:#e6e6e6;
+  --accent:#0054b6;
+  --accent-focus:#147af3;
+  --accent-tint:#eef5fc;
+  --green:#007a4d;
+  --green-tint:#eaf7f1;
+  --red:#d31510;
+  --red-tint:#fdf1f1;
+  --sp-50:4px;
+  --sp-100:8px;
+  --sp-200:16px;
+  --sp-300:24px;
+  --sp-400:32px;
+  --sp-600:48px;
+  --r-sm:2px;
+  --r-reg:4px;
+  --r-md:8px;
+  --ctrl-h:32px;
+  --dur-fast:130ms;
+  --dur-base:190ms;
+  --ease-out:cubic-bezier(0,0,0.4,1);
+  --font:adobe-clean,"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{
+  margin:0;background:var(--bg-page);color:var(--ink-body);
+  font-family:var(--font);font-size:14px;line-height:22px;
+  -webkit-font-smoothing:antialiased;
+}
+.skip-link{
+  position:absolute;left:-9999px;top:6px;z-index:100;
+  background:var(--accent);color:#ffffff;padding:8px 14px;border-radius:var(--r-reg);font-weight:700;text-decoration:none;
+}
+.skip-link:focus{left:16px}
+:focus-visible{outline:2px solid var(--accent-focus);outline-offset:2px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--sp-300)}
+
+/* N9 极简两极顶栏 */
+.sp-topbar{
+  background:var(--bg-page);border-bottom:1px solid var(--border-light);
+}
+.sp-topbar-in{
+  min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0;
+}
+.sp-brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+.sp-wordmark{font-size:18px;line-height:24px;font-weight:700;color:var(--ink-heading);text-decoration:none;min-height:24px;display:inline-flex;align-items:center}
+.sp-sub{font-size:12px;line-height:20px;color:var(--ink-label)}
+.sp-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.sp-btn{
+  min-height:var(--ctrl-h);padding:0 12px;border-radius:var(--r-reg);
+  border:1px solid var(--border);background:var(--bg-page);color:var(--ink-body);
+  font-size:13px;line-height:20px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;
+  transition:background var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out);
+}
+.sp-btn-primary{background:var(--accent);border-color:var(--accent);color:#ffffff}
+.sp-btn[aria-pressed="true"]{background:var(--accent-tint);border-color:var(--accent);color:var(--accent)}
+
+@media (hover:hover){
+  .sp-btn:not(.sp-btn-primary):hover{background:var(--bg-subtle);border-color:var(--ink-heading)}
+  .sp-btn-primary:hover{background:#004494;border-color:#004494}
+  .cat-tab:hover{color:var(--ink-heading)}
+  .eq-row:hover{background:var(--bg-subtle)}
+}
+
+/* Spectrum 实验室单行筛选工控带 */
+.filter-band{
+  position:sticky;top:0;z-index:30;
+  background:var(--bg-subtle);border-bottom:1px solid var(--border-light);
+  padding:8px 0;
+}
+.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sp-input,.sp-select{
+  min-height:var(--ctrl-h);padding:0 10px;border-radius:var(--r-reg);
+  border:1px solid var(--border);background:var(--bg-page);color:var(--ink-body);
+  font-size:13px;line-height:20px;
+}
+.sp-input{flex:1 1 200px}
+.cat-tabs{display:inline-flex;align-items:center;gap:2px;border-bottom:1px solid var(--border-light);flex-wrap:wrap}
+.cat-tab{
+  min-height:var(--ctrl-h);padding:0 10px;border:0;border-bottom:2px solid transparent;
+  background:transparent;color:var(--ink-label);font-size:13px;line-height:20px;font-weight:700;white-space:nowrap;
+}
+.cat-tab[aria-pressed="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* 状态横幅 */
+.state-banner{
+  margin-top:var(--sp-200);padding:10px 14px;border-radius:var(--r-reg);
+  border:1px solid var(--red);background:var(--red-tint);color:var(--red);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;
+}
+.state-banner.is-slow{border-color:var(--accent);background:var(--accent-tint);color:var(--accent)}
+.state-banner.hidden{display:none}
+.state-banner p{margin:0}
+
+/* 主工作区：左主名录（零废话直接露头）+ 右 310px 在库档期与预算快览 */
+main{padding:var(--sp-200) 0 var(--sp-600)}
+.bench-grid{display:grid;grid-template-columns:minmax(0,1.78fr) 310px;gap:var(--sp-300);align-items:start}
+
+.list-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding-bottom:8px;border-bottom:1px solid var(--border-light);
+}
+.list-head h1{margin:0;font-size:20px;line-height:26px;font-weight:700;color:var(--ink-heading)}
+.list-meta{font-size:12px;line-height:20px;color:var(--ink-label)}
+
+/* 置顶高优先级最早档期卡（左 3px Spectrum Blue 条，紧凑高密度） */
+.pin-card{
+  margin-top:12px;padding:12px 14px;border:1px solid var(--accent);border-left:4px solid var(--accent);
+  border-radius:var(--r-reg);background:var(--accent-tint);
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+}
+.pin-kicker{font-size:12px;line-height:18px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.pin-title{font-size:16px;line-height:22px;font-weight:700;color:var(--ink-heading);margin:0}
+.pin-sub{font-size:12px;line-height:20px;color:var(--ink-label);margin-top:2px}
+.pin-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.pin-price{font-size:18px;line-height:24px;font-weight:700;color:var(--ink-heading)}
+
+/* 全量零外框发丝线列表 */
+.eq-list{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--border-light)}
+.eq-row{
+  border-bottom:1px solid var(--border-light);padding:12px 8px;
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  transition:background var(--dur-fast) var(--ease-out);
+}
+.eq-title-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.eq-title{font-size:15px;line-height:21px;font-weight:700;color:var(--ink-heading)}
+.eq-tag{
+  display:inline-flex;align-items:center;padding:1px 7px;border-radius:var(--r-sm);
+  font-size:12px;line-height:18px;font-weight:700;
+}
+.et-rush{background:var(--green-tint);color:var(--green)}
+.et-cat{background:var(--bg-subtle);color:var(--ink-label);border:1px solid var(--border-light)}
+.eq-specs{font-size:13px;line-height:20px;color:var(--ink-body);margin-top:2px}
+.eq-lab{font-size:12px;line-height:18px;color:var(--ink-label);margin-top:2px}
+.eq-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.eq-price{font-size:16px;line-height:22px;font-weight:700;color:var(--ink-heading)}
+.eq-btns{display:flex;gap:6px;flex-wrap:wrap}
+body.is-long .eq-specs,body.is-long .eq-lab{white-space:normal;word-break:break-word}
+
+/* 右侧 Spectrum 参数检验栏 */
+.side-panel{
+  background:var(--bg-subtle);border:1px solid var(--border-light);border-radius:var(--r-reg);
+  padding:var(--sp-200);position:sticky;top:60px;display:grid;gap:var(--sp-200);
+}
+.side-panel h2{margin:0;font-size:14px;line-height:20px;font-weight:700;color:var(--ink-heading)}
+.stat-row{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);
+}
+.stat-col{padding:10px 4px;border-right:1px solid var(--border-light);text-align:center}
+.stat-col:last-child{border-right:0}
+.stat-n{font-size:20px;line-height:26px;font-weight:700;color:var(--ink-heading)}
+.stat-l{font-size:11px;line-height:16px;color:var(--ink-label)}
+
+.dist-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.dist-btn{
+  width:100%;text-align:left;min-height:28px;padding:4px 6px;border-radius:var(--r-sm);
+  border:1px solid transparent;background:var(--bg-page);display:grid;gap:4px;font-size:12px;line-height:18px;
+}
+.dist-btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-tint)}
+.dist-top{display:flex;justify-content:space-between;gap:8px}
+.dist-track{height:6px;background:var(--border-light);border-radius:999px;overflow:hidden}
+.dist-track i{display:block;height:100%;background:var(--accent);border-radius:999px}
+
+.side-note{
+  font-size:12px;line-height:19px;color:var(--ink-label);
+  padding-top:10px;border-top:1px solid var(--border-light);
+}
+
+.empty-box{padding:36px 16px;text-align:center;color:var(--ink-label);border-top:1px solid var(--border-light)}
+
+/* Ft6 实验工单落款页脚（独立 DOM 骨架） */
+footer.ps-lab-colophon{
+  border-top:1px solid var(--border-light);background:var(--bg-subtle);padding:var(--sp-300) 0;
+  font-size:12px;line-height:20px;color:var(--ink-label);
+}
+.ps-foot-grid{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ps-foot-sign{font-weight:700;color:var(--ink-heading)}
+.ps-foot-links{display:flex;gap:14px;flex-wrap:wrap}
+.ps-foot-links a{color:var(--accent);text-decoration:none;min-height:24px;display:inline-flex;align-items:center}
+
+dialog{
+  border:1px solid var(--border);border-radius:var(--r-md);background:var(--bg-page);color:var(--ink-body);
+  padding:0;width:min(640px,calc(100vw - 24px));max-height:86vh;box-shadow:0 12px 32px rgba(0,0,0,.2);
+}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.dlg-head{padding:12px 16px;background:var(--bg-subtle);border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dlg-head h3{margin:0;font-size:16px;line-height:22px;font-weight:700;color:var(--ink-heading)}
+.dlg-body{padding:16px;overflow-y:auto;max-height:calc(86vh - 110px)}
+.dlg-foot{padding:12px 16px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end;gap:8px}
+.form-grid{display:grid;gap:10px}
+.form-grid label{display:block;font-size:12px;font-weight:700;color:var(--ink-label);margin-bottom:4px}
+.cmp-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
+.cmp-card{border:1px solid var(--border-light);border-radius:var(--r-reg);padding:10px;background:var(--bg-subtle)}
+.cmp-card h4{margin:0 0 6px;font-size:14px;color:var(--ink-heading)}
+.cmp-card p{margin:3px 0;font-size:12px;line-height:18px}
+.toast{
+  position:fixed;right:16px;bottom:16px;z-index:80;padding:8px 14px;border-radius:var(--r-reg);
+  background:var(--ink-heading);color:#ffffff;font-weight:700;font-size:13px;display:none;
+}
+.toast.show{display:block}
+
+@media (max-width:960px){
+  .bench-grid{grid-template-columns:minmax(0,1fr)}
+  .side-panel{position:static}
+}
+@media (max-width:768px){
+  .wrap{padding:0 var(--sp-200)}
+  .pin-card,.eq-row{grid-template-columns:1fr}
+  .pin-right,.eq-right{align-items:flex-start}
+  .sp-btn,.sp-input,.sp-select,.cat-tab,.dist-btn{min-height:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到仪器共享名录</a>
+
+<header class="sp-topbar">
+  <div class="wrap sp-topbar-in">
+    <div class="sp-brand">
+      <a class="sp-wordmark" href="#main">ProbeShelf</a>
+      <span class="sp-sub">高校科研仪器与中试产线共享索引 · 设备损坏押金比例与专票税点 [待确认]</span>
+    </div>
+    <div class="sp-actions">
+      <button type="button" class="sp-btn" id="favFilterBtn" aria-pressed="false">收藏对比（<span id="favCount">0</span>）</button>
+      <button type="button" class="sp-btn" id="openCmpBtn" disabled>并排对比参数</button>
+      <button type="button" class="sp-btn sp-btn-primary" id="openRegBtn">+ 登记新机台</button>
+    </div>
+  </div>
+</header>
+
+<section class="filter-band" aria-label="四维档期筛选工具条">
+  <div class="wrap">
+    <div class="filter-row">
+      <input type="search" class="sp-input" id="searchInput" placeholder="搜设备型号、实验室或精度参数（如 GeminiSEM / 33GHz / 0402）" aria-label="搜索仪器型号与参数">
+      <select class="sp-select" id="citySelect" aria-label="按城市筛选">
+        <option value="all">全部 6 城</option>
+        <option value="上海">上海</option>
+        <option value="北京">北京</option>
+        <option value="深圳">深圳</option>
+        <option value="杭州">杭州</option>
+        <option value="成都">成都</option>
+        <option value="苏州">苏州</option>
+      </select>
+      <select class="sp-select" id="budgetSelect" aria-label="按日租预算筛选">
+        <option value="all">日租预算不限</option>
+        <option value="1500">1,500 元内</option>
+        <option value="3000">3,000 元内</option>
+        <option value="5000">5,000 元内</option>
+      </select>
+      <select class="sp-select" id="sortSelect" aria-label="排序方式">
+        <option value="slot">档期最早优先</option>
+        <option value="asc">日租从低到高</option>
+        <option value="desc">日租从高到低</option>
+      </select>
+      <button type="button" class="sp-btn" id="rushBtn" aria-pressed="false">仅看可加急</button>
+      <div class="cat-tabs" role="group" aria-label="设备类别">
+        <button type="button" class="cat-tab" data-cat="all" aria-pressed="true">全部</button>
+        <button type="button" class="cat-tab" data-cat="电镜" aria-pressed="false">电镜</button>
+        <button type="button" class="cat-tab" data-cat="示波器" aria-pressed="false">示波器</button>
+        <button type="button" class="cat-tab" data-cat="高低温箱" aria-pressed="false">高低温箱</button>
+        <button type="button" class="cat-tab" data-cat="SMT 贴片线" aria-pressed="false">SMT 贴片线</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div id="stateBanner" class="state-banner hidden" role="alert">
+    <p id="stateMsg"></p>
+    <button type="button" class="sp-btn" id="retryBtn">重试同步</button>
+  </div>
+</div>
+
+<main id="main" tabindex="-1">
+  <div class="wrap bench-grid">
+    <section aria-labelledby="listTitle">
+      <div class="list-head">
+        <h1 id="listTitle">可预约共享仪器与产线（16 台）</h1>
+        <span class="list-meta" id="listCountText">按档期最早排序 · 演示排期，不接真实高校预约接口</span>
+      </div>
+      <div id="pinSlot"></div>
+      <ul class="eq-list" id="eqList"></ul>
+    </section>
+
+    <aside class="side-panel" aria-label="在库档期与预算分布快览">
+      <h2>在库档期与预算快览</h2>
+      <div class="stat-row">
+        <div class="stat-col"><div class="stat-n num" id="stMatch">16</div><div class="stat-l">匹配机台</div></div>
+        <div class="stat-col"><div class="stat-n num" id="stRush">7</div><div class="stat-l">支持加急</div></div>
+        <div class="stat-col"><div class="stat-n num" id="st48h">12</div><div class="stat-l">48h 内空档</div></div>
+      </div>
+      <div>
+        <h2 style="margin-bottom:8px">日租预算分布（点击筛选）</h2>
+        <ul class="dist-list" id="distList"></ul>
+      </div>
+      <div class="side-note">
+        <div><strong>结算说明（演示口径）：</strong></div>
+        <div>1. 设备损坏押金比例：<span class="mono">[待确认]</span></div>
+        <div>2. 增值税专票税点：<span class="mono">[待确认]</span></div>
+        <div>3. 加急排期需在到样前与实验室管理员二次核对工装夹具。</div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="ps-lab-colophon">
+  <div class="wrap ps-foot-grid">
+    <div>
+      <div class="ps-foot-sign">ProbeShelf 科研共享索引 · 实验室接单与排期演示平台</div>
+      <div>覆盖上海、北京、深圳、杭州、成都、苏州六地，日租报价与档期仅为演示样本。</div>
+    </div>
+    <div class="ps-foot-links">
+      <a href="#main">回到名录顶部</a>
+      <a href="#distList">日租预算分布</a>
+    </div>
+  </div>
+</footer>
+
+<dialog id="cmpDialog" aria-labelledby="cmpDlgTitle">
+  <div class="dlg-head">
+    <h3 id="cmpDlgTitle">多机台参数并排对比</h3>
+    <button type="button" class="sp-btn" id="closeCmpBtn">关闭</button>
+  </div>
+  <div class="dlg-body" id="cmpBody"></div>
+</dialog>
+
+<dialog id="bookDialog" aria-labelledby="bookDlgTitle">
+  <form id="bookForm">
+    <div class="dlg-head">
+      <h3 id="bookDlgTitle">发起设备预约意向</h3>
+      <button type="button" class="sp-btn" id="closeBookBtn">取消</button>
+    </div>
+    <div class="dlg-body" id="bookBody"></div>
+    <div class="dlg-foot">
+      <button type="submit" class="sp-btn sp-btn-primary">生成预约回执</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="regDialog" aria-labelledby="regDlgTitle">
+  <form id="regForm">
+    <div class="dlg-head">
+      <h3 id="regDlgTitle">登记共享新机台</h3>
+      <button type="button" class="sp-btn" id="closeRegBtn">取消</button>
+    </div>
+    <div class="dlg-body form-grid">
+      <div><label for="rModel">设备型号</label><input id="rModel" class="sp-input" style="width:100%" placeholder="例如：Keysight N9040B 频谱分析仪" required></div>
+      <div><label for="rLab">所属实验室</label><input id="rLab" class="sp-input" style="width:100%" placeholder="例如：华中光子集成中试中心" required></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><label for="rCity">所在城市</label><select id="rCity" class="sp-select" style="width:100%"><option>上海</option><option>北京</option><option>深圳</option><option>杭州</option><option>成都</option><option>苏州</option></select></div>
+        <div><label for="rCat">设备类别</label><select id="rCat" class="sp-select" style="width:100%"><option>电镜</option><option>示波器</option><option>高低温箱</option><option>SMT 贴片线</option></select></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><label for="rPrice">日租预算（元/天）</label><input id="rPrice" type="number" min="200" step="100" class="sp-input" style="width:100%" value="2400" required></div>
+        <div><label for="rRush">排期选项</label><select id="rRush" class="sp-select" style="width:100%"><option value="1">支持加急</option><option value="0">常规排期</option></select></div>
+      </div>
+      <div><label for="rSpec">关键精度参数</label><input id="rSpec" class="sp-input" style="width:100%" placeholder="例如：3Hz-50GHz · 本底噪声 -166dBm/Hz" required></div>
+    </div>
+    <div class="dlg-foot">
+      <button type="submit" class="sp-btn sp-btn-primary">发布至名录</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const isEmpty = qs.get('empty') === '1';
+  const isFail = qs.get('fail') === '1';
+  const isSlow = qs.get('slow') === '1';
+  const isLong = qs.get('long') === '1';
+  if (isLong) document.body.classList.add('is-long');
+
+  let MACHINES = [
+    { id: 1, model: 'Zeiss GeminiSEM 500 场发射扫描电镜', cat: '电镜', city: '上海', lab: '复旦微纳加工共享平台', slot: '今日 14:00', slotOrder: 1, in48: true, rush: true, pin: true, price: 2800, spec: '0.6 nm 分辨率 · EDS 能谱联用 · 低真空模式 · 含工程师操作' },
+    { id: 2, model: 'Keysight UXR0334B 超宽带示波器', cat: '示波器', city: '深圳', lab: '鹏城高速互连实验室', slot: '今日 16:30', slotOrder: 2, in48: true, rush: true, pin: false, price: 3200, spec: '33 GHz 带宽 · 128 GSa/s 采样 · 10-bit ADC · 配差分探头' },
+    { id: 3, model: 'Yamaha YSM20R 高速贴片中试线', cat: 'SMT 贴片线', city: '苏州', lab: '长三角智造中试工坊', slot: '明日 08:30', slotOrder: 3, in48: true, rush: true, pin: false, price: 4600, spec: '95,000 CPH · 0201/0402 封装 · 含 SPI 锡膏检测与八温区回流焊' },
+    { id: 4, model: 'ESPEC GSU-0412 快速温变箱', cat: '高低温箱', city: '北京', lab: '海淀可靠性联合测试中心', slot: '明日 09:00', slotOrder: 4, in48: true, rush: true, pin: false, price: 1100, spec: '-70°C 至 +180°C · 15°C/min 升降温 · 412L 容积' },
+    { id: 5, model: 'FEI Talos F200X 透射电镜', cat: '电镜', city: '北京', lab: '清华材料微结构中心', slot: '明日 13:30', slotOrder: 5, in48: true, rush: false, pin: false, price: 5400, spec: '200 kV · HAADF-STEM 原子像 · 需提前 24h 送制样' },
+    { id: 6, model: 'Tektronix DPO73304SX 实时示波器', cat: '示波器', city: '上海', lab: '张江射频芯片测试公共平台', slot: '明日 15:00', slotOrder: 6, in48: true, rush: true, pin: false, price: 2900, spec: '33 GHz · 100 GSa/s · 眼图/抖动一致性包全开' },
+    { id: 7, model: 'Votsch VT4010 恒温恒湿试验箱', cat: '高低温箱', city: '杭州', lab: '之江电子环境应力室', slot: '11-23 09:00', slotOrder: 7, in48: true, rush: false, pin: false, price: 950, spec: '-40°C 至 +150°C · 湿度 10%-98%RH · 1000L 大箱体' },
+    { id: 8, model: 'Fuji NXT III 模组贴片打样线', cat: 'SMT 贴片线', city: '深圳', lab: '南山硬件加速中试线', slot: '11-23 10:00', slotOrder: 8, in48: true, rush: true, pin: false, price: 5200, spec: 'BGA 0.3mm 间距 · 双轨 AOI 光学检测 · 支持 5-50 片快打样' },
+    { id: 9, model: 'Hitachi SU8220 冷场发射电镜', cat: '电镜', city: '成都', lab: '川大高分子表征平台', slot: '11-23 14:00', slotOrder: 9, in48: true, rush: false, pin: false, price: 2200, spec: '0.8 nm @15kV · 轻元素减速模式 · 含喷金制样' },
+    { id: 10, model: 'Rohde & Schwarz RTP164 示波器', cat: '示波器', city: '杭州', lab: '滨江车载总线实验室', slot: '11-23 16:00', slotOrder: 10, in48: true, rush: false, pin: false, price: 1800, spec: '16 GHz · 40 GSa/s · PCIe 4.0 / 车载以太网协议解码' },
+    { id: 11, model: 'Thermotron S-8-3800 温度冲击箱', cat: '高低温箱', city: '苏州', lab: '园区新能源车规测试站', slot: '11-24 09:00', slotOrder: 11, in48: false, rush: false, pin: false, price: 1450, spec: '-70°C 至 +177°C 两箱冷热冲击 · 转换时间 < 10 秒' },
+    { id: 12, model: 'ASM SIPLACE TX2 高精度产线', cat: 'SMT 贴片线', city: '上海', lab: '松江精密电子中试基地', slot: '11-24 10:30', slotOrder: 12, in48: false, rush: true, pin: false, price: 4800, spec: '±22 μm 贴装精度 · 01005 元件 · 氮气保护回流' },
+    { id: 13, model: 'JEOL JSM-7800F Prime 扫描电镜', cat: '电镜', city: '杭州', lab: '浙大硅基器件共享室', slot: '11-25 09:00', slotOrder: 13, in48: false, rush: false, pin: false, price: 2600, spec: '0.7 nm · EBSD 晶体取向分析 · 4 英寸晶圆直入' },
+    { id: 14, model: 'LeCroy WaveMaster 820Zi-B', cat: '示波器', city: '成都', lab: '高新区毫米波雷达实验室', slot: '11-25 14:00', slotOrder: 14, in48: true, rush: false, pin: false, price: 2100, spec: '20 GHz · 80 GSa/s · 256Mpts 深存储' },
+    { id: 15, model: 'ACS DM1200 高低温湿热步入箱', cat: '高低温箱', city: '成都', lab: '西南整机环境可靠性站', slot: '11-26 09:30', slotOrder: 15, in48: false, rush: false, pin: false, price: 1300, spec: '-40°C 至 +85°C · 1.2m³ 整机级机柜老化仓' },
+    { id: 16, model: 'Mycronic MY300DX 无钢网柔性线', cat: 'SMT 贴片线', city: '北京', lab: '亦庄微系统小批量工坊', slot: '11-26 13:00', slotOrder: 16, in48: true, rush: false, pin: false, price: 3900, spec: '喷射锡膏印刷（免开钢网） · 适合研发改版 1-10 板快试' }
+  ];
+
+  let state = { q: '', city: 'all', cat: 'all', budget: 'all', sort: 'slot', rush: false, favOnly: false, favs: [], distBand: 'all', bannerOff: false, bookId: null };
+  const el = (id) => document.getElementById(id);
+  const toast = (m) => { const t = el('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2200); };
+
+  const renderBanner = () => {
+    const b = el('stateBanner');
+    if (state.bannerOff || (!isFail && !isSlow)) { b.className = 'state-banner hidden'; return; }
+    b.className = isSlow ? 'state-banner is-slow' : 'state-banner';
+    el('stateMsg').textContent = isSlow ? '正在拉取 6 城实验室最新排期档位，当前显示本地缓存名录...' : '部分实验室排期日历同步超时，请重试同步或先发起意向预约。';
+  };
+
+  const getFiltered = () => {
+    if (isEmpty) return [];
+    const q = state.q.trim().toLowerCase();
+    return MACHINES.filter((m) => {
+      if (state.city !== 'all' && m.city !== state.city) return false;
+      if (state.cat !== 'all' && m.cat !== state.cat) return false;
+      if (state.budget !== 'all' && m.price > Number(state.budget)) return false;
+      if (state.distBand === 'low' && m.price > 1500) return false;
+      if (state.distBand === 'mid' && (m.price <= 1500 || m.price > 3500)) return false;
+      if (state.distBand === 'high' && m.price <= 3500) return false;
+      if (state.rush && !m.rush) return false;
+      if (state.favOnly && !state.favs.includes(m.id)) return false;
+      if (q && !`${m.model} ${m.lab} ${m.city} ${m.spec}`.toLowerCase().includes(q)) return false;
+      return true;
+    }).sort((a, b) => state.sort === 'asc' ? a.price - b.price : state.sort === 'desc' ? b.price - a.price : a.slotOrder - b.slotOrder);
+  };
+
+  const renderSide = (rows) => {
+    el('stMatch').textContent = String(rows.length);
+    el('stRush').textContent = String(rows.filter((r) => r.rush).length);
+    el('st48h').textContent = String(rows.filter((r) => r.in48).length);
+
+    const tot = rows.length || 1;
+    const bands = [
+      { key: 'low', label: '1,500 元内', cnt: rows.filter((r) => r.price <= 1500).length },
+      { key: 'mid', label: '1,500-3,500 元', cnt: rows.filter((r) => r.price > 1500 && r.price <= 3500).length },
+      { key: 'high', label: '3,500 元以上', cnt: rows.filter((r) => r.price > 3500).length }
+    ];
+    el('distList').innerHTML = bands.map((b) => `<li><button type="button" class="dist-btn" data-band="${b.key}" aria-pressed="${state.distBand === b.key ? 'true' : 'false'}">
+      <span class="dist-top"><span>${b.label}</span><span class="mono num">${b.cnt} 台</span></span>
+      <span class="dist-track"><i style="width:${((b.cnt / tot) * 100).toFixed(1)}%"></i></span>
+    </button></li>`).join('');
+    el('distList').querySelectorAll('.dist-btn').forEach((b) => b.addEventListener('click', () => {
+      state.distBand = state.distBand === b.dataset.band ? 'all' : b.dataset.band; renderAll();
+    }));
+  };
+
+  const renderList = () => {
+    const rows = getFiltered();
+    renderSide(rows);
+    el('listTitle').textContent = `可预约共享仪器与产线（${rows.length} 台）`;
+    el('favCount').textContent = String(state.favs.length);
+    el('openCmpBtn').disabled = state.favs.length < 2;
+
+    const pinSlot = el('pinSlot');
+    const ul = el('eqList');
+    if (!rows.length) {
+      pinSlot.innerHTML = '';
+      ul.innerHTML = '<li class="empty-box">当前筛选条件下暂无可用机台，可放宽预算或城市条件。</li>';
+      return;
+    }
+
+    const pinned = rows.find((r) => r.pin && state.sort === 'slot') || null;
+    const rest = pinned ? rows.filter((r) => r.id !== pinned.id) : rows;
+
+    pinSlot.innerHTML = pinned ? `<div class="pin-card">
+      <div>
+        <div class="pin-kicker">最早可用高优先级推荐 · ${pinned.slot} · ${pinned.city}</div>
+        <h2 class="pin-title">${pinned.model}</h2>
+        <div class="pin-sub">${pinned.lab} · ${pinned.spec}</div>
+      </div>
+      <div class="pin-right">
+        <div class="pin-price num">¥${pinned.price.toLocaleString('en-US')}<span style="font-size:12px;line-height:18px;font-weight:400;color:var(--ink-label)"> / 天</span></div>
+        <div class="eq-btns">
+          <button type="button" class="sp-btn fav-btn" data-id="${pinned.id}" aria-pressed="${state.favs.includes(pinned.id) ? 'true' : 'false'}">${state.favs.includes(pinned.id) ? '已加对比' : '+ 收藏对比'}</button>
+          <button type="button" class="sp-btn sp-btn-primary book-btn" data-id="${pinned.id}">发起预约</button>
+        </div>
+      </div>
+    </div>` : '';
+
+    ul.innerHTML = rest.map((m) => {
+      const faved = state.favs.includes(m.id);
+      const longSpec = isLong ? `${m.spec} · 对接要求：送测需提前确认样品尺寸、工装及专票税点 [待确认]` : m.spec;
+      return `<li class="eq-row">
+        <div>
+          <div class="eq-title-line">
+            <span class="eq-title">${m.model}</span>
+            <span class="eq-tag et-cat">${m.cat} · ${m.city}</span>
+            ${m.rush ? '<span class="eq-tag et-rush">可加急</span>' : ''}
+          </div>
+          <div class="eq-specs">${longSpec}</div>
+          <div class="eq-lab">${m.lab} · 最早档期 <strong class="mono">${m.slot}</strong></div>
+        </div>
+        <div class="eq-right">
+          <div class="eq-price num">¥${m.price.toLocaleString('en-US')}<span style="font-size:12px;line-height:18px;font-weight:400;color:var(--ink-label)"> / 天</span></div>
+          <div class="eq-btns">
+            <button type="button" class="sp-btn fav-btn" data-id="${m.id}" aria-pressed="${faved ? 'true' : 'false'}">${faved ? '已选对比' : '+ 对比'}</button>
+            <button type="button" class="sp-btn sp-btn-primary book-btn" data-id="${m.id}">预约意向</button>
+          </div>
+        </div>
+      </li>`;
+    }).join('');
+
+    document.querySelectorAll('.fav-btn').forEach((b) => b.addEventListener('click', () => {
+      const id = Number(b.dataset.id);
+      const idx = state.favs.indexOf(id);
+      if (idx >= 0) state.favs.splice(idx, 1);
+      else if (state.favs.length >= 4) { toast('最多支持 4 台机台并排对比'); return; }
+      else state.favs.push(id);
+      renderList();
+    }));
+    document.querySelectorAll('.book-btn').forEach((b) => b.addEventListener('click', () => openBook(Number(b.dataset.id))));
+  };
+
+  const openBook = (id) => {
+    const m = MACHINES.find((x) => x.id === id);
+    if (!m) return;
+    state.bookId = id;
+    el('bookBody').innerHTML = `<div class="form-grid">
+      <div><strong>选定机台：</strong>${m.model}（${m.lab} · ¥${m.price}/天）</div>
+      <div><label for="bOrg">申请课题组 / 团队名称</label><input id="bOrg" class="sp-input" style="width:100%" placeholder="例如：光电系统研发一组" required></div>
+      <div><label for="bSlot">期望排期时段（最早 ${m.slot}）</label><input id="bSlot" class="sp-input" style="width:100%" value="${m.slot}" required></div>
+      <div><label for="bContact">联系人手机或邮箱</label><input id="bContact" class="sp-input" style="width:100%" placeholder="13800000000 / lab@example.com" required></div>
+      <div style="font-size:12px;color:var(--ink-label)">损坏押金比例 [待确认] · 增值税专票税点 [待确认]</div>
+    </div>`;
+    el('bookDialog').showModal();
+  };
+
+  const renderAll = () => { renderBanner(); renderList(); };
+
+  el('searchInput').addEventListener('input', (e) => { state.q = e.target.value; renderList(); });
+  el('citySelect').addEventListener('change', (e) => { state.city = e.target.value; renderList(); });
+  el('budgetSelect').addEventListener('change', (e) => { state.budget = e.target.value; renderList(); });
+  el('sortSelect').addEventListener('change', (e) => { state.sort = e.target.value; renderList(); });
+  el('rushBtn').addEventListener('click', () => { state.rush = !state.rush; el('rushBtn').setAttribute('aria-pressed', state.rush ? 'true' : 'false'); renderList(); });
+  el('favFilterBtn').addEventListener('click', () => { state.favOnly = !state.favOnly; el('favFilterBtn').setAttribute('aria-pressed', state.favOnly ? 'true' : 'false'); renderList(); });
+  document.querySelectorAll('[data-cat]').forEach((b) => b.addEventListener('click', () => {
+    state.cat = b.dataset.cat;
+    document.querySelectorAll('[data-cat]').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    renderList();
+  }));
+
+  el('openCmpBtn').addEventListener('click', () => {
+    const items = state.favs.map((id) => MACHINES.find((m) => m.id === id)).filter(Boolean);
+    if (items.length < 2) return;
+    el('cmpBody').innerHTML = `<div class="cmp-cols">${items.map((m) => `<div class="cmp-card">
+      <h4>${m.model}</h4><p><strong>${m.city}</strong> · ${m.lab}</p>
+      <p class="mono">日租：¥${m.price}/天</p><p>最早：${m.slot}（${m.rush ? '可加急' : '常规'}）</p>
+      <p>${m.spec}</p>
+    </div>`).join('')}</div>`;
+    el('cmpDialog').showModal();
+  });
+  el('closeCmpBtn').addEventListener('click', () => el('cmpDialog').close());
+  el('closeBookBtn').addEventListener('click', () => el('bookDialog').close());
+  el('bookForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const code = 'PS-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    el('bookDialog').close();
+    toast(`已生成预约回执 ${code}，待实验室确认`);
+  });
+
+  el('openRegBtn').addEventListener('click', () => el('regDialog').showModal());
+  el('closeRegBtn').addEventListener('click', () => el('regDialog').close());
+  el('regForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const item = {
+      id: Date.now(), model: el('rModel').value.trim(), cat: el('rCat').value, city: el('rCity').value,
+      lab: el('rLab').value.trim(), slot: '明日 09:30', slotOrder: 3, in48: true,
+      rush: el('rRush').value === '1', pin: false, price: Number(el('rPrice').value), spec: el('rSpec').value.trim()
+    };
+    MACHINES.unshift(item);
+    el('regDialog').close();
+    el('regForm').reset();
+    renderAll();
+    toast(`已上线新机台：${item.model}`);
+  });
+
+  el('retryBtn').addEventListener('click', () => { state.bannerOff = true; renderBanner(); toast('已恢复本地机台档期'); });
+  renderAll();
+})();
+</script>
+</body>
+</html>

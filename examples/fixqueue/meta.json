@@ -1,0 +1,7 @@
+{
+  "name": "FixQueue",
+  "tagline": "先处理临期工单，认领与解决都在行内完成。",
+  "accent": "Blue7 #0052d9",
+  "structure": "Stat-Led · N13 / Ft2",
+  "layout": "积压数字打头，单列工单队列，行内展开详情与快捷动作。"
+}

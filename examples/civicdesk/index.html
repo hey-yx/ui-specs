@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新生儿医保参保登记 · CivicDesk</title>
+<!-- Hallmark · macrostructure: Long Document · nav: N3 Side rail · footer: Ft1 Mast headed · tone: official-document · anchor hue: TDesign Cyan7 -->
+<style>
+/* ===== tokens · 全部取自 TDesign 原文，行号见 DECISIONS ===== */
+:root{
+  --white:#ffffff;        /* color.md:93 White */
+  --gray-1:#f3f3f3;       /* color.md:95 Gray1 */
+  --gray-3:#e8e8e8;       /* color.md:97 Gray3 */
+  --gray-7:#8b8b8b;       /* color.md:101 Gray7 仅装饰与占位 */
+  --gray-9:#5e5e5e;       /* color.md:103 Gray9 次要文字 6.48:1 */
+  --ink:#181818;          /* color.md:108 Gray14 正文 */
+  --brand:#00668e;        /* color.md:186 Cyan7 */
+  --brand-hover:#004e6d;  /* color.md:187 Cyan8 */
+  --brand-soft:#e8f5ff;   /* color.md:180 Cyan1 */
+  --danger:#ad352f;       /* color.md:60 Red7 6.31:1，Red6 4.32 不足 4.5 只做图标 */
+  --ok:#006c45;           /* color.md:84 Green7 5.88:1 */
+  --radius:4px;           /* GAP_RULES 圆角条：整站统一 4px 派生档 */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px; /* layout.md:138 间距档（8 倍数，另 4、12 两档） */
+  --measure:36rem;        /* 中文 35 到 45 字宽，GAP_RULES 行长条 */
+  --dur:200ms;            /* motion.md:101 desktop-base */
+  --dur-mod:240ms;        /* motion.md:102 desktop-moderate */
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+.skip{position:absolute;left:-999px;top:0;z-index:20;background:var(--brand);color:#fff;
+  padding:var(--space-3) var(--space-4);border-radius:var(--radius);font-size:14px;text-decoration:none}
+.skip:focus{left:var(--space-4);top:var(--space-4)}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--white);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:calc(1em + 8px);   /* fonts.md:69 行高 = 字号 + 8 */
+  text-wrap:pretty;                              /* 避免末行只剩一两个字 */
+  font-weight:400;                              /* fonts.md:87 只两档：400 / 600 */
+}
+:where(h1,h2,h3,p,li,td,th,label,span,dt,dd,a,button,input,select,small,legend,b,strong,em,code,figcaption,caption,option,time,abbr){line-height:calc(1em + 8px)}
+
+/* ===== 左缘竖条 N3 ===== */
+.rail{position:fixed;left:0;top:0;bottom:0;width:56px;border-right:1px solid var(--gray-3);
+  background:var(--white);display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:20px 0;z-index:5}
+.rail .mark{writing-mode:vertical-rl;text-orientation:mixed;font-size:12px;letter-spacing:.18em;
+  color:var(--ink);text-decoration:none;font-weight:600}
+.rail .now{writing-mode:vertical-rl;font-size:12px;color:var(--brand);letter-spacing:.1em}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.rail li{width:8px;height:8px;border-radius:50%;background:var(--gray-3)}
+.rail li[aria-current="true"]{background:var(--brand)}
+.rail .tel{writing-mode:vertical-rl;font-size:12px;color:var(--gray-9);text-decoration:none;min-height:44px;display:flex;align-items:center}
+
+/* ===== 文档主体 ===== */
+.page{margin-left:56px;padding:var(--space-8) var(--space-6) var(--space-12)}
+.doc{max-width:var(--measure);margin:0 auto;position:relative}
+/* 1200 以上：正文列右侧必须有承载物，不留空 */
+.notes{display:none}
+@media (min-width:1200px){
+  .doc{max-width:calc(var(--measure) + 15rem);display:grid;grid-template-columns:minmax(0,var(--measure)) 11rem;
+       column-gap:var(--space-8);justify-content:center;align-items:start}
+  .col-main{grid-column:1;min-width:0}
+  .notes{grid-column:2;grid-row:1;display:block;position:sticky;top:var(--space-8)}
+  .notes h2{font-size:12px;font-weight:600;color:var(--gray-9);margin:0 0 var(--space-2);letter-spacing:.08em}
+  .notes p{margin:0;padding:var(--space-3) 0;border-top:1px solid var(--gray-3);font-size:12px;color:var(--gray-9)}
+  .notes p b{display:block;color:var(--ink);font-size:14px;font-weight:600}
+}
+/* 材料示例与办理点表 */
+.figure{margin:var(--space-3) 0 0;border:1px solid var(--gray-3);border-radius:var(--radius);padding:var(--space-4);background:var(--white)}
+.figure svg{display:block;width:100%;height:auto}
+.figure svg text{line-height:calc(1em + 8px)}
+.figure figcaption{margin-top:var(--space-3);font-size:12px;color:var(--gray-9)}
+.places{width:100%;border-collapse:collapse;margin:var(--space-3) 0 0;font-size:14px}
+.places th,.places td{text-align:left;padding:var(--space-3);border-bottom:1px solid var(--gray-3);vertical-align:top}
+.places th{font-size:12px;color:var(--gray-9);font-weight:400;border-bottom-color:var(--gray-9)}
+.places caption{caption-side:top;text-align:left;font-size:12px;color:var(--gray-9);padding-bottom:var(--space-2)}
+.masthead{display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-4);
+  font-size:12px;color:var(--gray-9);border-bottom:1px solid var(--gray-3);padding-bottom:var(--space-3);margin-bottom:var(--space-8)}
+.masthead .tag{color:var(--gray-9);border:1px solid var(--gray-3);border-radius:var(--radius);padding:1px var(--space-2)}
+
+/* 首屏区块一：抬头 */
+.doc-head{margin-bottom:var(--space-8)}
+.kicker{font-size:12px;color:var(--gray-9);margin:0 0 var(--space-2)}
+h1{font-size:36px;font-weight:600;letter-spacing:-.01em;margin:0 0 var(--space-3)}  /* fonts.md:58 36px */
+.lede{font-size:16px;color:var(--ink);margin:0 0 var(--space-4)}                    /* fonts.md:55 16px */
+.facts{margin:0 0 var(--space-6);display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4);font-size:12px;color:var(--gray-9)}
+.facts b{font-weight:600;color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums}
+.act{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.btn{min-height:44px;padding:0 var(--space-6);border-radius:var(--radius);border:1px solid var(--brand);
+  background:var(--brand);color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:var(--space-2);transition:background var(--dur) var(--ease)}
+.btn:hover{background:var(--brand-hover);border-color:var(--brand-hover)}
+.btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn.link{background:none;border:0;color:var(--brand);text-decoration:underline;text-underline-offset:3px;padding:0;min-height:44px}
+.btn.link:hover{color:var(--brand-hover);background:none}
+
+/* 首屏区块二：材料 */
+section{margin-bottom:var(--space-12)}
+.num{font-size:12px;color:var(--gray-9);margin:0 0 var(--space-1);font-variant-numeric:tabular-nums}
+h2{font-size:24px;font-weight:600;margin:0 0 var(--space-3)}
+h3{font-size:16px;font-weight:600;margin:var(--space-6) 0 var(--space-2)}
+p{margin:0 0 var(--space-3)}
+.muted{color:var(--gray-9)}
+.checklist{list-style:none;margin:0;padding:0;border-top:1px solid var(--gray-3)}
+.checklist li{display:flex;gap:var(--space-3);align-items:flex-start;padding:var(--space-3) 0;
+  border-bottom:1px solid var(--gray-3)}
+.checklist label{display:flex;gap:var(--space-3);align-items:flex-start;cursor:pointer;min-height:44px;width:100%}
+.checklist input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--brand);flex:0 0 auto}
+.checklist .why{display:block;margin-top:2px;color:var(--gray-9);font-size:12px}
+.count{font-size:12px;color:var(--gray-9);margin:var(--space-2) 0 0}
+.cond{background:var(--gray-1);border-left:2px solid var(--brand);padding:var(--space-4);border-radius:var(--radius)}
+.cond dl{margin:0;display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:var(--space-2) var(--space-4);font-size:14px}
+.cond dt{color:var(--gray-9)}
+
+/* 表单 */
+fieldset{border:0;margin:0 0 var(--space-6);padding:0}
+legend{font-size:16px;font-weight:600;padding:0;margin-bottom:var(--space-3)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+.field{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.field.wide{grid-column:1/-1}
+.field label{font-size:12px;color:var(--gray-9)}
+.field input,.field select{min-height:44px;padding:0 var(--space-3);border:1px solid var(--gray-7);
+  border-radius:var(--radius);background:var(--white);color:var(--ink);font:inherit;font-size:14px;
+  transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+.field input:hover,.field select:hover{border-color:var(--gray-9)}
+.field input:focus-visible,.field select:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-color:var(--brand)}
+.field[data-bad="1"] input,.field[data-bad="1"] select{border-color:var(--danger)}
+.hint{font-size:12px;color:var(--gray-9)}
+.err{font-size:12px;color:var(--danger);display:none}
+.field[data-bad="1"] .err{display:block}
+.radios{display:flex;gap:var(--space-4);flex-wrap:wrap}
+.radios label{display:inline-flex;align-items:center;gap:var(--space-2);min-height:44px;font-size:14px;color:var(--ink);cursor:pointer}
+.radios input{width:18px;height:18px;accent-color:var(--brand)}
+.form-foot{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-4)}
+
+/* 回执 */
+.receipt[hidden]{display:none}
+.receipt{border:1px solid var(--gray-3);border-radius:var(--radius);padding:var(--space-6);background:var(--white)}
+.receipt .stamp{display:inline-flex;align-items:center;gap:var(--space-2);color:var(--ok);font-weight:600;font-size:14px}
+.receipt .no{font-size:36px;font-weight:600;letter-spacing:.04em;font-variant-numeric:tabular-nums;margin:var(--space-2) 0}
+.receipt dl{display:grid;grid-template-columns:auto 1fr;gap:var(--space-2) var(--space-4);margin:var(--space-4) 0 0;font-size:14px}
+.receipt dt{color:var(--gray-9)}
+
+/* 进度查询 */
+.track{background:var(--gray-1);border-radius:var(--radius);padding:var(--space-6)}
+.track form{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) auto;gap:var(--space-3);align-items:end}
+.track .field input{background:var(--white)}
+.track-out{margin-top:var(--space-4)}
+.state{border-radius:var(--radius);padding:var(--space-4);background:var(--white);border:1px solid var(--gray-3)}
+.state.empty{color:var(--gray-9)}
+.state.need{border-color:var(--danger)}
+.state.need .st{color:var(--danger)}
+.state .st{font-weight:600;margin:0 0 var(--space-1)}
+.state ol{margin:var(--space-2) 0 0;padding-left:1.1em;color:var(--gray-9)}
+.state ol li{margin-bottom:var(--space-1)}
+.samples{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-3);padding:0;list-style:none}
+.samples button{min-height:44px;padding:0 var(--space-2);border:1px solid var(--gray-3);background:var(--white);
+  border-radius:var(--radius);color:var(--gray-9);font:inherit;font-size:12px;line-height:calc(1em + 8px);cursor:pointer}
+.samples button:hover{border-color:var(--brand);color:var(--brand)}
+.spinner{width:16px;height:16px;border:2px solid var(--gray-3);border-top-color:var(--brand);border-radius:50%;
+  display:inline-block;animation:spin 700ms linear infinite;vertical-align:-3px;margin-right:var(--space-2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* FAQ */
+details{border-top:1px solid var(--gray-3);padding:var(--space-3) 0}
+details summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"＋";margin-left:auto;color:var(--gray-9)}
+details[open] summary::after{content:"－"}
+details p{margin:var(--space-2) 0 0;color:var(--gray-9)}
+
+/* 页脚 Ft1 */
+.ft1{border-top:1px solid var(--gray-3);margin-top:var(--space-12);padding:var(--space-8) 0 0;font-size:12px;color:var(--gray-9)}
+.ft1 .wm{font-size:16px;font-weight:600;color:var(--ink);margin:0 0 var(--space-1)}
+.ft1 .links{display:flex;gap:var(--space-4);flex-wrap:wrap;margin:var(--space-3) 0 0;padding:0;list-style:none}
+.ft1 a{color:var(--gray-9);display:inline-flex;align-items:center;min-height:44px}
+.ft1 .legal{margin:var(--space-4) 0 0}
+
+/* 断点 layout.md:156-158 */
+@media (max-width:991px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  h1{font-size:28px}
+}
+@media (max-width:767px){
+  .rail{width:24px;padding:12px 0}
+  .rail .mark,.rail .tel,.rail .now{display:none}
+  .page{margin-left:24px;padding:var(--space-6) var(--space-4) var(--space-8)}
+  .masthead{font-size:12px;flex-direction:column;gap:var(--space-1)}
+  .act{flex-direction:column;align-items:stretch;gap:var(--space-2)}
+  .act .btn{width:100%;justify-content:center}
+  .act .btn.link{min-height:44px}
+  .facts{gap:var(--space-4)}
+  h1{font-size:24px}
+  .track form{grid-template-columns:minmax(0,1fr)}
+  .receipt .no{font-size:24px}
+}
+:where(a,button,input,select,summary,[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+:where(a,button,input,select,summary){outline-offset:2px}
+@media print{
+  .rail,.notes,.skip,.act,.track form,.samples,.form-foot{display:none!important}
+  .page{margin:0;padding:0}
+  .doc{display:block;max-width:none}
+  body{font-size:11pt}
+  a{color:inherit;text-decoration:none}
+  section{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:1ms!important;animation-duration:1ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#s1">跳到正文</a>
+<nav class="rail" aria-label="文档分节">
+  <a class="mark" href="#top">CivicDesk</a>
+  <span class="now" id="railNow">材料</span>
+  <ol id="dots" aria-hidden="true"><li aria-current="true"></li><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+  <a class="tel" href="tel:12345">12345</a>
+</nav>
+
+<div class="page" id="top">
+  <main class="doc">
+    <div class="col-main">
+    <div class="masthead">
+      <span>市政公共服务站 · 新生儿参保</span>
+      <span class="tag">演示页 · 不与政务系统对接</span>
+    </div>
+
+    <!-- 区块一 -->
+    <header class="doc-head">
+      <p class="kicker">出生一件事 · 城乡居民基本医疗保险</p>
+      <h1>新生儿医保参保登记</h1>
+      <p class="lede">出生 90 天内办，待遇从出生之日起算；错过 90 天，从缴费次月起算。</p>
+      <p class="facts"><span>办理窗口 <b>90 天</b></span><span>办结 <b>3 个工作日</b></span><span>费用 <b>0 元</b>（演示口径）</span></p>
+      <div class="act">
+        <button class="btn" id="startBtn" type="button">开始填表</button>
+        <button class="btn link" id="toTrack" type="button">查办理进度</button>
+      </div>
+    </header>
+
+    <!-- 区块二 -->
+    <section id="s1" aria-labelledby="h-material">
+      <p class="num">01</p>
+      <h2 id="h-material">材料清单</h2>
+      <p class="muted">三样必带，代办再加一样。</p>
+      <ul class="checklist">
+        <li><label><input type="checkbox" data-mat><span>出生医学证明<span class="why">医院开具，名字要与户口簿一致</span></span></label></li>
+        <li><label><input type="checkbox" data-mat><span>户口簿<span class="why">新生儿页与首页</span></span></label></li>
+        <li><label><input type="checkbox" data-mat><span>监护人身份证<span class="why">正反面</span></span></label></li>
+        <li><label><input type="checkbox" data-mat><span>代办人身份证<span class="why">仅代办时带</span></span></label></li>
+      </ul>
+      <p class="count" id="matCount" role="status">已备 0 / 4</p>
+      <figure class="figure">
+        <svg viewBox="0 0 320 176" role="img" aria-label="出生医学证明示例：核对姓名、编号与医院章三处">
+          <rect x="0.5" y="0.5" width="319" height="175" rx="4" fill="#ffffff" stroke="#e8e8e8"/>
+          <text x="16" y="28" font-size="11" fill="#5e5e5e">出生医学证明（示例）</text>
+          <rect x="16" y="40" width="200" height="1" fill="#e8e8e8"/>
+          <text x="16" y="66" font-size="11" fill="#5e5e5e">新生儿姓名</text>
+          <text x="96" y="66" font-size="12" fill="#181818">陈小满</text>
+          <rect x="92" y="52" width="62" height="20" fill="none" stroke="#00668e" stroke-dasharray="3 2"/>
+          <circle cx="86" cy="62" r="7" fill="#00668e"/><text x="86" y="66" font-size="9" fill="#ffffff" text-anchor="middle">1</text>
+          <text x="16" y="96" font-size="11" fill="#5e5e5e">证明编号</text>
+          <text x="96" y="96" font-size="12" fill="#181818">R1101 2026 0042</text>
+          <rect x="92" y="82" width="126" height="20" fill="none" stroke="#00668e" stroke-dasharray="3 2"/>
+          <circle cx="86" cy="92" r="7" fill="#00668e"/><text x="86" y="96" font-size="9" fill="#ffffff" text-anchor="middle">2</text>
+          <text x="16" y="126" font-size="11" fill="#5e5e5e">接生机构</text>
+          <text x="96" y="126" font-size="12" fill="#181818">市妇幼保健院</text>
+          <circle cx="236" cy="120" r="20" fill="none" stroke="#ad352f" stroke-width="1.5"/>
+          <text x="236" y="118" font-size="8" fill="#ad352f" text-anchor="middle">接生机构</text>
+          <text x="236" y="128" font-size="8" fill="#ad352f" text-anchor="middle">专用章</text>
+          <circle cx="268" cy="100" r="7" fill="#00668e"/><text x="268" y="104" font-size="9" fill="#ffffff" text-anchor="middle">3</text>
+          <text x="16" y="160" font-size="10" fill="#8b8b8b">虚线框是窗口要对照的三处，章要压在编号上</text>
+        </svg>
+        <figcaption>窗口只对照三处：姓名与户口簿一致、编号可读、医院章压在编号上。缺章或字迹模糊要回医院补开。</figcaption>
+      </figure>
+    </section>
+
+    <!-- 区块三 -->
+    <section id="s2" aria-labelledby="h-cond">
+      <p class="num">02</p>
+      <h2 id="h-cond">办理条件</h2>
+      <div class="cond">
+        <dl>
+          <dt>谁可以办</dt><dd>本市户籍新生儿，以及在本市常住的新生儿（父母一方持有效居住证明）。</dd>
+          <dt>什么时候办</dt><dd>出生 90 天内。超期仍可办，待遇从缴费次月起算。</dd>
+          <dt>在哪里办</dt><dd>任一街道便民服务中心，工作日上午 9:00 到 12:00，下午 13:30 到 17:00。</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="s2b" aria-labelledby="h-places">
+      <p class="num">03</p>
+      <h2 id="h-places">去哪办</h2>
+      <p class="muted">全市通办，就近选一处，不用预约。</p>
+      <table class="places">
+        <caption>三个服务点的地址与时间（演示口径）</caption>
+        <thead><tr><th>服务点</th><th>地址</th><th>受理时间</th></tr></thead>
+        <tbody>
+          <tr><td>城东街道便民服务中心</td><td>云杉路 18 号一层</td><td>工作日上午 9:00 到 12:00，下午 13:30 到 17:00</td></tr>
+          <tr><td>望江路服务点</td><td>望江路 66 号政务大厅 2 号厅</td><td>工作日 9:00 到 17:00，中午不休</td></tr>
+          <tr><td>市妇幼保健院驻点</td><td>门诊楼一层 12 号窗口</td><td>工作日 8:30 到 16:30</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 填表 -->
+    <section id="s3" aria-labelledby="h-form">
+      <p class="num">04</p>
+      <h2 id="h-form">填表</h2>
+      <p class="muted">带 * 的必填。填完直接提交，不用先注册账号。</p>
+      <form id="regForm" novalidate>
+        <fieldset>
+          <legend>新生儿</legend>
+          <div class="grid">
+            <div class="field" data-f="name"><label for="babyName">姓名 *</label><input id="babyName" aria-required="true" aria-describedby="err-babyName" name="babyName" autocomplete="off"><p class="err" id="err-babyName">请填新生儿姓名</p></div>
+            <div class="field"><label>性别 *</label>
+              <div class="radios" role="radiogroup" aria-label="性别">
+                <label><input type="radio" name="sex" value="男">男</label>
+                <label><input type="radio" name="sex" value="女">女</label>
+              </div>
+            </div>
+            <div class="field" data-f="birth"><label for="birth">出生日期 *</label><input id="birth" aria-required="true" aria-describedby="err-birth" name="birth" type="date"><p class="err" id="err-birth">请填出生日期</p><p class="hint" id="birthHint"></p></div>
+            <div class="field" data-f="idno"><label for="idno">身份证号 *</label><input id="idno" aria-required="true" aria-describedby="err-idno" name="idno" inputmode="text" autocomplete="off"><p class="err" id="err-idno">身份证号应为 18 位，末位可以是 X</p></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>监护人</legend>
+          <div class="grid">
+            <div class="field" data-f="gname"><label for="gname">姓名 *</label><input id="gname" aria-required="true" aria-describedby="err-gname" name="gname" autocomplete="off"><p class="err" id="err-gname">请填监护人姓名</p></div>
+            <div class="field" data-f="gid"><label for="gid">证件号 *</label><input id="gid" aria-required="true" aria-describedby="err-gid" name="gid" autocomplete="off"><p class="err" id="err-gid">证件号应为 18 位</p></div>
+            <div class="field" data-f="phone"><label for="phone">手机号 *</label><input id="phone" aria-required="true" aria-describedby="err-phone" name="phone" inputmode="numeric" autocomplete="tel"><p class="err" id="err-phone">手机号应为 11 位数字</p><p class="hint">提交与办结各发一条短信</p></div>
+            <div class="field" data-f="year"><label for="year">参保年度 *</label>
+              <select id="year" aria-required="true" aria-describedby="err-year" name="year"><option value="">请选择</option><option>2026 年</option><option>2027 年</option></select>
+              <p class="err" id="err-year">请选择参保年度</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-foot">
+          <button class="btn" id="submitBtn" type="submit">提交登记</button>
+          <p class="muted" style="margin:0">提交后立刻拿到受理号，核验结果以短信为准。</p>
+        </div>
+      </form>
+    </section>
+
+    <!-- 回执 -->
+    <section class="receipt" id="receipt" hidden aria-live="polite" aria-labelledby="h-receipt">
+      <p class="num">05</p>
+      <h2 id="h-receipt">受理单</h2>
+      <p class="stamp">✓ 已提交，短信已发至监护人手机</p>
+      <p class="no" id="receiptNo">CD-2026-0000</p>
+      <dl>
+        <dt>新生儿</dt><dd id="rBaby">—</dd>
+        <dt>参保年度</dt><dd id="rYear">—</dd>
+        <dt>办结时限</dt><dd>3 个工作日，结果可凭受理号在本页查</dd>
+        <dt>需要补材料时</dt><dd>短信会写明缺哪样，补齐后重新提交即可</dd>
+      </dl>
+    </section>
+
+    <!-- 进度 -->
+    <section id="s4" aria-labelledby="h-track">
+      <p class="num">06</p>
+      <h2 id="h-track">查办理进度</h2>
+      <div class="track">
+        <form id="trackForm" novalidate>
+          <div class="field" data-f="tno"><label for="tno">受理号 *</label><input id="tno" name="tno" placeholder="CD-2026-0142"><p class="err">受理号格式是 CD-年份-四位数字</p></div>
+          <div class="field" data-f="tphone"><label for="tphone">手机后四位 *</label><input id="tphone" name="tphone" inputmode="numeric" placeholder="0142"><p class="err">请填手机号后四位</p></div>
+          <button class="btn" id="trackBtn" type="submit">查询</button>
+        </form>
+        <ul class="samples">
+          <li><button type="button" data-sample="CD-2026-0142">示例 · 核验中</button></li>
+          <li><button type="button" data-sample="CD-2026-0098">示例 · 需补材料</button></li>
+          <li><button type="button" data-sample="CD-2026-0207">示例 · 已完成</button></li>
+          <li><button type="button" data-sample="CD-2026-0311">示例 · 已提交</button></li>
+        </ul>
+        <div class="track-out" id="trackOut" aria-live="polite">
+          <div class="state empty">填受理号与手机后四位后查询。四种状态都会给下一步动作与咨询电话 12345。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="s5" aria-labelledby="h-faq">
+      <p class="num">07</p>
+      <h2 id="h-faq">常见问题</h2>
+      <details><summary>超过 90 天还能办吗？</summary><p>能办，待遇从缴费次月起算，之前的费用不追溯。</p></details>
+      <details><summary>非户籍常住怎么办？</summary><p>父母一方持有效居住证明即可，材料和户籍一致。</p></details>
+      <details><summary>受理号丢了怎么办？</summary><p>用监护人手机号拨 12345，核对姓名与出生日期后重新获取。</p></details>
+    </section>
+
+    <footer class="ft1">
+      <p class="wm">CivicDesk</p>
+      <p>主办单位：市政公共服务站 · 新生儿参保登记专项</p>
+      <p>服务点：城东街道便民服务中心（云杉路 18 号一层）</p>
+      <p>热线：<a href="tel:12345">12345</a> 转参保登记，工作日 9:00 到 17:00</p>
+      <ul class="links"><li><a href="#s1">材料清单</a></li><li><a href="#s2b">服务点</a></li><li><a href="#s4">查进度</a></li></ul>
+      <p class="legal">演示页：不与政务系统对接，受理号、时限与费用均为演示口径。</p>
+    </footer>
+    </div>
+
+    <aside class="notes" aria-label="本页要点">
+      <h2>本页要点</h2>
+      <p><b>90 天</b>从出生日算，不是从出院日算。</p>
+      <p><b>0 元</b>参保登记不收费，照相与复印按窗口价另计。</p>
+      <p><b>三样材料</b>姓名与户口簿一致，编号与医院章清楚。</p>
+      <p><b>12345</b>转参保登记，工作日 9:00 到 17:00。</p>
+    </aside>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  /* 材料计数 */
+  const mats = $$('[data-mat]');
+  const matCount = $('#matCount');
+  const paintMats = () => {
+    const n = mats.filter(m => m.checked).length;
+    matCount.textContent = `已备 ${n} / ${mats.length}`;
+  };
+  mats.forEach(m => m.addEventListener('change', paintMats));
+  paintMats();
+
+  /* 左缘圆点跟随分节 */
+  const dots = $$('#dots li');
+  const secs = ['s1', 's2', 's2b', 's3', 'receipt', 's4', 's5'].map(id => document.getElementById(id));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = secs.indexOf(e.target);
+      dots.forEach((d, k) => d.toggleAttribute('aria-current', k === i));
+      const names = ['材料', '条件', '地点', '填表', '回执', '进度', '问答'];
+      const now = document.getElementById('railNow');
+      if (now && names[i]) now.textContent = names[i];
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  secs.forEach(s => s && io.observe(s));
+
+  /* 出生日期提示：90 天窗口 */
+  const birth = $('#birth'), birthHint = $('#birthHint');
+  birth.addEventListener('change', () => {
+    if (!birth.value) { birthHint.textContent = ''; return; }
+    const d = new Date(birth.value + 'T00:00:00');
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    birthHint.textContent = days > 90
+      ? `已出生 ${days} 天，超过 90 天窗口：仍可办，待遇从缴费次月起算。`
+      : `出生第 ${Math.max(days, 0)} 天，在 90 天窗口内。`;
+  });
+
+  /* 校验 */
+  const bad = (el, on) => {
+    const f = el.closest('.field') || el.closest('[data-f]');
+    if (f) f.dataset.bad = on ? '1' : '0';
+    el.setAttribute('aria-invalid', on ? 'true' : 'false');
+  };
+  const isId = v => /^\d{17}[\dXx]$/.test(v.trim());
+  const isPhone = v => /^\d{11}$/.test(v.trim());
+
+  const form = $('#regForm');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let firstBad = null;
+    const rules = [
+      [$('#babyName'), v => v.trim().length > 0],
+      [$('#birth'), v => !!v],
+      [$('#idno'), v => isId(v)],
+      [$('#gname'), v => v.trim().length > 0],
+      [$('#gid'), v => isId(v)],
+      [$('#phone'), v => isPhone(v)],
+      [$('#year'), v => !!v],
+    ];
+    rules.forEach(([el, ok]) => {
+      const good = ok(el.value);
+      bad(el, !good);
+      if (!good && !firstBad) firstBad = el;
+    });
+    const sex = $('input[name=sex]:checked');
+    if (!sex) { /* 性别用桌面端默认不阻断，交给下面的提示 */ }
+    if (firstBad) { firstBad.focus(); return; }
+
+    const no = 'CD-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+    $('#receiptNo').textContent = no;
+    $('#rBaby').textContent = `${$('#babyName').value.trim()}（${$('#birth').value}）`;
+    $('#rYear').textContent = $('#year').value;
+    const r = $('#receipt');
+    r.hidden = false;
+    r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $$('#regForm input, #regForm select').forEach(el => {
+    el.addEventListener('input', () => { if (el.closest('[data-bad="1"]')) bad(el, false); });
+  });
+
+  /* 进度查询：空 / 加载 / 错误 / 四种结果 */
+  const tForm = $('#trackForm'), out = $('#trackOut');
+  const STATES = {
+    '0142': { st: '核验中', cls: '', desc: '材料已收，正在核验户口与出生证明。', next: ['3 个工作日内出结果，结果短信通知', '要补材料会单独发短信，说明缺哪样'] },
+    '0098': { st: '需补材料', cls: 'need', desc: '缺少出生医学证明的清晰照片，其余材料已核验通过。', next: ['拍一张出生医学证明，四角完整、字迹清楚', '补齐后点本页「提交登记」重新提交，不用到窗口', '不清楚缺什么拨 12345 转参保登记'] },
+    '0207': { st: '已完成', cls: '', desc: '参保登记已办结，待遇从出生之日起算。', next: ['医保电子凭证在「国家医保服务平台」激活后可用', '需要纸质凭证可到任一街道便民服务中心打印'] },
+    '0311': { st: '已提交', cls: '', desc: '申请已进队列，还没开始核验。', next: ['一般 1 个工作日内开始核验', '期间不用重复提交'] },
+  };
+  const paint = html => { out.innerHTML = html; };
+  /* 用户输入进 DOM 前转义：这里的受理号来自输入框，避免把标记当 HTML 执行 */
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  tForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const tno = $('#tno'), tp = $('#tphone');
+    const okNo = /^CD-\d{4}-\d{4}$/.test(tno.value.trim());
+    const okPhone = /^\d{4}$/.test(tp.value.trim());
+    bad(tno, !okNo); bad(tp, !okPhone);
+    if (!okNo) { tno.focus(); return; }
+    if (!okPhone) { tp.focus(); return; }
+
+    /* 加载态用 DOM 构造，输入值走 textContent */
+    const box = document.createElement('div');
+    box.className = 'state empty';
+    const sp = document.createElement('span');
+    sp.className = 'spinner';
+    box.append(sp, document.createTextNode('正在查受理号 ' + tno.value.trim() + '…'));
+    out.replaceChildren(box);
+    setTimeout(() => {
+      const key = tno.value.trim().slice(-4);
+      const s = STATES[key];
+      if (!s) {
+        paint('<div class="state empty">没查到这条受理号。核对一下年份与后四位，或拨 12345 人工查。</div>');
+        return;
+      }
+      paint(`<div class="state ${s.cls}"><p class="st">${s.st}</p><p class="muted">${s.desc}</p><ol>${s.next.map(t => `<li>${t}</li>`).join('')}</ol></div>`);
+    }, 600);
+  });
+
+  $$('.samples button').forEach(b => b.addEventListener('click', () => {
+    $('#tno').value = b.dataset.sample;
+    $('#tphone').value = '0142';
+    tForm.requestSubmit();
+  }));
+
+  /* 首屏按钮 */
+  $('#startBtn').addEventListener('click', () => {
+    const first = $('#babyName');
+    $('#s3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => first.focus({ preventScroll: true }), 260);
+  });
+  $('#toTrack').addEventListener('click', () => {
+    $('#s4').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => $('#tno').focus({ preventScroll: true }), 260);
+  });
+})();
+</script>
+</body>
+</html>

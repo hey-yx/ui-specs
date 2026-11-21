@@ -1,0 +1,7 @@
+{
+  "name": "PriceLens",
+  "tagline": "Shopify Polaris IndexTable 风格的 18 服务商 42 模型同档实时比价索引。",
+  "accent": "#005bd3",
+  "structure": "Index-First（Polaris N12 调价公告 + IndexFilters 单卡比价表 + Ft1）",
+  "layout": "Shopify Polaris · IndexTable / N12 / Ft1"
+}

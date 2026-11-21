@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>密钥与用量 · AnyTTL</title>
+<style>
+:root{
+  /* 色：Primer 语义 token，取自 color-themes.md 的 light 列 */
+  --bg:#ffffff; --bg-muted:#f6f8fa; --fg:#1f2328; --fg-muted:#59636e;
+  --accent:#0969da; --danger:#d1242f; --success:#1a7f37; --border:#d1d9e0;
+  /* 间距：8px 基数，回源 GAP_RULES「间距」条 */
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px;
+  /* 字号 derived（Primer 行只有 4px 网格与 rem，无 px 档位）；行高＝字号 + 8 */
+  --t1:14px; --t2:16px; --t3:20px; --t4:24px; --t5:32px;
+  --control-border:#59636e; /* 偏离：控件边界从 borderColor-default 加深，见 DECISIONS */
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:var(--t2)/24px -apple-system,"Segoe UI","PingFang SC",system-ui,sans-serif;
+  font-variant-numeric:tabular-nums}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:var(--s2);top:var(--s2);background:var(--bg);padding:var(--s1) var(--s2);outline:2px solid var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+code,.mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",monospace;font-size:var(--t1);line-height:22px}
+
+nav{border-bottom:1px solid var(--border);background:var(--bg-muted)}
+nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:var(--s3);margin:0 auto;max-width:1080px;
+  padding:var(--s2) var(--s3);align-items:center}
+nav .brand{font-weight:700;margin-right:var(--s2)}
+nav a{color:var(--fg-muted);text-decoration:none}
+nav a[aria-current]{color:var(--fg);font-weight:700}
+
+header{max-width:1080px;margin:0 auto;padding:var(--s4) var(--s3) var(--s2)}
+h1{font-size:var(--t4);line-height:32px;margin:0 0 var(--s1)}
+header p{margin:0;color:var(--fg-muted);font-size:var(--t1);line-height:22px}
+
+main{max-width:1080px;margin:0 auto;padding:0 var(--s3) var(--s5)}
+section{margin-top:var(--s4)}
+
+.filters{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:flex-end;margin-top:var(--s3)}
+label{display:block;font-size:var(--t1);line-height:22px;color:var(--fg-muted);margin-bottom:4px}
+input[type=search],input[type=number],select{font:inherit;color:inherit;background:var(--bg);
+  border:1px solid var(--control-border);padding:11px 12px;height:44px}
+input[type=search]{width:260px}
+
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-top:var(--s3)}
+.kpi div{min-width:0}
+.kpi div{border-top:2px solid var(--fg);padding-top:var(--s1)}
+.kpi dt{font-size:var(--t1);line-height:22px;color:var(--fg-muted);margin:0}
+.kpi dd{margin:0;font-size:var(--t5);line-height:40px;font-weight:700}
+.kpi .unit{font-size:var(--t1);font-weight:400;color:var(--fg-muted);margin-left:4px}
+
+.quota{margin-top:var(--s3)}
+.meter{position:relative;height:8px;background:var(--bg-muted);border:1px solid var(--border)}
+.meter i{display:block;height:100%;background:var(--accent)}
+.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--danger)}
+.quota p{margin:var(--s1) 0 0;font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+
+.bulk{display:none;align-items:center;gap:var(--s2);margin-top:var(--s2);padding:8px 12px;
+  background:var(--bg-muted);border:1px solid var(--border)}
+.bulk.on{display:flex}
+.bulk span{font-size:var(--t1);line-height:22px}
+
+.tablewrap{overflow-x:auto;margin-top:var(--s2)}
+table{width:100%;border-collapse:collapse}
+caption{text-align:left;font-size:var(--t1);line-height:22px;color:var(--fg-muted);padding-bottom:var(--s1)}
+th,td{padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle}
+th{font-size:var(--t1);line-height:22px;color:var(--fg-muted);font-weight:400;white-space:nowrap}
+td{font-size:var(--t1);line-height:22px}
+.num{text-align:right}
+th.num{text-align:right}
+tr.disabled td{color:var(--fg-muted)}
+.state{display:inline-block;font-size:var(--t1);line-height:22px}
+.state.warn{color:var(--danger);font-weight:700}
+.state.off{color:var(--fg-muted)}
+td .rowbtn{font:inherit;font-size:var(--t1);line-height:22px;background:var(--bg);
+  border:1px solid var(--control-border);color:var(--fg);padding:11px 12px;cursor:pointer}
+td .rowbtn:hover{border-color:var(--fg)}
+.edit td{background:var(--bg-muted)}
+.edit form{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:flex-end}
+.edit .calc{font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+.btn{font:inherit;font-size:var(--t1);line-height:22px;padding:11px 16px;cursor:pointer;
+  background:var(--accent);color:#fff;border:1px solid var(--accent)}
+.btn.ghost{background:var(--bg);color:var(--fg);border-color:var(--control-border)}
+.btn:hover{filter:brightness(.94)}
+.btn:active{filter:brightness(.86)}
+.btn.ghost:hover{border-color:var(--fg)}
+.btn:disabled{background:var(--bg-muted);color:var(--fg-muted);border-color:var(--border);filter:none;cursor:not-allowed}
+.nm{display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.ok{color:var(--success);font-weight:700}
+.status{margin-top:var(--s1);font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+
+.states{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3)}
+.statebox{border:1px solid var(--border);padding:var(--s2)}
+.statebox h3{margin:0 0 var(--s1);font-size:var(--t1);line-height:22px;color:var(--fg-muted);font-weight:400}
+.statebox p{margin:0 0 var(--s2);font-size:var(--t2);line-height:24px}
+.skel{height:16px;background:var(--bg-muted);border:1px solid var(--border);margin-bottom:8px}
+.err{border-left:3px solid var(--danger);padding-left:12px}
+
+footer{border-top:1px solid var(--border);background:var(--bg-muted)}
+footer div{max-width:1080px;margin:0 auto;padding:var(--s3);display:flex;flex-wrap:wrap;
+  gap:var(--s1) var(--s4);font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+
+@media (max-width:768px){
+  header{padding:var(--s3) var(--s3) var(--s1)}
+  h1{font-size:var(--t3);line-height:28px}
+  .kpi{grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+  .kpi dd{font-size:var(--t3);line-height:28px}
+  .kpi .unit{display:none}
+  .states{grid-template-columns:1fr}
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1) var(--s2);align-items:end}
+  .filters > div:first-child{grid-column:1/-1}
+  input[type=search]{width:100%}
+  .tablewrap{overflow:visible}
+  caption{display:block;width:100%;white-space:normal}
+  /* 窄屏把表格改成逐行键值堆叠 */
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{border-bottom:1px solid var(--border);padding:8px 0}
+  td{border:0;padding:4px 0;display:flex;justify-content:space-between;gap:var(--s2)}
+  td::before{content:attr(data-label);color:var(--fg-muted)}
+  td.num{text-align:right}
+  td .rowbtn{padding:12px 16px}
+  .btn{padding:12px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主内容</a>
+
+<nav aria-label="主导航">
+  <ul>
+    <li class="brand">AnyTTL</li>
+    <li><a href="#main" aria-current="page">密钥与用量</a></li>
+    <li><a href="#">日志</a></li>
+    <li><a href="#">设置</a></li>
+  </ul>
+</nav>
+
+<header>
+  <h1>密钥与用量</h1>
+  <p>2026-11-01 至 11-18，UTC+8。请求数按网关成功转发计，超限请求不计入。</p>
+</header>
+
+<main id="main">
+
+  <section id="filters" aria-labelledby="f-h">
+    <h2 id="f-h" style="margin:0;font-size:var(--t3);line-height:28px">筛选</h2>
+    <div class="filters">
+      <div>
+        <label for="q">搜索</label>
+        <input id="q" type="search" placeholder="密钥名或前缀">
+      </div>
+      <div>
+        <label for="st">状态</label>
+        <select id="st">
+          <option value="">全部</option>
+          <option value="warn">接近阈值</option>
+          <option value="ok">正常</option>
+          <option value="off">已停用</option>
+        </select>
+      </div>
+      <div>
+        <label for="sort">排序</label>
+        <select id="sort">
+          <option value="req">按本月请求降序</option>
+          <option value="name">按名称</option>
+          <option value="pct">按占用比例降序</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section id="quota" aria-labelledby="q-h">
+    <h2 id="q-h" style="margin:0;font-size:var(--t3);line-height:28px">额度</h2>
+    <dl class="kpi">
+      <div><dt>本月请求</dt><dd><span id="k-req">1,248,930</span><span class="unit">次</span></dd></div>
+      <div><dt>总额度已用</dt><dd><span id="k-pct">68</span><span class="unit">%</span></dd></div>
+      <div><dt>超阈值密钥</dt><dd><span id="k-warn">1</span><span class="unit">个</span></dd></div>
+    </dl>
+    <div class="quota">
+      <div class="meter" role="img" aria-label="总额度已用 68%，阈值 80%">
+        <i style="width:68%"></i><b style="left:80%"></b>
+      </div>
+      <p>阈值 80%：达到后新请求返回 429，响应体带 <code>retry_after</code>。改限额立即生效，按分钟统计。</p>
+    </div>
+  </section>
+
+  <section id="keys" aria-labelledby="k-h">
+    <h2 id="k-h" style="margin:0;font-size:var(--t3);line-height:28px">密钥</h2>
+    <div class="bulk" id="bulk">
+      <span id="bulk-n">已选 0 个</span>
+      <button class="btn ghost" type="button">批量停用</button>
+      <button class="btn ghost" type="button" id="bulk-clear">取消选择</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <caption>按本月请求降序；限额单位万次，请求单位次。</caption>
+        <thead>
+          <tr>
+            <th scope="col" style="width:40px"><span class="sr" style="position:absolute;left:-9999px">选择</span></th>
+            <th scope="col">名称</th>
+            <th scope="col">前缀</th>
+            <th scope="col" class="num">本月请求</th>
+            <th scope="col" class="num">限额/万次</th>
+            <th scope="col">状态</th>
+            <th scope="col" style="width:88px;white-space:nowrap"><span style="position:absolute;left:-9999px">操作</span></th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr data-name="prod-web" data-state="ok" data-req="812004" data-limit="1200000">
+            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 prod-web"></td>
+            <td data-label="名称"><span class="nm" title="prod-web-apac-cluster-a1">prod-web-apac-cluster-a1</span></td>
+            <td data-label="前缀"><span class="mono">sk-a31f</span></td>
+            <td data-label="本月请求" class="num">812,004</td>
+            <td data-label="限额/万次" class="num"><span class="lim">120</span></td>
+            <td data-label="状态"><span class="state">正常</span></td>
+            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
+          </tr>
+          <tr data-name="prod-worker" data-state="warn" data-req="331880" data-limit="400000">
+            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 prod-worker"></td>
+            <td data-label="名称">prod-worker</td>
+            <td data-label="前缀"><span class="mono">sk-b82c</span></td>
+            <td data-label="本月请求" class="num">331,880</td>
+            <td data-label="限额/万次" class="num"><span class="lim">40</span></td>
+            <td data-label="状态"><span class="state warn">接近阈值 83%</span></td>
+            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
+          </tr>
+          <tr data-name="staging" data-state="ok" data-req="96412" data-limit="200000">
+            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 staging"></td>
+            <td data-label="名称">staging</td>
+            <td data-label="前缀"><span class="mono">sk-c904</span></td>
+            <td data-label="本月请求" class="num">96,412</td>
+            <td data-label="限额/万次" class="num"><span class="lim">20</span></td>
+            <td data-label="状态"><span class="state">正常</span></td>
+            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
+          </tr>
+          <tr data-name="ci-build" data-state="off" data-req="8634" data-limit="50000" class="disabled">
+            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 ci-build"></td>
+            <td data-label="名称">ci-build</td>
+            <td data-label="前缀"><span class="mono">sk-d117</span></td>
+            <td data-label="本月请求" class="num">8,634</td>
+            <td data-label="限额/万次" class="num"><span class="lim">5</span></td>
+            <td data-label="状态"><span class="state off">已停用</span></td>
+            <td data-label="操作"><button class="rowbtn" type="button">启用</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="status" id="live" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="states" aria-labelledby="s-h">
+    <h2 id="s-h" style="margin:0;font-size:var(--t3);line-height:28px">四种状态</h2>
+    <div class="states" style="margin-top:var(--s2)">
+      <div class="statebox">
+        <h3>空态</h3>
+        <p>还没有密钥。创建一个后，这里会显示用量与限额。</p>
+        <button class="btn" type="button">创建密钥</button>
+      </div>
+      <div class="statebox">
+        <h3>加载中</h3>
+        <div class="skel" style="width:60%"></div>
+        <div class="skel"></div>
+        <div class="skel" style="width:80%"></div>
+        <p style="margin:8px 0 0;color:var(--fg-muted);font-size:var(--t1)">正在读取密钥列表；超过 750ms 才播报。</p>
+      </div>
+      <div class="statebox">
+        <h3>错误</h3>
+        <p class="err">读取失败：网关在上一次同步时超时（code=upstream_timeout）。</p>
+        <button class="btn ghost" type="button">重试</button>
+      </div>
+      <div class="statebox">
+        <h3>成功</h3>
+        <p><span class="ok">已保存。</span>prod-worker 的限额从 40 万次改为 60 万次，下一分钟起按新限额计。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>
+    <span>AnyTTL · 自建 API 网关控制台</span>
+    <span>支持 ops@anyttl.dev</span>
+    <span>演示页面，数据为样例，不与真实网关对接</span>
+    <span>文档 / 状态 / 变更记录</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('#rows tr'));
+  var q = document.getElementById('q');
+  var st = document.getElementById('st');
+  var sort = document.getElementById('sort');
+  var bulk = document.getElementById('bulk');
+  var bulkN = document.getElementById('bulk-n');
+  var live = document.getElementById('live');
+  var tbody = document.getElementById('rows');
+
+  function fmt(n) { return Number(n).toLocaleString('en-US'); }
+
+  function stateOf(row) {
+    var req = +row.dataset.req, lim = +row.dataset.limit;
+    if (row.dataset.state === 'off') return { key: 'off', text: '已停用', pct: req / lim };
+    var pct = req / lim;
+    if (pct >= 0.8) return { key: 'warn', text: '接近阈值 ' + Math.round(pct * 100) + '%', pct: pct };
+    return { key: 'ok', text: '正常', pct: pct };
+  }
+
+  function paint(row) {
+    var s = stateOf(row);
+    row.dataset.state = s.key;
+    var cell = row.querySelector('.state');
+    cell.textContent = s.text;
+    cell.className = 'state' + (s.key === 'warn' ? ' warn' : s.key === 'off' ? ' off' : '');
+  }
+
+  function apply() {
+    var term = q.value.trim().toLowerCase(), want = st.value;
+    rows.forEach(function (r) {
+      var hit = (!term || r.dataset.name.toLowerCase().indexOf(term) >= 0 ||
+        r.querySelector('.mono').textContent.toLowerCase().indexOf(term) >= 0);
+      if (want && stateOf(r).key !== want) hit = false;
+      r.style.display = hit ? '' : 'none';
+    });
+    live.textContent = '显示 ' + rows.filter(function (r) { return r.style.display !== 'none'; }).length + ' / ' + rows.length + ' 个密钥';
+  }
+
+  function doSort() {
+    var mode = sort.value;
+    var list = rows.slice();
+    list.sort(function (a, b) {
+      if (mode === 'name') return a.dataset.name.localeCompare(b.dataset.name);
+      if (mode === 'pct') return stateOf(b).pct - stateOf(a).pct;
+      return (+b.dataset.req) - (+a.dataset.req);
+    });
+    list.forEach(function (r) { tbody.appendChild(r); });
+  }
+
+  q.addEventListener('input', apply);
+  st.addEventListener('change', apply);
+  sort.addEventListener('change', function () { doSort(); apply(); });
+
+  document.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('pick')) return;
+    var n = rows.filter(function (r) { return r.querySelector('.pick').checked; }).length;
+    bulk.classList.toggle('on', n > 0);
+    bulkN.textContent = '已选 ' + n + ' 个';
+  });
+  document.getElementById('bulk-clear').addEventListener('click', function () {
+    rows.forEach(function (r) { r.querySelector('.pick').checked = false; });
+    bulk.classList.remove('on');
+  });
+
+  tbody.addEventListener('click', function (e) {
+    var btn = e.target.closest('.rowbtn');
+    if (!btn) return;
+    var tr = btn.closest('tr');
+    if (tr.dataset.state === 'off') {
+      tr.dataset.state = 'ok';
+      tr.classList.remove('disabled');
+      paint(tr);
+      btn.textContent = '调整';
+      live.textContent = tr.dataset.name + ' 已启用';
+      return;
+    }
+    var next = tr.nextElementSibling;
+    if (next && next.classList.contains('edit')) { next.remove(); return; }
+
+    var lim = +tr.dataset.limit;
+    var form = document.createElement('tr');
+    form.className = 'edit';
+    // 只拼本文件里的静态 data-* 值（name 来自上面的固定行），不接受用户输入
+    form.innerHTML = '<td colspan="7"><form>' +
+      '<div><label for="lim-' + tr.dataset.name + '">限额（万次）</label>' +
+      '<input id="lim-' + tr.dataset.name + '" type="number" min="1" step="1" value="' + (lim / 10000) + '" style="width:120px"></div>' +
+      '<button class="btn" type="submit">保存</button>' +
+      '<button class="btn ghost" type="button" data-cancel>取消</button>' +
+      '<span class="calc"></span></form></td>';
+    tr.after(form);
+
+    var input = form.querySelector('input');
+    var calc = form.querySelector('.calc');
+    function update() {
+      var v = +input.value;
+      var pct = tr.dataset.req / (v * 10000);
+      calc.textContent = v > 0
+        ? '当前请求 ' + fmt(tr.dataset.req) + ' 次，占 ' + Math.round(pct * 100) + '%；余量 ' + fmt(Math.max(0, v * 10000 - tr.dataset.req)) + ' 次'
+        : '限额要大于 0';
+    }
+    input.addEventListener('input', update);
+    update();
+
+    form.querySelector('[data-cancel]').addEventListener('click', function () { form.remove(); });
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var v = +input.value;
+      if (!(v > 0)) { live.textContent = '限额要大于 0，未保存'; input.focus(); return; }
+      tr.dataset.limit = String(v * 10000);
+      tr.querySelector('.lim').textContent = v;
+      paint(tr);
+      form.remove();
+      live.textContent = tr.dataset.name + ' 的限额已改为 ' + v + ' 万次';
+    });
+    input.focus();
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=自定; footer=Ft2; base=#ffffff">
+<meta name="description" content="ChatCafe 茶话会：移动端与浏览器端即开即聊 AI 助手平台，内置 12 个预设助手与空白开聊、免密手机号验证码登录、游客 3 次/会员 ¥19 计费额度、20 轮上下文与 3 条常见问题解答。">
+<title>ChatCafe 茶话会 - 即开即聊 12 个场景 AI 助手</title>
+<style>
+/* 数值来源：project-apple-hig (Apple HIG) + GAP_RULES 色值与间距回源
+ * 分层语义：content/color/developer.apple.com--color.md:103-121 (grouped system background & secondary grouped background, label/secondaryLabel/separator)
+ * 字阶原型：content/type/developer.apple.com--typography.md:210-220 (iOS/iPadOS Default Large: Title1 28/34, Title2 22/28, Title3 20/25, Body 17/22, Subhead 15/20, Footnote 13/18, Caption1 12/16)
+ * 色值/间距/动效回源 (GAP_RULES)：tdesign.tencent.com--color.md (#ffffff, #f3f3f3, #eeeeee, #e8e8e8, #5e5e5e, #181818, #0052d9, #003cab, #f2f3ff, #006c45, #e3f9e9, #954500, #fff1e9, #ad352f, #fff0ed)、uisdc spacing 8/16/24/32、nngroup 200/300ms
+ */
+:root {
+  --sys-bg: #f3f3f3;
+  --sys-card: #ffffff;
+  --sys-soft: #eeeeee;
+  --sys-sep: #e8e8e8;
+  --label: #181818;
+  --label-2: #5e5e5e;
+  --tint: #0052d9;
+  --tint-hover: #003cab;
+  --tint-soft: #f2f3ff;
+  --ok: #006c45;
+  --ok-soft: #e3f9e9;
+  --warn: #954500;
+  --warn-soft: #fff1e9;
+  --err: #ad352f;
+  --err-soft: #fff0ed;
+  --font-sf: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+  --dur: 200ms;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --shadow-bar: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-sheet: 0 18px 44px rgba(0, 0, 0, 0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--sys-card);
+  color: var(--label);
+  font-family: var(--font-sf);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, textarea { font-family: inherit; }
+a { color: var(--tint); text-decoration: none; }
+svg { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--tint); outline-offset: 2px; border-radius: 6px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 8px; z-index: 100;
+  background: var(--tint); color: #ffffff;
+  padding: 10px 16px; border-radius: 12px; font-weight: 600;
+}
+.skip:focus { left: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
+}
+
+.wrap { max-width: 1320px; margin: 0 auto; padding-inline: 16px; }
+
+/* Apple HIG iPadOS 分栏半透明工具栏（自定 nav） */
+.hig-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--sys-sep);
+}
+.hig-toolbar-in {
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding-block: 8px;
+}
+.toolbar-lead { display: flex; align-items: center; gap: 10px; justify-self: start; min-width: 0; }
+.toolbar-center { display: flex; align-items: center; gap: 10px; justify-self: center; min-width: 0; max-width: 100%; flex-wrap: wrap; }
+.toolbar-title { font-size: 15px; line-height: 20px; font-weight: 600; color: var(--label); max-width: 26ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 600;
+  color: var(--label);
+  min-height: 44px;
+  white-space: nowrap;
+}
+.quota-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--tint-soft);
+  color: var(--tint);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bar-acts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-self: end; }
+.app-shell.is-sidebar-hidden { grid-template-columns: minmax(0, 1fr) 288px; }
+.app-shell.is-sidebar-hidden .bots-col { display: none; }
+
+/* HIG 胶囊与圆角按钮 */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--sys-card);
+  box-shadow: inset 0 0 0 1px var(--sys-sep);
+  color: var(--label);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.pill-btn-lg { min-height: 44px; padding: 0 18px; font-size: 15px; line-height: 20px; }
+.pill-btn-primary {
+  background: var(--tint);
+  color: #ffffff;
+  box-shadow: none;
+}
+.pill-btn-danger {
+  background: var(--err-soft);
+  color: var(--err);
+  box-shadow: none;
+}
+.pill-btn[aria-pressed="true"] {
+  background: var(--tint);
+  color: #ffffff;
+  box-shadow: none;
+}
+.pill-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (hover: hover) {
+  .pill-btn:hover:not(:disabled) { background: var(--sys-soft); }
+  .pill-btn-primary:hover:not(:disabled) { background: var(--tint-hover); }
+  .pill-btn[aria-pressed="true"]:hover:not(:disabled) { background: var(--tint-hover); }
+}
+
+/* 三栏 iPadOS Split-View 架构 */
+.app-shell {
+  padding: 16px 0 36px;
+  display: grid;
+  grid-template-columns: 276px minmax(0, 1fr) 288px;
+  gap: 16px;
+  align-items: start;
+}
+
+.hig-group {
+  background: var(--sys-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--sys-sep);
+}
+.hig-group + .hig-group { margin-top: 12px; }
+.group-head {
+  padding: 14px 16px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.group-title { font-size: 15px; line-height: 20px; font-weight: 600; color: var(--label); }
+.group-sub { font-size: 12px; line-height: 16px; color: var(--label-2); }
+
+/* 左侧 12 助手 + 空白开聊目录 */
+.search-in {
+  margin: 0 12px 10px;
+  width: calc(100% - 24px);
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--sys-sep);
+  border-radius: 10px;
+  background: var(--sys-card);
+  color: var(--label);
+  font-size: 13px;
+  line-height: 18px;
+}
+.bot-list {
+  display: grid;
+  max-height: 560px;
+  overflow-y: auto;
+}
+.bot-item {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid var(--sys-sep);
+  background: transparent;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  min-height: 54px;
+}
+.bot-item.is-active { background: var(--tint-soft); }
+.bot-av {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--sys-card);
+  color: var(--tint);
+  font-size: 15px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.bot-item.is-active .bot-av { background: var(--tint); color: #ffffff; }
+.bot-info { min-width: 0; flex: 1; }
+.bot-name { font-size: 15px; line-height: 20px; font-weight: 600; color: var(--label); overflow-wrap: anywhere; }
+.bot-use { font-size: 12px; line-height: 16px; color: var(--label-2); overflow-wrap: anywhere; }
+
+/* 手机横滑快速助手条（仅在窄屏显示） */
+.mobile-bot-strip { display: none; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.mobile-bot-strip::-webkit-scrollbar { display: none; }
+
+/* 中央主对话舞台：纯白 */
+.chat-stage {
+  background: var(--sys-card);
+  border: 1px solid var(--sys-sep);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 640px;
+  box-shadow: var(--shadow-bar);
+  overflow: hidden;
+}
+.chat-top {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--sys-sep);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.chat-top-title { font-size: 20px; line-height: 25px; font-weight: 600; color: var(--label); }
+.chat-top-sub { font-size: 13px; line-height: 18px; color: var(--label-2); margin-top: 2px; }
+.chat-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.tag-hig {
+  font-size: 12px;
+  line-height: 16px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--sys-bg);
+  color: var(--label-2);
+  font-weight: 600;
+}
+.tag-ok { background: var(--ok-soft); color: var(--ok); }
+.tag-warn { background: var(--warn-soft); color: var(--warn); }
+
+.chat-stream {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+.starter-deck {
+  background: var(--sys-bg);
+  border-radius: 14px;
+  padding: 14px;
+}
+.starter-deck-head { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--label-2); margin-bottom: 10px; }
+.starter-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.starter-btn {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--sys-card);
+  color: var(--label);
+  font-size: 13px;
+  line-height: 18px;
+  cursor: pointer;
+  min-height: 60px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+@media (hover: hover) {
+  .starter-btn:hover { background: var(--tint-soft); color: var(--tint); }
+}
+
+.msg-row { display: flex; flex-direction: column; gap: 4px; max-width: 88%; }
+.msg-row.is-user { align-self: flex-end; align-items: flex-end; }
+.msg-row.is-ai { align-self: flex-start; align-items: flex-start; }
+.msg-who { font-size: 12px; line-height: 16px; color: var(--label-2); padding-inline: 4px; }
+.bubble {
+  padding: 12px 15px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 22px;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+.msg-row.is-user .bubble {
+  background: var(--tint);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+.msg-row.is-ai .bubble {
+  background: var(--sys-bg);
+  color: var(--label);
+  border-bottom-left-radius: 4px;
+}
+
+.err-inline {
+  background: var(--err-soft);
+  color: var(--err);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.busy-inline {
+  background: var(--tint-soft);
+  color: var(--tint);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 底部输入胶囊栏 */
+.composer-wrap {
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--sys-sep);
+  background: var(--sys-card);
+}
+.composer {
+  background: var(--sys-bg);
+  border-radius: 16px;
+  padding: 8px 8px 8px 14px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.composer textarea {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--label);
+  font-size: 15px;
+  line-height: 22px;
+  resize: none;
+  min-height: 36px;
+  max-height: 110px;
+  outline: none;
+  padding-top: 6px;
+}
+.composer-meta {
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--label-2);
+}
+
+/* 右侧配额、计费与隐私 FAQ 栏 */
+.rail-box { padding: 14px 16px; }
+.gauge-bar { height: 8px; border-radius: 999px; background: var(--sys-bg); overflow: hidden; margin: 8px 0; }
+.gauge-fill { height: 100%; background: var(--tint); transition: width var(--dur) var(--ease); }
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--sys-sep);
+  font-size: 13px;
+  line-height: 18px;
+}
+.price-row:first-of-type { border-top: 0; }
+
+.faq-item { border-top: 1px solid var(--sys-sep); padding: 10px 0; }
+.faq-item:first-child { border-top: 0; }
+.faq-q { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--label); }
+.faq-a { margin-top: 3px; font-size: 12px; line-height: 18px; color: var(--label-2); }
+
+/* 登录与导出弹窗 */
+.backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.sheet {
+  background: var(--sys-card); border-radius: 20px; box-shadow: var(--shadow-sheet);
+  width: min(460px, 100%); padding: 22px; display: grid; gap: 14px;
+}
+.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.field input {
+  width: 100%; min-height: 44px; padding: 8px 12px;
+  border: 1px solid #c6c6c6; border-radius: 10px; font-size: 15px;
+}
+.otp-row { display: flex; gap: 8px; }
+
+/* Ft2 发丝线单行页脚 */
+.foot-line {
+  border-top: 1px solid var(--sys-sep);
+  background: var(--sys-card);
+  padding: 16px 0 24px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--label-2);
+}
+.foot-line__copy { margin: 0; }
+
+@media (max-width: 1060px) {
+  .app-shell { grid-template-columns: 240px minmax(0, 1fr); }
+  .hig-toolbar-in { grid-template-columns: auto 1fr; }
+  .toolbar-center { grid-column: 1 / -1; justify-self: start; order: 3; }
+  .rail-col { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .rail-col .hig-group + .hig-group { margin-top: 0; }
+}
+@media (max-width: 740px) {
+  .hig-toolbar-in { grid-template-columns: 1fr; gap: 8px; }
+  .toolbar-lead, .toolbar-center, .bar-acts { justify-self: start; width: 100%; flex-wrap: wrap; }
+  #toggleBotsBtn { display: none; }
+  .app-shell, .app-shell.is-sidebar-hidden { grid-template-columns: 1fr; }
+  .bots-col { display: none; }
+  .mobile-bot-strip { display: flex; }
+  .starter-cards { grid-template-columns: 1fr; }
+  .rail-col { grid-template-columns: 1fr; }
+  .chat-stage { min-height: 520px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#chatStage">跳到当前对话窗口</a>
+
+<header class="hig-toolbar">
+  <div class="wrap hig-toolbar-in">
+    <div class="toolbar-lead">
+      <button class="pill-btn" type="button" id="toggleBotsBtn" aria-expanded="true" aria-controls="botsSidebar">助手栏</button>
+      <a class="brand" href="#top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="17" rx="5" fill="#0052d9"/>
+          <circle cx="8.5" cy="11.5" r="1.4" fill="#ffffff"/>
+          <circle cx="12" cy="11.5" r="1.4" fill="#ffffff"/>
+          <circle cx="15.5" cy="11.5" r="1.4" fill="#ffffff"/>
+        </svg>
+        <span>ChatCafe 茶话会</span>
+      </a>
+    </div>
+    <div class="toolbar-center">
+      <span class="toolbar-title" id="toolbarBotName">写作助手</span>
+      <div class="quota-pill" id="topQuotaPill">游客体验：剩余 3 / 3 次</div>
+    </div>
+    <div class="bar-acts">
+      <button class="pill-btn" type="button" id="exportBtn">导出本轮对话</button>
+      <button class="pill-btn pill-btn-primary" type="button" id="loginBtn">手机号免密登录</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap app-shell" id="top">
+  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+
+  <!-- 手机端快速助手横滑栏 -->
+  <div class="mobile-bot-strip" id="mobileBotStrip" role="group" aria-label="手机端切换预设助手"></div>
+
+  <!-- 左栏：12 个预设助手 + 空白开聊 -->
+  <aside class="bots-col" id="botsSidebar" aria-label="助手与空白开聊目录">
+    <div class="hig-group">
+      <div class="group-head">
+        <h2 class="group-title">12 场景助手 + 空白开聊</h2>
+      </div>
+      <label class="sr-only" for="botSearch">搜索助手名称或用途</label>
+      <input class="search-in" id="botSearch" type="search" placeholder="搜写作、英语、代码、菜谱...">
+      <div class="bot-list" id="botList"></div>
+    </div>
+  </aside>
+
+  <!-- 中央：即开即聊工作区 -->
+  <section class="chat-stage" id="chatStage" aria-label="对话工作区">
+    <div class="chat-top">
+      <div>
+        <h1 class="chat-top-title" id="activeBotTitle">写作助手</h1>
+        <p class="chat-top-sub" id="activeBotUse">把零散想法改写成结构清楚的周报、公告或邮件正文。</p>
+      </div>
+      <div class="chat-badges">
+        <span class="tag-hig tag-ok" id="turnCounter">上下文 2 / 20 轮</span>
+        <span class="tag-hig">对话不用于模型训练</span>
+        <button class="pill-btn pill-btn-danger" type="button" id="clearChatBtn">清空并 7 天彻底删除</button>
+      </div>
+    </div>
+
+    <div class="chat-stream" id="chatStream"></div>
+
+    <div class="composer-wrap">
+      <form class="composer" id="chatForm">
+        <label class="sr-only" for="chatInput">输入你要问助手的问题</label>
+        <textarea id="chatInput" rows="1" placeholder="直接问点什么，或点上方开场白立即体验..."></textarea>
+        <button class="pill-btn pill-btn-primary pill-btn-lg" type="submit" id="sendBtn">发送</button>
+      </form>
+      <div class="composer-meta">
+        <span>上下文保留 20 轮 · 历史默认存 30 天（可随时删除）</span>
+        <span id="privacyNote">本地演示对话，不连真实模型网关</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 右栏：额度与计费卡片 + 常见问题解答 -->
+  <aside class="rail-col" aria-label="额度计费与使用说明">
+    <div class="hig-group">
+      <div class="group-head">
+        <h2 class="group-title">可用对话额度（演示口径）</h2>
+        <span class="group-sub" id="authBadge">游客状态</span>
+      </div>
+      <div class="rail-box">
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span id="quotaDesc">游客默认免费 3 次</span>
+          <strong id="quotaNums">3 / 3</strong>
+        </div>
+        <div class="gauge-bar" aria-hidden="true"><div class="gauge-fill" id="quotaFill" style="width:100%"></div></div>
+        <div class="price-row"><span>游客免登录</span><strong>3 次</strong></div>
+        <div class="price-row"><span>手机号登录后</span><strong>每日 10 次免费</strong></div>
+        <div class="price-row"><span>月度会员卡（300 次）</span><strong>¥19 / 月</strong></div>
+        <div class="price-row"><span>按次加油包（50 次）</span><strong>¥6 / 次</strong></div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="pill-btn" style="flex:1" type="button" id="buyMemberBtn">模拟开通 ¥19 会员</button>
+          <button class="pill-btn" style="flex:1" type="button" id="buyPackBtn">模拟买 ¥6 加油包</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hig-group">
+      <div class="group-head">
+        <h2 class="group-title">常见问题与隐私承诺</h2>
+      </div>
+      <div class="rail-box">
+        <div class="faq-item">
+          <div class="faq-q">1. 额度按字数还是按对话轮数算？</div>
+          <div class="faq-a">按成功返回一次完整回答扣 1 次；单次上下文上限 20 轮，开新话题不重复计费，网络故障不扣次。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">2. 换了手机怎么找回历史与剩余额度？</div>
+          <div class="faq-a">用同一手机号收取短信验证码登录，30 天内的历史记录、已买加油包与会员次数自动漫游同步。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">3. 能不能导出对话与彻底删记录？</div>
+          <div class="faq-a">顶栏点「导出本轮对话」可一键复制或保存文本；删除历史后 7 天内从服务器彻底清除，绝不用于模型训练。</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="foot-line">
+  <div class="wrap">
+    <p class="foot-line__copy">© 2026 ChatCafe 茶话会 · 12 个助手、游客 3 次/会员 ¥19/加油包 ¥6 均为本地演示口径，不接真实模型与短信服务。</p>
+  </div>
+</footer>
+
+<div class="backdrop" id="loginModal" hidden role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="sheet">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 id="loginTitle" style="font-size:18px;font-weight:600">手机号 + 验证码免密登录</h2>
+      <button class="pill-btn" type="button" id="loginCloseBtn">关闭</button>
+    </div>
+    <p style="font-size:13px;color:var(--label-2)">不设密码。登录后每日额度立即提升至 10 次，历史保留 30 天跨手机同步（演示口径）。</p>
+    <div class="field">
+      <label for="phoneInput">中国大陆手机号</label>
+      <input id="phoneInput" type="tel" value="13800138000" placeholder="输入 11 位手机号">
+    </div>
+    <div class="field">
+      <label for="otpInput">6 位短信验证码（演示可填 884210）</label>
+      <div class="otp-row">
+        <input id="otpInput" type="text" value="884210" maxlength="6">
+        <button class="pill-btn pill-btn-lg" type="button" id="sendOtpBtn">获取验证码</button>
+      </div>
+    </div>
+    <button class="pill-btn pill-btn-primary pill-btn-lg" type="button" id="confirmLoginBtn">验证登录并领取每日 10 次额度</button>
+    <p id="loginMsg" style="font-size:13px;color:var(--ok);font-weight:600"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var BOTS = [
+    { id: "blank", av: "聊", name: "空白自由开聊", scene: "通用随时问答", use: "不限定角色，想到什么直接问，适合临时查概念或算小账。", starters: ["帮我列一下明天短途出差随身必带清单", "把 1984 和 2026 年之间满 42 周年的具体日期说清", "怎么用 3 句话给家里老人解释什么是医保电子凭证？"], reply: "已经按直观好懂的方式替你拆好：\n1. 先说结论与适用门槛，跳过绕弯的背景介绍。\n2. 列出随手就能核对的 3 个关键检查项。\n你可以继续追问具体细节（当前上下文最多记 20 轮）。" },
+    { id: "writing", av: "写", name: "写作助手", scene: "办公与通知", use: "把零散要点改写成得体清楚的周报、请假说明或通知正文。", starters: ["把「这周上线了两个页、修了3个bug」润色成产品周报", "写一条周三停水 2 小时的社区友好通知", "起草一封礼貌婉拒加班聚餐的群消息"], reply: "帮你梳理成可以直接发出的简洁版本：\n「本周工作进展汇报：已完成两项重点页面交付上线，并修复 3 处关键兼容性问题；下周将跟进留存数据核验。」\n如需调整语气更偏正式或口语，直接回复告诉我。" },
+    { id: "translate", av: "译", name: "地道翻译官", scene: "双语互译", use: "中英日自然对译，去掉生硬翻译腔并附关键术语注。", starters: ["把「界面不要套三层灰框」翻成地道英文设计评审评语", "翻译一份英文软件续费账单邮件核心条款", "润色一句给海外客户解释延期一天的邮件"], reply: "地道表达建议：\n\"Avoid nesting triple gray borders around cards; rely on background contrast and generous spacing instead.\"\n语义保持技术评审直接沟通口径，不带生硬机翻。" },
+    { id: "english", av: "英", name: "英语陪练", scene: "口语对话", use: "日常旅行点餐、机场过关或 15 分钟职场闲聊陪练，温和纠错。", starters: ["模拟在海外咖啡馆点一杯少糖燕麦拿铁", "陪我用全英文聊聊周末去公园散步的经历", "考我 3 句外企站会常用的进度同步表达"], reply: "Great! Imagine I am your barista today:\n\"Morning! What can I get started for you?\"\n你可以直接回英文试试看，我会在下一句用括号标出更自然的说法。" },
+    { id: "interview", av: "面", name: "模拟面试官", scene: "求职备考", use: "扮演一线业务或研发面试官逐轮追问项目难点与量化指标。", starters: ["围绕我做过的后台改版提 3 个必问深挖题", "用 STAR 法则帮我顺一遍上次性能优化经历", "面试官问「为什么离开上一家公司」怎么稳妥回答？"], reply: "我先扮演主考官给你第一个高频追问：\n「你在改版前如何界定旧界面的核心卡点？改完上线后哪个业务数字真实改善了，排除掉季节波动了吗？」\n请试着 3 句内答出背景、动作和具体成果。" },
+    { id: "resume", av: "历", name: "简历优化师", scene: "简历诊断", use: "把空泛的「负责」「参与」改成带动作、工具与量化结果的经历句。", starters: ["改写这句：参与公司官网重构，提升了加载速度", "帮我提炼产品经理简历顶部 2 行个人摘要", "检查我投递运营岗还缺哪两类经历关键词"], reply: "建议把原句压缩成更有说服力的「动词+范围+结果」格式：\n「独立重构核心落地页并剔除冗余脚本，将首屏加载从 3.2s 缩短至 0.9s，移动端零横向溢出。」" },
+    { id: "code", av: "码", name: "代码解释器", scene: "脚本排障", use: "用大白话逐行讲清报错原因、正则含义或短小 SQL 语句逻辑。", starters: ["解释为什么 CSS Grid 的列偶尔被长英文单词撑爆", "把这段 SQL 的 GROUP BY 与 HAVING 报错讲明白", "写一段只用原生 JS 读取 URL 查询参数的短代码"], reply: "根本原因是网格项默认的 `min-width: auto` 会被未折行的长串撑宽。\n解决办法只要两行 CSS：\n`grid-template-columns: minmax(0, 1fr);` 配 `overflow-wrap: anywhere;`\n320px 窄屏就不会再横向溢出。" },
+    { id: "recipe", av: "菜", name: "快手菜谱师", scene: "晚饭灵感", use: "报出冰箱剩余食材，给出 15 分钟能出锅的家常做法与火候提示。", starters: ["只有番茄、两个鸡蛋和一把菠菜，怎么炒不腻？", "工作日下班 20 分钟搞定一荤一素一汤怎么配", "电饭煲懒人香菇滑鸡焖饭准确米水比例是多少？"], reply: "【20 分钟极简晚饭搭配】\n1. 先泡米水比 1:1.1 进电饭煲焖；\n2. 同时切番茄炒蛋少油先盛蛋再合炒出沙；\n3. 沸水烫菠菜 20 秒捞出拌一勺生抽香油，正好同步开饭。" },
+    { id: "travel", av: "旅", name: "旅行行程师", scene: "路线与预算", use: "不排网红特种兵打卡，按步数、雨天备选和交通接驳顺一遍攻略。", starters: ["带 65 岁父母周末去苏州 2 天 1 晚怎么逛不累？", "清明 3 天假预算 1500 元内有哪些高铁 2 小时可达小城", "帮我把杭州西湖西溪 2 日路线按地铁口顺序排好"], reply: "【带长辈不累脚 2 日方案】\n第一天上午避开高台阶园林，先逛平路为主的拙政园外加平江路河边喝茶；中午选地铁直达苏博旁午餐后回酒店午休，傍晚再沿山塘街平缓散步。" },
+    { id: "fit", av: "动", name: "轻健身顾问", scene: "久坐与体态", use: "针对上班族肩颈紧绷、下班跑走规划安全的无器械拉伸与循序渐进计划。", starters: ["在工位上不引人注意缓解久坐后腰僵硬的 3 个动作", "零基础想在 8 周后跑完 5 公里，每周怎么起步不伤膝？", "晚饭后散步 30 分钟配什么简单拉伸效果最好"], reply: "【新手 5 公里安全起步周表】\n第 1 到 2 周绝不要咬牙连续猛跑：每次跑 2 分钟 + 快走 2 分钟循环 6 组（总共 24 分钟），跑休隔天进行，膝盖无紧绷再增量。" },
+    { id: "law", av: "法", name: "法律常识助手", scene: "日常维权参考", use: "拆解租房押金、劳动合同试用期或网购退换的常见法定边界与留证提示。", starters: ["公司口头通知延长试用期不转正，这合法吗？", "退租时房东扣墙面自然泛黄的押金怎么沟通保留证据？", "签两年期固定期限劳动合同，试用期最长能约定几天？"], reply: "按《劳动合同法》第 19 条参考：\n1. 一年以上不满三年的合同，试用期不得超过 2 个月；\n2. 同一用人单位与同一劳动者只能约定一次试用期，口头单方延长通常缺少法律依据（具体维权建议咨询当地 12348 公共法律服务热线）。" },
+    { id: "mood", av: "倾", name: "情绪树洞", scene: "夜间倾诉", use: "不急着讲大道理或甩鸡汤，先听完你的烦恼，帮你把乱麻理成三件小事。", starters: ["今天被工作里几件碎事搞得心烦，不想听教训只想说几句", "周末睡到中午觉得又虚度了一天，心里很焦虑怎么办", "面对重要决定前睡不着觉，帮我写一段安抚念头的话"], reply: "听到你现在很紧绷，没关系，不用急着立刻把明天的问题全想明白。\n如果你愿意，现在只挑「今天最重的那一块石头」说出来就好；先去倒杯温水，我在这里陪你慢慢聊完这一轮。" },
+    { id: "naming", av: "名", name: "起名与标题师", scene: "项目与起名", use: "给小店、播客栏目、小程序或小孩乳名提供好念不撞车的中英文候选。", starters: ["给一个专注周末骑行的本地播客起 5 个好记名字", "帮我为一个工具型开源项目起简短好拼的英文名", "开一家社区自习加手冲咖啡小馆怎么起名不落俗？"], reply: "推荐 5 组好念有画面感的候选方案：\n1. 轮迹电台（贴合周末骑行，好记）；\n2. 慢半档（谐音变速，契合下班松弛）；\n3. 沿风记；\n你更倾向哪一类调性？我可以沿着这个方向往下再挑 10 个。" }
+  ];
+
+  var state = {
+    botId: "writing",
+    search: "",
+    loggedIn: false,
+    guestQuota: 3,
+    memberDailyQuota: 10,
+    extraQuota: 0,
+    used: 0,
+    chats: {},
+    busy: params.get("slow") === "1",
+    failed: params.get("fail") === "1",
+    forceEmpty: params.get("empty") === "1",
+    longMode: params.get("long") === "1"
+  };
+
+  BOTS.forEach(function (b) {
+    state.chats[b.id] = [
+      { who: "ai", text: "你好，我是「" + b.name + "」。" + b.use + " 点下方任意开场白就能立即试聊，或在底部直接输入你的需求。" }
+    ];
+  });
+
+  if (state.longMode) {
+    BOTS[1].name = "企业全场景跨部门长篇公文周报公告与多轮润色专家级对话助手";
+    state.chats.writing.push({
+      who: "user",
+      text: "帮我把今天三个并行项目的进展、风险点、下周协调部门清单和各自预期上线时间全部收进同一条跨部门同步消息里，确保手机端阅读不断行不溢出。"
+    });
+  }
+
+  function currentLimit() {
+    var base = state.loggedIn ? state.memberDailyQuota : state.guestQuota;
+    return base + state.extraQuota;
+  }
+
+  function remainingQuota() {
+    return Math.max(0, currentLimit() - state.used);
+  }
+
+  function renderQuota() {
+    var rem = remainingQuota();
+    var lim = currentLimit();
+    $("topQuotaPill").textContent = (state.loggedIn ? "已登录额度" : "游客体验") + "：剩余 " + rem + " / " + lim + " 次";
+    $("authBadge").textContent = state.loggedIn ? "手机号已登录" : "游客状态";
+    $("quotaDesc").textContent = state.loggedIn ? ("每日免费 10 次" + (state.extraQuota ? " + 会员/加油包" : "")) : "游客免费 3 次";
+    $("quotaNums").textContent = rem + " / " + lim;
+    $("quotaFill").style.width = Math.round((rem / Math.max(1, lim)) * 100) + "%";
+    $("loginBtn").textContent = state.loggedIn ? "138****8000 已登录" : "手机号免密登录";
+  }
+
+  function renderBotLists() {
+    var q = state.search.trim().toLowerCase();
+    var list = BOTS.filter(function (b) {
+      return !q || (b.name + " " + b.scene + " " + b.use).toLowerCase().indexOf(q) > -1;
+    });
+
+    $("botList").innerHTML = list.map(function (b) {
+      var active = b.id === state.botId;
+      return '<button class="bot-item' + (active ? ' is-active' : '') + '" type="button" data-bot="' + b.id + '">' +
+        '<span class="bot-av" aria-hidden="true">' + b.av + '</span>' +
+        '<span class="bot-info"><div class="bot-name">' + b.name + '</div><div class="bot-use">' + b.scene + '</div></span>' +
+      '</button>';
+    }).join("");
+
+    $("mobileBotStrip").innerHTML = BOTS.map(function (b) {
+      var active = b.id === state.botId;
+      return '<button class="pill-btn" type="button" data-bot="' + b.id + '" aria-pressed="' + active + '">' + b.name + '</button>';
+    }).join("");
+  }
+
+  function renderChat() {
+    var bot = BOTS.find(function (b) { return b.id === state.botId; }) || BOTS[0];
+    $("activeBotTitle").textContent = bot.name;
+    if ($("toolbarBotName")) $("toolbarBotName").textContent = bot.name;
+    $("activeBotUse").textContent = bot.use;
+    var msgs = state.chats[bot.id] || [];
+    var rounds = Math.ceil(msgs.length / 2);
+    $("turnCounter").textContent = "上下文 " + rounds + " / 20 轮";
+
+    if (state.forceEmpty) {
+      $("chatStream").innerHTML = '<div style="margin:auto;text-align:center;padding:32px 16px">' +
+        '<h2 style="font-size:18px;color:var(--label)">本轮对话已清空，30 天记录已标记清除</h2>' +
+        '<p style="margin-top:6px;color:var(--label-2)">已删除的对话会在 7 天内彻底清除且不用于训练。随时挑下方开场白再开一段新对话。</p>' +
+        '<div style="margin-top:16px"><button class="pill-btn pill-btn-primary pill-btn-lg" type="button" id="restoreChatBtn">打开写作助手开场白</button></div>' +
+      '</div>';
+      var rcb = $("restoreChatBtn");
+      if (rcb) rcb.addEventListener("click", function () { state.forceEmpty = false; renderAll(); });
+      return;
+    }
+
+    var html = '<div class="starter-deck">' +
+      '<div class="starter-deck-head">「' + bot.name + '」推荐开场白（点击即发，共 3 条）：</div>' +
+      '<div class="starter-cards">' +
+        bot.starters.map(function (st, idx) {
+          return '<button class="starter-btn" type="button" data-starter="' + idx + '">' + st + '</button>';
+        }).join("") +
+      '</div>' +
+    '</div>';
+
+    if (state.busy) {
+      html += '<div class="busy-inline" role="status" aria-busy="true">「' + bot.name + '」正在整理回答（当前为本地慢响应演练态）...</div>';
+    }
+    if (state.failed) {
+      html += '<div class="err-inline" role="alert">' +
+        '<span>对话通道响应超时，本次未扣减你的可用次数。</span>' +
+        '<button class="pill-btn pill-btn-primary" type="button" id="retryChatBtn">重新发送上一条</button>' +
+      '</div>';
+    }
+
+    html += msgs.map(function (m) {
+      return '<div class="msg-row ' + (m.who === 'user' ? 'is-user' : 'is-ai') + '">' +
+        '<span class="msg-who">' + (m.who === 'user' ? '我' : bot.name) + '</span>' +
+        '<div class="bubble">' + m.text + '</div>' +
+      '</div>';
+    }).join("");
+
+    $("chatStream").innerHTML = html;
+    var rtb = $("retryChatBtn");
+    if (rtb) rtb.addEventListener("click", function () { state.failed = false; renderChat(); });
+  }
+
+  function sendUserText(text) {
+    var trimmed = text.trim();
+    if (!trimmed) { $("chatInput").focus(); return; }
+    if (remainingQuota() <= 0) {
+      state.chats[state.botId].push({
+        who: "ai",
+        text: "当前可用对话次数已用尽（游客 3 次已用完）。请点击右上角「手机号免密登录」立即领取每天 10 次免费额度，或点右栏试用会员 / ¥6 加油包。"
+      });
+      renderChat();
+      $("loginModal").hidden = false;
+      return;
+    }
+
+    var bot = BOTS.find(function (b) { return b.id === state.botId; }) || BOTS[0];
+    state.forceEmpty = false;
+    state.chats[bot.id].push({ who: "user", text: trimmed });
+    state.used += 1;
+    $("chatInput").value = "";
+    state.busy = true;
+    renderQuota();
+    renderChat();
+
+    setTimeout(function () {
+      state.busy = false;
+      state.chats[bot.id].push({ who: "ai", text: bot.reply });
+      renderChat();
+    }, params.get("slow") === "1" ? 1200 : 160);
+  }
+
+  function renderAll() {
+    renderQuota();
+    renderBotLists();
+    renderChat();
+  }
+
+  $("botSearch").addEventListener("input", function (e) { state.search = e.target.value; renderBotLists(); });
+  if ($("toggleBotsBtn")) {
+    $("toggleBotsBtn").addEventListener("click", function () {
+      var shell = $("top");
+      var hidden = shell.classList.toggle("is-sidebar-hidden");
+      $("toggleBotsBtn").setAttribute("aria-expanded", String(!hidden));
+    });
+  }
+
+  document.addEventListener("click", function (e) {
+    var bb = e.target.closest("[data-bot]");
+    if (bb) { state.botId = bb.getAttribute("data-bot"); state.forceEmpty = false; renderAll(); return; }
+    var st = e.target.closest("[data-starter]");
+    if (st) {
+      var bot = BOTS.find(function (b) { return b.id === state.botId; });
+      if (bot) sendUserText(bot.starters[Number(st.getAttribute("data-starter"))]);
+    }
+  });
+
+  $("chatForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    sendUserText($("chatInput").value);
+  });
+
+  $("clearChatBtn").addEventListener("click", function () {
+    state.chats[state.botId] = [];
+    state.forceEmpty = true;
+    renderChat();
+  });
+
+  $("exportBtn").addEventListener("click", function () {
+    var bot = BOTS.find(function (b) { return b.id === state.botId; });
+    var lines = state.chats[state.botId].map(function (m) {
+      return (m.who === "user" ? "我：" : bot.name + "：") + m.text;
+    }).join("\n\n");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lines).catch(function () {});
+    }
+    $("privacyNote").textContent = "已按 Markdown 复制「" + bot.name + "」当前 " + state.chats[state.botId].length + " 条对话。";
+  });
+
+  $("buyMemberBtn").addEventListener("click", function () {
+    state.loggedIn = true;
+    state.extraQuota += 300;
+    renderQuota();
+    $("privacyNote").textContent = "已模拟开通 ¥19/月 会员，总额度新增 300 次。";
+  });
+  $("buyPackBtn").addEventListener("click", function () {
+    state.extraQuota += 50;
+    renderQuota();
+    $("privacyNote").textContent = "已模拟购入 ¥6 加油包，总额度新增 50 次。";
+  });
+
+  var lastFocus = null;
+  $("loginBtn").addEventListener("click", function () {
+    lastFocus = document.activeElement;
+    $("loginModal").hidden = false;
+    $("phoneInput").focus();
+  });
+  function closeLogin() { $("loginModal").hidden = true; if (lastFocus) lastFocus.focus(); }
+  $("loginCloseBtn").addEventListener("click", closeLogin);
+  $("loginModal").addEventListener("click", function (e) { if (e.target === $("loginModal")) closeLogin(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("loginModal").hidden) closeLogin(); });
+
+  $("sendOtpBtn").addEventListener("click", function () {
+    var p = $("phoneInput").value.trim();
+    if (!/^1\d{10}$/.test(p)) {
+      $("loginMsg").style.color = "var(--err)";
+      $("loginMsg").textContent = "请输入有效 11 位中国大陆手机号。";
+      return;
+    }
+    $("loginMsg").style.color = "var(--ok)";
+    $("loginMsg").textContent = "验证码已发送至 " + p + "（演示验证码为 884210）。";
+  });
+
+  $("confirmLoginBtn").addEventListener("click", function () {
+    var p = $("phoneInput").value.trim();
+    var o = $("otpInput").value.trim();
+    if (!/^1\d{10}$/.test(p) || o.length < 4) {
+      $("loginMsg").style.color = "var(--err)";
+      $("loginMsg").textContent = "请核对 11 位手机号和验证码。";
+      return;
+    }
+    state.loggedIn = true;
+    $("loginMsg").style.color = "var(--ok)";
+    $("loginMsg").textContent = "验证成功！已将每天免费次数提升至 10 次并同步历史。";
+    renderQuota();
+    setTimeout(closeLogin, 350);
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

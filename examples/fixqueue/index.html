@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FixQueue · 一线工单台账</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tdesign-react@1.18.6/dist/tdesign.css">
+<style>
+/* Hallmark · macrostructure: Stat-Led · tone: utilitarian-dense · anchor hue: blue
+ * theme: TDesign palette (Blue7 #0052d9 accent) · nav: N13 inline ⌘K search pill · footer: Ft2 inline rule
+ * H4 knobs: number=tabular display 64px · qualifier=inline-right · secondary stats=row of four
+ * pre-emit critique: P5 H5 E5 S5 R4 V4
+ */
+:root{
+  /* colour — TDesign 色板原文值，行号见 DECISIONS.md §3 */
+  --paper:#f3f3f3;
+  --surface:#ffffff;
+  --rule:#e8e8e8;
+  --rule-2:#dddddd;
+  --border-control:#8b8b8b;
+  --ink:#181818;
+  --ink-2:#5e5e5e;
+  --ink-off:#a6a6a6;
+  --brand:#0052d9;
+  --brand-hover:#003cab;
+  --brand-weak:#f2f3ff;
+  --danger:#ad352f;
+  --danger-weak:#fff0ed;
+  --warn:#954500;
+  --warn-weak:#fff1e9;
+  --ok:#006c45;
+  --ok-weak:#e3f9e9;
+  --seg-new:#e37318;
+  --seg-doing:#366ef4;
+  --seg-done:#2ba471; --seg-resolved:#2ba471;
+  --seg-closed:#8b8b8b;
+  /* type — TDesign 第一二字节，行高 = 字号 + 8 */
+  --t12:12px; --lh12:20px;
+  --t14:14px; --lh14:22px;
+  --t16:16px; --lh16:24px;
+  --t20:20px; --lh20:28px;
+  --t24:24px; --lh24:32px;
+  --t36:36px; --lh36:44px;
+  --t64:64px; --lh64:72px;
+  /* space — 8 点网格加 4 / 12 两档小间距 */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  /* radius — 基准规范无通用圆角篇，派生两档 */
+  --r4:4px; --r8:8px;
+  /* motion — TDesign 桌面端固定时值与缓动 */
+  --dur-base:200ms; --dur-moderate:240ms; --dur-slow:280ms;
+  --ease-standard:cubic-bezier(.38,0,.24,1);
+  --ease-out:cubic-bezier(0,0,.15,1);
+  --ease-in:cubic-bezier(0.82,0,1,.9);
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  /* TDesign 组件变量映射到基准规范值 */
+  --td-brand-color:var(--brand);
+  --td-brand-color-hover:var(--brand-hover);
+  --td-brand-color-active:#002a7c;
+  --td-brand-color-focus:var(--brand-weak);
+  --td-brand-color-light:var(--brand-weak);
+  --td-brand-color-light-hover:#d9e1ff;
+  --td-brand-color-1:#f2f3ff;
+  --td-brand-color-2:#d9e1ff;
+  --td-brand-color-3:#b5c7ff;
+  --td-brand-color-4:#8eabff;
+  --td-brand-color-5:#618dff;
+  --td-brand-color-6:#366ef4;
+  --td-brand-color-7:#0052d9;
+  --td-brand-color-8:#003cab;
+  --td-error-color:var(--danger);
+  --td-error-color-hover:#881f1c;
+  --td-error-color-focus:var(--danger-weak);
+  --td-error-color-light:var(--danger-weak);
+  --td-warning-color:var(--warn);
+  --td-warning-color-focus:var(--warn-weak);
+  --td-warning-color-light:var(--warn-weak);
+  --td-success-color:var(--ok);
+  --td-success-color-focus:var(--ok-weak);
+  --td-success-color-light:var(--ok-weak);
+  --td-text-color-primary:var(--ink);
+  --td-text-color-secondary:var(--ink-2);
+  --td-text-color-placeholder:var(--ink-2);
+  --td-text-color-disabled:var(--ink-off);
+  --td-border-level-1-color:var(--rule);
+  --td-border-level-2-color:var(--border-control);
+  --td-component-border:var(--border-control);
+  --td-bg-color-page:var(--paper);
+  --td-bg-color-container:var(--surface);
+  --td-bg-color-secondarycontainer:#f3f3f3;
+  --td-radius-small:var(--r4);
+  --td-radius-default:var(--r4);
+  --td-radius-medium:var(--r8);
+  --td-font-family:var(--font-ui);
+  --td-font-family-medium:var(--font-ui);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-ui);font-size:var(--t14);line-height:var(--lh14);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,p,dl,dd,ul,ol{margin:0;padding:0}
+ul,ol{list-style:none}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:2px}
+:where(a,button,input,textarea,[tabindex]):focus-visible,
+.t-button:focus-visible,
+.t-input__inner:focus-visible,
+.t-checkbox__input:focus-visible ~ .t-checkbox__label::before{
+  outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--r4);
+}
+.skip{
+  position:absolute;inset-inline-start:var(--s4);top:-56px;z-index:90;
+  background:var(--surface);color:var(--ink);padding:var(--s2) var(--s4);
+  border:1px solid var(--border-control);border-radius:var(--r4);
+  font-size:var(--t14);line-height:var(--lh14);transition:top var(--dur-base) var(--ease-out);
+}
+.skip:focus{top:var(--s2)}
+.wrap{width:100%;max-width:1440px;margin:0 auto;padding-inline:var(--s4)}
+
+/* ── 页头 N13 ───────────────────────────────────────────── */
+.nav{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--rule)}
+.nav__in{display:flex;align-items:center;gap:var(--s3);height:56px}
+.brand{display:flex;align-items:baseline;gap:var(--s2);flex:0 0 auto;color:var(--ink);text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand__mark{font-size:var(--t16);line-height:var(--lh16);font-weight:600;letter-spacing:-.01em}
+.brand__q{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.duty{display:none;align-items:center;gap:var(--s2);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);min-width:0}
+.duty b{color:var(--ink);font-weight:600}
+.duty__dot{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:0 0 auto}
+.duty__sep{color:var(--rule-2)}
+.nav__spacer{flex:1 1 auto}
+.searchpill{
+  display:none;align-items:center;gap:var(--s2);
+  height:32px;padding:0 var(--s2) 0 var(--s3);max-width:360px;flex:1 1 auto;
+  background:var(--paper);border:1px solid var(--border-control);border-radius:999px;
+  color:var(--ink-2);font:inherit;font-size:var(--t12);line-height:var(--lh12);cursor:pointer;
+  transition:border-color var(--dur-base) var(--ease-standard),background var(--dur-base) var(--ease-standard);
+}
+.searchpill:hover{border-color:var(--ink-2);background:var(--surface)}
+.searchpill svg{flex:0 0 auto}
+.searchpill__txt{flex:1 1 auto;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kbd{
+  display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;
+  border:1px solid var(--rule-2);border-radius:var(--r4);background:var(--surface);
+  font-family:var(--font-mono);font-size:11px;line-height:16px;color:var(--ink-2);
+}
+.iconbtn{
+  display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
+  background:var(--surface);border:1px solid var(--border-control);border-radius:var(--r4);color:var(--ink);cursor:pointer;
+}
+.nav__new{flex:0 0 auto}
+
+/* ── 首屏 Stat-Led ──────────────────────────────────────── */
+.hero{padding-block:var(--s4) var(--s4);border-bottom:1px solid var(--rule);display:grid;gap:var(--s2)}
+.hero__h{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--s2) var(--s3);font-size:var(--t20);line-height:var(--lh20);font-weight:600;max-width:52ch}
+.hero__figure{
+  font-size:var(--t36);line-height:var(--lh36);font-weight:600;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.hero__words{color:var(--ink)}
+.hero__note{color:var(--ink-2);font-size:var(--t12);line-height:var(--lh12);max-width:72ch}
+
+/* 状态计数：可点的四格 */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r8);overflow:hidden}
+.stat{
+  display:flex;flex-direction:column;gap:2px;align-items:flex-start;
+  padding:var(--s2) var(--s4) var(--s3);background:var(--surface);border:0;border-bottom:2px solid transparent;
+  font:inherit;text-align:start;cursor:pointer;
+  transition:background var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);
+}
+.stat:hover{background:var(--paper)}
+.stat[aria-pressed="true"]{border-bottom-color:var(--brand);background:var(--brand-weak)}
+.stat__n{font-size:var(--t24);line-height:var(--lh24);font-weight:600;font-variant-numeric:tabular-nums}
+.stat__l{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:var(--t12);line-height:var(--lh12)}
+.swatch{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.swatch--new{background:var(--seg-new)}
+.swatch--doing{background:var(--seg-doing)}
+.swatch--resolved{background:var(--seg-done)}
+.swatch--closed{background:var(--seg-closed)}
+
+/* 分布条 + 图例 */
+.dist{display:grid;gap:var(--s3);align-content:start}
+.dist__bar{display:flex;gap:2px;height:12px;border-radius:var(--r4);overflow:hidden;background:var(--rule)}
+.dist__seg{height:100%;min-width:2px}
+.dist__legend{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.dist{margin-top:var(--s3)}
+.dist__item{display:flex;align-items:center;gap:6px}
+.dist__item b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ── 台账卡片 ───────────────────────────────────────────── */
+.ledger{
+  margin-block:var(--s3) var(--s4);background:var(--surface);
+  border:1px solid var(--rule);border-radius:var(--r8);overflow:hidden;
+}
+.ledger .t-table__content{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain}
+.ledger .t-table__content:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.ledger .t-table__content > table{min-width:1080px}
+.ledger__head{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2) var(--s3);
+  padding:var(--s3) var(--s4) 0;
+}
+.ledger__t{font-size:var(--t16);line-height:var(--lh16);font-weight:600}
+.ledger__n{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ledger__hint{margin-inline-start:auto;font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+
+/* 工具栏 */
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2) var(--s3);padding:var(--s3) var(--s4);align-items:end}
+.toolbar__search{grid-column:1 / -1}
+.toolbar__tail{grid-column:1 / -1;display:flex;gap:var(--s2);align-items:center;justify-content:space-between}
+.toolbar .t-input__wrap,.toolbar .t-select{width:100%}
+.fieldlabel{display:block;margin-bottom:var(--s1);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+
+/* 批量操作条 */
+.selbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3);
+  padding:var(--s2) var(--s4);background:var(--brand-weak);
+  border-block:1px solid #d9e1ff;font-size:var(--t12);line-height:var(--lh12);color:var(--ink);
+}
+.selbar b{font-variant-numeric:tabular-nums}
+.selbar .grow{flex:1 1 auto}
+
+/* 表格 */
+.tblnote{margin:0;padding:0 var(--s4) var(--s3);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.t-ledger .t-table__content{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--ink-off) var(--paper)}
+.t-ledger .t-table__content::-webkit-scrollbar{height:10px}
+.t-ledger .t-table__content::-webkit-scrollbar-thumb{background:var(--ink-off);border-radius:5px}
+.t-ledger .t-table__content::-webkit-scrollbar-track{background:var(--paper)}
+.t-ledger{--td-table-header-bg:var(--paper)}
+.t-ledger .t-table{color:var(--ink)}
+.t-ledger .t-table__content{overflow-x:auto}
+.t-ledger table{font-size:var(--t14);line-height:var(--lh14)}
+.t-ledger th,.t-ledger__th{
+  background:var(--paper);color:var(--ink-2);font-size:var(--t12);line-height:var(--lh12);
+  font-weight:600;white-space:nowrap;text-align:start;
+}
+.t-ledger td{padding-block:10px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.t-ledger th:first-child,.t-ledger td:first-child{padding-inline-start:var(--s4)}
+.t-ledger tbody tr:hover td{background:var(--paper)}
+.t-ledger tbody tr.is-closed td{color:var(--ink-2)}
+.cell-ttl{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell-acts{display:flex;gap:10px;justify-content:flex-end;align-items:center}
+.cell-acts .t-button{min-height:28px;padding-inline:var(--s1)}
+.t-ledger .t-checkbox{min-height:28px;min-width:28px;display:inline-flex;align-items:center;justify-content:center}
+.nowrap{white-space:nowrap}
+.cell-num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cell-time{white-space:nowrap;font-family:var(--font-mono);color:var(--ink-2);font-size:var(--t12);line-height:var(--lh12)}
+.cell-id{white-space:nowrap;font-family:var(--font-mono);font-size:var(--t12);line-height:var(--lh12);color:var(--ink)}
+.cell-bool{display:flex;align-items:center;justify-content:center}
+
+/* 状态与优先级标签 */
+.st{
+  display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 var(--s2);
+  border-radius:var(--r4);font-size:var(--t12);line-height:var(--lh12);white-space:nowrap;
+}
+.st--new{background:var(--warn-weak);color:var(--warn)}
+.st--doing{background:var(--brand-weak);color:var(--brand)}
+.st--resolved{background:var(--ok-weak);color:var(--ok)}
+.st--closed{background:var(--paper);color:var(--ink-2)}
+.st__dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
+.st--new .st__dot{background:var(--seg-new)}
+.st--doing .st__dot{background:var(--seg-doing)}
+.st--resolved .st__dot{background:var(--seg-done)}
+.st--closed .st__dot{background:var(--seg-closed)}
+.pri{
+  display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 var(--s2);
+  border:1px solid currentColor;border-radius:var(--r4);
+  font-size:var(--t12);line-height:var(--lh12);white-space:nowrap;background:var(--surface);
+}
+.pri--p1{color:var(--danger)}
+.pri--p2{color:var(--warn)}
+.pri--p3{color:var(--ink-2)}
+.pri__bars{display:inline-flex;align-items:flex-end;gap:2px;height:10px}
+.pri__bars i{display:block;width:3px;background:currentColor;border-radius:1px}
+.pri__bars i:nth-child(1){height:4px}
+.pri__bars i:nth-child(2){height:7px}
+.pri__bars i:nth-child(3){height:10px}
+.pri--p3 .pri__bars i:nth-child(2),.pri--p3 .pri__bars i:nth-child(3){opacity:.28}
+.pri--p2 .pri__bars i:nth-child(3){opacity:.28}
+
+/* 空态 / 加载态 */
+.empty{display:grid;gap:var(--s2);place-items:center;padding:var(--s7) var(--s4);text-align:center}
+.empty__h{font-size:var(--t16);line-height:var(--lh16);font-weight:600}
+.empty__p{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);max-width:38ch}
+.skel{padding:var(--s3) var(--s4) var(--s4)}
+.skel__lead{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);margin-bottom:var(--s3)}
+.skel__row{display:grid;grid-template-columns:88px 1fr 64px;gap:var(--s3);align-items:center;height:44px;border-bottom:1px solid var(--rule)}
+.skel__band{height:12px;border-radius:var(--r4);background:var(--rule-2);
+  animation:shimmer 1.4s var(--ease-standard) infinite}
+.skel__band--s{width:60%}
+.skel__band--m{width:85%}
+@keyframes shimmer{0%{opacity:.55}50%{opacity:1}100%{opacity:.55}}
+
+/* 分页 */
+.ledger__foot{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;padding:var(--s3) var(--s4);border-top:1px solid var(--rule)}
+.ledger__foot .grow{flex:1 1 auto}
+.ledger__count{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.t-pagination__total{display:none}
+
+/* 移动端卡片 */
+.cards{display:grid;gap:0}
+.card{padding:var(--s3) var(--s4);border-top:1px solid var(--rule);display:grid;gap:var(--s2)}
+.card:first-child{border-top:0}
+.card__top{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.card__id{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.card__t{font-size:var(--t14);line-height:var(--lh14);font-weight:600}
+.card__meta{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1) var(--s3);font-size:var(--t12);line-height:var(--lh12)}
+.card__meta div{display:flex;gap:6px;min-width:0}
+.card__meta dt{color:var(--ink-2);flex:0 0 auto}
+.card__meta dd{color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card__foot{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s3);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.card__foot>span{white-space:nowrap}
+.card__acts{margin-inline-start:auto;display:flex;gap:var(--s1);flex-wrap:wrap;justify-content:flex-end}
+.card__meta div:first-child{grid-column:1 / -1}
+
+@media (max-width:767px){
+  .card__acts .t-button,.toolbar .t-button,.toolbar__tail .t-button{min-height:36px;padding-inline:var(--s2)}
+  .card{row-gap:var(--s3)}
+}
+@media (max-width:399px){
+  .toolbar{grid-template-columns:1fr}
+  .toolbar__search,.toolbar__tail{grid-column:auto}
+}
+
+/* ── 页脚 Ft2 ───────────────────────────────────────────── */
+.foot{border-top:1px solid var(--rule);padding-block:var(--s4) var(--s5)}
+.foot p{font-family:var(--font-mono);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);max-width:110ch}
+.foot span{color:var(--rule-2);padding-inline:var(--s1)}
+
+/* ── 抽屉 / 弹窗 / 面板 ──────────────────────────────────── */
+.dt{display:grid;gap:var(--s4)}
+.dt__h{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+.dt__id{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.dt__title{font-size:var(--t20);line-height:var(--lh20);font-weight:600}
+.dt__dl{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4);font-size:var(--t14);line-height:var(--lh14)}
+.dt__dl dt{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);margin-bottom:2px}
+.dt__dl dd{font-weight:400}
+.dt__sec{border-top:1px solid var(--rule);padding-top:var(--s3)}
+.dt__sec h3{font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2);font-weight:600;margin-bottom:var(--s2)}
+.dt__p{font-size:var(--t14);line-height:var(--lh14);max-width:38ch}
+.log{display:grid;gap:var(--s2)}
+.log li{display:grid;grid-template-columns:88px 1fr;gap:var(--s3);font-size:var(--t12);line-height:var(--lh12)}
+.log time{font-family:var(--font-mono);color:var(--ink-2)}
+.dt__acts{display:flex;gap:var(--s2);flex-wrap:wrap}
+
+.form{display:grid;gap:var(--s3)}
+.form__req{color:var(--danger);margin-inline-start:2px}
+.form__err{display:block;margin-top:var(--s1);font-size:var(--t12);line-height:var(--lh12);color:var(--danger)}
+.form__sum{padding:var(--s2) var(--s3);background:var(--danger-weak);border:1px solid var(--danger);border-radius:var(--r4);font-size:var(--t12);line-height:var(--lh12);color:var(--danger)}
+.form input[aria-invalid="true"],.form textarea[aria-invalid="true"]{border-color:var(--danger)}
+.dlgfoot{display:flex;gap:var(--s2);justify-content:flex-end}
+
+/* 命令面板 */
+.cmdk{position:fixed;inset:0;z-index:800;display:grid;justify-items:center;align-items:start;padding-top:12vh}
+.cmdk__bd{position:absolute;inset:0;background:rgba(0,0,0,.45);border:0;padding:0}
+.cmdk__panel{
+  position:relative;width:min(560px,calc(100vw - 32px));background:var(--surface);
+  border:1px solid var(--border-control);border-radius:var(--r8);overflow:hidden;
+  box-shadow:0 24px 48px -24px rgba(0,0,0,.45);
+  animation:cmdk-in var(--dur-moderate) var(--ease-out) both;
+}
+@keyframes cmdk-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.cmdk__field{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule)}
+.cmdk__field input{
+  flex:1 1 auto;border:0;outline:0;font:inherit;font-size:var(--t14);line-height:var(--lh14);
+  color:var(--ink);background:transparent;
+}
+.cmdk__list{max-height:52vh;overflow-y:auto;padding:var(--s2) 0}
+.cmdk__grp{padding:var(--s1) var(--s4);font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+.cmdk__item{
+  display:flex;align-items:center;gap:var(--s2);width:100%;padding:var(--s2) var(--s4);
+  background:transparent;border:0;font:inherit;font-size:var(--t14);line-height:var(--lh14);
+  color:var(--ink);text-align:start;cursor:pointer;
+}
+.cmdk__item[data-active="true"]{background:var(--brand-weak)}
+.cmdk__item small{margin-inline-start:auto;color:var(--ink-2);font-size:var(--t12);font-family:var(--font-mono)}
+.cmdk__foot{display:flex;gap:var(--s3);padding:var(--s2) var(--s4);border-top:1px solid var(--rule);
+  font-size:var(--t12);line-height:var(--lh12);color:var(--ink-2)}
+
+/* ── 断点 ───────────────────────────────────────────────── */
+@media (min-width:768px){
+  .wrap{padding-inline:var(--s5)}
+  .duty{display:flex}
+  .searchpill{display:flex;margin-inline-start:auto}
+  .iconbtn{display:none}
+  .nav__spacer{flex:1 1 auto}
+  .hero{padding-block:var(--s4) var(--s5)}
+  .hero__figure{font-size:var(--t64);line-height:var(--lh64)}
+  .hero__h{font-size:var(--t24);line-height:var(--lh24);gap:var(--s3)}
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .toolbar{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .toolbar__search{grid-column:span 2}
+  .toolbar__tail{grid-column:span 4;justify-content:flex-end}
+  .dt__dl{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:992px){
+  .toolbar{grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,.62fr)) auto}
+  .toolbar__search{grid-column:auto}
+  .toolbar__tail{grid-column:auto;justify-content:flex-end}
+  .ledger__head{padding:var(--s4) var(--s5) 0}
+  .toolbar{padding:var(--s3) var(--s5)}
+  .ledger__foot{padding:var(--s3) var(--s5)}
+  .selbar{padding-inline:var(--s5)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<div id="app"><p style="padding:24px;color:#5e5e5e">正在载入 TDesign 组件…</p></div>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "tdesign-react": "https://esm.sh/tdesign-react@1.18.6?bundle&external=react,react-dom"
+  }
+}
+</script>
+<script type="module">
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Button, Input, Select, Table, Pagination, Checkbox, Drawer, Dialog, MessagePlugin } from 'tdesign-react';
+
+const e = React.createElement;
+const { useState, useMemo, useEffect, useRef, useCallback } = React;
+
+const ME = '程野';
+const STATUS = {
+  new: { label: '待处理', key: 'new' },
+  doing: { label: '处理中', key: 'doing' },
+  resolved: { label: '已解决', key: 'resolved' },
+  closed: { label: '已关闭', key: 'closed' }
+};
+const STATUS_ORDER = ['new', 'doing', 'resolved', 'closed'];
+const PRIO = { 1: '紧急', 2: '较高', 3: '普通' };
+const SORTS = [
+  { value: 'wait-desc', label: '等待 长 → 短' },
+  { value: 'wait-asc', label: '等待 短 → 长' },
+  { value: 'updated-desc', label: '更新 新 → 旧' },
+  { value: 'updated-asc', label: '更新 旧 → 新' },
+  { value: 'prio-desc', label: '优先级 高 → 低' }
+];
+
+// 单号, 标题, 设备 / 系统, 部门, 请求人, 状态, 优先级, 处理人, 已等待分钟, 更新时间, 描述
+const RAW = [
+  ['084','财务共享盘登录后提示凭据无效','Windows 11 · 域账号','财务部','陈慕','new',2,'—',4080,'2026-11-14 08:12','密码已确认正确，共享盘映射每次开机后断开，重启两次无效。'],
+  ['083','5 楼东门门禁读卡无反应','门禁读卡器 · 5F 东','行政部','高远','new',1,'—',1875,'2026-11-13 23:40','新卡在其他门正常，门禁后台显示卡片状态为待同步。'],
+  ['082','B2 会议室投屏无信号','投屏器 · B2 会议室','市场部','钱宁','new',1,'—',655,'2026-11-14 08:20','换线无效，下午有两场外部会议，需要提前确认。'],
+  ['081','三楼东区打印机队列堵塞','HP M428 · 3F','行政部','邵羽','new',2,'—',512,'2026-11-14 09:05','队列里堆了 14 个文档，面板提示进纸盒为空，实际有纸。'],
+  ['080','新员工笔记本重装并加域','ThinkPad T14 · 待交付','人力资源','沈岚','new',3,'沈亦',218,'2026-11-14 09:30','下周入职 2 人，需要部门镜像、办公套件与打印驱动。'],
+  ['079','VPN 客户端连接超时','MacBook Air · VPN','研发中心','罗青','new',2,'—',176,'2026-11-14 09:48','客户端日志显示证书校验失败，换网络后仍然超时。'],
+  ['078','显示器每隔几分钟黑屏一次','27 寸显示器 · 设计区','设计中心','苏禾','new',3,'—',141,'2026-11-14 10:02','换接口后依旧，怀疑线材或电源板。'],
+  ['077','共享邮箱收外部邮件延迟 20 分钟','Exchange · 销售共享箱','销售部','顾南','new',2,'—',96,'2026-11-14 10:35','个人邮箱正常，只有共享箱延迟。'],
+  ['076','工位网口指示灯不亮','工位网口 · 5F 西','客服中心','唐睿','new',3,'—',63,'2026-11-14 10:58','同排其他工位正常，交换机端口疑似未启用。'],
+  ['075','财务月结服务器磁盘剩余 3%','文件服务器 FS02','财务部','白露','new',1,'—',48,'2026-11-14 11:10','月结期间不能再扩容，需要先清理历史备份。'],
+  ['074','申请安装 Visio 与项目模板','软件申请 · 办公套件','研发中心','周斯','new',3,'郑铭',22,'2026-11-14 11:42','已附部门审批邮件，授权数量 2 台。'],
+  ['073','邮件客户端反复要求重新登录','Outlook · 市场部','市场部','韦一','doing',1,ME,1520,'2026-11-14 11:50','每小时弹一次登录框，网页版收发正常。'],
+  ['072','ERP 报表导出中文列名乱码','ERP · 供应链报表','供应链','邓可','doing',2,'林简',1180,'2026-11-14 11:35','CSV 用 Excel 打开按 ANSI 解码，已确认编码问题。'],
+  ['071','笔记本电池鼓包待更换','Dell 7420 · 法务','法务','白露','doing',1,'何棠',980,'2026-11-14 11:20','已告知停止充电并断电放置，等待备机。'],
+  ['070','会议室门禁与会议预约不同步','门禁系统 · 会议联动','行政部','钱宁','doing',2,'沈亦',760,'2026-11-14 11:05','预约开始前 10 分钟门禁未自动开放。'],
+  ['069','打印驱动在系统更新后失效','Windows 11 · 打印驱动','客服中心','唐睿','doing',3,'郑铭',610,'2026-11-14 10:50','更新后打印机显示脱机，重装驱动可恢复但重启失效。'],
+  ['068','企业微信文件传输失败','企业微信 · 桌面端','销售部','顾南','doing',2,'苏晓',430,'2026-11-14 10:40','超过 20MB 的文件全部失败，小文件正常。'],
+  ['067','测试实例连接数打满','MySQL · 测试实例','研发中心','罗青','doing',1,ME,360,'2026-11-14 10:25','连接池上限 200，当前 200，需要确认泄漏来源。'],
+  ['066','键盘部分按键失灵','罗技 K380 · 3F','市场部','韦一','doing',3,'林简',240,'2026-11-14 10:10','E、R、T 三个键偶发无响应，已备替换键盘。'],
+  ['065','会议室摄像头不被识别','USB 摄像头 · A3 会议室','行政部','邵羽','doing',2,'何棠',120,'2026-11-14 09:55','设备管理器显示未知 USB 设备。'],
+  ['064','共享盘权限申请','共享盘 · 项目目录','研发中心','周斯','resolved',2,'郑铭',0,'2026-11-14 09:40','申请只读权限，已按审批单加入项目组。'],
+  ['063','邮箱容量不足无法收信','Exchange · 个人邮箱','销售部','顾南','resolved',3,'苏晓',0,'2026-11-14 09:26','归档 4.2GB 历史邮件后恢复正常。'],
+  ['062','前台电话交换机断线','话机 · 前台','行政部','钱宁','resolved',1,'何棠',0,'2026-11-14 09:14','交换机端口灯不亮，更换跳线后恢复。'],
+  ['061','门禁卡补办','门禁 · 卡片办理','法务','白露','resolved',2,'林简',0,'2026-11-14 08:58','旧卡挂失后补办，权限沿用原部门。'],
+  ['060','软件中心无法下载安装包','软件中心 · 内网','研发中心','罗青','resolved',3,'沈亦',0,'2026-11-14 08:44','内网缓存节点异常，切换节点后正常。'],
+  ['059','笔记本无法连接投影','MacBook Pro · HDMI','设计中心','苏禾','resolved',2,ME,0,'2026-11-14 08:30','转接器固件过旧，升级后恢复。'],
+  ['058','工位显示器支架更换','显示器支架 · 6F','人力资源','沈岚','resolved',3,'郑铭',0,'2026-11-14 08:16','支架断裂，已换新并回收旧件。'],
+  ['057','财务系统登录提示证书过期','财务系统 · 门户','财务部','陈慕','resolved',1,'苏晓',0,'2026-11-14 08:02','门户证书已更新，清除浏览器缓存后正常。'],
+  ['056','打印机扫描到邮箱失败','HP M428 · 扫描','行政部','邵羽','resolved',2,'林简',0,'2026-11-13 18:40','SMTP 账号口令过期，重置后恢复。'],
+  ['055','无线网络在 7 楼频繁掉线','Wi-Fi · 7F 东','客服中心','唐睿','resolved',3,'何棠',0,'2026-11-13 18:12','AP 信道冲突，调整信道后稳定。'],
+  ['054','共享文件夹无法写入','共享盘 · 财务归档','财务部','白露','resolved',2,'沈亦',0,'2026-11-13 17:48','磁盘配额已满，清理临时目录后恢复。'],
+  ['053','键盘鼠标套装更换','键鼠套装 · 4F','市场部','韦一','resolved',3,ME,0,'2026-11-13 17:20','鼠标左键双击，整套更换。'],
+  ['052','会议室大屏黑屏','大屏 · C1 会议室','行政部','钱宁','resolved',1,'郑铭',0,'2026-11-13 16:55','信号源切换错误，重设默认输入后恢复。'],
+  ['051','邮箱收到大量退信','Exchange · 邮件网关','销售部','顾南','resolved',2,'苏晓',0,'2026-11-13 16:30','发件域被误列入黑名单，已申诉解除。'],
+  ['050','申请开通测试环境账号','测试环境 · 账号','研发中心','周斯','resolved',3,'林简',0,'2026-11-13 16:05','按最小权限开通只读账号，有效期 30 天。'],
+  ['049','笔记本风扇异响','ThinkPad X1 · 法务','法务','白露','resolved',2,'何棠',0,'2026-11-13 15:40','风扇积尘，清理后噪声下降。'],
+  ['048','申请更换工位','工位 · 6F 西','人力资源','沈岚','closed',3,'沈亦',0,'2026-11-13 15:10','已与行政完成工位调整，工单关闭。'],
+  ['047','打印机加粉','HP M405 · 2F','行政部','邵羽','closed',2,'郑铭',0,'2026-11-13 14:36','耗材已更换，计入季度耗材台账。'],
+  ['046','投影遥控器电池','遥控器 · B2 会议室','市场部','钱宁','closed',3,'苏晓',0,'2026-11-13 14:02','更换电池，另备一组放前台。'],
+  ['045','机房空调告警','机房 · 精密空调','研发中心','罗青','closed',1,ME,0,'2026-11-13 13:28','已转设施组处理，本单关闭并留档。'],
+  ['044','申请安装字体包','设计软件 · 字体','设计中心','苏禾','closed',3,'林简',0,'2026-11-13 12:54','按授权清单安装 6 款字体。'],
+  ['043','会议电话杂音','会议电话 · A3 会议室','销售部','顾南','closed',2,'何棠',0,'2026-11-13 11:20','更换音频线后杂音消失。'],
+  ['042','网线更换','网线 · 5F 西','客服中心','唐睿','closed',3,'郑铭',0,'2026-11-13 10:46','水晶头氧化，重新压制并更换线缆。'],
+  ['041','门禁卡消磁','门禁 · 卡片办理','法务','白露','closed',2,'沈亦',0,'2026-11-13 10:12','重新写卡，已通知本人取回。']
+];
+
+const SEED = RAW.map(r => ({
+  id: 'FQ-2611-' + r[0], title: r[1], system: r[2], dept: r[3], requester: r[4],
+  status: r[5], prio: r[6], assignee: r[7], wait: r[8], updated: r[9], desc: r[10]
+}));
+
+/* ── 小工具 ─────────────────────────────────────────────── */
+function fmtWait(min) {
+  if (!min) return '—';
+  if (min < 60) return min + ' 分钟';
+  const h = Math.floor(min / 60), m = min % 60;
+  if (h < 24) return m ? h + ' 小时 ' + m + ' 分' : h + ' 小时';
+  const d = Math.floor(h / 24), rh = h % 24;
+  return rh ? d + ' 天 ' + rh + ' 小时' : d + ' 天';
+}
+function shortTime(s) { return s.slice(5); }
+function addMin(s, delta) {
+  const d = new Date(s.replace(' ', 'T') + ':00');
+  d.setMinutes(d.getMinutes() + delta);
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function nowStr() {
+  const d = new Date(); const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function pctList(nums) {
+  const total = nums.reduce((a, b) => a + b, 0);
+  if (!total) return nums.map(() => 0);
+  const raw = nums.map(n => (n / total) * 100);
+  const base = raw.map(Math.floor);
+  let rest = 100 - base.reduce((a, b) => a + b, 0);
+  const order = raw.map((v, i) => ({ i, frac: v - Math.floor(v) })).sort((a, b) => b.frac - a.frac);
+  for (let k = 0; k < order.length && rest > 0; k++) { base[order[k].i] += 1; rest -= 1; }
+  return base;
+}
+
+function StatusTag({ s }) {
+  return e('span', { className: 'st st--' + s },
+    e('i', { className: 'st__dot', 'aria-hidden': 'true' }),
+    STATUS[s].label);
+}
+function PrioTag({ p }) {
+  return e('span', { className: 'pri pri--p' + p },
+    e('span', { className: 'pri__bars', 'aria-hidden': 'true' }, e('i'), e('i'), e('i')),
+    PRIO[p]);
+}
+function useViewportWidth() {
+  const get = () => window.innerWidth;
+  const [width, setWidth] = useState(get);
+  useEffect(() => {
+    const on = () => setWidth(get());
+    window.addEventListener('resize', on);
+    const ro = new ResizeObserver(on);
+    ro.observe(document.documentElement);
+    // 兜底：部分自动化环境改视口宽度不派发 resize / RO 回调，轮询一次成本可忽略
+    const timer = window.setInterval(on, 300);
+    return () => {
+      window.removeEventListener('resize', on);
+      ro.disconnect();
+      window.clearInterval(timer);
+    };
+  }, []);
+  return width;
+}
+
+/* ── 主组件 ─────────────────────────────────────────────── */
+const PARAMS = new URLSearchParams(location.search);
+const QA_STATE = PARAMS.get('state');
+
+function App() {
+  const vw = useViewportWidth();
+  const narrow = vw <= 767;
+  const scrollHint = !narrow && vw < 1090;
+  const [tickets, setTickets] = useState(() => QA_STATE === 'empty' ? [] : SEED);
+  const [q, setQ] = useState('');
+  const [statusF, setStatusF] = useState('all');
+  const [prioF, setPrioF] = useState('all');
+  const [sortKey, setSortKey] = useState('wait-desc');
+  const [pageSize, setPageSize] = useState(12);
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState([]);
+  const [drawerId, setDrawerId] = useState(null);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ title: '', system: '', dept: '', requester: '', prio: 3, desc: '' });
+  const [errs, setErrs] = useState({});
+  const [tried, setTried] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [palQ, setPalQ] = useState('');
+  const [palIdx, setPalIdx] = useState(0);
+  const [announce, setAnnounce] = useState('');
+  const [booting, setBooting] = useState(true);
+  const lastFocus = useRef(null);
+  const pillRef = useRef(null);
+  const palInput = useRef(null);
+  const palPanel = useRef(null);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    if (QA_STATE === 'loading') return undefined;
+    const t = window.setTimeout(() => setBooting(false), 1100);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const clearFilters = () => { setQ(''); setStatusF('all'); setPrioF('all'); setPage(1); };
+
+  // 搜索 + 优先级先筛（状态不参与，供汇总做分面计数）
+  const scoped = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return tickets.filter(t => {
+      if (prioF !== 'all' && String(t.prio) !== prioF) return false;
+      if (!needle) return true;
+      return (t.id + ' ' + t.title + ' ' + t.system + ' ' + t.dept + ' ' + t.requester + ' ' + t.assignee)
+        .toLowerCase().includes(needle);
+    });
+  }, [tickets, q, prioF]);
+
+  const counts = useMemo(() => {
+    const c = { new: 0, doing: 0, resolved: 0, closed: 0 };
+    scoped.forEach(t => { c[t.status] += 1; });
+    return c;
+  }, [scoped]);
+
+  const rows = useMemo(() => {
+    const list = scoped.filter(t => statusF === 'all' || t.status === statusF);
+    const cmp = {
+      'wait-desc': (a, b) => b.wait - a.wait || b.updated.localeCompare(a.updated),
+      'wait-asc': (a, b) => a.wait - b.wait || a.updated.localeCompare(b.updated),
+      'updated-desc': (a, b) => b.updated.localeCompare(a.updated),
+      'updated-asc': (a, b) => a.updated.localeCompare(b.updated),
+      'prio-desc': (a, b) => a.prio - b.prio || b.wait - a.wait
+    }[sortKey];
+    return list.slice().sort(cmp);
+  }, [scoped, statusF, sortKey]);
+
+  const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const safePage = Math.min(page, pages);
+  const pageRows = rows.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const unassignedRows = scoped.filter(t => t.status === 'new' && t.assignee === '—');
+  const unassigned = unassignedRows.length;
+  const unassignedMax = unassignedRows.reduce((m, t) => Math.max(m, t.wait), 0);
+
+  useEffect(() => { setPage(1); }, [q, statusF, prioF, sortKey, pageSize]);
+
+  useEffect(() => {
+    setAnnounce('当前显示 ' + rows.length + ' 张工单，共 ' + tickets.length +
+      ' 张。待处理 ' + counts.new + ' 张，处理中 ' + counts.doing + ' 张，已解决 ' + counts.resolved +
+      ' 张，已关闭 ' + counts.closed + ' 张。');
+  }, [rows.length, tickets.length, counts]);
+
+  /* 动作 */
+  const patch = (ids, fn, note) => {
+    setTickets(prev => prev.map(t => ids.includes(t.id) ? fn(t) : t));
+    if (note) setAnnounce(note);
+  };
+  const claim = useCallback(t => {
+    patch([t.id], x => ({ ...x, status: 'doing', assignee: ME, updated: nowStr() }), t.id + ' 已认领，处理人 ' + ME);
+    MessagePlugin.success({ content: t.id + ' 已认领，处理人 ' + ME, duration: 3000 });
+  }, []);
+  const solve = useCallback(t => {
+    patch([t.id], x => ({ ...x, status: 'resolved', wait: 0, updated: nowStr() }), t.id + ' 已标记解决');
+    MessagePlugin.success({ content: t.id + ' 已标记为已解决', duration: 3000 });
+  }, []);
+  const undo = useCallback(t => {
+    patch([t.id], x => ({ ...x, status: 'doing', assignee: x.assignee === '—' ? ME : x.assignee, updated: nowStr() }), t.id + ' 已撤销解决，回到处理中');
+    MessagePlugin.info({ content: t.id + ' 已撤销解决，回到处理中', duration: 3000 });
+  }, []);
+  const claimBatch = () => {
+    const targets = tickets.filter(t => selected.includes(t.id) && t.status === 'new');
+    const skipped = selected.length - targets.length;
+    patch(targets.map(t => t.id), x => ({ ...x, status: 'doing', assignee: ME, updated: nowStr() }),
+      '已批量认领 ' + targets.length + ' 张工单');
+    MessagePlugin.success({
+      content: '已认领 ' + targets.length + ' 张' + (skipped ? '，跳过 ' + skipped + ' 张非待处理工单' : ''),
+      duration: 3000
+    });
+    setSelected([]);
+  };
+
+  const toggleRow = id => setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : prev.concat(id));
+  const pageIds = pageRows.map(t => t.id);
+  const onPage = pageIds.filter(id => selected.includes(id));
+  const allOnPage = pageIds.length > 0 && onPage.length === pageIds.length;
+  const togglePage = () => setSelected(prev => allOnPage
+    ? prev.filter(id => !pageIds.includes(id))
+    : Array.from(new Set(prev.concat(pageIds))));
+
+  /* 导出 */
+  const exportCsv = useCallback(() => {
+    const head = ['单号', '标题', '设备 / 系统', '部门', '请求人', '状态', '优先级', '处理人', '等待时长', '更新时间'];
+    const body = rows.map(t => [t.id, t.title, t.system, t.dept, t.requester,
+      STATUS[t.status].label, PRIO[t.prio], t.assignee, fmtWait(t.wait), t.updated]);
+    const csv = '\ufeff' + [head].concat(body)
+      .map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fixqueue-2026-11-14.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 2000);
+    setAnnounce('已导出 ' + rows.length + ' 行 CSV');
+    MessagePlugin.success({ content: '已导出 ' + rows.length + ' 行 CSV', duration: 3000 });
+  }, [rows]);
+
+  /* 新建 */
+  const openCreate = () => {
+    setForm({ title: '', system: '', dept: '', requester: '', prio: 3, desc: '' });
+    setErrs({}); setTried(false); setCreating(true);
+  };
+  const validate = f => {
+    const out = {};
+    if (f.title.trim().length < 4) out.title = '标题至少 4 个字，写清现象与影响范围';
+    if (!f.system.trim()) out.system = '填写设备或系统名称';
+    if (!f.requester.trim()) out.requester = '填写请求人，便于回访';
+    return out;
+  };
+  const submit = () => {
+    const out = validate(form);
+    setErrs(out); setTried(true);
+    if (Object.keys(out).length) {
+      setAnnounce('表单有 ' + Object.keys(out).length + ' 项需要修正');
+      const firstKey = Object.keys(out)[0];
+      window.setTimeout(() => {
+        const box = formRef.current && formRef.current.querySelector('[data-field="' + firstKey + '"]');
+        const input = box && box.querySelector('input, textarea');
+        if (!input) return;
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', firstKey + '-err');
+        input.focus();
+      }, 80);
+      return;
+    }
+    const max = tickets.reduce((m, t) => Math.max(m, Number(t.id.slice(-3))), 0);
+    const id = 'FQ-2611-' + String(max + 1).padStart(3, '0');
+    const t = {
+      id, title: form.title.trim(), system: form.system.trim(), dept: form.dept || '未填写',
+      requester: form.requester.trim(), status: 'new', prio: Number(form.prio), assignee: '—',
+      wait: 0, updated: nowStr(), desc: form.desc.trim() || '（未填写补充说明）'
+    };
+    setTickets(prev => [t].concat(prev));
+    clearFilters(); setSortKey('updated-desc');
+    setCreating(false);
+    setAnnounce(id + ' 已创建，状态为待处理');
+    MessagePlugin.success({ content: id + ' 已创建，状态为待处理', duration: 3000 });
+  };
+
+  /* 命令面板 */
+  const openPalette = () => {
+    const act = document.activeElement;
+    lastFocus.current = act && act !== document.body ? act : pillRef.current;
+    setPalQ(''); setPalIdx(0); setPaletteOpen(true);
+  };
+  const modalTrigger = useRef(null);
+  const modalWasOpen = useRef(false);
+  useEffect(() => {
+    const open = creating || !!drawerId;
+    if (open) {
+      const act = document.activeElement;
+      if (act && act !== document.body && !modalWasOpen.current) modalTrigger.current = act;
+      modalWasOpen.current = true;
+      const focusables = () => Array.prototype.slice.call(
+        (document.querySelector('.t-drawer--open, .t-drawer__body, .t-dialog__ctx .form') || document.body).querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')
+      ).filter(x => x.offsetParent !== null);
+      const t = window.setTimeout(() => {
+        const f = focusables();
+        if (f.length) f[0].focus({ preventScroll: true });
+      }, 90);
+      const onKey = ev => {
+        if (ev.key === 'Escape') {
+          ev.stopPropagation();
+          ev.preventDefault();
+          if (creating) setCreating(false); else setDrawerId(null);
+          return;
+        }
+        if (ev.key !== 'Tab') return;
+        const f = focusables();
+        if (!f.length) return;
+        const i = f.indexOf(document.activeElement);
+        if (ev.shiftKey) {
+          if (i <= 0) { ev.preventDefault(); f[f.length - 1].focus(); }
+        } else if (i === -1 || i === f.length - 1) {
+          ev.preventDefault(); f[0].focus();
+        }
+      };
+      document.addEventListener('keydown', onKey, true);
+      return () => { window.clearTimeout(t); document.removeEventListener('keydown', onKey, true); };
+    }
+    if (modalWasOpen.current) {
+      modalWasOpen.current = false;
+      const back = modalTrigger.current;
+      if (back && back.focus) window.setTimeout(() => back.focus({ preventScroll: true }), 30);
+    }
+  }, [creating, drawerId]);
+
+  useEffect(() => {
+    if (narrow) return;
+    const sc = document.querySelector('#ledger .t-table__content');
+    if (!sc || sc.getAttribute('tabindex') === '0') return;
+    sc.setAttribute('tabindex', '0');
+    sc.setAttribute('role', 'region');
+    sc.setAttribute('aria-label', '工单表格，横向可滚动查看全部列');
+  });
+
+  const closePalette = () => {
+    setPaletteOpen(false);
+    const back = lastFocus.current;
+    if (back && back.focus) window.setTimeout(() => back.focus({ preventScroll: true }), 0);
+  };
+  useEffect(() => {
+    const onKey = ev => {
+      if ((ev.metaKey || ev.ctrlKey) && (ev.key === 'k' || ev.key === 'K')) {
+        ev.preventDefault();
+        paletteOpen ? closePalette() : openPalette();
+      }
+      if (ev.key === 'Escape' && paletteOpen) { ev.preventDefault(); closePalette(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [paletteOpen]);
+  useEffect(() => {
+    if (paletteOpen && palInput.current) palInput.current.focus({ preventScroll: true });
+  }, [paletteOpen]);
+
+  const commands = useMemo(() => ([
+    { kind: '筛选', label: '只看待处理', run: () => { setStatusF('new'); closePalette(); } },
+    { kind: '筛选', label: '只看处理中', run: () => { setStatusF('doing'); closePalette(); } },
+    { kind: '筛选', label: '清除筛选，回到全部', run: () => { clearFilters(); closePalette(); } },
+    { kind: '动作', label: '新建工单', run: () => { closePalette(); openCreate(); } },
+    { kind: '动作', label: '导出当前列表 CSV', run: () => { closePalette(); exportCsv(); } }
+  ]), [exportCsv]);
+
+  const palTickets = useMemo(() => {
+    const needle = palQ.trim().toLowerCase();
+    if (!needle) return rows.slice(0, 5);
+    return tickets.filter(t => (t.id + ' ' + t.title + ' ' + t.system).toLowerCase().includes(needle)).slice(0, 6);
+  }, [palQ, rows, tickets]);
+  const palCmds = palQ.trim() ? commands.filter(c => c.label.includes(palQ.trim())) : commands;
+  const palTotal = palTickets.length + palCmds.length;
+
+  const runPal = idx => {
+    if (idx < palTickets.length) { const t = palTickets[idx]; closePalette(); setDrawerId(t.id); return; }
+    const c = palCmds[idx - palTickets.length];
+    if (c) c.run();
+  };
+  const onPalKey = ev => {
+    if (ev.key === 'ArrowDown') { ev.preventDefault(); setPalIdx(i => (i + 1) % Math.max(1, palTotal)); }
+    if (ev.key === 'ArrowUp') { ev.preventDefault(); setPalIdx(i => (i - 1 + palTotal) % Math.max(1, palTotal)); }
+    if (ev.key === 'Enter') { ev.preventDefault(); runPal(palIdx); }
+    if (ev.key === 'Tab' && palPanel.current) {
+      const focusables = palPanel.current.querySelectorAll('input,button');
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+      else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+    }
+  };
+
+  /* 表单字段可访问名：TDesign 把 id 落在外层 wrapper，这里补到真正的输入元素上 */
+  useEffect(() => {
+    if (!creating || !formRef.current) return;
+    const t = window.setTimeout(() => {
+      formRef.current.querySelectorAll('[data-field]').forEach(box => {
+        const label = box.querySelector('label');
+        const input = box.querySelector('input, textarea');
+        if (!label || !input) return;
+        const name = label.textContent.replace('*', '').trim();
+        input.setAttribute('aria-label', name);
+        if (errs[box.getAttribute('data-field')]) {
+          input.setAttribute('aria-invalid', 'true');
+          input.setAttribute('aria-describedby', box.getAttribute('data-field') + '-err');
+        } else {
+          input.removeAttribute('aria-invalid');
+          input.removeAttribute('aria-describedby');
+        }
+      });
+    }, 60);
+    return () => window.clearTimeout(t);
+  }, [creating, errs]);
+
+  const t = tickets.find(x => x.id === drawerId) || null;
+
+  /* 表格列 */
+  const columns = useMemo(() => ([
+    {
+      colKey: 'sel', width: 36,
+      title: e('div', { className: 'cell-bool', onClick: ev => ev.stopPropagation() },
+        e(Checkbox, {
+          checked: allOnPage, indeterminate: onPage.length > 0 && !allOnPage,
+          onChange: togglePage, 'aria-label': '选择本页全部工单'
+        })),
+      cell: ({ row }) => e('div', { className: 'cell-bool', onClick: ev => ev.stopPropagation() },
+        e(Checkbox, {
+          checked: selected.includes(row.id), onChange: () => toggleRow(row.id),
+          'aria-label': '选择 ' + row.id
+        }))
+    },
+    { colKey: 'id', title: '单号', width: 116, fixed: 'left', cell: ({ row }) => e('span', { className: 'cell-id' }, row.id) },
+    {
+      colKey: 'title', title: '标题', width: 250, ellipsis: true,
+      cell: ({ row }) => e('span', { className: 'cell-ttl', title: row.title }, row.title)
+    },
+    { colKey: 'system', title: '设备 / 系统', width: 150, ellipsis: true, cell: ({ row }) => e('span', { className: 'muted cell-ttl' }, row.system) },
+    { colKey: 'dept', title: '部门', width: 72, cell: ({ row }) => e('span', { className: 'muted' }, row.dept) },
+    { colKey: 'requester', title: '请求人', width: 68, cell: ({ row }) => e('span', {}, row.requester) },
+    { colKey: 'status', title: '状态', width: 82, cell: ({ row }) => e(StatusTag, { s: row.status }) },
+    { colKey: 'prio', title: '优先级', width: 80, cell: ({ row }) => e(PrioTag, { p: row.prio }) },
+    { colKey: 'assignee', title: '处理人', width: 66, cell: ({ row }) => e('span', { className: row.assignee === '—' ? 'muted' : '' }, row.assignee) },
+    { colKey: 'wait', title: '等待时长', width: 100, align: 'right', cell: ({ row }) => e('span', { className: 'cell-num' }, fmtWait(row.wait)) },
+    { colKey: 'updated', title: '更新时间', width: 96, align: 'right', cell: ({ row }) => e('span', { className: 'cell-time' }, shortTime(row.updated)) },
+    {
+      colKey: 'act', title: '操作', width: 104,
+      cell: ({ row }) => e('div', { className: 'cell-acts', onClick: ev => ev.stopPropagation() },
+        e(Button, { size: 'small', variant: 'text', theme: 'primary', onClick: () => setDrawerId(row.id) }, '详情'),
+        row.status === 'new' ? e(Button, { size: 'small', variant: 'text', onClick: () => claim(row) }, '认领') : null,
+        row.status === 'doing' ? e(Button, { size: 'small', variant: 'text', onClick: () => solve(row) }, '解决') : null,
+        row.status === 'resolved' ? e(Button, { size: 'small', variant: 'text', onClick: () => undo(row) }, '撤销') : null
+      )
+    }
+  ]), [allOnPage, onPage.length, selected, pageIds.join(',')]);
+
+  const emptyNode = tickets.length === 0
+    ? e('div', { className: 'empty', 'data-state': 'empty-queue' },
+        e('p', { className: 'empty__h' }, '队列里还没有工单'),
+        e('p', { className: 'empty__p' }, '新建一张工单，它会以「待处理」出现在队首。'),
+        e(Button, { theme: 'primary', onClick: openCreate }, '新建工单'))
+    : e('div', { className: 'empty', 'data-state': 'empty-filter' },
+        e('p', { className: 'empty__h' }, '没有符合条件的工单'),
+        e('p', { className: 'empty__p' }, '当前搜索词「' + (q || '—') + '」与筛选条件同时生效，换个词或清除筛选再试。'),
+        e(Button, { variant: 'outline', onClick: clearFilters }, '清除全部筛选'));
+
+  /* 面板 */
+  const palette = paletteOpen ? e('div', { className: 'cmdk', role: 'presentation' },
+    e('button', { className: 'cmdk__bd', 'aria-label': '关闭搜索面板', onClick: closePalette, tabIndex: -1 }),
+    e('div', {
+      className: 'cmdk__panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': '搜索与跳转',
+      ref: palPanel, onKeyDown: onPalKey
+    },
+      e('div', { className: 'cmdk__field' },
+        e('input', {
+          ref: palInput, value: palQ, onChange: ev => { setPalQ(ev.target.value); setPalIdx(0); },
+          placeholder: '搜单号、标题、设备，或输入动作', 'aria-label': '搜索工单或动作'
+        }),
+        e('kbd', { className: 'kbd' }, 'esc')),
+      e('div', { className: 'cmdk__list', role: 'listbox', 'aria-label': '结果' },
+        palTickets.length ? e('p', { className: 'cmdk__grp' }, '工单') : null,
+        palTickets.map((row, i) => e('button', {
+          key: row.id, className: 'cmdk__item', role: 'option',
+          'aria-selected': palIdx === i ? 'true' : 'false', 'data-active': palIdx === i,
+          onMouseEnter: () => setPalIdx(i), onClick: () => runPal(i)
+        }, e('span', { className: 'mono' }, row.id), e('span', {}, row.title), e('small', {}, STATUS[row.status].label))),
+        palCmds.length ? e('p', { className: 'cmdk__grp' }, '动作') : null,
+        palCmds.map((c, i) => {
+          const idx = palTickets.length + i;
+          return e('button', {
+            key: c.label, className: 'cmdk__item', role: 'option',
+            'aria-selected': palIdx === idx ? 'true' : 'false', 'data-active': palIdx === idx,
+            onMouseEnter: () => setPalIdx(idx), onClick: () => runPal(idx)
+          }, e('span', {}, c.label), e('small', {}, c.kind));
+        }),
+        palTotal === 0 ? e('p', { className: 'cmdk__grp' }, '没有匹配的工单或动作') : null),
+      e('div', { className: 'cmdk__foot' },
+        e('span', {}, e('kbd', { className: 'kbd' }, '↑'), ' ', e('kbd', { className: 'kbd' }, '↓'), ' 移动'),
+        e('span', {}, e('kbd', { className: 'kbd' }, '↵'), ' 打开'),
+        e('span', {}, e('kbd', { className: 'kbd' }, 'esc'), ' 关闭')))
+  ) : null;
+
+  const drawer = e(Drawer, {
+    visible: !!t, onClose: () => setDrawerId(null), size: '480px',
+    header: t ? e('div', {}, e('span', { className: 'dt__id mono' }, t.id)) : '工单详情',
+    footer: t ? e('div', { className: 'dt__acts' },
+      t.status === 'new' ? e(Button, { theme: 'primary', onClick: () => { claim(t); } }, '认领这张') : null,
+      t.status === 'doing' ? e(Button, { theme: 'primary', onClick: () => { solve(t); } }, '标记解决') : null,
+      t.status === 'resolved' ? e(Button, { variant: 'outline', onClick: () => { undo(t); } }, '撤销解决') : null,
+      e(Button, { variant: 'text', onClick: () => setDrawerId(null) }, '关闭')) : null
+  }, t ? e('div', { className: 'dt' },
+    e('div', { className: 'dt__h' }, e(StatusTag, { s: t.status }), e(PrioTag, { p: t.prio })),
+    e('h2', { className: 'dt__title' }, t.title),
+    e('dl', { className: 'dt__dl' },
+      e('div', {}, e('dt', {}, '设备 / 系统'), e('dd', {}, t.system)),
+      e('div', {}, e('dt', {}, '部门'), e('dd', {}, t.dept)),
+      e('div', {}, e('dt', {}, '请求人'), e('dd', {}, t.requester)),
+      e('div', {}, e('dt', {}, '处理人'), e('dd', {}, t.assignee)),
+      e('div', {}, e('dt', {}, '等待时长'), e('dd', { className: 'cell-num' }, fmtWait(t.wait))),
+      e('div', {}, e('dt', {}, '更新时间'), e('dd', { className: 'mono' }, t.updated))),
+    e('div', { className: 'dt__sec' }, e('h3', {}, '现象与影响'), e('p', { className: 'dt__p' }, t.desc)),
+    e('div', { className: 'dt__sec' }, e('h3', {}, '处理记录'),
+      e('ul', { className: 'log' },
+        e('li', {}, e('time', {}, addMin(t.updated, -(t.wait || 90))), e('span', {}, '提交工单 · ' + t.requester)),
+        t.assignee !== '—' ? e('li', {}, e('time', {}, t.updated), e('span', {}, '受理 · ' + t.assignee)) : null,
+        e('li', {}, e('time', {}, t.updated), e('span', {}, '当前状态 ' + STATUS[t.status].label)))))
+    : null);
+
+  const dialog = e(Dialog, {
+    visible: creating, header: '新建工单', width: 560, onClose: () => setCreating(false),
+    footer: e('div', { className: 'dlgfoot' },
+      e(Button, { variant: 'outline', onClick: () => setCreating(false) }, '取消'),
+      e(Button, { theme: 'primary', onClick: submit }, '提交工单'))
+  },
+    e('div', { className: 'form', ref: formRef },
+      tried && Object.keys(errs).length
+        ? e('p', { className: 'form__sum', role: 'alert' }, '还有 ' + Object.keys(errs).length + ' 项需要修正才能提交。')
+        : null,
+      e('div', { className: 'field', 'data-field': 'title' },
+        e('label', { className: 'fieldlabel' }, '标题', e('span', { className: 'form__req', 'aria-hidden': 'true' }, '*')),
+        e(Input, { value: form.title, placeholder: '一句话写清现象，例如「3 楼东区打印机卡纸」', onChange: v => setForm({ ...form, title: v }) }),
+        errs.title ? e('span', { className: 'form__err', id: 'title-err', role: 'alert' }, errs.title) : null),
+      e('div', { className: 'field', 'data-field': 'system' },
+        e('label', { className: 'fieldlabel' }, '设备 / 系统', e('span', { className: 'form__req', 'aria-hidden': 'true' }, '*')),
+        e(Input, { value: form.system, placeholder: '例如 HP M428 · 3F', onChange: v => setForm({ ...form, system: v }) }),
+        errs.system ? e('span', { className: 'form__err', id: 'system-err', role: 'alert' }, errs.system) : null),
+      e('div', { className: 'field', 'data-field': 'requester' },
+        e('label', { className: 'fieldlabel' }, '请求人', e('span', { className: 'form__req', 'aria-hidden': 'true' }, '*')),
+        e(Input, { value: form.requester, placeholder: '报修人姓名', onChange: v => setForm({ ...form, requester: v }) }),
+        errs.requester ? e('span', { className: 'form__err', id: 'requester-err', role: 'alert' }, errs.requester) : null),
+      e('div', { className: 'field', 'data-field': 'dept' },
+        e('label', { className: 'fieldlabel' }, '部门（可选）'),
+        e(Input, { value: form.dept, placeholder: '例如 行政部', onChange: v => setForm({ ...form, dept: v }) })),
+      e('div', { className: 'field', 'data-field': 'prio' },
+        e('label', { className: 'fieldlabel' }, '优先级'),
+        e(Select, {
+          value: form.prio,
+          options: [{ value: 1, label: '紧急' }, { value: 2, label: '较高' }, { value: 3, label: '普通' }],
+          onChange: v => setForm({ ...form, prio: v })
+        })),
+      e('div', { className: 'field', 'data-field': 'desc' },
+        e('label', { className: 'fieldlabel' }, '补充说明（可选）'),
+        e(Input, { value: form.desc, placeholder: '影响范围、已尝试的处理', onChange: v => setForm({ ...form, desc: v }) }))));
+
+  /* 主体 */
+  const stats = STATUS_ORDER.map(s => e('button', {
+    key: s, className: 'stat', type: 'button',
+    'aria-pressed': statusF === s ? 'true' : 'false',
+    onClick: () => setStatusF(statusF === s ? 'all' : s)
+  },
+    e('span', { className: 'stat__n' }, counts[s]),
+    e('span', { className: 'stat__l' },
+      e('i', { className: 'swatch swatch--' + s, 'aria-hidden': 'true' }), STATUS[s].label)));
+
+  const shares = pctList(STATUS_ORDER.map(s => counts[s]));
+  const distItems = STATUS_ORDER.map((s, i) => ({ s, n: counts[s], p: shares[i] }));
+  const distLabel = '状态分布：' + distItems.map(d => STATUS[d.s].label + ' ' + d.n + ' 张 ' + d.p + '%').join('，');
+
+  const distBar = e('div', { className: 'dist__bar', role: 'img', 'aria-label': distLabel },
+    distItems.filter(d => d.n > 0).map(d => e('span', {
+      key: d.s, className: 'dist__seg',
+      style: { flex: d.n + ' 0 0', background: 'var(--seg-' + d.s + ')' }
+    })));
+
+  const distLegend = e('ul', { className: 'dist__legend' },
+    distItems.map(d => e('li', { key: d.s, className: 'dist__item' },
+      e('i', { className: 'swatch swatch--' + d.s, 'aria-hidden': 'true' }),
+      e('span', {}, STATUS[d.s].label), e('b', {}, d.p + '%'))));
+
+  const toolbar = e('div', { className: 'toolbar' },
+    e('div', { className: 'toolbar__search' },
+      e('label', { className: 'fieldlabel' }, '搜索'),
+      e(Input, {
+        value: q, clearable: true, placeholder: '单号、标题、设备、请求人',
+        onChange: v => setQ(v), 'aria-label': '搜索工单'
+      })),
+    e('div', {},
+      e('label', { className: 'fieldlabel' }, '状态'),
+      e(Select, {
+        value: statusF, onChange: v => setStatusF(v), 'aria-label': '按状态筛选',
+        options: [{ value: 'all', label: '全部状态' }].concat(STATUS_ORDER.map(s => ({ value: s, label: STATUS[s].label })))
+      })),
+    e('div', {},
+      e('label', { className: 'fieldlabel' }, '优先级'),
+      e(Select, {
+        value: prioF, onChange: v => setPrioF(v), 'aria-label': '按优先级筛选',
+        options: [{ value: 'all', label: '全部优先级' }].concat([1, 2, 3].map(p => ({ value: String(p), label: PRIO[p] })))
+      })),
+    e('div', {},
+      e('label', { className: 'fieldlabel' }, '排序'),
+      e(Select, { value: sortKey, onChange: v => setSortKey(v), 'aria-label': '排序方式', options: SORTS })),
+    e('div', {},
+      e('label', { className: 'fieldlabel' }, '每页'),
+      e(Select, {
+        value: pageSize, onChange: v => setPageSize(v), 'aria-label': '每页条数',
+        options: [12, 20, 40].map(n => ({ value: n, label: n + ' 张' }))
+      })),
+    e('div', { className: 'toolbar__tail' },
+      e(Button, { variant: 'text', onClick: clearFilters, disabled: q === '' && statusF === 'all' && prioF === 'all' }, '重置'),
+      e(Button, { variant: 'outline', onClick: exportCsv }, '导出 CSV')));
+
+  const selbar = selected.length ? e('div', { className: 'selbar', role: 'status' },
+    e('span', {}, '已选 ', e('b', {}, selected.length), ' 张'),
+    e(Button, { size: 'small', theme: 'primary', onClick: claimBatch }, '批量认领'),
+    e('span', { className: 'grow' }),
+    e(Button, { size: 'small', variant: 'text', onClick: () => setSelected([]) }, '清除选择')) : null;
+
+  const loading = booting ? e('div', { className: 'skel', 'data-state': 'loading', 'aria-busy': 'true' },
+    e('p', { className: 'skel__lead' }, '正在读取工单队列…'),
+    Array.from({ length: 7 }).map((_, i) => e('div', { key: i, className: 'skel__row' },
+      e('span', { className: 'skel__band skel__band--s' }),
+      e('span', { className: 'skel__band ' + (i % 2 ? 'skel__band--m' : '') }),
+      e('span', { className: 'skel__band' })))) : null;
+
+  const cards = e('ul', { className: 'cards', 'aria-label': '工单列表' },
+    pageRows.map(row => e('li', { key: row.id, className: 'card', 'data-status': row.status },
+      e('div', { className: 'card__top' },
+        e(Checkbox, {
+          checked: selected.includes(row.id), onChange: () => toggleRow(row.id),
+          'aria-label': '选择 ' + row.id
+        }),
+        e('span', { className: 'card__id mono' }, row.id),
+        e(StatusTag, { s: row.status }),
+        e(PrioTag, { p: row.prio })),
+      e('h3', { className: 'card__t' }, row.title),
+      e('dl', { className: 'card__meta' },
+        e('div', {}, e('dt', {}, '设备'), e('dd', {}, row.system)),
+        e('div', {}, e('dt', {}, '部门'), e('dd', {}, row.dept)),
+        e('div', {}, e('dt', {}, '请求人'), e('dd', {}, row.requester)),
+        e('div', {}, e('dt', {}, '处理人'), e('dd', {}, row.assignee))),
+      e('div', { className: 'card__foot' },
+        e('span', {}, '等待 ' + fmtWait(row.wait)),
+        e('span', { className: 'mono' }, shortTime(row.updated)),
+        e('div', { className: 'card__acts' },
+          e(Button, { size: 'small', variant: 'text', theme: 'primary', onClick: () => setDrawerId(row.id) }, '详情'),
+          row.status === 'new' ? e(Button, { size: 'small', variant: 'text', onClick: () => claim(row) }, '认领') : null,
+          row.status === 'doing' ? e(Button, { size: 'small', variant: 'text', onClick: () => solve(row) }, '解决') : null,
+          row.status === 'resolved' ? e(Button, { size: 'small', variant: 'text', onClick: () => undo(row) }, '撤销') : null)))));
+
+  const nav = e('header', { className: 'nav' },
+    e('div', { className: 'wrap nav__in' },
+      e('a', { className: 'brand', href: '#top' },
+        e('span', { className: 'brand__mark' }, 'FixQueue'),
+        e('span', { className: 'brand__q' }, '一线台账')),
+      e('div', { className: 'duty' },
+        e('i', { className: 'duty__dot', 'aria-hidden': 'true' }),
+        e('span', {}, '值班主管 ', e('b', {}, '陈亦然')),
+        e('span', { className: 'duty__sep', 'aria-hidden': 'true' }, '/'),
+        e('span', {}, '08:00–20:00'),
+        e('span', { className: 'duty__sep', 'aria-hidden': 'true' }, '/'),
+        e('span', {}, '一线 3 人 · 在线 2')),
+      e('span', { className: 'nav__spacer' }),
+      e('button', { className: 'searchpill', type: 'button', ref: pillRef, onClick: openPalette, 'aria-label': '搜索，快捷键 Command K' },
+        e('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, 'aria-hidden': 'true' },
+          e('circle', { cx: 11, cy: 11, r: 7 }), e('path', { d: 'M20 20l-3.5-3.5' })),
+        e('span', { className: 'searchpill__txt' }, '跳转工单或执行动作'),
+        e('span', { className: 'kbd' }, '⌘K')),
+      e('button', { className: 'iconbtn', type: 'button', onClick: openPalette, 'aria-label': '搜索，快捷键 Command K' },
+        e('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, 'aria-hidden': 'true' },
+          e('circle', { cx: 11, cy: 11, r: 7 }), e('path', { d: 'M20 20l-3.5-3.5' }))),
+      e(Button, { className: 'nav__new', theme: 'primary', onClick: openCreate }, '新建工单')));
+
+  const hero = e('section', { className: 'hero', 'aria-labelledby': 'hero-h' },
+    e('h1', { className: 'hero__h', id: 'hero-h' },
+      e('span', { className: 'hero__figure' }, unassigned),
+      e('span', { className: 'hero__words' }, '张无人认领，最长一条等了 ',
+        e('span', { className: 'nowrap' }, fmtWait(unassignedMax)))),
+    e('p', { className: 'hero__note' },
+      '队列共 ' + tickets.length + ' 张，待处理 ' + counts.new + ' 张（' + unassigned + ' 张未认领），处理中 ' + counts.doing +
+      ' 张。演示数据，刷新回初始。'),
+    e('div', { className: 'stats', role: 'group', 'aria-label': '按状态筛选' }, stats),
+    e('div', { className: 'dist' }, distBar, distLegend));
+
+  const ledger = e('section', { className: 'ledger', id: 'ledger', 'aria-labelledby': 'ledger-h' },
+    e('div', { className: 'ledger__head' },
+      e('h2', { className: 'ledger__t', id: 'ledger-h' }, '工单队列'),
+      e('span', { className: 'ledger__n' }, '共 ' + rows.length + ' 张 · 第 ' + safePage + ' / ' + pages + ' 页'),
+      e('span', { className: 'ledger__hint' }, narrow ? '点开卡片右上角按钮处理' : '点任意行打开详情')),
+    toolbar,
+    selbar,
+    scrollHint ? e('p', { className: 'tblnote' }, '表格最窄 1080px：窗口更窄时左右滚动查看，单号列固定在左侧。') : null,
+    loading || (narrow ? (pageRows.length ? cards : emptyNode) : e(Table, {
+      className: 't-ledger', columns, data: pageRows, rowKey: 'id',
+      hover: true, size: 'small', tableLayout: 'fixed', disableDataPage: true,
+      empty: emptyNode,
+      rowClassName: params => params.row.status === 'closed' ? 'is-closed' : '',
+      onRowClick: params => setDrawerId(params.row.id)
+    })),
+    e('div', { className: 'ledger__foot' },
+      e('span', { className: 'ledger__count' },
+        rows.length
+          ? '显示 ' + ((safePage - 1) * pageSize + 1) + ' - ' + Math.min(safePage * pageSize, rows.length) + ' 张，共 ' + rows.length + ' 张'
+          : '没有可显示的工单'),
+      e('span', { className: 'grow' }),
+      e(Pagination, {
+        total: rows.length, current: safePage, pageSize, showJumper: !narrow,
+        pageSizeOptions: [12, 20, 40],
+        onChange: info => {
+          setPage(info.current);
+          if (info.pageSize !== pageSize) { setPageSize(info.pageSize); setPage(1); }
+        }
+      })));
+
+  const foot = e('footer', { className: 'foot' },
+    e('div', { className: 'wrap' },
+      e('p', {},
+        'FixQueue · 演示数据，不连后端，刷新即回初始',
+        e('span', {}, '·'), 'tdesign-react 1.18.6 / React 18.3.1',
+        e('span', {}, '·'), '基准规范 TDesign · Stat-Led / N13 / Ft2',
+        e('span', {}, '·'), '2026-11-14')));
+
+  return e(React.Fragment, null,
+    e('a', { className: 'skip', href: '#ledger' }, '跳到工单台账'),
+    nav,
+    e('main', { id: 'top' }, e('div', { className: 'wrap' }, hero, ledger)),
+    foot,
+    e('p', { className: 'sr-only', role: 'status', 'aria-live': 'polite' }, announce),
+    drawer, dialog, palette);
+}
+
+createRoot(document.getElementById('app')).render(e(App));
+</script>
+</body>
+</html>

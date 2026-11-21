@@ -1,0 +1,7 @@
+{
+  "name": "ClinicDesk",
+  "tagline": "社区医院在线预约挂号台：Fluent 2 品牌蓝、6 科室 12 医生排班与右栏可取消二维码凭条",
+  "accent": "Fluent Brand #0f6cbd",
+  "structure": "Fluent 2 + Detail Split · N6 居中报头 + #ebf3fc 品牌浅蓝底 + 右栏 360px 粘性存根 + Ft6 落款页脚",
+  "layout": "Microsoft Fluent 2 project-fluent-2（N6 居中报头、#ebf3fc 浅蓝底、6 科室矩阵、未来 7 天 08:00 放号日期条、12 位医生出诊表与 ¥10/¥30/¥20 分档、30 分钟时段号源格、家人管理、右侧粘性存根与 Ft6 落款页脚）"
+}

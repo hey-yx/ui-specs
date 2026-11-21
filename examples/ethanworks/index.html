@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="frame" content="nav=N5; footer=Ft5; base=#ffffff">
+<meta name="description" content="EthanWorks 林深个人工作室：8 年前端架构与设计系统交付经验，6 个已验收项目复盘、12 篇工程技术文章、合作模式与档期联系。">
+<title>EthanWorks · 林深 - 前端架构与设计系统独立交付</title>
+<style>
+/* 数值来源：project-tdesign（Purple7 单色相扩展 + 协作工作台落地页骨架）
+ * 色彩：content/color/tdesign.tencent.com--color.md (White #ffffff, Gray1 #f3f3f3, Gray2 #eeeeee, Gray3 #e8e8e8, Gray5 #c6c6c6, Gray8 #777777, Gray9 #5e5e5e, Gray14 #181818, Purple1 #fbf0ff, Purple2 #eedcff, Purple3 #dcbfff, Purple6 #8e56dd, Purple7 #7137bf, Purple8 #5610a4, Green7 #006c45, Green1 #e3f9e9, Red6 #d54941, Red7 #ad352f, Red1 #fff0ed)
+ * 字阶与行高：content/type/tdesign.tencent.com--fonts.md (12/14/16/20/24/28/36/48/64, line-height = font-size + 8, 400/600 两档字重)
+ * 零描边层次靠白纸 / Gray1 浅灰 / Purple1 浅紫 + 柔和阴影
+ */
+:root {
+  --white: #ffffff;
+  --gray1: #f3f3f3;
+  --gray2: #eeeeee;
+  --gray3: #e8e8e8;
+  --gray4: #dddddd;
+  --gray5: #c6c6c6;
+  --gray7: #8b8b8b;
+  --gray8: #777777;
+  --gray9: #5e5e5e;
+  --gray14: #181818;
+  --purple1: #fbf0ff;
+  --purple2: #eedcff;
+  --purple3: #dcbfff;
+  --purple5: #ad75fe;
+  --purple6: #8e56dd;
+  --purple7: #7137bf;
+  --purple8: #5610a4;
+  --green1: #e3f9e9;
+  --green5: #2ba471;
+  --green6: #008858;
+  --green7: #006c45;
+  --red6: #d54941;
+  --red7: #ad352f;
+  --red1: #fff0ed;
+  --ink: rgba(0, 0, 0, 0.9);
+  --ink2: #5e5e5e;
+  --fs-12: 12px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+  --fs-36: 36px;
+  --fs-48: 48px;
+  --fs-64: 64px;
+  --lh: calc(1em + 8px);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", "Source Han Sans CN", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --r-8: 8px;
+  --r-12: 12px;
+  --r-16: 16px;
+  --r-pill: 999px;
+  --dur: 200ms;
+  --ease: cubic-bezier(0.38, 0, 0.24, 1);
+  --shadow-panel: 0 24px 60px -32px rgba(0, 0, 0, 0.24), 0 2px 10px -4px rgba(0, 0, 0, 0.08);
+  --shadow-pill: 0 10px 30px -18px rgba(0, 0, 0, 0.32);
+  --shadow-modal: 0 24px 56px rgba(0, 0, 0, 0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--fs-16);
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, dl, figure { margin: 0; }
+h1, h2, h3, h4, p, li, dt, dd, figcaption, label, span, div { line-height: calc(1em + 8px); }
+h1, h2, h3 { letter-spacing: -0.02em; font-weight: 600; }
+ul { padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+a { color: var(--purple7); text-decoration: none; }
+:focus-visible { outline: 2px solid var(--purple7); outline-offset: 2px; border-radius: 4px; }
+
+.wrap { width: min(1140px, 100% - 48px); margin-inline: auto; }
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--white); color: var(--ink);
+  padding: 12px 16px; z-index: 100; border-radius: 8px; font-weight: 600;
+}
+.skip:focus { left: 16px; top: 16px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}
+
+/* N5 悬浮毛玻璃胶囊导航 */
+.nav {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 50;
+  display: flex; align-items: center; gap: var(--sp-5);
+  padding: 6px 8px 6px 16px; border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: var(--shadow-pill), inset 0 0 0 1px var(--gray3);
+  max-width: calc(100% - 24px);
+}
+.nav__brand {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--ink); font-weight: 600; font-size: var(--fs-16); white-space: nowrap;
+  min-height: 36px;
+}
+.nav__mark { width: 22px; height: 22px; flex: none; }
+.nav__links { display: flex; gap: var(--sp-4); }
+.nav__links a {
+  color: var(--ink2); font-size: var(--fs-14);
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 4px; white-space: nowrap;
+}
+.nav__status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--fs-12); color: var(--green7); background: var(--green1);
+  padding: 4px 10px; border-radius: var(--r-pill); font-weight: 600; white-space: nowrap;
+}
+.nav__status i { width: 6px; height: 6px; border-radius: 50%; background: var(--green6); display: inline-block; }
+.nav__cta { min-height: 40px !important; padding: 0 16px !important; font-size: var(--fs-14) !important; }
+.nav__menu {
+  display: none; flex: none; width: 44px; height: 44px; border: 0;
+  border-radius: var(--r-pill); background: var(--gray1); cursor: pointer;
+  align-items: center; justify-content: center;
+}
+.nav__menu span { display: block; width: 16px; height: 2px; background: var(--ink); position: relative; }
+.nav__menu span::before, .nav__menu span::after {
+  content: ""; position: absolute; left: 0; width: 16px; height: 2px; background: var(--ink);
+}
+.nav__menu span::before { top: -5px; }
+.nav__menu span::after { top: 5px; }
+.nav__panel {
+  position: fixed; top: 76px; left: 50%; transform: translateX(-50%); z-index: 49;
+  width: min(360px, calc(100% - 32px));
+  background: var(--white); border-radius: var(--r-16);
+  box-shadow: var(--shadow-panel); padding: 8px;
+}
+.nav__panel a {
+  display: flex; align-items: center; padding: 0 14px;
+  border-radius: var(--r-8); color: var(--ink); font-size: var(--fs-16); min-height: 44px;
+}
+
+/* 按钮 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 22px; border: 0; border-radius: var(--r-pill);
+  font-size: var(--fs-14); font-weight: 600; line-height: 22px;
+  cursor: pointer; white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.btn--primary { background: var(--purple7); color: var(--white); }
+.btn--primary:active { background: var(--purple8); transform: translateY(1px); }
+.btn--quiet { background: var(--gray1); color: var(--ink); }
+.btn--quiet:active { background: var(--gray3); transform: translateY(1px); }
+.btn--outline { background: var(--white); color: var(--ink); box-shadow: inset 0 0 0 1px var(--gray5); }
+.btn--outline:active { background: var(--gray2); transform: translateY(1px); }
+.btn:disabled { background: var(--gray2); color: var(--gray9); cursor: not-allowed; transform: none; box-shadow: none; }
+.btn--sm { min-height: 36px; padding: 0 14px; font-size: var(--fs-14); }
+
+/* Hero */
+.hero { padding: 124px 0 0; position: relative; }
+.hero__display {
+  font-size: clamp(36px, 5.2vw, 64px);
+  letter-spacing: -0.03em;
+  max-width: 14em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--sp-12);
+  align-items: start;
+  margin-top: var(--sp-6);
+}
+.hero__sub { font-size: var(--fs-16); color: var(--ink2); max-width: 40em; }
+.hero__actions { display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap; margin-top: var(--sp-6); }
+.hero__note { font-size: var(--fs-14); color: var(--ink2); margin-top: var(--sp-3); }
+.hero__facts { margin: 0; border-top: 1px solid var(--gray3); }
+.hero__facts div { display: flex; gap: var(--sp-4); align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--gray3); }
+.hero__facts dt { flex: none; width: 82px; font-size: var(--fs-12); color: var(--ink2); }
+.hero__facts dd { margin: 0; font-size: var(--fs-14); color: var(--gray14); font-weight: 600; }
+
+/* 首屏无假浏览器框三栏项目复盘工作台 */
+.hero__figure { margin-top: var(--sp-10); position: relative; }
+.hero__figure::before {
+  content: ""; position: absolute; inset: 10% 3% -4% 3%;
+  background: var(--purple1); border-radius: var(--r-16); z-index: 0;
+}
+.mock {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 248px minmax(0, 1fr) 256px;
+  background: var(--white); border-radius: var(--r-16);
+  box-shadow: var(--shadow-panel); overflow: hidden; min-height: 440px;
+}
+.mock__side {
+  background: var(--gray1); padding: 18px 14px;
+  display: flex; flex-direction: column; gap: 10px; font-size: var(--fs-12);
+}
+.mock__brand { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: var(--fs-14); font-weight: 600; color: var(--ink); }
+.mock__search {
+  width: 100%; border: 0; border-radius: var(--r-8); background: var(--white);
+  padding: 7px 10px; font-size: var(--fs-12); color: var(--ink);
+  min-height: 36px;
+}
+.mock__search::placeholder { color: var(--gray9); }
+.mock__group { color: var(--ink2); font-size: var(--fs-12); padding: 2px 4px; font-weight: 600; }
+.mock__docs { display: grid; gap: 4px; }
+.mock__doc {
+  width: 100%; text-align: left; border: 0; background: transparent;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px;
+  padding: 6px 10px; border-radius: var(--r-8); color: var(--gray14);
+  font-size: var(--fs-12); cursor: pointer; overflow-wrap: anywhere;
+}
+.mock__doc[aria-current="true"] { background: var(--purple1); color: var(--purple7); font-weight: 600; }
+.mock__doc-tag {
+  font-size: 12px; color: var(--ink2); flex: none;
+}
+.mock__doc[aria-current="true"] .mock__doc-tag { color: var(--purple7); }
+.mock__empty-side { padding: 14px 8px; color: var(--gray9); font-size: var(--fs-12); }
+.mock__empty-side button {
+  margin-top: 8px; border: 0; background: var(--white); color: var(--purple7);
+  padding: 6px 12px; min-height: 32px; border-radius: 6px; font-size: var(--fs-12); font-weight: 600; cursor: pointer;
+}
+.mock__people {
+  margin-top: auto; display: flex; align-items: center; gap: 8px;
+  color: var(--ink2); padding-top: 10px; border-top: 1px solid var(--gray3);
+}
+.mock__av {
+  width: 24px; height: 24px; border-radius: 50%; font-size: 12px; color: var(--white);
+  display: grid; place-items: center; font-weight: 600; flex: none;
+}
+
+.mock__main { padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.mock__crumb { font-size: var(--fs-12); color: var(--ink2); }
+.mock__title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.mock__title { font-size: var(--fs-20); font-weight: 600; letter-spacing: -0.01em; color: var(--ink); outline: none; }
+.mock__metric-pill {
+  background: var(--green1); color: var(--green7); font-weight: 600;
+  font-size: var(--fs-12); padding: 3px 10px; border-radius: var(--r-pill);
+}
+.mock__meta { font-size: var(--fs-12); color: var(--ink2); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mock__p { font-size: var(--fs-14); color: var(--gray14); }
+.mock__bench {
+  background: var(--gray1); border-radius: var(--r-8); padding: 14px 16px;
+}
+.mock__bench-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: var(--fs-12); color: var(--ink2); margin-bottom: 8px;
+}
+.mock__bench svg { width: 100%; height: auto; }
+.mock__quote {
+  position: relative; background: var(--purple1); border-radius: var(--r-8);
+  padding: 12px 14px; font-size: var(--fs-14); color: var(--gray14);
+}
+.mock__who { font-size: var(--fs-12); color: var(--purple7); font-weight: 600; display: block; margin-top: 4px; }
+.mock__stack { display: flex; gap: 6px; flex-wrap: wrap; }
+.stack-pill {
+  font-size: var(--fs-12); color: var(--ink2); background: var(--gray1);
+  padding: 2px 10px; border-radius: 6px; font-family: var(--font-mono);
+}
+
+.mock__rail {
+  background: var(--white); border-left: 1px solid var(--gray3);
+  padding: 20px 16px; font-size: var(--fs-12); color: var(--gray9);
+  display: flex; flex-direction: column; gap: 12px; min-width: 0;
+}
+.mock__rail h3 { margin: 0; font-size: var(--fs-14); color: var(--ink); font-weight: 600; }
+.mock__events { display: grid; gap: 10px; }
+.mock__event { display: flex; gap: 8px; overflow-wrap: anywhere; font-size: var(--fs-12); }
+.mock__event i { width: 6px; height: 6px; border-radius: 50%; background: var(--gray5); margin-top: 7px; flex: none; }
+.mock__event.is-new i { background: var(--purple7); }
+.mock__event b { color: var(--gray14); font-weight: 600; }
+.mock__composer { margin-top: auto; display: grid; gap: 8px; padding-top: 10px; border-top: 1px solid var(--gray3); }
+.mock__input {
+  width: 100%; border: 1px solid var(--gray5); border-radius: var(--r-8);
+  padding: 8px 10px; font-size: var(--fs-12); color: var(--ink); min-height: 38px;
+}
+.mock__send {
+  border: 0; border-radius: var(--r-8); background: var(--purple7); color: var(--white);
+  min-height: 36px; font-size: var(--fs-12); font-weight: 600; cursor: pointer;
+}
+.mock__send[disabled] { opacity: 0.65; cursor: wait; }
+.mock__err {
+  background: var(--red1); color: var(--red7); border-radius: var(--r-8);
+  padding: 8px 10px; font-size: var(--fs-12);
+}
+.mock__retry {
+  margin-top: 4px; border: 0; background: transparent; color: var(--red7);
+  text-decoration: underline; padding: 0; font-size: var(--fs-12); font-weight: 600; cursor: pointer; min-height: 24px;
+}
+
+/* 客户评价带 */
+.logos {
+  background: var(--purple1); padding: var(--sp-5) 0;
+  margin-top: var(--sp-16);
+}
+.logos__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px 24px;
+}
+.logos__label { font-size: var(--fs-14); color: var(--ink2); font-weight: 600; }
+.logos__list { display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.logos__list li { font-size: var(--fs-14); font-weight: 600; color: var(--gray14); }
+
+/* 通用区块 */
+.section { padding: var(--sp-16) 0; }
+.sec-head { max-width: 44em; margin-bottom: var(--sp-8); }
+.sec-head h2 { font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.025em; }
+.sec-head p { margin-top: var(--sp-2); color: var(--ink2); font-size: var(--fs-16); max-width: 40em; }
+
+/* Bento 工程能力与服务边界卡 (纯白压 Gray1 浅灰，零框线) */
+.bento-sec { background: var(--gray1); }
+.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--sp-4); }
+.tile {
+  background: var(--white); border-radius: var(--r-16);
+  padding: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-3);
+  min-width: 0; overflow: hidden;
+}
+.tile--a { grid-column: span 4; }
+.tile--b { grid-column: span 2; }
+.tile--c { grid-column: span 2; }
+.tile--d { grid-column: span 2; }
+.tile--e { grid-column: span 2; }
+.tile h3 { font-size: var(--fs-20); color: var(--ink); }
+.tile p { color: var(--ink2); font-size: var(--fs-14); }
+.tile__art { margin-top: auto; padding-top: var(--sp-2); }
+.scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); margin-top: var(--sp-2); }
+.scope-col { background: var(--gray1); border-radius: var(--r-8); padding: var(--sp-3); }
+.scope-col--no { background: var(--red1); }
+.scope-col h4 { margin: 0 0 6px; font-size: var(--fs-12); font-weight: 600; color: var(--green7); }
+.scope-col--no h4 { color: var(--red7); }
+.scope-col li { font-size: var(--fs-12); color: var(--ink); padding: 2px 0; }
+
+/* 12 篇技术文章索引 */
+.articles-sec { background: var(--white); }
+.art-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3); flex-wrap: wrap; margin-bottom: var(--sp-6);
+}
+.chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.chip {
+  min-height: 36px; padding: 0 14px; border: 0; border-radius: var(--r-pill);
+  background: var(--gray1); color: var(--ink); font-size: var(--fs-14); cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--purple7); color: var(--white); font-weight: 600; }
+.art-list { border-top: 1px solid var(--gray3); }
+.art-row {
+  display: grid; grid-template-columns: 100px minmax(0, 1fr) auto;
+  align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4) 0; border-bottom: 1px solid var(--gray3);
+}
+.art-date { font-size: var(--fs-12); font-family: var(--font-mono); color: var(--ink2); }
+.art-title { font-size: var(--fs-16); font-weight: 600; color: var(--ink); }
+.art-sum { margin-top: 2px; font-size: var(--fs-14); color: var(--ink2); }
+.art-meta { display: flex; align-items: center; gap: var(--sp-2); }
+.art-cat {
+  font-size: var(--fs-12); background: var(--purple1); color: var(--purple7);
+  padding: 2px 10px; border-radius: var(--r-pill); font-weight: 600; white-space: nowrap;
+}
+
+/* 合作方案与定价 */
+.pricing { background: var(--gray1); }
+.pricing__head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: var(--sp-6); flex-wrap: wrap; margin-bottom: var(--sp-8);
+}
+.seg {
+  display: inline-flex; background: var(--white);
+  border-radius: var(--r-pill); padding: 4px;
+}
+.seg button {
+  min-height: 40px; padding: 0 18px; border: 0; border-radius: var(--r-pill);
+  background: transparent; color: var(--ink2); font-size: var(--fs-14); font-weight: 600; cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--purple7); color: var(--white); }
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); align-items: stretch; }
+.plan {
+  background: var(--white); border-radius: var(--r-16);
+  padding: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0;
+}
+.plan--pick { background: var(--purple1); }
+.plan__flag {
+  font-size: var(--fs-12); color: var(--purple7); font-weight: 600;
+  display: flex; align-items: center; gap: 6px; min-height: 20px;
+}
+.plan--pick .plan__flag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--purple7); }
+.plan h3 { font-size: var(--fs-20); }
+.plan__lede { font-size: var(--fs-14); color: var(--ink2); }
+.plan__price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.plan__num { font-size: var(--fs-36); font-weight: 600; letter-spacing: -0.02em; }
+.plan__cur { font-size: var(--fs-20); font-weight: 600; }
+.plan__per { font-size: var(--fs-14); color: var(--ink2); }
+.plan__note { font-size: var(--fs-14); color: var(--ink2); min-height: 24px; }
+.plan__note--save { color: var(--green7); font-weight: 600; }
+.plan ul { display: flex; flex-direction: column; gap: 10px; font-size: var(--fs-14); color: var(--gray14); margin: var(--sp-2) 0 var(--sp-4); }
+.plan li { display: flex; gap: 10px; align-items: flex-start; }
+.plan li svg { flex: none; margin-top: 3px; }
+.plan .btn { margin-top: auto; width: 100%; }
+
+/* 档期与联系方式 CTA */
+.cta { background: var(--purple1); padding: var(--sp-16) 0; }
+.cta__box { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); gap: var(--sp-10); align-items: start; }
+.cta h2 { font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.025em; }
+.cta p { color: var(--ink2); margin-top: var(--sp-2); max-width: 34em; }
+.contact-cards { margin-top: var(--sp-6); display: grid; gap: var(--sp-2); }
+.contact-item {
+  background: var(--white); border-radius: var(--r-8); padding: 12px 14px;
+  display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); font-size: var(--fs-14);
+}
+.contact-k { color: var(--ink2); }
+.contact-v { font-family: var(--font-mono); font-weight: 600; color: var(--ink); }
+.form { background: var(--white); border-radius: var(--r-16); padding: var(--sp-6); }
+.form label { display: block; font-size: var(--fs-14); color: var(--ink); font-weight: 600; margin-bottom: 6px; }
+.form__field { margin-bottom: var(--sp-4); }
+.form input, .form select, .form textarea {
+  width: 100%; padding: 10px 14px;
+  border-radius: var(--r-8); border: 1px solid var(--gray5); background: var(--white);
+  color: var(--ink); font-size: var(--fs-14);
+}
+.form input, .form select { min-height: 44px; }
+.form textarea { min-height: 88px; resize: vertical; }
+.form input[aria-invalid="true"] { border-color: var(--red6); }
+.form__msg { font-size: var(--fs-14); margin-top: 10px; min-height: 22px; }
+.form__msg--err { color: var(--red7); }
+.form__msg--ok { color: var(--green7); font-weight: 600; }
+
+/* Ft5 收束宣言页脚：一句大字收尾 + 下方词标、链接列与版权 */
+.foot-stmt { background: var(--white); border-top: 1px solid var(--gray3); padding: var(--sp-16) 0 var(--sp-10); }
+.foot-stmt__line {
+  font-size: clamp(24px, 3.8vw, 36px); line-height: 1.25; letter-spacing: -0.02em; font-weight: 600;
+  color: var(--ink); max-width: 28ch; margin: 0 0 var(--sp-8);
+}
+.foot-stmt__meta {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--sp-6); flex-wrap: wrap;
+  padding-top: var(--sp-5); border-top: 1px solid var(--gray3);
+}
+.foot-stmt__brand { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-16); font-weight: 600; color: var(--ink); }
+.foot-stmt__links { display: flex; gap: var(--sp-5); flex-wrap: wrap; }
+.foot-stmt__links a { display: inline-flex; align-items: center; color: var(--gray9); font-size: var(--fs-14); min-height: 32px; }
+.foot-stmt__base {
+  display: flex; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap;
+  margin-top: var(--sp-4); font-size: var(--fs-12); line-height: 20px; color: var(--ink2);
+}
+
+/* 文章阅读抽屉 / 弹窗 */
+.backdrop {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex; align-items: center; justify-content: center; padding: var(--sp-4);
+}
+.dialog {
+  background: var(--white); border-radius: var(--r-16);
+  box-shadow: var(--shadow-modal); width: min(680px, 100%);
+  max-height: 86vh; overflow-y: auto; padding: var(--sp-6);
+}
+.dialog-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4);
+  padding-bottom: var(--sp-4); border-bottom: 1px solid var(--gray3);
+}
+.dialog-title { font-size: var(--fs-20); font-weight: 600; color: var(--ink); }
+.dialog-sub { margin-top: 4px; font-size: var(--fs-12); color: var(--ink2); }
+.dialog-body { padding-top: var(--sp-4); display: grid; gap: var(--sp-3); font-size: var(--fs-14); color: var(--gray14); }
+.code-snippet {
+  background: var(--gray1); border-radius: var(--r-8); padding: var(--sp-4);
+  font-family: var(--font-mono); font-size: var(--fs-12); line-height: 20px; overflow-x: auto;
+}
+
+@media (hover: hover) {
+  a:hover { color: var(--purple7); text-decoration: underline; text-underline-offset: 3px; }
+  .nav__brand:hover { text-decoration: none; color: var(--ink); }
+  .nav__links a:hover { color: var(--ink); text-decoration: none; }
+  .nav__panel a:hover { background: var(--gray1); text-decoration: none; }
+  .btn--primary:hover { background: var(--purple8); color: var(--white); text-decoration: none; }
+  .btn--quiet:hover { background: var(--gray2); color: var(--ink); text-decoration: none; }
+  .btn--outline:hover { background: var(--gray1); color: var(--ink); text-decoration: none; }
+  .mock__doc:hover { background: var(--gray2); }
+  .mock__doc[aria-current="true"]:hover { background: var(--purple1); }
+  .seg button:hover { color: var(--ink); }
+  .foot-stmt__links a:hover { color: var(--ink); }
+}
+
+@media (max-width: 1024px) {
+  .mock { grid-template-columns: 204px minmax(0, 1fr); }
+  .mock__rail { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--gray3); }
+  .hero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-8); }
+}
+
+@media (max-width: 900px) {
+  .nav__links, .nav__status { display: none; }
+  .nav__menu { display: flex; }
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile--a, .tile--b, .tile--c, .tile--d, .tile--e { grid-column: span 2; }
+  .plans { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+  .cta__box { grid-template-columns: minmax(0, 1fr); gap: var(--sp-8); }
+}
+
+@media (max-width: 640px) {
+  .wrap { width: calc(100% - 32px); }
+  .nav { gap: 10px; padding: 6px 8px 6px 14px; }
+  .nav__cta { padding: 0 12px !important; }
+  .hero { padding-top: 96px; }
+  .hero__actions .btn { flex: 1 1 100%; }
+  .section { padding: var(--sp-12) 0; }
+  .mock { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .mock__side { padding: 14px; }
+  .mock__main { padding: 18px; }
+  .scope-grid { grid-template-columns: 1fr; }
+  .art-row { grid-template-columns: 1fr; gap: 6px; }
+  .plan { padding: var(--sp-5); }
+  .foot-stmt__links a { min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<nav class="nav" aria-label="主导航">
+  <a class="brand" href="#top">
+    <svg class="nav__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="4" stroke="#7137bf" stroke-width="2"/>
+      <path d="M8 9h8M8 12.5h5M8 16h7" stroke="#5610a4" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span>EthanWorks</span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="#work">已交付项目</a></li>
+    <li><a href="#scope">工作范围</a></li>
+    <li><a href="#articles">技术文章</a></li>
+    <li><a href="#pricing">合作方式</a></li>
+  </ul>
+  <span class="nav__status"><i aria-hidden="true"></i>当前可接 1 个项目</span>
+  <a class="btn btn--primary nav__cta" href="#contact">预约排期</a>
+  <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="menuPanel" aria-label="打开菜单"><span></span></button>
+</nav>
+<div class="nav__panel" id="menuPanel" hidden>
+  <a href="#work">已交付项目</a>
+  <a href="#scope">工作范围</a>
+  <a href="#articles">技术文章</a>
+  <a href="#pricing">合作方式</a>
+  <a href="#contact">预约排期</a>
+</div>
+
+<main id="main">
+  <span id="top"></span>
+
+  <section class="hero wrap" aria-labelledby="heroTitle">
+    <h1 class="hero__display" id="heroTitle">写得清楚的前端系统，<br>长期交接不返工。</h1>
+    <div class="hero__grid">
+      <div>
+        <p class="hero__sub">林深，独立前端架构师与设计系统工程师（8 年一线交付经验）。帮产品与技术团队做组件底座、高密度工作台与性能无障碍治理，源码与规范成套移交。</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#contact">发需求看档期</a>
+          <a class="btn btn--quiet" href="#pricing">按项目 / 按月合作</a>
+        </div>
+        <p class="hero__note">不接纯视觉创意展示站与批量活动投放页；工作日 24 小时内回复（UTC+8）。</p>
+      </div>
+      <dl class="hero__facts">
+        <div><dt>从业资历</dt><dd>8 年前端架构与设计系统</dd></div>
+        <div><dt>交付沉淀</dt><dd>6 个核心项目 · 12 篇技术文章</dd></div>
+        <div><dt>当前档期</dt><dd>可接 1 个新项目（UTC+8）</dd></div>
+        <div><dt>合作方式</dt><dd>按项目固定交付 / 按月长期维护</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero__figure" id="work">
+      <div class="mock" role="region" aria-label="已交付项目复盘工作台">
+        <div class="mock__side">
+          <div class="mock__brand">
+            <span>已交付项目（6）</span>
+          </div>
+          <label class="sr-only" for="projSearch">搜索交付项目</label>
+          <input class="mock__search" id="projSearch" type="search" placeholder="搜行业、技术栈或关键词">
+          <div class="mock__group">行业与类型</div>
+          <div class="mock__docs" id="projList"></div>
+          <div class="mock__empty-side" id="projEmpty" hidden>
+            <p>没有匹配的项目复盘</p>
+            <button type="button" id="projReset">恢复全部 6 个项目</button>
+          </div>
+          <div class="mock__people">
+            <span class="mock__av" style="background:#7137bf">林</span>
+            <span>林深本人独立或主导交付</span>
+          </div>
+        </div>
+
+        <div class="mock__main">
+          <div class="mock__crumb" id="projCrumb">项目档案 / 行业与周期</div>
+          <div class="mock__title-row">
+            <h2 class="mock__title" id="projTitle" tabindex="-1">云原生 API 网关控制面</h2>
+            <span class="mock__metric-pill" id="projMetric">LCP 3.4s 降至 0.9s</span>
+          </div>
+          <div class="mock__meta" id="projMeta">角色：主架构 · 周期：10 周 · 状态：长期维护中</div>
+          <p class="mock__p" id="projDesc"></p>
+          <div class="mock__bench">
+            <div class="mock__bench-head">
+              <span id="benchLabel">交付前后实测对照（演示口径）</span>
+              <span id="benchScale">指标越低越好 / 越稳越好</span>
+            </div>
+            <svg id="benchSvg" viewBox="0 0 520 118" role="img" aria-label="项目交付前后实测对照柱图"></svg>
+          </div>
+          <div class="mock__quote">
+            <span id="projQuote"></span>
+            <span class="mock__who" id="projWho"></span>
+          </div>
+          <div class="mock__stack" id="projStack"></div>
+        </div>
+
+        <div class="mock__rail">
+          <h3>最近交付与回复记录</h3>
+          <div class="mock__events" id="eventList"></div>
+          <form class="mock__composer" id="noteForm">
+            <label class="sr-only" for="noteInput">留一句技术背景或问题</label>
+            <input class="mock__input" id="noteInput" type="text" placeholder="试记一条项目问题回车模拟留言">
+            <div class="mock__err" id="noteErr" role="alert" hidden>
+              <div>暂存失败：演示通道繁忙，请重试。</div>
+              <button class="mock__retry" id="noteRetry" type="button">重新提交</button>
+            </div>
+            <button class="mock__send" id="noteSend" type="submit">快速试留需求</button>
+          </form>
+        </div>
+      </div>
+    </figure>
+  </section>
+
+  <section class="logos" aria-label="合作团队行业分布">
+    <div class="wrap logos__inner">
+      <p class="logos__label">近三年服务产品与技术团队所在领域</p>
+      <ul class="logos__list">
+        <li>云原生基础设施</li>
+        <li>跨境清结算系统</li>
+        <li>工业物联网巡检</li>
+        <li>开发者 SaaS 控制台</li>
+        <li>SaaS 设计系统底座</li>
+        <li>数字医疗文档台</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bento-sec" id="scope" aria-labelledby="bentoTitle">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="bentoTitle">五项核心工程能力，与清楚的接活边界</h2>
+        <p>把钱花在架构、设计系统、状态交互、性能与无障碍上；明确不承接的范围，避免双方耗在不对等的预期里。</p>
+      </div>
+      <div class="bento">
+        <article class="tile tile--a">
+          <h3>接与不接，先写在合同前面</h3>
+          <p>适合研发节奏明确、需要可维护前端资产的团队，不承接只看一次效果的纯展示与投放页面。</p>
+          <div class="scope-grid">
+            <div class="scope-col">
+              <h4>可以承担的范围</h4>
+              <ul>
+                <li>1. 前端工程架构选型与微前端/Monorepo 治理</li>
+                <li>2. 多端 Design Token 与基础组件库搭建</li>
+                <li>3. 高密度数据工作台、键盘与四态完善</li>
+                <li>4. 首屏性能与包体积拆包治理、WCAG AA 达标</li>
+              </ul>
+            </div>
+            <div class="scope-col scope-col--no">
+              <h4>明确不接的类型</h4>
+              <ul>
+                <li>1. 纯视觉审美类品牌宣传页、抽奖 H5</li>
+                <li>2. 按页计价、急赶工期的批量广告投放页</li>
+                <li>3. 只出静态设计稿、不写可运行前端代码</li>
+                <li>4. 缺少真实接口定义却要求 3 天交付整站</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="tile tile--b">
+          <h3>设计系统 Token 编译管线</h3>
+          <p>从设计稿色阶与字阶自动产出 CSS 变量与 TS 类型，消灭散落硬编码。</p>
+          <div class="tile__art">
+            <svg viewBox="0 0 260 148" role="img" aria-label="Design Token 编译管线示意">
+              <rect x="8" y="14" width="244" height="32" rx="6" fill="#fbf0ff"/>
+              <text x="20" y="34" font-size="12" fill="#7137bf" font-weight="600">tokens.json (色/字阶/间距)</text>
+              <path d="M130 46v18" stroke="#8e56dd" stroke-width="2"/>
+              <rect x="34" y="64" width="192" height="30" rx="6" fill="#f3f3f3"/>
+              <text x="130" y="83" font-size="12" fill="#181818" text-anchor="middle">对比度复算 + 派生校验</text>
+              <path d="M130 94v18" stroke="#8e56dd" stroke-width="2"/>
+              <rect x="14" y="112" width="106" height="28" rx="6" fill="#e3f9e9"/>
+              <text x="67" y="130" font-size="12" fill="#006c45" text-anchor="middle" font-weight="600">CSS Vars</text>
+              <rect x="140" y="112" width="106" height="28" rx="6" fill="#e3f9e9"/>
+              <text x="193" y="130" font-size="12" fill="#006c45" text-anchor="middle" font-weight="600">React/Vue 包</text>
+            </svg>
+          </div>
+        </article>
+
+        <article class="tile tile--c">
+          <h3>高复杂状态与异步收敛</h3>
+          <p>空态、加载态、并发竞态、错误可重试与超长文本折行一次性写出测试。</p>
+        </article>
+
+        <article class="tile tile--d">
+          <h3>可访问性与键盘流</h3>
+          <p>焦点环对比、弹窗 Tab 陷阱、ARIA live 播报与 320/375px 移动端适配全检。</p>
+        </article>
+
+        <article class="tile tile--e">
+          <h3>性能拆包与长期可维护</h3>
+          <p>保留清晰模块注释、ADR 决策记录与 Playwright 回归脚本，团队接手无黑盒。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section articles-sec" id="articles" aria-labelledby="articlesTitle">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="articlesTitle">技术文章（12 篇）</h2>
+        <p>过去几年踩过的组件边界、性能拆包与设计系统工程笔记，点任一篇可直接阅读要点与代码片段。</p>
+      </div>
+      <div class="art-toolbar">
+        <div class="chips" id="artFilters" role="group" aria-label="按主题筛选文章">
+          <button class="chip" type="button" data-cat="all" aria-pressed="true">全部 (12)</button>
+          <button class="chip" type="button" data-cat="设计系统" aria-pressed="false">设计系统 (4)</button>
+          <button class="chip" type="button" data-cat="前端架构" aria-pressed="false">前端架构 (4)</button>
+          <button class="chip" type="button" data-cat="性能与无障碍" aria-pressed="false">性能与无障碍 (4)</button>
+        </div>
+      </div>
+      <ul class="art-list" id="artList"></ul>
+    </div>
+  </section>
+
+  <section class="section pricing" id="pricing" aria-labelledby="priceTitle">
+    <div class="wrap">
+      <div class="pricing__head">
+        <div class="sec-head" style="margin-bottom:0">
+          <h2 id="priceTitle">合作方式：按项目交付，或按月长期维护</h2>
+          <p>以下价格与工期为常规参考口径（演示内容），正式立项以需求文档与工作量评估为准。</p>
+        </div>
+        <div class="seg" role="group" aria-label="合作模式切换">
+          <button type="button" id="modeProject" aria-pressed="true" data-mode="project">按项目</button>
+          <button type="button" id="modeMonthly" aria-pressed="false" data-mode="monthly">按月维护</button>
+        </div>
+      </div>
+
+      <div class="plans" aria-live="polite">
+        <article class="plan">
+          <div class="plan__flag" aria-hidden="true"></div>
+          <h3 id="t1Name">设计系统诊断周</h3>
+          <p class="plan__lede" id="t1Lede">适合已有前端包袱重、组件样式混乱的团队先梳理基线。</p>
+          <div class="plan__price">
+            <span class="plan__cur">¥</span><span class="plan__num" data-project="16,000" data-monthly="18,000">16,000</span><span class="plan__per" data-project="/ 周" data-monthly="/ 月">/ 周</span>
+          </div>
+          <p class="plan__note" data-project="5 个工作日交付整改清单与原型" data-monthly="每月含 2 次代码评审与答疑">5 个工作日交付整改清单与原型</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>盘点色阶、字号与重复组件包袱</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>输出统一 CSS Token 表与迁移路径</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>1 场全团队前端规范对齐同步会</li>
+          </ul>
+          <a class="btn btn--outline" href="#contact">预约诊断档期</a>
+        </article>
+
+        <article class="plan plan--pick">
+          <div class="plan__flag">最多团队选择的合作档</div>
+          <h3 id="t2Name">核心工作台 / 组件库交付</h3>
+          <p class="plan__lede" id="t2Lede">独立负责一套 B 端控制台、设计系统或复杂交互前端从 0 到 1 上线。</p>
+          <div class="plan__price">
+            <span class="plan__cur">¥</span><span class="plan__num" data-project="58,000" data-monthly="36,000">58,000</span><span class="plan__per" data-project="/ 期（4-6 周）" data-monthly="/ 月（长期托管）">/ 期（4-6 周）</span>
+          </div>
+          <p class="plan__note plan__note--save" data-project="分里程碑验收付款，移交完整源码" data-monthly="含每周 20 小时迭代开发与回归测试">分里程碑验收付款，移交完整源码</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>React / TypeScript / Vue3 完整前端工程</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>四态完备 + 320-1280 全视口与 AA 对比度</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Playwright 关键链路用例 + 上线后 1 月质保</li>
+          </ul>
+          <a class="btn btn--primary" href="#contact">锁定 1 个项目档期</a>
+        </article>
+
+        <article class="plan">
+          <div class="plan__flag" aria-hidden="true"></div>
+          <h3 id="t3Name">长期前端顾问与共建</h3>
+          <p class="plan__lede" id="t3Lede">以按月共建或核心重构为主，作为研发团队的固定外脑。</p>
+          <div class="plan__price">
+            <span class="plan__cur">¥</span><span class="plan__num" data-project="92,000" data-monthly="48,000">92,000</span><span class="plan__per" data-project="/ 期（8-12 周）" data-monthly="/ 月（深度嵌入）">/ 期（8-12 周）</span>
+          </div>
+          <p class="plan__note" data-project="大型多子系统前端底座与设计系统共建" data-monthly="可按季度续签，随时提前 14 天终止">大型多子系统前端底座与设计系统共建</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>嵌入飞书/GitHub 日常 PR Review 与架构拍板</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>全站性能巡检与核心交互疑难杂症兜底</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#006c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>配套前端内部培训与团队招聘技术把关</li>
+          </ul>
+          <a class="btn btn--outline" href="#contact">评估长期合作</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact" aria-labelledby="ctaTitle">
+    <div class="wrap cta__box">
+      <div>
+        <h2 id="ctaTitle">当前可接 1 个项目，发份需求聊聊。</h2>
+        <p>附带产品形态、预计周期和已有设计或接口状况就行。工作日（UTC+8）24 小时内回信，明确告诉你适不适合接、能做成什么样。</p>
+        <div class="contact-cards" aria-label="联系方式与响应约定">
+          <div class="contact-item"><span class="contact-k">工作邮箱（占位）</span><span class="contact-v">ethan@ethanworks.example</span></div>
+          <div class="contact-item"><span class="contact-k">GitHub（占位）</span><span class="contact-v">@ethanworks-lab</span></div>
+          <div class="contact-item"><span class="contact-k">微信（占位）</span><span class="contact-v">ethan_lin_utc8（注明来意）</span></div>
+          <div class="contact-item"><span class="contact-k">档期与时区</span><span class="contact-v">当前可接 1 项 · UTC+8 · 24h 内回复</span></div>
+        </div>
+      </div>
+
+      <form class="form" id="contactForm" novalidate>
+        <div class="form__field">
+          <label for="cEmail">你的工作邮箱</label>
+          <input id="cEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="pm@company.com">
+        </div>
+        <div class="form__field">
+          <label for="cType">拟合作类型</label>
+          <select id="cType" name="type">
+            <option value="核心工作台 / 组件库交付（按项目）">核心工作台 / 组件库交付（按项目）</option>
+            <option value="长期维护与架构顾问（按月）">长期维护与架构顾问（按月）</option>
+            <option value="设计系统诊断周">设计系统诊断周</option>
+          </select>
+        </div>
+        <div class="form__field">
+          <label for="cBrief">简述需求与时间期望</label>
+          <textarea id="cBrief" placeholder="例如：现有 B 端风控后台准备从零重构表格与筛选系统，希望 6 周上线..."></textarea>
+        </div>
+        <button class="btn btn--primary" style="width:100%" id="submitBtn" type="submit">发送合作意向</button>
+        <p class="form__msg" id="formMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot-stmt">
+  <div class="wrap">
+    <p class="foot-stmt__line">源码、规范与自动化基线成套移交，团队接手就能继续维护。</p>
+    <div class="foot-stmt__meta">
+      <div class="foot-stmt__brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="4" stroke="#7137bf" stroke-width="2" fill="none"/>
+          <path d="M8 9h8M8 12.5h5M8 16h7" stroke="#5610a4" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span>EthanWorks · 林深</span>
+      </div>
+      <nav class="foot-stmt__links" aria-label="页脚导航">
+        <a href="#work">6 个项目复盘</a>
+        <a href="#articles">12 篇技术文章</a>
+        <a href="#pricing">按项目 / 按月</a>
+        <a href="#contact">预约档期（UTC+8）</a>
+      </nav>
+    </div>
+    <div class="foot-stmt__base">
+      <span>8 年独立前端架构与设计系统交付经验 · 不接纯视觉创意站与批量投放页</span>
+      <span>EthanWorks 工作室 · 项目数字、客户反馈与联系方式均为本地演示占位</span>
+    </div>
+  </div>
+</footer>
+
+<div class="backdrop" id="artModal" hidden role="dialog" aria-modal="true" aria-labelledby="artModalTitle">
+  <div class="dialog">
+    <div class="dialog-head">
+      <div>
+        <h2 class="dialog-title" id="artModalTitle">文章详情</h2>
+        <div class="dialog-sub" id="artModalMeta"></div>
+      </div>
+      <button class="btn btn--quiet btn--sm" id="artModalClose" type="button">关闭</button>
+    </div>
+    <div class="dialog-body" id="artModalBody"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var params = new URLSearchParams(location.search);
+  var $ = function (id) { return document.getElementById(id); };
+
+  var PROJECTS = [
+    {
+      id: "p1",
+      name: "云原生网关控制台",
+      badge: "B 端 · 10 周",
+      crumb: "云计算基础设施 · 主前端架构",
+      metric: "首屏 LCP 从 3.4s 降至 0.9s",
+      meta: "周期：10 周 · 技术栈：React / TypeScript / SVG · 后续长期维护中",
+      desc: "重构多租户路由与熔断规则工作台。将原本跨 6 层 Drawer 嵌套的配置流收拢到左侧分组导航加内联差异对比视图，并用纯 SVG 替代沉重图表库。",
+      bench: [
+        { label: "首屏 LCP (ms)", before: 3400, after: 900, unit: "ms" },
+        { label: "JS 主包体 (KB)", before: 980, after: 186, unit: "KB" },
+        { label: "配置平均点击步", before: 9, after: 3, unit: "步" }
+      ],
+      quote: "“重写完后新人看路由配置不需要再问后端开发，线上大促期间面板也能 1 秒内秒开。”",
+      who: "某云厂商基础架构产品总监",
+      stack: ["React 19", "TypeScript", "CSS Tokens", "Inline SVG", "Playwright"]
+    },
+    {
+      id: "p2",
+      name: "多币种清结算账本",
+      badge: "金融 · 8 周",
+      crumb: "跨境支付 · 设计系统与核心表格",
+      metric: "万元级明细渲染掉帧归 0",
+      meta: "周期：8 周 · 技术栈：Vue 3 / 虚拟滚动 / Tabular Numerals",
+      desc: "为财务与清结算运营打造等距对齐对账台。统一负号与千分位格式、固定右栏存根确认区，并在 10,000 行对账流水滚动下维持 60fps。",
+      bench: [
+        { label: "万行过滤耗时 (ms)", before: 620, after: 28, unit: "ms" },
+        { label: "内存占用峰值 (MB)", before: 410, after: 74, unit: "MB" },
+        { label: "对账报错漏报率 (%)", before: 12, after: 0, unit: "%" }
+      ],
+      quote: "“之前财务拉流水动不动卡死浏览器，现在一边筛币种一边勾选异常单很顺滑。”",
+      who: "跨境结算研发负责人",
+      stack: ["Vue 3", "TypeScript", "Virtual List", "a11y Grid"]
+    },
+    {
+      id: "p3",
+      name: "跨产品 Design Token 平台",
+      badge: "底座 · 12 周",
+      crumb: "SaaS 团队 · 设计系统总架构",
+      metric: "5 条产品线重复 CSS 砍掉 68%",
+      meta: "周期：12 周 · 技术栈：Style Dictionary / W3C DTCG / Web Components",
+      desc: "梳理三套历史组件库的色阶、字号与间距乱象，统一收口为一份 W3C Token 源码，接入 CI 自动比对浅/深模式下的 WCAG 4.5:1 对比度门槛。",
+      bench: [
+        { label: "散写硬编码颜色 (处)", before: 412, after: 0, unit: "处" },
+        { label: "全局样式压缩体 (KB)", before: 215, after: 44, unit: "KB" },
+        { label: "合规组件达标率 (%)", before: 54, after: 100, unit: "%" }
+      ],
+      quote: "“设计师改一档主题色，五个子应用 PR 自动对齐且不破坏对比度。”",
+      who: "企业协作产品线技术VP",
+      stack: ["W3C DTCG", "CSS Variables", "React + Vue", "Contrast Gate"]
+    },
+    {
+      id: "p4",
+      name: "工业设备巡检工单台",
+      badge: "制造 · 6 周",
+      crumb: "智能制造 · 移动端与离线协同",
+      metric: "车间弱网提交成功率达 99.6%",
+      meta: "周期：6 周 · 技术栈：PWA / IndexedDB / 触控大目标",
+      desc: "面向佩戴手套、强光车间的质检员，重新划分 44px 以上触控目标与高对比度警告栏，补齐断网暂存队列与恢复后一键重传。",
+      bench: [
+        { label: "误触返工率 (%)", before: 18, after: 2, unit: "%" },
+        { label: "单次巡检录入 (秒)", before: 95, after: 34, unit: "秒" },
+        { label: "首屏可交互 (ms)", before: 2800, after: 720, unit: "ms" }
+      ],
+      quote: "“车间 Wi-Fi 掉线时工单不再丢失，白底黑字在日光灯反光下也很稳。”",
+      who: "制造业数字化项目经理",
+      stack: ["Vanilla TS", "IndexedDB", "Service Worker", "WCAG AAA Text"]
+    },
+    {
+      id: "p5",
+      name: "开发者文档与调试沙箱",
+      badge: "工具 · 5 周",
+      crumb: "开放平台 · Astro 静态架构与搜索",
+      metric: "本地毫秒检索 600+ 篇接口文档",
+      meta: "周期：5 周 · 技术栈：Astro / Pagefind / 零运行时首屏",
+      desc: "将原本依赖服务端渲染、冷启动偏慢的开放平台文档站重构为纯静态生成架构，首屏零外部重框架脚本并内置实时签名调试器。",
+      bench: [
+        { label: "文档首次加载 (ms)", before: 1850, after: 240, unit: "ms" },
+        { label: "搜索匹配延迟 (ms)", before: 430, after: 19, unit: "ms" },
+        { label: "外部脚本请求 (个)", before: 24, after: 1, unit: "个" }
+      ],
+      quote: "“外部开发者查错误码再也不用等转圈，API 试用转化率肉眼可见提高。”",
+      who: "开放平台运营负责人",
+      stack: ["Astro 5", "Static HTML", "Web Crypto", "Zero-Framework UI"]
+    },
+    {
+      id: "p6",
+      name: "临床随访数据审核台",
+      badge: "医疗 · 8 周",
+      crumb: "数字健康 · 双栏审核详情页",
+      metric: "医生单份病例复核省时 42%",
+      meta: "周期：8 周 · 技术栈：React / ARIA Keyboard / Sticky Stub",
+      desc: "借鉴财务凭条双栏设计，左侧保留完整随访时间轴与检验对比，右侧固定审核决定与异常原因标签，支持纯键盘上下条快速审阅。",
+      bench: [
+        { label: "单份审核耗时 (秒)", before: 140, after: 81, unit: "秒" },
+        { label: "键盘可达操作 (%)", before: 38, after: 100, unit: "%" },
+        { label: "状态遗漏率 (%)", before: 9, after: 0, unit: "%" }
+      ],
+      quote: "“医生不用来回切 Tab 对检验单，右栏一点批准就自动跳到下一例待审。”",
+      who: "生物医药数据负责人",
+      stack: ["React", "Sticky Rail", "Keyboard Nav", "Four States"]
+    }
+  ];
+
+  var ARTICLES = [
+    { id: "a1", date: "2026-10", cat: "设计系统", read: "7 分钟", title: "为什么大多数内部设计系统半年后都会腐化？", sum: "Token 命名与产品语义脱节，往往比组件数量不够更快拖垮迭代。", code: ":root { --surface-paper: #ffffff; --surface-muted: #f3f3f3; --ink-secondary: #5e5e5e; }", body: ["很多团队一开始把精力全放在造按钮变体上，却没规定什么时候不该画边框、什么时候必须由背景色差承担分层。", "实战里有效的方式，是在 CI 里加两条硬校验：禁止组件 CSS 出现散落 hex 值，并把所有次级文字颜色压实到 4.5:1 以上。"] },
+    { id: "a2", date: "2026-09", cat: "前端架构", read: "9 分钟", title: "把四态（空、错、慢、长）写进列表与表单骨架的一手清单", sum: "不在测试阶段补异常分支，而是在第一行 JSX/DOM 就给出占位与可重试路径。", code: "const url = new URLSearchParams(location.search); // ?empty=1&fail=1&slow=1&long=1", body: ["评审后台页最怕「正常态好看、无数据时一片白、报错时把按钮锁死」。", "最简单的工程惯例，是给每个页面直接挂四个 URL 开关参数，提测和自动截图都直接跑一遍。"] },
+    { id: "a3", date: "2026-08", cat: "性能与无障碍", read: "6 分钟", title: "去掉 180KB 图表依赖：用 40 行内联 SVG 写清业务折线与柱图", sum: "80% 的后台指标只需要清晰的零基线坐标、真实端点标注与键盘可读标签。", code: "<svg viewBox=\"0 0 520 120\" role=\"img\" aria-label=\"交付前后指标对比\">...</svg>", body: ["业务后台里很多 ECharts 实例只画两根柱子，却拉进上百 KB 的运行时与 Canvas 事件层。", "当图元数量在几十以内，直接生成语义清晰的 SVG 既有锐利视网膜显示，也能跟页面 Token 无缝同步。"] },
+    { id: "a4", date: "2026-06", cat: "设计系统", read: "8 分钟", title: "行高与中文排版：为什么字号 + 8 比死板的 1.5 倍更顺眼", sum: "在大号标题（36-64px）维持 1.5 倍会导致换行撕裂，等间距公式怎么落地。", code: "h1, h2, p, li { line-height: calc(1em + 8px); }", body: ["小号 14px 正文加 8px 正好 22px（约 1.57 倍），而 48px 大标题加 8px 是 56px，既不挤也不空。", "同时中文标题务必避免无意义全大写英文眉题和英文 em-dash 的误插。"] },
+    { id: "a5", date: "2026-05", cat: "前端架构", read: "11 分钟", title: "外包与独立顾问怎么交接前端源码，才不会让接手工程师骂街", sum: "除了 clean code，还需要决策台账 DECISIONS.md 与结构化状态说明。", code: "/* DECISIONS: 为什么这里使用零描边分层而非 card-border */", body: ["代码好读只是一方面，接手人更困惑「为什么当时不用某组件而要自写表格」。", "随源码交一份三百字的边界决策文档，能省下后面半年 80% 的误改成本。"] },
+    { id: "a6", date: "2026-03", cat: "性能与无障碍", read: "7 分钟", title: "headless 浏览器零端口全页扫描对比度与 44px 触控底线", sum: "在提审前自动遍历全部文本节点的背景 alpha 合成对比度与视口溢出。", code: "if (ratio < (isLarge ? 3.0 : 4.5)) reportFailure(node);", body: ["很多半透明灰字看似在白色上没问题，一旦落进 `#f3f3f3` 灰卡就悄然跌破 4.5:1。", "用脚本遍历实际渲染树并按祖先背景色逐层混合，能抓出所有肉眼漏掉的低对比陷阱。"] },
+    { id: "a7", date: "2026-01", cat: "设计系统", read: "6 分钟", title: "极克制的零描边界面：靠底色差、发丝线与留白建立秩序", sum: "为什么给每张卡片套灰黑 1px 线框，反而让用户扫读更累。", code: ".list-row { border-bottom: 1px solid #e8e8e8; } /* 仅留单向发丝分割 */", body: ["框线嵌套三层后，屏幕上的像素噪声会把真正重要的状态标签和主按钮淹没。", "用浅灰画布托举纯白区域，只在列表行间保留单向 1px 发丝线，主副视觉层级立刻拉开。"] },
+    { id: "a8", date: "2025-11", cat: "前端架构", read: "10 分钟", title: "多币种与金额表格设计的七条铁律（Tabular Numerals 实战）", sum: "等宽数字、负号放在币种前、两档对齐以及冻结列焦点丢失处理。", code: "body { font-variant-numeric: tabular-nums; }", body: ["财务系统最忌小数点不对齐和表格重渲染后丢失当前选中行焦点。", "把金额列全部切到 tabular-nums，并在重绘后通过 row-id 恢复 focus 是基础功。"] },
+    { id: "a9", date: "2025-09", cat: "性能与无障碍", read: "5 分钟", title: "在桌面和触摸设备同时正确的 `:hover` 写法", sum: "用 `@media (hover: hover)` 包裹悬停变化，避免手机端第一次轻触卡在悬停色。", code: "@media (hover: hover) { .btn:hover { background: var(--purple8); } }", body: ["移动端点击按钮触发粘滞 hover 是最常见却最容易被忽略的细节。", "所有非聚焦状态变色全数收进 `@media (hover: hover)` 媒体查询里。"] },
+    { id: "a10", date: "2025-07", cat: "前端架构", read: "8 分钟", title: "拒绝过度工程：什么时候不需要上全局状态管理库", sum: "URL 查询串与单文件局部闭环状态，比动辄引入百行 boilerplate 更稳。", code: "function filterJobs(state) { /* 纯函数从唯一状态源派生当前展示列表 */ }", body: ["中小型工作台如果只有筛选、排序、抽屉与本地收藏，纯函数状态派生加受控重绘最容易测通。"] },
+    { id: "a11", date: "2025-05", cat: "设计系统", read: "6 分钟", title: "单色相如何覆盖成功、警告与错误语义而不至于花哨", sum: "全站保持一个主品牌色相，红黄绿只留给明确的异常与通过状态且总面积低于 5%。", code: "/* 主操作用紫7，状态标签才动用红7 / 绿7 */", body: ["颜色越多，页面越像拼出来的模板。控制好信号色占比，关键按钮自然站出来。"] },
+    { id: "a12", date: "2025-02", cat: "性能与无障碍", read: "7 分钟", title: "320px 窄屏的尊严：不裁断、不横滚的移动端响应式自检", sum: "用 CSS Grid minmax(0, 1fr) 与 flex-wrap 守住最窄一档屏幕的可读底线。", code: ".grid { grid-template-columns: minmax(0, 1fr); overflow-wrap: anywhere; }", body: ["很多网站只测到 375px，一到 320px 就被长数字或邮箱撑出横向滚动条。", "给网格轨道加上 minmax(0, 1fr) 与 overflow-wrap: anywhere 是最便宜的保险。"] }
+  ];
+
+  var EVENTS = [
+    { who: "某跨境支付团队", act: "完成按项目阶段 2 验收", fresh: false },
+    { who: "林深", act: "发布第 12 篇技术复盘笔记", fresh: false },
+    { who: "制造数字化组", act: "续签按月前端维护协议", fresh: false },
+    { who: "档期看板", act: "2026 Q4 尚余 1 个可接项目位", fresh: true }
+  ];
+
+  var state = {
+    projId: "p1",
+    query: params.get("empty") === "1" ? "不存在的关键词" : "",
+    artCat: "all",
+    failOnce: params.get("fail") === "1",
+    slow: params.get("slow") === "1",
+    busy: false
+  };
+
+  if (params.get("long") === "1") {
+    $("heroTitle").innerHTML = "跨团队复杂B端工作台与设计系统底座，<br>从零架构到长期无黑盒维护交接。";
+    PROJECTS[0].name = "企业级多云混合架构实时路由网关与熔断观测一体化控制台";
+  }
+
+  function renderProjects() {
+    var q = state.query.trim().toLowerCase();
+    var filtered = PROJECTS.filter(function (p) {
+      return !q || (p.name + p.badge + p.crumb + p.stack.join(" ")).toLowerCase().indexOf(q) > -1;
+    });
+    var list = $("projList");
+    var empty = $("projEmpty");
+    if (!filtered.length) {
+      list.innerHTML = "";
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    list.innerHTML = filtered.map(function (p) {
+      var cur = p.id === state.projId;
+      return '<button type="button" class="mock__doc" data-proj="' + p.id + '"' + (cur ? ' aria-current="true"' : "") + '>' +
+        '<span>' + p.name + '</span>' +
+        '<span class="mock__doc-tag">' + p.badge + '</span>' +
+      '</button>';
+    }).join("");
+    list.querySelectorAll("[data-proj]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.projId = btn.getAttribute("data-proj");
+        renderProjects();
+        renderActiveProject(true);
+      });
+    });
+  }
+
+  function renderActiveProject(focusTitle) {
+    var p = PROJECTS.find(function (item) { return item.id === state.projId; }) || PROJECTS[0];
+    $("projCrumb").textContent = p.crumb;
+    $("projTitle").textContent = p.name;
+    $("projMetric").textContent = p.metric;
+    $("projMeta").textContent = p.meta;
+    $("projDesc").textContent = p.desc;
+    $("projQuote").textContent = p.quote;
+    $("projWho").textContent = p.who;
+    $("projStack").innerHTML = p.stack.map(function (s) { return '<span class="stack-pill">' + s + '</span>'; }).join("");
+
+    // Render crisp before/after SVG horizontal bars
+    var rows = p.bench.map(function (b, i) {
+      var y = 10 + i * 36;
+      var maxVal = Math.max(b.before, b.after, 1);
+      var wBefore = Math.max(18, Math.round((b.before / maxVal) * 210));
+      var wAfter = Math.max(12, Math.round((b.after / maxVal) * 210));
+      return '<text x="4" y="' + (y + 12) + '" font-size="12" fill="#181818" font-weight="600">' + b.label + '</text>' +
+        '<rect x="160" y="' + y + '" width="' + wBefore + '" height="10" rx="5" fill="#dcdcdc"/>' +
+        '<text x="' + (166 + wBefore) + '" y="' + (y + 9) + '" font-size="11" fill="#5e5e5e">改造前 ' + b.before + b.unit + '</text>' +
+        '<rect x="160" y="' + (y + 14) + '" width="' + wAfter + '" height="10" rx="5" fill="#7137bf"/>' +
+        '<text x="' + (166 + wAfter) + '" y="' + (y + 23) + '" font-size="11" fill="#7137bf" font-weight="600">交付后 ' + b.after + b.unit + '</text>';
+    }).join("");
+    $("benchSvg").innerHTML = rows;
+    if (focusTitle) $("projTitle").focus();
+  }
+
+  function renderEvents() {
+    $("eventList").innerHTML = EVENTS.map(function (ev) {
+      return '<div class="mock__event' + (ev.fresh ? " is-new" : "") + '"><i></i><span><b>' + ev.who + '</b> ' + ev.act + '</span></div>';
+    }).join("");
+  }
+
+  function renderArticles() {
+    var list = ARTICLES.filter(function (a) { return state.artCat === "all" || a.cat === state.artCat; });
+    $("artList").innerHTML = list.map(function (a) {
+      return '<li class="art-row">' +
+        '<span class="art-date">' + a.date + '</span>' +
+        '<div><div class="art-title">' + a.title + '</div><div class="art-sum">' + a.sum + '</div></div>' +
+        '<div class="art-meta"><span class="art-cat">' + a.cat + '</span>' +
+        '<button type="button" class="btn btn--quiet btn--sm" data-read-art="' + a.id + '">读摘要 (' + a.read + ')</button></div>' +
+      '</li>';
+    }).join("");
+  }
+
+  $("projSearch").value = state.query;
+  $("projSearch").addEventListener("input", function (e) {
+    state.query = e.target.value;
+    renderProjects();
+  });
+  $("projReset").addEventListener("click", function () {
+    state.query = "";
+    $("projSearch").value = "";
+    renderProjects();
+    $("projSearch").focus();
+  });
+
+  function submitNote(isRetry) {
+    if (state.busy) return;
+    var text = $("noteInput").value.trim() || (isRetry ? "需要重做设计系统与列表交互" : "");
+    if (!text) { $("noteInput").focus(); return; }
+    state.busy = true;
+    var send = $("noteSend");
+    send.disabled = true;
+    send.setAttribute("aria-busy", "true");
+    send.textContent = "暂存中...";
+    var delay = state.slow ? 1400 : 220;
+    setTimeout(function () {
+      state.busy = false;
+      send.disabled = false;
+      send.removeAttribute("aria-busy");
+      send.textContent = "快速试留需求";
+      if (state.failOnce && !isRetry) {
+        state.failOnce = false;
+        $("noteErr").hidden = false;
+        $("noteRetry").focus();
+        return;
+      }
+      $("noteErr").hidden = true;
+      EVENTS.unshift({ who: "访客备忘", act: text, fresh: true });
+      if (EVENTS.length > 5) EVENTS.pop();
+      $("noteInput").value = "";
+      renderEvents();
+    }, delay);
+  }
+  $("noteForm").addEventListener("submit", function (e) { e.preventDefault(); submitNote(false); });
+  $("noteRetry").addEventListener("click", function () { submitNote(true); });
+
+  $("artFilters").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-cat]");
+    if (!btn) return;
+    state.artCat = btn.getAttribute("data-cat");
+    $("artFilters").querySelectorAll(".chip").forEach(function (c) {
+      c.setAttribute("aria-pressed", String(c === btn));
+    });
+    renderArticles();
+  });
+
+  var lastArtBtn = null;
+  document.addEventListener("click", function (e) {
+    var readBtn = e.target.closest("[data-read-art]");
+    if (readBtn) {
+      var art = ARTICLES.find(function (x) { return x.id === readBtn.getAttribute("data-read-art"); });
+      if (!art) return;
+      lastArtBtn = readBtn;
+      $("artModalTitle").textContent = art.title;
+      $("artModalMeta").textContent = art.date + " · " + art.cat + " · 阅读约 " + art.read;
+      $("artModalBody").innerHTML =
+        art.body.map(function (p) { return '<p>' + p + '</p>'; }).join("") +
+        '<pre class="code-snippet"><code>' + art.code.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</code></pre>' +
+        '<p style="color:var(--ink2);font-size:12px">注：本弹窗展示工程文章核心摘要，完整系列见仓库技术随笔目录。</p>';
+      $("artModal").hidden = false;
+      $("artModalClose").focus();
+    }
+  });
+  function closeArtModal() {
+    $("artModal").hidden = true;
+    if (lastArtBtn) lastArtBtn.focus();
+  }
+  $("artModalClose").addEventListener("click", closeArtModal);
+  $("artModal").addEventListener("click", function (e) { if (e.target === $("artModal")) closeArtModal(); });
+
+  /* 合作模式切换 */
+  var modeBtns = [$("modeProject"), $("modeMonthly")];
+  modeBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var mode = btn.getAttribute("data-mode");
+      modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+      document.querySelectorAll(".plan__num").forEach(function (el) {
+        el.textContent = el.getAttribute("data-" + mode);
+      });
+      document.querySelectorAll(".plan__per").forEach(function (el) {
+        el.textContent = el.getAttribute("data-" + mode);
+      });
+      document.querySelectorAll(".plan__note").forEach(function (el) {
+        el.textContent = el.getAttribute("data-" + mode);
+      });
+    });
+  });
+
+  /* 移动端导航 */
+  var menuBtn = $("menuBtn");
+  var menuPanel = $("menuPanel");
+  function setMenu(open) {
+    menuPanel.hidden = !open;
+    menuBtn.setAttribute("aria-expanded", String(open));
+  }
+  menuBtn.addEventListener("click", function () { setMenu(menuPanel.hidden); });
+  menuPanel.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      if (!$("artModal").hidden) closeArtModal();
+      else if (!menuPanel.hidden) { setMenu(false); menuBtn.focus(); }
+    }
+  });
+
+  /* 联系表单校验 */
+  var form = $("contactForm");
+  var email = $("cEmail");
+  var formMsg = $("formMsg");
+  var validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = email.value.trim();
+    if (!validEmail.test(v)) {
+      email.setAttribute("aria-invalid", "true");
+      formMsg.className = "form__msg form__msg--err";
+      formMsg.textContent = "请输入有效的工作邮箱（例如 pm@company.com）。";
+      email.focus();
+      return;
+    }
+    email.removeAttribute("aria-invalid");
+    formMsg.className = "form__msg form__msg--ok";
+    formMsg.textContent = "已记录来自 " + v + " 的「" + $("cType").value + "」沟通意向，工作日 24 小时内通过邮箱联系（本地演示不实际外发）。";
+  });
+
+  renderProjects();
+  renderActiveProject(false);
+  renderEvents();
+  renderArticles();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+Carbon 数据可视化色板取色记录
+来源页面：https://www.carbondesignsystem.com/building-blocks/data-visualization/color-palettes
+原 MDX：https://raw.githubusercontent.com/carbon-design-system/carbon-website/main/src/pages/data-visualization/color-palettes/index.mdx
+取色时间：2026-11-14
+
+分类色板（Categorical, light）
+01 Purple 70  #6929c4
+02 Cyan 50    #1192e8
+03 Teal 70    #005d5d
+04 Magenta 70 #9f1853
+05 Red 50     #fa4d56
+
+Alert 色板（light）
+01 Red 60     #da1e28
+02 Orange 40  #ff832b
+03 Yellow 30  #f1c21b
+04 Green 60   #198038
+
+本页采用
+请求量：分类 01 Purple 70 #6929c4
+失败率：Alert 01 Red 60 #da1e28
+
+说明：UISpecs 的 content/dataviz/carbondesignsystem.com--data-visualization-color-palettes.md
+在分类色板处只留下 React 组件占位（「色板示例见原文」），没有 hex；以上值从公开页渲染结果读取，
+按基准规范缺口回源，不冒充 content 行号。

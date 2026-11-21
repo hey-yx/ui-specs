@@ -1,0 +1,102 @@
+---
+// 单个站的建站需求：真源是 briefs/<slug>.md，页面只渲染解析后的事实（原文在 /briefs/<slug>.md）
+import Base from '../../layouts/Base.astro'
+import FootLine from '../../components/FootLine.astro'
+import { loadBriefs } from '../../data/case-briefs'
+import { loadCases } from '../../data/examples'
+import { parseBriefBody } from '../../data/brief-body'
+import { withBase } from '../../lib/url'
+
+export async function getStaticPaths() {
+  const { briefs } = await loadBriefs()
+  return briefs.map((brief) => ({
+    params: { slug: brief.slug },
+    props: { brief },
+  }))
+}
+
+const { brief } = Astro.props
+const { lead, sections } = parseBriefBody(brief.product)
+// 成品链接只在 examples/ 里真有这个站时出现；没跑的站只留需求本身
+const caseExists = loadCases({ strict: false }).some((c) => c.slug === brief.slug)
+const title = `建站需求 · ${brief.name}`
+const description = `${brief.name} 的建站需求：产品、用户、主任务与关键内容。`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: title,
+  description,
+  inLanguage: 'zh-CN',
+  about: lead,
+}
+---
+
+<Base title={`${title} · UISpecs`} description={description} jsonLd={jsonLd} path={`/briefs/${brief.slug}/`}>
+  <div class="page">
+    <article id="main" class="article-page">
+      <header class="doc-head">
+        <p class="doc-crumb">
+          <a href={withBase('/briefs/')}>建站需求</a> / <span>{brief.category}</span> / 详情
+        </p>
+        <h1 class="doc-title">{title}</h1>
+        <div class="doc-meta">
+          {
+            caseExists && (
+              <>
+                <a href={withBase(`/examples/${brief.slug}/index.html`)} target="_blank" rel="noopener noreferrer">
+                  打开成品
+                </a>
+                <a href={withBase(`/examples/${brief.slug}/decisions/`)}>DECISIONS</a>
+                <a href={withBase(`/examples/${brief.slug}/findings/`)}>FINDINGS</a>
+              </>
+            )
+          }
+          <a href={withBase(`/briefs/${brief.slug}.md`)}>原始 Markdown</a>
+        </div>
+      </header>
+
+      <div class="doc-body">
+        <p class="brief-lead">{lead}</p>
+
+        {
+          sections.length > 0 && (
+            <div class="brief-sections">
+              {sections.map((section) => (
+                <section class="brief-section">
+                  <h2>{section.title}</h2>
+                  {section.blocks.map((block) =>
+                    block.type === 'p' ? (
+                      <p>{block.text}</p>
+                    ) : (
+                      <ul>
+                        {block.items.map((item) => (
+                          <li>{item}</li>
+                        ))}
+                      </ul>
+                    ),
+                  )}
+                </section>
+              ))}
+            </div>
+          )
+        }
+
+        <dl class="brief-fields">
+          <div><dt>语言</dt><dd>{brief.lang}</dd></div>
+          <div><dt>分类</dt><dd>{brief.category}</dd></div>
+          {brief.framework && (
+            <div><dt>框架</dt><dd>{brief.framework === 'react' ? 'React' : 'Vue'}</dd></div>
+          )}
+        </dl>
+      </div>
+    </article>
+
+    <FootLine>
+      <span>UI 设计规范指南</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><b>{brief.slug}</b> 的建站需求</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span><a href={withBase('/briefs/')}>全部需求</a></span>
+    </FootLine>
+  </div>
+</Base>

@@ -1,0 +1,7 @@
+{
+  "name": "EthanWorks",
+  "tagline": "独立前端与设计系统工程师个人站：悬浮胶囊导航、6 项目前后对照工作台与 12 篇笔记",
+  "accent": "TDesign Purple7 #7137bf",
+  "structure": "SaaS Landing · N5 悬浮胶囊导航 + 无假浏览器框三栏项目对照工作台 + Ft5 宣言收尾页脚",
+  "layout": "TDesign project-tdesign（N5 悬浮胶囊、64px 展示标题 + 4 行事实表、三栏交互 6 项目 SVG 指标前后对比台、可承接 vs 不承接双栏 Bento、12 篇带摘要弹窗技术文章、按项目/按月切换、UTC+8 约期表单与 Ft5 宣言页脚）"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "GatewayDeck",
+  "tagline": "多账号网关控制台：账号额度、签到、路由与失败重试一屏处理。",
+  "accent": "TDesign Cyan7 #00668e",
+  "structure": "Workbench · N12 / Ft2",
+  "layout": "状态横幅加顶栏，KPI 与双图表在上，账号、路由、失败表依次在下；窄屏表格转卡片。"
+}

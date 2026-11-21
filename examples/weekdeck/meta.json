@@ -1,0 +1,7 @@
+{
+  "name": "WeekDeck",
+  "tagline": "团队周报看板：燃尽、目标与成员周报收在一页。",
+  "accent": "Yellow4 #f5ba18",
+  "structure": "Stat-Led · N6 / Ft2",
+  "layout": "报头式刊期行加四个 KPI 巨数，燃尽图、目标进度、成员任务依次往下，页脚一行署名。"
+}

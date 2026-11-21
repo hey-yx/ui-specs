@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PayloadDeck · Parse log lines with one API</title>
+<meta name="description" content="PayloadDeck turns raw log lines into structured JSON. Quickstart, endpoint reference, error codes and rate limits for backend and platform engineers.">
+<link rel="icon" href="data:,">
+<style>
+/* Hallmark · macrostructure: Component Playground · nav: N13 · footer: Ft4 · tone: technical-editorial · anchor hue: Primer blue
+ * Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5
+ * UISpecs · base: Primer (GitHub) · values: content/ tokens with line refs in DECISIONS.md
+ */
+:root {
+  /* color · Primer light theme tokens */
+  --paper: #ffffff;            /* bgColor-default */
+  --surface: #f6f8fa;          /* bgColor-muted */
+  --surface-2: #eef1f4;        /* derived tint of bgColor-muted */
+  --ink: #1f2328;              /* fgColor-default */
+  --muted: #59636e;            /* fgColor-muted */
+  --disabled: #818b98;         /* fgColor-disabled */
+  --accent: #0969da;           /* fgColor-accent */
+  --accent-hover: #0757b8;     /* derived 12% darker */
+  --danger: #cf222e;           /* bgColor-danger-emphasis */
+  --danger-soft: #ffebe9;      /* derived tint */
+  --success: #1a7f37;          /* fgColor-success */
+  --success-soft: #dafbe1;     /* derived tint */
+  --attention: #9a6700;        /* bgColor-attention-emphasis */
+  --rule: #d1d9e0;             /* borderColor-default, decorative */
+  --control-border: #59636e;   /* fgColor-muted, 6.1:1 on paper */
+  --focus: #0969da;            /* focus-outlineColor */
+  --emphasis: #25292e;         /* bgColor-emphasis */
+
+  /* space · 8px base (GAP_RULES spacing, derived) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+
+  /* type · TDesign scale, line-height = size + 8 (derived for Primer) */
+  --text-xs: 12px;   --lh-xs: 20px;
+  --text-sm: 14px;   --lh-sm: 22px;
+  --text-md: 16px;   --lh-md: 24px;
+  --text-lg: 20px;   --lh-lg: 28px;
+  --text-xl: 24px;   --lh-xl: 32px;
+  --text-2xl: 36px;  --lh-2xl: 44px;
+
+  /* radius · GAP_RULES derived set */
+  --radius-1: 4px;
+  --radius-2: 8px;
+
+  /* motion · NN/g durations + W3C easing (derived) */
+  --dur-1: 100ms;
+  --dur-2: 200ms;
+  --dur-3: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.58, 1);
+  --ease-in: cubic-bezier(0.42, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --nav-h: 56px;
+  --sidebar-w: 240px;
+  --measure: 68ch;
+}
+
+* { box-sizing: border-box; }
+html { overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: var(--lh-md);
+  overflow-x: clip;
+}
+:where(body, body *) { line-height: calc(1em + 8px); }
+img, svg { display: block; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:hover { color: var(--accent-hover); }
+code, pre, kbd { font-family: var(--font-mono); }
+h1, h2, h3, p, ul, ol, table, pre, figure { margin: 0; }
+button { cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-1);
+}
+::selection { background: var(--accent); color: var(--paper); }
+
+.skip {
+  position: absolute;
+  left: var(--space-2);
+  top: -60px;
+  z-index: 900;
+  padding: var(--space-1) var(--space-2);
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius-1);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}
+.skip:focus { top: var(--space-1); }
+
+/* ── header: N13 inline search pill ───────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: var(--nav-h);
+  padding: 0 var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--text-md);
+  white-space: nowrap;
+  min-height: 44px;
+}
+.brand-mark {
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--radius-1);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+.search-pill {
+  flex: 1 1 auto;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 40px;
+  padding: 0 var(--space-1) 0 12px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-1);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: left;
+}
+.search-pill:hover { background: var(--surface-2); }
+.search-pill .kbd-group { margin-left: auto; display: inline-flex; gap: 4px; }
+kbd {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 4px;
+  border: 1px solid var(--rule);
+  border-bottom-color: var(--control-border);
+  border-radius: var(--radius-1);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 18px;
+  text-align: center;
+}
+.nav-links { display: flex; align-items: center; gap: var(--space-2); }
+.nav-links a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--accent); text-decoration: underline; }
+.nav-links a[aria-current="page"] { color: var(--accent); font-weight: 600; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.btn-primary { background: var(--accent); color: var(--paper); }
+.btn-primary:hover { background: var(--accent-hover); color: var(--paper); }
+.btn-secondary { background: var(--surface); border-color: var(--rule); color: var(--ink); }
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--control-border); }
+.btn-ghost { color: var(--muted); }
+.btn-ghost:hover { background: var(--surface); color: var(--ink); }
+.btn[disabled] { background: var(--surface-2); border-color: var(--rule); color: var(--disabled); cursor: not-allowed; }
+.btn-small { min-height: 32px; padding: 0 10px; font-size: var(--text-xs); }
+.icon-button {
+  width: 40px; height: 40px;
+  display: inline-grid; place-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--muted);
+}
+.icon-button:hover { background: var(--surface); color: var(--ink); }
+.menu-button { display: none; }
+
+/* mobile nav panel */
+.mobile-menu {
+  display: none;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  padding: var(--space-1) var(--space-2) var(--space-2);
+}
+.mobile-menu.is-open { display: block; }
+.mobile-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--rule);
+}
+.mobile-menu a:last-child { border-bottom: 0; }
+
+/* ── docs shell: sidebar + article ─────────────────────────────── */
+.shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-2);
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.sidebar {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--space-3));
+  padding: var(--space-3) 0 var(--space-5);
+  border-right: 1px solid var(--rule);
+  padding-right: var(--space-3);
+  max-height: calc(100vh - var(--nav-h) - var(--space-3));
+  overflow-y: auto;
+  font-size: var(--text-sm);
+}
+.sidebar h2 {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  font-weight: 600;
+  margin: var(--space-2) 0 var(--space-1);
+  letter-spacing: 0.02em;
+}
+.sidebar h2:first-child { margin-top: 0; }
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar a {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 10px;
+  color: var(--muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius-1) var(--radius-1) 0;
+}
+.sidebar a:hover { background: var(--surface); color: var(--ink); }
+.sidebar a[aria-current="true"] {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--surface);
+  font-weight: 500;
+}
+.mobile-toc { display: none; }
+
+.article {
+  min-width: 0;
+  padding: var(--space-4) 0 var(--space-6);
+}
+.article-head { max-width: var(--measure); }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin-bottom: var(--space-2);
+}
+.eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+h1 {
+  font-size: var(--text-2xl);
+  line-height: var(--lh-2xl);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  max-width: 20ch;
+}
+.lede {
+  margin-top: var(--space-2);
+  font-size: var(--text-lg);
+  line-height: var(--lh-lg);
+  color: var(--muted);
+  max-width: 46ch;
+}
+.meta-row {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+.meta-row .sep { width: 1px; height: 12px; background: var(--rule); }
+
+.doc-section { margin-top: var(--space-5); scroll-margin-top: calc(var(--nav-h) + var(--space-2)); }
+.doc-section > h2 {
+  font-size: var(--text-xl);
+  line-height: var(--lh-xl);
+  font-weight: 600;
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--rule);
+  max-width: var(--measure);
+}
+.doc-section > p { margin-top: var(--space-2); max-width: var(--measure); color: var(--muted); }
+.doc-section > p strong { color: var(--ink); font-weight: 600; }
+h3 { font-size: var(--text-md); line-height: var(--lh-md); font-weight: 600; margin-top: var(--space-3); }
+.doc-body { max-width: 76ch; }
+
+.steps { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: grid; gap: var(--space-3); }
+.step {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+}
+.step-num {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+  background: var(--paper);
+}
+.step h3 { margin-top: 0; }
+.step p { margin-top: 4px; color: var(--muted); font-size: var(--text-sm); max-width: 58ch; }
+
+/* code block */
+.code-block {
+  margin-top: var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-2);
+  background: var(--surface);
+  overflow: hidden;
+}
+.code-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 40px;
+  padding: 0 var(--space-1) 0 var(--space-2);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.code-head .copy { margin-left: auto; }
+.code-block pre {
+  margin: 0;
+  padding: var(--space-2);
+  overflow-x: auto;
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--ink);
+  tab-size: 2;
+}
+.tok-key { color: var(--accent); }
+.tok-str { color: var(--success); }
+.tok-punc { color: var(--muted); }
+.tok-num { color: var(--attention); }
+.copy-status { font-size: var(--text-xs); color: var(--success); min-width: 52px; text-align: right; }
+
+/* try-it panel */
+.try-it {
+  margin-top: var(--space-3);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-2);
+  padding: var(--space-3);
+  background: var(--paper);
+}
+.try-it h3 { margin-top: 0; }
+.try-it p { color: var(--muted); font-size: var(--text-sm); margin-top: 4px; }
+.field { margin-top: var(--space-2); }
+.field label { display: block; font-size: var(--text-sm); font-weight: 600; margin-bottom: 6px; }
+.field textarea {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-1);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+}
+.field textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.field .hint { margin-top: 4px; font-size: var(--text-xs); color: var(--muted); }
+.error-text {
+  display: none;
+  margin-top: 6px;
+  font-size: var(--text-xs);
+  color: var(--danger);
+  font-weight: 500;
+}
+.field.has-error textarea { border-color: var(--danger); }
+.field.has-error .error-text { display: block; }
+.actions { display: flex; align-items: center; gap: var(--space-1); margin-top: var(--space-2); flex-wrap: wrap; }
+.status-line { font-size: var(--text-xs); color: var(--muted); margin-left: auto; min-height: 20px; }
+
+.result {
+  margin-top: var(--space-2);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-2);
+}
+.result[hidden] { display: none; }
+.result h4 { margin: 0 0 var(--space-1); font-size: var(--text-sm); }
+.result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--space-1) var(--space-2); }
+.result-grid div { display: flex; gap: var(--space-1); font-size: var(--text-sm); border-bottom: 1px solid var(--rule); padding: 6px 0; }
+.result-grid dt { color: var(--muted); min-width: 92px; margin: 0; }
+.result-grid dd { margin: 0; font-family: var(--font-mono); overflow-wrap: anywhere; }
+.result-error {
+  border: 1px solid var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--radius-1);
+  padding: var(--space-2);
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+.result-error strong { color: var(--danger); }
+.skeleton { display: grid; gap: var(--space-1); padding: var(--space-1) 0; }
+.skeleton span { display: block; height: 14px; border-radius: var(--radius-1); background: var(--surface-2); animation: pulse 1.2s ease-in-out infinite; }
+.skeleton span:nth-child(2) { width: 72%; }
+.skeleton span:nth-child(3) { width: 48%; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+
+/* tabs */
+.tabs { margin-top: var(--space-2); }
+.tablist { display: flex; gap: 4px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
+.tab {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.tab:hover { color: var(--ink); background: var(--surface); }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.tabpanel { padding-top: var(--space-2); }
+.tabpanel[hidden] { display: none; }
+
+table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); }
+caption { text-align: left; color: var(--muted); font-size: var(--text-xs); padding-bottom: var(--space-1); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; color: var(--ink); background: var(--surface); white-space: nowrap; }
+td code { font-size: var(--text-xs); background: var(--surface); padding: 1px 4px; border-radius: var(--radius-1); }
+.table-wrap { margin-top: var(--space-2); overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--radius-2); }
+.table-wrap table { min-width: 560px; }
+.table-wrap th:first-child, .table-wrap td:first-child { padding-left: var(--space-2); }
+.table-wrap th:last-child, .table-wrap td:last-child { padding-right: var(--space-2); }
+
+.note {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.note strong { color: var(--ink); }
+
+.next-links { margin-top: var(--space-3); display: grid; gap: var(--space-1); }
+.next-links a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-2);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}
+.next-links a:hover { border-color: var(--control-border); background: var(--surface); }
+.next-links span { margin-left: auto; color: var(--muted); font-family: var(--font-mono); font-size: var(--text-xs); }
+
+/* footer Ft4 */
+.foot {
+  border-top: 1px solid var(--rule);
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--space-2) var(--space-4);
+  max-width: 1280px;
+  margin-inline: auto;
+}
+.foot p {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 20px;
+  color: var(--muted);
+  max-width: 92ch;
+}
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--ink); }
+
+/* search modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-2) var(--ease-out), visibility var(--dur-2);
+}
+.modal {
+  position: fixed;
+  z-index: 810;
+  top: 12vh;
+  left: 50%;
+  width: min(480px, calc(100vw - 32px));
+  max-height: min(600px, 72vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-2);
+  box-shadow: 0 12px 32px rgba(31, 35, 40, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -8px) scale(0.98);
+  transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out), visibility var(--dur-3);
+}
+.modal.is-open, .modal-backdrop.is-open { opacity: 1; visibility: visible; }
+.modal.is-open { transform: translate(-50%, 0) scale(1); }
+.modal.is-closing, .modal-backdrop.is-closing { opacity: 0; visibility: visible; }
+.modal.is-closing { transform: translate(-50%, -8px) scale(0.98); }
+.modal-head { display: flex; align-items: center; gap: var(--space-1); padding: 12px; border-bottom: 1px solid var(--rule); }
+.modal-head svg { color: var(--muted); flex: none; }
+.modal-head input {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-1);
+  padding: 0 12px;
+  font-size: var(--text-sm);
+  background: var(--paper);
+}
+.modal-body { overflow-y: auto; padding: var(--space-1) 0; }
+.search-group { padding: 4px 0; }
+.search-group-label { padding: 6px 16px; font-size: var(--text-xs); color: var(--muted); font-weight: 600; }
+.search-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 10px 16px;
+  min-height: 44px;
+  font-size: var(--text-sm);
+  color: var(--ink);
+  text-decoration: none;
+}
+.search-item:hover, .search-item.is-active { background: var(--surface); color: var(--accent); }
+.search-item small { display: block; color: var(--muted); font-size: var(--text-xs); margin-top: 2px; }
+.search-empty { padding: var(--space-3) 16px; color: var(--muted); font-size: var(--text-sm); }
+.search-empty b { color: var(--ink); }
+.modal-foot { border-top: 1px solid var(--rule); padding: 8px 16px; display: flex; gap: var(--space-2); font-size: var(--text-xs); color: var(--muted); }
+
+/* toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-3);
+  transform: translate(-50%, 12px);
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  border-radius: var(--radius-2);
+  background: var(--emphasis);
+  color: var(--paper);
+  font-size: var(--text-sm);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out), visibility var(--dur-3);
+}
+.toast.is-open { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.toast.is-closing { opacity: 0; transform: translate(-50%, 12px); visibility: visible; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+@media (max-width: 1012px) {
+  .nav-links .nav-link-secondary { display: none; }
+  .shell { gap: var(--space-3); }
+}
+@media (max-width: 768px) {
+  .nav-inner { gap: 8px; }
+  .nav-links { display: none; }
+  .menu-button { display: inline-grid; width: 44px; height: 44px; }
+  .search-pill { flex: 0 0 auto; width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .search-pill .search-text, .search-pill .kbd-group { display: none; }
+  .shell { display: block; padding: 0 var(--space-2); }
+  .sidebar { display: none; }
+  .mobile-toc {
+    display: block;
+    margin-top: var(--space-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-2);
+    padding: var(--space-1) var(--space-2);
+  }
+  .mobile-toc summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; font-size: var(--text-sm); font-weight: 600; list-style: none; }
+  .mobile-toc summary::-webkit-details-marker { display: none; }
+  .mobile-toc summary svg { transition: transform var(--dur-2) var(--ease-out); }
+  .mobile-toc[open] summary svg { transform: rotate(180deg); }
+  .mobile-toc ul { list-style: none; padding: 0 0 var(--space-1); margin: 0; }
+  .mobile-toc a { display: flex; align-items: center; min-height: 44px; color: var(--muted); text-decoration: none; font-size: var(--text-sm); border-top: 1px solid var(--rule); }
+  .article { padding-top: var(--space-3); }
+  h1 { font-size: 28px; line-height: 36px; }
+  .lede { font-size: var(--text-md); line-height: var(--lh-md); }
+  .meta-row .sep { display: none; }
+  .doc-section { margin-top: var(--space-4); }
+  .step { grid-template-columns: 24px minmax(0, 1fr); gap: var(--space-1); }
+  .step-num { width: 24px; height: 24px; font-size: 11px; }
+  .try-it { padding: var(--space-2); }
+  .foot { padding-inline: var(--space-2); }
+}
+@media (max-width: 400px) {
+  .brand > span:last-child { display: none; }
+  .brand-mark { width: 28px; height: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="PayloadDeck home">
+      <span class="brand-mark" aria-hidden="true">PD</span>
+      <span>PayloadDeck</span>
+    </a>
+
+    <button class="search-pill" id="searchBtn" aria-label="Search docs, Command K" aria-haspopup="dialog">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5 14 14"></path></svg>
+      <span class="search-text">Search docs</span>
+      <span class="kbd-group" aria-hidden="true"><kbd>⌘</kbd><kbd>K</kbd></span>
+    </button>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#quickstart" aria-current="page">Docs</a>
+      <a href="#endpoint" class="nav-link-secondary">API</a>
+      <a href="#errors" class="nav-link-secondary">Changelog</a>
+      <a class="btn btn-primary" href="#quickstart">Get API key</a>
+    </nav>
+
+    <button class="icon-button menu-button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"></path></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+    <a href="#quickstart">Docs</a>
+    <a href="#endpoint">API</a>
+    <a href="#errors">Changelog</a>
+    <a href="#quickstart">Get API key</a>
+  </nav>
+</header>
+
+<div class="shell" id="top">
+  <aside class="sidebar" aria-label="Docs contents">
+    <nav>
+      <h2>Getting started</h2>
+      <ul>
+        <li><a href="#quickstart">Quickstart</a></li>
+        <li><a href="#send">Send a line</a></li>
+        <li><a href="#read">Read the result</a></li>
+      </ul>
+      <h2>Reference</h2>
+      <ul>
+        <li><a href="#endpoint">POST /v1/parse</a></li>
+        <li><a href="#errors">Error codes</a></li>
+        <li><a href="#limits">Rate limits</a></li>
+        <li><a href="#sdks">SDKs</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="article" id="main">
+    <header class="article-head">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> API v2.4.0 · Updated 14 Nov 2026</p>
+      <h1>Parse logs in one request.</h1>
+      <p class="lede">Send a raw line to <code>POST /v1/parse</code> and get structured JSON back. The quickstart takes about 30 minutes, including your first query.</p>
+      <div class="meta-row">
+        <span>30 min quickstart</span><span class="sep" aria-hidden="true"></span>
+        <span>No SDK required</span><span class="sep" aria-hidden="true"></span>
+        <span>Fixture demo runs locally</span>
+      </div>
+    </header>
+
+    <details class="mobile-toc">
+      <summary>Contents <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6l4 4 4-4"></path></svg></summary>
+      <ul>
+        <li><a href="#quickstart">Quickstart</a></li>
+        <li><a href="#endpoint">POST /v1/parse</a></li>
+        <li><a href="#errors">Error codes</a></li>
+        <li><a href="#limits">Rate limits</a></li>
+        <li><a href="#sdks">SDKs</a></li>
+      </ul>
+    </details>
+
+    <section class="doc-section" id="quickstart">
+      <h2>Quickstart</h2>
+      <p>Three steps: send a line, read the fields, then query what you stored. The example below uses a real log shape from an API gateway.</p>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num" aria-hidden="true">1</span>
+          <div>
+            <h3 id="send">Send a line</h3>
+            <p>Post one line per request. Batch up to 500 lines with <code>POST /v1/parse/batch</code> when you need throughput.</p>
+            <div class="code-block">
+              <div class="code-head"><span>request.sh</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-curl">Copy</button></div>
+              <pre id="code-curl"><code><span class="tok-punc">curl</span> https://api.payloaddeck.dev/v1/parse \
+  <span class="tok-punc">-H</span> <span class="tok-str">"Authorization: Bearer $PAYLOADDECK_KEY"</span> \
+  <span class="tok-punc">-H</span> <span class="tok-str">"Content-Type: application/json"</span> \
+  <span class="tok-punc">-d</span> <span class="tok-str">'{"line":"2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a status=200 latency_ms=84"}'</span></code></pre>
+            </div>
+          </div>
+        </li>
+
+        <li class="step">
+          <span class="step-num" aria-hidden="true">2</span>
+          <div>
+            <h3 id="read">Read the result</h3>
+            <p>Every field is typed. A missing field is left out, never filled with a guess.</p>
+            <div class="code-block">
+              <div class="code-head"><span>response.json</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-json">Copy</button></div>
+              <pre id="code-json"><code>{
+  <span class="tok-key">"timestamp"</span><span class="tok-punc">:</span> <span class="tok-str">"2026-11-14T09:41:07Z"</span>,
+  <span class="tok-key">"level"</span><span class="tok-punc">:</span> <span class="tok-str">"INFO"</span>,
+  <span class="tok-key">"service"</span><span class="tok-punc">:</span> <span class="tok-str">"api-gateway"</span>,
+  <span class="tok-key">"request_id"</span><span class="tok-punc">:</span> <span class="tok-str">"8f3c2a"</span>,
+  <span class="tok-key">"status"</span><span class="tok-punc">:</span> <span class="tok-num">200</span>,
+  <span class="tok-key">"latency_ms"</span><span class="tok-punc">:</span> <span class="tok-num">84</span>
+}</code></pre>
+            </div>
+          </div>
+        </li>
+
+        <li class="step">
+          <span class="step-num" aria-hidden="true">3</span>
+          <div>
+            <h3>Query what you stored</h3>
+            <p>Parsed fields land in a queryable table. Filter by <code>service</code> and <code>status</code> without writing a regex.</p>
+            <div class="code-block">
+              <div class="code-head"><span>query.sh</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-query">Copy</button></div>
+              <pre id="code-query"><code><span class="tok-punc">curl</span> <span class="tok-str">"https://api.payloaddeck.dev/v1/events?service=api-gateway&amp;status=5xx&amp;since=24h"</span> \
+  <span class="tok-punc">-H</span> <span class="tok-str">"Authorization: Bearer $PAYLOADDECK_KEY"</span></code></pre>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="try-it">
+        <h3>Try a line</h3>
+        <p>This runs against a local fixture. It sends nothing and needs no key.</p>
+        <form id="tryForm" novalidate>
+          <div class="field" id="lineField">
+            <label for="logLine">Log line</label>
+            <textarea id="logLine" name="line" spellcheck="false" aria-describedby="lineHint lineError">2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a user=u_10428 route=/v1/chat status=200 latency_ms=84</textarea>
+            <p class="hint" id="lineHint">ISO 8601 timestamp first, then level, service and key=value pairs.</p>
+            <p class="error-text" id="lineError" role="alert">Enter a log line first.</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit" id="runBtn">Parse line</button>
+            <button class="btn btn-ghost" type="button" id="resetBtn">Reset example</button>
+            <span class="status-line" id="tryStatus" aria-live="polite"></span>
+          </div>
+        </form>
+        <div class="result" id="tryResult" hidden aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="endpoint">
+      <h2>POST /v1/parse</h2>
+      <p>One line in, one event out. Requests are limited by plan, not by concurrency.</p>
+
+      <div class="tabs">
+        <div class="tablist" role="tablist" aria-label="Request examples">
+          <button class="tab" role="tab" id="tab-curl" aria-selected="true" aria-controls="panel-curl" tabindex="0">cURL</button>
+          <button class="tab" role="tab" id="tab-node" aria-selected="false" aria-controls="panel-node" tabindex="-1">Node</button>
+          <button class="tab" role="tab" id="tab-python" aria-selected="false" aria-controls="panel-python" tabindex="-1">Python</button>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-curl" aria-labelledby="tab-curl">
+          <div class="code-block">
+            <div class="code-head"><span>request.sh</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-tab-curl">Copy</button></div>
+            <pre id="code-tab-curl"><code><span class="tok-punc">curl</span> https://api.payloaddeck.dev/v1/parse \
+  <span class="tok-punc">-H</span> <span class="tok-str">"Authorization: Bearer $PAYLOADDECK_KEY"</span> \
+  <span class="tok-punc">-H</span> <span class="tok-str">"Content-Type: application/json"</span> \
+  <span class="tok-punc">-d</span> <span class="tok-str">'{"line":"2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a status=200"}'</span></code></pre>
+          </div>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" hidden>
+          <div class="code-block">
+            <div class="code-head"><span>parse.mjs</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-tab-node">Copy</button></div>
+            <pre id="code-tab-node"><code><span class="tok-key">import</span> { PayloadDeck } <span class="tok-key">from</span> <span class="tok-str">"@payloaddeck/sdk"</span>;
+
+<span class="tok-key">const</span> deck = <span class="tok-key">new</span> <span class="tok-punc">PayloadDeck</span>({ apiKey: process.env.PAYLOADDECK_KEY });
+
+<span class="tok-key">const</span> event = <span class="tok-key">await</span> deck.parse({
+  line: <span class="tok-str">"2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a status=200"</span>,
+});</code></pre>
+          </div>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-python" aria-labelledby="tab-python" hidden>
+          <div class="code-block">
+            <div class="code-head"><span>parse.py</span><span class="copy-status" data-copy-status aria-live="polite"></span><button class="btn btn-secondary btn-small copy" data-copy="code-tab-python">Copy</button></div>
+            <pre id="code-tab-python"><code><span class="tok-key">from</span> payloaddeck <span class="tok-key">import</span> Client
+
+client = Client(api_key=os.environ[<span class="tok-str">"PAYLOADDECK_KEY"</span>])
+event = client.parse(
+    line=<span class="tok-str">"2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a status=200"</span>,
+)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>Parameters</h3>
+      <div class="table-wrap">
+        <table>
+          <caption>Request body fields for POST /v1/parse</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Required</th><th scope="col">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>line</code></td><td>string</td><td>Yes</td><td>One line, up to 64 KB. Long lines return <code>413</code>.</td></tr>
+            <tr><td><code>format</code></td><td>json · ndjson</td><td>No</td><td>Defaults to <code>json</code>. Use <code>ndjson</code> for streams.</td></tr>
+            <tr><td><code>rules</code></td><td>string[]</td><td>No</td><td>Extra patterns for fields your line format needs.</td></tr>
+            <tr><td><code>redact</code></td><td>string[]</td><td>No</td><td>Field names to replace with <code>[redacted]</code> before storage.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note"><strong>Response time.</strong> p50 is 12 ms and p95 is 41 ms for a 1 KB line in the same region. Measured on 14 Nov 2026 with the fixture corpus.</p>
+    </section>
+
+    <section class="doc-section" id="errors">
+      <h2>Error codes</h2>
+      <p>Errors return a JSON body with <code>code</code> and <code>message</code>. Retry only the codes marked retryable.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>API error codes and fixes</caption>
+          <thead><tr><th scope="col">Code</th><th scope="col">HTTP</th><th scope="col">Meaning</th><th scope="col">Fix</th></tr></thead>
+          <tbody>
+            <tr><td><code>invalid_key</code></td><td>401</td><td>Missing or revoked API key</td><td>Create a key in the console, then retry.</td></tr>
+            <tr><td><code>invalid_json</code></td><td>400</td><td>Body is not valid JSON</td><td>Check quotes and commas before retrying.</td></tr>
+            <tr><td><code>line_too_long</code></td><td>413</td><td>Line is over 64 KB</td><td>Truncate the line or split it at a delimiter.</td></tr>
+            <tr><td><code>unparsable_line</code></td><td>422</td><td>No timestamp or level found</td><td>Send the raw line, not a pre-formatted summary.</td></tr>
+            <tr><td><code>rate_limited</code></td><td>429</td><td>Plan limit reached</td><td>Back off for the number of seconds in <code>Retry-After</code>.</td></tr>
+            <tr><td><code>internal</code></td><td>500</td><td>Parser failed</td><td>Retry with jitter. If it repeats, send the line to support.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc-section" id="limits">
+      <h2>Rate limits</h2>
+      <p>Limits reset every minute. Burst allows a short spike above the steady rate.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Requests per minute by plan</caption>
+          <thead><tr><th scope="col">Plan</th><th scope="col">Requests / min</th><th scope="col">Burst</th><th scope="col">Batch size</th></tr></thead>
+          <tbody>
+            <tr><td>Free</td><td>60</td><td>10</td><td>50 lines</td></tr>
+            <tr><td>Pro</td><td>600</td><td>100</td><td>500 lines</td></tr>
+            <tr><td>Scale</td><td>6,000</td><td>1,000</td><td>5,000 lines</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note"><strong>Retries.</strong> A <code>429</code> response includes <code>Retry-After</code> in seconds. Retry after that delay, then add up to 200 ms of jitter.</p>
+    </section>
+
+    <section class="doc-section" id="sdks">
+      <h2>SDKs</h2>
+      <p>The SDKs wrap the same endpoint. Use them if you want typed fields and automatic retries.</p>
+      <div class="next-links">
+        <a href="#sdks"><span aria-hidden="true">↗</span> Node · <code>@payloaddeck/sdk</code><span>v2.4.0</span></a>
+        <a href="#sdks"><span aria-hidden="true">↗</span> Python · <code>payloaddeck</code><span>v2.4.0</span></a>
+        <a href="#sdks"><span aria-hidden="true">↗</span> Go · <code>payloaddeck-go</code><span>v2.4.0</span></a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="foot">
+  <p>PayloadDeck docs v2.4.0 · Updated 14 Nov 2026 · Fixture data, no live API calls · Built from the UISpecs Primer base · <a href="#top">Back to top</a></p>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop"></div>
+<div class="modal" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="searchLabel" hidden>
+  <div class="modal-head">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5 14 14"></path></svg>
+    <label class="sr-only" id="searchLabel" for="searchInput">Search docs</label>
+    <input id="searchInput" type="search" placeholder="Search docs, try “rate limits”" autocomplete="off" spellcheck="false">
+    <kbd aria-hidden="true">esc</kbd>
+  </div>
+  <div class="modal-body" id="searchResults"></div>
+  <div class="modal-foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ── toast ─────────────────────────────────────────────────── */
+  const toast = $('#toast');
+  let toastTimer = 0;
+  function showToast(text) {
+    clearTimeout(toastTimer);
+    toast.textContent = text;
+    toast.classList.remove('is-closing');
+    toast.classList.add('is-open');
+    toastTimer = window.setTimeout(() => {
+      toast.classList.add('is-closing');
+      toast.classList.remove('is-open');
+      window.setTimeout(() => toast.classList.remove('is-closing'), prefersReduced.matches ? 0 : 300);
+    }, 2200);
+  }
+
+  /* ── copy buttons ──────────────────────────────────────────── */
+  function legacyCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }
+  async function copyText(text, btn) {
+    const status = btn.closest('.code-head').querySelector('[data-copy-status]');
+    try {
+      let copied = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await Promise.race([
+            navigator.clipboard.writeText(text),
+            new Promise((_, reject) => window.setTimeout(() => reject(new Error('timeout')), 600)),
+          ]);
+          copied = true;
+        } catch (err) {
+          copied = false;
+        }
+      }
+      if (!copied && !legacyCopy(text)) throw new Error('copy failed');
+      btn.textContent = 'Copied';
+      if (status) status.textContent = 'Copied to clipboard';
+      showToast('Code copied');
+      window.setTimeout(() => { btn.textContent = 'Copy'; if (status) status.textContent = ''; }, 1600);
+    } catch (err) {
+      if (status) status.textContent = 'Select the code and press ⌘C';
+      showToast('Copy failed. Select the code and press ⌘C.');
+    }
+  }
+  $$('.copy').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const pre = document.getElementById(btn.dataset.copy);
+      if (pre) copyText(pre.innerText, btn);
+    });
+  });
+
+  /* ── tabs ──────────────────────────────────────────────────── */
+  const tabs = $$('.tab');
+  function selectTab(tab, moveFocus = true) {
+    tabs.forEach((t) => {
+      const selected = t === tab;
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !selected;
+    });
+    if (moveFocus) tab.focus();
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => selectTab(tab, false));
+    tab.addEventListener('keydown', (e) => {
+      let next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (next) { e.preventDefault(); selectTab(next); }
+    });
+  });
+
+  /* ── sidebar scrollspy ─────────────────────────────────────── */
+  const spyLinks = $$('.sidebar a[href^="#"]');
+  const spySections = spyLinks.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function setCurrent(id) {
+    spyLinks.forEach((a) => {
+      const on = a.getAttribute('href') === '#' + id;
+      if (on) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setCurrent(visible[0].target.id);
+    }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, 0.2, 1] });
+    spySections.forEach((s) => io.observe(s));
+  }
+
+  /* ── mobile menu ───────────────────────────────────────────── */
+  const menuBtn = $('#menuBtn');
+  const mobileMenu = $('#mobileMenu');
+  function closeMenu(returnFocus = false) {
+    mobileMenu.classList.remove('is-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    if (returnFocus) menuBtn.focus();
+  }
+  menuBtn.addEventListener('click', () => {
+    const open = menuBtn.getAttribute('aria-expanded') === 'true';
+    if (open) closeMenu();
+    else { mobileMenu.classList.add('is-open'); menuBtn.setAttribute('aria-expanded', 'true'); }
+  });
+  mobileMenu.addEventListener('click', (e) => { if (e.target.closest('a')) closeMenu(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') closeMenu(true);
+  });
+
+  /* ── try-it demo ───────────────────────────────────────────── */
+  const SAMPLE = '2026-11-14T09:41:07Z INFO api-gateway req=8f3c2a user=u_10428 route=/v1/chat status=200 latency_ms=84';
+  const lineField = $('#lineField');
+  const logLine = $('#logLine');
+  const runBtn = $('#runBtn');
+  const resetBtn = $('#resetBtn');
+  const tryResult = $('#tryResult');
+  const tryStatus = $('#tryStatus');
+  let running = false;
+
+  function setLineError(message) {
+    const err = $('#lineError');
+    if (message) {
+      err.textContent = message;
+      lineField.classList.add('has-error');
+      logLine.setAttribute('aria-invalid', 'true');
+      logLine.focus();
+    } else {
+      lineField.classList.remove('has-error');
+      logLine.removeAttribute('aria-invalid');
+    }
+  }
+
+  function parseLine(line) {
+    const ts = line.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)/);
+    if (!ts) return { ok: false, message: 'No ISO 8601 timestamp found at the start of the line.' };
+    const level = line.match(/\s(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\s/);
+    if (!level) return { ok: false, message: 'No log level found. Expected INFO, WARN, ERROR and similar.' };
+    const rest = line.slice(ts[1].length).trim().split(/\s+/);
+    const service = rest[1] || 'unknown';
+    const kv = {};
+    rest.slice(2).forEach((part) => {
+      const i = part.indexOf('=');
+      if (i > 0) kv[part.slice(0, i)] = part.slice(i + 1);
+    });
+    return {
+      ok: true,
+      fields: {
+        timestamp: ts[1],
+        level: level[1],
+        service,
+        request_id: kv.req || 'not present',
+        user_id: kv.user || 'not present',
+        route: kv.route || 'not present',
+        status: kv.status || 'not present',
+        latency_ms: kv.latency_ms || 'not present',
+      },
+    };
+  }
+
+  function renderResult(html) {
+    // All markup here is built from fixed strings; interpolated field values are escaped above.
+    tryResult.hidden = false;
+    tryResult.innerHTML = html;
+  }
+
+  $('#tryForm').addEventListener('submit', (e) => e.preventDefault());
+  runBtn.addEventListener('click', () => {
+    if (running) return;
+    const line = logLine.value.trim();
+    if (!line) { setLineError('Enter a log line first.'); return; }
+    setLineError('');
+    running = true;
+    runBtn.disabled = true;
+    tryStatus.textContent = 'Parsing…';
+    renderResult('<div class="skeleton" aria-label="Parsing"><span></span><span></span><span></span></div>');
+    window.setTimeout(() => {
+      const result = parseLine(line);
+      if (!result.ok) {
+        renderResult('<div class="result-error" role="alert"><strong>Could not parse this line.</strong> ' + result.message + ' Keep the line as the service wrote it, then try again.</div>');
+        tryStatus.textContent = 'Fix the line, then retry.';
+      } else {
+        const f = result.fields;
+        const rows = Object.entries(f).map(([k, v]) => '<div><dt>' + k + '</dt><dd>' + String(v).replace(/[<>&]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])) + '</dd></div>').join('');
+        renderResult('<h4>Parsed event</h4><dl class="result-grid">' + rows + '</dl>');
+        tryStatus.textContent = 'Parsed 1 line in 12 ms (fixture).';
+      }
+      running = false;
+      runBtn.disabled = false;
+    }, 1200);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    logLine.value = SAMPLE;
+    setLineError('');
+    tryResult.hidden = true;
+    tryResult.innerHTML = '';
+    tryStatus.textContent = '';
+    logLine.focus();
+  });
+
+  /* ── search modal ──────────────────────────────────────────── */
+  const SEARCH_INDEX = [
+    { group: 'Getting started', title: 'Quickstart', desc: 'Send a line, read the result, query it', href: '#quickstart', keys: 'start setup first request curl' },
+    { group: 'Getting started', title: 'Send a line', desc: 'One line per request, batch up to 500', href: '#send', keys: 'post request batch' },
+    { group: 'Getting started', title: 'Read the result', desc: 'Typed fields, missing fields stay missing', href: '#read', keys: 'response json fields types' },
+    { group: 'Reference', title: 'POST /v1/parse', desc: 'Body fields, formats and rules', href: '#endpoint', keys: 'endpoint parameters format rules redact' },
+    { group: 'Reference', title: 'Error codes', desc: '401, 400, 413, 422, 429, 500', href: '#errors', keys: 'failures retry invalid rate' },
+    { group: 'Reference', title: 'Rate limits', desc: 'Requests per minute by plan', href: '#limits', keys: 'quota burst throttle 429 retry-after' },
+    { group: 'Reference', title: 'SDKs', desc: 'Node, Python and Go packages', href: '#sdks', keys: 'client library npm pip go' },
+  ];
+  const modal = $('#searchModal');
+  const backdrop = $('#modalBackdrop');
+  const searchBtn = $('#searchBtn');
+  const input = $('#searchInput');
+  const results = $('#searchResults');
+  let lastTrigger = null;
+  let activeIndex = 0;
+  let rendered = [];
+  let closeTimer = 0;
+
+  function filterIndex(q) {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return SEARCH_INDEX;
+    return SEARCH_INDEX.filter((item) => (item.title + ' ' + item.desc + ' ' + item.keys).toLowerCase().includes(needle));
+  }
+
+  function renderResults(q) {
+    rendered = filterIndex(q);
+    activeIndex = 0;
+    if (!rendered.length) {
+      results.innerHTML = '<div class="search-empty">No results for <b>“' + q.replace(/[<>&]/g, '') + '”</b>. Try “parse”, “errors” or “rate limits”.</div>';
+      return;
+    }
+    let html = '';
+    let group = '';
+    rendered.forEach((item, i) => {
+      if (item.group !== group) { group = item.group; html += '<div class="search-group-label">' + group + '</div>'; }
+      html += '<a class="search-item' + (i === 0 ? ' is-active' : '') + '" href="' + item.href + '" data-i="' + i + '">' + item.title + '<small>' + item.desc + '</small></a>';
+    });
+    results.innerHTML = html;
+    $$('.search-item', results).forEach((el) => el.addEventListener('click', () => {
+      const target = document.querySelector(el.getAttribute('href'));
+      closeSearch(false);
+      if (target) {
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      }
+    }));
+  }
+
+  function setActive(i) {
+    const items = $$('.search-item', results);
+    if (!items.length) return;
+    activeIndex = (i + items.length) % items.length;
+    items.forEach((el, j) => el.classList.toggle('is-active', j === activeIndex));
+    items[activeIndex].scrollIntoView({ block: 'nearest' });
+  }
+
+  function openSearch() {
+    clearTimeout(closeTimer);
+    lastTrigger = document.activeElement === document.body ? searchBtn : document.activeElement;
+    modal.hidden = false;
+    backdrop.classList.add('is-open');
+    modal.classList.add('is-open');
+    renderResults('');
+    input.value = '';
+    window.setTimeout(() => input.focus(), 30);
+  }
+
+  function closeSearch(returnFocus = true) {
+    modal.classList.add('is-closing');
+    backdrop.classList.add('is-closing');
+    const done = () => {
+      modal.classList.remove('is-open', 'is-closing');
+      backdrop.classList.remove('is-open', 'is-closing');
+      modal.hidden = true;
+      if (returnFocus && lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+    };
+    if (prefersReduced.matches) done();
+    else closeTimer = window.setTimeout(done, 200);
+  }
+
+  searchBtn.addEventListener('click', openSearch);
+  backdrop.addEventListener('click', () => closeSearch());
+  input.addEventListener('input', () => renderResults(input.value));
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(activeIndex + 1); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); setActive(activeIndex - 1); }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const items = $$('.search-item', results);
+      if (items[activeIndex]) items[activeIndex].click();
+    }
+    if (e.key === 'Escape') { e.preventDefault(); closeSearch(); }
+  });
+  modal.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.stopPropagation(); closeSearch(); return; }
+    if (e.key !== 'Tab') return;
+    const focusables = $$('a[href], button, input', modal).filter((el) => el.offsetParent !== null);
+    if (!focusables.length) return;
+    const first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+  });
+
+  /* ── hash links close mobile menu and search ───────────────── */
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (a && modal.classList.contains('is-open') && a.closest('.modal')) closeSearch(false);
+  });
+})();
+</script>
+</body>
+</html>

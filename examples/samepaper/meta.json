@@ -1,0 +1,7 @@
+{
+  "name": "SamePaper",
+  "tagline": "把评审、讨论和待办写在同一张纸上的协作工具。",
+  "accent": "Purple7 #7137bf",
+  "structure": "Marquee Hero · N5 / Ft5",
+  "layout": "首屏一句大字主张，下面一张可点的评审纸：右侧讨论、底部待办都指向同一段正文。"
+}

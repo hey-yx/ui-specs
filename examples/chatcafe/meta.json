@@ -1,0 +1,7 @@
+{
+  "name": "ChatCafe",
+  "tagline": "浏览器即开即聊 AI 助手馆：Apple HIG iPadOS 分栏、12 场景助手、空白开聊与免密登录",
+  "accent": "HIG Blue #0052d9",
+  "structure": "Apple HIG Split-View · 自定 iPadOS 半透明工具栏 + #f3f3f3 侧栏/纯白对话区 + Ft2 发丝线单行页脚",
+  "layout": "Apple HIG project-apple-hig 规范（半透明毛玻璃顶栏 + #f3f3f3 Grouped Background 托举圆角白卡、12 个场景助手 + 空白开聊、3 卡开场白即发、游客 3 次/会员 ¥19/加油包 ¥6 额度表与 30 天记录控制）"
+}

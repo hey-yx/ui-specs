@@ -1,0 +1,198 @@
+---
+title: "TDesign · Message 全局提示"
+source: https://tdesign.tencent.com/vue/components/message
+section: components
+tag: "规范"
+fetched: 2026-11-09
+status: full
+id: components-tdesign-message
+publisher: "腾讯"
+---
+
+# TDesign · Message 全局提示
+
+> 来源：[https://tdesign.tencent.com/vue/components/message](https://tdesign.tencent.com/vue/components/message)
+
+---
+
+### 普通全局提示
+
+使用简洁文字描述操作反馈。常规全局提示包含：普通信息、成功信息、警示信息、错误信息、帮助信息和加载中。
+
+### 加载中信息提示
+
+### 关闭全局提示
+
+#### 带关闭按钮的全局提示
+
+#### 使用关闭函数控制全局提示
+
+如果不希望通过计时关闭，或者用户点击按钮关闭，也可以使用关闭函数。
+
+#### 关闭多条全局提示
+
+### 控制全局提示显示位置
+
+全局提示显示位置可控制，`placement` 用于控制大概位置，`offset` 用于设置相对于 `placement` 所在位置的偏移
+
+### 插件调用与函数式调用
+
+支持插件式调用 `this.$message` 和函数式调用 `MessagePlugin` 两种方式，两种方式参数完全一样。
+
+  - 示例一：`MessagePlugin.warning('请输入信息')` 或 `this.$message.warning('请输入信息')`
+  - 示例二：`MessagePlugin.warning({ content: '请输入信息', duration: 5000, placement: 'top', onDurationEnd: () => {} })`
+插件调用
+
+函数式调用
+
+### 全局方法
+
+还提供了全局配置方法
+
+  - `this.$message.config(placement, attach, offset, zIndex)`
+  - `MessagePlugin.config(placement, attach, offset, zIndex)`
+
+### Message Props
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| closeBtn | String / Boolean / Slot / Function | undefined | 关闭按钮，可以自定义。值为 true 显示默认关闭按钮，值为 false 不显示关闭按钮。值类型为 string 则直接显示值，如：“关闭”。也可以完全自定义按钮。TS 类型：`string \| boolean \| TNode`。[通用类型定义](https://github.com/Tencent/tdesign-vue/blob/develop/src/common.ts) | N |
+| content | String / Slot / Function | - | 用于自定义消息弹出内容。TS 类型：`string \| TNode`。[通用类型定义](https://github.com/Tencent/tdesign-vue/blob/develop/src/common.ts) | N |
+| duration | Number | 3000 | 消息内置计时器，计时到达时会触发 duration-end 事件。单位：毫秒。值为 0 则表示没有计时器。 | N |
+| icon | Boolean / Slot / Function | true | 用于自定义消息前面的图标，优先级大于 theme 设定的图标。值为 false 则不显示图标，值为 true 显示 theme 设定图标。TS 类型：`boolean \| TNode`。[通用类型定义](https://github.com/Tencent/tdesign-vue/blob/develop/src/common.ts) | N |
+| theme | String | info | 消息组件风格。可选项：info/success/warning/error/question/loading。TS 类型：`MessageThemeList` `type MessageThemeList = 'info' \| 'success' \| 'warning' \| 'error' \| 'question' \| 'loading'`。[详细类型定义](https://github.com/Tencent/tdesign-vue/tree/develop/src/message/type.ts) | N |
+| onClose | Function |  | TS 类型：`(context: { trigger: 'close-click' \| 'duration-end', e?: MouseEvent }) => void`  关闭消息时触发 | N |
+| onCloseBtnClick | Function |  | TS 类型：`(context: { e: MouseEvent }) => void`  当关闭按钮存在时，用户点击关闭按钮触发 | N |
+| onDurationEnd | Function |  | TS 类型：`() => void`  计时结束后触发 | N |
+
+### Message Events
+
+| 名称 | 参数 | 描述 |
+| --- | --- | --- |
+| close | `(context: { trigger: 'close-click' \| 'duration-end', e?: MouseEvent })` | 关闭消息时触发 |
+| close-btn-click | `(context: { e: MouseEvent })` | 当关闭按钮存在时，用户点击关闭按钮触发 |
+| duration-end | - | 计时结束后触发 |
+
+### MessageOptions
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| attach | String / Function | 'body' | 指定弹框挂载的父节点。数据类型为 String 时，会被当作选择器处理，进行节点查询。示例：'body' 或 () => document.body。TS 类型：`AttachNode`。[通用类型定义](https://github.com/Tencent/tdesign-vue/blob/develop/src/common.ts) | N |
+| className | String | - | 类名 | N |
+| offset | Array | - | 相对于 placement 的偏移量，示例：[-10, 20] 或 ['10em', '8rem']。TS 类型：`Array<string \| number>` | N |
+| placement | String | top | 弹出消息位置。可选项：center/top/left/right/bottom/top-left/top-right/bottom-left/bottom-right。TS 类型：`MessagePlacementList` `type MessagePlacementList = 'center' \| 'top' \| 'left' \| 'right' \| 'bottom' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`。[详细类型定义](https://github.com/Tencent/tdesign-vue/tree/develop/src/message/type.ts) | N |
+| style | Object | - | 内敛样式。TS 类型：`CSSProperties` | N |
+| zIndex | Number | 5000 | 消息层级 | N |
+| `MessageProps` | - | - | 继承 `MessageProps` 中的全部 API | N |
+
+### MessagePlugin
+
+同时也支持 `this.$message`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin(theme, message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| theme | String | - | 必需。消息类型。TS 类型：`MessageThemeList` |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.info
+
+同时也支持 `this.$message.info`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.info(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageInfoOptions` `type MessageInfoOptions = Omit<MessageOptions, 'theme'>`。[详细类型定义](https://github.com/Tencent/tdesign-vue/tree/develop/src/message/type.ts) |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.error
+
+同时也支持 `this.$message.error`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.error(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageInfoOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.warning
+
+同时也支持 `this.$message.warning`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.warning(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageInfoOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.success
+
+同时也支持 `this.$message.success`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.success(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageInfoOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.loading
+
+同时也支持 `this.$message.loading`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.loading(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息提醒内容。TS 类型：`string \| MessageInfoOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.question
+
+同时也支持 `this.$message.question`。请注意以下字段是形参名，非实际参数名，即 `MessagePlugin.question(message, duration)`
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | String / Object | - | 必需。消息内容。TS 类型：`string \| MessageInfoOptions` |
+| duration | Number | 3000 | 消息显示时长，单位：毫秒。值为 0 表示永久显示 |
+
+### MessagePlugin.close
+
+同时也支持 `this.$message.close`。
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| options | Object | - | 必需。该插件参数为 $Message.info() 等插件执行后的返回值。示例：`const msg = $Message.info({}); $Message.close(msg)`。TS 类型：`Promise<MessageInstance>` |
+
+### MessagePlugin.closeAll
+
+同时也支持 `this.$message.closeAll`。
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| - | - | - | - |
+
+### MessagePlugin.config
+
+同时也支持 `this.$message.config`。
+
+| 参数名称 | 参数类型 | 参数默认值 | 参数说明 |
+| --- | --- | --- | --- |
+| message | Object | - | 必需。全局提醒插件全局配置。TS 类型：`MessageOptions` |
+
+### 何时使用
+
+在完成某个独立页面后，需要反馈时；
+
+在某个操作区域或系列操作完成后，需要总体反馈时。
+
+### 与页面布局相关
+
+##### 全局提示常出现在页面顶部居中、内容区右上方和左下方等位置，提示用户却不过于干扰
+
+![](https://tdesign.gtimg.com/site/design/guide/message/message-1@2x.png)
+
+![](https://tdesign.gtimg.com/site/design/guide/message/message-2@2x.png)
+
+![](https://tdesign.gtimg.com/site/design/guide/message/message-3@2x.png)
+
+### 相似组件
+
+| 相似组件 | 何时使用 |
+| --- | --- |
+| [全局提示](https://tdesign.tencent.com/vue/components/message) | 对用户的操作作出轻量的全局反馈。 |
+| [警告](https://tdesign.tencent.com/vue/components/Alert) | 警告常用于承载站内相关产品某项功能的解释说明、使用注意事项等，置于内容展示区域顶部，非悬浮层。 |
+| [消息通知](https://tdesign.tencent.com/vue/components/Notification) | 需要提醒用户来自系统的消息，且不打断用户时；带有解释描述的提醒内容时。 |

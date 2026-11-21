@@ -1,0 +1,4036 @@
+{
+  "tasks": {
+    "s1": {
+      "name": "项目选型方案",
+      "short": "项目选型"
+    },
+    "s2": {
+      "name": "通用页面基本功",
+      "short": "页面基本功"
+    },
+    "s3": {
+      "name": "数值层（色字距动效）",
+      "short": "数值层"
+    },
+    "s4": {
+      "name": "文案与写作",
+      "short": "文案写作"
+    },
+    "s5": {
+      "name": "组件设计",
+      "short": "组件"
+    },
+    "s6": {
+      "name": "图标",
+      "short": "图标"
+    },
+    "s7": {
+      "name": "导航与信息架构",
+      "short": "导航"
+    },
+    "s8": {
+      "name": "状态与反馈",
+      "short": "状态反馈"
+    },
+    "s9": {
+      "name": "表单与流程",
+      "short": "表单流程"
+    },
+    "s10": {
+      "name": "图表与数据可视化",
+      "short": "图表"
+    },
+    "s11": {
+      "name": "落地页与营销页",
+      "short": "落地页"
+    },
+    "s12": {
+      "name": "后台与数据面板",
+      "short": "后台面板"
+    },
+    "s13": {
+      "name": "品牌设计语言",
+      "short": "品牌语言"
+    },
+    "s14": {
+      "name": "Token 标准与落地",
+      "short": "Token 标准"
+    },
+    "s15": {
+      "name": "Web 标准",
+      "short": "Web 标准"
+    },
+    "s16": {
+      "name": "无障碍验收",
+      "short": "无障碍"
+    },
+    "s17": {
+      "name": "评审与体验底线",
+      "short": "评审底线"
+    },
+    "s18": {
+      "name": "案例库",
+      "short": "案例库"
+    }
+  },
+  "points": [
+    {
+      "id": "howto-visual-hierarchy",
+      "name": "视觉层级",
+      "domain": "howto",
+      "select": "用大小、字重和颜色深浅拉开主次，字号最多分 3 档，最大的元素控制在 2 个以内。简单设计的配色限 2 个主色加 2 个辅色，相近颜色堆多了层级就糊了。",
+      "checks": [
+        {
+          "q": "原文说为什么可以用尺寸（字号）来标记信息的重要程度？",
+          "a": "Bigger elements stand out more and attract users’ attention, so size can be used as a marker for importance.",
+          "cite": "content/howto/nngroup.com--visual-hierarchy-ux-definition.md:64"
+        },
+        {
+          "q": "界面信息应按什么顺序呈现，靠什么手段做到？",
+          "a": "Aim to present information in order of importance by making more important elements look more prominent.",
+          "cite": "content/howto/adhamdannaway.com--ui-design-tips.md:99"
+        }
+      ],
+      "tasks": [
+        "s2",
+        "s11",
+        "s17"
+      ],
+      "articles": [
+        "howto/nngroup.com--visual-hierarchy-ux-definition.md",
+        "howto/awwwards.com--understanding-web-ui-visual-hierarchy.md",
+        "howto/adhamdannaway.com--ui-design-tips.md"
+      ]
+    },
+    {
+      "id": "howto-ui-polish",
+      "name": "界面美化细则",
+      "domain": "howto",
+      "select": "留白要舍得给，菜单项和列表的间距宁多勿少，排版密度靠留白拉开节奏。白字压图必须垫深色渐变遮罩或黑色滤镜保证可读，粗体标题可略微收紧字距。",
+      "checks": [
+        {
+          "q": "音乐播放器示例里，菜单项文字上下留的内边距和字号是什么关系？",
+          "a": "You’re looking at 12px font with just as much padding above and below it.",
+          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-1.md:285"
+        },
+        {
+          "q": "粗体标题想收紧字距时，示例给出的字距取值是多少？",
+          "a": "I would add a slight bit of negative letter-spacing. Here’s -1%.",
+          "cite": "content/howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-2.md:348"
+        }
+      ],
+      "tasks": [
+        "s2",
+        "s11"
+      ],
+      "articles": [
+        "howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-1.md",
+        "howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-2.md",
+        "howto/adhamdannaway.com--ui-design-tips.md"
+      ]
+    },
+    {
+      "id": "howto-ui-color-framework",
+      "name": "界面配色框架",
+      "domain": "howto",
+      "select": "色相按等间隔取一组，饱和度和亮度先拉满做基准，再靠降亮度、降饱和来表达 hover 和选中状态，而不是乱换色。选中态可以只降亮度，hover 只降饱和，各自只动一个维度。",
+      "checks": [
+        {
+          "q": "按原文，Harvest 头部的选中态和 hover 态各自只改了哪个维度？",
+          "a": "In the Harvest header above, the selected state is just a lower brightness (saturation unchanged) and the hover state is just a lower saturation (brightness unchanged).",
+          "cite": "content/howto/learnui.design--color-in-ui-design-a-practical-framework.md:242"
+        },
+        {
+          "q": "做“更深一档”的颜色变化时，亮度和饱和度分别要往哪走？",
+          "a": "Darker color variations are made by lowering brightness and increasing saturation.",
+          "cite": "content/howto/learnui.design--color-in-ui-design-a-practical-framework.md:208"
+        }
+      ],
+      "tasks": [
+        "s2",
+        "s3"
+      ],
+      "articles": [
+        "howto/learnui.design--color-in-ui-design-a-practical-framework.md",
+        "howto/nngroup.com--visual-hierarchy-ux-definition.md"
+      ]
+    },
+    {
+      "id": "bento-grid-layout",
+      "name": "Bento 网格",
+      "domain": "bento",
+      "select": "做官网功能区或产品展示想用便当格排布时选它。以基础单位统一间距搭网格，内容块跨度不一就用 dense 流补洞。格子别排太密，选项一多用户决策会变慢。",
+      "checks": [
+        {
+          "q": "便当格里每个格子的宽和高相对基础单位要满足什么条件？",
+          "a": "Every cell width and height should be a whole multiple of that unit.",
+          "cite": "content/bento/setproduct.com--bento-grid-layout-design-guide.md:58"
+        },
+        {
+          "q": "布局出现空洞时，可以用 grid-auto-flow: dense 来补齐吗？",
+          "a": "Never reach for grid-auto-flow: dense to patch a layout with gaps.",
+          "cite": "content/bento/setproduct.com--bento-grid-layout-design-guide.md:80"
+        }
+      ],
+      "tasks": [
+        "s11",
+        "s2"
+      ],
+      "articles": [
+        "bento/freecodecamp.org--bento-grids-in-web-design.md",
+        "bento/setproduct.com--bento-grid-layout-design-guide.md"
+      ]
+    },
+    {
+      "id": "markdown-cn-copywriting",
+      "name": "中文文案与排版",
+      "domain": "markdown",
+      "select": "中文界面文案按中文写作与排版规范定用词和语气。排版上中英文之间、中文与数字之间、数字与单位之间都要加空格，度数和百分比除外。技术文档按文档写作规范组织标题与句式。",
+      "checks": [
+        {
+          "q": "中文与半角阿拉伯数字之间，空格是可加可不加吗，风格上有什么硬性要求？",
+          "a": "（2）全角中文字符与半角阿拉伯数字之间，有没有半角空格都可，但必须保证风格统一，不能两种风格混杂。",
+          "cite": "content/markdown/github.com--document-style-guide.md:113"
+        },
+        {
+          "q": "单个句子长度应该控制在多少字以内，超过多少字是任何情况下都不能接受的？",
+          "a": "不包含任何标点符号的单个句子，或者以逗号分隔的句子构件，长度尽量保持在 20 个字以内；20～29 个字的句子，可以接受；30～39 个字的句子，语义必须明确，才能接受；多于 40 个字的句子，任何情况下都不能接受。",
+          "cite": "content/markdown/github.com--document-style-guide.md:149"
+        }
+      ],
+      "tasks": [
+        "s4",
+        "s9"
+      ],
+      "articles": [
+        "markdown/github.com--chinese-copywriting-guidelines.md",
+        "markdown/github.com--document-style-guide.md"
+      ]
+    },
+    {
+      "id": "markdown-en-voice",
+      "name": "英文语调与排版",
+      "domain": "markdown",
+      "select": "英文界面文案的语调三支柱是 warm and relaxed、crisp and clear、ready to lend a hand，速查用 Microsoft 的风格与语调十条。长文排版按文字排版原则处理，Google 的文档编写最佳实践管文档结构。",
+      "checks": [
+        {
+          "q": "Microsoft 语调三支柱里的 crisp and clear 具体要求怎么写？",
+          "a": "We’re to the point. We write for scanning first, reading second. We make it simple above all.",
+          "cite": "content/markdown/learn.microsoft.com--brand-voice-above-all-simple-human.md:51"
+        },
+        {
+          "q": "英文标点排版里，句号、问号、冒号之后要留几个空格，破折号两侧要不要空格？",
+          "a": "Use only one space after periods, question marks, and colons—and no spaces around dashes.",
+          "cite": "content/markdown/learn.microsoft.com--top-10-tips-style-voice.md:107"
+        }
+      ],
+      "tasks": [
+        "s4"
+      ],
+      "articles": [
+        "markdown/google.github.io--best_practices.md",
+        "markdown/practicaltypography.com--type-composition.md",
+        "markdown/learn.microsoft.com--brand-voice-above-all-simple-human.md",
+        "markdown/learn.microsoft.com--top-10-tips-style-voice.md"
+      ]
+    },
+    {
+      "id": "standards-transition-animation",
+      "name": "过渡动画与缓动",
+      "domain": "standards",
+      "select": "CSS Transitions 1 定了哪些属性可过渡、transition-* 语法和过渡事件；CSS Animations 1 定了 @keyframes、animation-* 和动画事件。缓动函数 cubic-bezier()、steps()、linear() 的数学定义和使用边界在 CSS Easing 1，写自定义曲线前先核对。",
+      "checks": [
+        {
+          "q": "transition-property 写成 none 之外的值时，规范说明它是一份什么？",
+          "a": "Otherwise, a list of properties to be transitioned, or the keyword all which indicates that all properties are to be transitioned, is given.",
+          "cite": "content/standards/w3c--css-transitions-1.md:204"
+        },
+        {
+          "q": "@keyframes 里的关键帧用来声明什么？",
+          "a": "Keyframes are used to specify the values for the animating properties at various points during the animation.",
+          "cite": "content/standards/w3c--css-animations-1.md:82"
+        }
+      ],
+      "tasks": [
+        "s15",
+        "s3"
+      ],
+      "articles": [
+        "standards/w3c--css-transitions-1.md",
+        "standards/w3c--css-animations-1.md",
+        "standards/w3c--css-easing-1.md"
+      ]
+    },
+    {
+      "id": "standards-grid-alignment",
+      "name": "网格与对齐",
+      "domain": "standards",
+      "select": "CSS Grid 1 定了轨道、网格线、命名区域、自动放置和子网格。对齐问题查 Box Alignment 3：justify-* 和 align-*、gap、基线对齐、安全对齐。",
+      "checks": [
+        {
+          "q": "没有显式指定 grid-auto-flow 时，自动放置采用哪种算法、会不会回头补洞？",
+          "a": "If omitted, a “sparse” algorithm is used, where the placement algorithm only ever moves “forward” in the grid when placing items, never backtracking to fill holes.",
+          "cite": "content/standards/w3c--css-grid-1.md:1314"
+        },
+        {
+          "q": "对齐内容溢出时，unsafe 和 safe 两种模式分别怎么处理？",
+          "a": "“Unsafe” alignment honors the specified alignment mode in overflow situations, even if it causes data loss, while “safe” alignment changes the alignment mode in overflow situations in an attempt to avoid data loss.",
+          "cite": "content/standards/w3c--css-align-3.md:330"
+        }
+      ],
+      "tasks": [
+        "s15",
+        "s3"
+      ],
+      "articles": [
+        "standards/w3c--css-grid-1.md",
+        "standards/w3c--css-align-3.md",
+        "standards/w3c--css-contain-3.md"
+      ]
+    },
+    {
+      "id": "standards-clreq-typesetting",
+      "name": "中文排版禁则",
+      "domain": "standards",
+      "select": "中文排版按 clreq 处理标点、行首行尾禁则（避头尾）、字距和中西文混排，标点间距与字距单独定义，避免挤压和避头尾错误。空格细则按排版指北：中英文之间、中文与数字之间、数字与单位之间加空格，度数和百分比除外。",
+      "checks": [
+        {
+          "q": "标点符号的位置限制是为了达到什么效果，通常允许它们出现在行首或行尾吗？",
+          "a": "为了保持阅读顺畅、体例一致，多数标点符号的位置有限制，通常一个标点符号依其性质，禁止出现在行首或行尾。",
+          "cite": "content/standards/w3c--clreq.md:1941"
+        },
+        {
+          "q": "做禁则处理时，遇到不希望出现在行首的标点，应按什么顺序处理？",
+          "a": "排版时如果进行禁则处理，应遵守“先挤进，后推出”原则，即不希望标点符号出现在行首时，应在已经标点挤压的基础上再次检讨是否有机会将其挤到前一行，最后没有挤压机会再从前一行取最后一个字至下一行。",
+          "cite": "content/standards/w3c--clreq.md:1989"
+        }
+      ],
+      "tasks": [
+        "s4",
+        "s3",
+        "s15"
+      ],
+      "articles": [
+        "standards/w3c--clreq.md",
+        "markdown/github.com--chinese-copywriting-guidelines.md",
+        "type/uisdc.com--ui-text-design-specification.md"
+      ]
+    },
+    {
+      "id": "brands-design-language",
+      "name": "品牌设计语言",
+      "domain": "brands",
+      "select": "每篇是完整品牌 DESIGN.md，配色字体全带具体值。Claude 奶油底配珊瑚主色加衬线大标题，Linear 近黑底配薰衣草蓝做唯一强调色，Vercel 黑白双色加多彩渐变。做 AI 工具类产品先读这三篇之一定基调。",
+      "tasks": [
+        "s13"
+      ],
+      "articles": [
+        "brands/designmd--claude.md",
+        "brands/designmd--linear.app.md",
+        "brands/designmd--vercel.md",
+        "brands/designmd--x.ai.md"
+      ],
+      "checks": [
+        {
+          "q": "品牌 DESIGN.md 里要记录哪些交互状态，悬停态要不要写？",
+          "a": "Never document hover. Default and Active/Pressed states only.",
+          "cite": "content/brands/designmd--claude.md:292"
+        },
+        {
+          "q": "Vercel 的卡片阴影怎么叠，为什么不用单层大模糊投影？",
+          "a": "The brand uses STACKED shadows — multiple small offsets layered to fake natural light — never a single 8-px-blur generic drop.",
+          "cite": "content/brands/designmd--vercel.md:172"
+        }
+      ]
+    },
+    {
+      "id": "brands-bmw",
+      "name": "BMW双线语言",
+      "domain": "brands",
+      "select": "车企官网要给母品牌和性能子品牌分线立语言时选它。母品牌走奶白底加企业蓝的稳健商务风，M 系换近黑底配白色大写标题，靠整车赛道摄影发力，一点装饰色都不用。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--bmw.md",
+        "brands/designmd--bmw-m.md"
+      ],
+      "checks": [
+        {
+          "q": "母品牌里承担所有主 CTA 的唯一行动主色是哪个色值？",
+          "a": "BMW corporate blue (`{colors.primary}` — #1c69d4) acts as the single primary action color.",
+          "cite": "content/brands/designmd--bmw.md:28"
+        },
+        {
+          "q": "BMW M 系页面用什么底色、标题用什么写法和颜色？",
+          "a": "BMW M's marketing surface is a near-pure black canvas (`{colors.canvas}` — #000) holding white BMW Type Next Latin headlines in **confident UPPERCASE**.",
+          "cite": "content/brands/designmd--bmw-m.md:18"
+        }
+      ]
+    },
+    {
+      "id": "brands-supercar",
+      "name": "超跑黑金气质",
+      "domain": "brands",
+      "select": "做高端汽车或奢侈品营销页、想用黑暗加摄影当唯一冲击力时选它。Ferrari 近黑底配纯白标题，Lamborghini 用不妥协的纯黑配金黄，Bugatti 在纯黑底上加大写宽字距标题和三套定制字体。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--ferrari.md",
+        "brands/designmd--lamborghini.md",
+        "brands/designmd--bugatti.md"
+      ],
+      "checks": [
+        {
+          "q": "布加迪的展示级标题在大小写和字距上怎么处理？",
+          "a": "All display headlines are UPPERCASE with wide letter-spacing (2-4px).",
+          "cite": "content/brands/designmd--bugatti.md:27"
+        },
+        {
+          "q": "法拉利官网的页面底色能不能用纯黑？",
+          "a": "Don't use pure black canvas. The brand canvas is `{colors.canvas}` (#181818) — slightly warm.",
+          "cite": "content/brands/designmd--ferrari.md:233"
+        }
+      ]
+    },
+    {
+      "id": "brands-crypto",
+      "name": "加密交易平台",
+      "domain": "brands",
+      "select": "做交易、金融或博彩高密度数据界面选它。Binance 深黑底用品牌黄扛所有主按钮，Coinbase 白底把蓝克制到只点主行动上像正规金融服务，Kraken 用紫立专业感且红绿只留给涨跌，1win 近黑底用鲜绿做行动色撑满屏游戏砖与直播投注。",
+      "tasks": [
+        "s13",
+        "s12"
+      ],
+      "articles": [
+        "brands/designmd--binance.md",
+        "brands/designmd--coinbase.md",
+        "brands/designmd--kraken.md",
+        "brands/designmd--1win.md"
+      ],
+      "checks": [
+        {
+          "q": "Binance 的绿/红涨跌色只允许用在哪些操作上？",
+          "a": "Use `{component.button-trading-up}` (green) and `{component.button-trading-down}` (red) only for explicit Buy/Sell or Long/Short actions.",
+          "cite": "content/brands/designmd--binance.md:258"
+        },
+        {
+          "q": "Coinbase 蓝在每个版块里最多用几次？",
+          "a": "Coinbase Blue stays scarce — one or two blue moments per band.",
+          "cite": "content/brands/designmd--coinbase.md:276"
+        }
+      ]
+    },
+    {
+      "id": "brands-fintech",
+      "name": "金融品牌质感",
+      "domain": "brands",
+      "select": "做支付、银行、转账或理财类产品时选它，两种走向：高端年报质感与高数据密度信任感。Mastercard 用像年报纸张的灰奶油底加橙色信号，重要元素一律做成胶囊形；Mercury 在墨紫夜色首页和近白产品页之间切换，全靠一支靛蓝行动胶囊串起两界。Stripe 用深藏蓝墨色配电光靛，每页顶部放渐变雾；Wise 用超重的大标题配亮青柠；NerdWallet 用深绿加薄荷绿梯度撑起高密度对比表格。信任感来自克制的色板和数据密度。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--mastercard.md",
+        "brands/designmd--mercury.md",
+        "brands/designmd--stripe.md",
+        "brands/designmd--wise.md",
+        "brands/designmd--revolut.md",
+        "brands/designmd--nerdwallet.md"
+      ],
+      "checks": [
+        {
+          "q": "Mastercard 的大标题用什么字重、字距取多少？",
+          "a": "Headlines are set at a medium weight (500) with tight negative letter-spacing (-2%), giving them confidence without shouting.",
+          "cite": "content/brands/designmd--mastercard.md:24"
+        },
+        {
+          "q": "Mercury 在夜色首页和近白产品页这两界里，用哪一种颜色统一承担可点击动作？",
+          "a": "One colour carries the actions in both worlds: Mercury Indigo (`{colors.primary}` — #5266eb).",
+          "cite": "content/brands/designmd--mercury.md:20"
+        }
+      ]
+    },
+    {
+      "id": "brands-ai-warm",
+      "name": "AI工具暖调",
+      "domain": "brands",
+      "select": "做面向大众的 AI 工具营销页、想避开冷色深底科技风时选它。Cursor 用暖奶油底配橙色像安静的编辑部，ElevenLabs 在米白底上靠柔和粉彩渐变出印刷杂志感，Lovable 用羊皮纸奶油做出亲和力。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--cursor.md",
+        "brands/designmd--elevenlabs.md",
+        "brands/designmd--lovable.md"
+      ],
+      "checks": [
+        {
+          "q": "Cursor 的暖底和近黑墨色分别是什么色值？",
+          "a": "The base canvas is **warm cream** (`{colors.canvas}` — #f7f7f4) holding warm near-black ink (`{colors.ink}` — #26251e) for body and display alike.",
+          "cite": "content/brands/designmd--cursor.md:18"
+        },
+        {
+          "q": "ElevenLabs 的粉彩渐变球一共几种、只能拿来做什么？",
+          "a": "Pastel gradient orbs (5 tokens: mint, peach, lavender, sky, rose) used as atmospheric brand decoration only.",
+          "cite": "content/brands/designmd--elevenlabs.md:29"
+        }
+      ]
+    },
+    {
+      "id": "brands-dev-platform",
+      "name": "开发者产品品牌",
+      "domain": "brands",
+      "select": "做开发者工具、文档平台或基建产品官网选它，两种走向：工程感与记忆点。Composio 近黑底加一支深电蓝立住 AI 工具集成的工程感；Expo 纯白底加天空蓝渐变晕染做安静的基建品牌；Mintlify 营销页用云插画天空渐变、文档页收成密集的工程排版。Sentry 用深夜紫画布配荧光青柠和手绘插画；PostHog 在暖奶油画布上散手绘刺猬；Supabase 白配近黑加一个祖母绿按钮。产品截图当主视觉，吉祥物或荧光色做记忆点。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--composio.md",
+        "brands/designmd--expo.md",
+        "brands/designmd--mintlify.md",
+        "brands/designmd--posthog.md",
+        "brands/designmd--sentry.md",
+        "brands/designmd--supabase.md"
+      ],
+      "checks": [
+        {
+          "q": "Composio 的 CTA 和卡片默认取哪个圆角档，各是多少 px？",
+          "a": "CTAs default to `{rounded.md}` (8px). Cards use `{rounded.lg}` or `{rounded.xl}`.",
+          "cite": "content/brands/designmd--composio.md:250"
+        },
+        {
+          "q": "Mintlify 的按钮该用全圆角还是方角，方角在这个语言里代表什么？",
+          "a": "Pill-shaped buttons (`{rounded.full}`) always; squared buttons signal \"third-party widget\" in this language.",
+          "cite": "content/brands/designmd--mintlify.md:407"
+        }
+      ]
+    },
+    {
+      "id": "brands-infra",
+      "name": "基础设施工具",
+      "domain": "brands",
+      "select": "做数据库、云基础设施类工程产品选它。HashiCorp 黑底给各产品一支身份色，Terraform 紫、Vault 黄、Consul 粉当 token 管理不做装饰。ClickHouse 纯黑底用电光黄当品牌电压，统计数字也是黄字。MongoDB 深青黑英雄带配亮绿胶囊按钮、白色文档面双模式。",
+      "tasks": [
+        "s13"
+      ],
+      "articles": [
+        "brands/designmd--hashicorp.md",
+        "brands/designmd--clickhouse.md",
+        "brands/designmd--mongodb.md",
+        "brands/designmd--resend.md",
+        "brands/designmd--sanity.md"
+      ],
+      "checks": [
+        {
+          "q": "ClickHouse 的底色和品牌强调色分别是什么色值？",
+          "a": "The base atmosphere is **near-pure black canvas** (`{colors.canvas}` — #0a0a0a) with **electric yellow** (`{colors.primary}` — #faff69) as the singular brand voltage.",
+          "cite": "content/brands/designmd--clickhouse.md:18"
+        },
+        {
+          "q": "在不是讲某个产品的页面上，能不能用那个产品的强调色做 CTA？",
+          "a": "Don't use a product accent color for a CTA on a page that isn't about that product.",
+          "cite": "content/brands/designmd--hashicorp.md:274"
+        }
+      ]
+    },
+    {
+      "id": "brands-design-tools",
+      "name": "设计协作工具",
+      "domain": "brands",
+      "select": "做设计工具、白板协作或建站产品选它。Figma 用纯黑白编辑框加手工裁切粉彩大色块讲故事，Framer 纯黑底把页面当画板、GT Walsheim 负字距大标题配一支只留给超链接的蓝，Miro 用签名明黄 wordmark 和粉彩块带出白板玩心。",
+      "tasks": [
+        "s13"
+      ],
+      "articles": [
+        "brands/designmd--figma.md",
+        "brands/designmd--framer.md",
+        "brands/designmd--miro.md"
+      ],
+      "checks": [
+        {
+          "q": "Figma 官网的单色系统里，黑白两色具体承担了哪些元素？",
+          "a": "Monochrome system core: `{colors.primary}` (black) and `{colors.canvas}` (white) carry every CTA, every body line, every footer link.",
+          "cite": "content/brands/designmd--figma.md:25"
+        },
+        {
+          "q": "Framer 那唯一一支蓝色允许用在哪几处、不允许用在哪？",
+          "a": "Use `{colors.accent-blue}` only for hyperlinks, focus rings, and selected indicators. Never as a background or button fill.",
+          "cite": "content/brands/designmd--framer.md:244"
+        }
+      ]
+    },
+    {
+      "id": "brands-work-saas",
+      "name": "SaaS工作台",
+      "domain": "brands",
+      "select": "做团队协作、日程或客服类 SaaS、要温和工作台气质时选它。Airtable 白底深墨排版靠珊瑚、深绿、桃色整幅色卡给长滚动页断句，Cal.com 白底黑主按钮加 Cal Sans 展示字、卡片带软圆角，Intercom 奶白底配 Saans 字体、橙色只留给 Fin AI。",
+      "tasks": [
+        "s13",
+        "s5"
+      ],
+      "articles": [
+        "brands/designmd--airtable.md",
+        "brands/designmd--cal.md",
+        "brands/designmd--intercom.md"
+      ],
+      "checks": [
+        {
+          "q": "Cal.com 展示字的字重固定在哪一档，禁用哪两档？",
+          "a": "Display weight stays at 600 across all sizes — never 700, never 500.",
+          "cite": "content/brands/designmd--cal.md:97"
+        },
+        {
+          "q": "Intercom 的 Fin Orange 允许出现在哪些位置？",
+          "a": "Treat Fin Orange as a product accent: Fin CTA and Fin badge only.",
+          "cite": "content/brands/designmd--intercom.md:298"
+        }
+      ]
+    },
+    {
+      "id": "brands-hardware",
+      "name": "硬件产品展厅",
+      "domain": "brands",
+      "select": "做硬件产品营销页、想把产品图当展品时选它。Apple 整幅产品图交替明暗底、SF Pro Display 负字距大标题、交互蓝只用一支。DJI 白底方块瓷砖摆影棚渲染图、按钮统一工程蓝胶囊。HP 白纸底用一支电蓝信号加蓝色人字纹。Dell 1996 反着走复古路，黑色页面框加彩色缎带卡。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--apple.md",
+        "brands/designmd--dji.md",
+        "brands/designmd--hp.md",
+        "brands/designmd--dell-1996.md"
+      ],
+      "checks": [
+        {
+          "q": "Apple 17px 及以上的标题要把字距收紧到哪个区间？",
+          "a": "Every headline at 17px and up carries a slight tracking tighten (`-0.12 → -0.374px`).",
+          "cite": "content/brands/designmd--apple.md:98"
+        },
+        {
+          "q": "DJI 的次要动作与英雄区 CTA 分别用什么形态的按钮？",
+          "a": "Secondary actions are 1px `{colors.ink}` outline pills (`button-outline`); hero CTAs are white ghost pills over photography (`button-hero-ghost`).",
+          "cite": "content/brands/designmd--dji.md:27"
+        }
+      ]
+    },
+    {
+      "id": "brands-enterprise",
+      "name": "大厂企业风",
+      "domain": "brands",
+      "select": "做企业级产品、大厂品牌面或大型企业与运营商官网、要稳重可信选它。IBM 还原 Carbon：白底炭灰字、IBM 蓝做一支强调、圆角压到平直方角、IBM Plex Sans 细字重撑排版。Meta 白底配整幅产品照，用 Optimistic 可变字体做卖货语气。Oracle 用六级暖灰承担全部表面，红色只留给商标；SAP 白底加两级灰和一根蓝，浅灰导航条像应用框；Vodafone 用编辑部摄影加超大全大写标题，猩红只给按钮。界面退后，品牌色只做信号。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--ibm.md",
+        "brands/designmd--meta.md",
+        "brands/designmd--oracle.md",
+        "brands/designmd--sap.md",
+        "brands/designmd--vodafone.md"
+      ],
+      "checks": [
+        {
+          "q": "按 IBM 的规范，CTA、卡片、输入框和容器的圆角统一取多少？",
+          "a": "Use `{rounded.none}` 0px on every CTA, card, input, and container.",
+          "cite": "content/brands/designmd--ibm.md:240"
+        },
+        {
+          "q": "IBM 卡片之间的层级靠什么表达，明确不用什么？",
+          "a": "Card hierarchy is carried by 1px hairlines and surface change, never by drop shadow.",
+          "cite": "content/brands/designmd--ibm.md:32"
+        }
+      ]
+    },
+    {
+      "id": "brands-editorial-feed",
+      "name": "资讯与信息流",
+      "domain": "brands",
+      "select": "做资讯站或高密度信息流选它。Al Jazeera 白纸平铺加密集 Roboto 标题堆栈、一色饱和橙做栏目标签条、突发新闻用直播红标记；mydealz 用品牌绿撑白卡瀑布流、每张价格卡带冷热温度条把价格变成情绪信号。",
+      "tasks": [
+        "s13",
+        "s2"
+      ],
+      "articles": [
+        "brands/designmd--aljazeera.md",
+        "brands/designmd--mydealz.md"
+      ],
+      "checks": [
+        {
+          "q": "Al Jazeera 的黑色胶囊按钮内边距多少，周围行距要保证什么？",
+          "a": "The black pills pad 6px 17px around 16px labels — keep their surrounding row spacing so targets clear 44×44.",
+          "cite": "content/brands/designmd--aljazeera.md:122"
+        },
+        {
+          "q": "mydealz 信息流卡片在默认状态下用不用重阴影？",
+          "a": "There are no heavy shadow stacks in the resting feed.",
+          "cite": "content/brands/designmd--mydealz.md:124"
+        }
+      ]
+    },
+    {
+      "id": "brands-consumer-market",
+      "name": "明快消费风格",
+      "domain": "brands",
+      "select": "做消费市场或增长类产品、想要明快活泼的配色时选它。Airbnb 白底用 Rausch 红做一支品牌电压扛主按钮和评分点，Clay 白底深藏青按钮加圆润展示字、热粉深青薰衣草桃色整幅色卡给功能区断句，Jobright 用春绿配黑白加淡薄荷色带撑起 AI 求职的活力感。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--airbnb.md",
+        "brands/designmd--clay.md",
+        "brands/designmd--jobright.md"
+      ],
+      "checks": [
+        {
+          "q": "整个 Airbnb 系统里唯一排版上很响的地方是哪一处、多大字号？",
+          "a": "The single typographically loud moment in the entire system is the **rating display** (`{typography.rating-display}` — 64px / 700) on listing pages.",
+          "cite": "content/brands/designmd--airbnb.md:102"
+        },
+        {
+          "q": "编辑型区块的垂直留白和房源、城市卡片之间的间距分别是多少？",
+          "a": "The system gives editorial bands 64px of vertical breathing room but compresses card grids — property and city-link cards sit just 16px apart.",
+          "cite": "content/brands/designmd--airbnb.md:123"
+        }
+      ]
+    },
+    {
+      "id": "brands-ai-devtools",
+      "name": "AI 开发工具",
+      "domain": "brands",
+      "select": "做 AI 开发工具或终端产品官网选它。Ollama 把首页当 Markdown README 写，居中大标题配一个黑色胶囊按钮和终端安装命令。OpenCode 全站用 Berkeley Mono 等宽字，暖米画布读起来像一页 manpage。共同点是零装饰，命令行直接露出来建立信任。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--ollama.md",
+        "brands/designmd--opencode.ai.md",
+        "brands/designmd--warp.md",
+        "brands/designmd--replicate.md"
+      ],
+      "checks": [
+        {
+          "q": "Ollama 首页所有交互元素统一用多大的圆角？",
+          "a": "The design philosophy is geometric: every interactive element collapses to `{rounded.full}` (9999px) — buttons, search pills, install-snippet pills, text inputs, and the terminal-traffic-light dots.",
+          "cite": "content/brands/designmd--ollama.md:20"
+        },
+        {
+          "q": "OpenCode 的页面底色和正文墨色分别是什么色值？",
+          "a": "The chrome is austere: warm cream canvas (`{colors.canvas}` — `#fdfcfc` with a faint blush), nearly-black ink (`{colors.ink}` — `#201d1d`), and a 4-tier neutral gray ladder for body, metadata, and disabled text.",
+          "cite": "content/brands/designmd--opencode.ai.md:20"
+        }
+      ]
+    },
+    {
+      "id": "brands-ai-frontier",
+      "name": "AI 品牌质感",
+      "domain": "brands",
+      "select": "做大模型、AI 基础设施或算力平台的品牌站与营销页时选它，两种审美走向：高记忆点单色信号与编辑化产品卡。Together AI 只用一条橙紫渐变当品牌装饰，其余近黑加纯白；NVIDIA 让高饱和绿通吃所有 CTA；Runway 干脆把整站拍成电影卷轴，全屏影像就是界面。Cohere 用纯白编辑空间加深绿黑产品带，标题带等宽味；MiniMax 白底黑胶囊按钮给每个模型发一张橙红到蓝的渐变产品卡；Mistral 用芥末橙红的日落渐变加山景照片，每页结尾压一条日落色条。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--together.ai.md",
+        "brands/designmd--runwayml.md",
+        "brands/designmd--nvidia.md",
+        "brands/designmd--cohere.md",
+        "brands/designmd--minimax.md",
+        "brands/designmd--mistral.ai.md"
+      ],
+      "checks": [
+        {
+          "q": "同一屏内出现第二个实心绿 CTA 时该怎么处理？",
+          "a": "Keep `{colors.primary}` scarce per viewport — if more than one solid-green CTA appears in the same fold, neutralize one to `{component.button-outline}`.",
+          "cite": "content/brands/designmd--nvidia.md:340"
+        },
+        {
+          "q": "Together AI 的三色品牌渐变只能用在什么尺度上？",
+          "a": "Pair the brand gradient (`{colors.accent-orange}` → `{colors.accent-magenta}` → `{colors.accent-periwinkle}`) at hero scale only.",
+          "cite": "content/brands/designmd--together.ai.md:305"
+        }
+      ]
+    },
+    {
+      "id": "brands-productivity",
+      "name": "效率协作工具",
+      "domain": "brands",
+      "select": "做效率或协作软件官网时选它。Raycast 把营销页做成放大版产品截图，纯近黑底加细线卡片；Notion 用深藏蓝英雄带配紫色胶囊按钮和便利贴圆点；Slack 是深茄紫配奶紫渐变。产品界面的气质直接搬到营销页。",
+      "tasks": [
+        "s13",
+        "s11",
+        "s12"
+      ],
+      "articles": [
+        "brands/designmd--notion.md",
+        "brands/designmd--raycast.md",
+        "brands/designmd--superhuman.md",
+        "brands/designmd--slack.md",
+        "brands/designmd--zapier.md"
+      ],
+      "checks": [
+        {
+          "q": "Notion 的按钮圆角取多少，为什么不做胶囊形？",
+          "a": "Buttons are `{rounded.md}` (8px) rectangles, NOT pills — distinguishing Notion's sober rectangular geometry from competitors that use pills universally.",
+          "cite": "content/brands/designmd--notion.md:22"
+        },
+        {
+          "q": "Raycast 用什么手段表达层级，系统里有没有投影？",
+          "a": "The system has no drop-shadow elevation at all. Depth is built entirely from the surface-color ladder: each notch lighter on the dark scale reads as one step closer to the viewer.",
+          "cite": "content/brands/designmd--raycast.md:132"
+        }
+      ]
+    },
+    {
+      "id": "brands-media",
+      "name": "科技媒体风格",
+      "domain": "brands",
+      "select": "做科技媒体或内容发现页时选它。The Verge 用近黑底配 Manuka 重标题，酸薄荷做电子点缀；Wired 是纯黑白编辑部，窄体定制大字当报头；Pinterest 用大标题加瀑布流网格，暖奶白外壳让照片当主角。",
+      "tasks": [
+        "s13"
+      ],
+      "articles": [
+        "brands/designmd--theverge.md",
+        "brands/designmd--wired.md",
+        "brands/designmd--pinterest.md"
+      ],
+      "checks": [
+        {
+          "q": "Manuka 出现在低于多少 px 的尺寸上说明出了问题？",
+          "a": "If you see Manuka below 60px you're looking at a bug.",
+          "cite": "content/brands/designmd--theverge.md:104"
+        },
+        {
+          "q": "The Verge 的卡片内图形圆角要跟什么对齐，给的是哪几档数值？",
+          "a": "**Corners**: always rounded to match the parent card — `3px`, `4px`, or inherit `20px` / `24px` from the tile.",
+          "cite": "content/brands/designmd--theverge.md:202"
+        }
+      ]
+    },
+    {
+      "id": "brands-entertainment",
+      "name": "娱乐游戏品牌",
+      "domain": "brands",
+      "select": "做音乐、游戏或娱乐产品页时选它。Spotify 是内容优先的黑，近黑让专辑封面自己发光，荧光绿只做点缀；PlayStation 用黑白蓝三段章节像主机发布片；Nintendo 2001 反着来，拉丝金属板配琥珀发光导航，Y2K 硬件感。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--spotify.md",
+        "brands/designmd--playstation.md",
+        "brands/designmd--nintendo-2001.md"
+      ],
+      "checks": [
+        {
+          "q": "Spotify 的设计哲学是什么，界面为什么整体压成近黑？",
+          "a": "The design philosophy is \"content-first darkness\" — the UI recedes into shadow so that music, podcasts, and playlists can glow.",
+          "cite": "content/brands/designmd--spotify.md:20"
+        },
+        {
+          "q": "复刻 2001 版任天堂视觉时，圆角该怎么处理？",
+          "a": "A modern reproduction should resist the urge to soften every corner; the tension between sharp plates and the few pill elements is the whole character.",
+          "cite": "content/brands/designmd--nintendo-2001.md:154"
+        }
+      ]
+    },
+    {
+      "id": "brands-lifestyle",
+      "name": "运动零售品牌",
+      "domain": "brands",
+      "select": "做运动、咖啡零售或健康消费品牌时选它。Nike 摄影先行，Futura 全大写标题压大片，购物界面近单色、带黑色胶囊按钮；Starbucks 奶白配围裙绿，取色来自纸巾和咖啡墙；Oura 奶油大地色配高对比衬线，只留一个行动蓝做转化。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--nike.md",
+        "brands/designmd--starbucks.md",
+        "brands/designmd--oura.md"
+      ],
+      "checks": [
+        {
+          "q": "Nike 排版的两极分别是什么字号层级，中间有没有过渡档？",
+          "a": "The system runs on extreme typographic contrast: a single 96px uppercase display tier reserved for editorial campaign moments, and a quiet 12–16px Helvetica Now Text/Medium tier carrying everything else.",
+          "cite": "content/brands/designmd--nike.md:101"
+        },
+        {
+          "q": "Oura 的按钮只允许用哪个例外色，用在什么时刻？",
+          "a": "Buttons carry a single, deliberate exception: **action blue** (`{colors.primary}` — #2a72de), used only for the decisive conversion moments (\"Explore\", \"Shop All Products\").",
+          "cite": "content/brands/designmd--oura.md:22"
+        }
+      ]
+    },
+    {
+      "id": "brands-mobility",
+      "name": "出行工程品牌",
+      "domain": "brands",
+      "select": "做汽车、出行或硬核工程品牌页时选它。Tesla 极端做减法，全屏车照当首屏，界面几乎消失；Uber 黑白双色，所有交互件都是全胶囊；SpaceX 纯黑底全幅火箭影像配 D-DIN 全大写紧排。产品本身就是画面。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--tesla.md",
+        "brands/designmd--uber.md",
+        "brands/designmd--renault.md",
+        "brands/designmd--spacex.md"
+      ],
+      "checks": [
+        {
+          "q": "Tesla 官网的「减法」体现在产品和界面各占什么位置？",
+          "a": "Tesla's website is an exercise in radical subtraction — a digital showroom where the product is everything and the interface is almost nothing.",
+          "cite": "content/brands/designmd--tesla.md:20"
+        },
+        {
+          "q": "Uber 的胶囊形状铺到哪些元素上，有哪两个例外？",
+          "a": "The pill is the single signature shape — `{rounded.pill}` 999 px on every interactive element except the tab-toggle (`{rounded.pill-tab}` 36 px) and the larger product cards (`{rounded.xl}` 16 px).",
+          "cite": "content/brands/designmd--uber.md:26"
+        }
+      ]
+    },
+    {
+      "id": "brands-builder-commerce",
+      "name": "电商建站平台",
+      "domain": "brands",
+      "select": "做电商或建站平台官网时选它。Shopify 双轨制，营销页近黑加全幅商家摄影和超细大标题，产品页转白底卖功能；Webflow 用近黑对大白画布，靠一条五段彩色渐变提亮。黑底大片卖愿景，白底界面卖产品。",
+      "tasks": [
+        "s13",
+        "s11"
+      ],
+      "articles": [
+        "brands/designmd--shopify.md",
+        "brands/designmd--webflow.md"
+      ],
+      "checks": [
+        {
+          "q": "Shopify 两套画布各自负责什么页面，能否混用？",
+          "a": "Two-canvas system: `{colors.canvas-night}` for cinematic marketing, `{colors.canvas-light}` / `{colors.canvas-cream}` for transactional surfaces — never blended.",
+          "cite": "content/brands/designmd--shopify.md:25"
+        },
+        {
+          "q": "Webflow 的按钮和卡片各用多少圆角？",
+          "a": "Use `{rounded.sm}` 4 px for buttons, `{rounded.md}` 8 px for cards.",
+          "cite": "content/brands/designmd--webflow.md:277"
+        }
+      ]
+    },
+    {
+      "id": "icons-usability",
+      "name": "图标可用性",
+      "domain": "icons",
+      "select": "图标不是越隐喻越妙，认不出就白画。NN/g 有可用性研究、图标测试方法（让人说出图标含义）与分类学三篇，动手前先定图标要传达的概念。",
+      "checks": [
+        {
+          "q": "图标旁的文字标签应该什么时候可见，能不能靠用户交互才出现？",
+          "a": "Icon labels should be visible at all times, without any interaction from the user.",
+          "cite": "content/icons/nngroup.com--icon-usability.md:74"
+        },
+        {
+          "q": "脱离上下文测图标识别度时，具体让受访者做什么？",
+          "a": "Show the icon to people in isolation, without a text label, and ask them what it is or represents.",
+          "cite": "content/icons/nngroup.com--how-to-test-digital-icons.md:198"
+        }
+      ],
+      "tasks": [
+        "s6",
+        "s17"
+      ],
+      "articles": [
+        "icons/nngroup.com--icon-usability.md",
+        "icons/nngroup.com--how-to-test-digital-icons.md",
+        "icons/nngroup.com--classifying-icons.md",
+        "icons/developer.apple.com--app-icons.md"
+      ]
+    },
+    {
+      "id": "icons-unity",
+      "name": "图标统一",
+      "domain": "icons",
+      "select": "成套图标要统一构造和风格：Adobe 两篇先讲视觉语言与含义，再讲构造打磨与风格统一；Smashing 那篇把图标放回界面里，看它和文字、图像的视觉权重。",
+      "checks": [
+        {
+          "q": "密集布局里成套图标的常用尺寸有哪几档？",
+          "a": "Standard icon sizes for dense layouts are 16 x 16px, 18 x 18px, 20 x 20px, or 24 x 24px.",
+          "cite": "content/icons/adobe.design--how-to-design-effective-icons-part-2.md:55"
+        },
+        {
+          "q": "粗重风格和极简风格图标分别该用多粗的描边？",
+          "a": "A heavier and bolder icon style will usually require a 2px stroke weight; in contrast, a minimalistic and reduced icon will benefit from a thinner stroke weight of 1px or 1.5px.",
+          "cite": "content/icons/adobe.design--how-to-design-effective-icons-part-2.md:247"
+        }
+      ],
+      "tasks": [
+        "s6",
+        "s5"
+      ],
+      "articles": [
+        "icons/adobe.design--how-to-design-effective-icons-part-1.md",
+        "icons/adobe.design--how-to-design-effective-icons-part-2.md",
+        "icons/smashingmagazine.com--user-interfaces-icons-visual-elements-screen-design.md"
+      ]
+    },
+    {
+      "id": "icons-grid-optical",
+      "name": "图标栅格",
+      "domain": "icons",
+      "select": "先给整套图标定统一绘制栅格与交付尺寸，再按光学体积单独校准每个图形的尺寸和对齐，而不是把单张图等比缩放。",
+      "checks": [
+        {
+          "q": "每枚图标要交付几个版本，分别是多大？",
+          "a": "Always design two versions of each icon: a 16px version and a 24px version.",
+          "cite": "content/icons/primer.style--octicons-guidelines.md:26"
+        },
+        {
+          "q": "可交互图标的触摸目标最小要多大？",
+          "a": "All touch targets for interactive icons need to be 44px or larger.",
+          "cite": "content/icons/carbondesignsystem.com--iconography.md:42"
+        }
+      ],
+      "tasks": [
+        "s6"
+      ],
+      "articles": [
+        "icons/primer.style--octicons-guidelines.md",
+        "icons/tdesign.tencent.com--icon.md",
+        "icons/carbondesignsystem.com--iconography.md"
+      ]
+    },
+    {
+      "id": "icons-text-match",
+      "name": "图标配文",
+      "domain": "icons",
+      "select": "图标和文字并排时按文字来配：符号的重量档跟着字体重量档走，尺寸档相对大写字高定，形状偏心的图形靠补内边距做光学居中。",
+      "checks": [
+        {
+          "q": "除非要强调图标或文字，图标与相邻文字的字重应该怎么处理？",
+          "a": "Unless you want to emphasize either the icons or the text, using the same weight for both gives your content a consistent appearance and level of emphasis.",
+          "cite": "content/icons/developer.apple.com--icons.md:33"
+        },
+        {
+          "q": "在工具栏、列表等图标与文字并排出现的位置，适合用 SF Symbols 的哪种变体？",
+          "a": "The outline variant works well in toolbars, lists, and other places where you display a symbol alongside text.",
+          "cite": "content/icons/developer.apple.com--sf-symbols.md:115"
+        }
+      ],
+      "tasks": [
+        "s6"
+      ],
+      "articles": [
+        "icons/developer.apple.com--sf-symbols.md",
+        "icons/developer.apple.com--icons.md"
+      ]
+    },
+    {
+      "id": "icons-metaphor",
+      "name": "隐喻通用",
+      "domain": "icons",
+      "select": "图标先借用户已认识的通用符号，别用小众、过时或特定文化的比喻自创；事物有多种画法时取最流通那种，平台已有的标准符号直接沿用。",
+      "checks": [
+        {
+          "q": "为什么图标要优先借用普遍公认的符号与比喻？",
+          "a": "Universally recognized symbols and metaphors ensure icons are easily understood by a broad user base.",
+          "cite": "content/icons/polaris.shopify.com--iconography.md:68"
+        },
+        {
+          "q": "同一个事物有多种图形画法时，应该怎么选？",
+          "a": "在设计时避免使用那些含义模糊的图形，当同个事物存在多个图形表述时，应选取最为流通的样式，必要时进行针对性的强化。",
+          "cite": "content/icons/tdesign.tencent.com--icon.md:32"
+        }
+      ],
+      "tasks": [
+        "s6"
+      ],
+      "articles": [
+        "icons/polaris.shopify.com--iconography.md",
+        "icons/spectrum.adobe.com--iconography.md",
+        "icons/tdesign.tencent.com--icon.md"
+      ]
+    },
+    {
+      "id": "color-token-tiers",
+      "name": "色彩体系分层",
+      "domain": "color",
+      "select": "色彩体系先分层再取色值：按基础色板、中性色板、语义色板分层管理，或把色彩 token 分系统色、主题色、状态色三层，系统色是全量可选色，主题色绑定具体界面角色，状态色只管 hover、focus 这类交互反馈。先定层级再取色值。",
+      "checks": [
+        {
+          "q": "Fluent 把颜色分成哪三套色板？",
+          "a": "Fluent defines three color palettes: neutral, shared, and brand.",
+          "cite": "content/color/fluent-2--color.md:20"
+        },
+        {
+          "q": "TDesign 里每个功能色扩展出多少级色阶？",
+          "a": "在 TDesign 色彩系统中，每个功能色扩展10级色阶，足够覆盖界面设计中各需求场景。",
+          "cite": "content/color/tdesign.tencent.com--color.md:38"
+        }
+      ],
+      "tasks": [
+        "s14",
+        "s3",
+        "s2"
+      ],
+      "articles": [
+        "standards/w3c--css-color-4.md",
+        "color/tdesign.tencent.com--color.md",
+        "color/developer.apple.com--color.md",
+        "color/fluent-2--color.md",
+        "color/polaris.shopify.com--color.md",
+        "color/primer.style--color-overview.md",
+        "color/primer.style--color.md",
+        "color/spectrum.adobe.com--color.md"
+      ]
+    },
+    {
+      "id": "color-cn-picking",
+      "name": "界面配色实操",
+      "domain": "color",
+      "select": "从零定界面配色或核对颜色可用性时用它。TDesign 把中性色按亮度扩到 14 级，常用文字与底色对比度都大于 4.5、满足 WCAG2.0；W3C 要求小字对比至少 5 比 1，14pt 粗体或 18pt 以上大字至少 3 比 1。",
+      "checks": [
+        {
+          "q": "较大文本（14pt 粗体或 18pt 正常以上）与背景的对比度至少要达到多少？",
+          "a": "较大的文本(14pt 粗体／18pt 正常或以上)与背景的对比度要达到3：1以上。",
+          "cite": "content/color/uisdc.com--ui-color-design-guideline.md:147"
+        },
+        {
+          "q": "研究显示多数人偏好只用多少种颜色的配色方案？",
+          "a": "多伦多大学关于人们如何使用Adobe Color CC的研究显示大多数人更倾向于仅依赖2-3种色彩的简单色彩组合。",
+          "cite": "content/color/uisdc.com--ui-color-design-guideline.md:34"
+        }
+      ],
+      "tasks": [
+        "s3"
+      ],
+      "articles": [
+        "color/uisdc.com--ui-color-design-guideline.md"
+      ]
+    },
+    {
+      "id": "type-line-spacing-pct",
+      "name": "英文行距区间",
+      "domain": "type",
+      "select": "英文正文行距按字号的百分比取值，低于下限会挤，高于上限段落会散；这个区间是排印实践里多数文本的最优解，按它调就稳。",
+      "checks": [
+        {
+          "q": "多数文本的正文行距，按字号百分比算的合理区间是多少？",
+          "a": "For most text, the optimal line spacing is between 120% and 145% of the point size.",
+          "cite": "content/type/practicaltypography.com--line-spacing.md:26"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s2"
+      ],
+      "articles": [
+        "type/practicaltypography.com--line-spacing.md",
+        "type/polaris.shopify.com--using-type.md"
+      ]
+    },
+    {
+      "id": "type-hierarchy-recipe",
+      "name": "层级三件套",
+      "domain": "type",
+      "select": "层级靠字号、字重、字色三者叠加表达：更大、更重、更深的字抓注意力，更小更轻更浅的字退到背景；不要只靠颜色定义层级，要组合字重、字号、颜色和定位。字重档位按 Spectrum 分工：ExtraBold 是最重档，标题层用 Bold，Black 只留给大标题。",
+      "checks": [
+        {
+          "q": "TDesign 的行高和字号之间是什么计算关系？",
+          "a": "8 作为变量正好同时满足与 1.5 倍的「14px & 16px」常用字号行高保持一致，总体文字间隙稳定，得出计算公式「line-height = font size + 8」。",
+          "cite": "content/type/tdesign.tencent.com--fonts.md:69"
+        },
+        {
+          "q": "用透明度档位做字色层级时，文字对比度至少要达到多少？",
+          "a": "根据字体样式的设计原则，制定了简易好记的透明度数值区间，并且将该字色与界面系统的色彩系统结合，文字显示色彩对比满足至少 1:4.5（AA 级别）。",
+          "cite": "content/type/tdesign.tencent.com--fonts.md:96"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s2"
+      ],
+      "articles": [
+        "type/web.dev--typography.md",
+        "type/tdesign.tencent.com--fonts.md"
+      ]
+    },
+    {
+      "id": "type-dynamic-scaling",
+      "name": "系统字号适配",
+      "domain": "type",
+      "select": "用系统定义的 text styles 排字，字号随用户系统设置等比缩放，从而支持 Dynamic Type 与无障碍大字号。",
+      "checks": [
+        {
+          "q": "在 font-size 声明里能不能只用 vw 一个单位？",
+          "a": "It's important that you don't use the `vw` by itself in a font-size declaration.",
+          "cite": "content/type/web.dev--typography.md:80"
+        },
+        {
+          "q": "用 clamp() 控制字号后，字号在宽窄屏上的上下限是多少？",
+          "a": "Now the text size shrinks and grows in proportion to the user's screen but the text size will never go below `1rem` or above `2rem`.",
+          "cite": "content/type/web.dev--typography.md:112"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s16"
+      ],
+      "articles": [
+        "type/web.dev--typography.md",
+        "standards/w3c--css-values-4.md"
+      ]
+    },
+    {
+      "id": "type-type-in-code",
+      "name": "排版工程落地",
+      "domain": "type",
+      "select": "排版规范落成代码 token 时用它。Primer 用单个 font 简写 token 控制字号、字族、字重、行高，行高无单位、对齐网格；Flutter Typography 类内置 Material 2018 两套字号、字重、字距可引用。",
+      "checks": [
+        {
+          "q": "Typography.material2018 用的是哪一版 Material Design 默认值？",
+          "a": "Creates a typography instance using Material Design's 2018 defaults.",
+          "cite": "content/type/api.flutter.dev--Typography-class.md:112"
+        },
+        {
+          "q": "Typography.material2014 用的是哪一版 Material Design 默认值？",
+          "a": "Creates a typography instance using Material Design's 2014 defaults.",
+          "cite": "content/type/api.flutter.dev--Typography-class.md:104"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s5"
+      ],
+      "articles": [
+        "type/api.flutter.dev--Typography-class.md"
+      ]
+    },
+    {
+      "id": "layout-intrinsic-patterns",
+      "name": "布局模式",
+      "domain": "layout",
+      "select": "页面骨架先拆成几个基本模式再拼：Stack 管纵向堆叠和间距，Sidebar 管主从两栏，Switcher 按可用宽度在横排与换行间切换，不为每种宽度单独写一套。",
+      "checks": [
+        {
+          "q": "Switcher 是把容器的哪个宽度值丢进计算、与哪个断点比较？",
+          "a": "The `flex-basis` value enters the (current) width of the container, expressed as `100%`, into a calculation with the designated `30rem` breakpoint.",
+          "cite": "content/layout/every-layout.dev--switcher.md:69"
+        },
+        {
+          "q": "Sidebar 两栏并排时，侧栏和非侧栏的宽度怎么分？",
+          "a": "Critically, the sidebar’s width is *fixed* while the two elements are adjacent, and the non-sidebar takes up the rest of the available space.",
+          "cite": "content/layout/every-layout.dev--sidebar.md:62"
+        }
+      ],
+      "tasks": [
+        "s2",
+        "s3"
+      ],
+      "articles": [
+        "layout/every-layout.dev--stack.md",
+        "layout/every-layout.dev--sidebar.md",
+        "layout/every-layout.dev--switcher.md",
+        "layout/developer.apple.com--layout.md",
+        "layout/developer.apple.com--spatial-layout.md",
+        "layout/polaris.shopify.com--layout-tokens.md",
+        "layout/polaris.shopify.com--layout.md",
+        "layout/primer.style--layout.md"
+      ]
+    },
+    {
+      "id": "layout-responsive-adaptation",
+      "name": "响应式与跨设备适配",
+      "domain": "layout",
+      "select": "跨设备适配按四件事核对：断点由布局原文给，不按设备型号拍数字；窄屏按 WCAG 最小宽度验收，先单列再按内容加列；触控目标单独量，鼠标与手指两种输入分别验；全面屏留出安全区，横竖屏各看一遍。",
+      "checks": [
+        {
+          "q": "TDesign 基于不同显示设备一共设置了几个断点？",
+          "a": "TDesign 基于不同显示设备，共设置了 3 个断点。该断点系统在兼顾平板端设备的同时，对 PC 端的断点进行细分，并考虑不同浏览器的特性差异（注1），使栅格系统更好地适配主流的电脑显示器和浏览器。",
+          "cite": "content/layout/tdesign.tencent.com--layout.md:152"
+        },
+        {
+          "q": "移动端最小触控目标，iOS/Web 与 Android 分别是多大？",
+          "a": "Spacers will also help provide enough room to accommodate minimum touch targets on mobile devices, iOS & Web [44 x 44], Android [48 x 48].",
+          "cite": "content/layout/fluent-2--layout.md:77"
+        }
+      ],
+      "tasks": [
+        "s2",
+        "s3",
+        "s12"
+      ],
+      "articles": [
+        "layout/tdesign.tencent.com--layout.md",
+        "layout/carbondesignsystem.com--2x-grid.md",
+        "a11y/w3c--wcag-2.2.md",
+        "layout/fluent-2--layout.md",
+        "layout/developer.mozilla.org--viewport-meta.md",
+        "layout/primer.style--responsive.md"
+      ]
+    },
+    {
+      "id": "color-dark-mode",
+      "name": "暗色模式与主题切换",
+      "domain": "color",
+      "select": "要暗色先看数值文章怎么给：有的系统按语义别名换一套映射，组件不动；有的按主题文件整套导入；有的直接给 Gray 90/100 两档主题。没有官方暗色的系统不要自己反色推导，按缺口语义走兜底并记账。",
+      "checks": [
+        {
+          "q": "Carbon 的暗色主题里，每加一层，图层颜色怎么变化？",
+          "a": "In the dark themes, layers become one step lighter with each added layer.",
+          "cite": "content/color/carbondesignsystem.com--color.md:63"
+        },
+        {
+          "q": "暗色表面上为什么不宜用高饱和度颜色？",
+          "a": "尽量避免使用高饱和度的颜色，因为在较暗的表面上观看时，高饱和度颜色具有视觉“抖动”效果。",
+          "cite": "content/color/tdesign.tencent.com--dark.md:32"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s13"
+      ],
+      "articles": [
+        "color/tdesign.tencent.com--dark.md",
+        "color/developer.apple.com--dark-mode.md",
+        "color/carbondesignsystem.com--color.md",
+        "color/primer.style--theming.md",
+        "tokens/primer.style--color-themes.md",
+        "color/fluent-2--dark.md",
+        "tokens/fluent-2--dark-tokens.md",
+        "tokens/spectrum.adobe.com--color-sets.md"
+      ]
+    },
+    {
+      "id": "layout-spacing-values",
+      "name": "间距取值规则",
+      "domain": "layout",
+      "select": "定间距刻度和响应式留白时用它。优设建议基础间距按固定步长递增，宽画布配窄内容区并两侧留对称边距；Spectrum 把间距原则定为关系、比例、感知三条。",
+      "checks": [
+        {
+          "q": "TDesign 的侧边距默认多少，取值要遵守什么规律？",
+          "a": "TDesign 中侧边距的默认值为 24px，也可根据实际情况确定取值，建议使用 8 的倍数。",
+          "cite": "content/layout/tdesign.tencent.com--layout.md:96"
+        },
+        {
+          "q": "在 8 倍数原则之外，间距刻度还额外开放了哪两档小间距？",
+          "a": "我们推荐了一组具有韵律的间距值，在遵循 8 倍数原则的基础上，增加了 4、12 两档小间距，以灵活满足不同的应用场景。",
+          "cite": "content/layout/tdesign.tencent.com--layout.md:138"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s2"
+      ],
+      "articles": [
+        "layout/uisdc.com--code-for-design-of-spacing.md",
+        "layout/tdesign.tencent.com--layout.md",
+        "layout/carbondesignsystem.com--spacing.md",
+        "layout/spectrum.adobe.com--component-spacing.md",
+        "layout/spectrum.adobe.com--layout-spacing.md",
+        "layout/spectrum.adobe.com--spacing.md"
+      ]
+    },
+    {
+      "id": "layout-dark-spec-process",
+      "name": "设计规范全流程",
+      "domain": "layout",
+      "select": "从零搭一套设计规范、要定设计语言覆盖范围时用它。优设的规范全流程给出设计语言该覆盖的内容清单：设计原则先行，再定色彩系统、图形、栅格系统、字体、投影、图文关系，基础元素定稿后保持稳定不频繁变动。",
+      "checks": [
+        {
+          "q": "规范里的基础颜色和字体，至少要在多长时间内不频繁变动？",
+          "a": "设计一套设计语言是一个很复杂的过程，前期一般需要比较资深的的设计师来完成，设计完成后，对于基础的颜色，字体不要经常变动，成本会比较高，至少需要保证这些基础元素，一年内不要频繁变动，今天和大家分享的只是一个大概框架，后续我将会拆解里面每个模块，逐步和大家分享如何去设计一个语言。",
+          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:205"
+        },
+        {
+          "q": "为什么多设备、多屏幕尺寸、多家厂商自定义系统的环境下必须做设计规范？",
+          "a": "我们现在处于一个各种设备的时代，各种屏幕尺寸，平板电脑，笔记本，各种安卓机器，各种厂商自定义的系统等等，我们的设计需要在这些平台上运行，就必须保证设计的统一性。",
+          "cite": "content/layout/uisdc.com--ui-design-specification-process.md:62"
+        }
+      ],
+      "tasks": [
+        "s17"
+      ],
+      "articles": [
+        "layout/uisdc.com--ui-design-specification-process.md"
+      ]
+    },
+    {
+      "id": "motion-duration",
+      "name": "动效时长",
+      "domain": "motion",
+      "select": "时长按场景分档，别一个值用到底。工程默认阶梯按 hover/press、tooltip 与下拉、modal 与抽屉、页面切换、全屏遮罩逐级加长，modal 与抽屉另有上限；NN/g 另给了动效时长的经验区间。",
+      "checks": [
+        {
+          "q": "TDesign 给桌面端和移动端的元素运动时长各定了什么区间？",
+          "a": "针对桌面端（Laptop 和 Desktop）200～600ms 是合适的元素运动时长；针对移动端（Mobile 和 Pad）100～400ms 是合适的元素运动时长。",
+          "cite": "content/motion/tdesign.tencent.com--motion.md:90"
+        },
+        {
+          "q": "勾选框、开关这类简单反馈动画的总时长该取多少？",
+          "a": "Simple feedback animations, such as showing a checkbox or toggle switch, should be roughly 100 ms (0.10 seconds) in total duration.",
+          "cite": "content/motion/nngroup.com--animation-duration.md:80"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s5"
+      ],
+      "articles": [
+        "motion/nngroup.com--animation-duration.md",
+        "motion/tdesign.tencent.com--motion.md",
+        "motion/carbondesignsystem.com--motion-choreography.md",
+        "motion/carbondesignsystem.com--motion.md",
+        "motion/developer.apple.com--motion.md",
+        "motion/fluent-2--motion.md",
+        "motion/polaris.shopify.com--creating-motion.md",
+        "motion/polaris.shopify.com--motion.md"
+      ]
+    },
+    {
+      "id": "motion-easing",
+      "name": "缓动曲线",
+      "domain": "motion",
+      "select": "进场用 ease-out，出场用 ease-in，位移缩放用 ease-in-out，常规 UI 不用 bounce/elastic。",
+      "checks": [
+        {
+          "q": "CSS 里 ease-out 关键字等价于哪条 cubic-bezier() 曲线？",
+          "a": "Equivalent to cubic-bezier(0, 0, 0.58, 1).",
+          "cite": "content/standards/w3c--css-easing-1.md:138"
+        },
+        {
+          "q": "ease-in-out 关键字等价于哪条 cubic-bezier() 曲线？",
+          "a": "Equivalent to cubic-bezier(0.42, 0, 0.58, 1).",
+          "cite": "content/standards/w3c--css-easing-1.md:142"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s15"
+      ],
+      "articles": [
+        "motion/developer.mozilla.org--using-css-transitions.md",
+        "standards/w3c--css-easing-1.md",
+        "motion/spectrum.adobe.com--motion.md"
+      ]
+    },
+    {
+      "id": "motion-semantics",
+      "name": "动效语义",
+      "domain": "motion",
+      "select": "动效只为解释状态变化、传达状态和指路，先衡量有没有意义再做，不做装饰，系统组件自带的动效直接复用。动效只为解释状态变化，不做装饰；Spectrum 把动效分方向性、交互、寻路三类，Carbon 专篇讲路径与编排，NN/g 讲清加动效的理由，先答为什么再调曲线。",
+      "checks": [
+        {
+          "q": "动效能改善体验，但使用频率上有什么限制？",
+          "a": "But they should not be overused, as they can easily become overwhelming and distract users.",
+          "cite": "content/motion/nngroup.com--animation-purpose-ux.md:99"
+        },
+        {
+          "q": "结账这类流程里，滑入式（slide-over）动效能向用户说明什么？",
+          "a": "Likewise, a slide-over animation helps to establish that a user is moving forward or backward within a process such as checkout.",
+          "cite": "content/motion/nngroup.com--animation-purpose-ux.md:71"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s17",
+        "s5"
+      ],
+      "articles": [
+        "motion/nngroup.com--animation-purpose-ux.md"
+      ]
+    },
+    {
+      "id": "motion-performance",
+      "name": "动效性能",
+      "domain": "motion",
+      "select": "动画只动 transform 和 opacity，不动 width/height/top/left/margin。组件展开收起别用 grid-template-rows 从 0fr 到 1fr，每帧重排全部内容，长文必掉帧，长内容走 transform/opacity 加 JS 收尾。",
+      "checks": [
+        {
+          "q": "现代浏览器能低成本动画的 CSS 属性是哪两个？",
+          "a": "Modern browsers can animate two CSS properties cheaply: `transform` and `opacity`.",
+          "cite": "content/motion/web.dev--animations-guide.md:32"
+        },
+        {
+          "q": "动画一旦改动布局相关属性，浏览器要多算什么？",
+          "a": "Layout changes involve calculating the geometry (position and size) of all the elements affected by the change.",
+          "cite": "content/motion/web.dev--animations-guide.md:71"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s15"
+      ],
+      "articles": [
+        "motion/web.dev--animations-guide.md",
+        "motion/developer.mozilla.org--using-css-animations.md",
+        "motion/developer.mozilla.org--using-css-transitions.md"
+      ]
+    },
+    {
+      "id": "motion-reduced",
+      "name": "减少动效",
+      "domain": "motion",
+      "select": "prefers-reduced-motion: reduce 下动效要关闭或改成即时变化，不能只变慢。这是无障碍底线，高于任何风格选择，Carbon、Spectrum 的动效篇都写了兜底做法。",
+      "checks": [
+        {
+          "q": "prefers-reduced-motion 这个媒体特性用来检测用户的什么请求？",
+          "a": "The prefers-reduced-motion media feature is used to detect if the user has requested the system minimize the amount of non-essential motion it uses.",
+          "cite": "content/standards/w3c--mediaqueries-5.md:1255"
+        },
+        {
+          "q": "脚本要覆盖用户「减少动效」的系统偏好时用哪个属性？",
+          "a": "The `reducedMotion` attribute is a `PreferenceObject` used to override the user’s preference for reduced motion on the site.",
+          "cite": "content/standards/w3c--mediaqueries-5.md:1499"
+        }
+      ],
+      "tasks": [
+        "s3",
+        "s16"
+      ],
+      "articles": [
+        "standards/w3c--mediaqueries-5.md"
+      ]
+    },
+    {
+      "id": "a11y-contrast-threshold",
+      "name": "对比度阈值",
+      "domain": "a11y",
+      "select": "选完色要用对比度工具算过再定稿。正文文字和背景的对比度要求最严，大号文字和图形控件可放宽。信息不能只靠颜色传达，色觉障碍用户要靠图标、文字或纹理补足。",
+      "tasks": [
+        "s16"
+      ],
+      "articles": [
+        "a11y/web.dev--a11y-color-contrast.md",
+        "a11y/carbondesignsystem.com--a11y-color.md",
+        "a11y/carbondesignsystem.com--a11y-keyboard.md",
+        "a11y/carbondesignsystem.com--a11y-overview.md"
+      ],
+      "checks": [
+        {
+          "q": "大号文字和必要的图标，对比度至少要达到多少？",
+          "a": "Large-sized text and essential icons must have a color contrast ratio of `3:1`.",
+          "cite": "content/a11y/web.dev--a11y-color-contrast.md:158"
+        }
+      ]
+    },
+    {
+      "id": "a11y-focus-visibility",
+      "name": "焦点可见性",
+      "domain": "a11y",
+      "select": "键盘用户必须看得见焦点在哪：用 focus-visible 让焦点环只在键盘操作时出现，鼠标点击不出现。页面顶部放跳转链接跳过导航，焦点顺序跟操作顺序一致，所有功能都能纯键盘完成。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/web.dev--a11y-focus.md",
+        "a11y/fluent-2--focus.md"
+      ],
+      "checks": [
+        {
+          "q": "Fluent UI 默认的焦点指示器是什么形态？",
+          "a": "The default focus indicator used in Fluent UI is an outline.",
+          "cite": "content/a11y/fluent-2--focus.md:46"
+        },
+        {
+          "q": "关于正 tabindex，通用规则是什么？",
+          "a": "As a general rule, you should avoid positive tabindexes.",
+          "cite": "content/a11y/web.dev--a11y-focus.md:103"
+        }
+      ]
+    },
+    {
+      "id": "a11y-modal-focus-trap",
+      "name": "模态焦点陷阱",
+      "domain": "a11y",
+      "select": "模态对话框打开时把焦点锁在框内（焦点陷阱），Esc 关闭，关闭后焦点还原到打开它的那个元素。菜单按钮用 Enter 或 Space 打开菜单，焦点落到第一个菜单项。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/w3c--apg-dialog-modal.md",
+        "a11y/w3c--apg-menu-button.md"
+      ],
+      "checks": [
+        {
+          "q": "模态对话框里焦点在最后一个可 Tab 元素上时，再按 Tab 去哪？",
+          "a": "If focus is on the last tabbable element inside the dialog, moves focus to the first tabbable element inside the dialog.",
+          "cite": "content/a11y/w3c--apg-dialog-modal.md:42"
+        },
+        {
+          "q": "焦点在菜单按钮上按 Enter 时，菜单和焦点分别怎样？",
+          "a": "Enter: opens the menu and places focus on the first menu item.",
+          "cite": "content/a11y/w3c--apg-menu-button.md:35"
+        }
+      ]
+    },
+    {
+      "id": "a11y-form-structure",
+      "name": "表单无障碍",
+      "domain": "a11y",
+      "select": "每个输入框都要有关联的 label，错误提示跟字段绑定并说清怎么改，必填项和分组用语义结构标出来。语义结构和阅读顺序要照顾屏幕阅读器，读序跟视觉顺序一致。",
+      "tasks": [
+        "s16",
+        "s9"
+      ],
+      "articles": [
+        "a11y/web.dev--a11y-forms.md",
+        "a11y/web.dev--a11y-design-ux.md"
+      ],
+      "checks": [
+        {
+          "q": "用 HTML required 属性时，浏览器给出的错误提示依据什么生成？",
+          "a": "The browser will supply a generic error message based on the filed validation parameters.",
+          "cite": "content/a11y/web.dev--a11y-forms.md:182"
+        },
+        {
+          "q": "只用 aria-required 提供自定义错误信息时，谁会收到这条信息？",
+          "a": "Only ATs will receive the message unless you add additional code to make the message visible to all users.",
+          "cite": "content/a11y/web.dev--a11y-forms.md:183"
+        }
+      ]
+    },
+    {
+      "id": "a11y-expand-collapse-keys",
+      "name": "展开收起键盘",
+      "domain": "a11y",
+      "select": "手风琴标题按钮用 Enter 和 Space 展开收起，展开状态挂 aria-expanded，内容区用 aria-controls 关联到标题按钮。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/w3c--apg-accordion.md",
+        "a11y/w3c--apg-disclosure.md"
+      ],
+      "checks": [
+        {
+          "q": "Enter 键在 disclosure 上执行什么动作？",
+          "a": "Enter: activates the disclosure control and toggles the visibility of the disclosure content.",
+          "cite": "content/a11y/w3c--apg-disclosure.md:38"
+        },
+        {
+          "q": "展开收起的内容可见时，标题按钮的 aria-expanded 设成什么？",
+          "a": "When the content is visible, the element with role `button` has [aria-expanded](https://w3c.github.io/aria/#aria-expanded) set to `true`.",
+          "cite": "content/a11y/w3c--apg-disclosure.md:44"
+        }
+      ]
+    },
+    {
+      "id": "a11y-select-keys",
+      "name": "选择组件键盘",
+      "domain": "a11y",
+      "select": "组合框是键盘模型最复杂的一类，要在输入框和下拉列表间管理焦点；列表框方向键在选项间移动，分单选和多选两套按键；菜单内用方向键导航。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/w3c--apg-combobox.md",
+        "a11y/w3c--apg-listbox.md",
+        "a11y/w3c--apg-menu.md"
+      ],
+      "checks": [
+        {
+          "q": "焦点在组合框的列表弹层里按 Enter，会依次发生哪几步？",
+          "a": "Enter: Accepts the focused option in the listbox by closing the popup, placing the accepted value in the combobox, and if the combobox is editable, placing the input cursor at the end of the value.",
+          "cite": "content/a11y/w3c--apg-combobox.md:96"
+        },
+        {
+          "q": "单选列表框按向下箭头时，焦点和选中态怎么变？",
+          "a": "Down Arrow: Moves focus to the next option. Optionally, in a single-select listbox, selection may also move with focus.",
+          "cite": "content/a11y/w3c--apg-listbox.md:48"
+        }
+      ]
+    },
+    {
+      "id": "a11y-value-input-keys",
+      "name": "数值组件键盘",
+      "domain": "a11y",
+      "select": "滑块和数字步进都用方向键按步进值增减，Home 和 End 跳到最小值和最大值，当前值用 aria-valuenow 播报给辅助技术。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/w3c--apg-slider.md",
+        "a11y/w3c--apg-spinbutton.md"
+      ],
+      "checks": [
+        {
+          "q": "滑块组件上按 Home 键会发生什么？",
+          "a": "Home: Set the slider to the first allowed value in its range.",
+          "cite": "content/a11y/w3c--apg-slider.md:43"
+        },
+        {
+          "q": "滑块上可选的 Page Up 键，单次调整幅度与上箭头有什么不同？",
+          "a": "Page Up (Optional): Increase the slider value by an amount larger than the step change made by Up Arrow.",
+          "cite": "content/a11y/w3c--apg-slider.md:45"
+        }
+      ]
+    },
+    {
+      "id": "a11y-switch-tooltip",
+      "name": "开关与提示",
+      "domain": "a11y",
+      "select": "开关用 Space 切换，role=switch 表达开和关两个状态。工具提示 hover 和 focus 都要能触发，延迟显示，Esc 关闭。",
+      "tasks": [
+        "s16",
+        "s5"
+      ],
+      "articles": [
+        "a11y/w3c--apg-switch.md",
+        "a11y/w3c--apg-tooltip.md"
+      ],
+      "checks": [
+        {
+          "q": "焦点落在开关上时，按哪个键会切换开关状态？",
+          "a": "Space: When focus is on the switch, changes the state of the switch.",
+          "cite": "content/a11y/w3c--apg-switch.md:38"
+        },
+        {
+          "q": "工具提示一般什么时候出现、靠什么消失？",
+          "a": "It typically appears after a small delay and disappears when Escape is pressed or on mouse out.",
+          "cite": "content/a11y/w3c--apg-tooltip.md:24"
+        }
+      ]
+    },
+    {
+      "id": "a11y-tabs-tree-keys",
+      "name": "标签页与树形",
+      "domain": "a11y",
+      "select": "标签页用方向键在标签间移动，aria-selected 标出当前页。树形视图支持节点展开折叠和层级导航，键盘能走到每一层。",
+      "tasks": [
+        "s16",
+        "s5",
+        "s7"
+      ],
+      "articles": [
+        "a11y/w3c--apg-tabs.md",
+        "a11y/w3c--apg-treeview.md"
+      ],
+      "checks": [
+        {
+          "q": "横向标签列表要不要响应上/下方向键？为什么？",
+          "a": "If the tab list is horizontal, it does not listen for Down Arrow or Up Arrow so those keys can provide their normal browser scrolling functions even when focus is inside the tab list.",
+          "cite": "content/a11y/w3c--apg-tabs.md:74"
+        },
+        {
+          "q": "树里焦点在已折叠节点上按右方向键会怎样？",
+          "a": "When focus is on a closed node, opens the node; focus does not move.",
+          "cite": "content/a11y/w3c--apg-treeview.md:77"
+        }
+      ]
+    },
+    {
+      "id": "a11y-grid-toolbar-keys",
+      "name": "网格与工具栏",
+      "domain": "a11y",
+      "select": "数据网格要支持单元格级方向键导航、行选择和单元格编辑。工具栏内用左右方向键在一组控件间移动。",
+      "tasks": [
+        "s16",
+        "s12"
+      ],
+      "articles": [
+        "a11y/w3c--apg-grid.md",
+        "a11y/w3c--apg-toolbar.md"
+      ],
+      "checks": [
+        {
+          "q": "方向键在单元格之间搬焦点时，还能不能用来操作单元格内的组合框或移动编辑光标？",
+          "a": "While navigation keys, such as arrow keys, are moving focus from cell to cell, they are not available to do something like operate a combobox or move an editing caret inside of a cell.",
+          "cite": "content/a11y/w3c--apg-grid.md:64"
+        },
+        {
+          "q": "一组控件要满足什么条件才该用 toolbar 容器归组？",
+          "a": "Use toolbar as a grouping element only if the group contains 3 or more controls.",
+          "cite": "content/a11y/w3c--apg-toolbar.md:33"
+        }
+      ]
+    },
+    {
+      "id": "a11y-announce-nav",
+      "name": "导航与播报",
+      "domain": "a11y",
+      "select": "警告提示用 role=alert 让屏幕阅读器即时播报。轮播有自动播放就必须给暂停控制，内容变化用 aria-live 播报。面包屑用 nav 包 ol，当前页标 aria-current=page。",
+      "tasks": [
+        "s16",
+        "s5",
+        "s7"
+      ],
+      "articles": [
+        "a11y/w3c--apg-alert.md",
+        "a11y/w3c--apg-carousel.md",
+        "a11y/w3c--apg-breadcrumb.md"
+      ],
+      "checks": [
+        {
+          "q": "设计警告提示时，为什么不能让它自动消失？",
+          "a": "It is also important to avoid designing alerts that disappear automatically.",
+          "cite": "content/a11y/w3c--apg-alert.md:26"
+        },
+        {
+          "q": "键盘焦点进入轮播时，自动轮播应该怎么处理？",
+          "a": "Stops rotating when keyboard focus enters the carousel.",
+          "cite": "content/a11y/w3c--apg-carousel.md:54"
+        }
+      ]
+    },
+    {
+      "id": "components-button-hierarchy",
+      "name": "按钮层级与状态",
+      "domain": "components",
+      "select": "每屏只放一个 primary 按钮，页头弹窗侧栏不算；secondary 只配 primary 做取消返回类否定动作；tertiary 可独立用；danger 有 primary、tertiary、ghost 三种样式；尺寸按档配输入框正文；切换按钮 aria-pressed 显式写 true/false，文案不随按下态改。",
+      "tasks": [
+        "s5",
+        "s9",
+        "s16"
+      ],
+      "articles": [
+        "components/inclusive-components.design--toggle-button.md",
+        "components/tdesign.tencent.com--button.md",
+        "components/carbondesignsystem.com--button-usage.md",
+        "components/carbondesignsystem.com--radio-button-usage.md",
+        "components/fluent-2--button.md",
+        "components/polaris--button-group.md",
+        "components/polaris--button.md",
+        "components/polaris.shopify.com--button.md"
+      ],
+      "checks": [
+        {
+          "q": "每个屏幕能出现几个主按钮，哪些区域不计入这个限制？",
+          "a": "Primary buttons should only appear once per screen (not including the application header, modal dialog, or side panel).",
+          "cite": "content/components/carbondesignsystem.com--button-usage.md:55"
+        },
+        {
+          "q": "次按钮能不能单独使用？",
+          "a": "Secondary buttons can only be used in conjunction with a primary button.",
+          "cite": "content/components/carbondesignsystem.com--button-usage.md:56"
+        }
+      ]
+    },
+    {
+      "id": "components-nav-aids",
+      "name": "导航辅助",
+      "domain": "components",
+      "select": "面包屑从首页连到当前页父级，不用在扁平站和线性流程里；分页只翻内容列表，只有一页时不显示，线性表单用 Continue 加返回链接。返回链接和面包屑绝不同时用；skip link 每页必须有，放 body 开头，有 cookie banner 时放它之后。",
+      "tasks": [
+        "s5",
+        "s12",
+        "s7"
+      ],
+      "articles": [
+        "a11y/w3c--apg-disclosure.md",
+        "a11y/w3c--apg-menu-button.md",
+        "components/primer--nav-list.md",
+        "components/primer--tab-nav.md",
+        "components/primer--underline-nav.md",
+        "components/carbondesignsystem.com--breadcrumb-usage.md",
+        "components/carbondesignsystem.com--dropdown-usage.md"
+      ],
+      "checks": [
+        {
+          "q": "导航列表即使视觉上不显示标签，也要为辅助技术做什么？",
+          "a": "Nav lists should always be labeled for assistive technologies, even if the label is visually hidden.",
+          "cite": "content/components/primer--nav-list.md:104"
+        },
+        {
+          "q": "深层嵌套导航能不能用 tree view 顶替导航列表？",
+          "a": "A tree view is never an accessible replacement for navigation, as it serves a different purpose and is not recognized as navigation by assistive technologies.",
+          "cite": "content/components/primer--nav-list.md:96"
+        }
+      ]
+    },
+    {
+      "id": "components-cards",
+      "name": "卡片",
+      "domain": "components",
+      "select": "同级卡片用同级标题 h2，整卡可点时把链接放进标题再铺满整卡，不要把块级标题塞进内联 a 里。卡片网格要无 hover 也完整可读，reduced motion 下停掉倾斜和交错动效。层级随大纲位置：卡片挂在区块 h2 下时，卡内标题降为 h3。",
+      "tasks": [
+        "s5",
+        "s11"
+      ],
+      "articles": [
+        "components/inclusive-components.design--cards.md",
+        "layouts/layout--bento-grid-showcase.md"
+      ],
+      "checks": [
+        {
+          "q": "卡片网格在没有悬停、且系统要求减少动效时要保证什么？",
+          "a": "Keep cards usable without hover and suppress tilt/stagger/video motion under reduced motion.",
+          "cite": "content/layouts/layout--bento-grid-showcase.md:68"
+        },
+        {
+          "q": "卡片里的标题在源码顺序上应该放在什么位置？",
+          "a": "Remember that headings should *begin* sections.",
+          "cite": "content/components/inclusive-components.design--cards.md:687"
+        }
+      ]
+    },
+    {
+      "id": "patterns-global-nav",
+      "name": "全局导航",
+      "domain": "patterns",
+      "select": "页头里的 logo 只链回本站首页，产品级链接左对齐、全局链接右对齐，链接不开新 tab 也不链到别的域名。工具图标不直接导航而是打开面板，下拉菜单打开时箭头朝上。",
+      "tasks": [
+        "s12",
+        "s2",
+        "s7"
+      ],
+      "articles": [
+        "howto/nngroup.com--hamburger-menus.md",
+        "howto/nngroup.com--is-navigation-useful.md",
+        "patterns/carbon--dialog-pattern.md",
+        "patterns/carbon--disclosures-pattern.md",
+        "patterns/carbon--empty-states-pattern.md",
+        "patterns/carbon--forms-pattern.md",
+        "patterns/carbon--global-header.md",
+        "patterns/carbon--loading-pattern.md"
+      ],
+      "checks": [
+        {
+          "q": "桌面端能不能用汉堡图标把主导航收起来？",
+          "a": "Do not use hidden navigation (such as hamburger icons) in desktop user interfaces.",
+          "cite": "content/howto/nngroup.com--hamburger-menus.md:151"
+        },
+        {
+          "q": "顶层导航链接不超过几条时应当直接显示为可见链接？",
+          "a": "If your site has 4 or fewer top-level navigation links, display them as visible links.",
+          "cite": "content/howto/nngroup.com--hamburger-menus.md:156"
+        }
+      ]
+    },
+    {
+      "id": "patterns-notification",
+      "name": "通知分层",
+      "domain": "patterns",
+      "select": "信息、警告、错误分层给不同措辞和图标。图标按大小决定用实心版还是描边版，描边版配大一号文字；aria-live 默认 polite，页面隐藏时关掉播报，不要播报一切。",
+      "tasks": [
+        "s9",
+        "s4",
+        "s8"
+      ],
+      "articles": [
+        "components/inclusive-components.design--notifications.md",
+        "components/tdesign.tencent.com--message.md",
+        "patterns/carbon--login-pattern.md",
+        "patterns/carbon--notification-pattern.md",
+        "patterns/carbon--read-only-states-pattern.md",
+        "patterns/carbon--search-pattern.md",
+        "patterns/carbon--status-indicator-pattern.md",
+        "patterns/carbon--text-toolbar-pattern.md"
+      ],
+      "checks": [
+        {
+          "q": "TDesign 的常规全局提示包含哪几类信息？",
+          "a": "使用简洁文字描述操作反馈。常规全局提示包含：普通信息、成功信息、警示信息、错误信息、帮助信息和加载中。",
+          "cite": "content/components/tdesign.tencent.com--message.md:20"
+        },
+        {
+          "q": "TDesign 全局提示的插件式调用和函数式调用，参数是否一致？",
+          "a": "支持插件式调用 `this.$message` 和函数式调用 `MessagePlugin` 两种方式，两种方式参数完全一样。",
+          "cite": "content/components/tdesign.tencent.com--message.md:40"
+        }
+      ]
+    },
+    {
+      "id": "patterns-review-checklist",
+      "name": "评审清单与原则",
+      "domain": "patterns",
+      "select": "评审扫雷用 UX 规则速查表的 119 条跨规范清单，每条带 Do/Don't、代码示例和严重度，但它只是索引，争议回到上游一手规范定。写设计原则文案参考 Ant 价值观四点：自然、确定性、意义感、生长性。",
+      "tasks": [
+        "s17"
+      ],
+      "articles": [
+        "patterns/ux-rules-checklist.md"
+      ],
+      "checks": [
+        {
+          "q": "这份 119 条清单是从哪些官方规范摘出来的、每条带什么？",
+          "a": "这 119 条是作者从 WCAG 2.2、GOV.UK、Apple HIG、Material、Carbon 等官方规范摘抄整理的横向清单，一条一规则，带 Do/Don't 与代码示例。",
+          "cite": "content/patterns/ux-rules-checklist.md:19"
+        }
+      ]
+    },
+    {
+      "id": "patterns-test-walkthrough",
+      "name": "测试逐页走查",
+      "domain": "patterns",
+      "select": "出稿先把页面铺开：入口页、核心任务页、结果页按产品任务链出全，多步流程每步都算一页，内容用真实文案填满。测试按页面、交互元素、显示状态三张清单逐项走查，每项真点真操作并记录前后值，只看首页的样子不算测过。",
+      "checks": [
+        {
+          "q": "页面清单走查时宽度按哪几档走，还要按什么再逐个量边界？",
+          "a": "宽度从手机窄屏到桌面逐档走，查横向溢出；本库测试批次用 320 / 375 / 768 / 1280 四档，再按该站数值文章的断点逐个边界量一次。",
+          "cite": "content/patterns/ui-specs--test-walkthrough.md:28"
+        },
+        {
+          "q": "显示状态清单里的每个状态，检查前要满足什么前提？",
+          "a": "默认、悬停、按下、焦点、禁用、加载、空、错误、成功、内容超长截断，每个适用状态都要真实出现过一次再检查。",
+          "cite": "content/patterns/ui-specs--test-walkthrough.md:30"
+        }
+      ],
+      "tasks": [
+        "s17",
+        "s2"
+      ],
+      "articles": [
+        "patterns/ui-specs--test-walkthrough.md"
+      ]
+    },
+    {
+      "id": "patterns-feedback-criteria",
+      "name": "反馈目标与通过标准",
+      "domain": "patterns",
+      "select": "反馈要可感知、及时、真实、可行动：按下当帧有视觉响应，等待给进行中状态，失败保留输入并说明原因，界面数字跟着数据联动。通过标准逐条对：覆盖、零死点、反馈合目标、数字对账、底线复测、回炉重测，任何一条不过就回炉整轮重测。",
+      "checks": [
+        {
+          "q": "那种要求用户确认的提示，应该留给什么样的操作？",
+          "a": "It’s generally best to reserve this type of confirmation for activities that are sufficiently important — because people typically expect their action or task to succeed, they only need to know when it doesn’t.",
+          "cite": "content/patterns/developer.apple.com--feedback.md:37"
+        },
+        {
+          "q": "警报用得太多或者用来传达无关紧要的信息会怎样？",
+          "a": "Alerts can lose their impact if you use them too often or to deliver unimportant information.",
+          "cite": "content/patterns/developer.apple.com--feedback.md:33"
+        }
+      ],
+      "tasks": [
+        "s17",
+        "s8"
+      ],
+      "articles": [
+        "patterns/ui-specs--test-walkthrough.md",
+        "patterns/developer.apple.com--feedback.md"
+      ]
+    },
+    {
+      "id": "layouts-product-page",
+      "name": "产品页版型",
+      "domain": "layouts",
+      "select": "区块顺序是主视觉、价值主张、功能、CTA、页脚，功能区只放少量区块，CTA 在首屏吸底加页尾各放一次。按钮文字对按钮底色的对比度有最低要求，只有明确冲 AAA 级文字对比才用更严档位；有演示视频时把视频样例放进功能区。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--hero-features-cta.md",
+        "layouts/layout--product-demo-features.md"
+      ],
+      "checks": [
+        {
+          "q": "CTA 按钮文字对按钮底色至少要多少对比度，什么情况下才用 7:1？",
+          "a": "For CTA label text, verify at least 4.5:1 against the button fill; use 7:1 only when the product explicitly targets AAA normal-text contrast.",
+          "cite": "content/layouts/layout--hero-features-cta.md:68"
+        },
+        {
+          "q": "什么时候才值得用可交互的产品演示？",
+          "a": "Use an interactive demo only when it explains value better than static media.",
+          "cite": "content/layouts/layout--product-demo-features.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-pricing-comparison",
+      "name": "定价对比版型",
+      "domain": "layouts",
+      "select": "定价页每张套餐卡里放 CTA，导航里再放吸顶 CTA，突出匹配目标受众的套餐，年付省多少写真实数字，用 FAQ 解顾虑。对比页把 CTA 放表格右列和表下，高亮自家产品行，价格行写明免费试用。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--pricing-page-cta.md"
+      ],
+      "checks": [
+        {
+          "q": "定价页要突出哪个套餐，年付优惠怎么写？",
+          "a": "Highlight the plan that matches the intended audience and show actual annual savings transparently.",
+          "cite": "content/layouts/layout--pricing-page-cta.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-conversion-lead",
+      "name": "转化留资版型",
+      "domain": "layouts",
+      "select": "三步漏斗每步放一个 mini CTA，最后一步放主 CTA，每步只给必要信息并显示进度。留资表单只收交付必需的字段，先预览资料价值再让填表；用户评价和信任背书放在 CTA 之前撑场，候补名单页同理。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--funnel-3-step-conversion.md",
+        "layouts/layout--hero-testimonials-cta.md",
+        "layouts/layout--trust-authority-conversion.md"
+      ],
+      "checks": [
+        {
+          "q": "三步漏斗里每一步只展示什么、靠什么指示进度？",
+          "a": "Show only essential info per step. Use progress indicators.",
+          "cite": "content/layouts/layout--funnel-3-step-conversion.md:68"
+        },
+        {
+          "q": "用户评价该放在 CTA 的什么位置、用什么样的评价内容？",
+          "a": "Social proof before CTA. Use a concise set of verified testimonials with photo, name, and role.",
+          "cite": "content/layouts/layout--hero-testimonials-cta.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-showcase-story",
+      "name": "展示叙事版型",
+      "domain": "layouts",
+      "select": "Bento 网格和作品集追求可扫读的高密度，卡片不依赖 hover 也能用，reduced motion 下关掉倾斜和交错动效。视频首屏给字幕和可见暂停键，滚动叙事在没有动效时也要读得通；活动页写清截止日期，FAQ 页把搜索框放显眼处并给联系入口。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--bento-grid-showcase.md",
+        "layouts/layout--scroll-triggered-storytelling.md",
+        "layouts/layout--video-first-hero.md",
+        "layouts/layout--event-conference-landing.md"
+      ],
+      "checks": [
+        {
+          "q": "Bento 网格在 reduced motion 下对倾斜、交错和卡片可用性怎么处理？",
+          "a": "Keep cards usable without hover and suppress tilt/stagger/video motion under reduced motion.",
+          "cite": "content/layouts/layout--bento-grid-showcase.md:68"
+        },
+        {
+          "q": "视频首屏要为可访问性和减弱动效各提供什么？",
+          "a": "Provide captions and a visible pause control; use a static poster when reduced motion is requested.",
+          "cite": "content/layouts/layout--video-first-hero.md:63"
+        }
+      ]
+    },
+    {
+      "id": "layouts-dashboard-density",
+      "name": "看板密度",
+      "domain": "layouts",
+      "select": "数据密集型看板适合 BI 和运营场景，KPI 卡加多图表加紧凑留白，不适合营销看板。高管摘要型只放少量大指标和趋势一眼看懂，不适合技术深挖和运营监控。",
+      "tasks": [
+        "s12",
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--dashboard-data-dense-dashboard.md",
+        "patterns/tdesign.tencent.com--backoffice-tasks.md",
+        "components/tdesign.tencent.com--table.md"
+      ],
+      "checks": [
+        {
+          "q": "数据密集型看板一屏里筛选条、KPI 卡、主图和明细表怎么排，适合谁用？",
+          "a": "一屏塞进最多指标：筛选条常驻顶部，KPI 卡横排，主图与明细表并排或上下叠。适合运营、客服、财务这类需要一眼看完当天数据的人。",
+          "cite": "content/layouts/layout--dashboard-data-dense-dashboard.md:21"
+        },
+        {
+          "q": "表格内容超高滚动时表头怎么处理，高度用什么参数设置？",
+          "a": "表格内容高度超出后，滚动时表头会自动固定。可通过 `height` 或 `maxHeight` 设置表格高度，单位同 CSS 属性。",
+          "cite": "content/components/tdesign.tencent.com--table.md:90"
+        }
+      ]
+    },
+    {
+      "id": "layouts-dashboard-analytics",
+      "name": "分析下钻",
+      "domain": "layouts",
+      "select": "从总量逐层下钻到明细并保留上下文，展开式分区给交互式下钻路径。用户行为分析给漏斗路径，对比分析支持同比环比、A/B 结果和分区并排比。",
+      "tasks": [
+        "s12",
+        "s10"
+      ],
+      "articles": [
+        "layouts/layout--dashboard-drill-down-analytics.md",
+        "layouts/layout--dashboard-comparative-analysis-dashboard.md"
+      ],
+      "checks": [
+        {
+          "q": "排仪表盘区块之前要先定哪三件事，才去排区块？",
+          "a": "仪表盘版型：后台与数据面板怎么切区块。和落地页版型不同，这里先定「要看什么、多快刷新、谁能操作」，再排区块。",
+          "cite": "content/layouts/layout--dashboard-drill-down-analytics.md:19"
+        },
+        {
+          "q": "并排对比两个对象或时间段时，差异和同比环比要怎么呈现？",
+          "a": "两个对象或两个时间段并排比：差异要能直接读出来，别让读者自己算。同比环比要标明基准期。",
+          "cite": "content/layouts/layout--dashboard-comparative-analysis-dashboard.md:21"
+        }
+      ]
+    },
+    {
+      "id": "layouts-dashboard-specialized",
+      "name": "专项看板",
+      "domain": "layouts",
+      "select": "实时监控看板给流式更新、状态指示和告警通知，适合 DevOps 和行情，不适合历史分析。预测看板画预测线、置信区间和场景推演；财务销售看板给收支、预算、现金流、营收指标和审计线索。",
+      "tasks": [
+        "s12",
+        "s10"
+      ],
+      "articles": [
+        "layouts/layout--dashboard-real-time-monitoring.md",
+        "layouts/layout--dashboard-predictive-analytics.md",
+        "layouts/layout--dashboard-financial-dashboard.md",
+        "layouts/layout--dashboard-sales-intelligence-dashboard.md"
+      ],
+      "checks": [
+        {
+          "q": "实时面板为什么必须在界面上标出延迟与刷新频率？",
+          "a": "每秒都在变的面板：状态条置顶标健康度，日志滚动，告警按严重度排。延迟与刷新频率要在界面上说明，否则读的人不知道数字是几秒前的。",
+          "cite": "content/layouts/layout--dashboard-real-time-monitoring.md:21"
+        },
+        {
+          "q": "财务看板里金额精度、对账状态和视觉效果哪个优先，哪些信息必须写在界面上？",
+          "a": "财务场景：金额精度与对账状态优先于视觉效果。币种、单位、账期必须在界面上写清楚。",
+          "cite": "content/layouts/layout--dashboard-financial-dashboard.md:21"
+        }
+      ]
+    },
+    {
+      "id": "layouts-page-selection-chain",
+      "name": "页面三步法",
+      "domain": "layouts",
+      "select": "接到「做个 XX 页面」的需求按三步走：先定版型，用 product-picker 按产品类型查该用什么版型，或直接读落地页版型文章；表面与强调色从品牌文章的手法来，数值从数值文章取，版型文章的配色策略只作配色方向；最后定组件与交互。三个维度互相独立，不要用版型决定组件。触控一体机类页面触控目标有最小尺寸要求，标准产品页走 hero 加功能加 CTA 的顺序，文案为主就用极简单栏。",
+      "tasks": [
+        "s11",
+        "s5"
+      ],
+      "articles": [
+        "layouts/product-picker.md",
+        "layouts/layout--hero-features-cta.md",
+        "layouts/layout--minimal-single-column.md"
+      ],
+      "checks": [
+        {
+          "q": "要给某类产品挑落地页版型时，第一步先查什么，然后再去读哪里的文章？",
+          "a": "拿到产品类型先查这一篇：它给出该类产品推荐的落地页版型、配色方向与注意事项，再去 `content/layouts/` 读对应文章。",
+          "cite": "content/layouts/product-picker.md:19"
+        },
+        {
+          "q": "CTA 按钮文字和按钮底色的对比度至少要多少，何时才升到 7:1？",
+          "a": "For CTA label text, verify at least 4.5:1 against the button fill; use 7:1 only when the product explicitly targets AAA normal-text contrast.",
+          "cite": "content/layouts/layout--hero-features-cta.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-product-official",
+      "name": "产品官网版型",
+      "domain": "layouts",
+      "select": "做产品官网或营销首页选版型时用它。主视觉优先版型把首屏大图加单一价值条和主按钮排到底，功能展示版型用功能卡加社会证明收尾，App Store 式版型用截图轮播加评分评论，前后对比版型用对比滑块引出转化按钮。",
+      "tasks": [
+        "s11",
+        "s2"
+      ],
+      "articles": [
+        "layouts/layout--hero-centric-design.md",
+        "layouts/layout--feature-rich-showcase.md",
+        "layouts/layout--app-store-style-landing.md"
+      ],
+      "checks": [
+        {
+          "q": "主视觉版型里 CTA 文字与按钮底色的对比度最低要求是多少，什么时候才用 7:1？",
+          "a": "Verify CTA label text against the button fill at 4.5:1 minimum; use 7:1 only for an explicit AAA normal-text target.",
+          "cite": "content/layouts/layout--hero-centric-design.md:61"
+        },
+        {
+          "q": "功能展示版型要求每张功能卡讲几个信息点？",
+          "a": "Clear feature hierarchy. One key message per card.",
+          "cite": "content/layouts/layout--feature-rich-showcase.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-content-community",
+      "name": "内容社区版型",
+      "domain": "layouts",
+      "select": "做内容订阅、社区或目录型平台的落地页时用它。订阅版型把价值主张和订阅表单放首屏、再摆往期内容和订阅数，社区版型展示热门话题和活跃成员后放加入按钮，目录版型以搜索框为首屏重点再按分类列条目。",
+      "tasks": [
+        "s11",
+        "s2"
+      ],
+      "articles": [
+        "layouts/layout--newsletter-content-first.md",
+        "layouts/layout--marketplace-directory.md"
+      ],
+      "checks": [
+        {
+          "q": "订阅版型对表单字段和样刊链接的规则是什么？",
+          "a": "Keep the form to the fields actually required and link to a sample issue.",
+          "cite": "content/layouts/layout--newsletter-content-first.md:63"
+        },
+        {
+          "q": "订阅人数什么时候才能展示？",
+          "a": "Show a subscriber count only when it is current, verified, and dated; otherwise use qualitative social proof.",
+          "cite": "content/layouts/layout--newsletter-content-first.md:63"
+        }
+      ]
+    },
+    {
+      "id": "layouts-enterprise-event",
+      "name": "企业活动版型",
+      "domain": "layouts",
+      "select": "做企业获客或活动报名页时用它。企业入口版型按行业和角色分两层解决方案，以联系销售为主按钮、登录为次按钮；报名版型把主题、倒计时和表单放首屏右侧，往下讲收获和讲师，底部再放一次表单。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "layouts/layout--enterprise-gateway.md"
+      ],
+      "checks": [
+        {
+          "q": "企业入口版的 Logo 轮播在键盘操作和暂停上有什么硬性要求？",
+          "a": "Logo carousel controls must be keyboard operable; pause moving media offscreen/hidden and render a static final state under reduced motion.",
+          "cite": "content/layouts/layout--enterprise-gateway.md:68"
+        }
+      ]
+    },
+    {
+      "id": "layouts-data-proof",
+      "name": "数据佐证版型",
+      "domain": "layouts",
+      "select": "产品优势要靠数据或口碑说话时用它。实时运营版型在首屏放产品实况预览加关键指标，看完指标再给试用按钮；评分版型按聚合评分、评分分布、单条评价的顺序铺开，购买按钮跟评价并排。",
+      "tasks": [
+        "s11",
+        "s12"
+      ],
+      "articles": [
+        "layouts/layout--real-time-operations-landing.md"
+      ],
+      "checks": [
+        {
+          "q": "数据什么时候才可以标成 live？",
+          "a": "Label telemetry as live only when backed by a current source, with update time and stale state.",
+          "cite": "content/layouts/layout--real-time-operations-landing.md:63"
+        },
+        {
+          "q": "实时数据看板对滚动数据和预览区要提供哪些控制，降级时怎么处理？",
+          "a": "Provide pause/hide or update-frequency controls for tickers and previews, stop offscreen/hidden work, support keyboard controls, and render a static final snapshot under reduced motion.",
+          "cite": "content/layouts/layout--real-time-operations-landing.md:63"
+        }
+      ]
+    },
+    {
+      "id": "cases-dark-mode-rollout",
+      "name": "暗色模式落地",
+      "domain": "cases",
+      "select": "Terra 按用户分群量暗色人群规模，给这批人定制暗色主题，读 prefers-color-scheme 系统偏好，桌面端用户跳出率下降、每会话页数上涨。Facebook.com 靠重建技术栈做出暗色模式和信息流定位记忆，架构撑不住别硬加。",
+      "tasks": [
+        "s18"
+      ],
+      "articles": [
+        "cases/web.dev--terra-dark-mode.md",
+        "cases/engineering.fb.com--facebook-redesign.md"
+      ],
+      "checks": [
+        {
+          "q": "Terra 上线暗色主题后，跳出率和每会话页数各变成多少？",
+          "a": "Both metrics improved when showing a dark theme: bounce rates went from 27.25% to 10.82% and pages per session almost tripled (from 3.7 to 9.99).",
+          "cite": "content/cases/web.dev--terra-dark-mode.md:199"
+        },
+        {
+          "q": "Facebook 用 CSS 变量做主题后，主题带来的性能开销取决于什么？",
+          "a": "This made the performance impact of a theme proportional to the size of the color palette rather than to the size or complexity of the component library.",
+          "cite": "content/cases/engineering.fb.com--facebook-redesign.md:114"
+        }
+      ]
+    },
+    {
+      "id": "cases-ux-metrics-proof",
+      "name": "改版效果实证",
+      "domain": "cases",
+      "select": "体验决策要用实测数据背书。Yahoo! JAPAN 换无密码登录后咨询量下降、登录更快；Telegraph 给广告位预留固定尺寸让 CLS 明显改善；兰蔻移动站重建成 PWA 后转化率和 iOS 移动会话都上涨。",
+      "tasks": [
+        "s18",
+        "s17"
+      ],
+      "articles": [
+        "cases/web.dev--yahoo-japan-identity-case-study.md",
+        "cases/web.dev--telegraph.md",
+        "cases/web.dev--lancome.md"
+      ],
+      "checks": [
+        {
+          "q": "Telegraph 发现平板端广告位塌陷后用的是什么修法？",
+          "a": "We revisited the slot and adjusted the height to use the most common size.",
+          "cite": "content/cases/web.dev--telegraph.md:132"
+        },
+        {
+          "q": "Yahoo! JAPAN 观察到 FIDO 的转化率表现如何？",
+          "a": "Since FIDO is so easy to set up, it has a particularly high conversion rate.",
+          "cite": "content/cases/web.dev--yahoo-japan-identity-case-study.md:337"
+        }
+      ]
+    },
+    {
+      "id": "cases-color-theme-system",
+      "name": "色彩与主题系统",
+      "domain": "cases",
+      "select": "腾讯文档把品牌标准色从天蓝升级为钴蓝，又在中性灰里加蓝做出蓝灰色撑界面结构。QQ 主题升级先算成本：按原方案要做两端 1800 多张切图、多家外包公司至少四个月，最后改成按覆盖范围、美化质量、可用性三个目标收敛方案。",
+      "tasks": [
+        "s18"
+      ],
+      "articles": [
+        "cases/isux.tencent.com--tencentdocs-color-system.md",
+        "cases/isux.tencent.com--qq-theme-upgrade.md"
+      ],
+      "checks": [
+        {
+          "q": "腾讯文档的标准色由天蓝升级成了哪种蓝？",
+          "a": "我们将标准色由平静的天蓝色，升级为更加生动、进取、科技、可靠的明亮清澈的钴蓝色。",
+          "cite": "content/cases/isux.tencent.com--tencentdocs-color-system.md:40"
+        },
+        {
+          "q": "按最初的 QQ 主题方案落地，每个主题包要新增多少张切图、多家 CP 公司至少要做多久？",
+          "a": "但在进行执行评审的时候，我们意识到，这样的方案虽然可行，但落地成本非常的巨大，需要每个主题包内新增两端共1800多张切图，花耗多家cp公司至少四个月的时间和人力。",
+          "cite": "content/cases/isux.tencent.com--qq-theme-upgrade.md:42"
+        }
+      ]
+    },
+    {
+      "id": "cases-motion-performance",
+      "name": "动效性能与手感",
+      "domain": "cases",
+      "select": "滚动驱动动画别在主线程监听 scroll 事件，换新 API 后 Chrome 116 起实测流畅得多。手势动效要在设计稿里定死触发阈值、速度曲线、回弹阻尼这些参数，否则开发只能自己猜。",
+      "tasks": [
+        "s18"
+      ],
+      "articles": [
+        "cases/developer.chrome.com--scroll-animation-performance-case-study.md",
+        "cases/isux.tencent.com--gesture-motion-design.md"
+      ],
+      "checks": [
+        {
+          "q": "以前做滚动驱动动画，唯一的做法是去监听什么事件？",
+          "a": "In the past, the only way to create scroll-driven animations was to respond to the scroll event on the main thread.",
+          "cite": "content/cases/developer.chrome.com--scroll-animation-performance-case-study.md:24"
+        },
+        {
+          "q": "弹性曲线的手感由哪个参数决定，按它分成哪三种？",
+          "a": "弹性曲线是一种基于阻尼弹性振荡的原理实现的复杂曲线，阻尼比决定了曲线具体动画感受，根绝阻尼比的不同，弹性曲线可以分为三种，分别是欠阻尼运动、临界阻尼运动及过阻尼运动。",
+          "cite": "content/cases/isux.tencent.com--gesture-motion-design.md:96"
+        }
+      ]
+    },
+    {
+      "id": "motion-overlays",
+      "name": "浮层与转场动效",
+      "domain": "motion",
+      "select": "做菜单、弹窗、面板、页面切换这类浮层时用它：浮层从触发位置长出来，打开比关闭慢一点，关闭要能被打断；时长、曲线、缩放按取值示意取，不自己编。",
+      "checks": [
+        {
+          "q": "下拉菜单打开与关闭的时长各是多少？",
+          "a": "节奏差异只来自时长：打开 250ms，关闭 150ms。",
+          "cite": "content/motion/transitions.dev--05-menu-dropdown.md:49"
+        },
+        {
+          "q": "模态框打开与关闭的缩放值为什么写成两个变量？",
+          "a": "打开前的 0.96 和关闭时的 0.96 数值相同，但它们是两个变量（`--modal-scale` 与 `--modal-scale-close`），可以分别调，改一个不影响另一个。",
+          "cite": "content/motion/transitions.dev--06-modal.md:30"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--05-menu-dropdown.md",
+        "motion/transitions.dev--06-modal.md",
+        "motion/transitions.dev--07-panel-reveal.md",
+        "motion/transitions.dev--08-page-side-by-side.md",
+        "motion/transitions.dev--41-banner-stacking.md"
+      ]
+    },
+    {
+      "id": "motion-inplace",
+      "name": "就地状态动效",
+      "domain": "motion",
+      "select": "做文本、数字、图标、卡片这类原地变化时用它：旧内容先退、新内容再进，变化过程要能看清是哪一处变了；时长、模糊与曲线按取值示意取。",
+      "checks": [
+        {
+          "q": "卡片尺寸变化时，`.t-resize` 让过渡跟踪哪两个属性？",
+          "a": "`.t-resize` 只声明两件事：一条 transition，前半段跟踪 width，后半段跟踪 height，两段共用同一个时长变量和同一个缓动变量；以及 `will-change: width, height;`，把这两个属性提前标出来。",
+          "cite": "content/motion/transitions.dev--01-card-resize.md:24"
+        },
+        {
+          "q": "数字滚动时，末尾两位怎么错开？",
+          "a": "给末尾两个字符打 `data-stagger=\"1\"` 与 `data-stagger=\"2\"`，前面的字符不加，它们按零延迟入场。",
+          "cite": "content/motion/transitions.dev--02-number-pop-in.md:56"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--01-card-resize.md",
+        "motion/transitions.dev--02-number-pop-in.md",
+        "motion/transitions.dev--04-text-states-swap.md",
+        "motion/transitions.dev--09-icon-swap.md"
+      ]
+    },
+    {
+      "id": "motion-feedback",
+      "name": "反馈与悬停动效",
+      "domain": "motion",
+      "select": "做成功、错误、徽标、头像组、3D 倾斜这类反馈与悬停时用它：反馈只表达状态，不抢主操作；装饰性悬停只用在营销页，产品界面按 reduced-motion 兜底。",
+      "checks": [
+        {
+          "q": "成功勾选的 reduced-motion 分支除了关掉动画，还要补哪两个终值？",
+          "a": "reduced-motion 的写法不是简单清动画，还补了终值。照抄时别把 `opacity: 1` 和 `stroke-dashoffset: 0` 丢掉。",
+          "cite": "content/motion/transitions.dev--10-success-check.md:76"
+        },
+        {
+          "q": "通知徽标出现时，触发器本身会不会动？",
+          "a": "这个动效让徽标从右上角外侧斜着滑进落位，里面的圆点再独立地弹开，触发器本身一动不动。",
+          "cite": "content/motion/transitions.dev--03-notification-badge.md:18"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s8",
+        "s11"
+      ],
+      "articles": [
+        "motion/transitions.dev--03-notification-badge.md",
+        "motion/transitions.dev--10-success-check.md",
+        "motion/transitions.dev--11-avatar-group-hover.md",
+        "motion/transitions.dev--12-error-state-shake.md",
+        "motion/transitions.dev--19-3d-tilt.md"
+      ]
+    },
+    {
+      "id": "motion-inputs",
+      "name": "输入与选择动效",
+      "domain": "motion",
+      "select": "做输入框、复选框、开关、点赞、了解更多这类可操作控件时用它：状态变化要短、能看清，点击后立即给反馈；时长、位移、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "减少动效模式下，这段输入清除动效会完全静音吗？",
+          "a": "reduced-motion 下原文只把 `.t-clear-glow` 的 `opacity` 锁成 `0`，位移与模糊仍在 JS 里跑；要彻底静音得在脚本里判断后跳过整段。",
+          "cite": "content/motion/transitions.dev--13-input-clear-with-dissolve.md:55"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--13-input-clear-with-dissolve.md",
+        "motion/transitions.dev--23-like-button.md",
+        "motion/transitions.dev--24-learn-more-hover.md",
+        "motion/transitions.dev--25-checkbox-check.md",
+        "motion/transitions.dev--27-toggle.md"
+      ]
+    },
+    {
+      "id": "motion-disclosure",
+      "name": "展开与导航动效",
+      "domain": "motion",
+      "select": "做手风琴、标签页、下拉菜单、提示浮层、轻提示这类展开与导航时用它：打开比关闭慢，浮层从触发点长出来，关闭要能被打断；时长、位移、缩放按取值示意取。",
+      "checks": [
+        {
+          "q": "手风琴面板收起时，为什么必须在面板里再套一层内层？",
+          "a": "第二层必须存在：`grid-template-rows` 的行高插值不会裁掉溢出的内容，如果面板里直接放正文，收起时文字会从 0 高度的行里溢出来压在下面的模块上。",
+          "cite": "content/motion/transitions.dev--21-accordion.md:24"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--16-tabs-sliding.md",
+        "motion/transitions.dev--18-tooltip-open-close.md",
+        "motion/transitions.dev--20-dropdown-menu-morph.md",
+        "motion/transitions.dev--21-accordion.md",
+        "motion/transitions.dev--22-toast-open-close.md"
+      ]
+    },
+    {
+      "id": "motion-loading",
+      "name": "加载与等待动效",
+      "domain": "motion",
+      "select": "做骨架屏、加载指示、流式文本、思考状态、推理流这类等待过程时用它：先给占位再换内容，等待中的动画要轻，不抢正文；时长、间隔、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "骨架屏的脉冲动画为什么不能加在骨架本身？",
+          "a": "脉冲必须落在子元素上。给骨架本身加 `animation` 会让 `opacity` 被动画接管，交叉淡化直接失效。",
+          "cite": "content/motion/transitions.dev--14-skeleton-loader-and-reveal.md:62"
+        },
+        {
+          "q": "流式文本里每个词被包成什么元素，空格放在哪里？",
+          "a": "脚本按空白切词，每个词包一层 `span.t-stream-w`；空格留在 span 外面，避免相邻两个词被粘在一起。",
+          "cite": "content/motion/transitions.dev--39-streaming-text.md:45"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--14-skeleton-loader-and-reveal.md",
+        "motion/transitions.dev--37-thinking-states.md",
+        "motion/transitions.dev--38-reasoning-stream.md",
+        "motion/transitions.dev--39-streaming-text.md",
+        "motion/transitions.dev--40-matrix-dot-loader.md"
+      ]
+    },
+    {
+      "id": "motion-text",
+      "name": "文本与数字显现",
+      "domain": "motion",
+      "select": "做标题上浮、数字滚轮、数字微变、文字微光这类文本与数字变化时用它：变化要能看清是哪一处变了，数字滚动要能停在准确值；时长、位移、模糊按取值示意取。",
+      "checks": [
+        {
+          "q": "文本上浮显现要播放入场，给哪一层加哪个类？",
+          "a": "初始不加类，行保持不可见；要播入场时给父层加 `.is-shown`。",
+          "cite": "content/motion/transitions.dev--15-texts-reveal.md:52"
+        },
+        {
+          "q": "数字微变要重播一次，按什么顺序操作？",
+          "a": "开动画：给容器加 `.is-animating`。要重播时按原文三步走，移除类、重新渲染、强制 reflow，再加回类，否则同一个类不会重启关键帧。",
+          "cite": "content/motion/transitions.dev--44-number-subtle-change.md:50"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md",
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/transitions.dev--15-texts-reveal.md",
+        "motion/transitions.dev--17-shimmer-text.md",
+        "motion/transitions.dev--26-spinning-counter.md",
+        "motion/transitions.dev--44-number-subtle-change.md"
+      ]
+    },
+    {
+      "id": "motion-implementation",
+      "name": "动效落地",
+      "domain": "motion",
+      "select": "把过渡真的落进页面时用它：先由浮层、原地变化、反馈、输入、展开、加载、文本这七类配方点选动作，再用这个点把每个有状态变化的组件写成动效清单，列出组件、触发、配方、动的属性、起止值与进出场顺序；交付前在浏览器里逐项验到过渡真的在跑。它管落地与验收，不替代配方点。",
+      "checks": [
+        {
+          "q": "菜单、弹窗、toast、横幅堆叠、面板这几种浮层的入场和出场时长分别是多少？",
+          "a": "浮层类入场 250 到 400ms，出场 150 到 250ms：菜单 250ms 进、150ms 出，弹窗 250ms 进、150ms 出，toast 350ms 进、250ms 出，横幅堆叠 350ms 进、250ms 出，面板 400ms 进、350ms 出。",
+          "cite": "content/motion/ui-specs--motion-implementation.md:28"
+        },
+        {
+          "q": "微交互那一档的时长区间是多少，勾选框底色、勾线、文本切换、图标交换、标签页滑块各是多少毫秒？",
+          "a": "微交互 150 到 200ms：勾选框底色 150ms、勾线 350ms，文本切换 200ms，图标交换 200ms，标签页滑块 250ms。",
+          "cite": "content/motion/ui-specs--motion-implementation.md:30"
+        }
+      ],
+      "tasks": [
+        "s5",
+        "s3",
+        "s8"
+      ],
+      "articles": [
+        "motion/ui-specs--motion-implementation.md",
+        "motion/transitions.dev--05-menu-dropdown.md",
+        "motion/transitions.dev--22-toast-open-close.md",
+        "motion/transitions.dev--25-checkbox-check.md"
+      ]
+    },
+    {
+      "id": "dataviz-chart-library",
+      "name": "图表库主题",
+      "domain": "dataviz",
+      "select": "单文件案例与纯测试页用内联 SVG；项目本来就有图表库时，用它的主题与调色盘把颜色、字体、动效换成该站数值文章的值，Carbon 体系改用 @carbon/charts。选 ECharts 看中主题可逐项覆盖、图表类型全，但不为单文件案例新引外链库。",
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/echarts.apache.org--style.md",
+        "dataviz/echarts.apache.org--aria.md",
+        "dataviz/echarts.apache.org--canvas-vs-svg.md",
+        "dataviz/echarts.apache.org--v6-feature.md",
+        "dataviz/carbondesignsystem.com--data-visualization-spatial-charts.md",
+        "dataviz/polaris.shopify.com--data-visualizations.md"
+      ],
+      "checks": [
+        {
+          "q": "ECharts 的调色盘在哪里设置，它怎么给图形分配颜色？",
+          "a": "调色盘，可以在 option 中设置。它给定了一组颜色，图形、系列会自动从其中选择颜色。",
+          "cite": "content/dataviz/echarts.apache.org--style.md:63"
+        },
+        {
+          "q": "需要创建很多 ECharts 实例、浏览器容易崩溃时，可以改用哪种渲染器？",
+          "a": "在需要创建很多 ECharts 实例且浏览器易崩溃的情况下（可能是因为 Canvas 数量多导致内存占用超出手机承受能力），可以使用 SVG 渲染器来进行改善。",
+          "cite": "content/dataviz/echarts.apache.org--canvas-vs-svg.md:32"
+        }
+      ]
+    },
+    {
+      "id": "dataviz-chart-anatomy",
+      "name": "图表解剖与坐标轴",
+      "domain": "dataviz",
+      "select": "画矩形图先补齐标题、轴标题、刻度、图例、提示框与缩放条这层骨架；柱状与面积图的数值轴要落到基准线，折线散点可为看清趋势裁切纵轴；缺失时段留空并标注起止，不做插值。",
+      "checks": [
+        {
+          "q": "柱状图、面积图这类分类比较图，数值轴必须从哪里起？",
+          "a": "Always start numerical axes at zero for part-to-whole and comparisons charts, such as bar and area chart.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md:28"
+        },
+        {
+          "q": "一段时间缺数据时，能在两头之间插值补线吗？",
+          "a": "Never interpolate between periods when data is unavailable.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md:48"
+        }
+      ],
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md",
+        "dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md"
+      ]
+    },
+    {
+      "id": "dataviz-color-legend-encoding",
+      "name": "色彩与图例编码",
+      "domain": "dataviz",
+      "select": "分类数据按色板既定顺序取色，顺序本身服务于相邻色对比，不自行跳色；能直接贴标签就不放图例，只有单类数据时省掉图例；图例默认置于图表底部，空间紧张时放顶部；悬停弱化其余类，点击只留选中类。",
+      "checks": [
+        {
+          "q": "悬停某一类图例时，图表里其他类的不透明度降到多少？",
+          "a": "Hovering over the legend of one category lowers the opacity of all other categories in the chart to 30 percent.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-legends.md:86"
+        },
+        {
+          "q": "图例高度最多占图表高度的多少？",
+          "a": "A legend should not be taller than 30 percent of the chart's height.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-legends.md:116"
+        }
+      ],
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/carbondesignsystem.com--data-visualization-color-palettes.md",
+        "dataviz/carbondesignsystem.com--data-visualization-legends.md"
+      ]
+    },
+    {
+      "id": "dataviz-panel-density",
+      "name": "面板层级与密度",
+      "domain": "dataviz",
+      "select": "面板先按重要性排层级，最重要的数据给最高对比与最大面积，其余沿阅读顺序递减；每块只留与结论有关的指标，用留白分组而不是堆框线；同一面板内图表的布局、间距与图例位置保持一致。",
+      "checks": [
+        {
+          "q": "面板里最重要的数据在对比度和面积上应该占什么位置？",
+          "a": "The most important data should have the highest contrast and occupy the largest area.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-dashboards.md:32"
+        },
+        {
+          "q": "留白在面板里起什么作用？",
+          "a": "White space either sets elements apart or brings them together to distinguish a point's priority.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-dashboards.md:46"
+        }
+      ],
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/carbondesignsystem.com--data-visualization-dashboards.md",
+        "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md",
+        "dataviz/carbondesignsystem.com--data-visualization-legends.md"
+      ]
+    },
+    {
+      "id": "dataviz-flow-gantt",
+      "name": "流程与甘特专用图",
+      "domain": "dataviz",
+      "select": "看记录在多个指标间怎么流动用桑基或冲积图，但只解读直接相连两段指标的相关性；网络图配浮动的缩放平移与节点展开收起；甘特图左侧列任务、右侧时间轴排进度条，相邻任务条用对比色，任务标题与执行人写进卡片。",
+      "checks": [
+        {
+          "q": "甘特图里相邻任务条的配色怎么安排？",
+          "a": "When designing the Gantt chart make sure to arrange task bars with contrasting colors next to each other and similar colors away from each other.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-gantt-charts.md:36"
+        },
+        {
+          "q": "甘特图的任务卡片里必须写清哪两样信息？",
+          "a": "Tasks should have a clear title and all users who are assigned listed in the card.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-gantt-charts.md:36"
+        }
+      ],
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/carbondesignsystem.com--data-visualization-flow-charts.md",
+        "dataviz/carbondesignsystem.com--data-visualization-gantt-charts.md"
+      ]
+    },
+    {
+      "id": "tokens-dtcg-structure",
+      "name": "Token 结构与别名",
+      "domain": "tokens",
+      "select": "自建或整理设计系统时，用 DTCG 的文件格式、类型、分组与别名规则组织 token；它只给结构和命名，色值、字号、间距的数值仍从项目采用的数值文章取。",
+      "checks": [
+        {
+          "q": "花括号引用语法引用的是目标的哪部分内容？",
+          "a": "The curly brace syntax is specifically designed for referencing **complete token values** and always resolves to the `$value` property of the target token.",
+          "cite": "content/tokens/dtcg--aliases.md:35"
+        },
+        {
+          "q": "工具能不能靠分组名去推断 token 的类型或用途？",
+          "a": "Groups are arbitrary and tools SHOULD NOT use them to infer the type or purpose of design tokens.",
+          "cite": "content/tokens/dtcg--groups.md:20"
+        }
+      ],
+      "tasks": [
+        "s14"
+      ],
+      "articles": [
+        "tokens/dtcg--design-token.md",
+        "tokens/dtcg--aliases.md",
+        "tokens/dtcg--file-format.md",
+        "tokens/dtcg--groups.md",
+        "tokens/dtcg--terminology.md",
+        "tokens/dtcg--types.md",
+        "tokens/primer.style--primitives-token-names.md",
+        "tokens/fluent-2--tokens.md"
+      ]
+    },
+    {
+      "id": "tokens-naming-layers",
+      "name": "命名分层与语义别名",
+      "domain": "tokens",
+      "select": "决定 token 怎么命名、怎么分层时用它：先分清原始值层与语义层，再按命名约定的各段拼出名称，不要把组件名当作语义名称。",
+      "checks": [
+        {
+          "q": "Primer 里 base 层 token 处于什么层级、映射到什么？",
+          "a": "Base tokens are the lowest level tokens and map directly to a raw value.",
+          "cite": "content/tokens/primer.style--primitives-token-names.md:34"
+        },
+        {
+          "q": "组件/模式层 token 只允许在哪里使用？",
+          "a": "Component/pattern tokens should only be used in component CSS.",
+          "cite": "content/tokens/primer.style--primitives-token-names.md:64"
+        }
+      ],
+      "tasks": [
+        "s14"
+      ],
+      "articles": [
+        "tokens/primer.style--primitives-token-names.md",
+        "tokens/fluent-2--design-tokens.md",
+        "tokens/dtcg--terminology.md"
+      ]
+    },
+    {
+      "id": "tokens-theme-modes",
+      "name": "主题与多模式映射",
+      "domain": "tokens",
+      "select": "要给同一套 token 配置多套主题时用它：在每套模式下，同一个 token 名称各对应一个值，不要为不同模式另起 token 名称。",
+      "checks": [
+        {
+          "q": "Fluent 的 token 开箱就支持哪些主题/模式？",
+          "a": "That means that right out of the box, our tokens support OS theming for light, dark, high-contrast, and branded elements, as well as ensure sufficient color contrast across the system.",
+          "cite": "content/tokens/fluent-2--design-tokens.md:38"
+        }
+      ],
+      "tasks": [
+        "s14"
+      ],
+      "articles": [
+        "tokens/primer.style--color-themes.md",
+        "tokens/spectrum.adobe.com--color-sets.md",
+        "tokens/fluent-2--design-tokens.md",
+        "tokens/fluent-2--dark-tokens.md",
+        "tokens/dtcg--groups.md"
+      ]
+    },
+    {
+      "id": "tokens-css-vars-snapshot",
+      "name": "CSS 变量与取值快照",
+      "domain": "tokens",
+      "select": "读取主题 CSS 或 token 快照来核对数值时用它：先确认变量引用链是否已解析、单位与透明度如何记录，再抄写数值。",
+      "checks": [
+        {
+          "q": "这份主题色快照里，带透明度的色值怎么记录？",
+          "a": "下表 `var(--x)` 链已解析成最终色值，带透明度的值保留 hex 加两位 alpha（如 `#d1d9e0b3`）。",
+          "cite": "content/tokens/primer.style--color-themes.md:16"
+        },
+        {
+          "q": "哪一层 token 直接映射到原始值？",
+          "a": "Base tokens are the lowest level tokens and map directly to a raw value.",
+          "cite": "content/tokens/primer.style--primitives-token-names.md:34"
+        }
+      ],
+      "tasks": [
+        "s14"
+      ],
+      "articles": [
+        "tokens/primer.style--color-themes.md",
+        "tokens/polaris.shopify.com--tokens.md",
+        "tokens/spectrum.adobe.com--tokens.md",
+        "tokens/primer.style--primitives-token-names.md"
+      ]
+    },
+    {
+      "id": "a11y-wcag-checklist",
+      "name": "无障碍审查清单",
+      "domain": "a11y",
+      "select": "做无障碍验收时，按 WCAG 2.2 的成功准则和 Easy Checks 逐条过；它给判定条件与阈值，不给视觉样式。",
+      "checks": [
+        {
+          "q": "符合 WCAG 2.2 的页面，是否同时符合 2.0 和 2.1？",
+          "a": "Content that conforms to WCAG 2.2 also conforms to WCAG 2.0 and WCAG 2.1.",
+          "cite": "content/a11y/w3c--wcag-2.2.md:25"
+        },
+        {
+          "q": "Easy Checks 这套检查是给谁用的？",
+          "a": "These checks are designed for anyone who can use the web.",
+          "cite": "content/a11y/w3c--easy-checks.md:131"
+        }
+      ],
+      "tasks": [
+        "s16",
+        "s17"
+      ],
+      "articles": [
+        "a11y/w3c--wcag-2.2.md",
+        "a11y/w3c--easy-checks.md"
+      ]
+    },
+    {
+      "id": "components-dialog",
+      "name": "对话框",
+      "domain": "components",
+      "select": "先定模态还是非模态：模态会中断当前操作，必须处理完才能继续；再定关闭方式与焦点归还，Esc 与遮罩点击都要能关。",
+      "checks": [
+        {
+          "q": "模态框的边距里能不能放标签或文字？",
+          "a": "Labels or text of any kind should never be in the modal margins.",
+          "cite": "content/components/carbondesignsystem.com--modal-usage.md:138"
+        },
+        {
+          "q": "对话框最小要在多大的视口里还能用？",
+          "a": "All dialogs need to work on viewports of at least `320px` of width, and `256px` of height.",
+          "cite": "content/components/primer--dialog.md:105"
+        }
+      ],
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--modal-usage.md",
+        "components/polaris--modal.md",
+        "components/fluent-2--dialog.md",
+        "components/primer--dialog.md",
+        "components/tdesign.tencent.com--dialog.md",
+        "components/developer.apple.com--sheets.md",
+        "components/tdesign.tencent.com--drawer.md"
+      ]
+    },
+    {
+      "id": "components-table",
+      "name": "表格",
+      "domain": "components",
+      "select": "先定密度与固定列，再定排序、筛选、行选择与空态；表头文案和数字对齐一起定，长文本给省略与展开。",
+      "checks": [
+        {
+          "q": "表格里有展开图标和选择图标时，展开图标的位置在哪？",
+          "a": "The expandable icon always appears first and to the left of the selection icon.",
+          "cite": "content/components/carbondesignsystem.com--data-table-usage.md:229"
+        },
+        {
+          "q": "表格单元格里的数据应该用什么长度和格式呈现？",
+          "a": "Cells should represent data in the shortest possible format.",
+          "cite": "content/components/primer--data-table.md:99"
+        }
+      ],
+      "tasks": [
+        "s12",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--data-table-usage.md",
+        "components/primer--data-table.md",
+        "components/polaris--table.md",
+        "components/polaris.shopify.com--index-table.md"
+      ]
+    },
+    {
+      "id": "components-form",
+      "name": "表单",
+      "domain": "components",
+      "select": "先定标签对齐与必填标记，再定校验时机与错误归属；错误写在字段下方，不弹窗，提交后聚焦第一个错项。",
+      "checks": [
+        {
+          "q": "必填字段该怎么标记，校验错误什么时候才显示？",
+          "a": "Use the `required` property and show validation errors only after user interaction or submission attempt.",
+          "cite": "content/components/polaris--form.md:342"
+        },
+        {
+          "q": "标记必填时，应该加在外层控件上还是里面的 input 上？",
+          "a": "When marking a control as required, opt to mark the form control as required instead of the input contained within it.",
+          "cite": "content/components/primer--form-control.md:36"
+        }
+      ],
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/polaris--form.md",
+        "components/tdesign.tencent.com--form.md",
+        "components/polaris.shopify.com--form-layout.md",
+        "components/primer--form-control.md",
+        "components/carbondesignsystem.com--search-usage.md",
+        "components/carbondesignsystem.com--text-input-usage.md",
+        "components/developer.apple.com--search-fields.md",
+        "components/primer--text-input.md"
+      ]
+    },
+    {
+      "id": "components-select",
+      "name": "选择器",
+      "domain": "components",
+      "select": "先定单选还是多选、可搜索与否，再定禁用、加载和空态；选项多到一屏放不下时给搜索，不靠滚动硬找。",
+      "checks": [
+        {
+          "q": "Carbon 认为选项少于几个时不该用 select？",
+          "a": "It is best practice not to use a select if there are fewer than three options for selection.",
+          "cite": "content/components/carbondesignsystem.com--select-usage.md:41"
+        },
+        {
+          "q": "用户怎么打开和关闭 select 的选项列表？",
+          "a": "Users can open and close the list by clicking the chevron icon or clicking anywhere within the field.",
+          "cite": "content/components/carbondesignsystem.com--select-usage.md:173"
+        }
+      ],
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--select-usage.md",
+        "components/polaris--select.md",
+        "components/primer--select.md",
+        "components/tdesign.tencent.com--select.md",
+        "components/primer--selectpanel.md"
+      ]
+    },
+    {
+      "id": "components-checkbox",
+      "name": "复选框",
+      "domain": "components",
+      "select": "先定单选组还是多选，再定全选与半选；禁用与只读要能分辨，整组禁用的优先级要写清。",
+      "checks": [
+        {
+          "q": "复选框用来做哪种选择，和只能选一项的场景怎么区分？",
+          "a": "Use checkboxes to allow users to select multiple items from a list of individual items, or to mark one individual item as selected.",
+          "cite": "content/components/primer--checkbox.md:18"
+        },
+        {
+          "q": "勾选或取消父级复选框时，嵌套的子级复选框会怎样？",
+          "a": "Checking the parent checkbox automatically selects all of the nested children checkboxes. Unchecking the parent checkbox automatically deselects all of the children checkboxes.",
+          "cite": "content/components/carbondesignsystem.com--checkbox-usage.md:173"
+        }
+      ],
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--checkbox-usage.md",
+        "components/polaris--checkbox.md",
+        "components/primer--checkbox.md",
+        "components/tdesign.tencent.com--checkbox.md",
+        "components/primer--checkbox-group.md"
+      ]
+    },
+    {
+      "id": "components-tooltip",
+      "name": "文字提示",
+      "domain": "components",
+      "select": "只在需要解释时用，放得下就不加；鼠标与键盘都要能触发，内容不放大段文字，也不放必须点击的按钮。",
+      "checks": [
+        {
+          "q": "tooltip 该在什么时候用，内容要避免什么？",
+          "a": "They provide additional information when a user hovers over or focuses on a UI element and should only be used when necessary to offer quick context without cluttering the interface.",
+          "cite": "content/components/carbondesignsystem.com--tooltip-usage.md:32"
+        },
+        {
+          "q": "tooltip 打开时明确不能遮住什么？",
+          "a": "Do not cover related content that is essential to the user's tasks.",
+          "cite": "content/components/carbondesignsystem.com--tooltip-usage.md:105"
+        }
+      ],
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--tooltip-usage.md",
+        "components/polaris--tooltip.md",
+        "components/primer--tooltip.md",
+        "components/tdesign.tencent.com--tooltip.md",
+        "components/developer.apple.com--popovers.md",
+        "components/polaris--popover.md",
+        "components/primer--popover.md"
+      ]
+    },
+    {
+      "id": "components-menu",
+      "name": "菜单",
+      "domain": "components",
+      "select": "先定入口层级，再定展开方式与键盘操作；菜单宽度给下限，不为塞进布局压窄。",
+      "checks": [
+        {
+          "q": "菜单项文字变长时，菜单按钮和菜单各自怎么变，菜单最宽到多少？",
+          "a": "If the menu item labels become longer, the menu button and combo button remain the same size, while the menu component can expand up to a maximum of 288px.",
+          "cite": "content/components/carbondesignsystem.com--menu-usage.md:101"
+        },
+        {
+          "q": "按钮文字变长时，菜单能不能比按钮窄？",
+          "a": "Conversely, if the button labels become longer, the menu component should not appear narrower but should extend to match the width of the menu buttons.",
+          "cite": "content/components/carbondesignsystem.com--menu-usage.md:101"
+        }
+      ],
+      "tasks": [
+        "s7",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--menu-usage.md",
+        "components/fluent-2--menu.md",
+        "components/tdesign.tencent.com--menu.md",
+        "components/developer.apple.com--menus.md"
+      ]
+    },
+    {
+      "id": "components-pagination",
+      "name": "分页",
+      "domain": "components",
+      "select": "先定每页条数与总页数展示，再定跳页与折叠规则；页码多到一行放不下就折叠，不缩小点击区。",
+      "checks": [
+        {
+          "q": "分页和数据表一起用时，分页该放哪、和表格之间要不要留内边距？",
+          "a": "When using the pagination variant with a data table, the pagination should be stacked and below the table with no padding between them.",
+          "cite": "content/components/carbondesignsystem.com--pagination-usage.md:119"
+        },
+        {
+          "q": "省略号按钮能不能放在一串页码的开头或结尾？",
+          "a": "We recommend never placing the ellipsis button at the beginning or end of a series of pages in the pagination component.",
+          "cite": "content/components/carbondesignsystem.com--pagination-usage.md:155"
+        }
+      ],
+      "tasks": [
+        "s12",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--pagination-usage.md",
+        "components/primer--pagination.md",
+        "components/tdesign.tencent.com--pagination.md"
+      ]
+    },
+    {
+      "id": "components-date-picker",
+      "name": "日期选择",
+      "domain": "components",
+      "select": "先定单日还是区间，再定可选范围与快捷项；一周从周几开始跟业务一致，禁用日期要说明原因。",
+      "checks": [
+        {
+          "q": "一周从周几开始由哪个属性决定，默认是哪一天？",
+          "a": "可以通过 `firstDayOfWeek` 属性指定一周从星期几开始，仅在日期选择时(`mode = date`) 时有效，默认为 1 即从周一开始，如下可以设置为周日开始。",
+          "cite": "content/components/tdesign.tencent.com--date-picker.md:66"
+        },
+        {
+          "q": "筛选实时数据时，未来日期该怎么处理？",
+          "a": "在筛选实时数据时，如订单量、费用账单等，日期选择器禁止选择未发生的日期，避免筛选结果无数据。",
+          "cite": "content/components/tdesign.tencent.com--date-picker.md:614"
+        }
+      ],
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--date-picker-usage.md",
+        "components/polaris--date-picker.md",
+        "components/tdesign.tencent.com--date-picker.md"
+      ]
+    },
+    {
+      "id": "components-switch",
+      "name": "开关",
+      "domain": "components",
+      "select": "开关只表达即时生效的二元状态；需要点保存的场景改用勾选，切换中给 loading，禁用与加载要能分辨。",
+      "checks": [
+        {
+          "q": "Polaris 规定 switch 用在什么类型的二元控件上？",
+          "a": "Use switch for binary controls that take effect immediately, like enabling features, activating settings, or controlling visibility.",
+          "cite": "content/components/polaris--switch.md:18"
+        },
+        {
+          "q": "开关处于加载状态时，状态显示上要等什么？",
+          "a": "Wait until loading is complete before showing a change.",
+          "cite": "content/components/primer--toggle-switch.md:62"
+        }
+      ],
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/polaris--switch.md",
+        "components/tdesign.tencent.com--switch.md",
+        "components/primer--toggle-switch.md"
+      ]
+    },
+    {
+      "id": "components-avatar",
+      "name": "头像",
+      "domain": "components",
+      "select": "头像先定尺寸与形状，再定叠放与超出规则；超过可外显个数就收起，不在行内硬挤。",
+      "tasks": [
+        "s5"
+      ],
+      "articles": [
+        "components/polaris--avatar.md",
+        "components/primer--avatar-pair.md",
+        "components/primer--avatar-stack.md",
+        "components/primer--avatar.md"
+      ],
+      "checks": [
+        {
+          "q": "头像尺寸从多少开始、按什么步进，到多少切换步进？",
+          "a": "Avatars start at 16px and increment by base-4 until 32px. At 32px, the scale switches to base-8 up to 48px.",
+          "cite": "content/components/primer--avatar.md:26"
+        },
+        {
+          "q": "头像叠放最少和最多显示几个？",
+          "a": "Avatar stack displays a minimum of 2 avatars and a maximum of 4 avatars.",
+          "cite": "content/components/primer--avatar-stack.md:29"
+        }
+      ]
+    },
+    {
+      "id": "components-progress",
+      "name": "进度",
+      "domain": "components",
+      "select": "进度先定能否量化：能量化用确定型，不能量化用不确定型；长任务配一句说明，别只转圈。",
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--progress-bar-usage.md",
+        "components/developer.apple.com--progress-indicators.md",
+        "components/polaris--progress.md",
+        "components/primer--progress-bar.md"
+      ],
+      "checks": [
+        {
+          "q": "进度指示优先用确定型还是不确定型？",
+          "a": "When possible, use a determinate progress indicator.",
+          "cite": "content/components/developer.apple.com--progress-indicators.md:41"
+        },
+        {
+          "q": "确定型进度条填充的范围是多少？",
+          "a": "Determinate progress bars fill from 0 to 100%.",
+          "cite": "content/components/carbondesignsystem.com--progress-bar-usage.md:56"
+        }
+      ]
+    },
+    {
+      "id": "components-tabs",
+      "name": "标签页",
+      "domain": "components",
+      "select": "标签页用于同层内容切换，不用于步骤推进；标题短到一行放得下，超过 5 个换导航。",
+      "tasks": [
+        "s7",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--tabs-usage.md",
+        "components/tdesign.tencent.com--tabs.md"
+      ],
+      "checks": [
+        {
+          "q": "标签页的可点区域有多大，点到哪里都能切换？",
+          "a": "Users can trigger a state change by clicking anywhere in the container area.",
+          "cite": "content/components/carbondesignsystem.com--tabs-usage.md:280"
+        },
+        {
+          "q": "自动式 tablist 和手动式 tablist 的核心差别在哪一步？",
+          "a": "Automatic and manual tablists differ in how the tab items are activated.",
+          "cite": "content/components/carbondesignsystem.com--tabs-usage.md:290"
+        }
+      ]
+    },
+    {
+      "id": "components-alert",
+      "name": "警告条",
+      "domain": "components",
+      "select": "警告条只放需要立刻知道的系统信息；超过两行折叠，操作按钮最多一个。",
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/developer.apple.com--alerts.md",
+        "components/polaris--banner.md"
+      ],
+      "checks": [
+        {
+          "q": "警报标题是句子片段时，大小写和结尾标点怎么处理？",
+          "a": "If the title is a sentence fragment, use title-style capitalization, and don’t add ending punctuation.",
+          "cite": "content/components/developer.apple.com--alerts.md:52"
+        },
+        {
+          "q": "警示符号该在什么时候用，什么时候不该用？",
+          "a": "Use the symbol only when extra attention is really needed, as when confirming an action that might result in unexpected loss of data.",
+          "cite": "content/components/developer.apple.com--alerts.md:93"
+        }
+      ]
+    },
+    {
+      "id": "components-textarea",
+      "name": "多行输入",
+      "domain": "components",
+      "select": "多行输入先定行数与是否可拉伸，再定计数与错误位置；只读和禁用要能分辨。",
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/primer--textarea.md",
+        "components/tdesign.tencent.com--textarea.md"
+      ],
+      "checks": [
+        {
+          "q": "多行输入默认能不能拉伸，往哪些方向？",
+          "a": "By default, a textarea can be resized vertically and horizontally.",
+          "cite": "content/components/primer--textarea.md:73"
+        },
+        {
+          "q": "内容高度超过多行输入时，用户能怎么处理？",
+          "a": "If the height of the content exceeds the height of textarea, users can scroll the content or resize the textarea.",
+          "cite": "content/components/primer--textarea.md:69"
+        }
+      ]
+    },
+    {
+      "id": "components-slider",
+      "name": "滑块",
+      "domain": "components",
+      "select": "滑块只用于粗略取值，范围不要过大；需要精确数字时配输入框，别让人拖。",
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--slider-usage.md",
+        "components/developer.apple.com--sliders.md",
+        "components/tdesign.tencent.com--slider.md"
+      ],
+      "checks": [
+        {
+          "q": "Carbon 举了哪个例子说明滑块不适用于极大范围？",
+          "a": "Do not use for extremely large ranges, for example, 1-1000.",
+          "cite": "content/components/carbondesignsystem.com--slider-usage.md:36"
+        },
+        {
+          "q": "滑块没有数字输入框时，怎么让用户看到当前选中值？",
+          "a": "If the slider does not include number inputs to display the selected values, use a tooltip on hover, focus, and active to show the selected values.",
+          "cite": "content/components/carbondesignsystem.com--slider-usage.md:166"
+        }
+      ]
+    },
+    {
+      "id": "components-link",
+      "name": "链接",
+      "domain": "components",
+      "select": "链接只做导航；行内链接带下划线，独立链接不带；外部链接标出新开。",
+      "tasks": [
+        "s7",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--link-usage.md",
+        "components/polaris--link.md",
+        "components/primer--link.md"
+      ],
+      "checks": [
+        {
+          "q": "行内链接靠什么和周围正文区分开？",
+          "a": "The inline link behaves the same as the standalone link but it is styled with an underline.",
+          "cite": "content/components/carbondesignsystem.com--link-usage.md:156"
+        },
+        {
+          "q": "Carbon 的独立链接在哪些状态下才有下划线？",
+          "a": "Standalone links are the default link style for Carbon and only have an underline in the hover state, focus state, and active state.",
+          "cite": "content/components/carbondesignsystem.com--link-usage.md:146"
+        }
+      ]
+    },
+    {
+      "id": "components-radio",
+      "name": "单选框",
+      "domain": "components",
+      "select": "单选框用于互斥选项，默认选中一个；选项超过 5 个改用选择器，横向排列不超过 3 个。",
+      "tasks": [
+        "s9",
+        "s5"
+      ],
+      "articles": [
+        "components/primer--radio-group.md",
+        "components/primer--radio.md",
+        "components/tdesign.tencent.com--radio.md"
+      ],
+      "checks": [
+        {
+          "q": "radio group 用来在什么范围的选项里选一个？",
+          "a": "Use radio group to allow users to select a single option from a short list of related options.",
+          "cite": "content/components/primer--radio-group.md:20"
+        },
+        {
+          "q": "单选组选项数量建议控制在几个以内？",
+          "a": "Only use a radio group for a short list of options: aim for 6 or less options.",
+          "cite": "content/components/primer--radio-group.md:43"
+        }
+      ]
+    },
+    {
+      "id": "components-tag",
+      "name": "标签",
+      "domain": "components",
+      "select": "标签用于标记与筛选；可切换选中态时按多选处理，不可切换时只做标注，别混用。",
+      "tasks": [
+        "s5",
+        "s12"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--tag-usage.md",
+        "components/tdesign.tencent.com--tag.md"
+      ],
+      "checks": [
+        {
+          "q": "标签成组排列时，四周该留多少间隔？",
+          "a": "When tags are placed in groups, it is recommended to have 8px of space between them on the top, bottom, left, and right.",
+          "cite": "content/components/carbondesignsystem.com--tag-usage.md:105"
+        },
+        {
+          "q": "标签标题的长度控制在多少？",
+          "a": "Tag titles should describe the tag in a few words or be under 20 characters when possible.",
+          "cite": "content/components/carbondesignsystem.com--tag-usage.md:118"
+        }
+      ]
+    },
+    {
+      "id": "components-list",
+      "name": "列表",
+      "domain": "components",
+      "select": "列表只放必须信息，其余字段收进详情；每行一个主信息，操作不超过两个。",
+      "tasks": [
+        "s12",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--list-usage.md",
+        "components/primer--action-list.md",
+        "components/tdesign.tencent.com--list.md"
+      ],
+      "checks": [
+        {
+          "q": "列表文字换行时应该相对标记怎么排？",
+          "a": "Text in a list should wrap below the marker, keeping it top-aligned with the first list item to ensure readability.",
+          "cite": "content/components/carbondesignsystem.com--list-usage.md:137"
+        },
+        {
+          "q": "列表内容超出可用宽度时，应该截断还是换行？",
+          "a": "Truncation should be avoided and text should instead wrap to multiple lines.",
+          "cite": "content/components/carbondesignsystem.com--list-usage.md:137"
+        }
+      ]
+    },
+    {
+      "id": "components-loading",
+      "name": "加载",
+      "domain": "components",
+      "select": "加载态先定范围：整页、区块还是按钮；等待偏长时给进度或说明，不要只转圈。",
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--loading-usage.md",
+        "components/tdesign.tencent.com--loading.md"
+      ],
+      "checks": [
+        {
+          "q": "加载的小、中、大三种尺寸分别对应什么范围？",
+          "a": "小尺寸适用于组件内加载场景，中尺寸适用于容器如卡片、表格等区域的加载场景，大尺寸适用于页面全屏加载场景。",
+          "cite": "content/components/tdesign.tencent.com--loading.md:35"
+        },
+        {
+          "q": "同一界面能不能同时放多个加载指示器，为什么？",
+          "a": "Refrain from using multiple loading indicators simultaneously, as it may overwhelm users.",
+          "cite": "content/components/carbondesignsystem.com--loading-usage.md:40"
+        }
+      ]
+    },
+    {
+      "id": "components-notification",
+      "name": "通知",
+      "domain": "components",
+      "select": "通知只放需要立刻处理的信息；标题一行、正文最多三行，动作最多一个。",
+      "tasks": [
+        "s8",
+        "s5"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--notification-usage.md",
+        "components/developer.apple.com--notifications.md"
+      ],
+      "checks": [
+        {
+          "q": "通知正文长度要求控制在多少？",
+          "a": "Be concise; limit the content to one or two short sentences.",
+          "cite": "content/components/carbondesignsystem.com--notification-usage.md:115"
+        },
+        {
+          "q": "通知标题要写成什么样？",
+          "a": "The title should be short and descriptive, explaining the most important piece of information.",
+          "cite": "content/components/carbondesignsystem.com--notification-usage.md:109"
+        }
+      ]
+    },
+    {
+      "id": "flow-copywriting",
+      "name": "文案全流程",
+      "domain": "markdown",
+      "select": "按顺序走：标题定一句主张，按钮用动词，错误说清怎么改，空态给下一步，通知只写发生什么和要做什么；中文标点与中英文空格按规范。",
+      "tasks": [
+        "s4"
+      ],
+      "articles": [
+        "markdown/github.com--chinese-copywriting-guidelines.md",
+        "markdown/github.com--document-style-guide.md",
+        "markdown/learn.microsoft.com--brand-voice-above-all-simple-human.md",
+        "markdown/learn.microsoft.com--top-10-tips-style-voice.md",
+        "markdown/practicaltypography.com--type-composition.md",
+        "patterns/primer--empty-states.md"
+      ],
+      "checks": [
+        {
+          "q": "句子长度控制在多少字以内，超过多少字任何情况下都不能接受？",
+          "a": "不包含任何标点符号的单个句子，或者以逗号分隔的句子构件，长度尽量保持在 20 个字以内；20～29 个字的句子，可以接受；30～39 个字的句子，语义必须明确，才能接受；多于 40 个字的句子，任何情况下都不能接受。",
+          "cite": "content/markdown/github.com--document-style-guide.md:149"
+        },
+        {
+          "q": "中文与半角阿拉伯数字之间加不加空格，有什么硬性要求？",
+          "a": "全角中文字符与半角阿拉伯数字之间，有没有半角空格都可，但必须保证风格统一，不能两种风格混杂。",
+          "cite": "content/markdown/github.com--document-style-guide.md:113"
+        }
+      ]
+    },
+    {
+      "id": "flow-icons",
+      "name": "图标全流程",
+      "domain": "icons",
+      "select": "先定语义，再定尺寸与描边粗细，最后按光学体积对齐；成套交付时统一栅格与命名，可用性测试要能让人说含义。",
+      "tasks": [
+        "s6"
+      ],
+      "articles": [
+        "icons/nngroup.com--icon-usability.md",
+        "icons/nngroup.com--how-to-test-digital-icons.md",
+        "icons/nngroup.com--classifying-icons.md",
+        "icons/carbondesignsystem.com--iconography.md",
+        "icons/polaris.shopify.com--iconography.md",
+        "icons/adobe.design--how-to-design-effective-icons-part-1.md",
+        "icons/tdesign.tencent.com--icon.md"
+      ],
+      "checks": [
+        {
+          "q": "为什么图标旁边必须配文字标签？",
+          "a": "To help overcome the ambiguity that almost all icons face, a text label must be present alongside an icon to clarify its meaning in that particular context.",
+          "cite": "content/icons/nngroup.com--icon-usability.md:72"
+        },
+        {
+          "q": "Carbon 对产品内图标尺寸的一致性要求是什么？",
+          "a": "Be sure icon size is consistent throughout your product.",
+          "cite": "content/icons/carbondesignsystem.com--iconography.md:24"
+        }
+      ]
+    },
+    {
+      "id": "flow-navigation",
+      "name": "导航全流程",
+      "domain": "patterns",
+      "select": "从入口层级开始：先定顶部与侧边的主入口，再定二级展开与面包屑，最后补搜索与移动端收法；链接不开新窗，当前页要标出。",
+      "tasks": [
+        "s7"
+      ],
+      "articles": [
+        "patterns/carbon--global-header.md",
+        "components/tdesign.tencent.com--menu.md",
+        "components/tdesign.tencent.com--tabs.md",
+        "components/polaris--link.md",
+        "components/primer--nav-list.md"
+      ],
+      "checks": [
+        {
+          "q": "页头里的产品导航链接能不能在新标签页打开或跳到别的域名？",
+          "a": "These links should not open a new tab or link to another domain.",
+          "cite": "content/patterns/carbon--global-header.md:44"
+        },
+        {
+          "q": "窄屏时页头里的导航链接收到哪里？",
+          "a": "These links drop down to the side menu in narrow screen widths.",
+          "cite": "content/patterns/carbon--global-header.md:45"
+        }
+      ]
+    },
+    {
+      "id": "flow-dataviz",
+      "name": "图表全流程",
+      "domain": "dataviz",
+      "select": "先选图型，再补标题、坐标轴、刻度与图例，然后给空数据与加载态，最后接提示框与下钻；颜色按分类色板顺序取，不跳色。",
+      "tasks": [
+        "s10"
+      ],
+      "articles": [
+        "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md",
+        "dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md",
+        "dataviz/carbondesignsystem.com--data-visualization-legends.md",
+        "dataviz/carbondesignsystem.com--data-visualization-color-palettes.md",
+        "dataviz/carbondesignsystem.com--data-visualization-dashboards.md",
+        "dataviz/echarts.apache.org--aria.md"
+      ],
+      "checks": [
+        {
+          "q": "坐标轴需要断轴时，X 轴和 Y 轴的断口宽度怎么定？",
+          "a": "On the X axis, the break can be fluid with graph area size, with a minimum width of 16px. On the Y axis, we recommend using a fixed distance of 16px for the break.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md:56"
+        },
+        {
+          "q": "想避免图例过长，可以怎么标注？",
+          "a": "When possible, use labels directly on the chart to avoid long legends.",
+          "cite": "content/dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md:43"
+        }
+      ]
+    },
+    {
+      "id": "flow-web-standards",
+      "name": "Web 标准全流程",
+      "domain": "standards",
+      "select": "从语义结构开始，再定焦点与键盘顺序，然后接过渡与动效，最后补减少动效与中文排版；每步以规范原文为准。",
+      "tasks": [
+        "s15"
+      ],
+      "articles": [
+        "standards/w3c--clreq.md",
+        "standards/w3c--css-grid-1.md",
+        "standards/w3c--css-transitions-1.md",
+        "standards/w3c--mediaqueries-5.md",
+        "a11y/web.dev--a11y-focus.md",
+        "motion/transitions.dev--01-card-resize.md"
+      ],
+      "checks": [
+        {
+          "q": "prefers-reduced-motion 这个媒体特性用来检测什么？",
+          "a": "The prefers-reduced-motion media feature is used to detect if the user has requested the system minimize the amount of non-essential motion it uses.",
+          "cite": "content/standards/w3c--mediaqueries-5.md:1255"
+        },
+        {
+          "q": "中文排版里汉字和标点符号原则上按什么比例、怎么排列？",
+          "a": "原则上，中文排版所使用的汉字和标点符号比例皆为1:1的正方形，将其无缝隙并列排成版面。",
+          "cite": "content/standards/w3c--clreq.md:202"
+        }
+      ],
+      "method": "motion/ui-specs--motion-implementation.md"
+    },
+    {
+      "id": "flow-case-study",
+      "name": "案例拆解",
+      "domain": "cases",
+      "select": "按案例原文走：先看目标与约束，再看改了什么，然后看数据与复盘；只引用原文给的指标，不替作者补结论。",
+      "tasks": [
+        "s18"
+      ],
+      "articles": [
+        "cases/isux.tencent.com--qq-theme-upgrade.md",
+        "cases/isux.tencent.com--tencentdocs-color-system.md",
+        "cases/web.dev--terra-dark-mode.md",
+        "cases/web.dev--yahoo-japan-identity-case-study.md",
+        "cases/web.dev--lancome.md"
+      ],
+      "checks": [
+        {
+          "q": "Terra 换成深色主题后，两个指标各自变化多少？",
+          "a": "Both metrics improved when showing a dark theme: bounce rates went from 27.25% to 10.82% and pages per session almost tripled (from 3.7 to 9.99).",
+          "cite": "content/cases/web.dev--terra-dark-mode.md:199"
+        },
+        {
+          "q": "Terra 是怎么测深色主题影响的？",
+          "a": "To measure the impact of the dark theme, Terra took the group of users that have the \"Prefer Dark\" setting turned on in their devices and compared engagement metrics when showing a \"Light\" vs. a \"DarK\" theme.",
+          "cite": "content/cases/web.dev--terra-dark-mode.md:166"
+        }
+      ]
+    },
+    {
+      "id": "flow-layout-basics",
+      "name": "版式全流程",
+      "domain": "howto",
+      "select": "先定版式与层级，再定留白与对齐，最后按断点收；每步看一个点，不跳步。",
+      "tasks": [
+        "s2"
+      ],
+      "articles": [
+        "howto/nngroup.com--visual-hierarchy-ux-definition.md",
+        "howto/awwwards.com--understanding-web-ui-visual-hierarchy.md",
+        "howto/adhamdannaway.com--ui-design-tips.md",
+        "type/web.dev--typography.md",
+        "type/tdesign.tencent.com--fonts.md",
+        "layout/uisdc.com--code-for-design-of-spacing.md",
+        "layout/tdesign.tencent.com--layout.md",
+        "layout/carbondesignsystem.com--spacing.md"
+      ],
+      "checks": [
+        {
+          "q": "界面上信息重要性不同时，应该按什么顺序呈现？",
+          "a": "Not all information in an interface has the same level of importance. Aim to present information in order of importance by making more important elements look more prominent.",
+          "cite": "content/howto/adhamdannaway.com--ui-design-tips.md:99"
+        },
+        {
+          "q": "长正文的行高至少要取多少，合适区间是多少？",
+          "a": "For accessibility and readability, especially for long body text, ensure that line height is at least 1.5 (150%). Keeping line height between 1.5 and 2 generally works well.",
+          "cite": "content/howto/adhamdannaway.com--ui-design-tips.md:224"
+        }
+      ]
+    },
+    {
+      "id": "flow-values",
+      "name": "数值全流程",
+      "domain": "standards",
+      "select": "色、字、间距、圆角、动效按顺序取值，同一 token 只认一篇原文。",
+      "tasks": [
+        "s3"
+      ],
+      "articles": [
+        "standards/w3c--css-color-4.md",
+        "color/tdesign.tencent.com--color.md",
+        "color/developer.apple.com--color.md",
+        "color/fluent-2--color.md",
+        "color/polaris.shopify.com--color.md",
+        "color/primer.style--color-overview.md",
+        "color/primer.style--color.md",
+        "color/spectrum.adobe.com--color.md"
+      ],
+      "checks": [
+        {
+          "q": "TDesign 为什么用 Design Token 来规范颜色运用规则？",
+          "a": "在 TDesign 中，腾讯蓝是主要的交互颜色，并且因为组件实际情况的复杂性，我们使用 Design Token 规范了颜色运用规则。",
+          "cite": "content/color/tdesign.tencent.com--color.md:231"
+        },
+        {
+          "q": "动态语义色的定义依据是用途还是外观色值？",
+          "a": "Each dynamic color is semantically defined by its purpose, rather than its appearance or color values.",
+          "cite": "content/color/developer.apple.com--color.md:59"
+        }
+      ]
+    },
+    {
+      "id": "flow-components",
+      "name": "组件全流程",
+      "domain": "components",
+      "select": "组件先定状态与尺寸，再定禁用、加载、空态；状态不齐不动手。",
+      "tasks": [
+        "s5"
+      ],
+      "articles": [
+        "components/inclusive-components.design--toggle-button.md",
+        "components/tdesign.tencent.com--button.md",
+        "components/carbondesignsystem.com--button-usage.md",
+        "components/carbondesignsystem.com--radio-button-usage.md",
+        "components/fluent-2--button.md",
+        "components/polaris--button-group.md",
+        "components/polaris--button.md",
+        "components/polaris.shopify.com--button.md"
+      ],
+      "checks": [
+        {
+          "q": "一个按钮组里能不能混用不同尺寸的按钮？",
+          "a": "We do not recommend mixing different button sizes in #button-groups.",
+          "cite": "content/components/carbondesignsystem.com--button-usage.md:101"
+        },
+        {
+          "q": "单选按钮组默认要不要预选一个选项？",
+          "a": "By default, no option will be preselected.",
+          "cite": "content/components/carbondesignsystem.com--radio-button-usage.md:174"
+        }
+      ]
+    },
+    {
+      "id": "flow-states",
+      "name": "状态全流程",
+      "domain": "components",
+      "select": "状态按空、加载、错误、成功、重试走一遍，每种写触发条件与恢复路径。",
+      "tasks": [
+        "s8"
+      ],
+      "articles": [
+        "components/inclusive-components.design--notifications.md",
+        "components/tdesign.tencent.com--message.md",
+        "patterns/carbon--login-pattern.md",
+        "patterns/carbon--notification-pattern.md",
+        "patterns/carbon--read-only-states-pattern.md",
+        "patterns/carbon--search-pattern.md",
+        "patterns/carbon--status-indicator-pattern.md",
+        "patterns/carbon--text-toolbar-pattern.md"
+      ],
+      "checks": [
+        {
+          "q": "Banner 通知应该放在什么位置？",
+          "a": "Banners should be placed at the top of the content area they relate to.",
+          "cite": "content/patterns/carbon--notification-pattern.md:272"
+        },
+        {
+          "q": "通知里的动作按钮文案最多几个词？",
+          "a": "Limit action labels to two words or less.",
+          "cite": "content/patterns/carbon--notification-pattern.md:231"
+        }
+      ]
+    },
+    {
+      "id": "flow-form",
+      "name": "表单全流程",
+      "domain": "components",
+      "select": "表单按结构、标签、校验、错误、提交、回执走，错误写在字段下方。",
+      "tasks": [
+        "s9"
+      ],
+      "articles": [
+        "components/polaris--form.md",
+        "components/tdesign.tencent.com--form.md",
+        "components/polaris.shopify.com--form-layout.md",
+        "components/primer--form-control.md",
+        "components/carbondesignsystem.com--search-usage.md",
+        "components/carbondesignsystem.com--text-input-usage.md",
+        "components/developer.apple.com--search-fields.md",
+        "components/primer--text-input.md"
+      ],
+      "checks": [
+        {
+          "q": "表单布局默认怎么排字段，除了默认还支持什么？",
+          "a": "By default it stacks fields vertically but also supports horizontal groups of fields.",
+          "cite": "content/components/polaris.shopify.com--form-layout.md:18"
+        },
+        {
+          "q": "表单提交处理中和处理完，分别要给什么反馈？",
+          "a": "Show loading states during processing and clear success or error messages after completion.",
+          "cite": "content/components/polaris--form.md:344"
+        }
+      ]
+    },
+    {
+      "id": "flow-landing",
+      "name": "落地页全流程",
+      "domain": "howto",
+      "select": "落地页按首屏、证据、功能、定价、FAQ、CTA 走，首屏只留一个主张。",
+      "tasks": [
+        "s11"
+      ],
+      "articles": [
+        "howto/nngroup.com--visual-hierarchy-ux-definition.md",
+        "howto/awwwards.com--understanding-web-ui-visual-hierarchy.md",
+        "howto/adhamdannaway.com--ui-design-tips.md",
+        "bento/freecodecamp.org--bento-grids-in-web-design.md",
+        "bento/setproduct.com--bento-grid-layout-design-guide.md",
+        "brands/designmd--mastercard.md",
+        "brands/designmd--mercury.md",
+        "brands/designmd--stripe.md"
+      ],
+      "checks": [
+        {
+          "q": "页面视觉层级和元素重要度一致时，对用户和品牌有什么结果？",
+          "a": "When the page’s visual hierarchy accurately reflects the importance of different design elements, users easily understand it and can successfully complete tasks, thus gaining trust in the design and the brand.",
+          "cite": "content/howto/nngroup.com--visual-hierarchy-ux-definition.md:114"
+        },
+        {
+          "q": "bento 网格里的方框数量建议控制在多少以内？",
+          "a": "To maintain clarity and avoid overwhelming users, it's recommended to use nine or fewer boxes within the bento grid.",
+          "cite": "content/bento/freecodecamp.org--bento-grids-in-web-design.md:241"
+        }
+      ]
+    },
+    {
+      "id": "flow-backoffice",
+      "name": "后台全流程",
+      "domain": "components",
+      "select": "后台按列表、筛选、批量、详情、状态、空态走，首屏先放当前要处理的事。",
+      "tasks": [
+        "s12"
+      ],
+      "articles": [
+        "components/carbondesignsystem.com--data-table-usage.md",
+        "components/primer--data-table.md",
+        "components/polaris--table.md",
+        "components/polaris.shopify.com--index-table.md",
+        "components/carbondesignsystem.com--pagination-usage.md",
+        "components/primer--pagination.md",
+        "components/tdesign.tencent.com--pagination.md",
+        "layouts/layout--dashboard-data-dense-dashboard.md"
+      ],
+      "checks": [
+        {
+          "q": "表格没有数据时，能不能用 “x” 或 “-” 这类字符占位？",
+          "a": "You may show a message to explain an absence of data. Just don't use a character like “x” or “-”.",
+          "cite": "content/components/primer--data-table.md:119"
+        },
+        {
+          "q": "数据表的每页行数从哪里起步比较合适？",
+          "a": "These factors make it difficult to recommend an “ideal” page size for all use cases, but 20 rows is a good place to start.",
+          "cite": "content/components/primer--data-table.md:146"
+        }
+      ]
+    },
+    {
+      "id": "flow-brand",
+      "name": "品牌语言全流程",
+      "domain": "brands",
+      "select": "品牌先定语气，再定色、字、图形，最后看应用示例；手法要能指到页面哪一处。",
+      "tasks": [
+        "s13"
+      ],
+      "articles": [
+        "brands/designmd--claude.md",
+        "brands/designmd--linear.app.md",
+        "brands/designmd--vercel.md",
+        "brands/designmd--x.ai.md",
+        "brands/designmd--mastercard.md",
+        "brands/designmd--mercury.md",
+        "brands/designmd--stripe.md",
+        "brands/designmd--wise.md"
+      ],
+      "checks": [
+        {
+          "q": "Claude 的 display 字号用哪个字重，能不能用粗体？",
+          "a": "Display sizes use weight 400 (regular), never bold.",
+          "cite": "content/brands/designmd--claude.md:104"
+        },
+        {
+          "q": "x.ai 用哪两套字体撑起品牌语气？",
+          "a": "Universal Sans weight 400 for display, Geist Mono uppercase tracked for labels — the two-face contrast IS the brand voice.",
+          "cite": "content/brands/designmd--x.ai.md:26"
+        }
+      ]
+    },
+    {
+      "id": "flow-tokens",
+      "name": "Token 全流程",
+      "domain": "tokens",
+      "select": "Token 按命名、分层、主题、落地走，语义层不写裸值。",
+      "tasks": [
+        "s14"
+      ],
+      "articles": [
+        "tokens/dtcg--design-token.md",
+        "tokens/dtcg--aliases.md",
+        "tokens/dtcg--file-format.md",
+        "tokens/dtcg--groups.md",
+        "tokens/dtcg--terminology.md",
+        "tokens/dtcg--types.md",
+        "tokens/primer.style--primitives-token-names.md",
+        "tokens/fluent-2--tokens.md"
+      ],
+      "checks": [
+        {
+          "q": "工具能不能靠看值的写法规格来猜 token 的 `$type`？",
+          "a": "Tools MUST NOT attempt to guess the type of a token by inspecting the contents of its value.",
+          "cite": "content/tokens/dtcg--design-token.md:145"
+        },
+        {
+          "q": "别名又指向另一个别名时，工具要追到哪一步为止？",
+          "a": "In this case, tools MUST follow each reference until they find a token with an explicit value.",
+          "cite": "content/tokens/dtcg--aliases.md:140"
+        }
+      ]
+    },
+    {
+      "id": "flow-a11y",
+      "name": "无障碍全流程",
+      "domain": "a11y",
+      "select": "无障碍按对比度、焦点、键盘、表单、播报走，逐项留证据。",
+      "tasks": [
+        "s16"
+      ],
+      "articles": [
+        "a11y/web.dev--a11y-color-contrast.md",
+        "a11y/carbondesignsystem.com--a11y-color.md",
+        "a11y/carbondesignsystem.com--a11y-keyboard.md",
+        "a11y/carbondesignsystem.com--a11y-overview.md",
+        "a11y/web.dev--a11y-focus.md",
+        "a11y/fluent-2--focus.md",
+        "a11y/web.dev--a11y-forms.md",
+        "a11y/web.dev--a11y-design-ux.md"
+      ],
+      "checks": [
+        {
+          "q": "能不能只靠颜色来传达含义？",
+          "a": "Don't rely on color alone to convey meaning.",
+          "cite": "content/a11y/carbondesignsystem.com--a11y-color.md:55"
+        },
+        {
+          "q": "所有可交互内容和元素在键盘可用性上要达到什么要求？",
+          "a": "All interactive content and elements should include keyboard functionality.",
+          "cite": "content/a11y/carbondesignsystem.com--a11y-keyboard.md:18"
+        }
+      ]
+    },
+    {
+      "id": "flow-review",
+      "name": "评审全流程",
+      "domain": "patterns",
+      "select": "评审先拿清单，再要证据，不过线回炉；不改点硬凑。",
+      "tasks": [
+        "s17"
+      ],
+      "articles": [
+        "patterns/ux-rules-checklist.md",
+        "patterns/ui-specs--test-walkthrough.md",
+        "patterns/developer.apple.com--feedback.md",
+        "cases/web.dev--yahoo-japan-identity-case-study.md",
+        "cases/web.dev--telegraph.md",
+        "cases/web.dev--lancome.md"
+      ],
+      "checks": [
+        {
+          "q": "测试走查的覆盖面由哪三张清单组成，只看首页够不够？",
+          "a": "测试走查的覆盖面由三张清单组成：页面清单、交互元素清单、显示状态清单。不只看首页的样子，漏任何一页都不算测过。",
+          "cite": "content/patterns/ui-specs--test-walkthrough.md:26"
+        },
+        {
+          "q": "走查发现的问题按性质分哪三类、各自怎么处置？",
+          "a": "问题按性质分三类处置：工具的问题修工具，数据的缺口补数据并回填缺口清单，设计不对回到设计点重推。",
+          "cite": "content/patterns/ui-specs--test-walkthrough.md:52"
+        }
+      ]
+    }
+  ]
+}

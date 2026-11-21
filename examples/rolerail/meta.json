@@ -1,0 +1,7 @@
+{
+  "name": "RoleRail",
+  "tagline": "12 城市与远程职位索引：TDesign Green7、实时薪资分布卡片、最高薪置顶与 3 岗位横向对比",
+  "accent": "TDesign Green7 #006c45",
+  "structure": "Job Index · N1b 三段磨砂顶栏 + Green1 浅绿带搜索与薪资卡 + Green1 置顶条 + Ft7 周报订阅页脚",
+  "layout": "TDesign project-tdesign（N1b 三段磨砂顶栏、Green1 浅绿带 Hero 搜索、Gray1 分布卡、12 城市筛选与 20 条技术/非技术岗位样本、3 岗位横向对比弹窗、直跳公司页确认与 Ft7 周报订阅页脚）"
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1600, initial-scale=1" />
+    <title>UISpecs Cover · All 28 Cases</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1600px;
+        height: 800px;
+        overflow: hidden;
+        background: #f3f2f1;
+        color: #0b0c0c;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+          'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .top-bar {
+        width: 100%;
+        height: 10px;
+        background: #1a65a6;
+      }
+      .canvas {
+        width: 1600px;
+        height: 790px;
+        padding: 40px 36px 44px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .masthead {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 32px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #d0d3d6;
+      }
+      .title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-mark {
+        width: 16px;
+        height: 16px;
+        background: #1a65a6;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      h1 {
+        margin: 0;
+        font-size: 36px;
+        line-height: 1.2;
+        font-weight: 700;
+        color: #0b0c0c;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .lede {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.4;
+        font-weight: 400;
+        color: #484949;
+      }
+      .scope-block {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .scope-rule {
+        width: 40px;
+        height: 3px;
+        background: #1a65a6;
+        margin: 0 0 12px auto;
+      }
+      .scope {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.4;
+        font-weight: 500;
+        color: #484949;
+        white-space: nowrap;
+      }
+      .wall {
+        display: grid;
+        grid-template-columns: repeat(7, 208px);
+        column-gap: 12px;
+        row-gap: 14px;
+      }
+      .tile {
+        width: 208px;
+        height: 130px;
+        background: #ffffff;
+        border: 1px solid #c5c8cb;
+        border-radius: 3px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(11, 12, 12, 0.06);
+      }
+      .tile img {
+        width: 101.8%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left top;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar"></div>
+    <main class="canvas">
+      <header class="masthead">
+        <div class="title-block">
+          <div class="brand-row">
+            <span class="brand-mark"></span>
+            <h1>UISpecs · UI 设计规范全文库</h1>
+          </div>
+          <p class="lede">给 AI 用的官方设计规范原文库，每个数值溯源到文件行号。</p>
+        </div>
+        <div class="scope-block">
+          <div class="scope-rule"></div>
+          <p class="scope">7 套官方体系 · 18 分区 · 28 站实测案例</p>
+        </div>
+      </header>
+
+      <section class="wall" aria-label="28 站设计案例拼图">
+        <!-- Row 1: 7 official design systems -->
+        <div class="tile"><img src="../examples/needknows/preview.png" alt="NeedKnows" /></div>
+        <div class="tile"><img src="../examples/rolerail/preview.png" alt="RoleRail" /></div>
+        <div class="tile"><img src="../examples/coursedeck/preview.png" alt="CourseDeck" /></div>
+        <div class="tile"><img src="../examples/clinicdesk/preview.png" alt="ClinicDesk" /></div>
+        <div class="tile"><img src="../examples/promptshelf/preview.png" alt="PromptShelf" /></div>
+        <div class="tile"><img src="../examples/allparse/preview.png" alt="ALLParse" /></div>
+        <div class="tile"><img src="../examples/chatcafe/preview.png" alt="ChatCafe" /></div>
+        <!-- Row 2 -->
+        <div class="tile"><img src="../examples/chillgauge/preview.png" alt="ChillGauge" /></div>
+        <div class="tile"><img src="../examples/ethanworks/preview.png" alt="EthanWorks" /></div>
+        <div class="tile"><img src="../examples/pricelens/preview.png" alt="PriceLens" /></div>
+        <div class="tile"><img src="../examples/allparse-console/preview.png" alt="ALLParse Console" /></div>
+        <div class="tile"><img src="../examples/tallylane/preview.png" alt="TallyLane" /></div>
+        <div class="tile"><img src="../examples/annualdesk/preview.png" alt="AnnualDesk" /></div>
+        <div class="tile"><img src="../examples/payloaddeck/preview.png" alt="PayloadDeck" /></div>
+        <!-- Row 3 -->
+        <div class="tile"><img src="../examples/probeshelf/preview.png" alt="ProbeShelf" /></div>
+        <div class="tile"><img src="../examples/samepaper/preview.png" alt="SamePaper" /></div>
+        <div class="tile"><img src="../examples/gatewaydeck/preview.png" alt="GatewayDeck" /></div>
+        <div class="tile"><img src="../examples/metricrail/preview.png" alt="MetricRail" /></div>
+        <div class="tile"><img src="../examples/epdeck/preview.png" alt="EpDeck" /></div>
+        <div class="tile"><img src="../examples/civicdesk/preview.png" alt="CivicDesk" /></div>
+        <div class="tile"><img src="../examples/anyttl/preview.png" alt="AnyTTL" /></div>
+        <!-- Row 4 -->
+        <div class="tile"><img src="../examples/pickbin/preview.png" alt="PickBin" /></div>
+        <div class="tile"><img src="../examples/quilldeck/preview.png" alt="QuillDeck" /></div>
+        <div class="tile"><img src="../examples/cartlane/preview.png" alt="CartLane" /></div>
+        <div class="tile"><img src="../examples/fixqueue/preview.png" alt="FixQueue" /></div>
+        <div class="tile"><img src="../examples/swimboard/preview.png" alt="SwimBoard" /></div>
+        <div class="tile"><img src="../examples/listenrail/preview.png" alt="ListenRail" /></div>
+        <div class="tile"><img src="../examples/weekdeck/preview.png" alt="WeekDeck" /></div>
+      </section>
+    </main>
+  </body>
+</html>

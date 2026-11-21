@@ -1,0 +1,94 @@
+---
+title: "GitHub Primer · Component · Textarea"
+source: https://raw.githubusercontent.com/primer/design/main/content/components/textarea.mdx
+section: components
+tag: "规范"
+fetched: 2026-11-14
+status: full
+id: comp-primer-textarea
+publisher: "GitHub Primer"
+---
+
+# GitHub Primer · Component · Textarea
+
+> 来源：https://primer.style/components/textarea
+
+![](https://user-images.githubusercontent.com/2313998/226424284-25f5e2d1-4986-48b3-b856-20a227925eae.png)
+
+## Usage
+
+Use a textarea to allow users to input a long string of free-form text.
+
+### States
+
+![](https://user-images.githubusercontent.com/2313998/226424285-ba0f63cb-f1fe-42bb-b5f4-1a77ec8f69f5.png)
+
+**Focused:** The input has been navigated to and is ready to accept input.
+
+**Disabled:** The input cannot accept input or become focused.
+
+**Invalid:** The value failed validation.
+
+**Valid:** The value passed validation.
+
+For more information about the "valid" and "invalid" states, see the validation section of the form design pattern guidelines.
+
+## Anatomy
+
+![](https://user-images.githubusercontent.com/6905903/274239156-064abae9-6d16-4c1a-b673-ec8f96429ed9.png)
+
+**Label (required):** The input's title. It should be as concise as possible and convey the purpose of the input. The label may be visually hidden in rare cases, but a label must be defined for assistive technologies such as a screen reader.
+
+**Required indicator:** Indicates that a value is required. Must be shown for any required field, even if all fields in the form are required.
+When using symbols -e.g., an asterisk (*)- to indicate particular fields are required within a form, consider adding a "Required fields are marked with an asterisk (\*)" message at the top of the form for extra clarity.
+
+**Input (required):** Accepts user free-form text input
+
+**Caption:** Provides additional context about the field to help users fill in the correct data or explain how the data will be used. Caption text should be as short as possible. Caption text may be displayed at the same time as a validation message, or it may be hidden if it only provides redundant information.
+
+**Validation message:** A single validation message may be displayed to provide helpful information for a user to complete their task. It is most commonly used to explain why a value is invalid so they can correct it and submit the form.
+
+## Options
+
+### Width
+
+![](https://user-images.githubusercontent.com/2313998/226424288-001f5f16-94d3-445e-8e61-d7f18acd39b5.png)
+
+By default, a textarea will the width of a line of 30 characters.
+
+You can change this to be any number of characters, or render the textarea to fill the width of its parent element.
+
+### Height
+
+![](https://user-images.githubusercontent.com/2313998/226424290-d32d48a0-9b6b-4899-8c45-2031bbd09a1f.png)
+
+By default, a textarea will the height of 7 lines of text.
+
+You can change this to be any number of lines. Consider the length of the expected value to set a height.
+
+If the height of the content exceeds the height of textarea, users can scroll the content or resize the textarea.
+
+### Resizing
+
+By default, a textarea can be resized vertically and horizontally.
+
+You can limit a user's resizing options to:
+
+- no resizing
+- only resize vertically
+- only resize horizontally
+
+## Accessibility
+
+- Textareas must be labeled. The label may be visually hidden, but visible labels are preferred.
+- [Placeholder text](https://primer.style/guides/accessibility/placeholders) is **never** an acceptable substitute for a label because:
+  - The placeholder text disappears as soon as the input has a value
+  - Placeholder text colors are typically too light to meet the minimum color contrast ratio required for accessibility
+  - Screen readers do not read placeholder text as a label
+
+### Known accessibility issues (GitHub staff only)
+
+## Related links
+
+- Forms
+- [Text input](https://primer.style/components/text-input)
