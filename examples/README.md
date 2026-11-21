@@ -27,7 +27,7 @@
 | gatewaydeck | GatewayDeck | Carbon（语义色回源 TDesign） | Cyan7 `#00668e` | Workbench · N12 / Ft2 |
 | payloaddeck | PayloadDeck | Primer | Blue `#0969da` | Component Playground · N13 / Ft4 |
 | listenrail | ListenRail | TDesign | Yellow4 `#f5ba18` | Content Community · 订阅版型 |
-| epdeck | EpDeck | TDesign | Orange5 `#e37318` | Ecosystem Index · N1b / Ft5 |
+| epdeck | EpDeck | TDesign Dark | Orange6 `#ed8139` | Ecosystem Index · N13 / Ft3 |
 | quilldeck | QuillDeck | TDesign | Pink7 `#a12279` | Bento Grid · N12 / Ft7 |
 | weekdeck | WeekDeck | TDesign | Yellow4 `#f5ba18` | Stat-Led · N6 / Ft2 |
 | annualdesk | AnnualDesk | TDesign | Cyan7 `#00668e` | Service Document · N2 / Ft2 |

@@ -4,1087 +4,2153 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>EpDeck · 好剧值得被看见</title>
-<meta name="description" content="EpDeck：今晚主推、正在热播、本周热榜，一个晚上挑一部值得看完的剧。">
+<meta name="frame" content="batch=2026-11-21-c; nav=N13; footer=Ft3; base=#15181d">
+<title>EpDeck，追剧片库首页</title>
+<meta name="description" content="EpDeck 追剧平台首页：继续观看进度、12 部在播剧集筛选、追剧单提醒与本周热榜。">
 <style>
-/* Hallmark · genre: atmospheric · macrostructure: Ecosystem Index · theme: Midnight / TDesign Orange5 (#e37318)
- * enrichment: Tier-B 手绘内联 SVG 封面 ×12 · nav: N1b · footer: Ft5 · layout: Video-First Hero
- * pre-emit critique: P4 H5 E5 S5 R4 V5
- * 数值基线：TDesign 字体/色彩两篇，逐条在 DECISIONS.md 标 文件:行号
+/* Hallmark · genre: atmospheric · macrostructure: Ecosystem Index · theme: TDesign Dark / BlueGray14 (#15181d) + Orange6 (#ED8139) · nav: N13 · footer: Ft3 · frame: batch=2026-11-21-c; nav=N13; footer=Ft3; base=#15181d
+ * critique: P5 H5 E5 S5 R5 V5 · 扁平暗阶片库骨架：首屏直出继续观看与片库网格，零浮层阴影与遮罩叠加
  */
-:root{
-  /* 中性色（TDesign 中性色 14 阶）color.md:208-215 */
-  --bg:#181818;      /* Gray14 L8  color.md:214-215 */
-  --bg-2:#242424;    /* Gray13 L14 color.md:212-213 */
-  --bg-3:#2c2c2c;    /* Gray12 L18 color.md:210-211 */
-  --bg-4:#393939;    /* Gray11 L24 color.md:208-209 */
-  --line:#393939;    /* 发丝线用 Gray11 */
-  --border-strong:#777777; /* Gray8 L50 color.md:202-203，输入框边界 3.97:1 */
-  /* 字色（TDesign 暗色字阶）fonts.md:103-110 */
-  --ink-1:#ffffff;              /* Wh1 100% */
-  --ink-2:rgba(255,255,255,.55);/* Wh2 55%  */
-  --ink-3:rgba(255,255,255,.35);/* Wh3 35%：仅禁用/装饰 */
-  /* 强调色（TDesign 橙系）color.md:114-115 / 126-127 / 132-133 */
-  --accent:#e37318;      /* Orange5 */
-  --accent-hi:#fa9550;   /* Orange4 */
-  --accent-ink:#181818;  /* 橙底上的墨色字 */
-  --ok:#2ba471;          /* Green5 color.md:149-150 */
-  --danger:#d54941;      /* Red6 color.md:97-98 */
-  --danger-text:#ff9285; /* Red4 color.md:91-92，暗底 8.7:1 用于错误文案 */
-  /* 字阶 fonts.md:48-60 */
-  --fs-12:12px; --fs-14:14px; --fs-16:16px; --fs-20:20px; --fs-24:24px;
-  --fs-28:28px; --fs-36:36px; --fs-48:48px; --fs-64:64px;
-  /* 行高 = 字号 + 8  fonts.md:67-74 */
-  --lh-12:20px; --lh-14:22px; --lh-16:24px; --lh-20:28px; --lh-24:32px;
-  --lh-28:36px; --lh-36:44px; --lh-48:56px; --lh-64:72px;
-  /* 间距：字阶步进值 +4/+8/+12/+16 组合 fonts.md:44-46 */
-  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
-  --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
-  --max:1200px; --gutter:clamp(20px,4vw,48px);
-  --dur:200ms; --dur-2:240ms;
-  --ease:cubic-bezier(.22,.61,.36,1);
-  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Source Han Sans CN",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-}
-*,*::before,*::after{box-sizing:border-box}
-html{overflow-x:clip;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;overflow-x:clip;background:var(--bg);color:var(--ink-1);
-  font-family:var(--font);font-size:var(--fs-16);line-height:var(--lh-16);
-  -webkit-font-smoothing:antialiased}
-img,svg{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit}
-[hidden]{display:none!important}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--gutter)}
-:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px;border-radius:0}
-/* 跳转链接 */
-.skip{position:absolute;left:var(--sp-4);top:-64px;z-index:99;background:var(--accent);color:var(--accent-ink);
-  padding:var(--sp-3) var(--sp-4);font-size:var(--fs-14);line-height:var(--lh-14);transition:top var(--dur) var(--ease)}
-.skip:focus{top:var(--sp-3)}
+:root {
+  /* 中性底面（TDesign BlueGray 暗阶）content/color/tdesign.tencent.com--color.md:165-171 */
+  --bg-canvas: #15181d;
+  --bg-surface: #20232b;
+  --bg-elevated: #272b34;
+  --line-hairline: #323843;
+  --border-control: #6f7686;
 
-/* ---------- N1b 导航：品牌 / 居中四链 / 搜索 + 登录 ---------- */
-.nav{position:fixed;inset:0 0 auto;z-index:60;background:transparent;
-  transition:background var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
-.nav.is-scrolled{background:var(--bg);box-shadow:0 8px 28px -18px rgba(0,0,0,.9)}
-.nav__inner{max-width:var(--max);margin:0 auto;padding-inline:var(--gutter);height:64px;
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:var(--sp-5)}
-.brand{display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600;white-space:nowrap}
-.brand svg{width:22px;height:22px}
-.nav__center{justify-self:center;display:flex;align-items:center;gap:var(--sp-1)}
-.nav__link{position:relative;padding:var(--sp-2) var(--sp-3);font-size:var(--fs-14);line-height:var(--lh-14);
-  color:var(--ink-2);white-space:nowrap;transition:color var(--dur) var(--ease)}
-.nav__link:hover{color:var(--ink-1)}
-.nav__link.is-current{color:var(--ink-1);font-weight:600}
-.nav__link.is-current::after{content:"";position:absolute;left:var(--sp-3);right:var(--sp-3);bottom:0;height:2px;background:var(--accent)}
-.nav__right{justify-self:end;display:flex;align-items:center;gap:var(--sp-3);min-width:0}
-.search{display:flex;align-items:center;gap:var(--sp-2);height:40px;padding:0 var(--sp-3);
-  background:var(--bg-2);width:230px;min-width:0;transition:background var(--dur) var(--ease)}
-.search:hover{background:var(--bg-3)}
-.search:focus-within{background:var(--bg-3);outline:2px solid var(--accent-hi);outline-offset:1px}
-.search svg{width:16px;height:16px;flex:none;color:var(--ink-2)}
-.search input{flex:1;min-width:0;background:none;border:0;color:var(--ink-1);
-  font-family:inherit;font-size:var(--fs-14);line-height:var(--lh-14);outline:none}
-.search input::placeholder{color:var(--ink-2)}
-.search__clear{flex:none;width:24px;height:24px;display:grid;place-items:center;background:none;border:0;
-  color:var(--ink-2);cursor:pointer;padding:0}
-.search__clear:hover{color:var(--ink-1)}
-.nav__signin{font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2);white-space:nowrap;
-  transition:color var(--dur) var(--ease)}
-.nav__signin:hover{color:var(--ink-1)}
+  /* 暗色字阶（TDesign Dark Mode）content/color/tdesign.tencent.com--dark.md:48-51 */
+  --ink-primary: rgba(255, 255, 255, 0.90);
+  --ink-secondary: rgba(255, 255, 255, 0.60);
+  --ink-placeholder: rgba(255, 255, 255, 0.40);
+  --ink-disabled: rgba(255, 255, 255, 0.26);
 
-/* ---------- 主区 ---------- */
-main{padding-top:64px}
-.hero{padding-top:56px}
-.hero__grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:var(--sp-4)}
-.feature{position:relative;min-height:540px;overflow:hidden;display:flex;align-items:flex-end;
-  background:var(--bg-2);cursor:pointer}
-.feature__art{position:absolute;inset:0;width:100%;height:100%}
-.feature__shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.5) 38%,rgba(0,0,0,0) 72%)}
-.feature__body{position:relative;padding:var(--sp-7) var(--sp-6);width:100%}
-.feature__kicker{margin:0 0 var(--sp-3);font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2)}
-.hero-title{margin:0 0 var(--sp-4);font-size:var(--fs-64);line-height:var(--lh-64);font-weight:600;letter-spacing:-.01em;
-  max-width:12em;overflow-wrap:anywhere;min-width:0}
-.feature__meta{margin:0 0 var(--sp-5);font-size:var(--fs-14);line-height:var(--lh-14);color:rgba(255,255,255,.78)}
-.feature__meta b{color:var(--ink-1);font-weight:600;font-size:var(--fs-16);line-height:var(--lh-16)}
-.feature__acts{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
-  height:48px;padding:0 var(--sp-5);border:0;cursor:pointer;white-space:nowrap;
-  font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600;
-  transition:background var(--dur) var(--ease),color var(--dur) var(--ease),opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
-.btn--accent{background:var(--accent);color:var(--accent-ink)}
-.btn--accent:hover{background:var(--accent-hi)}
-.btn--accent:active{transform:translateY(1px);background:var(--accent-hi)}
-.btn--accent:focus-visible{outline-color:#fff}
-.btn--ghost{background:transparent;color:var(--ink-1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
-.btn--ghost:hover{background:rgba(255,255,255,.08)}
-.btn--ghost:active{transform:translateY(1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.feat__status{font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2);min-height:var(--lh-12)}
-.hero__side{display:flex;flex-direction:column;gap:var(--sp-4);min-width:0}
-.mini{position:relative;flex:1;min-height:0;overflow:hidden;background:var(--bg-2);display:flex;align-items:flex-end;
-  padding:var(--sp-4);transition:transform var(--dur-2) var(--ease)}
-.mini:hover{transform:translateY(-3px)}
-.mini__art{position:absolute;inset:0;width:100%;height:100%;transition:transform var(--dur-2) var(--ease)}
-.mini:hover .mini__art{transform:scale(1.04)}
-.mini__shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,0) 70%)}
-.mini__text{position:relative;display:grid;gap:var(--sp-1)}
-.mini__text b{font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600}
-.mini__text i{font-style:normal;font-size:var(--fs-12);line-height:var(--lh-12);color:rgba(255,255,255,.72)}
+  /* 强调与语义色（TDesign Dark Mode）content/color/tdesign.tencent.com--dark.md:116-117,128-129,153 */
+  --accent: #ed8139;
+  --accent-hover: #ff9852;
+  --accent-ink: #15181d;
+  --accent-soft: rgba(237, 129, 57, 0.14);
+  --ok-signal: #37bf8e;
+  --danger-bar: #fb6e77;
+  --danger-text: #ff9195;
+  --danger-soft: rgba(251, 110, 119, 0.14);
 
-/* ---------- Ecosystem rails ---------- */
-.band{margin-top:var(--sp-9);scroll-margin-top:80px}
-.band__head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap}
-.band__title{margin:0;font-size:var(--fs-36);line-height:var(--lh-36);font-weight:600;letter-spacing:-.01em;overflow-wrap:anywhere;min-width:0}
-.band__note{margin:0;font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2);font-variant-numeric:tabular-nums}
-.chips{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin:var(--sp-5) 0 var(--sp-6)}
-.chip{height:40px;padding:0 var(--sp-4);background:transparent;border:0;cursor:pointer;
-  font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2);white-space:nowrap;
-  box-shadow:inset 0 0 0 1px var(--border-strong);
-  transition:background var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
-.chip:hover{background:var(--bg-2);color:var(--ink-1)}
-.chip:active{transform:translateY(1px)}
-.chip[aria-pressed="true"]{background:var(--bg-3);color:var(--accent-hi);font-weight:600;
-  box-shadow:inset 0 -2px 0 var(--accent),inset 0 0 0 1px var(--border-strong)}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:var(--sp-7);align-items:start}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--sp-6) var(--sp-4);min-width:0}
-.card{display:grid;gap:var(--sp-2);min-width:0;transition:transform var(--dur-2) var(--ease)}
-.card:hover{transform:translateY(-4px)}
-.card__cover{position:relative;display:block;aspect-ratio:2/3;overflow:hidden;background:var(--bg-2)}
-.card__cover svg{width:100%;height:100%;transition:transform var(--dur-2) var(--ease)}
-.card:hover .card__cover svg{transform:scale(1.04)}
-.card__title{font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600;overflow-wrap:anywhere;min-width:0}
-.card__meta{display:flex;align-items:baseline;gap:var(--sp-2);font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2)}
-.card__meta b{color:var(--ink-1);font-weight:600;font-variant-numeric:tabular-nums}
-.card__note{font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2)}
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:6px;vertical-align:1px}
-.skel{aspect-ratio:2/3;background:linear-gradient(100deg,var(--bg-2) 30%,var(--bg-3) 50%,var(--bg-2) 70%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
-@keyframes shimmer{to{background-position:-200% 0}}
-.empty{grid-column:1/-1;padding:var(--sp-8) 0;display:grid;gap:var(--sp-3);justify-items:start}
-.empty svg{width:40px;height:40px;color:var(--ink-3)}
-.empty h3{margin:0;font-size:var(--fs-20);line-height:var(--lh-20);font-weight:600}
-.empty p{margin:0;font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2)}
-.empty button{margin-top:var(--sp-2);height:44px;padding:0 var(--sp-4);background:var(--bg-2);border:0;cursor:pointer;
-  font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-1);box-shadow:inset 0 0 0 1px var(--border-strong);
-  transition:background var(--dur) var(--ease)}
-.empty button:hover{background:var(--bg-3)}
-/* 热榜 */
-.board{position:sticky;top:88px;min-width:0}
-.board__title{margin:0 0 var(--sp-2);font-size:var(--fs-20);line-height:var(--lh-20);font-weight:600}
-.board__list{list-style:none;margin:0;padding:0;counter-reset:rank}
-.board__row{border-top:1px solid var(--line)}
-.board__row:first-child{border-top:0}
-.board__link{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:baseline;gap:var(--sp-2);
-  padding:var(--sp-3) 0;transition:background var(--dur) var(--ease)}
-.board__link:hover{background:var(--bg-2)}
-.rank{font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.board__row:first-child .rank{color:var(--accent-hi)}
-.board__name{font-size:var(--fs-14);line-height:var(--lh-14);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.board__val{font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2);font-variant-numeric:tabular-nums}
-.board__note{margin:var(--sp-3) 0 0;font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2)}
+  /* 轨道、悬停与焦点辅助色 */
+  --track-bar: rgba(255, 255, 255, 0.16);
+  --hover-tint: rgba(255, 255, 255, 0.05);
+  --focus-on-accent: rgba(255, 255, 255, 0.90);
 
-/* ---------- 详情视图 ---------- */
-.detail{padding-top:64px}
-.detail__bar{display:flex;align-items:center;gap:var(--sp-4);flex-wrap:wrap;padding-top:var(--sp-4)}
-.back{height:40px;padding:0 var(--sp-4);background:var(--bg-2);border:0;cursor:pointer;
-  font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-1);
-  transition:background var(--dur) var(--ease)}
-.back:hover{background:var(--bg-3)}
-.detail__crumb{font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2)}
-.detail__hero{display:grid;grid-template-columns:280px minmax(0,1fr);gap:var(--sp-6);align-items:center;margin-top:var(--sp-4)}
-.detail__poster{aspect-ratio:2/3;overflow:hidden;background:var(--bg-2);min-width:0}
-.detail__poster svg{width:100%;height:100%}
-.detail__head{padding:0;min-width:0}
-.detail__title{margin:0 0 var(--sp-2);font-size:var(--fs-48);line-height:var(--lh-48);font-weight:600;overflow-wrap:anywhere;min-width:0}
-.detail__meta{margin:0;font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2)}
-.detail__meta b{color:var(--ink-1);font-weight:600}
-.detail__body{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:var(--sp-7);margin-top:var(--sp-6)}
-.player__frame{position:relative;aspect-ratio:16/9;background:var(--bg-2);overflow:hidden}
-.player__art{position:absolute;inset:0;width:100%;height:100%;filter:blur(16px) brightness(.55) saturate(1.15);transform:scale(1.15)}
-.player__shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78),rgba(0,0,0,.12) 55%,rgba(0,0,0,.35))}
-.player__caption{position:absolute;left:var(--sp-5);bottom:var(--sp-5);font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-1)}
-.player__play{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;border:0;cursor:pointer;
-  background:rgba(24,24,24,.72);color:#fff;display:grid;place-items:center;
-  transition:background var(--dur) var(--ease),transform var(--dur) var(--ease)}
-.player__play:hover{background:var(--accent);color:var(--accent-ink)}
-.player__play:active{transform:scale(.96)}
-.player__play:disabled{opacity:.4;cursor:not-allowed}
-.player__play:disabled:hover{background:rgba(24,24,24,.72);color:#fff}
-.player__play svg{width:24px;height:24px}
-.player__bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.18)}
-.player__bar i{display:block;height:100%;width:18%;background:var(--accent);transition:width var(--dur-2) var(--ease)}
-.player__syn{margin:var(--sp-4) 0 0;font-size:var(--fs-16);line-height:var(--lh-16);color:var(--ink-2);max-width:40em}
-.player__warn{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;margin-top:var(--sp-3);
-  padding:var(--sp-3) var(--sp-4);background:var(--bg-2);box-shadow:inset 2px 0 0 var(--danger)}
-.player__warn-text{font-size:var(--fs-14);line-height:var(--lh-14);color:var(--danger-text)}
-.btn-retry{height:36px;padding:0 var(--sp-4);background:transparent;border:0;cursor:pointer;
-  font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-1);box-shadow:inset 0 0 0 1px var(--border-strong);
-  transition:background var(--dur) var(--ease)}
-.btn-retry:hover{background:var(--bg-3)}
-.btn-retry:active{transform:translateY(1px)}
-.label{margin:0 0 var(--sp-2);font-size:var(--fs-14);line-height:var(--lh-14);font-weight:600;color:var(--ink-1)}
-.prose{margin:0 0 var(--sp-6);font-size:var(--fs-16);line-height:var(--lh-16);color:var(--ink-2);max-width:40em;overflow-wrap:anywhere}
-.cast{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-5)}
-.cast li{font-size:var(--fs-16);line-height:var(--lh-16)}
-.eps{margin-top:var(--sp-8)}
-.eps__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:var(--sp-2);margin-top:var(--sp-4)}
-.ep{height:48px;background:var(--bg-2);border:0;cursor:pointer;font-size:var(--fs-14);line-height:var(--lh-14);
-  color:var(--ink-1);font-variant-numeric:tabular-nums;
-  transition:background var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
-.ep:hover{background:var(--bg-3)}
-.ep:active{transform:translateY(1px)}
-.ep[aria-current="true"]{color:var(--accent-hi);font-weight:600;background:var(--bg-3);box-shadow:inset 0 -2px 0 var(--accent)}
-.ep:disabled{opacity:.4;cursor:not-allowed;color:var(--ink-2)}
-.eps__note{margin:var(--sp-3) 0 0;font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2)}
-.also{margin-top:var(--sp-8)}
-.also .grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:var(--sp-5)}
+  /* 字体与字阶（TDesign 字体规范）content/type/tdesign.tencent.com--fonts.md:35,52-60,69,87 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", "Source Han Sans CN", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --fs-12: 12px; --lh-12: 20px;
+  --fs-14: 14px; --lh-14: 22px;
+  --fs-16: 16px; --lh-16: 24px;
+  --fs-20: 20px; --lh-20: 28px;
+  --fs-24: 24px; --lh-24: 32px;
+  --fs-28: 28px; --lh-28: 36px;
+  --fs-36: 36px; --lh-36: 44px;
 
-/* ---------- Ft5 页脚 ---------- */
-.foot{margin-top:var(--sp-9);padding:var(--sp-8) 0 var(--sp-7)}
-.foot__line{margin:0 0 var(--sp-7);font-size:var(--fs-48);line-height:var(--lh-48);font-weight:600;
-  letter-spacing:-.01em;max-width:38ch;overflow-wrap:anywhere}
-.foot__meta{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;
-  padding-top:var(--sp-4);border-top:1px solid var(--line)}
-.foot__brand{font-size:var(--fs-16);line-height:var(--lh-16);font-weight:600}
-.foot__nav{display:flex;gap:var(--sp-5)}
-.foot__nav a{font-size:var(--fs-14);line-height:var(--lh-14);color:var(--ink-2);transition:color var(--dur) var(--ease)}
-.foot__nav a:hover{color:var(--ink-1)}
-.foot__copy{font-size:var(--fs-12);line-height:var(--lh-12);color:var(--ink-2)}
+  /* 间距与栅格（TDesign 8px 基数 + 4/12px 步进）content/layout/tdesign.tencent.com--layout.md:78,92,96,138 */
+  --sp-4: 4px;
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-48: 48px;
+  --container: 1280px;
+  --gutter: 24px;
 
-/* ---------- 响应式 ---------- */
-@media (max-width:1100px){
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .layout{grid-template-columns:minmax(0,1fr)}
-  .board{position:static;margin-top:var(--sp-4)}
-  .board__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--sp-6)}
-  .board__row:nth-child(2){border-top:0}
+  /* 圆角与动效（GAP_RULES 圆角 + TDesign 动效规范）content/motion/tdesign.tencent.com--motion.md:98,101-102,115-116 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 999px;
+  --dur-micro: 100ms;
+  --dur-base: 200ms;
+  --dur-moderate: 240ms;
+  --ease-standard: cubic-bezier(0.38, 0, 0.24, 1);
+  --ease-out: cubic-bezier(0, 0, 0.15, 1);
 }
-@media (max-width:1023px){
-  .hero__grid{grid-template-columns:minmax(0,1fr)}
-  .feature{min-height:440px}
-  .hero__side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-3)}
-  .mini{min-height:128px}
-  .hero-title{font-size:var(--fs-48);line-height:var(--lh-48)}
-  .band__title{font-size:var(--fs-28);line-height:var(--lh-28)}
-  .detail__body{grid-template-columns:minmax(0,1fr)}
-  .foot__line{font-size:var(--fs-36);line-height:var(--lh-36)}
+
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
 }
-@media (max-width:860px){
-  .nav__center{display:none}
-  .nav__inner{grid-template-columns:auto 1fr;gap:var(--sp-4)}
-  .nav__right{justify-self:end}
-  .search{width:clamp(150px,42vw,240px)}
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--bg-canvas);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
 }
-@media (max-width:767px){
-  :root{--gutter:20px}
-  .hero{padding-top:32px}
-  .feature{min-height:400px}
-  .feature__body{padding:var(--sp-6) var(--sp-5)}
-  .hero-title{font-size:var(--fs-36);line-height:var(--lh-36)}
-  .band{margin-top:var(--sp-8)}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-5) var(--sp-3)}
-  .card__title{font-size:var(--fs-14);line-height:var(--lh-14)}
-  .board__list{grid-template-columns:minmax(0,1fr)}
-  .board__row:nth-child(2){border-top:1px solid var(--line)}
-  .detail__title{font-size:var(--fs-36);line-height:var(--lh-36)}
-  .detail__hero{grid-template-columns:120px minmax(0,1fr);gap:var(--sp-4)}
-  .detail__head{padding:0}
-  .also .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .foot__line{font-size:var(--fs-28);line-height:var(--lh-28)}
-  .foot{margin-top:var(--sp-8)}
-  .hero__side{grid-template-columns:minmax(0,1fr);gap:var(--sp-2)}
-  .mini{min-height:96px}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; padding: 0; }
+input { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
-@media (max-width:520px){
-  .nav__signin{display:none}
-  .search{width:auto;flex:1}
-  .nav__inner{grid-template-columns:auto minmax(0,1fr)}
-  .nav__right{width:100%}
-  .feature__meta{font-size:var(--fs-12);line-height:var(--lh-12)}
-  .btn{height:44px;padding:0 var(--sp-4);font-size:var(--fs-14);line-height:var(--lh-14)}
-  .goal{width:100%}
+.ep-wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
 }
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
-    transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .card:hover,.mini:hover{transform:none}
+:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--sp-12);
+  left: var(--sp-16);
+  z-index: 600;
+  padding: var(--sp-8) var(--sp-16);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transform: translateY(-160%);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* 导航 N13：单层扁平吸顶顶栏，含检索框与 ⌘K 快捷键 */
+.ep-nav {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  background: var(--bg-canvas);
+  color: var(--ink-primary);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-nav-in {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--sp-12) var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-16);
+}
+.ep-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-size: var(--fs-20);
+  line-height: var(--lh-20);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  min-height: 36px;
+}
+.ep-brand-mark { width: 20px; height: 20px; flex-shrink: 0; }
+
+.ep-nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ep-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 var(--sp-12);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  border-radius: var(--radius-sm);
+  transition: color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard);
+}
+.ep-nav-link[aria-current="page"] {
+  color: var(--ink-primary);
+  background: var(--bg-elevated);
+}
+
+.ep-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  min-width: 0;
+}
+.ep-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 248px;
+  min-width: 0;
+}
+.ep-search-box svg {
+  position: absolute;
+  left: var(--sp-12);
+  width: 15px;
+  height: 15px;
+  color: var(--ink-secondary);
+  pointer-events: none;
+}
+.ep-search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--sp-48) 0 var(--sp-32);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-primary);
+  transition: border-color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard);
+}
+.ep-search-input::placeholder { color: var(--ink-placeholder); }
+.ep-search-input:focus {
+  border-color: var(--accent-hover);
+  background: var(--bg-elevated);
+}
+.ep-kbd {
+  position: absolute;
+  right: var(--sp-8);
+  padding: 0 var(--sp-8);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+}
+.ep-search-clear {
+  position: absolute;
+  right: var(--sp-4);
+  min-width: 28px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-secondary);
+  font-size: var(--fs-12);
+  border-radius: var(--radius-sm);
+}
+
+.ep-watch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  min-height: 36px;
+  padding: 0 var(--sp-12);
+  background: transparent;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--ink-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
+}
+.ep-watch-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--sp-8);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  border-radius: var(--radius-sm);
+}
+
+.ep-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+}
+.ep-mobile-drawer {
+  border-top: 1px solid var(--line-hairline);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  padding: var(--sp-12) var(--gutter) var(--sp-16);
+}
+.ep-mobile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+/* 按钮体系（桌面 36px 紧凑高度，移动端扩展至 >=44px） */
+.ep-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  min-height: 36px;
+  padding: 0 var(--sp-16);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), transform var(--dur-micro) var(--ease-out);
+}
+.ep-btn:active:not(:disabled):not([aria-disabled="true"]) { transform: translateY(1px); }
+.ep-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.ep-btn-primary:focus-visible { outline-color: var(--focus-on-accent); }
+.ep-btn-secondary {
+  background: transparent;
+  color: var(--ink-primary);
+  border: 1px solid var(--border-control);
+}
+.ep-btn-secondary[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+.ep-btn-ghost {
+  color: var(--ink-secondary);
+  padding: 0 var(--sp-12);
+}
+
+/* 首屏扁平引导带：定位标题 + 继续观看双条（不占整屏，把片库网格留在首屏内） */
+.ep-intro-band {
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-24);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--sp-24);
+  align-items: center;
+}
+.ep-intro-title {
+  margin: 0 0 var(--sp-8);
+  font-size: var(--fs-36);
+  line-height: var(--lh-36);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.ep-intro-lede {
+  margin: 0;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+  max-width: 34em;
+  text-wrap: pretty;
+}
+
+.ep-resume-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-12);
+}
+.ep-resume-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-16);
+  background: var(--bg-elevated);
+  color: var(--ink-primary);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  transition: background-color var(--dur-base) var(--ease-standard);
+}
+.ep-resume-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+}
+.ep-resume-name {
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+.ep-resume-ep {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  font-weight: 600;
+  color: var(--accent-hover);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.ep-resume-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.ep-progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--track-bar);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.ep-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transition: transform var(--dur-moderate) var(--ease-out);
+}
+
+/* 通用扁平区块 */
+.ep-section {
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-32);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-16);
+  margin-bottom: var(--sp-16);
+}
+.ep-sec-title {
+  margin: 0;
+  font-size: var(--fs-24);
+  line-height: var(--lh-24);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.ep-sec-sub {
+  margin: var(--sp-4) 0 0;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 筛选条 */
+.ep-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+  margin-bottom: var(--sp-16);
+}
+.ep-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+.ep-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 var(--sp-12);
+  background: transparent;
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+  transition: background-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
+}
+.ep-chip[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  font-weight: 600;
+}
+
+/* 12 部扁平片库网格 */
+.ep-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-16);
+}
+.ep-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: background-color var(--dur-base) var(--ease-standard);
+}
+.ep-card-trigger {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+  flex: 1;
+}
+.ep-card-poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-elevated);
+  color: var(--ink-primary);
+  overflow: hidden;
+}
+.ep-card-poster svg { width: 100%; height: 100%; }
+.ep-card-body {
+  padding: var(--sp-12) var(--sp-16) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.ep-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+}
+.ep-card-title {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+.ep-card-score {
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--accent-hover);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.ep-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+}
+.ep-status-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+.ep-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-sm);
+  background: var(--ok-signal);
+  flex-shrink: 0;
+}
+.ep-dot.is-done { background: var(--ink-secondary); }
+.ep-card-foot {
+  padding: var(--sp-8) var(--sp-16) var(--sp-12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  border-top: 1px solid var(--line-hairline);
+}
+.ep-card-cast {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ep-mini-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 var(--sp-8);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-control);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  font-weight: 600;
+  color: var(--ink-primary);
+  flex-shrink: 0;
+  transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard);
+}
+.ep-mini-toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+/* 骨架与空状态 */
+.ep-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-16);
+}
+.ep-skel {
+  height: 224px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  opacity: 0.7;
+}
+.ep-empty {
+  padding: var(--sp-32) var(--sp-24);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+.ep-empty h3 {
+  margin: 0 0 var(--sp-8);
+  font-size: var(--fs-20);
+  line-height: var(--lh-20);
+  font-weight: 600;
+}
+.ep-empty p {
+  margin: 0 auto var(--sp-16);
+  max-width: 36em;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+}
+
+/* 我的追剧单 + 本周热榜双栏收束 */
+.ep-lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--sp-32);
+  align-items: start;
+}
+.ep-watch-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-hairline);
+}
+.ep-watch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-8);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-watch-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.ep-watch-title {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 600;
+}
+.ep-watch-remind {
+  margin: 0;
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ok-signal);
+}
+.ep-watch-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex-shrink: 0;
+}
+
+.ep-rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-hairline);
+}
+.ep-rank-row {
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-rank-btn {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1.3fr) 64px 96px 52px;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-8);
+  text-align: left;
+  transition: background-color var(--dur-base) var(--ease-standard);
+}
+.ep-rank-no {
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-secondary);
+}
+.ep-rank-no.is-top { color: var(--accent-hover); }
+.ep-rank-name {
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+.ep-rank-cat, .ep-rank-ep {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.ep-rank-score {
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--accent-hover);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* 剧集详情与扁平选集播放器 */
+.ep-detail {
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-48);
+}
+.ep-detail-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+  margin-bottom: var(--sp-16);
+}
+.ep-player-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: var(--sp-24);
+  align-items: start;
+}
+.ep-player-box {
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.ep-player-stage {
+  aspect-ratio: 16 / 9;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-player-stage svg { width: 100%; height: 100%; }
+.ep-player-controls-bar {
+  padding: var(--sp-12) var(--sp-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+.ep-player-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+.ep-player-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+.ep-play-btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 var(--sp-12);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  transition: background-color var(--dur-base) var(--ease-standard), opacity var(--dur-base) var(--ease-standard);
+}
+.ep-play-btn:focus-visible { outline-color: var(--focus-on-accent); }
+.ep-play-btn[aria-busy="true"] { opacity: 0.6; }
+.ep-play-btn:disabled {
+  background: var(--bg-elevated);
+  color: var(--ink-disabled);
+  cursor: not-allowed;
+}
+.ep-player-ep-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ep-player-ep-title {
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+}
+.ep-player-ep-sub {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.ep-line-switch {
+  display: inline-flex;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-canvas);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+}
+.ep-line-btn {
+  min-height: 28px;
+  padding: 0 var(--sp-8);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+}
+.ep-line-btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.ep-error-banner {
+  margin-top: var(--sp-16);
+  padding: var(--sp-12) var(--sp-16);
+  background: var(--danger-soft);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-bar);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+.ep-error-msg {
+  margin: 0;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+}
+.ep-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+.ep-detail-info {
+  margin-top: var(--sp-24);
+}
+.ep-detail-title {
+  margin: 0 0 var(--sp-12);
+  font-size: var(--fs-28);
+  line-height: var(--lh-28);
+  font-weight: 600;
+  text-wrap: balance;
+}
+.ep-meta-dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16);
+  margin: 0 0 var(--sp-12);
+  padding: 0;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+}
+.ep-meta-pair {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+}
+.ep-meta-pair dt { color: var(--ink-secondary); }
+.ep-meta-pair dd {
+  margin: 0;
+  color: var(--ink-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ep-meta-score { color: var(--accent-hover); }
+.ep-detail-desc {
+  margin: 0;
+  max-width: 42em;
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  color: var(--ink-secondary);
+}
+
+.ep-episodes-panel {
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-24);
+}
+.ep-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+.ep-panel-title {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: 600;
+  text-wrap: balance;
+}
+.ep-panel-note {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+}
+.ep-ep-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-8);
+  margin-top: var(--sp-16);
+}
+.ep-ep-btn {
+  min-height: 36px;
+  padding: var(--sp-4) var(--sp-8);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  transition: background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard);
+}
+.ep-ep-btn[aria-current="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.ep-ep-btn[aria-disabled="true"] {
+  color: var(--ink-disabled);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+.ep-ep-tag {
+  font-size: var(--fs-12);
+  color: var(--ink-secondary);
+}
+.ep-ep-note {
+  margin: var(--sp-16) 0 0;
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+}
+
+/* 页脚 Ft3：扁平三栏索引 */
+.ep-flat-foot {
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  padding: var(--sp-48) 0 var(--sp-32);
+}
+.ep-foot-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1.4fr;
+  gap: var(--sp-32);
+  padding-bottom: var(--sp-32);
+  border-bottom: 1px solid var(--line-hairline);
+}
+.ep-foot-col h2 {
+  margin: 0 0 var(--sp-12);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  font-weight: 600;
+  color: var(--ink-primary);
+  text-wrap: balance;
+}
+.ep-foot-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+.ep-foot-link {
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+  text-align: left;
+  transition: color var(--dur-base) var(--ease-standard);
+}
+.ep-foot-desc {
+  margin: 0;
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+  color: var(--ink-secondary);
+  max-width: 34em;
+}
+.ep-foot-base {
+  padding-top: var(--sp-24);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--ink-secondary);
+}
+
+@media (hover: hover) {
+  .ep-nav-link:hover { color: var(--ink-primary); background: var(--hover-tint); }
+  .ep-watch-btn:hover { background: var(--bg-surface); border-color: var(--ink-secondary); }
+  .ep-btn-primary:hover { background: var(--accent-hover); }
+  .ep-btn-secondary:hover { background: var(--bg-surface); border-color: var(--ink-secondary); }
+  .ep-btn-ghost:hover { color: var(--ink-primary); background: var(--hover-tint); }
+  .ep-resume-card:hover { background: var(--bg-surface); }
+  .ep-chip:hover { color: var(--ink-primary); border-color: var(--border-control); }
+  .ep-card:hover { background: var(--bg-elevated); }
+  .ep-mini-toggle:hover { border-color: var(--ink-primary); }
+  .ep-rank-btn:hover { background: var(--bg-surface); }
+  .ep-play-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .ep-ep-btn:hover:not([aria-current="true"]):not([aria-disabled="true"]) {
+    border-color: var(--border-control);
+    background: var(--bg-surface);
+  }
+  .ep-foot-link:hover { color: var(--ink-primary); }
+}
+
+@media (max-width: 1199px) {
+  .ep-card-grid, .ep-skeleton-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 991px) {
+  .ep-intro-grid, .ep-lower-grid, .ep-player-layout { grid-template-columns: minmax(0, 1fr); }
+  .ep-foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .ep-nav-links, .ep-kbd { display: none; }
+  .ep-menu-btn { display: inline-flex; }
+  .ep-search-box { width: auto; flex: 1; }
+  .ep-search-input { height: 44px; padding-right: var(--sp-32); }
+  .ep-btn, .ep-chip, .ep-watch-btn, .ep-mini-toggle, .ep-ep-btn, .ep-nav-link, .ep-play-btn { min-height: 44px; }
+  .ep-intro-title { font-size: var(--fs-28); line-height: var(--lh-28); }
+  .ep-resume-strip { grid-template-columns: minmax(0, 1fr); }
+  .ep-card-grid, .ep-skeleton-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ep-rank-btn { grid-template-columns: 32px minmax(0, 1fr) 76px 48px; gap: var(--sp-8); }
+  .ep-rank-cat { display: none; }
+  .ep-ep-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ep-foot-grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-24); }
+}
+@media (max-width: 520px) {
+  .ep-watch-btn-label { display: none; }
+  .ep-card-grid, .ep-skeleton-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (pointer: coarse) {
+  .ep-btn, .ep-chip, .ep-watch-btn, .ep-mini-toggle, .ep-ep-btn, .ep-play-btn { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
 </head>
 <body>
-<a class="skip" href="#home">跳到主要内容</a>
+<a class="skip-link" href="#main">跳到主内容</a>
 
-<header class="nav" id="nav">
-  <div class="nav__inner">
-    <a class="brand" href="#top" id="brand" aria-label="EpDeck 首页">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z" fill="#e37318"/><circle cx="18.5" cy="5.5" r="1.4" fill="#fa9550"/></svg>
+<header class="ep-nav" aria-label="主导航">
+  <div class="ep-nav-in">
+    <a class="ep-brand" href="#top" id="brandLink" aria-label="EpDeck 首页">
+      <svg class="ep-brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="3" fill="none" stroke="#ed8139" stroke-width="2"></rect>
+        <polygon points="10,8.5 16.5,12 10,15.5" fill="#ed8139"></polygon>
+      </svg>
       <span>EpDeck</span>
     </a>
-    <nav class="nav__center" aria-label="分类导航">
-      <a class="nav__link is-current" href="#top" data-filter="全部">首页</a>
-      <a class="nav__link" href="#now" data-filter="剧集">剧集</a>
-      <a class="nav__link" href="#now" data-filter="电影">电影</a>
-      <a class="nav__link" href="#now" data-filter="综艺">综艺</a>
+
+    <nav aria-label="片库分类">
+      <ul class="ep-nav-links" id="navLinks">
+        <li><button type="button" class="ep-nav-link" data-nav-cat="全部" aria-current="page">首页</button></li>
+        <li><button type="button" class="ep-nav-link" data-nav-cat="剧集">剧集</button></li>
+        <li><button type="button" class="ep-nav-link" data-nav-cat="电影">电影</button></li>
+        <li><button type="button" class="ep-nav-link" data-nav-cat="综艺">综艺</button></li>
+      </ul>
     </nav>
-    <div class="nav__right">
-      <form class="search" role="search" id="searchForm">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="搜剧名、演员或类型" aria-label="搜索片库" autocomplete="off">
-        <button class="search__clear" type="button" id="qClear" aria-label="清空搜索" hidden>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-        </button>
-      </form>
-      <a class="nav__signin" href="#top">登录</a>
+
+    <div class="ep-nav-actions">
+      <div class="ep-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.8-3.8"></path>
+        </svg>
+        <label class="sr-only" for="searchInput">搜索剧名、演员或类型</label>
+        <input id="searchInput" class="ep-search-input" type="search" placeholder="搜剧名、演员或题材" autocomplete="off">
+        <kbd class="ep-kbd" id="searchKbd">⌘K</kbd>
+        <button type="button" class="ep-search-clear" id="searchClear" aria-label="清空搜索" hidden>✕</button>
+      </div>
+
+      <button type="button" class="ep-watch-btn" id="jumpWatchlist">
+        <span class="ep-watch-btn-label">追剧单</span>
+        <span class="ep-watch-count" id="watchBadge">2</span>
+      </button>
+
+      <button type="button" class="ep-menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileDrawer" aria-label="展开分类菜单">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="ep-mobile-drawer" id="mobileDrawer" hidden>
+    <div class="ep-mobile-links" id="mobileNavLinks">
+      <button type="button" class="ep-chip" data-nav-cat="全部" aria-pressed="true">首页全部</button>
+      <button type="button" class="ep-chip" data-nav-cat="剧集" aria-pressed="false">剧集</button>
+      <button type="button" class="ep-chip" data-nav-cat="电影" aria-pressed="false">电影</button>
+      <button type="button" class="ep-chip" data-nav-cat="综艺" aria-pressed="false">综艺</button>
     </div>
   </div>
 </header>
 
-<main id="home">
-  <section class="hero" id="top">
-    <div class="wrap">
-      <div class="hero__grid">
-        <div class="feature" id="feature" data-id="p1" tabindex="0" role="link" aria-label="查看《雾港》详情">
-          <svg class="feature__art" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#still1"/></svg>
-          <div class="feature__shade"></div>
-          <div class="feature__body">
-            <p class="feature__kicker">今晚主推 · 悬疑</p>
-            <h1 class="hero-title">把世界<br>关在门外</h1>
-            <p class="feature__meta"><b>9.2</b> · 更新至第 18 集 · 沈知遥 主演</p>
-            <div class="feature__acts">
-              <button class="btn btn--accent" id="heroPlay" type="button">继续观看 · 第 13 集</button>
-              <button class="btn btn--ghost" id="heroFollow" type="button">加入追剧单</button>
-              <span class="feat__status" id="heroStatus" aria-live="polite"></span>
+<main id="main">
+  <div id="homeView">
+    <!-- 首屏扁平引导：定位 + 继续观看进度条 -->
+    <section class="ep-intro-band" aria-labelledby="introTitle">
+      <div class="ep-wrap ep-intro-grid">
+        <div>
+          <h1 class="ep-intro-title" id="introTitle">今晚接着追哪部</h1>
+          <p class="ep-intro-lede">12 部在播剧集、电影与综艺，每周五 20:00 更新，点开接着上次位置播。</p>
+        </div>
+        <div class="ep-resume-strip" id="continueList" aria-label="继续观看"></div>
+      </div>
+    </section>
+
+    <!-- 首屏直出：12 部片库网格 + 题材与状态筛选 -->
+    <section class="ep-section ep-wrap" id="catalogue" aria-labelledby="catHead">
+      <div class="ep-sec-head">
+        <div>
+          <h2 class="ep-sec-title" id="catHead">片库与更新进度</h2>
+          <p class="ep-sec-sub" id="catCount">共 12 部在播剧集，每周五晚更新</p>
+        </div>
+        <div class="ep-chips" id="statusFilterGroup" role="group" aria-label="完结状态筛选">
+          <button type="button" class="ep-chip" data-status="all" aria-pressed="true">全部状态</button>
+          <button type="button" class="ep-chip" data-status="ongoing" aria-pressed="false">连载中</button>
+          <button type="button" class="ep-chip" data-status="done" aria-pressed="false">已完结</button>
+        </div>
+      </div>
+
+      <div class="ep-toolbar">
+        <div class="ep-chips" id="genreFilterGroup" role="group" aria-label="题材筛选">
+          <button type="button" class="ep-chip" data-genre="全部" aria-pressed="true">全部题材</button>
+          <button type="button" class="ep-chip" data-genre="悬疑" aria-pressed="false">悬疑</button>
+          <button type="button" class="ep-chip" data-genre="都市" aria-pressed="false">都市</button>
+          <button type="button" class="ep-chip" data-genre="科幻" aria-pressed="false">科幻</button>
+          <button type="button" class="ep-chip" data-genre="综艺" aria-pressed="false">综艺</button>
+        </div>
+        <button type="button" class="ep-btn ep-btn-ghost" id="resetFiltersBtn" hidden>重置全部筛选</button>
+      </div>
+
+      <div class="ep-skeleton-grid" id="catSkeleton" hidden aria-busy="true" aria-label="正在筛选剧集">
+        <div class="ep-skel"></div><div class="ep-skel"></div><div class="ep-skel"></div><div class="ep-skel"></div>
+      </div>
+
+      <div class="ep-card-grid" id="catGrid"></div>
+
+      <div class="ep-empty" id="catEmpty" role="status" hidden>
+        <h3>没有找到匹配的剧集</h3>
+        <p id="catEmptyReason">当前搜索或筛选条件下暂无在播片目。</p>
+        <button type="button" class="ep-btn ep-btn-primary" id="emptyResetBtn">显示全部 12 部剧集</button>
+      </div>
+    </section>
+
+    <!-- 追剧单与本周热榜并排收束 -->
+    <section class="ep-section ep-wrap" aria-label="追剧单与本周热榜">
+      <div class="ep-lower-grid">
+        <div id="watchlist">
+          <div class="ep-sec-head">
+            <div>
+              <h2 class="ep-sec-title" id="watchHead">我的追剧单</h2>
+              <p class="ep-sec-sub" id="watchSub">已追 2 部，新集上线自动提醒</p>
+            </div>
+          </div>
+          <div class="ep-watch-list" id="watchGrid"></div>
+          <div class="ep-empty" id="watchEmpty" role="status" hidden>
+            <h3>追剧单还是空的</h3>
+            <p>在片库卡片点击「+ 追剧」，即可保留更新提醒与接续集数。</p>
+            <a class="ep-btn ep-btn-primary" href="#catalogue">去挑一部想追的剧</a>
+          </div>
+        </div>
+
+        <div id="hot-chart">
+          <div class="ep-sec-head">
+            <div>
+              <h2 class="ep-sec-title" id="rankHead">本周热榜</h2>
+              <p class="ep-sec-sub">按站内播放与追剧人数排序，每周一更新</p>
+            </div>
+          </div>
+          <ol class="ep-rank-list" id="rankList"></ol>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 剧集详情与扁平选集播放器 -->
+  <section class="ep-detail ep-wrap" id="detailView" hidden aria-labelledby="detailTitle">
+    <div class="ep-detail-bar">
+      <button type="button" class="ep-btn ep-btn-secondary" id="backHomeBtn">返回片库</button>
+      <button type="button" class="ep-btn ep-btn-secondary" id="detailFollowBtn" aria-pressed="false">加入追剧单</button>
+    </div>
+
+    <div class="ep-player-layout">
+      <div>
+        <div class="ep-player-box">
+          <div class="ep-player-stage" id="playerArt" aria-hidden="true"></div>
+          <div class="ep-player-controls-bar">
+            <div class="ep-progress-track" aria-hidden="true">
+              <span class="ep-progress-fill" id="playerProgressFill" style="transform:scaleX(0.08)"></span>
+            </div>
+            <div class="ep-player-row">
+              <div class="ep-player-left">
+                <button type="button" class="ep-play-btn" id="playToggleBtn" aria-pressed="false">
+                  <svg id="playIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <polygon points="8,5 19,12 8,19"></polygon>
+                  </svg>
+                  <span id="playBtnText">播放</span>
+                </button>
+                <div class="ep-player-ep-text">
+                  <span class="ep-player-ep-title" id="playerEpTitle">第 1 集</span>
+                  <span class="ep-player-ep-sub" id="playerEpTime">已播 00:00 / 42:00</span>
+                </div>
+              </div>
+
+              <div class="ep-line-switch" role="group" aria-label="片源线路切换">
+                <button type="button" class="ep-line-btn" data-line="main" aria-pressed="true">主线路</button>
+                <button type="button" class="ep-line-btn" data-line="backup" aria-pressed="false">备用线路</button>
+                <button type="button" class="ep-line-btn" data-line="fault" aria-pressed="false">模拟失败</button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="hero__side" aria-label="今晚另外三部">
-          <a class="mini" href="#now" data-id="p3">
-            <svg class="mini__art" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#c3"/></svg>
-            <span class="mini__shade"></span>
-            <span class="mini__text"><b>长安十二时</b><i>9.4 · 更新至 10 集</i></span>
-          </a>
-          <a class="mini" href="#now" data-id="p7">
-            <svg class="mini__art" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#c7"/></svg>
-            <span class="mini__shade"></span>
-            <span class="mini__text"><b>星轨</b><i>9.1 · 更新至 12 集</i></span>
-          </a>
-          <a class="mini" href="#now" data-id="p9">
-            <svg class="mini__art" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#c9"/></svg>
-            <span class="mini__shade"></span>
-            <span class="mini__text"><b>周末开麦</b><i>8.4 · 更新至 7 集</i></span>
-          </a>
+
+        <div class="ep-error-banner" id="playerErrorBox" role="alert" hidden>
+          <p class="ep-error-msg" id="playerErrorText">当前线路连接超时，未能读取本集视频流。</p>
+          <div class="ep-error-actions">
+            <button type="button" class="ep-btn ep-btn-primary" id="retryLineBtn">重试当前线路</button>
+            <button type="button" class="ep-btn ep-btn-secondary" id="switchBackupBtn">切换备用线路</button>
+          </div>
+        </div>
+
+        <div class="ep-detail-info">
+          <h1 class="ep-detail-title" id="detailTitle">雾港</h1>
+          <dl class="ep-meta-dl" id="detailMeta"></dl>
+          <p class="ep-detail-desc" id="detailDesc"></p>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="band" id="now">
-    <div class="wrap">
-      <div class="band__head">
-        <h2 class="band__title">正在热播</h2>
-        <p class="band__note" id="count" aria-live="polite">共 12 部 · 每周五更新</p>
-      </div>
-      <div class="chips" id="chips" role="group" aria-label="类型筛选"></div>
-      <div class="layout">
-        <div class="grid" id="grid" aria-busy="false"></div>
-        <aside class="board" aria-labelledby="boardTitle">
-          <h2 class="board__title" id="boardTitle">本周热榜</h2>
-          <ol class="board__list" id="board"></ol>
-          <p class="board__note">按站内播放与追剧人数排序，每周一更新。</p>
-        </aside>
-      </div>
+      <aside class="ep-episodes-panel" aria-labelledby="episodesHead">
+        <div class="ep-panel-head">
+          <h2 class="ep-panel-title" id="episodesHead">选集列表</h2>
+          <span class="ep-panel-note" id="episodesSummary">共 24 集</span>
+        </div>
+        <div class="ep-ep-grid" id="epGrid"></div>
+        <p class="ep-ep-note" id="epLockNote">标有「预告」的集数尚未播出，每周五 20:00 解锁更新。</p>
+      </aside>
     </div>
+
+    <section style="margin-top:32px;padding-top:24px;border-top:1px solid var(--line-hairline);" aria-labelledby="relatedHead">
+      <div class="ep-sec-head">
+        <div>
+          <h2 class="ep-sec-title" id="relatedHead">同题材在播</h2>
+          <p class="ep-sec-sub">可直接切换继续观看</p>
+        </div>
+      </div>
+      <div class="ep-card-grid" id="relatedGrid"></div>
+    </section>
   </section>
 </main>
 
-<section class="detail" id="detail" hidden aria-labelledby="d-title" tabindex="-1">
-  <div class="wrap">
-    <div class="detail__bar">
-      <button class="back" id="back" type="button">← 返回片库</button>
-      <span class="detail__crumb">片库 / <b id="d-crumb">雾港</b></span>
-    </div>
-    <div class="detail__hero">
-      <div class="detail__poster">
-        <svg viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use id="d-use" href="#c1"/></svg>
-      </div>
-      <div class="detail__head">
-        <h1 class="detail__title" id="d-title" tabindex="-1">雾港</h1>
-        <p class="detail__meta"><b id="d-score">9.2</b> · <span id="d-genre">悬疑</span> · <span id="d-status">更新至第 18 集</span></p>
-      </div>
-    </div>
-    <div class="detail__body">
-      <div class="player">
-        <div class="player__frame">
-          <svg class="player__art" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use id="d-player-use" href="#c1"/></svg>
-          <div class="player__shade"></div>
-          <p class="player__caption" id="d-ep">第 1 集 · 播放中</p>
-          <button class="player__play" id="d-play" type="button" aria-pressed="false" aria-label="暂停播放">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect id="d-play-icon" x="7" y="6" width="3.6" height="12"/><rect x="13.4" y="6" width="3.6" height="12"/></svg>
-          </button>
-          <div class="player__bar"><i id="d-progress"></i></div>
-        </div>
-        <p class="player__syn" id="d-syn"></p>
-        <div class="player__warn" id="d-warn" role="alert" hidden>
-          <span class="player__warn-text" id="d-warn-text"></span>
-          <button class="btn-retry" id="d-retry" type="button">重试</button>
-        </div>
-      </div>
-      <div class="detail__info">
-        <h2 class="label">简介</h2>
-        <p class="prose" id="d-intro"></p>
-        <h2 class="label">主演</h2>
-        <ul class="cast" id="d-cast"></ul>
-      </div>
-    </div>
-    <div class="eps">
-      <div class="band__head">
-        <h2 class="band__title">选集</h2>
-        <p class="band__note" id="d-epnote"></p>
-      </div>
-      <div class="eps__grid" id="d-eps" role="group" aria-label="选集列表"></div>
-      <p class="eps__note" id="eps-note"></p>
-    </div>
-    <div class="also">
-      <h2 class="band__title">猜你喜欢</h2>
-      <div class="grid" id="d-also"></div>
-    </div>
-  </div>
-</section>
+<div class="sr-only" id="liveAnnounce" aria-live="polite"></div>
 
-<footer class="foot">
-  <div class="wrap">
-    <p class="foot__line">好剧不怕晚，怕的是没人陪你等更新。</p>
-    <div class="foot__meta">
-      <span class="foot__brand">EpDeck</span>
-      <nav class="foot__nav" aria-label="页脚导航">
-        <a href="#top">关于</a><a href="#now">帮助</a><a href="#now">合作</a>
-      </nav>
-      <span class="foot__copy">© 2026 EpDeck</span>
+<footer class="ep-flat-foot" aria-label="站点索引与说明">
+  <div class="ep-wrap">
+    <div class="ep-foot-grid">
+      <div class="ep-foot-col">
+        <h2>片库题材</h2>
+        <ul class="ep-foot-list">
+          <li><button type="button" class="ep-foot-link" data-foot-genre="悬疑">悬疑剧场</button></li>
+          <li><button type="button" class="ep-foot-link" data-foot-genre="都市">都市生活</button></li>
+          <li><button type="button" class="ep-foot-link" data-foot-genre="科幻">科幻星海</button></li>
+          <li><button type="button" class="ep-foot-link" data-foot-genre="综艺">周五综艺</button></li>
+        </ul>
+      </div>
+      <div class="ep-foot-col">
+        <h2>追剧入口</h2>
+        <ul class="ep-foot-list">
+          <li><a class="ep-foot-link" href="#catalogue">片库筛选</a></li>
+          <li><a class="ep-foot-link" href="#watchlist">我的追剧单</a></li>
+          <li><a class="ep-foot-link" href="#hot-chart">本周热榜</a></li>
+          <li><button type="button" class="ep-foot-link" id="footFocusSearch">快捷键检索（⌘K）</button></li>
+        </ul>
+      </div>
+      <div class="ep-foot-col">
+        <h2>更新节奏</h2>
+        <ul class="ep-foot-list">
+          <li><span class="ep-foot-link">在播剧集：每周五 20:00</span></li>
+          <li><span class="ep-foot-link">站内热榜：每周一 10:00</span></li>
+          <li><span class="ep-foot-link">支持主备线路切换与重试</span></li>
+        </ul>
+      </div>
+      <div class="ep-foot-col">
+        <h2>EpDeck</h2>
+        <p class="ep-foot-desc">页面内剧名、评分、选集与播放线路均为前端演示数据，不接入真实视频流。</p>
+      </div>
+    </div>
+    <div class="ep-foot-base">
+      <span>EpDeck 追剧平台</span>
+      <span>按 Esc 可返回片库或清空搜索</span>
     </div>
   </div>
 </footer>
 
-<div class="sr-only" id="live" aria-live="polite"></div>
-
-<!-- 12 张封面 + 1 张主推宽幅：配色全部取自 TDesign 色板（见 DECISIONS.md） -->
-<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
-<defs>
-  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="22"/></filter>
-  <filter id="soft2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10"/></filter>
-</defs>
-
-<!-- 1 雾港：青灰雾 + 灯塔 -->
-<symbol id="c1">
-  <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#002536"/><stop offset="1" stop-color="#004e6d"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g1)"/>
-  <rect y="640" width="600" height="260" fill="#002536"/>
-  <ellipse cx="300" cy="620" rx="380" ry="80" fill="#ffffff" opacity=".05"/>
-  <ellipse cx="250" cy="540" rx="310" ry="52" fill="#ffffff" opacity=".06"/>
-  <ellipse cx="360" cy="700" rx="320" ry="60" fill="#ffffff" opacity=".04"/>
-  <polygon points="452,250 600,170 600,330" fill="#f5ba18" opacity=".13"/>
-  <rect x="438" y="290" width="26" height="330" fill="#181818"/>
-  <rect x="430" y="272" width="42" height="22" fill="#242424"/>
-  <circle cx="451" cy="266" r="11" fill="#fa9550"/>
-  <path d="M0 600 Q120 580 240 596 T600 590 V900 H0Z" fill="#002536" opacity=".7"/>
-  <path d="M110 640 h64 l-12 20 h-40 Z" fill="#181818"/>
-  <path d="M142 640 v-46" stroke="#181818" stroke-width="5"/>
-  <g stroke="#618dff" opacity=".22" stroke-width="2"><path d="M60 700 h120"/><path d="M330 740 h150"/><path d="M120 790 h90"/></g>
-</symbol>
-
-<!-- 2 第七夜：暗红月亮 + 窗格 -->
-<symbol id="c2">
-  <defs><radialGradient id="g2" cx=".5" cy=".3" r=".9"><stop offset="0" stop-color="#881f1c"/><stop offset="1" stop-color="#490002"/></radialGradient></defs>
-  <rect width="600" height="900" fill="url(#g2)"/>
-  <circle cx="300" cy="250" r="150" fill="#f6685d" opacity=".85"/>
-  <circle cx="300" cy="250" r="150" fill="none" stroke="#ff9285" stroke-width="2" opacity=".4"/>
-  <g stroke="#181818" stroke-width="14" opacity=".9"><path d="M100 0 v900"/><path d="M300 0 v900"/><path d="M500 0 v900"/><path d="M0 180 h600"/><path d="M0 420 h600"/><path d="M0 660 h600"/></g>
-  <rect x="100" y="180" width="200" height="240" fill="#490002" opacity=".65"/>
-  <rect x="300" y="420" width="200" height="240" fill="#490002" opacity=".45"/>
-  <rect x="0" y="660" width="100" height="240" fill="#181818"/>
-  <path d="M330 900 v-120 a26 26 0 0 1 52 0 v120 Z" fill="#181818"/>
-  <circle cx="356" cy="742" r="18" fill="#181818"/>
-  <ellipse cx="356" cy="790" rx="30" ry="46" fill="#181818"/>
-</symbol>
-
-<!-- 3 长安十二时：日轮 + 宫檐 -->
-<symbol id="c3">
-  <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1700"/><stop offset="1" stop-color="#713300"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g3)"/>
-  <circle cx="300" cy="250" r="120" fill="#e37318"/>
-  <circle cx="300" cy="250" r="150" fill="none" stroke="#ffb98c" stroke-width="1.5" opacity=".5"/>
-  <path d="M0 560 L90 470 L180 560 L270 470 L360 560 L450 470 L540 560 L600 510 V620 H0 Z" fill="#181818" opacity=".85"/>
-  <path d="M40 640 h520 l-40 -40 H80 Z" fill="#181818"/>
-  <path d="M0 700 H600 V900 H0Z" fill="#181818"/>
-  <path d="M110 700 v-40 h60 v40 M430 700 v-40 h60 v40" stroke="#f5ba18" stroke-width="2" opacity=".45" fill="none"/>
-  <g stroke="#f5ba18" opacity=".25" stroke-width="2"><path d="M0 330 h90"/><path d="M510 330 h90"/><path d="M60 380 h60"/><path d="M480 380 h60"/></g>
-</symbol>
-
-<!-- 4 山河旧梦：浅纸 + 墨山 + 朱印 -->
-<symbol id="c4">
-  <rect width="600" height="900" fill="#f3f3f3"/>
-  <rect width="600" height="900" fill="url(#g4)"/>
-  <defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5e4"/><stop offset="1" stop-color="#e8e2d4"/></linearGradient></defs>
-  <circle cx="420" cy="220" r="90" fill="#ffffff"/>
-  <circle cx="420" cy="220" r="90" fill="none" stroke="#c6c6c6" stroke-width="1"/>
-  <path d="M0 560 Q120 400 240 520 T480 470 T600 520 V900 H0 Z" fill="#8b8b8b" opacity=".55"/>
-  <path d="M0 640 Q140 500 280 600 T600 580 V900 H0 Z" fill="#5e5e5e" opacity=".72"/>
-  <path d="M0 740 Q160 640 320 700 T600 690 V900 H0 Z" fill="#393939" opacity=".9"/>
-  <rect x="70" y="700" width="64" height="64" fill="#ad352f"/>
-  <g stroke="#ffffff" stroke-width="6"><path d="M86 722 h32"/><path d="M102 706 v24"/><path d="M102 730 v20"/></g>
-  <path d="M0 810 Q200 780 400 800 T600 795" stroke="#242424" stroke-width="1.5" fill="none" opacity=".35"/>
-  <ellipse cx="300" cy="470" rx="260" ry="26" fill="#ffffff" opacity=".5"/>
-</symbol>
-
-<!-- 5 夜班便利店：蓝底霓虹 -->
-<symbol id="c5">
-  <defs><linearGradient id="g5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#001a57"/><stop offset="1" stop-color="#242424"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g5)"/>
-  <rect x="60" y="620" width="480" height="200" fill="#16121c"/>
-  <rect x="60" y="560" width="480" height="60" fill="#f5ba18" opacity=".85"/>
-  <rect x="60" y="560" width="480" height="60" fill="none" stroke="#ffd36d" stroke-width="2" opacity=".6"/>
-  <rect x="90" y="660" width="180" height="120" fill="#41b8f2" opacity=".28"/>
-  <rect x="330" y="660" width="180" height="120" fill="#ff79cd" opacity=".28"/>
-  <rect x="90" y="660" width="420" height="120" fill="none" stroke="#ffffff" stroke-width="2" opacity=".18"/>
-  <rect x="270" y="700" width="60" height="80" fill="#001a57" opacity=".7"/>
-  <ellipse cx="300" cy="600" rx="220" ry="60" fill="#ff79cd" opacity=".16" filter="url(#soft)"/>
-  <ellipse cx="180" cy="420" rx="120" ry="40" fill="#41b8f2" opacity=".12" filter="url(#soft)"/>
-  <g stroke="#ffffff" opacity=".14" stroke-width="2"><path d="M80 180 l-30 90"/><path d="M200 120 l-30 90"/><path d="M340 150 l-30 90"/><path d="M470 100 l-30 90"/><path d="M520 260 l-30 90"/></g>
-  <rect y="820" width="600" height="80" fill="#181818" opacity=".8"/>
-</symbol>
-
-<!-- 6 合租时代：暖窗格 + 猫 -->
-<symbol id="c6">
-  <defs><linearGradient id="g6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1700"/><stop offset="1" stop-color="#242424"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g6)"/>
-  <rect x="70" y="110" width="460" height="620" fill="#2c2c2c"/>
-  <g>
-    <rect x="100" y="150" width="90" height="110" fill="#f5ba18" opacity=".85"/>
-    <rect x="220" y="150" width="90" height="110" fill="#713300" opacity=".7"/>
-    <rect x="340" y="150" width="90" height="110" fill="#fa9550" opacity=".6"/>
-    <rect x="100" y="300" width="90" height="110" fill="#713300" opacity=".7"/>
-    <rect x="220" y="300" width="90" height="110" fill="#f5ba18" opacity=".55"/>
-    <rect x="340" y="300" width="90" height="110" fill="#713300" opacity=".5"/>
-    <rect x="100" y="450" width="90" height="110" fill="#fa9550" opacity=".5"/>
-    <rect x="220" y="450" width="90" height="110" fill="#713300" opacity=".6"/>
-    <rect x="340" y="450" width="90" height="110" fill="#f5ba18" opacity=".9"/>
-  </g>
-  <rect x="70" y="620" width="460" height="16" fill="#181818"/>
-  <path d="M380 620 v-24 a16 16 0 0 1 32 0 v24" fill="#181818"/>
-  <circle cx="396" cy="586" r="12" fill="#181818"/>
-  <path d="M386 566 l-6 -14 12 8 8 -8" fill="#181818"/>
-  <path d="M396 620 q60 -10 44 -50" stroke="#181818" stroke-width="10" fill="none"/>
-  <path d="M0 780 h600 v120 H0Z" fill="#181818"/>
-  <path d="M300 300 v-70" stroke="#181818" stroke-width="4"/>
-  <circle cx="300" cy="230" r="12" fill="#ffd9c2"/>
-  <ellipse cx="300" cy="250" rx="70" ry="26" fill="#ffd9c2" opacity=".14" filter="url(#soft2)"/>
-</symbol>
-
-<!-- 7 星轨：行星 + 光环 -->
-<symbol id="c7">
-  <defs><radialGradient id="g7" cx=".4" cy=".35" r="1"><stop offset="0" stop-color="#001a57"/><stop offset="1" stop-color="#05060f"/></radialGradient></defs>
-  <rect width="600" height="900" fill="url(#g7)"/>
-  <g fill="#ffffff">
-    <circle cx="70" cy="120" r="2"/><circle cx="140" cy="60" r="1.4"/><circle cx="240" cy="140" r="1.8"/>
-    <circle cx="360" cy="80" r="1.2"/><circle cx="480" cy="140" r="2.2"/><circle cx="540" cy="60" r="1.4"/>
-    <circle cx="90" cy="300" r="1.6"/><circle cx="520" cy="330" r="1.8"/><circle cx="60" cy="520" r="1.4"/>
-    <circle cx="560" cy="600" r="2"/><circle cx="180" cy="760" r="1.6"/><circle cx="430" cy="800" r="1.8"/>
-    <circle cx="300" cy="840" r="1.2"/><circle cx="120" cy="620" r="1.2"/><circle cx="470" cy="480" r="1.4"/>
-  </g>
-  <circle cx="300" cy="440" r="150" fill="#003cab"/>
-  <circle cx="250" cy="390" r="150" fill="#0052d9" opacity=".55"/>
-  <ellipse cx="300" cy="440" rx="240" ry="64" fill="none" stroke="#85d3ff" stroke-width="3" opacity=".75" transform="rotate(-14 300 440)"/>
-  <ellipse cx="300" cy="440" rx="270" ry="78" fill="none" stroke="#41b8f2" stroke-width="1.5" opacity=".35" transform="rotate(-14 300 440)"/>
-  <path d="M60 220 a340 340 0 0 1 480 40" fill="none" stroke="#366ef4" stroke-width="1.5" stroke-dasharray="6 10" opacity=".5"/>
-  <circle cx="300" cy="440" r="150" fill="none" stroke="#8eabff" stroke-width="1" opacity=".35"/>
-</symbol>
-
-<!-- 8 深空回声：射电波纹 -->
-<symbol id="c8">
-  <defs><linearGradient id="g8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#002536"/><stop offset="1" stop-color="#001225"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g8)"/>
-  <g stroke="#41b8f2" fill="none" opacity=".55">
-    <path d="M300 520 a120 120 0 0 1 120 120" stroke-width="2"/>
-    <path d="M300 440 a200 200 0 0 1 200 200" stroke-width="2" opacity=".7"/>
-    <path d="M300 360 a280 280 0 0 1 280 280" stroke-width="2" opacity=".45"/>
-    <path d="M300 280 a360 360 0 0 1 360 360" stroke-width="2" opacity=".3"/>
-  </g>
-  <path d="M300 520 V300" stroke="#85d3ff" stroke-width="4"/>
-  <path d="M300 300 L210 190" stroke="#85d3ff" stroke-width="3"/>
-  <circle cx="300" cy="300" r="14" fill="#e37318"/>
-  <ellipse cx="300" cy="640" rx="210" ry="46" fill="none" stroke="#029cd4" stroke-width="2" opacity=".5"/>
-  <path d="M80 700 v60 M150 680 v100 M220 710 v40 M290 660 v140 M360 700 v60 M430 690 v80 M500 710 v40" stroke="#85d3ff" stroke-width="8" opacity=".55"/>
-  <g stroke="#ffffff" opacity=".2"><path d="M0 100 h600"/><path d="M0 200 h600"/><path d="M0 300 h600"/><path d="M0 400 h600"/></g>
-</symbol>
-
-<!-- 9 周末开麦：亮黄 + 麦克风 -->
-<symbol id="c9">
-  <defs><linearGradient id="g9" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd36d"/><stop offset="1" stop-color="#f5ba18"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g9)"/>
-  <g fill="#d8a100" opacity=".35">
-    <circle cx="60" cy="60" r="8"/><circle cx="120" cy="60" r="8"/><circle cx="180" cy="60" r="8"/><circle cx="240" cy="60" r="8"/><circle cx="300" cy="60" r="8"/><circle cx="360" cy="60" r="8"/><circle cx="420" cy="60" r="8"/><circle cx="480" cy="60" r="8"/><circle cx="540" cy="60" r="8"/>
-    <circle cx="60" cy="120" r="8"/><circle cx="120" cy="120" r="8"/><circle cx="180" cy="120" r="8"/><circle cx="240" cy="120" r="8"/><circle cx="300" cy="120" r="8"/><circle cx="360" cy="120" r="8"/><circle cx="420" cy="120" r="8"/><circle cx="480" cy="120" r="8"/><circle cx="540" cy="120" r="8"/>
-  </g>
-  <rect x="250" y="250" width="100" height="200" rx="50" fill="#181818"/>
-  <g stroke="#ffd36d" stroke-width="2" opacity=".7"><path d="M265 290 h70"/><path d="M265 320 h70"/><path d="M265 350 h70"/><path d="M265 380 h70"/></g>
-  <path d="M300 450 v120" stroke="#181818" stroke-width="8"/>
-  <path d="M240 620 h120" stroke="#181818" stroke-width="8"/>
-  <path d="M150 470 a150 150 0 0 1 300 0" fill="none" stroke="#be5a00" stroke-width="6" opacity=".6"/>
-  <polygon points="90,760 150,780 96,806" fill="#d54941"/>
-  <polygon points="500,700 540,740 486,752" fill="#0052d9"/>
-  <circle cx="470" cy="820" r="18" fill="#ffffff" opacity=".8"/>
-  <circle cx="140" cy="300" r="10" fill="#d54941"/>
-  <circle cx="520" cy="250" r="14" fill="#ffffff" opacity=".9"/>
-</symbol>
-
-<!-- 10 今晚吃什么：深绿 + 盘 -->
-<symbol id="c10">
-  <defs><linearGradient id="g10" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#002515"/><stop offset="1" stop-color="#005334"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g10)"/>
-  <circle cx="300" cy="480" r="180" fill="none" stroke="#c6f3d7" stroke-width="6"/>
-  <circle cx="300" cy="480" r="150" fill="#92dab2" opacity=".16"/>
-  <circle cx="300" cy="480" r="104" fill="none" stroke="#56c08d" stroke-width="2" opacity=".7"/>
-  <path d="M262 430 q-16 -30 12 -46 q28 -16 12 -46" stroke="#ffffff" stroke-width="4" fill="none" opacity=".4"/>
-  <path d="M318 440 q-14 -26 10 -42 q24 -16 10 -40" stroke="#ffffff" stroke-width="4" fill="none" opacity=".3"/>
-  <path d="M300 480 q40 -30 90 6" stroke="#56c08d" stroke-width="8" fill="none" opacity=".6"/>
-  <g stroke="#f5ba18" stroke-width="10" stroke-linecap="round"><path d="M120 700 L330 620"/><path d="M140 740 L350 660"/></g>
-  <circle cx="450" cy="270" r="60" fill="none" stroke="#c6f3d7" stroke-width="3" opacity=".5"/>
-  <circle cx="450" cy="270" r="40" fill="#92dab2" opacity=".14"/>
-  <rect y="800" width="600" height="100" fill="#002515" opacity=".8"/>
-</symbol>
-
-<!-- 11 回声电台：紫底声波 -->
-<symbol id="c11">
-  <defs><linearGradient id="g11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#280057"/><stop offset="1" stop-color="#181818"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g11)"/>
-  <circle cx="450" cy="170" r="70" fill="#ffd8eb" opacity=".35"/>
-  <circle cx="450" cy="170" r="70" fill="none" stroke="#ffaedc" stroke-width="1.5" opacity=".4"/>
-  <g fill="#c69cff" opacity=".85">
-    <rect x="90" y="560" width="18" height="120"/><rect x="124" y="520" width="18" height="200"/>
-    <rect x="158" y="470" width="18" height="300"/><rect x="192" y="540" width="18" height="160"/>
-    <rect x="226" y="420" width="18" height="400"/><rect x="260" y="490" width="18" height="260"/>
-    <rect x="294" y="380" width="18" height="480"/><rect x="328" y="450" width="18" height="340"/>
-    <rect x="362" y="530" width="18" height="180"/><rect x="396" y="470" width="18" height="300"/>
-    <rect x="430" y="550" width="18" height="140"/><rect x="464" y="500" width="18" height="240"/>
-  </g>
-  <g fill="#e851b3" opacity=".5">
-    <rect x="124" y="560" width="18" height="80"/><rect x="226" y="480" width="18" height="80"/><rect x="294" y="440" width="18" height="80"/><rect x="396" y="520" width="18" height="80"/>
-  </g>
-  <path d="M300 340 v-180" stroke="#f5ba18" stroke-width="3"/>
-  <path d="M300 160 l-26 -40 h52 Z" fill="#f5ba18"/>
-  <g stroke="#ffaedc" fill="none" opacity=".45" stroke-width="2"><path d="M330 160 a40 40 0 0 1 0 60"/><path d="M360 140 a80 80 0 0 1 0 100"/></g>
-  <rect y="800" width="600" height="100" fill="#181818" opacity=".75"/>
-</symbol>
-
-<!-- 12 雪落无声：蓝夜 + 雪 + 木屋 -->
-<symbol id="c12">
-  <defs><linearGradient id="g12" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#002a7c"/><stop offset="1" stop-color="#1d2c38"/></linearGradient></defs>
-  <rect width="600" height="900" fill="url(#g12)"/>
-  <g fill="#ffffff">
-    <circle cx="60" cy="90" r="2.5" opacity=".8"/><circle cx="140" cy="150" r="1.8" opacity=".6"/><circle cx="230" cy="70" r="2.2" opacity=".9"/>
-    <circle cx="320" cy="130" r="1.6" opacity=".7"/><circle cx="410" cy="80" r="2.6" opacity=".85"/><circle cx="500" cy="160" r="1.8" opacity=".6"/>
-    <circle cx="80" cy="260" r="2" opacity=".7"/><circle cx="180" cy="330" r="1.6" opacity=".5"/><circle cx="280" cy="240" r="2.4" opacity=".8"/>
-    <circle cx="380" cy="300" r="1.8" opacity=".6"/><circle cx="480" cy="260" r="2.2" opacity=".75"/><circle cx="540" cy="360" r="1.6" opacity=".5"/>
-    <circle cx="60" cy="430" r="1.8" opacity=".6"/><circle cx="150" cy="500" r="2.4" opacity=".8"/><circle cx="260" cy="420" r="1.6" opacity=".5"/>
-    <circle cx="360" cy="480" r="2" opacity=".7"/><circle cx="450" cy="420" r="1.8" opacity=".55"/><circle cx="530" cy="500" r="2.2" opacity=".7"/>
-    <circle cx="100" cy="620" r="2" opacity=".65"/><circle cx="220" cy="680" r="1.6" opacity=".5"/><circle cx="400" cy="640" r="2.4" opacity=".8"/>
-    <circle cx="500" cy="700" r="1.8" opacity=".55"/><circle cx="300" cy="740" r="2" opacity=".6"/>
-  </g>
-  <path d="M0 720 L90 720 L150 560 L210 720 L270 720 L320 600 L370 720 L600 720 V900 H0Z" fill="#181818"/>
-  <path d="M0 760 L120 760 L180 640 L240 760 L390 760 L450 660 L510 760 L600 760 V900 H0Z" fill="#181818" opacity=".9"/>
-  <rect x="390" y="700" width="120" height="90" fill="#242424"/>
-  <path d="M380 700 L450 640 L520 700 Z" fill="#181818"/>
-  <rect x="420" y="730" width="30" height="30" fill="#ffb98c"/>
-  <rect x="420" y="730" width="30" height="30" fill="#ffb98c" opacity=".7" filter="url(#soft2)"/>
-  <path d="M0 800 H600 V900 H0Z" fill="#ffffff" opacity=".12"/>
-  <path d="M0 800 Q150 780 300 796 T600 790" stroke="#ffffff" stroke-width="2" fill="none" opacity=".2"/>
-</symbol>
-
-<!-- 主推宽幅 雾港（16:9） -->
-<symbol id="still1">
-  <defs><linearGradient id="g0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#002536"/><stop offset="1" stop-color="#004e6d"/></linearGradient></defs>
-  <rect width="1600" height="900" fill="url(#g0)"/>
-  <rect y="640" width="1600" height="260" fill="#002536"/>
-  <circle cx="300" cy="180" r="120" fill="#c4e8ff" opacity=".18"/>
-  <ellipse cx="700" cy="620" rx="700" ry="90" fill="#ffffff" opacity=".05"/>
-  <ellipse cx="900" cy="540" rx="620" ry="60" fill="#ffffff" opacity=".05"/>
-  <ellipse cx="500" cy="720" rx="600" ry="70" fill="#ffffff" opacity=".04"/>
-  <polygon points="1230,240 1600,120 1600,420" fill="#f5ba18" opacity=".12"/>
-  <polygon points="1230,240 1600,300 1600,420" fill="#f5ba18" opacity=".06"/>
-  <rect x="1206" y="300" width="48" height="360" fill="#181818"/>
-  <rect x="1192" y="276" width="76" height="34" fill="#242424"/>
-  <circle cx="1230" cy="268" r="18" fill="#fa9550"/>
-  <circle cx="1230" cy="268" r="40" fill="#fa9550" opacity=".35" filter="url(#soft)"/>
-  <path d="M0 620 Q300 590 600 614 T1200 606 T1600 612 V900 H0Z" fill="#002536" opacity=".65"/>
-  <path d="M250 660 h120 l-24 34 h-72 Z" fill="#181818"/>
-  <path d="M310 660 v-86" stroke="#181818" stroke-width="8"/>
-  <path d="M310 580 l54 60 h-108 Z" fill="#181818" opacity=".8"/>
-  <g stroke="#618dff" opacity=".2" stroke-width="3"><path d="M120 740 h220"/><path d="M760 780 h300"/><path d="M1150 740 h180"/><path d="M420 820 h200"/></g>
-  <g fill="#ffffff" opacity=".5"><circle cx="820" cy="120" r="2"/><circle cx="980" cy="90" r="1.5"/><circle cx="1120" cy="150" r="2"/><circle cx="620" cy="140" r="1.5"/><circle cx="1450" cy="110" r="2"/></g>
-</symbol>
-</svg>
-
 <script>
-(function(){
-  "use strict";
-  var $ = function(s,c){return (c||document).querySelector(s)};
-  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var DRAMAS = [
-    {id:'p1',sym:'c1',title:'雾港',genre:'悬疑',score:'9.2',eps:24,aired:18,cast:['沈知遥','陆行舟','周砚','何小满'],
-     intro:'一座终年不散的雾港，一艘二十年前失踪的渡轮，和一个在灯塔值班的年轻人。他每记下一次汽笛，就离那年的真相更近一步。',
-     lines:['渡轮靠岸，阿雾在雾里听见第二次汽笛。','灯塔值班表上多出一个陌生的名字。','老周说，港口的雾从不连下三天。','凌晨两点，无线电里传来自己的声音。','仓库铁门后，是一整面没有编号的船票。','阿雾在售票厅找到父亲二十年前的签名。','潮水退去，滩涂上露出一排生锈的钟。','修船厂的账本少了一页，恰好是那一夜。','陌生人递来一把钥匙，说别问是谁给的。','灯塔第三次亮起，比时刻表早了七分钟。','阿雾开始记录每一班船的汽笛次数。','港务局档案室失火，烧掉的只有旧卷宗。','老周承认，那年冬天不止一艘船失踪。','一张褪色合影背后写着：别让他们上岸。','无线电再次响起，这次是求救。','阿雾在雾里看见一盏不该存在的灯。','船票背面的编号对应着镇上的人名。','有人连夜搬走了修船厂的全部工具。','灯塔管理员换人了，档案却是旧的。','阿雾把记录本交给报社，第二天被退回。','潮汐表被改过，改的人还留在镇上。','最后一班渡轮没有乘客，只有一只箱子。','雾散了，港口安静得像什么都没发生。','阿雾站在灯塔上，等第二十五次汽笛。']},
-    {id:'p2',sym:'c2',title:'第七夜',genre:'悬疑',score:'8.9',eps:12,aired:12,cast:['温言','江叙','邵青','唐未'],
-     intro:'一栋老公寓，连续六个夜晚的怪事，和一本写满日期的登记簿。第七夜到来之前，楼里的人必须决定谁留下。',
-     lines:['第七个夜晚，楼里的灯全亮着。','402 的住户说，他昨晚没有回家。','监控里多出一段不存在的走廊。','停电之后，电梯自己下到了负三层。','每一户门口都放着一双湿鞋。','值班保安交出一本写满日期的登记簿。','第七夜之前，这栋楼住过另一个人。','天台的门锁着，锁孔里塞着头发。','住户群发来一张合影，多了一个人。','那个女人说她一直在等第七夜。','钟敲十二下，走廊尽头有人敲门。','天亮时，楼里只剩下一盏灯还亮着。']},
-    {id:'p3',sym:'c3',title:'长安十二时',genre:'古装',score:'9.4',eps:16,aired:10,cast:['裴照','苏晚','崔九','阿史那'],
-     intro:'一封密信、一只铜匣、十二个时辰。少年在大理寺的卷宗里，翻出父亲十年前被抹去的名字。',
-     lines:['更鼓未响，西市先乱了。','一封没有落款的密信送进大理寺。','卖胡饼的老人认出了信上的火漆。','十二时之内，城门只开一次。','少年在酒肆里听见有人提起父亲。','驿马带来边关的坏消息，被压下了。','宫墙外的槐树下埋着一只铜匣。','乐坊新曲里藏着一句密语。','有人连夜换了城门的守卫。','铜匣打开，里面是一张旧地图。','地图上标着的，是一座不存在的坊。','少年见到了那个该在十年前死去的人。','更鼓响到第九声，西市闭市。','叛逆的名字被写进了当夜的奏折。','天亮之前，有人替他烧了那封信。','城门开时，长安什么也没少。']},
-    {id:'p4',sym:'c4',title:'山河旧梦',genre:'古装',score:'8.7',eps:12,aired:12,cast:['顾长庚','云娘','沈砚秋','老渡'],
-     intro:'离乡十年的人回到旧宅，只找回半张琴谱。另一半在谁手里，山寺的钟声知道。',
-     lines:['归乡的船在雨里走了三天。','旧宅的门槛比记忆里低了一些。','母亲留下的匣子里只有半张琴谱。','山寺的钟声，还是当年的调子。','他在渡口遇见一个很像故人的人。','琴谱的另一半，在别人的手里。','旧梦做了一半，雨就停了。','族谱上，他的名字被墨涂掉了。','有人替他在坟前添了新土。','那一夜的酒，喝到天亮也没说完。','他把琴留在了山上。','下山时，他回头看了一眼云。']},
-    {id:'p5',sym:'c5',title:'夜班便利店',genre:'都市',score:'8.5',eps:12,aired:9,cast:['林一','陈皮','小满','老周'],
-     intro:'凌晨的便利店，货架、关东煮和不肯回家的人。每一张小票背后，都有一句没说出口的话。',
-     lines:['凌晨一点，第一位客人买了三罐咖啡。','收银台的小票上多打了一样东西。','常来的女孩今天没有出现。','货架最上层，有人留了一张字条。','雨下大了，门口的伞多了一把。','店长说，这条街的监控三天前就坏了。','有人在冰柜里找到一盒过期的蛋糕。','女孩回来了，头发是湿的。','字条上的数字，正好是今天的营业额。','凌晨四点，送货的车提前到了。','他把那把伞留在了店门口。','天亮交班时，他发现伞不见了。']},
-    {id:'p6',sym:'c6',title:'合租时代',genre:'都市',score:'8.2',eps:10,aired:10,cast:['周一','阿桃','大熊','小鹿'],
-     intro:'四个陌生人，一间三居室，一只不认生的猫。冰箱上的便签越贴越多，房子慢慢变成了家。',
-     lines:['新室友搬进来，行李只有一只猫。','冰箱上的便签开始有人回话。','客厅的灯泡换了第三次。','有人在深夜煮了一锅面，香气飘满楼道。','猫把合同的最后一页抓破了。','房东突然说要卖房。','四个人第一次坐下来开了个会。','有人决定不走了。','搬家那天，猫躲进了纸箱。','新房子还是合租，只是多了一层楼。']},
-    {id:'p7',sym:'c7',title:'星轨',genre:'科幻',score:'9.1',eps:16,aired:12,cast:['程野','苏黎','老周','小满'],
-     intro:'轨道站收到一段来自四十年前的信号，署名却是一个还没出生的少年。星图上第七颗星，正在慢慢移位。',
-     lines:['轨道站收到一段来自四十年前的信号。','值班员把它标记为噪声，然后失眠了。','星图上的第七颗星移位了半度。','有人在舱外看见不该出现的反光。','导航系统开始重复同一句话。','站长决定隐瞒这次观测记录。','少年偷偷打开了封存的频段。','信号里是一个女孩的声音，在数星星。','她说的坐标，指向太阳系外的一颗空点。','飞船偏离航线，没有人下令。','舷窗外，整片星海在缓慢后退。','女孩说她已经等了四十年。','站长终于承认，那次任务没有返航计划。','推进器最后一次点火，方向是回家。','星轨闭合，像一句没说完的话。','地面站收到第二段信号，署名是少年。']},
-    {id:'p8',sym:'c8',title:'深空回声',genre:'科幻',score:'8.8',eps:8,aired:8,srcError:7,cast:['顾衍','林岚','老陈','阿澈'],
-     intro:'射电望远镜捕捉到一段规律脉冲，研究员叫它「回声」。第七次回声之后，他关掉了设备，听见窗外的蝉鸣。',
-     lines:['射电望远镜捕捉到一段规律的脉冲。','值班的研究员把它称作「回声」。','数据里藏着一段旋律，重复了七次。','有人提出，那是某种回应。','项目被叫停，设备却没断电。','研究员独自留下，开始记录每一次回声。','第七次回声之后，信号变了调。','他关掉设备，听见窗外的蝉鸣。']},
-    {id:'p9',sym:'c9',title:'周末开麦',genre:'综艺',score:'8.4',eps:10,aired:7,cast:['小米','阿凯','大伟','桃子','老宋'],
-     intro:'五个人，一间排练室，一场没人看好的演出。他们把每个周末，都过成了现场。',
-     lines:['五个人，一间排练室，第一次合练。','主唱忘词，鼓手把节奏救回来了。','乐队名字投票，平票了三次。','第一场演出，台下只有七个观众。','有人把演出视频发到了网上。','评论区吵成一团，票却卖完了。','排练到凌晨，楼下邻居来敲门。','决赛前夜，贝斯手说要退出。','他最后还是站上了台。','谢幕时，五个人都没说话。']},
-    {id:'p10',sym:'c10',title:'今晚吃什么',genre:'综艺',score:'8.0',eps:12,aired:12,cast:['陈师傅','阿May','老李','小周'],
-     intro:'三个厨师，一个冰箱，二十分钟。限时、限料、限人数，做出来的却是最像家的一桌菜。',
-     lines:['三个厨师，一个冰箱，二十分钟。','第一轮：只会做一道菜的人先上。','有人把糖当成了盐。','评委沉默了很久。','第二轮，限时十五分钟。','一道家常菜，吃出了家的味道。','有人开始偷偷交换食材。','冰箱里只剩下一颗鸡蛋。','最不被看好的人，做了一桌菜。','评委说，这是他今年吃过最好的一顿。','冠军把奖金分给了所有人。','散场后，他们一起吃了顿夜宵。']},
-    {id:'p11',sym:'c11',title:'回声电台',genre:'悬疑',score:'8.6',eps:16,aired:11,cast:['周声','林晚','老麦','阿宁'],
-     intro:'午夜频率 98.7，只播给睡不着的人。一个女孩每晚点同一首歌，而那首歌，在曲库里查不到。',
-     lines:['午夜频率 98.7，第一次有人点歌。','主持人说，这档节目只播给睡不着的人。','一个女孩每晚都点同一首歌。','歌名在曲库里查不到。','台里的老录音带里，有一样的声音。','女孩说，她是在等一个人回信。','有人匿名寄来一盒磁带。','磁带里是二十年前的一期节目。','主持人发现，那位前辈失踪在同一年。','频率开始在其他时段出现杂音。','女孩不再点歌了。','台里决定停播这档节目。','最后一夜，来电的人排到了天亮。','主持人念了那封没有寄出的信。','天亮时，频率恢复了安静。','他把磁带留在了直播间。']},
-    {id:'p12',sym:'c12',title:'雪落无声',genre:'电影',score:'9.0',eps:8,aired:8,cast:['陆青','何遇','老猎','小雪'],
-     intro:'山里的第一场雪来得早，护林员在木屋外发现一行脚印。脚印到林子深处就断了，故事才刚开始。',
-     lines:['山里的第一场雪，比往年来得早。','护林员在木屋外发现一行脚印。','脚印到林子深处就断了。','收音机里说，暴雪还要下三天。','有人在夜里敲了门，又走了。','他循着灯找到一间废弃的猎屋。','屋里有一本写到一半的日记。','雪停时，他把日记放回了原处。']}
+(() => {
+  const SHOWS = [
+    {
+      id: 'wugang',
+      title: '雾港',
+      navType: '剧集',
+      genre: '悬疑',
+      score: '9.2',
+      latestEp: 18,
+      totalEp: 24,
+      done: false,
+      cast: '沈知遥 / 周凛',
+      desc: '雾港灯塔值守员在暴风夜截获三年前失联船只的回波，整座港口随即陷入连环停电。',
+      remind: '周五 20:00 更新第 19 集',
+      heat: '148.2 万追剧',
+      resumeEp: 13,
+      resumeTime: '24:12 / 42:00',
+      resumeRatio: 0.58,
+      art: { bg1: '#05437d', bg2: '#15181d', acc: '#67c9fc', kind: 'lighthouse' }
+    },
+    {
+      id: 'changan',
+      title: '长安十二时',
+      navType: '剧集',
+      genre: '悬疑',
+      score: '9.4',
+      latestEp: 10,
+      totalEp: 16,
+      done: false,
+      cast: '陈序 / 梁微',
+      desc: '上元灯夜开市前十二个时辰，靖安司查办一桩横跨坊市的密信案。',
+      remind: '今晚 20:00 更新第 11 集',
+      heat: '192.6 万追剧',
+      resumeEp: 9,
+      resumeTime: '31:05 / 45:00',
+      resumeRatio: 0.69,
+      art: { bg1: '#873105', bg2: '#15181d', acc: '#ff9852', kind: 'eaves' }
+    },
+    {
+      id: 'xinggui',
+      title: '星轨',
+      navType: '剧集',
+      genre: '科幻',
+      score: '9.1',
+      latestEp: 12,
+      totalEp: 12,
+      done: true,
+      cast: '林澈 / 方野',
+      desc: '近地轨道维修站失去主推进器后，四名工程师要在七十二小时内拼接返回舱。',
+      remind: '全 12 集已完结',
+      heat: '134.0 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 48:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#062e9a', bg2: '#15181d', acc: '#69a1ff', kind: 'orbit' }
+    },
+    {
+      id: 'zhoumokaimai',
+      title: '周末开麦',
+      navType: '综艺',
+      genre: '综艺',
+      score: '8.4',
+      latestEp: 7,
+      totalEp: 10,
+      done: false,
+      cast: '苏言 / 陆远',
+      desc: '八组城市上班族下班后走进小剧场，把一周的通勤与加班写成五分钟段子。',
+      remind: '今晚 20:00 更新第 8 期',
+      heat: '96.4 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 62:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#8c6106', bg2: '#15181d', acc: '#fbcc30', kind: 'mic' }
+    },
+    {
+      id: 'shenkong',
+      title: '深空回声',
+      navType: '剧集',
+      genre: '科幻',
+      score: '9.0',
+      latestEp: 14,
+      totalEp: 20,
+      done: false,
+      cast: '顾衡 / 许宁',
+      desc: '射电望远镜阵列截获一段来自木卫二的周期脉冲，解析出上世纪丢失的航行日志。',
+      remind: '周五 20:00 更新第 15 集',
+      heat: '121.8 万追剧',
+      resumeEp: 7,
+      resumeTime: '14:20 / 44:00',
+      resumeRatio: 0.32,
+      faultOnEp: 7,
+      art: { bg1: '#06579e', bg2: '#15181d', acc: '#8fddff', kind: 'radar' }
+    },
+    {
+      id: 'diqiye',
+      title: '第七夜',
+      navType: '电影',
+      genre: '悬疑',
+      score: '8.8',
+      latestEp: 1,
+      totalEp: 1,
+      done: true,
+      cast: '唐骁 / 宋清',
+      desc: '雪山气象站连续七夜记录到异常气压，唯一离开通道的缆车却在午夜自行启动。',
+      remind: '正片已上线',
+      heat: '108.5 万点播',
+      resumeEp: 1,
+      resumeTime: '00:00 / 118:00',
+      resumeRatio: 0.04,
+      art: { bg1: '#960627', bg2: '#15181d', acc: '#ff9195', kind: 'moon' }
+    },
+    {
+      id: 'yebanbianlidian',
+      title: '夜班便利店',
+      navType: '剧集',
+      genre: '都市',
+      score: '8.9',
+      latestEp: 16,
+      totalEp: 20,
+      done: false,
+      cast: '江禾 / 程砚',
+      desc: '老城区路口 24 小时便利店凌晨两点的货架旁，外卖员、急诊护士与夜归人轮流借火。',
+      remind: '周五 20:00 更新第 17 集',
+      heat: '115.3 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 38:00',
+      resumeRatio: 0.06,
+      art: { bg1: '#1e2c60', bg2: '#15181d', acc: '#ff99e4', kind: 'neon' }
+    },
+    {
+      id: 'hezushidai',
+      title: '合租时代',
+      navType: '剧集',
+      genre: '都市',
+      score: '8.6',
+      latestEp: 24,
+      totalEp: 24,
+      done: true,
+      cast: '林夏 / 韩墨',
+      desc: '四位刚毕业的异乡青年合租进老筒子楼四楼，一边分摊水电，一边守住各自的第一份工作。',
+      remind: '全 24 集已完结',
+      heat: '89.7 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 40:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#692204', bg2: '#15181d', acc: '#ffe682', kind: 'windows' }
+    },
+    {
+      id: 'jinwanchishenme',
+      title: '今晚吃什么',
+      navType: '综艺',
+      genre: '综艺',
+      score: '8.7',
+      latestEp: 9,
+      totalEp: 12,
+      done: false,
+      cast: '阿哲 / 苗苗',
+      desc: '每期只花五十元预算逛菜场，半小时内端出三道下班就能复刻的家常热菜。',
+      remind: '周五 20:00 更新第 10 期',
+      heat: '84.1 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 50:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#035428', bg2: '#15181d', acc: '#71d5ae', kind: 'plate' }
+    },
+    {
+      id: 'huishengdiantai',
+      title: '回声电台',
+      navType: '剧集',
+      genre: '都市',
+      score: '8.5',
+      latestEp: 11,
+      totalEp: 16,
+      done: false,
+      cast: '白露 / 温策',
+      desc: '面临关停的深夜城市调频台收到一封十年前寄出的点歌明信片，主播决定顺着邮戳找人。',
+      remind: '周五 20:00 更新第 12 集',
+      heat: '76.9 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 41:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#451981', bg2: '#15181d', acc: '#cb96ff', kind: 'wave' }
+    },
+    {
+      id: 'xueluowusheng',
+      title: '雪落无声',
+      navType: '剧集',
+      genre: '悬疑',
+      score: '9.3',
+      latestEp: 12,
+      totalEp: 12,
+      done: true,
+      cast: '秦越 / 姜迟',
+      desc: '东北林场大雪封山七天，护林站交接本上多出一行没人签字的巡山记录。',
+      remind: '全 12 集已完结',
+      heat: '164.5 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 46:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#084dcd', bg2: '#15181d', acc: '#ffb97d', kind: 'pine' }
+    },
+    {
+      id: 'shanhejiumeng',
+      title: '山河旧梦',
+      navType: '剧集',
+      genre: '都市',
+      score: '8.8',
+      latestEp: 15,
+      totalEp: 18,
+      done: false,
+      cast: '沈岚 / 贺明',
+      desc: '古籍修复室师徒两代人用三年时间拼合一套散落各地的晚清地方志刻本。',
+      remind: '周五 20:00 更新第 16 集',
+      heat: '92.0 万追剧',
+      resumeEp: 1,
+      resumeTime: '00:00 / 44:00',
+      resumeRatio: 0.05,
+      art: { bg1: '#730524', bg2: '#15181d', acc: '#ffd6d8', kind: 'ridge' }
+    }
   ];
-  var byId = {};
-  DRAMAS.forEach(function(d){byId[d.id]=d});
 
-  var HEAT = ['p1','p2','p3','p7','p11','p5','p9','p4','p8','p6'];
-  var CHIPS = ['全部','悬疑','古装','都市','科幻','电影','综艺'];
-  var state = {filter:'全部', q:'', current:null, ep:1, lastFocus:null};
+  const state = {
+    navCat: '全部',
+    genre: '全部',
+    status: 'all',
+    query: '',
+    followed: new Set(['wugang', 'shenkong']),
+    activeShowId: null,
+    activeEp: 1,
+    playing: false,
+    line: 'main',
+    lineError: false
+  };
 
-  var grid = $('#grid'), count = $('#count'), live = $('#live');
-
-  function say(msg){ live.textContent = ''; setTimeout(function(){ live.textContent = msg; }, 30); }
-  function noteText(d){ return d.aired < d.eps ? ('更新至第 ' + d.aired + ' 集 · 全 ' + d.eps + ' 集') : ('全 ' + d.eps + ' 集'); }
-  function cardHTML(d){
-    return '<a class="card" href="#now" data-id="' + d.id + '" aria-label="查看《' + d.title + '》详情">'
-      + '<span class="card__cover"><svg viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#' + d.sym + '"/></svg></span>'
-      + '<span class="card__title">' + d.title + '</span>'
-      + '<span class="card__meta"><b>' + d.score + '</b><span>' + d.genre + '</span></span>'
-      + '<span class="card__note">' + (d.aired < d.eps ? '<i class="dot" aria-hidden="true"></i>' : '') + noteText(d) + '</span></a>';
-  }
-  function matches(d){
-    var f = state.filter;
-    if (f === '剧集' && d.genre === '综艺') return false;
-    if (f !== '全部' && f !== '剧集' && d.genre !== f) return false;
-    var q = state.q.trim();
-    if (q) {
-      var hay = d.title + d.genre + d.cast.join('');
-      if (hay.indexOf(q) === -1) return false;
-    }
-    return true;
-  }
-  function countText(n){
-    if (state.q.trim()) return '搜索「' + state.q.trim() + '」 · ' + n + ' 部';
-    if (state.filter === '全部') return '共 ' + n + ' 部 · 每周五更新';
-    return state.filter + ' · ' + n + ' 部';
-  }
-  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  function emptyHTML(){
-    return '<div class="empty" role="status">'
-      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 15.5c1-1.2 2.2-1.8 3.5-1.8s2.5.6 3.5 1.8"/></svg>'
-      + '<h3>没有找到「' + esc(state.q.trim() || state.filter) + '」相关的剧</h3>'
-      + '<p>换个片名、演员或类型试试，比如「悬疑」「古装」「沈知遥」。</p>'
-      + '<button type="button" id="resetFilter">清空搜索与筛选</button></div>';
-  }
-  function render(){
-    var list = DRAMAS.filter(matches);
-    if (list.length) {
-      grid.innerHTML = list.map(cardHTML).join('');
+  function makeArt(art, idSuffix) {
+    const gid = `g-${art.kind}-${idSuffix}`;
+    let shapes = '';
+    if (art.kind === 'lighthouse') {
+      shapes = `
+        <circle cx="96" cy="64" r="36" fill="${art.acc}" opacity="0.18"/>
+        <path d="M0 164 Q110 144 210 160 T400 156 L400 250 L0 250 Z" fill="${art.bg2}" opacity="0.88"/>
+        <rect x="278" y="70" width="22" height="106" fill="${art.bg2}"/>
+        <polygon points="289,76 80,26 80,126" fill="${art.acc}" opacity="0.22"/>
+        <circle cx="289" cy="76" r="8" fill="${art.acc}"/>`;
+    } else if (art.kind === 'eaves') {
+      shapes = `
+        <circle cx="200" cy="48" r="56" fill="${art.acc}" opacity="0.32"/>
+        <path d="M24 132 Q200 102 376 132 L348 148 L52 148 Z" fill="${art.bg2}"/>
+        <path d="M0 198 L120 146 L248 188 L400 138 L400 250 L0 250 Z" fill="${art.bg2}" opacity="0.9"/>`;
+    } else if (art.kind === 'orbit') {
+      shapes = `
+        <circle cx="210" cy="122" r="64" fill="${art.acc}" opacity="0.22"/>
+        <circle cx="210" cy="122" r="46" fill="${art.bg1}"/>
+        <ellipse cx="210" cy="122" rx="136" ry="34" transform="rotate(-16 210 122)" fill="none" stroke="${art.acc}" stroke-width="2" opacity="0.85"/>`;
+    } else if (art.kind === 'mic') {
+      shapes = `
+        <path d="M90 250 A110 110 0 0 1 310 250" fill="none" stroke="${art.acc}" stroke-width="2" opacity="0.45"/>
+        <rect x="176" y="42" width="48" height="86" rx="24" fill="${art.bg2}"/>
+        <rect x="196" y="128" width="8" height="122" fill="${art.bg2}"/>`;
+    } else if (art.kind === 'radar') {
+      shapes = `
+        <circle cx="200" cy="125" r="24" fill="none" stroke="${art.acc}" stroke-width="2" opacity="0.9"/>
+        <circle cx="200" cy="125" r="56" fill="none" stroke="${art.acc}" stroke-width="1.5" opacity="0.55"/>
+        <circle cx="200" cy="125" r="92" fill="none" stroke="${art.acc}" stroke-width="1" opacity="0.32"/>`;
+    } else if (art.kind === 'moon') {
+      shapes = `
+        <circle cx="200" cy="96" r="46" fill="${art.acc}" opacity="0.82"/>
+        <rect x="60" y="34" width="280" height="182" fill="none" stroke="${art.bg2}" stroke-width="10"/>`;
+    } else if (art.kind === 'neon') {
+      shapes = `
+        <rect x="78" y="64" width="244" height="148" fill="${art.bg2}" opacity="0.9"/>
+        <rect x="108" y="92" width="184" height="20" rx="3" fill="${art.acc}" opacity="0.85"/>`;
+    } else if (art.kind === 'windows') {
+      shapes = `
+        <rect x="74" y="36" width="252" height="196" fill="${art.bg2}"/>
+        <rect x="104" y="62" width="44" height="52" fill="${art.acc}" opacity="0.82"/>
+        <rect x="178" y="62" width="44" height="52" fill="${art.bg1}" opacity="0.8"/>
+        <rect x="252" y="62" width="44" height="52" fill="${art.acc}" opacity="0.45"/>`;
+    } else if (art.kind === 'plate') {
+      shapes = `
+        <circle cx="200" cy="134" r="68" fill="${art.bg2}"/>
+        <circle cx="200" cy="134" r="46" fill="none" stroke="${art.acc}" stroke-width="2.5"/>`;
+    } else if (art.kind === 'wave') {
+      shapes = `
+        <rect x="92" y="112" width="12" height="56" rx="6" fill="${art.acc}" opacity="0.65"/>
+        <rect x="124" y="84" width="12" height="112" rx="6" fill="${art.acc}" opacity="0.85"/>
+        <rect x="156" y="54" width="12" height="168" rx="6" fill="${art.acc}"/>
+        <rect x="188" y="96" width="12" height="90" rx="6" fill="${art.acc}" opacity="0.75"/>
+        <rect x="220" y="68" width="12" height="140" rx="6" fill="${art.acc}" opacity="0.9"/>`;
+    } else if (art.kind === 'pine') {
+      shapes = `
+        <polygon points="96,216 142,84 188,216" fill="${art.bg2}"/>
+        <polygon points="164,216 218,54 272,216" fill="${art.bg2}"/>
+        <rect x="284" y="150" width="66" height="66" fill="${art.bg2}"/>
+        <rect x="304" y="168" width="24" height="24" fill="${art.acc}"/>`;
     } else {
-      grid.innerHTML = emptyHTML();
-      var reset = $('#resetFilter');
-      if (reset) reset.addEventListener('click', function(){
-        state.q = ''; state.filter = '全部'; $('#q').value = ''; $('#qClear').hidden = true;
-        syncChips(); markNav(null); apply(false); say('已清空搜索与筛选，显示全部 12 部片');
-      });
+      shapes = `
+        <path d="M0 186 Q96 122 198 164 T400 142 L400 250 L0 250 Z" fill="${art.bg2}" opacity="0.82"/>
+        <rect x="312" y="46" width="32" height="32" rx="3" fill="${art.acc}" opacity="0.85"/>`;
     }
-    count.textContent = countText(list.length);
-    grid.setAttribute('aria-busy','false');
+    return `<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="${art.bg1}"/>
+          <stop offset="100%" stop-color="${art.bg2}"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="250" fill="url(#${gid})"/>
+      ${shapes}
+    </svg>`;
   }
-  function apply(animate){
-    var list = DRAMAS.filter(matches);
-    count.textContent = countText(list.length);
-    if (animate && !reduce) {
-      grid.setAttribute('aria-busy','true');
-      grid.innerHTML = new Array(8).fill('<div class="skel"></div>').join('');
-      setTimeout(function(){ render(); }, 240);
+
+  const $ = (id) => document.getElementById(id);
+
+  function announce(msg) {
+    $('liveAnnounce').textContent = msg;
+  }
+
+  function updateFollowButtons() {
+    $('watchBadge').textContent = String(state.followed.size);
+    if (state.activeShowId) {
+      const df = $('detailFollowBtn');
+      const on = state.followed.has(state.activeShowId);
+      df.setAttribute('aria-pressed', String(on));
+      df.textContent = on ? '已在追剧单' : '加入追剧单';
+    }
+  }
+
+  function toggleFollow(showId) {
+    const show = SHOWS.find((s) => s.id === showId);
+    if (!show) return;
+    if (state.followed.has(showId)) {
+      state.followed.delete(showId);
+      announce(`已将《${show.title}》移出追剧单`);
     } else {
-      render();
+      state.followed.add(showId);
+      announce(`已将《${show.title}》加入追剧单`);
     }
-  }
-  function syncChips(){
-    $$('#chips .chip').forEach(function(b){
-      b.setAttribute('aria-pressed', b.dataset.f === state.filter ? 'true' : 'false');
-    });
-  }
-  function markNav(el){
-    $$('.nav__link').forEach(function(a){ a.classList.toggle('is-current', a === el); });
+    updateFollowButtons();
+    renderCatalogue();
+    renderWatchlist();
   }
 
-  /* chips */
-  var chips = $('#chips');
-  chips.innerHTML = CHIPS.map(function(c){
-    return '<button class="chip" type="button" data-f="' + c + '" aria-pressed="' + (c === '全部') + '">' + c + '</button>';
-  }).join('');
-  chips.addEventListener('click', function(e){
-    var b = e.target.closest('.chip'); if (!b) return;
-    state.filter = b.dataset.f;
-    syncChips(); markNav(null);
-    apply(true);
-    say('筛选已切换到' + state.filter);
-  });
+  function renderContinueStrip() {
+    const continueItems = [SHOWS[0], SHOWS[4]];
+    $('continueList').innerHTML = continueItems.map((s) => `
+      <button type="button" class="ep-resume-card" data-open-show="${s.id}" data-open-ep="${s.resumeEp}">
+        <span class="ep-resume-top">
+          <span class="ep-resume-name">${s.title}</span>
+          <span class="ep-resume-ep">继续第 ${s.resumeEp} 集</span>
+        </span>
+        <span class="ep-resume-meta">
+          <span>${s.genre}</span>
+          <span>${s.resumeTime}</span>
+        </span>
+        <span class="ep-progress-track">
+          <span class="ep-progress-fill" style="transform:scaleX(${s.resumeRatio})"></span>
+        </span>
+      </button>
+    `).join('');
+  }
 
-  /* 导航分类 */
-  $$('.nav__link[data-filter]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      e.preventDefault();
-      closeDetail(false);
-      state.filter = a.dataset.filter;
-      syncChips(); markNav(a);
-      apply(true);
-      document.getElementById('now').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
-    });
-  });
-
-  /* 搜索 */
-  var q = $('#q'), qClear = $('#qClear');
-  q.addEventListener('input', function(){
-    state.q = q.value;
-    qClear.hidden = !q.value;
-    if (state.current) closeDetail(false);
-    apply(false);
-    if (q.value.trim() && window.scrollY < 160 && !document.getElementById('home').hidden) {
-      document.getElementById('now').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
-    }
-  });
-  q.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') { q.value = ''; state.q = ''; qClear.hidden = true; apply(false); }
-  });
-  qClear.addEventListener('click', function(){
-    q.value = ''; state.q = ''; qClear.hidden = true; apply(false); q.focus();
-  });
-  document.addEventListener('keydown', function(e){
-    if (e.key === '/' && document.activeElement !== q && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
-      e.preventDefault(); q.focus();
-    }
-  });
-
-  /* 热榜 */
-  $('#board').innerHTML = HEAT.map(function(id, i){
-    var d = byId[id];
-    return '<li class="board__row"><a class="board__link" href="#now" data-id="' + d.id + '">'
-      + '<span class="rank">' + (i+1) + '</span><span class="board__name">' + d.title + '</span>'
-      + '<span class="board__val">' + d.score + '</span></a></li>';
-  }).join('');
-  $('#board').addEventListener('click', function(e){
-    var a = e.target.closest('.board__link'); if (!a) return;
-    e.preventDefault(); openDetail(a.dataset.id);
-  });
-
-  /* 卡片点击 */
-  grid.addEventListener('click', function(e){
-    var a = e.target.closest('.card'); if (!a) return;
-    e.preventDefault(); openDetail(a.dataset.id);
-  });
-  $$('.mini').forEach(function(a){
-    a.addEventListener('click', function(e){ e.preventDefault(); openDetail(a.dataset.id); });
-  });
-  var feature = $('#feature');
-  feature.addEventListener('click', function(e){
-    if (e.target.closest('button')) return;
-    openDetail('p1');
-  });
-  feature.addEventListener('keydown', function(e){
-    if ((e.key === 'Enter' || e.key === ' ') && e.target === feature) { e.preventDefault(); openDetail('p1'); }
-  });
-
-  /* 详情 */
-  var detail = $('#detail');
-  function openDetail(id){
-    var d = byId[id]; if (!d) return;
-    state.lastFocus = document.activeElement;
-    state.current = d;
-    $('#d-crumb').textContent = d.title;
-    $('#d-title').textContent = d.title;
-    $('#d-score').textContent = d.score;
-    $('#d-genre').textContent = d.genre;
-    $('#d-status').textContent = d.aired < d.eps ? ('更新至第 ' + d.aired + ' 集 · 全 ' + d.eps + ' 集') : ('全 ' + d.eps + ' 集');
-    $('#d-use').setAttribute('href', '#' + d.sym);
-    $('#d-player-use').setAttribute('href', '#' + d.sym);
-    $('#d-intro').textContent = d.intro;
-    $('#d-cast').innerHTML = d.cast.map(function(n){ return '<li>' + n + '</li>'; }).join('');
-    $('#d-epnote').textContent = d.aired < d.eps ? ('已更新 ' + d.aired + ' 集，共 ' + d.eps + ' 集') : ('全 ' + d.eps + ' 集');
-    $('#eps-note').textContent = d.aired < d.eps ? ('第 ' + (d.aired + 1) + ' 集起为预告，每周五 20:00 更新。') : '已完结，可整季观看。';
-    var epsBox = $('#d-eps');
-    epsBox.innerHTML = '';
-    for (var i = 1; i <= d.eps; i++) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'ep'; b.textContent = i;
-      b.dataset.n = i;
-      if (i > d.aired) {
-        b.disabled = true;
-        b.setAttribute('aria-label', '第 ' + i + ' 集，预告，未更新');
-      } else {
-        b.setAttribute('aria-label', '播放第 ' + i + ' 集');
-        b.addEventListener('click', function(ev){ selectEp(d, Number(ev.currentTarget.dataset.n), ev.currentTarget); });
+  function filteredShows() {
+    const q = state.query.trim().toLowerCase();
+    return SHOWS.filter((s) => {
+      if (state.navCat !== '全部' && s.navType !== state.navCat) return false;
+      if (state.genre !== '全部' && s.genre !== state.genre) return false;
+      if (state.status === 'ongoing' && s.done) return false;
+      if (state.status === 'done' && !s.done) return false;
+      if (q) {
+        const hay = `${s.title} ${s.genre} ${s.navType} ${s.cast} ${s.desc}`.toLowerCase();
+        if (!hay.includes(q)) return false;
       }
-      epsBox.appendChild(b);
-    }
-    selectEp(d, 1, epsBox.firstChild);
-    playBtn.disabled = false;
-    playBtn.setAttribute('aria-pressed','false');
-    playBtn.setAttribute('aria-label','播放');
-    var icon = document.getElementById('d-play-icon');
-    if (icon) icon.outerHTML = '<g id="d-play-icon"><path d="M7 4l13 8-13 8z"/></g>';
-    $('#d-warn').hidden = true;
-    var rel = DRAMAS.filter(function(x){ return x.id !== d.id && x.genre === d.genre; });
-    DRAMAS.forEach(function(x){ if (rel.length < 3 && x.id !== d.id && rel.indexOf(x) === -1) rel.push(x); });
-    $('#d-also').innerHTML = rel.slice(0,3).map(cardHTML).join('');
-
-    document.getElementById('home').hidden = true;
-    detail.hidden = false;
-    window.scrollTo(0, 0);
-    $('#d-title').focus({preventScroll:true});
-  }
-  function selectEp(d, n, btn){
-    state.ep = n;
-    var all = $$('#d-eps .ep');
-    all.forEach(function(b){ b.removeAttribute('aria-current'); });
-    if (btn) btn.setAttribute('aria-current','true');
-    var line = d.lines[n-1] || '';
-    $('#d-ep').textContent = '第 ' + n + ' 集 · 播放中';
-    $('#d-syn').textContent = line;
-    $('#d-progress').style.width = Math.round(n / d.eps * 100) + '%';
-    var warn = $('#d-warn'), pb = $('#d-play');
-    if (d.srcError === n) {
-      warn.hidden = false;
-      $('#d-warn-text').textContent = '第 ' + n + ' 集片源加载失败，已自动重试一次。';
-      pb.disabled = true;
-      pb.setAttribute('aria-pressed','false');
-      say('第 ' + n + ' 集片源加载失败');
-    } else {
-      warn.hidden = true;
-      pb.disabled = false;
-    }
-    say('已切换到第 ' + n + ' 集：' + line);
-  }
-  function closeDetail(restore){
-    if (!state.current) return;
-    detail.hidden = true;
-    document.getElementById('home').hidden = false;
-    state.current = null;
-    if (restore !== false && state.lastFocus && state.lastFocus.focus) {
-      try { state.lastFocus.focus(); } catch(e){}
-    }
-  }
-  $('#back').addEventListener('click', function(){ closeDetail(true); });
-  $('#brand').addEventListener('click', function(e){
-    if (!detail.hidden) { e.preventDefault(); closeDetail(true); }
-  });
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && !detail.hidden) { closeDetail(true); }
-  });
-  $('#d-also').addEventListener('click', function(e){
-    var a = e.target.closest('.card'); if (!a) return;
-    e.preventDefault(); openDetail(a.dataset.id);
-  });
-
-  /* 播放按钮：loading → 播放/暂停 */
-  var playBtn = $('#d-play'), playTimer;
-  playBtn.addEventListener('click', function(){
-    if (playBtn.dataset.loading === '1') return;
-    var playing = playBtn.getAttribute('aria-pressed') === 'true';
-    if (!playing) {
-      playBtn.dataset.loading = '1';
-      playBtn.setAttribute('aria-busy','true');
-      playBtn.style.opacity = '.6';
-      clearTimeout(playTimer);
-      playTimer = setTimeout(function(){
-        playBtn.dataset.loading = '0';
-        playBtn.removeAttribute('aria-busy');
-        playBtn.style.opacity = '';
-        playBtn.setAttribute('aria-pressed','true');
-        playBtn.setAttribute('aria-label','暂停播放');
-        $('#d-play-icon').outerHTML = '<g id="d-play-icon"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></g>';
-        say('开始播放 · 第 ' + state.ep + ' 集');
-      }, 240);
-    } else {
-      playBtn.setAttribute('aria-pressed','false');
-      playBtn.setAttribute('aria-label','继续播放');
-      $('#d-play-icon').outerHTML = '<g id="d-play-icon"><path d="M7 4l13 8-13 8z"/></g>';
-      say('已暂停');
-    }
-  });
-
-  /* 片源失败 → 重试 */
-  $('#d-retry').addEventListener('click', function(){
-    var btn = this;
-    if (btn.disabled) return;
-    btn.disabled = true;
-    $('#d-warn-text').textContent = '正在重新连接片源…';
-    setTimeout(function(){
-      btn.disabled = false;
-      $('#d-warn').hidden = true;
-      $('#d-play').disabled = false;
-      say('片源已恢复，可以播放第 ' + state.ep + ' 集');
-    }, 320);
-  });
-
-  /* 主推 CTA */
-  $('#heroPlay').addEventListener('click', function(){
-    openDetail('p1');
-    var target = $$('#d-eps .ep')[12];
-    if (target) target.click();
-  });
-  $('#heroFollow').addEventListener('click', function(){
-    var b = $('#heroFollow');
-    if (b.disabled) return;
-    b.disabled = true;
-    b.textContent = '已在追剧单';
-    $('#heroStatus').textContent = '已加入追剧单，更新时提醒你';
-    say('已把《雾港》加入追剧单');
-  });
-
-  /* 初始渲染 */
-  apply(false);
-  syncChips();
-
-  /* 导航滚动态 */
-  var nav = $('#nav'), ticking = false;
-  function onScroll(){
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      nav.classList.toggle('is-scrolled', window.scrollY > 24);
-      ticking = false;
+      return true;
     });
   }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+
+  function showCardHTML(s, keyPrefix) {
+    const followed = state.followed.has(s.id);
+    const statusLabel = s.done ? `已完结（${s.totalEp} 集）` : `更新至 ${s.latestEp} 集`;
+    return `
+      <article class="ep-card">
+        <button type="button" class="ep-card-trigger" data-open-show="${s.id}">
+          <div class="ep-card-poster">${makeArt(s.art, keyPrefix + '-' + s.id)}</div>
+          <div class="ep-card-body">
+            <div class="ep-card-top">
+              <h3 class="ep-card-title">${s.title}</h3>
+              <span class="ep-card-score">${s.score}</span>
+            </div>
+            <div class="ep-card-meta">
+              <span class="ep-status-inline">
+                <span class="ep-dot${s.done ? ' is-done' : ''}" aria-hidden="true"></span>
+                <span>${statusLabel}</span>
+              </span>
+              <span>${s.genre}</span>
+            </div>
+          </div>
+        </button>
+        <div class="ep-card-foot">
+          <span class="ep-card-cast">${s.cast}</span>
+          <button type="button" class="ep-mini-toggle" data-follow="${s.id}" aria-pressed="${followed}">
+            ${followed ? '已追' : '+ 追剧'}
+          </button>
+        </div>
+      </article>`;
+  }
+
+  function renderCatalogue() {
+    const list = filteredShows();
+    const hasFilter = state.navCat !== '全部' || state.genre !== '全部' || state.status !== 'all' || state.query.trim() !== '';
+    $('resetFiltersBtn').hidden = !hasFilter;
+
+    if (state.query.trim()) {
+      $('catCount').textContent = `搜索「${state.query.trim()}」，匹配 ${list.length} 部`;
+    } else if (hasFilter) {
+      $('catCount').textContent = `当前筛选共 ${list.length} 部片目`;
+    } else {
+      $('catCount').textContent = `共 ${list.length} 部在播剧集，每周五晚更新`;
+    }
+
+    if (list.length === 0) {
+      $('catGrid').innerHTML = '';
+      $('catGrid').hidden = true;
+      $('catEmpty').hidden = false;
+      const parts = [];
+      if (state.navCat !== '全部') parts.push(state.navCat);
+      if (state.genre !== '全部') parts.push(state.genre);
+      if (state.status !== 'all') parts.push(state.status === 'done' ? '已完结' : '连载中');
+      if (state.query.trim()) parts.push(`关键词「${state.query.trim()}」`);
+      $('catEmptyReason').textContent = `条件「${parts.join(' + ')}」下没有匹配片目。`;
+    } else {
+      $('catEmpty').hidden = true;
+      $('catGrid').hidden = false;
+      $('catGrid').innerHTML = list.map((s) => showCardHTML(s, 'cat')).join('');
+    }
+  }
+
+  function applyFilterWithSkeleton(mutate) {
+    mutate();
+    $('catGrid').hidden = true;
+    $('catEmpty').hidden = true;
+    $('catSkeleton').hidden = false;
+    window.setTimeout(() => {
+      $('catSkeleton').hidden = true;
+      renderCatalogue();
+    }, 160);
+  }
+
+  function renderWatchlist() {
+    const items = SHOWS.filter((s) => state.followed.has(s.id));
+    $('watchSub').textContent = items.length ? `已追 ${items.length} 部，新集上线自动提醒` : '暂无追剧记录';
+    if (items.length === 0) {
+      $('watchGrid').innerHTML = '';
+      $('watchGrid').hidden = true;
+      $('watchEmpty').hidden = false;
+      return;
+    }
+    $('watchEmpty').hidden = true;
+    $('watchGrid').hidden = false;
+    $('watchGrid').innerHTML = items.map((s) => `
+      <article class="ep-watch-row">
+        <div class="ep-watch-info">
+          <h3 class="ep-watch-title">${s.title}</h3>
+          <p class="ep-watch-remind">${s.remind}</p>
+        </div>
+        <div class="ep-watch-actions">
+          <button type="button" class="ep-btn ep-btn-secondary" data-open-show="${s.id}" data-open-ep="${s.resumeEp}">播第 ${s.resumeEp} 集</button>
+          <button type="button" class="ep-btn ep-btn-ghost" data-follow="${s.id}">移出</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function renderRank() {
+    const top10 = [...SHOWS].sort((a, b) => parseFloat(b.score) - parseFloat(a.score)).slice(0, 10);
+    $('rankList').innerHTML = top10.map((s, idx) => `
+      <li class="ep-rank-row">
+        <button type="button" class="ep-rank-btn" data-open-show="${s.id}">
+          <span class="ep-rank-no${idx < 3 ? ' is-top' : ''}">${String(idx + 1).padStart(2, '0')}</span>
+          <span class="ep-rank-name">${s.title}</span>
+          <span class="ep-rank-cat">${s.genre}</span>
+          <span class="ep-rank-ep">${s.done ? '已完结' : '更新至 ' + s.latestEp + ' 集'}</span>
+          <span class="ep-rank-score">${s.score}</span>
+        </button>
+      </li>
+    `).join('');
+  }
+
+  function syncLineUI(show) {
+    document.querySelectorAll('.ep-line-btn').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.line === state.line));
+    });
+    const playBtn = $('playToggleBtn');
+    const errBox = $('playerErrorBox');
+
+    if (state.lineError || state.line === 'fault') {
+      errBox.hidden = false;
+      $('playerErrorText').textContent = `《${show.title}》第 ${state.activeEp} 集当前线路连接超时，未能读取视频流。`;
+      playBtn.disabled = true;
+      playBtn.setAttribute('aria-pressed', 'false');
+      state.playing = false;
+    } else {
+      errBox.hidden = true;
+      playBtn.disabled = false;
+    }
+    syncPlayIcon();
+  }
+
+  function syncPlayIcon() {
+    const btn = $('playToggleBtn');
+    btn.setAttribute('aria-pressed', String(state.playing));
+    $('playBtnText').textContent = state.playing ? '暂停' : '播放';
+    $('playIcon').innerHTML = state.playing
+      ? '<rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect>'
+      : '<polygon points="8,5 19,12 8,19"></polygon>';
+  }
+
+  function openShow(showId, epNum) {
+    const show = SHOWS.find((s) => s.id === showId);
+    if (!show) return;
+    state.activeShowId = show.id;
+    state.activeEp = epNum ? Math.min(epNum, show.latestEp) : show.resumeEp;
+    state.playing = false;
+    state.line = show.faultOnEp === state.activeEp ? 'fault' : 'main';
+    state.lineError = state.line === 'fault';
+
+    $('homeView').hidden = true;
+    $('detailView').hidden = false;
+    $('playerArt').innerHTML = makeArt(show.art, 'player-' + show.id);
+    $('detailTitle').textContent = show.title;
+    $('detailDesc').textContent = show.desc;
+    $('detailMeta').innerHTML = `
+      <div class="ep-meta-pair"><dt>评分</dt><dd class="ep-meta-score">${show.score}</dd></div>
+      <div class="ep-meta-pair"><dt>题材</dt><dd>${show.genre}</dd></div>
+      <div class="ep-meta-pair"><dt>主演</dt><dd>${show.cast}</dd></div>
+      <div class="ep-meta-pair"><dt>状态</dt><dd>${show.remind}</dd></div>
+    `;
+
+    renderEpisodes(show);
+    syncPlayerEpisode(show);
+    syncLineUI(show);
+    updateFollowButtons();
+
+    const related = SHOWS.filter((s) => s.id !== show.id && (s.genre === show.genre || parseFloat(s.score) >= 9.0)).slice(0, 4);
+    $('relatedGrid').innerHTML = related.map((s) => showCardHTML(s, 'rel')).join('');
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    announce(`已打开《${show.title}》第 ${state.activeEp} 集`);
+  }
+
+  function syncPlayerEpisode(show) {
+    $('playerEpTitle').textContent = `${show.title} 第 ${state.activeEp} 集`;
+    const ratio = show.totalEp > 1 ? Math.max(0.08, state.activeEp / show.totalEp) : show.resumeRatio;
+    $('playerProgressFill').style.transform = `scaleX(${ratio.toFixed(2)})`;
+    $('playerEpTime').textContent = state.activeEp === show.resumeEp ? `已播 ${show.resumeTime}` : '已播 00:00 / 42:00';
+  }
+
+  function renderEpisodes(show) {
+    $('episodesSummary').textContent = show.done ? `全 ${show.totalEp} 集已完结` : `已更新 ${show.latestEp} / ${show.totalEp} 集`;
+    const buttons = [];
+    for (let i = 1; i <= show.totalEp; i++) {
+      const locked = i > show.latestEp;
+      const cur = i === state.activeEp;
+      buttons.push(`
+        <button type="button" class="ep-ep-btn" data-ep="${i}" ${cur ? 'aria-current="true"' : ''} ${locked ? 'aria-disabled="true" title="尚未播出，每周五 20:00 更新"' : ''}>
+          <span>第 ${i} 集</span>
+          ${locked ? '<span class="ep-ep-tag">预告</span>' : ''}
+        </button>
+      `);
+    }
+    $('epGrid').innerHTML = buttons.join('');
+    $('epLockNote').hidden = show.done;
+  }
+
+  function closeDetail() {
+    state.activeShowId = null;
+    state.playing = false;
+    $('detailView').hidden = true;
+    $('homeView').hidden = false;
+    announce('已返回片库首页');
+  }
+
+  function resetAllFilters() {
+    state.navCat = '全部';
+    state.genre = '全部';
+    state.status = 'all';
+    state.query = '';
+    $('searchInput').value = '';
+    $('searchClear').hidden = true;
+    $('searchKbd').hidden = false;
+    syncFilterButtons();
+    renderCatalogue();
+  }
+
+  function syncFilterButtons() {
+    document.querySelectorAll('[data-nav-cat]').forEach((el) => {
+      const match = el.dataset.navCat === state.navCat;
+      if (el.classList.contains('ep-nav-link')) el.setAttribute('aria-current', match ? 'page' : 'false');
+      else el.setAttribute('aria-pressed', String(match));
+    });
+    document.querySelectorAll('#genreFilterGroup .ep-chip').forEach((el) => {
+      el.setAttribute('aria-pressed', String(el.dataset.genre === state.genre));
+    });
+    document.querySelectorAll('#statusFilterGroup .ep-chip').forEach((el) => {
+      el.setAttribute('aria-pressed', String(el.dataset.status === state.status));
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const followBtn = e.target.closest('[data-follow]');
+    if (followBtn) {
+      e.stopPropagation();
+      toggleFollow(followBtn.dataset.follow);
+      return;
+    }
+
+    const openBtn = e.target.closest('[data-open-show]');
+    if (openBtn) {
+      const ep = openBtn.dataset.openEp ? Number(openBtn.dataset.openEp) : undefined;
+      openShow(openBtn.dataset.openShow, ep);
+      return;
+    }
+
+    const navBtn = e.target.closest('[data-nav-cat]');
+    if (navBtn) {
+      if (state.activeShowId) closeDetail();
+      applyFilterWithSkeleton(() => {
+        state.navCat = navBtn.dataset.navCat;
+        syncFilterButtons();
+      });
+      $('mobileDrawer').hidden = true;
+      $('menuBtn').setAttribute('aria-expanded', 'false');
+      if (state.navCat !== '全部') $('catalogue').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    const genreBtn = e.target.closest('[data-genre]');
+    if (genreBtn) {
+      applyFilterWithSkeleton(() => {
+        state.genre = genreBtn.dataset.genre;
+        syncFilterButtons();
+      });
+      return;
+    }
+
+    const statusBtn = e.target.closest('[data-status]');
+    if (statusBtn) {
+      applyFilterWithSkeleton(() => {
+        state.status = statusBtn.dataset.status;
+        syncFilterButtons();
+      });
+      return;
+    }
+
+    const footGenreBtn = e.target.closest('[data-foot-genre]');
+    if (footGenreBtn) {
+      if (state.activeShowId) closeDetail();
+      applyFilterWithSkeleton(() => {
+        state.navCat = '全部';
+        state.genre = footGenreBtn.dataset.footGenre;
+        syncFilterButtons();
+      });
+      $('catalogue').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    const epBtn = e.target.closest('[data-ep]');
+    if (epBtn && state.activeShowId) {
+      const show = SHOWS.find((s) => s.id === state.activeShowId);
+      if (!show) return;
+      if (epBtn.getAttribute('aria-disabled') === 'true') {
+        announce('该集为未更新预告，每周五 20:00 解锁');
+        return;
+      }
+      state.activeEp = Number(epBtn.dataset.ep);
+      state.line = show.faultOnEp === state.activeEp ? 'fault' : 'main';
+      state.lineError = state.line === 'fault';
+      state.playing = false;
+      renderEpisodes(show);
+      syncPlayerEpisode(show);
+      syncLineUI(show);
+      announce(`已切换到《${show.title}》第 ${state.activeEp} 集`);
+      return;
+    }
+
+    const lineBtn = e.target.closest('.ep-line-btn');
+    if (lineBtn && state.activeShowId) {
+      const show = SHOWS.find((s) => s.id === state.activeShowId);
+      state.line = lineBtn.dataset.line;
+      state.lineError = state.line === 'fault';
+      syncLineUI(show);
+      announce(state.lineError ? '模拟线路断流，请重试或切换备用线路' : '已切换播放线路');
+    }
+  });
+
+  $('detailFollowBtn').addEventListener('click', () => {
+    if (state.activeShowId) toggleFollow(state.activeShowId);
+  });
+  $('backHomeBtn').addEventListener('click', closeDetail);
+  $('brandLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (state.activeShowId) closeDetail();
+    resetAllFilters();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $('jumpWatchlist').addEventListener('click', () => {
+    if (state.activeShowId) closeDetail();
+    $('watchlist').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  $('resetFiltersBtn').addEventListener('click', resetAllFilters);
+  $('emptyResetBtn').addEventListener('click', resetAllFilters);
+
+  $('playToggleBtn').addEventListener('click', () => {
+    if (!state.activeShowId || state.lineError) return;
+    const btn = $('playToggleBtn');
+    btn.setAttribute('aria-busy', 'true');
+    window.setTimeout(() => {
+      btn.removeAttribute('aria-busy');
+      state.playing = !state.playing;
+      syncPlayIcon();
+      announce(state.playing ? '已开始播放' : '已暂停播放');
+    }, 200);
+  });
+
+  $('retryLineBtn').addEventListener('click', () => {
+    const show = SHOWS.find((s) => s.id === state.activeShowId);
+    if (!show) return;
+    window.setTimeout(() => {
+      state.line = 'main';
+      state.lineError = false;
+      syncLineUI(show);
+      announce('主线路已恢复连接');
+    }, 240);
+  });
+
+  $('switchBackupBtn').addEventListener('click', () => {
+    const show = SHOWS.find((s) => s.id === state.activeShowId);
+    if (!show) return;
+    state.line = 'backup';
+    state.lineError = false;
+    syncLineUI(show);
+    announce('已切换到备用线路');
+  });
+
+  $('searchInput').addEventListener('input', (e) => {
+    state.query = e.target.value;
+    const hasVal = state.query.length > 0;
+    $('searchClear').hidden = !hasVal;
+    $('searchKbd').hidden = hasVal;
+    if (state.activeShowId) closeDetail();
+    renderCatalogue();
+  });
+
+  $('searchClear').addEventListener('click', () => {
+    state.query = '';
+    $('searchInput').value = '';
+    $('searchClear').hidden = true;
+    $('searchKbd').hidden = false;
+    renderCatalogue();
+    $('searchInput').focus();
+  });
+
+  $('footFocusSearch').addEventListener('click', () => {
+    if (state.activeShowId) closeDetail();
+    $('searchInput').focus();
+  });
+
+  $('menuBtn').addEventListener('click', () => {
+    const drawer = $('mobileDrawer');
+    const open = drawer.hidden;
+    drawer.hidden = !open;
+    $('menuBtn').setAttribute('aria-expanded', String(open));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (state.activeShowId) closeDetail();
+      $('searchInput').focus();
+      $('searchInput').select();
+    } else if (e.key === 'Escape') {
+      if (document.activeElement === $('searchInput') && $('searchInput').value) {
+        $('searchClear').click();
+      } else if (state.activeShowId) {
+        closeDetail();
+      } else if (!$('mobileDrawer').hidden) {
+        $('mobileDrawer').hidden = true;
+        $('menuBtn').setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  renderContinueStrip();
+  renderCatalogue();
+  renderWatchlist();
+  renderRank();
+  updateFollowButtons();
 })();
 </script>
 </body>

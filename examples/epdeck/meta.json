@@ -1,7 +1,7 @@
 {
   "name": "EpDeck",
-  "tagline": "追剧首页：今晚主推、正在热播与本周热榜，一个晚上挑一部看完。",
-  "accent": "Orange5 #e37318",
-  "structure": "Ecosystem Index · N1b / Ft5",
-  "layout": "暗色影院：首屏主推大图，正在热播卡片墙与本周热榜在下，剧集简介、主演与选集接着排。"
+  "tagline": "扁平暗色追剧片库：继续观看进度、12 部在播筛选、追剧单与本周热榜。",
+  "accent": "TDesign Dark Orange6 #ed8139",
+  "structure": "Ecosystem Index · N13 / Ft3",
+  "layout": "扁平暗阶片库（BlueGray14 #15181d）：单行检索顶栏 + 首屏继续观看双条与片库直出网格，追剧单与热榜并排收束，详情页支持选集与双线路切换。"
 }

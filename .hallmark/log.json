@@ -1,6 +1,17 @@
 [
   {
     "date": "2026-11-21",
+    "brief": "EpDeck · 追剧平台片库首页：继续观看进度、12 部片库筛选、我的追剧单提醒、本周热榜与双线路选集播放",
+    "theme": "TDesign Dark",
+    "macrostructure": "Ecosystem Index",
+    "nav": "N13",
+    "footer": "Ft3",
+    "accent": "TDesign Dark Orange6 #ed8139",
+    "first_screen": "N13 栏内检索顶栏 + BlueGray14 #15181d 扁平引导带（继续观看双条）+ 首屏直出片库网格",
+    "stamp": "frame: batch=2026-11-21-c; nav=N13; footer=Ft3; base=#15181d"
+  },
+  {
+    "date": "2026-11-21",
     "brief": "ProbeShelf · 6 城 16 台科研仪器与中试产线共享索引：四维档期筛选、置顶推荐、并排参数对比与新机台登记",
     "theme": "Spectrum",
     "macrostructure": "Catalogue",
