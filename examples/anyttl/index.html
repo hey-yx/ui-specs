@@ -1,418 +1,1520 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>密钥与用量 · AnyTTL</title>
-<style>
-:root{
-  /* 色：Primer 语义 token，取自 color-themes.md 的 light 列 */
-  --bg:#ffffff; --bg-muted:#f6f8fa; --fg:#1f2328; --fg-muted:#59636e;
-  --accent:#0969da; --danger:#d1242f; --success:#1a7f37; --border:#d1d9e0;
-  /* 间距：8px 基数，回源 GAP_RULES「间距」条 */
-  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px;
-  /* 字号 derived（Primer 行只有 4px 网格与 rem，无 px 档位）；行高＝字号 + 8 */
-  --t1:14px; --t2:16px; --t3:20px; --t4:24px; --t5:32px;
-  --control-border:#59636e; /* 偏离：控件边界从 borderColor-default 加深，见 DECISIONS */
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);
-  font:var(--t2)/24px -apple-system,"Segoe UI","PingFang SC",system-ui,sans-serif;
-  font-variant-numeric:tabular-nums}
-.skip{position:absolute;left:-9999px}
-.skip:focus{left:var(--s2);top:var(--s2);background:var(--bg);padding:var(--s1) var(--s2);outline:2px solid var(--accent)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-a{color:var(--accent)}
-code,.mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",monospace;font-size:var(--t1);line-height:22px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AnyTTL 自建 API 网关控制台：查看本月总额度、排查超阈值密钥并实时调整限额。">
+  <meta name="frame" content="batch=2026-11-22-a; nav=N8; footer=Ft2; base=#ffffff">
+  <title>AnyTTL · 密钥与用量</title>
+  <style>
+    /* Hallmark · shape: app screen · genre: modern-minimal · theme: Primer (project-primer) · v0.1 */
+    /* critique: 控制台以 Primer 32px 紧凑控件与 1px hairline 分割带承载 1,248,930 次请求与行内调额，首屏直出前 7 行密钥清单 */
 
-nav{border-bottom:1px solid var(--border);background:var(--bg-muted)}
-nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:var(--s3);margin:0 auto;max-width:1080px;
-  padding:var(--s2) var(--s3);align-items:center}
-nav .brand{font-weight:700;margin-right:var(--s2)}
-nav a{color:var(--fg-muted);text-decoration:none}
-nav a[aria-current]{color:var(--fg);font-weight:700}
+    :root {
+      /* Primer Color Tokens (content/tokens/primer.style--color-themes.md) */
+      --bg-default: #ffffff;
+      --bg-muted: #f6f8fa;
+      --bg-inset: #f6f8fa;
+      --bg-emphasis: #25292e;
+      --fg-default: #1f2328;
+      --fg-muted: #59636e;
+      --fg-on-emphasis: #ffffff;
+      --fg-accent: #0969da;
+      --fg-danger: #d1242f;
+      --fg-success: #1a7f37;
+      --fg-attention: #9a6700;
+      --border-default: #d1d9e0;
+      --border-control: #59636e;
+      --border-danger-muted: #ff818266;
+      --border-success-muted: #4ac26b66;
+      --bg-accent-emphasis: #0969da;
+      --bg-danger-emphasis: #cf222e;
+      --bg-attention-subtle: #fff8c5;
+      --bg-danger-subtle: #ffebe9;
+      --bg-success-subtle: #dafbe1;
+      --focus-outline: #0969da;
+      --btn-primary-bg: #1f883d;
+      --btn-primary-hover: #1c8139;
+      --btn-primary-fg: #ffffff;
+      --btn-default-bg: #f6f8fa;
+      --btn-default-hover: #eaeef2;
+      --btn-danger-hover: #a40e26;
+      --bg-track: #eaeef2;
+      --fg-dark-accent: #4493f8;
+      --fg-dark-muted: #9198a1;
+      --fg-dark-default: #f0f6fc;
+      --border-dark: #656c76;
 
-header{max-width:1080px;margin:0 auto;padding:var(--s4) var(--s3) var(--s2)}
-h1{font-size:var(--t4);line-height:32px;margin:0 0 var(--s1)}
-header p{margin:0;color:var(--fg-muted);font-size:var(--t1);line-height:22px}
+      /* Typography (derived 4px grid per content/type/primer.style--typography.md:29) */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --fs-xs: 12px;
+      --lh-xs: 20px;
+      --fs-sm: 14px;
+      --lh-sm: 22px;
+      --fs-md: 16px;
+      --lh-md: 24px;
+      --fs-lg: 20px;
+      --lh-lg: 28px;
+      --fs-xl: 24px;
+      --lh-xl: 32px;
 
-main{max-width:1080px;margin:0 auto;padding:0 var(--s3) var(--s5)}
-section{margin-top:var(--s4)}
+      /* Spacing (8px base per content/layout/uisdc.com--code-for-design-of-spacing.md:48) */
+      --sp-1: 4px;
+      --sp-2: 8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-6: 24px;
+      --sp-8: 32px;
 
-.filters{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:flex-end;margin-top:var(--s3)}
-label{display:block;font-size:var(--t1);line-height:22px;color:var(--fg-muted);margin-bottom:4px}
-input[type=search],input[type=number],select{font:inherit;color:inherit;background:var(--bg);
-  border:1px solid var(--control-border);padding:11px 12px;height:44px}
-input[type=search]{width:260px}
+      /* Controls & Radius (derived) */
+      --control-h: 32px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --container-max: 1280px;
 
-.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-top:var(--s3)}
-.kpi div{min-width:0}
-.kpi div{border-top:2px solid var(--fg);padding-top:var(--s1)}
-.kpi dt{font-size:var(--t1);line-height:22px;color:var(--fg-muted);margin:0}
-.kpi dd{margin:0;font-size:var(--t5);line-height:40px;font-weight:700}
-.kpi .unit{font-size:var(--t1);font-weight:400;color:var(--fg-muted);margin-left:4px}
+      /* Motion (NN/g 100ms / 200ms + W3C easing) */
+      --dur-micro: 100ms;
+      --dur-short: 200ms;
+      --ease-out: ease-out;
+    }
 
-.quota{margin-top:var(--s3)}
-.meter{position:relative;height:8px;background:var(--bg-muted);border:1px solid var(--border)}
-.meter i{display:block;height:100%;background:var(--accent)}
-.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--danger)}
-.quota p{margin:var(--s1) 0 0;font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-.bulk{display:none;align-items:center;gap:var(--s2);margin-top:var(--s2);padding:8px 12px;
-  background:var(--bg-muted);border:1px solid var(--border)}
-.bulk.on{display:flex}
-.bulk span{font-size:var(--t1);line-height:22px}
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: clip;
+      background-color: var(--bg-default);
+      color: var(--fg-default);
+      font-family: var(--font-sans);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-sm);
+      -webkit-font-smoothing: antialiased;
+    }
 
-.tablewrap{overflow-x:auto;margin-top:var(--s2)}
-table{width:100%;border-collapse:collapse}
-caption{text-align:left;font-size:var(--t1);line-height:22px;color:var(--fg-muted);padding-bottom:var(--s1)}
-th,td{padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle}
-th{font-size:var(--t1);line-height:22px;color:var(--fg-muted);font-weight:400;white-space:nowrap}
-td{font-size:var(--t1);line-height:22px}
-.num{text-align:right}
-th.num{text-align:right}
-tr.disabled td{color:var(--fg-muted)}
-.state{display:inline-block;font-size:var(--t1);line-height:22px}
-.state.warn{color:var(--danger);font-weight:700}
-.state.off{color:var(--fg-muted)}
-td .rowbtn{font:inherit;font-size:var(--t1);line-height:22px;background:var(--bg);
-  border:1px solid var(--control-border);color:var(--fg);padding:11px 12px;cursor:pointer}
-td .rowbtn:hover{border-color:var(--fg)}
-.edit td{background:var(--bg-muted)}
-.edit form{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:flex-end}
-.edit .calc{font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
-.btn{font:inherit;font-size:var(--t1);line-height:22px;padding:11px 16px;cursor:pointer;
-  background:var(--accent);color:#fff;border:1px solid var(--accent)}
-.btn.ghost{background:var(--bg);color:var(--fg);border-color:var(--control-border)}
-.btn:hover{filter:brightness(.94)}
-.btn:active{filter:brightness(.86)}
-.btn.ghost:hover{border-color:var(--fg)}
-.btn:disabled{background:var(--bg-muted);color:var(--fg-muted);border-color:var(--border);filter:none;cursor:not-allowed}
-.nm{display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
-.ok{color:var(--success);font-weight:700}
-.status{margin-top:var(--s1);font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 100;
+      padding: var(--sp-2) var(--sp-4);
+      background: var(--bg-emphasis);
+      color: var(--fg-on-emphasis);
+      font-weight: 600;
+      text-decoration: none;
+    }
 
-.states{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3)}
-.statebox{border:1px solid var(--border);padding:var(--s2)}
-.statebox h3{margin:0 0 var(--s1);font-size:var(--t1);line-height:22px;color:var(--fg-muted);font-weight:400}
-.statebox p{margin:0 0 var(--s2);font-size:var(--t2);line-height:24px}
-.skel{height:16px;background:var(--bg-muted);border:1px solid var(--border);margin-bottom:8px}
-.err{border-left:3px solid var(--danger);padding-left:12px}
+    .skip-link:focus {
+      left: var(--sp-4);
+      top: var(--sp-2);
+      outline: 2px solid var(--focus-outline);
+      outline-offset: 2px;
+    }
 
-footer{border-top:1px solid var(--border);background:var(--bg-muted)}
-footer div{max-width:1080px;margin:0 auto;padding:var(--s3);display:flex;flex-wrap:wrap;
-  gap:var(--s1) var(--s4);font-size:var(--t1);line-height:22px;color:var(--fg-muted)}
+    :focus-visible {
+      outline: 2px solid var(--focus-outline);
+      outline-offset: 2px;
+    }
 
-@media (max-width:768px){
-  header{padding:var(--s3) var(--s3) var(--s1)}
-  h1{font-size:var(--t3);line-height:28px}
-  .kpi{grid-template-columns:repeat(3,1fr);gap:var(--s2)}
-  .kpi dd{font-size:var(--t3);line-height:28px}
-  .kpi .unit{display:none}
-  .states{grid-template-columns:1fr}
-  .filters{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1) var(--s2);align-items:end}
-  .filters > div:first-child{grid-column:1/-1}
-  input[type=search]{width:100%}
-  .tablewrap{overflow:visible}
-  caption{display:block;width:100%;white-space:normal}
-  /* 窄屏把表格改成逐行键值堆叠 */
-  thead{display:none}
-  table,tbody,tr,td{display:block;width:100%}
-  tr{border-bottom:1px solid var(--border);padding:8px 0}
-  td{border:0;padding:4px 0;display:flex;justify-content:space-between;gap:var(--s2)}
-  td::before{content:attr(data-label);color:var(--fg-muted)}
-  td.num{text-align:right}
-  td .rowbtn{padding:12px 16px}
-  .btn{padding:12px 16px}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
+    /* N8: 仿命令行终端面包屑顶栏 */
+    .topbar {
+      background-color: var(--bg-emphasis);
+      color: var(--fg-on-emphasis);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .topbar-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--sp-2) var(--sp-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .cli-crumb {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-sm);
+      min-width: 0;
+    }
+
+    .cli-prompt {
+      color: var(--fg-dark-accent);
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .brand-name {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      font-weight: 700;
+      color: var(--fg-on-emphasis);
+      text-decoration: none;
+    }
+
+    .crumb-sep {
+      color: var(--fg-dark-muted);
+    }
+
+    .crumb-node {
+      color: var(--fg-dark-default);
+    }
+
+    .topbar-tools {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+    }
+
+    .state-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      font-size: var(--fs-xs);
+      color: var(--fg-dark-default);
+    }
+
+    .state-select {
+      height: var(--control-h);
+      min-height: 24px;
+      padding: 0 var(--sp-2);
+      background-color: var(--fg-default);
+      color: var(--fg-on-emphasis);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: var(--fs-xs);
+      cursor: pointer;
+    }
+
+    /* Primer UnderlineNav */
+    .subnav {
+      background-color: var(--bg-muted);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .subnav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--sp-4);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-6);
+      overflow-x: auto;
+    }
+
+    .subnav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      min-height: 40px;
+      padding: var(--sp-2) 0;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color var(--dur-micro) var(--ease-out);
+    }
+
+    .subnav-link[aria-current="page"] {
+      color: var(--fg-default);
+      font-weight: 600;
+      border-bottom-color: var(--fg-accent);
+    }
+
+    .subnav-link[aria-disabled="true"] {
+      color: var(--fg-muted);
+      cursor: not-allowed;
+    }
+
+    .subnav-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 var(--sp-2);
+      background-color: var(--bg-track);
+      color: var(--fg-default);
+      border-radius: 10px;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Main Container */
+    .main-shell {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--sp-6) var(--sp-4) var(--sp-8);
+    }
+
+    /* PageHeader */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      padding-bottom: var(--sp-4);
+      border-bottom: 1px solid var(--border-default);
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      margin: 0 0 var(--sp-1);
+      font-size: var(--fs-xl);
+      line-height: var(--lh-xl);
+      font-weight: 600;
+      color: var(--fg-default);
+    }
+
+    .page-subtitle {
+      margin: 0;
+      font-size: var(--fs-sm);
+      line-height: var(--lh-sm);
+      color: var(--fg-muted);
+      max-width: 68ch;
+    }
+
+    .page-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      flex-shrink: 0;
+    }
+
+    /* Buttons (Primer 32px desktop density) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-1);
+      min-height: var(--control-h);
+      padding: 0 var(--sp-3);
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      border: 1px solid var(--border-control);
+      background-color: var(--btn-default-bg);
+      color: var(--fg-default);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--btn-primary-bg);
+      border-color: var(--btn-primary-bg);
+      color: var(--btn-primary-fg);
+    }
+
+    .btn-danger {
+      background-color: var(--bg-danger-emphasis);
+      border-color: var(--bg-danger-emphasis);
+      color: var(--fg-on-emphasis);
+    }
+
+    .btn[aria-disabled="true"],
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn:not(:disabled):not([aria-disabled="true"]):active {
+      transform: translateY(1px);
+    }
+
+    @media (hover: hover) {
+      .subnav-link:not([aria-disabled="true"]):hover {
+        color: var(--fg-default);
+      }
+      .btn:not(:disabled):not([aria-disabled="true"]):hover {
+        background-color: var(--btn-default-hover);
+      }
+      .btn-primary:not(:disabled):not([aria-disabled="true"]):hover {
+        background-color: var(--btn-primary-hover);
+      }
+      .btn-danger:not(:disabled):not([aria-disabled="true"]):hover {
+        background-color: var(--btn-danger-hover);
+      }
+    }
+
+    /* 单行 1px hairline 齐平指标带（无卡片套框） */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--border-default);
+      margin-bottom: var(--sp-4);
+    }
+
+    .kpi-cell {
+      padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-1);
+    }
+
+    .kpi-cell + .kpi-cell {
+      padding-left: var(--sp-6);
+      border-left: 1px solid var(--border-default);
+    }
+
+    .kpi-label {
+      font-size: var(--fs-xs);
+      line-height: var(--lh-xs);
+      color: var(--fg-muted);
+      font-weight: 500;
+    }
+
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+    }
+
+    .kpi-value {
+      font-size: var(--fs-xl);
+      line-height: var(--lh-xl);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--fg-default);
+    }
+
+    .kpi-unit {
+      font-size: var(--fs-xs);
+      color: var(--fg-muted);
+    }
+
+    .kpi-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: var(--font-sans);
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      color: var(--fg-accent);
+      text-decoration: underline;
+      cursor: pointer;
+      min-height: 24px;
+    }
+
+    .quota-bar-track {
+      width: 100%;
+      max-width: 240px;
+      height: 8px;
+      background-color: var(--bg-track);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-top: var(--sp-1);
+    }
+
+    .quota-bar-fill {
+      height: 100%;
+      background-color: var(--fg-accent);
+      border-radius: 3px;
+    }
+
+    /* Live Feedback Banner */
+    .live-banner {
+      margin-bottom: var(--sp-4);
+      padding: var(--sp-3) var(--sp-4);
+      border: 1px solid var(--border-success-muted);
+      background-color: var(--bg-success-subtle);
+      color: var(--fg-default);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      font-size: var(--fs-sm);
+    }
+
+    .live-banner[hidden] {
+      display: none;
+    }
+
+    .live-banner-close {
+      background: none;
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-sm);
+      color: var(--fg-default);
+      min-height: 24px;
+      padding: 0 var(--sp-2);
+      font-size: var(--fs-xs);
+      cursor: pointer;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-3);
+      flex-wrap: wrap;
+    }
+
+    .toolbar-filters {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      flex: 1 1 320px;
+      flex-wrap: wrap;
+    }
+
+    .input-control,
+    .select-control {
+      height: var(--control-h);
+      padding: 0 var(--sp-3);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      background-color: var(--bg-default);
+      color: var(--fg-default);
+      font-family: var(--font-sans);
+      font-size: var(--fs-sm);
+    }
+
+    .input-search {
+      flex: 1 1 220px;
+      max-width: 320px;
+    }
+
+    .toolbar-meta {
+      font-size: var(--fs-xs);
+      color: var(--fg-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Batch Bar (unoccupied when nothing selected) */
+    .batch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      padding: var(--sp-2) var(--sp-4);
+      margin-bottom: var(--sp-3);
+      background-color: var(--bg-muted);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      flex-wrap: wrap;
+    }
+
+    .batch-bar[hidden] {
+      display: none;
+    }
+
+    .batch-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    /* DataTable Box (Single-layer Primer Box) */
+    .table-box {
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      background-color: var(--bg-default);
+      overflow: hidden;
+    }
+
+    table.key-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .key-table th {
+      background-color: var(--bg-muted);
+      color: var(--fg-muted);
+      font-size: var(--fs-xs);
+      line-height: var(--lh-xs);
+      font-weight: 600;
+      padding: var(--sp-2) var(--sp-3);
+      border-bottom: 1px solid var(--border-default);
+      white-space: nowrap;
+    }
+
+    .key-table td {
+      padding: var(--sp-3);
+      border-bottom: 1px solid var(--border-default);
+      vertical-align: middle;
+      font-size: var(--fs-sm);
+      line-height: var(--lh-sm);
+    }
+
+    .key-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .sort-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: var(--fg-default);
+      cursor: pointer;
+      min-height: 24px;
+    }
+
+    .col-check {
+      width: 40px;
+      text-align: center;
+    }
+
+    .row-checkbox {
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: var(--fg-accent);
+      vertical-align: middle;
+    }
+
+    .key-name {
+      font-weight: 600;
+      color: var(--fg-default);
+    }
+
+    .key-prefix {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--fg-muted);
+      background-color: var(--bg-muted);
+      padding: var(--sp-1) var(--sp-2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-default);
+      white-space: nowrap;
+    }
+
+    .num-cell {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Status Label (Icon + Text, never color alone) */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      padding: var(--sp-1) var(--sp-2);
+      border-radius: 12px;
+      font-size: var(--fs-xs);
+      line-height: var(--lh-xs);
+      font-weight: 500;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-normal {
+      color: var(--fg-success);
+      background-color: var(--bg-success-subtle);
+      border-color: var(--border-success-muted);
+    }
+
+    .status-warning {
+      color: var(--fg-danger);
+      background-color: var(--bg-danger-subtle);
+      border-color: var(--border-danger-muted);
+    }
+
+    .status-disabled {
+      color: var(--fg-muted);
+      background-color: var(--bg-muted);
+      border-color: var(--border-default);
+    }
+
+    .usage-ratio {
+      font-size: var(--fs-xs);
+      color: var(--fg-muted);
+      margin-left: var(--sp-1);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Inline Edit Row */
+    .edit-row td {
+      background-color: var(--bg-muted);
+      padding: var(--sp-4);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .inline-editor {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .editor-fields {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-1);
+    }
+
+    .field-label {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--fg-default);
+    }
+
+    .editor-preview {
+      font-size: var(--fs-sm);
+      color: var(--fg-default);
+      padding: var(--sp-1) 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .editor-error {
+      font-size: var(--fs-xs);
+      color: var(--fg-danger);
+      font-weight: 500;
+      margin-top: var(--sp-1);
+    }
+
+    .editor-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    /* Blankslate / Loading / Error States */
+    .state-panel {
+      padding: var(--sp-8) var(--sp-4);
+      text-align: center;
+    }
+
+    .state-panel[hidden] {
+      display: none;
+    }
+
+    .state-title {
+      margin: var(--sp-2) 0 var(--sp-1);
+      font-size: var(--fs-md);
+      line-height: var(--lh-md);
+      font-weight: 600;
+      color: var(--fg-default);
+    }
+
+    .state-desc {
+      margin: 0 auto var(--sp-4);
+      max-width: 48ch;
+      font-size: var(--fs-sm);
+      color: var(--fg-muted);
+    }
+
+    .error-code {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      background-color: var(--bg-danger-subtle);
+      color: var(--fg-danger);
+      padding: var(--sp-1) var(--sp-2);
+      border-radius: var(--radius-sm);
+    }
+
+    .state-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+    }
+
+    /* Skeleton */
+    .skeleton-list {
+      padding: var(--sp-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+
+    .skeleton-list[hidden] {
+      display: none;
+    }
+
+    .skeleton-row {
+      display: grid;
+      grid-template-columns: 24px 1.4fr 1fr 1fr 1fr 1.2fr 88px;
+      gap: var(--sp-3);
+      align-items: center;
+      padding: var(--sp-2) 0;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .skeleton-row:last-child {
+      border-bottom: none;
+    }
+
+    .skeleton-bar {
+      height: 16px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-track);
+    }
+
+    /* Ft2 Footer (Unique DOM skeleton) */
+    .anyttl-ft {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--sp-4) var(--sp-4) var(--sp-8);
+      border-top: 1px solid var(--border-default);
+      color: var(--fg-muted);
+      font-size: var(--fs-xs);
+      line-height: var(--lh-xs);
+    }
+
+    .anyttl-ft-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .anyttl-ft-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      flex-wrap: wrap;
+    }
+
+    .anyttl-ft-links {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    .anyttl-ft-meta a,
+    .anyttl-ft-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      color: var(--fg-accent);
+      text-decoration: underline;
+    }
+
+    /* Responsive < 768px (narrow viewport: stacked key-value rows & 44px touch targets) */
+    @media (max-width: 767px) {
+      .kpi-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-cell {
+        padding: var(--sp-3) 0;
+      }
+
+      .kpi-cell + .kpi-cell {
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid var(--border-default);
+      }
+
+      .btn,
+      .input-control,
+      .select-control,
+      .state-select,
+      .subnav-link,
+      .kpi-link,
+      .brand-name,
+      .live-banner-close,
+      .sort-btn,
+      .anyttl-ft-meta a,
+      .anyttl-ft-links a {
+        min-height: 44px;
+      }
+
+      .col-check {
+        width: auto;
+        text-align: left;
+      }
+
+      .row-checkbox {
+        width: 24px;
+        height: 24px;
+      }
+
+      table.key-table,
+      .key-table thead,
+      .key-table tbody,
+      .key-table tr,
+      .key-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .key-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+
+      .key-table tbody tr {
+        padding: var(--sp-3);
+        border-bottom: 1px solid var(--border-default);
+      }
+
+      .key-table tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .key-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-2);
+        padding: var(--sp-1) 0;
+        border-bottom: none;
+      }
+
+      .key-table td::before {
+        content: attr(data-label);
+        font-size: var(--fs-xs);
+        color: var(--fg-muted);
+        font-weight: 500;
+        flex-shrink: 0;
+      }
+
+      .key-table td.col-check::before {
+        content: "选择";
+      }
+
+      .key-table tr.edit-row td {
+        display: block;
+        padding: var(--sp-3);
+      }
+
+      .key-table tr.edit-row td::before {
+        display: none;
+      }
+
+      .skeleton-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<a class="skip" href="#main">跳到主内容</a>
+  <a class="skip-link" href="#main-content">跳到密钥清单</a>
 
-<nav aria-label="主导航">
-  <ul>
-    <li class="brand">AnyTTL</li>
-    <li><a href="#main" aria-current="page">密钥与用量</a></li>
-    <li><a href="#">日志</a></li>
-    <li><a href="#">设置</a></li>
-  </ul>
-</nav>
-
-<header>
-  <h1>密钥与用量</h1>
-  <p>2026-11-01 至 11-18，UTC+8。请求数按网关成功转发计，超限请求不计入。</p>
-</header>
-
-<main id="main">
-
-  <section id="filters" aria-labelledby="f-h">
-    <h2 id="f-h" style="margin:0;font-size:var(--t3);line-height:28px">筛选</h2>
-    <div class="filters">
-      <div>
-        <label for="q">搜索</label>
-        <input id="q" type="search" placeholder="密钥名或前缀">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="cli-crumb" aria-label="网关路径">
+        <span class="cli-prompt" aria-hidden="true">$</span>
+        <a class="brand-name" href="#top">AnyTTL</a>
+        <span class="crumb-sep" aria-hidden="true">/</span>
+        <span class="crumb-node">prod-gateway</span>
+        <span class="crumb-sep" aria-hidden="true">/</span>
+        <span class="crumb-node">keys</span>
       </div>
+      <div class="topbar-tools">
+        <label class="state-switcher">
+          <span>列表视图</span>
+          <select id="view-state-select" class="state-select" aria-label="切换列表视图状态">
+            <option value="ready" selected>正常数据</option>
+            <option value="loading">加载中</option>
+            <option value="empty">空列表</option>
+            <option value="error">读取失败</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <nav class="subnav" aria-label="控制台导航">
+    <div class="subnav-inner">
+      <a class="subnav-link" href="#main-content" aria-current="page">
+        <span>密钥与用量</span>
+        <span class="subnav-count" id="nav-key-count">7</span>
+      </a>
+      <a class="subnav-link" href="#logs-placeholder" aria-disabled="true" title="本期仅开放密钥与用量">
+        <span>请求日志</span>
+      </a>
+      <a class="subnav-link" href="#settings-placeholder" aria-disabled="true" title="本期仅开放密钥与用量">
+        <span>网关设置</span>
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="main-shell">
+    <section class="page-header" aria-labelledby="page-heading">
       <div>
-        <label for="st">状态</label>
-        <select id="st">
-          <option value="">全部</option>
-          <option value="warn">接近阈值</option>
-          <option value="ok">正常</option>
-          <option value="off">已停用</option>
+        <h1 id="page-heading" class="page-title">密钥与用量</h1>
+        <p class="page-subtitle">单把密钥达到限额 80% 即触发限流（HTTP 429，响应体带 retry_after）；修改限额立即生效，按分钟统计。计费与结算口径 [待确认]。</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" class="btn" id="btn-refresh">刷新用量</button>
+      </div>
+    </section>
+
+    <section class="kpi-strip" aria-label="本月额度概览">
+      <div class="kpi-cell">
+        <span class="kpi-label">本月总请求</span>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-total-requests">1,248,930</span>
+          <span class="kpi-unit">次</span>
+        </div>
+      </div>
+      <div class="kpi-cell">
+        <span class="kpi-label">总额度已用</span>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-quota-pct">68%</span>
+          <span class="kpi-unit">剩余 32%</span>
+        </div>
+        <div class="quota-bar-track" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="本月总额度使用率 68%">
+          <div class="quota-bar-fill" style="width: 68%;"></div>
+        </div>
+      </div>
+      <div class="kpi-cell">
+        <span class="kpi-label">超阈值密钥（≥80%）</span>
+        <div class="kpi-value-row">
+          <span class="kpi-value" id="kpi-over-count">1</span>
+          <span class="kpi-unit">个</span>
+          <button type="button" class="kpi-link" id="btn-filter-warning">仅看超阈值</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="live-banner" class="live-banner" role="status" aria-live="polite" hidden>
+      <span id="live-banner-text"></span>
+      <button type="button" class="live-banner-close" id="live-banner-close">关闭</button>
+    </div>
+
+    <div class="toolbar" role="region" aria-label="筛选与排序">
+      <div class="toolbar-filters">
+        <input type="search" id="search-input" class="input-control input-search" placeholder="按密钥名称或 sk- 前缀筛选" aria-label="按密钥名称或前缀筛选">
+        <select id="status-filter" class="select-control" aria-label="按状态筛选">
+          <option value="all">全部状态</option>
+          <option value="warning">接近阈值（≥80%）</option>
+          <option value="normal">正常</option>
+          <option value="disabled">已停用</option>
         </select>
       </div>
-      <div>
-        <label for="sort">排序</label>
-        <select id="sort">
-          <option value="req">按本月请求降序</option>
-          <option value="name">按名称</option>
-          <option value="pct">按占用比例降序</option>
-        </select>
+      <div class="toolbar-meta" id="toolbar-count">共 7 把密钥 · 默认按本月请求降序</div>
+    </div>
+
+    <div id="batch-bar" class="batch-bar" role="region" aria-label="批量操作" hidden>
+      <span id="batch-summary">已选择 0 把密钥</span>
+      <div class="batch-actions">
+        <button type="button" class="btn btn-danger" id="btn-batch-disable">批量停用</button>
+        <button type="button" class="btn" id="btn-batch-clear">取消选择</button>
       </div>
     </div>
-  </section>
 
-  <section id="quota" aria-labelledby="q-h">
-    <h2 id="q-h" style="margin:0;font-size:var(--t3);line-height:28px">额度</h2>
-    <dl class="kpi">
-      <div><dt>本月请求</dt><dd><span id="k-req">1,248,930</span><span class="unit">次</span></dd></div>
-      <div><dt>总额度已用</dt><dd><span id="k-pct">68</span><span class="unit">%</span></dd></div>
-      <div><dt>超阈值密钥</dt><dd><span id="k-warn">1</span><span class="unit">个</span></dd></div>
-    </dl>
-    <div class="quota">
-      <div class="meter" role="img" aria-label="总额度已用 68%，阈值 80%">
-        <i style="width:68%"></i><b style="left:80%"></b>
+    <div class="table-box">
+      <div id="loading-skeleton" class="skeleton-list" aria-busy="true" aria-label="正在加载密钥清单" hidden>
+        <div class="skeleton-row"><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div></div>
+        <div class="skeleton-row"><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div></div>
+        <div class="skeleton-row"><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div></div>
+        <div class="skeleton-row"><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div><div class="skeleton-bar"></div></div>
       </div>
-      <p>阈值 80%：达到后新请求返回 429，响应体带 <code>retry_after</code>。改限额立即生效，按分钟统计。</p>
-    </div>
-  </section>
 
-  <section id="keys" aria-labelledby="k-h">
-    <h2 id="k-h" style="margin:0;font-size:var(--t3);line-height:28px">密钥</h2>
-    <div class="bulk" id="bulk">
-      <span id="bulk-n">已选 0 个</span>
-      <button class="btn ghost" type="button">批量停用</button>
-      <button class="btn ghost" type="button" id="bulk-clear">取消选择</button>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <caption>按本月请求降序；限额单位万次，请求单位次。</caption>
+      <div id="empty-panel" class="state-panel" hidden>
+        <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="color: var(--fg-muted);">
+          <path d="M10.5 5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm.061 3.073a4 4 0 1 0-5.123 0 6.004 6.004 0 0 0-3.431 5.142.75.75 0 0 0 1.498.07 4.5 4.5 0 0 1 8.99 0 .75.75 0 1 0 1.498-.07 6.005 6.005 0 0 0-3.432-5.142Z"></path>
+        </svg>
+        <h2 class="state-title" id="empty-title">暂无匹配的网关密钥</h2>
+        <p class="state-desc" id="empty-desc">当前筛选条件下没有找到密钥。你可以清除筛选条件，查看全部网关密钥。</p>
+        <div class="state-actions">
+          <button type="button" class="btn btn-primary" id="btn-reset-filters">清除筛选条件</button>
+        </div>
+      </div>
+
+      <div id="error-panel" class="state-panel" role="alert" hidden>
+        <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="color: var(--fg-danger);">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+        </svg>
+        <h2 class="state-title">无法读取密钥用量数据</h2>
+        <p class="state-desc">网关控制面响应超时（错误码 <span class="error-code">upstream_timeout</span>）。请重试请求，或切回本地只读列表核对。</p>
+        <div class="state-actions">
+          <button type="button" class="btn btn-primary" id="btn-retry-load">重试加载</button>
+          <button type="button" class="btn" id="btn-fallback-ready">查看本地快照</button>
+        </div>
+      </div>
+
+      <table class="key-table" id="key-table" aria-label="网关密钥清单">
         <thead>
           <tr>
-            <th scope="col" style="width:40px"><span class="sr" style="position:absolute;left:-9999px">选择</span></th>
-            <th scope="col">名称</th>
-            <th scope="col">前缀</th>
-            <th scope="col" class="num">本月请求</th>
-            <th scope="col" class="num">限额/万次</th>
-            <th scope="col">状态</th>
-            <th scope="col" style="width:88px;white-space:nowrap"><span style="position:absolute;left:-9999px">操作</span></th>
+            <th class="col-check">
+              <input type="checkbox" id="select-all" class="row-checkbox" aria-label="全选当前列表密钥">
+            </th>
+            <th>名称</th>
+            <th>前缀</th>
+            <th>
+              <button type="button" class="sort-btn" id="btn-sort-requests" aria-label="按本月请求排序">
+                <span>本月请求</span>
+                <span id="sort-indicator" aria-hidden="true">↓</span>
+              </button>
+            </th>
+            <th>限额（万次）</th>
+            <th>状态与占用</th>
+            <th>操作</th>
           </tr>
         </thead>
-        <tbody id="rows">
-          <tr data-name="prod-web" data-state="ok" data-req="812004" data-limit="1200000">
-            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 prod-web"></td>
-            <td data-label="名称"><span class="nm" title="prod-web-apac-cluster-a1">prod-web-apac-cluster-a1</span></td>
-            <td data-label="前缀"><span class="mono">sk-a31f</span></td>
-            <td data-label="本月请求" class="num">812,004</td>
-            <td data-label="限额/万次" class="num"><span class="lim">120</span></td>
-            <td data-label="状态"><span class="state">正常</span></td>
-            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
-          </tr>
-          <tr data-name="prod-worker" data-state="warn" data-req="331880" data-limit="400000">
-            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 prod-worker"></td>
-            <td data-label="名称">prod-worker</td>
-            <td data-label="前缀"><span class="mono">sk-b82c</span></td>
-            <td data-label="本月请求" class="num">331,880</td>
-            <td data-label="限额/万次" class="num"><span class="lim">40</span></td>
-            <td data-label="状态"><span class="state warn">接近阈值 83%</span></td>
-            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
-          </tr>
-          <tr data-name="staging" data-state="ok" data-req="96412" data-limit="200000">
-            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 staging"></td>
-            <td data-label="名称">staging</td>
-            <td data-label="前缀"><span class="mono">sk-c904</span></td>
-            <td data-label="本月请求" class="num">96,412</td>
-            <td data-label="限额/万次" class="num"><span class="lim">20</span></td>
-            <td data-label="状态"><span class="state">正常</span></td>
-            <td data-label="操作"><button class="rowbtn" type="button">调整</button></td>
-          </tr>
-          <tr data-name="ci-build" data-state="off" data-req="8634" data-limit="50000" class="disabled">
-            <td data-label="选择"><input type="checkbox" class="pick" aria-label="选择 ci-build"></td>
-            <td data-label="名称">ci-build</td>
-            <td data-label="前缀"><span class="mono">sk-d117</span></td>
-            <td data-label="本月请求" class="num">8,634</td>
-            <td data-label="限额/万次" class="num"><span class="lim">5</span></td>
-            <td data-label="状态"><span class="state off">已停用</span></td>
-            <td data-label="操作"><button class="rowbtn" type="button">启用</button></td>
-          </tr>
-        </tbody>
+        <tbody id="key-tbody"></tbody>
       </table>
     </div>
-    <p class="status" id="live" role="status" aria-live="polite"></p>
-  </section>
+  </main>
 
-  <section id="states" aria-labelledby="s-h">
-    <h2 id="s-h" style="margin:0;font-size:var(--t3);line-height:28px">四种状态</h2>
-    <div class="states" style="margin-top:var(--s2)">
-      <div class="statebox">
-        <h3>空态</h3>
-        <p>还没有密钥。创建一个后，这里会显示用量与限额。</p>
-        <button class="btn" type="button">创建密钥</button>
+  <footer class="anyttl-ft">
+    <div class="anyttl-ft-row">
+      <div class="anyttl-ft-meta">
+        <span>© 2026 AnyTTL 网关控制台</span>
+        <span>支持邮箱：<a href="mailto:support@anyttl.dev" style="color: var(--fg-accent);">support@anyttl.dev</a></span>
+        <span>数据按分钟聚合，价格与结算口径 [待确认]</span>
       </div>
-      <div class="statebox">
-        <h3>加载中</h3>
-        <div class="skel" style="width:60%"></div>
-        <div class="skel"></div>
-        <div class="skel" style="width:80%"></div>
-        <p style="margin:8px 0 0;color:var(--fg-muted);font-size:var(--t1)">正在读取密钥列表；超过 750ms 才播报。</p>
-      </div>
-      <div class="statebox">
-        <h3>错误</h3>
-        <p class="err">读取失败：网关在上一次同步时超时（code=upstream_timeout）。</p>
-        <button class="btn ghost" type="button">重试</button>
-      </div>
-      <div class="statebox">
-        <h3>成功</h3>
-        <p><span class="ok">已保存。</span>prod-worker 的限额从 40 万次改为 60 万次，下一分钟起按新限额计。</p>
+      <div class="anyttl-ft-links">
+        <a href="#main-content">密钥与用量</a>
+        <a href="#rate-limit-spec" onclick="return false;">429 限流说明</a>
       </div>
     </div>
-  </section>
+  </footer>
 
-</main>
+  <script>
+    (function () {
+      const INITIAL_KEYS = [
+        { id: "k1", name: "web-checkout-prod", prefix: "sk-live-8f2a", requests: 412800, limitWan: 45, disabled: false },
+        { id: "k2", name: "mobile-ios-gateway", prefix: "sk-live-3c91", requests: 318400, limitWan: 50, disabled: false },
+        { id: "k3", name: "admin-portal-bff", prefix: "sk-live-7d04", requests: 224150, limitWan: 40, disabled: false },
+        { id: "k4", name: "partner-webhook-relay", prefix: "sk-live-1e55", requests: 148900, limitWan: 30, disabled: false },
+        { id: "k5", name: "staging-preview-edge", prefix: "sk-test-9b12", requests: 92480, limitWan: 20, disabled: false },
+        { id: "k6", name: "ci-e2e-runner", prefix: "sk-test-4a77", requests: 52200, limitWan: 15, disabled: false },
+        { id: "k7", name: "legacy-cron-sync", prefix: "sk-live-0f88", requests: 0, limitWan: 10, disabled: true }
+      ];
 
-<footer>
-  <div>
-    <span>AnyTTL · 自建 API 网关控制台</span>
-    <span>支持 ops@anyttl.dev</span>
-    <span>演示页面，数据为样例，不与真实网关对接</span>
-    <span>文档 / 状态 / 变更记录</span>
-  </div>
-</footer>
+      let keys = INITIAL_KEYS.map(function (k) { return Object.assign({}, k); });
+      let viewState = "ready";
+      let searchQuery = "";
+      let statusFilter = "all";
+      let sortDesc = true;
+      let selectedIds = new Set();
+      let editingId = null;
 
-<script>
-(function () {
-  var rows = [].slice.call(document.querySelectorAll('#rows tr'));
-  var q = document.getElementById('q');
-  var st = document.getElementById('st');
-  var sort = document.getElementById('sort');
-  var bulk = document.getElementById('bulk');
-  var bulkN = document.getElementById('bulk-n');
-  var live = document.getElementById('live');
-  var tbody = document.getElementById('rows');
+      const tbody = document.getElementById("key-tbody");
+      const keyTable = document.getElementById("key-table");
+      const loadingSkeleton = document.getElementById("loading-skeleton");
+      const emptyPanel = document.getElementById("empty-panel");
+      const errorPanel = document.getElementById("error-panel");
+      const emptyTitle = document.getElementById("empty-title");
+      const emptyDesc = document.getElementById("empty-desc");
+      const btnResetFilters = document.getElementById("btn-reset-filters");
+      const batchBar = document.getElementById("batch-bar");
+      const batchSummary = document.getElementById("batch-summary");
+      const selectAllCheckbox = document.getElementById("select-all");
+      const toolbarCount = document.getElementById("toolbar-count");
+      const kpiOverCount = document.getElementById("kpi-over-count");
+      const navKeyCount = document.getElementById("nav-key-count");
+      const liveBanner = document.getElementById("live-banner");
+      const liveBannerText = document.getElementById("live-banner-text");
+      const viewStateSelect = document.getElementById("view-state-select");
+      const searchInput = document.getElementById("search-input");
+      const statusSelect = document.getElementById("status-filter");
+      const sortBtn = document.getElementById("btn-sort-requests");
+      const sortIndicator = document.getElementById("sort-indicator");
 
-  function fmt(n) { return Number(n).toLocaleString('en-US'); }
+      function getStatus(item) {
+        if (item.disabled) return "disabled";
+        var limitCount = item.limitWan * 10000;
+        if (limitCount <= 0) return "warning";
+        return (item.requests / limitCount) >= 0.8 ? "warning" : "normal";
+      }
 
-  function stateOf(row) {
-    var req = +row.dataset.req, lim = +row.dataset.limit;
-    if (row.dataset.state === 'off') return { key: 'off', text: '已停用', pct: req / lim };
-    var pct = req / lim;
-    if (pct >= 0.8) return { key: 'warn', text: '接近阈值 ' + Math.round(pct * 100) + '%', pct: pct };
-    return { key: 'ok', text: '正常', pct: pct };
-  }
+      function getRatio(item) {
+        var limitCount = item.limitWan * 10000;
+        if (limitCount <= 0) return 100;
+        return (item.requests / limitCount) * 100;
+      }
 
-  function paint(row) {
-    var s = stateOf(row);
-    row.dataset.state = s.key;
-    var cell = row.querySelector('.state');
-    cell.textContent = s.text;
-    cell.className = 'state' + (s.key === 'warn' ? ' warn' : s.key === 'off' ? ' off' : '');
-  }
+      function formatNum(n) {
+        return n.toLocaleString("en-US");
+      }
 
-  function apply() {
-    var term = q.value.trim().toLowerCase(), want = st.value;
-    rows.forEach(function (r) {
-      var hit = (!term || r.dataset.name.toLowerCase().indexOf(term) >= 0 ||
-        r.querySelector('.mono').textContent.toLowerCase().indexOf(term) >= 0);
-      if (want && stateOf(r).key !== want) hit = false;
-      r.style.display = hit ? '' : 'none';
-    });
-    live.textContent = '显示 ' + rows.filter(function (r) { return r.style.display !== 'none'; }).length + ' / ' + rows.length + ' 个密钥';
-  }
+      function showBanner(msg) {
+        liveBannerText.textContent = msg;
+        liveBanner.hidden = false;
+      }
 
-  function doSort() {
-    var mode = sort.value;
-    var list = rows.slice();
-    list.sort(function (a, b) {
-      if (mode === 'name') return a.dataset.name.localeCompare(b.dataset.name);
-      if (mode === 'pct') return stateOf(b).pct - stateOf(a).pct;
-      return (+b.dataset.req) - (+a.dataset.req);
-    });
-    list.forEach(function (r) { tbody.appendChild(r); });
-  }
+      function hideBanner() {
+        liveBanner.hidden = true;
+      }
 
-  q.addEventListener('input', apply);
-  st.addEventListener('change', apply);
-  sort.addEventListener('change', function () { doSort(); apply(); });
+      function statusBadgeHtml(status, ratio) {
+        var pctText = ratio.toFixed(1) + "%";
+        if (status === "warning") {
+          return '<span class="status-badge status-warning">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>' +
+            '<span>接近阈值</span></span><span class="usage-ratio">' + pctText + '</span>';
+        }
+        if (status === "disabled") {
+          return '<span class="status-badge status-disabled">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>' +
+            '<span>已停用</span></span><span class="usage-ratio">' + pctText + '</span>';
+        }
+        return '<span class="status-badge status-normal">' +
+          '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16Zm3.78-9.72a.751.751 0 0 0-.018-1.042.751.751 0 0 0-1.042-.018L6.75 9.19 5.28 7.72a.751.751 0 0 0-1.042.018.751.751 0 0 0-.018 1.042l2 2a.75.75 0 0 0 1.06 0Z"></path></svg>' +
+          '<span>正常</span></span><span class="usage-ratio">' + pctText + '</span>';
+      }
 
-  document.addEventListener('change', function (e) {
-    if (!e.target.classList.contains('pick')) return;
-    var n = rows.filter(function (r) { return r.querySelector('.pick').checked; }).length;
-    bulk.classList.toggle('on', n > 0);
-    bulkN.textContent = '已选 ' + n + ' 个';
-  });
-  document.getElementById('bulk-clear').addEventListener('click', function () {
-    rows.forEach(function (r) { r.querySelector('.pick').checked = false; });
-    bulk.classList.remove('on');
-  });
+      function getFilteredKeys() {
+        var q = searchQuery.trim().toLowerCase();
+        var filtered = keys.filter(function (item) {
+          var st = getStatus(item);
+          if (statusFilter !== "all" && st !== statusFilter) return false;
+          if (q && item.name.toLowerCase().indexOf(q) === -1 && item.prefix.toLowerCase().indexOf(q) === -1) {
+            return false;
+          }
+          return true;
+        });
+        filtered.sort(function (a, b) {
+          return sortDesc ? b.requests - a.requests : a.requests - b.requests;
+        });
+        return filtered;
+      }
 
-  tbody.addEventListener('click', function (e) {
-    var btn = e.target.closest('.rowbtn');
-    if (!btn) return;
-    var tr = btn.closest('tr');
-    if (tr.dataset.state === 'off') {
-      tr.dataset.state = 'ok';
-      tr.classList.remove('disabled');
-      paint(tr);
-      btn.textContent = '调整';
-      live.textContent = tr.dataset.name + ' 已启用';
-      return;
-    }
-    var next = tr.nextElementSibling;
-    if (next && next.classList.contains('edit')) { next.remove(); return; }
+      function updateKpis() {
+        var overCount = keys.filter(function (k) { return getStatus(k) === "warning"; }).length;
+        kpiOverCount.textContent = String(overCount);
+        navKeyCount.textContent = String(keys.length);
+      }
 
-    var lim = +tr.dataset.limit;
-    var form = document.createElement('tr');
-    form.className = 'edit';
-    // 只拼本文件里的静态 data-* 值（name 来自上面的固定行），不接受用户输入
-    form.innerHTML = '<td colspan="7"><form>' +
-      '<div><label for="lim-' + tr.dataset.name + '">限额（万次）</label>' +
-      '<input id="lim-' + tr.dataset.name + '" type="number" min="1" step="1" value="' + (lim / 10000) + '" style="width:120px"></div>' +
-      '<button class="btn" type="submit">保存</button>' +
-      '<button class="btn ghost" type="button" data-cancel>取消</button>' +
-      '<span class="calc"></span></form></td>';
-    tr.after(form);
+      function updateBatchBar(visibleRows) {
+        var count = selectedIds.size;
+        if (count === 0) {
+          batchBar.hidden = true;
+        } else {
+          batchBar.hidden = false;
+          batchSummary.textContent = "已选择 " + count + " 把密钥";
+        }
+        if (visibleRows.length === 0) {
+          selectAllCheckbox.checked = false;
+          selectAllCheckbox.indeterminate = false;
+        } else {
+          var selectedVisible = visibleRows.filter(function (r) { return selectedIds.has(r.id); }).length;
+          selectAllCheckbox.checked = selectedVisible === visibleRows.length;
+          selectAllCheckbox.indeterminate = selectedVisible > 0 && selectedVisible < visibleRows.length;
+        }
+      }
 
-    var input = form.querySelector('input');
-    var calc = form.querySelector('.calc');
-    function update() {
-      var v = +input.value;
-      var pct = tr.dataset.req / (v * 10000);
-      calc.textContent = v > 0
-        ? '当前请求 ' + fmt(tr.dataset.req) + ' 次，占 ' + Math.round(pct * 100) + '%；余量 ' + fmt(Math.max(0, v * 10000 - tr.dataset.req)) + ' 次'
-        : '限额要大于 0';
-    }
-    input.addEventListener('input', update);
-    update();
+      function render() {
+        updateKpis();
+        loadingSkeleton.hidden = true;
+        emptyPanel.hidden = true;
+        errorPanel.hidden = true;
+        keyTable.hidden = false;
 
-    form.querySelector('[data-cancel]').addEventListener('click', function () { form.remove(); });
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var v = +input.value;
-      if (!(v > 0)) { live.textContent = '限额要大于 0，未保存'; input.focus(); return; }
-      tr.dataset.limit = String(v * 10000);
-      tr.querySelector('.lim').textContent = v;
-      paint(tr);
-      form.remove();
-      live.textContent = tr.dataset.name + ' 的限额已改为 ' + v + ' 万次';
-    });
-    input.focus();
-  });
+        if (viewState === "loading") {
+          keyTable.hidden = true;
+          loadingSkeleton.hidden = false;
+          batchBar.hidden = true;
+          toolbarCount.textContent = "正在读取网关密钥...";
+          return;
+        }
 
-  apply();
-})();
-</script>
+        if (viewState === "error") {
+          keyTable.hidden = true;
+          errorPanel.hidden = false;
+          batchBar.hidden = true;
+          toolbarCount.textContent = "读取失败（upstream_timeout）";
+          return;
+        }
+
+        if (viewState === "empty") {
+          keyTable.hidden = true;
+          emptyPanel.hidden = false;
+          batchBar.hidden = true;
+          emptyTitle.textContent = "网关尚未签发任何密钥";
+          emptyDesc.textContent = "当前节点下暂无可用密钥。点击下方按钮返回密钥列表，或检查网关节点配置。";
+          btnResetFilters.textContent = "返回密钥列表";
+          toolbarCount.textContent = "共 0 把密钥";
+          return;
+        }
+
+        var rows = getFilteredKeys();
+        toolbarCount.textContent = "显示 " + rows.length + " / " + keys.length + " 把密钥 · 按本月请求" + (sortDesc ? "降序" : "升序");
+        updateBatchBar(rows);
+
+        if (rows.length === 0) {
+          keyTable.hidden = true;
+          emptyPanel.hidden = false;
+          emptyTitle.textContent = "没有符合筛选条件的密钥";
+          emptyDesc.textContent = "当前共有 " + keys.length + " 把密钥，但没有匹配当前关键词或状态的记录。";
+          btnResetFilters.textContent = "清除筛选条件";
+          return;
+        }
+
+        var html = "";
+        rows.forEach(function (item) {
+          var st = getStatus(item);
+          var ratio = getRatio(item);
+          var checkedAttr = selectedIds.has(item.id) ? " checked" : "";
+          var isEditing = editingId === item.id;
+
+          html += '<tr data-id="' + item.id + '">' +
+            '<td class="col-check" data-label="选择"><input type="checkbox" class="row-checkbox js-row-check" data-id="' + item.id + '" aria-label="选择密钥 ' + item.name + '"' + checkedAttr + '></td>' +
+            '<td data-label="名称"><span class="key-name">' + item.name + '</span></td>' +
+            '<td data-label="前缀"><code class="key-prefix">' + item.prefix + '...</code></td>' +
+            '<td data-label="本月请求" class="num-cell">' + formatNum(item.requests) + '</td>' +
+            '<td data-label="限额（万次）" class="num-cell">' + item.limitWan + ' 万次</td>' +
+            '<td data-label="状态与占用">' + statusBadgeHtml(st, ratio) + '</td>' +
+            '<td data-label="操作"><button type="button" class="btn js-edit-btn" data-id="' + item.id + '" aria-expanded="' + (isEditing ? "true" : "false") + '">' + (isEditing ? "收起调整" : "调整限额") + '</button></td>' +
+            '</tr>';
+
+          if (isEditing) {
+            var remaining = Math.max(0, item.limitWan * 10000 - item.requests);
+            var previewRatio = getRatio(item).toFixed(1);
+            var willWarn = getStatus(item) === "warning";
+            html += '<tr class="edit-row"><td colspan="7">' +
+              '<form class="inline-editor js-edit-form" data-id="' + item.id + '" novalidate>' +
+                '<div class="editor-fields">' +
+                  '<div class="field-group">' +
+                    '<label class="field-label" for="limit-input-' + item.id + '">新限额（万次）</label>' +
+                    '<input type="number" min="1" max="10000" step="1" id="limit-input-' + item.id + '" class="input-control js-limit-input" value="' + item.limitWan + '" required>' +
+                    '<div class="editor-error js-limit-error" hidden></div>' +
+                  '</div>' +
+                  '<div class="editor-preview js-limit-preview">' +
+                    '预计占用 <strong>' + previewRatio + '%</strong> · 剩余余量 <strong>' + formatNum(remaining) + '</strong> 次 · ' +
+                    (willWarn ? '<span style="color: var(--fg-danger);">仍超 80% 阈值，将触发 429 限流</span>' : '<span style="color: var(--fg-success);">低于 80% 阈值，状态正常</span>') +
+                  '</div>' +
+                '</div>' +
+                '<div class="editor-actions">' +
+                  '<button type="button" class="btn js-cancel-edit">取消</button>' +
+                  '<button type="submit" class="btn btn-primary js-save-edit">保存并生效</button>' +
+                '</div>' +
+              '</form>' +
+            '</td></tr>';
+          }
+        });
+
+        tbody.innerHTML = html;
+      }
+
+      viewStateSelect.addEventListener("change", function (e) {
+        viewState = e.target.value;
+        editingId = null;
+        render();
+      });
+
+      searchInput.addEventListener("input", function (e) {
+        searchQuery = e.target.value;
+        render();
+      });
+
+      statusSelect.addEventListener("change", function (e) {
+        statusFilter = e.target.value;
+        render();
+      });
+
+      document.getElementById("btn-filter-warning").addEventListener("click", function () {
+        viewState = "ready";
+        viewStateSelect.value = "ready";
+        statusFilter = "warning";
+        statusSelect.value = "warning";
+        render();
+      });
+
+      sortBtn.addEventListener("click", function () {
+        sortDesc = !sortDesc;
+        sortIndicator.textContent = sortDesc ? "↓" : "↑";
+        render();
+      });
+
+      btnResetFilters.addEventListener("click", function () {
+        if (viewState === "empty") {
+          viewState = "ready";
+          viewStateSelect.value = "ready";
+        }
+        searchQuery = "";
+        statusFilter = "all";
+        searchInput.value = "";
+        statusSelect.value = "all";
+        render();
+      });
+
+      document.getElementById("btn-retry-load").addEventListener("click", function () {
+        viewState = "loading";
+        viewStateSelect.value = "loading";
+        render();
+        setTimeout(function () {
+          viewState = "ready";
+          viewStateSelect.value = "ready";
+          render();
+          showBanner("已重新连接网关控制面，密钥用量数据已刷新。");
+        }, 300);
+      });
+
+      document.getElementById("btn-fallback-ready").addEventListener("click", function () {
+        viewState = "ready";
+        viewStateSelect.value = "ready";
+        render();
+      });
+
+      document.getElementById("btn-refresh").addEventListener("click", function () {
+        viewState = "loading";
+        viewStateSelect.value = "loading";
+        render();
+        setTimeout(function () {
+          viewState = "ready";
+          viewStateSelect.value = "ready";
+          render();
+          showBanner("已同步最新一分钟网关请求计数。");
+        }, 250);
+      });
+
+      document.getElementById("live-banner-close").addEventListener("click", hideBanner);
+
+      selectAllCheckbox.addEventListener("change", function (e) {
+        var visible = getFilteredKeys();
+        if (e.target.checked) {
+          visible.forEach(function (r) { selectedIds.add(r.id); });
+        } else {
+          visible.forEach(function (r) { selectedIds.delete(r.id); });
+        }
+        render();
+      });
+
+      document.getElementById("btn-batch-clear").addEventListener("click", function () {
+        selectedIds.clear();
+        render();
+      });
+
+      document.getElementById("btn-batch-disable").addEventListener("click", function () {
+        var count = selectedIds.size;
+        keys.forEach(function (k) {
+          if (selectedIds.has(k.id)) {
+            k.disabled = true;
+          }
+        });
+        selectedIds.clear();
+        editingId = null;
+        render();
+        showBanner("已批量停用 " + count + " 把密钥，新请求将立即被网关拒绝。");
+      });
+
+      tbody.addEventListener("change", function (e) {
+        if (e.target.classList.contains("js-row-check")) {
+          var id = e.target.getAttribute("data-id");
+          if (e.target.checked) {
+            selectedIds.add(id);
+          } else {
+            selectedIds.delete(id);
+          }
+          updateBatchBar(getFilteredKeys());
+        }
+      });
+
+      tbody.addEventListener("click", function (e) {
+        var editBtn = e.target.closest(".js-edit-btn");
+        if (editBtn) {
+          var id = editBtn.getAttribute("data-id");
+          editingId = editingId === id ? null : id;
+          render();
+          if (editingId) {
+            var inputEl = document.getElementById("limit-input-" + editingId);
+            if (inputEl) inputEl.focus();
+          }
+          return;
+        }
+        if (e.target.closest(".js-cancel-edit")) {
+          editingId = null;
+          render();
+        }
+      });
+
+      tbody.addEventListener("input", function (e) {
+        if (!e.target.classList.contains("js-limit-input")) return;
+        var form = e.target.closest(".js-edit-form");
+        var id = form.getAttribute("data-id");
+        var item = keys.find(function (k) { return k.id === id; });
+        var errEl = form.querySelector(".js-limit-error");
+        var previewEl = form.querySelector(".js-limit-preview");
+        var val = Number(e.target.value);
+
+        if (!Number.isInteger(val) || val < 1 || val > 10000) {
+          errEl.textContent = "请输入 1 到 10000 之间的整数（单位：万次）。";
+          errEl.hidden = false;
+          previewEl.textContent = "等待有效限额输入";
+          return;
+        }
+        errEl.hidden = true;
+        var newLimitCount = val * 10000;
+        var ratio = (item.requests / newLimitCount) * 100;
+        var remaining = Math.max(0, newLimitCount - item.requests);
+        var warn = ratio >= 80;
+        previewEl.innerHTML =
+          '预计占用 <strong>' + ratio.toFixed(1) + '%</strong> · 剩余余量 <strong>' + formatNum(remaining) + '</strong> 次 · ' +
+          (warn ? '<span style="color: var(--fg-danger);">仍超 80% 阈值，将触发 429 限流</span>' : '<span style="color: var(--fg-success);">低于 80% 阈值，状态正常</span>');
+      });
+
+      tbody.addEventListener("submit", function (e) {
+        if (!e.target.classList.contains("js-edit-form")) return;
+        e.preventDefault();
+        var form = e.target;
+        var id = form.getAttribute("data-id");
+        var item = keys.find(function (k) { return k.id === id; });
+        var inputEl = form.querySelector(".js-limit-input");
+        var errEl = form.querySelector(".js-limit-error");
+        var saveBtn = form.querySelector(".js-save-edit");
+        var val = Number(inputEl.value);
+
+        if (!Number.isInteger(val) || val < 1 || val > 10000) {
+          errEl.textContent = "请输入 1 到 10000 之间的整数（单位：万次）。";
+          errEl.hidden = false;
+          inputEl.focus();
+          return;
+        }
+
+        saveBtn.disabled = true;
+        saveBtn.setAttribute("aria-busy", "true");
+        saveBtn.textContent = "保存中...";
+
+        setTimeout(function () {
+          item.limitWan = val;
+          if (item.disabled && val > 0) {
+            // Keep disabled state if already disabled, only update limit
+          }
+          editingId = null;
+          render();
+          var newRatio = getRatio(item).toFixed(1);
+          var stateText = getStatus(item) === "warning" ? "仍接近阈值" : (item.disabled ? "已停用" : "状态正常，429 限流已解除");
+          showBanner("已将 " + item.name + " 限额更新为 " + val + " 万次（当前占用 " + newRatio + "%，" + stateText + "），新配置已生效。");
+        }, 120);
+      });
+
+      render();
+    })();
+  </script>
 </body>
 </html>

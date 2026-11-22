@@ -1,7 +1,7 @@
 {
   "name": "AnyTTL",
-  "tagline": "查本月额度、按密钥调到不超阈值，改完立刻生效。",
-  "accent": "Blue accent #0969da",
-  "structure": "Data-Dense Dashboard · Nav3 / Ft4",
-  "layout": "筛选条 → 三个额度数字 → 密钥表 → 行内调整；窄屏表格转逐行键值堆叠。"
+  "tagline": "查本月额度、排查超阈值密钥并实时调高限额，改完立刻生效。",
+  "accent": "Primer Accent #0969da",
+  "structure": "Workbench · N8 / Ft2",
+  "layout": "N8 终端顶栏 + UnderlineNav → PageHeader → 单行 1px hairline 指标带 → 单层 Box 密钥表（行内展开调额）；窄屏转逐行键值堆叠。"
 }
