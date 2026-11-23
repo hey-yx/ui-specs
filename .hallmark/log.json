@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-11-23",
+    "brief": "HookPulse · Webhook 投递与事件订阅监控台：KPI 指标、柱图与 7×24 失败热力、32px 端点开关、只读签名密钥反转与投递日志表",
+    "theme": "Umami Dark",
+    "macrostructure": "Stat-Led",
+    "nav": "N9",
+    "footer": "Ft5",
+    "accent": "Umami Primary #3080ff",
+    "first_screen": "N9 两极顶栏（含亮/暗切换）+ 4 格 KPI 带 + 投递柱图与 7×24 圆点热力 + Line Tabs（端点开关与只读密钥反转）",
+    "stamp": "frame: batch=2026-11-22-a; nav=N9; footer=Ft5; base=#262626"
+  },
+  {
     "date": "2026-11-22",
     "brief": "AnyTTL · 自建 API 网关控制台：本月 1,248,930 次请求与 68% 总额度、超阈值密钥排查与行内实时调额",
     "theme": "Primer",

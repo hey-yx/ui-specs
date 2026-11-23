@@ -1960,6 +1960,32 @@
       ]
     },
     {
+      "id": "patterns-progressive-disclosure",
+      "name": "信息架构与渐进披露",
+      "domain": "patterns",
+      "select": "主画布只留高频核心概览与最关键的少数选项，低频配置、多条件规则与明细下钻通过弹窗、抽屉、Tab 或独立设置视图渐进披露，避免首屏数据与控件堆砌；披露触发器保持上下文连续并配文字说明。",
+      "tasks": [
+        "s2",
+        "s12"
+      ],
+      "articles": [
+        "patterns/nngroup.com--progressive-disclosure.md",
+        "patterns/primer--progressive-disclosure.md"
+      ],
+      "checks": [
+        {
+          "q": "渐进披露在主界面和次级界面之间怎么分配选项？",
+          "a": "Initially, show users only a few of the most important options. Offer a larger set of specialized options upon request.",
+          "cite": "content/patterns/nngroup.com--progressive-disclosure.md:24"
+        },
+        {
+          "q": "做渐进披露交互时，怎么避免让用户迷失焦点？",
+          "a": "Refrain from creating interactions that drastically disorient the user’s initial point of focus.",
+          "cite": "content/patterns/primer--progressive-disclosure.md:22"
+        }
+      ]
+    },
+    {
       "id": "patterns-test-walkthrough",
       "name": "测试逐页走查",
       "domain": "patterns",
@@ -2750,7 +2776,8 @@
       "articles": [
         "dataviz/carbondesignsystem.com--data-visualization-dashboards.md",
         "dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md",
-        "dataviz/carbondesignsystem.com--data-visualization-legends.md"
+        "dataviz/carbondesignsystem.com--data-visualization-legends.md",
+        "dataviz/nngroup.com--dashboards-preattentive.md"
       ]
     },
     {

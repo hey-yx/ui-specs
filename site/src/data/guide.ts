@@ -59,8 +59,8 @@ export const MAIN_SOURCES: MainSource[] = [
     context: "企业产品 / 数据密集界面",
     id: "project-carbon",
     scenario: {
-      use: "企业数据密集界面、监控与运维台、复杂表格；需要 IBM 直角与 Blue 60 语言的 React 产品。",
-      switchTo: "中文通用后台换 TDesign；轻量营销页换品牌规范；没有 React 时只能按 Carbon CSS 做 CSS-only。",
+      use: "企业数据密集界面、监控与运维台、多维复杂表格；需要 IBM 直角与 Blue 60 语言的 React 产品。",
+      switchTo: "中文通用后台换 TDesign；轻量 KPI 看板或需要原生 1px 细边框亮暗双主题的工具台换 Umami；代码/仓库类开发者工具换 Primer；没有 React 时只能按 Carbon CSS 做 CSS-only。",
     },
     short: "企业数据密集（IBM Carbon）",
     source: "Carbon（IBM）",
@@ -75,7 +75,7 @@ export const MAIN_SOURCES: MainSource[] = [
     id: "project-polaris",
     scenario: {
       use: "商家后台、电商运营、订单与商品管理，尤其 Shopify 生态的 React 项目。",
-      switchTo: "中文通用后台换 TDesign；非电商后台换行；需要 IBM 数据密集语言换 Carbon。",
+      switchTo: "中文通用后台换 TDesign；需要暗色模式时换 TDesign Dark 或 Umami；需要 IBM 数据密集语言换 Carbon。",
     },
     short: "商家后台（Shopify Polaris）",
     source: "Polaris（Shopify）",
@@ -87,8 +87,8 @@ export const MAIN_SOURCES: MainSource[] = [
     context: "开发者工具 / 代码协作",
     id: "project-primer",
     scenario: {
-      use: "开发者工具、代码协作、仓库与 Pull Request 类产品，GitHub 风格明确时。",
-      switchTo: "非开发者产品换行；普通企业后台换 TDesign 或 Carbon。",
+      use: "开发者工具、代码协作、仓库、CLI 与 Pull Request 类产品，GitHub 风格明确时。",
+      switchTo: "轻量指标看板与开关/密钥配置台换 Umami；高密度运维监控与复杂表格换 Carbon；普通中文企业后台换 TDesign。",
     },
     short: "开发者工具（GitHub Primer）",
     source: "Primer（GitHub）",
@@ -142,6 +142,10 @@ export const MAIN_SOURCES: MainSource[] = [
   {
     context: "原生应用（iOS / macOS / visionOS）",
     id: "project-apple-hig",
+    scenario: {
+      use: "iOS / macOS / visionOS 原生应用，或明确需要 Apple 半透明材质顶栏与分组分层气质的消费级多角色对话壳。",
+      switchTo: "常规 Web 通用中后台换 TDesign；开发者与控制台产品换 Primer 或 Umami；Windows / M365 生态换 Fluent 2。",
+    },
     short: "Apple HIG",
     source: "Apple HIG（人机界面规范）",
     files: [
@@ -254,6 +258,19 @@ export const MAIN_SOURCES: MainSource[] = [
       "content/components/developer.apple.com--widgets.md",
     ],
     note: "Apple HIG 分栏应用采用半透明材质顶栏与分组分层；原文缺十六进制色板、px 间距与 ms 动效表，这三项按 GAP_RULES 成套回源并记账",
+  },
+  {
+    context: "复刻 Umami 风格（轻量数据看板 / 工具后台）",
+    id: "project-umami",
+    scenario: {
+      use: "轻量流量与业务分析看板、API/Webhook 密钥与配置台、Feature Flag 开关面板，以及需要原生亮/暗双主题与 1px 细边框卡片语言的工具后台（版式不绑定原站侧栏，由 Hallmark 灵活调配）。",
+      switchTo: "高密度运维表格与企业监控换 Carbon；代码协作/仓库/CLI 类开发者工具换 Primer；中文多表单通用中后台换 TDesign；营销官网换品牌规范。",
+    },
+    short: "轻量看板（Umami）",
+    source: "Umami（站点抽取）",
+    stacks: [{ framework: 'react', pkg: '@umami/react-zen' }],
+    files: ["content/brands/designmd--umami.md"],
+    note: "只取表面语言与数值（#3080ff 主色、Light/Dark 双色板、Inter 字阶、6px/12px 圆角、150ms 微交互及 300ms 弹簧弹窗/加载动效）；React 项目可直接选用 MIT 开源组件库 @umami/react-zen；页面版式与外壳结构不锁定原站，按 briefs/layouts.md 自由选配",
   }
 ]
 
@@ -385,7 +402,7 @@ export const REQUIRED_RULES: RequiredRule[] = [
 /** 场景必选：命中就要走完的点层，不靠 AI 自己挑；对不上的场景直接跳过，命中但本期决定不做，在 DECISIONS 写一句理由 */
 /** 必读点：场景命中就全读，由本库判定，AI 不许自己减。points 里的 id 必须能在设计地图找到，check-map 会校验 */
 export const REQUIRED_SCENARIOS: { id: string; when: string; why: string; points: string[] }[] = [
-  { id: 's2', when: '所有项目', why: '骨架、栅格与断点决定后面所有数值能不能落地', points: ['flow-layout-basics', 'howto-visual-hierarchy', 'howto-ui-polish'] },
+  { id: 's2', when: '所有项目', why: '骨架、栅格、信息架构与留白决定主画布克制与数值落地', points: ['flow-layout-basics', 'howto-visual-hierarchy', 'howto-ui-polish', 'patterns-progressive-disclosure'] },
   { id: 's3', when: '所有项目', why: '色字距动效的取值口径与色板原文，缺一项就会出现裸值', points: ['flow-values', 'type-hierarchy-recipe', 'layout-spacing-values'] },
   { id: 's16', when: '有界面就要验', why: '对比度、焦点与键盘是可访问性底线，高于任何风格', points: ['flow-a11y', 'a11y-wcag-checklist', 'a11y-contrast-threshold'] },
   { id: 's4', when: '有文案', why: '语气与微文案决定空态、报错、按钮说不说得清', points: ['flow-copywriting', 'markdown-cn-copywriting'] },
@@ -489,7 +506,7 @@ export const DEV_STEPS: { n: number; title: string; prompt: string }[] = [
     n: 3,
     title: '克制层次落稿与四态底线',
     prompt:
-      '按选中选型行的边界语言分层（Carbon 用 48px 全局头 + 0px 直角齐平指标带，Primer 用 PageHeader + UnderlineNav + 单层 Box，Polaris 用 #F7F7F7 托举 IndexTable 单卡，避免框套框与满屏筛选胶囊墙）；颜色、字阶、间距、圆角全部进命名 token，不写裸值。控制台/看板/比价表在 1280×800 首屏必须直接露出主图或主表行。主流程真实可点（筛选、搜索、切换、提交等），同时内置空态、加载态、错误态与超长文本折行；正文保持真实产品口吻，不在主操作区贴满「演示口径」自检词。可访问性高于风格：正文对比度 ≥ 4.5:1、大字与控件边界 ≥ 3:1、键盘路径完整且焦点环高对比可见、桌面控件贴合原生 32-36px 密度（任意可点目标 ≥ 24px，移动端 `< 768px` 扩至 ≥ 44px）、`:hover` 包进 `@media (hover: hover)`、`prefers-reduced-motion` 关闭动画；图表用内联 SVG。',
+      '按选中选型行的边界语言分层（Carbon 用 48px 全局头 + 0px 直角齐平指标带，Primer 用 PageHeader + UnderlineNav + 单层 Box，Polaris 用 #F7F7F7 托举 IndexTable 单卡，避免框套框与满屏筛选胶囊墙）；颜色、字阶、间距、圆角全部进命名 token，不写裸值。坚持信息架构与渐进披露：主画布只留高频核心概览（多指标优先连体 1px 齐平分割带，主图给足宽幅呼吸感），低频配置、多条件规则与长明细下钻收进 Modal / Drawer / Tab / 独立设置视图，避免首屏数据堆砌。控制台/看板/比价表在 1280×800 首屏必须直接露出主图或主表行。主流程真实可点（筛选、搜索、切换、提交等），同时内置空态、加载态、错误态与超长文本折行；正文保持真实产品口吻，不在主操作区贴满「演示口径」自检词。可访问性高于风格：正文对比度 ≥ 4.5:1、大字与控件边界 ≥ 3:1、键盘路径完整且焦点环高对比可见、桌面控件贴合原生 32-36px 密度（任意可点目标 ≥ 24px，移动端 `< 768px` 扩至 ≥ 44px）、`:hover` 包进 `@media (hover: hover)`、`prefers-reduced-motion` 关闭动画；图表用内联 SVG。',
   },
   {
     n: 4,
@@ -525,7 +542,7 @@ export const TYPE_BY_DOMAIN: Record<string, InfoType> = {
 /** 公开 AI 提示词（默认开发者模式）：首页「复制提示词」直接复制这份，简洁、按需拉包、默认只做首页 */
 export const AI_PROMPT = [
   '按 UISpecs 生成生产级界面。默认范围：未指定多页时只做网站首页；优先适配当前项目技术栈（React / Vue / Next.js / Tailwind 等），无现有工程时产出零外部请求的单文件 HTML。',
-  '视觉与防固化硬律（六条）：1. 按产品同构在 7 套选型（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG）间择其一并沿用其原生表面语言，禁止把「白纸压 `#f3f3f3` 灰卡 + 通用单行页脚」当全站唯一皮肤；2. 顶栏、页脚、页底色随产品动作与选型分化，多站/多页保持外观轮换不撞壳；3. 核心工件首屏直出与零框套框（控制台、看板、比价表在 1280×800 首屏必须直接露出主图或主表行；多指标用 1px 齐平分割带，超过 5 项的筛选收进下拉/Tab，禁止用框套框和三排胶囊墙把主内容挤出首屏，桌面保持 32-36px 原生控件密度，移动端扩至 ≥ 44px）；4. 标题与首屏重心服务产品形态（官网可用大字主张，工具/对话/挂号直接让操作区顶格进首屏，禁用中文标题上挂 `01 / SECTION` 英文装饰眉题）；5. 真实业务主语（给足真数据、真实交互或定制产品部件，禁用黑底 JSON 终端、三列大图标卡或抽象占位色块）；6. 真实产品口吻（去掉 logo 与主色后仍认得出产品，不在正文到处挂「演示口径」自检词）。',
+  '视觉与防固化硬律（六条）：1. 按产品同构在 7 套官方选型（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG）及 Umami 轻量看板间择其一并沿用其原生表面语言，禁止把「白纸压 `#f3f3f3` 灰卡 + 通用单行页脚」当全站唯一皮肤；2. 顶栏、页脚、页底色随产品动作与选型分化，多站/多页保持外观轮换不撞壳；3. 核心工件首屏直出与渐进披露（控制台、看板、比价表在 1280×800 首屏直接露出主图或主表行；多指标用连体 1px 齐平分割带，主图给足宽幅呼吸感，低频配置、多条件筛选与明细下钻收进弹窗/抽屉/设置子页，禁止用框套框、独立小卡片墙或三排胶囊墙堆砌首屏，桌面保持 32-36px 原生控件密度，移动端扩至 ≥ 44px）；4. 标题与首屏重心服务产品形态（官网可用大字主张，工具/对话/挂号直接让操作区顶格进首屏，禁用中文标题上挂 `01 / SECTION` 英文装饰眉题）；5. 真实业务主语（给足真数据、真实交互或定制产品部件，禁用黑底 JSON 终端、三列大图标卡或抽象占位色块）；6. 真实产品口吻（去掉 logo 与主色后仍认得出产品，不在正文到处挂「演示口径」自检词）。',
   ...DEV_STEPS.map((s) => `${s.n}. ${s.title}：${s.prompt}`),
 ].join('\n\n')
 

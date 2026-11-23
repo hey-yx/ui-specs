@@ -44,6 +44,7 @@
 | needknows | NeedKnows | IBM Carbon | Carbon Blue `#0052d9` / Header `#161616` | Index-First · N13 #161616 ⌘K 顶栏 / Ft3 Gray10 三栏索引 |
 | promptshelf | PromptShelf | GitHub Primer | Primer Accent `#0969da` / Header `#25292e` | Component Playground · N8 #25292e 终端面包屑 / Ft1 水平词标（#f6f8fa 右栏填词台） |
 | rolerail | RoleRail | TDesign | Green7 `#006c45` | Catalogue · N1b 三段磨砂顶栏 / Ft7 周报订阅（Green1 浅绿 Hero + Gray1 分布卡） |
+| hookpulse | HookPulse | Umami Dark | Umami Primary `#3080ff` | Stat-Led · N9 极简两极顶栏 / Ft5 一句大字收尾（#262626 画布 + #171717 卡片 + 只读密钥反转） |
 
 SamePaper 与 CivicDesk 是 2026-11-13 同一批生成的两站，版式三件与色相按批内不重复分派：前者营销页，后者办事流程页。CivicDesk 在 2026-11-15 按 Service Chain 重做了一版，旧稿（Narrative Workflow）存档在仓库外，README 结构列已按新版更新。CartLane、FixQueue 与 SwimBoard 是随后两批的三站，CartLane 与 FixQueue 都在旧稿上重做了一版。
 

@@ -1,0 +1,7 @@
+{
+  "name": "HookPulse",
+  "tagline": "Umami Dark 表面语言：Webhook 投递监控、32px 端点开关、只读密钥反转与无模糊弹窗。",
+  "accent": "#3080ff",
+  "structure": "Stat-Led（N9 极简两极顶栏 + 4 格 KPI 带 + 柱图与 7×24 热力 + Line Tabs 端点与投递表 + Ft5）",
+  "layout": "Umami · Stat-Led / N9 / Ft5"
+}
