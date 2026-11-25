@@ -82,12 +82,12 @@ publisher: "UISpecs 本库原创"
 ## 三、实现顺序
 
 1. 先定动作。浮层、原地变化、反馈、输入、展开、加载、文本七类各对应一组配方点，先选点再写 CSS。时长与曲线按基准规范覆盖配方默认值，两条账分开记：动作来自配方，毫秒来自基准规范或缺口规则。
-2. 入场先给初态。元素常驻 DOM，初始带 `opacity: 0`、位移、缩放或模糊，切换时改终态。不要用 `display: none` 或 `hidden` 直接切出来：元素从 `display: none` 变成可见时没有起始帧，声明了 `transition` 也不会跑。实测把菜单的 `hidden` 去掉后，`getAnimations()` 返回 0，`transform` 一直是 `none`，页面看着就是硬切。要保留 `hidden` 做可达性，就在移除 `hidden` 的同一拍补上初态类，再在下一帧切终态，或者直接用 keyframes 播一次。
-3. 出场先加关闭态。加 `is-closing` 类，等 `transitionend` 或定时器到点再设 `hidden`；关闭时长比入场短，菜单 250ms 进、150ms 出，toast 350ms 进、250ms 出。直接把元素设成 `hidden`，关闭方向的过渡同样不会发生。
-4. 只动 transform、opacity、filter。这三样走合成层，不触发布局。几何变化是配方刻意为之的例外：标签页滑块动 `width`，卡片尺寸动 `width/height`，手风琴动 `grid-template-rows`，它们有 JS 配合且范围受控，不要把这个做法推广到普通卡片或列表。
-5. 可打断优先。交互状态变化用 CSS transition，能中途反向；keyframes 只给一次性序列（成功勾、粒子、抖动、循环加载）。勾选框的勾线用 `stroke-dashoffset` 过渡，中途取消能反向画回，这是它不用 keyframes 的原因。
-6. 起点跟着触发件。菜单与下拉从触发按钮的位置长出来（`transform-origin` 指过去，0.97 起），弹窗居中缩放（0.96），面板从容器边缘滑入（100px 位移加模糊）。起点错了，动作再对也像换了一块屏。
-7. 减弱动效要瞬时到位。每条配方都带 `prefers-reduced-motion: reduce` 的兜底，把过渡清零，不是把时长调短；功能结果仍要发生（菜单开、值更新、面板显示）。
+2. 入场先给初态，或用 `@starting-style` 配合离散显隐。传统写法要求元素常驻 DOM 并切类名（初始带 `opacity: 0` 与位移，但不要让隐藏元素继续留在点击命中或可读流中）；如果用 `display: none` 控制关闭态，必须配合 `@starting-style`（在打开态规则内声明 `@starting-style { opacity: 0; transform: ...; }`）或在移除 `hidden` 的同一拍补初态类并在下一帧切终态，否则元素从 `display: none` 切到可见时没有起始帧，声明了 `transition` 也不会跑（`getAnimations()` 返回 0）。单向一次性微反馈（如点击波纹、成功勾）直接用 `@keyframes` 播完移除即可。
+3. 出场与关闭态要对称。常规容器关闭可加 `is-closing` 类等 `transitionend` 或定时器到点再设 `hidden`，关闭时长比入场短（如菜单 250ms 进、150ms 出；toast 350ms 进、250ms 出）；若使用现代 CSS `transition-behavior: allow-discrete` 搭配 `display`，也要确保关闭时不拦截指针事件。直接把元素设成 `hidden` 或 `display: none` 而无退场配置，关闭方向就会硬切。
+4. 只动合成属性。优先动 `transform`、`opacity`、`filter`（或 `clip-path`、`backdrop-filter` 这类不触发布局的属性）。几何变化是配方刻意为之的例外：标签页滑块动 `width`，卡片尺寸动 `width/height`，手风琴动 `grid-template-rows`，它们有 JS 配合且范围受控，不要把这个做法推广到普通卡片或列表。
+5. 可打断优先。交互状态变化用 CSS transition，能中途反向；keyframes 只给一次性序列（成功勾、粒子、抖动、循环加载、点击反馈波纹）。勾选框的勾线用 `stroke-dashoffset` 过渡，中途取消能反向画回，这是它不用 keyframes 的原因。
+6. 起点跟着触发件。菜单与下拉从触发按钮的位置长出来（`transform-origin` 指过去，0.97 起），弹窗居中缩放（0.96），抽屉与面板从停靠边缘滑入。起点错了，动作再对也像换了一块屏。
+7. 减弱动效要瞬时到位。每条配方都带 `prefers-reduced-motion: reduce` 的兜底，把过渡和关键帧动画清零，不是把时长调短；功能结果仍要发生（菜单开、值更新、面板显示）。
 
 ## 四、验收
 
@@ -96,3 +96,19 @@ publisher: "UISpecs 本库原创"
 浏览器里逐项测三件事：动作后 `el.getAnimations()` 不为空；`currentTime` 在推进，不是停在 0；首帧计算值不等于终态值。开与关两个方向各测一次，只测开的方向会漏掉出场丢失。用 `hidden` 或 `display` 控制显隐的元素，再补一条：移除隐藏后第一帧必须能看到起始值，直接是终态就是没过渡。
 
 验收记录写实测值，不写「已按规范实现」。规范给的是数值与配方，过渡有没有真的发生只能由运行时的动画对象证明。
+
+## 五、克制边界与选型分工
+
+### 1. 选型动效篇与缺口回源分工
+
+- **时长与曲线优先按项目选型取**：先读当前主源（`main_sources`）里的动效篇（如 TDesign、Carbon、Fluent 2、Polaris、Spectrum、Apple HIG）；
+- **选型无具体数值时按缺口规则回源**：参考 NN/g 动效时长研究（简单反馈约 100ms、状态切换与微交互 200–300ms）与 W3C 定值缓动曲线，禁止凭感觉自造 `cubic-bezier`；
+- **动作结构取自配方**：抽屉、弹窗、Toast、下拉、手风琴、数字变化的具体位移、缩放与交错方式按本篇第 2 节查表回对应配方原文。
+
+### 2. 必须配克制过渡 vs 严禁动效
+
+| 类别 | 适用元素 | 要求 |
+| --- | --- | --- |
+| 必须配过渡 | 抽屉（Drawer）、弹窗（Modal）、浮层（Popover/Dropdown）、提示条（Toast/Banner）、Tab 指示条、交互微反馈 | 用指数缓出或选型主曲线，仅动 `transform` / `opacity` 等合成属性，且首屏状态默认可见、不靠全屏延迟入场遮挡 |
+| 严禁过渡 | `:focus-visible` 焦点环 | 键盘聚焦边框/轮廓必须 `0ms` 瞬时出现，严禁给 `outline` 或焦点 `box-shadow` 加 `transition` |
+| 严禁写法 | `transition: all` / 静止 `opacity: 0` / 散落整屏淡入 | 显式列出属性名；禁止给页面每个区块加统一滚动淡入；常规控件状态切换禁止使用过冲回弹曲线（控制点 y > 1.05） |

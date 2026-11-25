@@ -143,7 +143,6 @@ const examples = defineCollection({
  * 新增一站＝丢一份 briefs/<slug>.md 进去：frontmatter 写 name / category / lang
  * （可选 framework），正文写产品是什么、给谁用。dev 下 content 层会监听该目录，
  * 文件增改即重载；不用跑生成脚本，也不用重启。
- * layouts.md 是版式速查手册，同目录放着，靠 id 排除（见 data/case-briefs.ts）。
  */
 const briefs = defineCollection({
   loader: glob({ pattern: '*.md', base: fileURLToPath(new URL('../../briefs', import.meta.url)) }),

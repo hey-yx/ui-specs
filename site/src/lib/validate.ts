@@ -171,8 +171,8 @@ export function validateStarPoints(
     ) {
       errors.push(`${where}：tasks 必须是 1-3 个 s2..s8`)
     }
-    if (!Array.isArray(p.articles) || p.articles.length < 1 || p.articles.length > 8) {
-      errors.push(`${where}：articles 必须 1-8 个`)
+    if (!Array.isArray(p.articles) || p.articles.length < 1) {
+      errors.push(`${where}：articles 至少 1 个`)
     } else {
       for (const a of p.articles) {
         if (!byFile.has(a)) errors.push(`${where}：文章不存在 content/${a}`)

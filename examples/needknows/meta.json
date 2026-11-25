@@ -1,7 +1,7 @@
 {
   "name": "NeedKnows",
-  "tagline": "每日 07:30 行业情报终端：IBM Carbon 0px 直角格栅、90 天往期切换、36 条五分类表与 08:00 订阅",
+  "tagline": "每日 07:30 行业情报终端：IBM Carbon 0px 直角、N6 报头、Index-First 主从核对流与 Ft7 订阅页脚",
   "accent": "Carbon Blue #0052d9 / Header #161616",
-  "structure": "Carbon Data Stream · N13 顶栏 ⌘K 情报检索 + 4 指标瓦片 + 36 行抽屉表 + Ft3 Gray10 三栏索引页脚",
-  "layout": "IBM Carbon project-carbon 规范（全页 0px 直角语法、90 天往期日期下拉切换、五大分类实时横向柱图、36 条融资/新品/开源/政策/人事全要素列表、行内核对原文抽屉与 14 信源/分品类邮件 RSS 订阅弹窗）"
+  "structure": "Index-First · N6 报头 + 1px 分类条 + 主从分栏 36 条情报流与右侧原文核对面板 + Ft7 邮件/RSS 订阅页脚",
+  "layout": "IBM Carbon project-carbon 规范（全页 0px 直角语法、90 天往期日期下拉切换、36 条五分类主从核对流、右侧结构化字段与信源核对、14 类信源弹窗与 Ft7 08:00 邮件/分品类 RSS 订阅）"
 }

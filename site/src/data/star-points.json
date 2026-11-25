@@ -126,7 +126,8 @@
       "articles": [
         "howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-1.md",
         "howto/learnui.design--7-rules-for-creating-gorgeous-ui-part-2.md",
-        "howto/adhamdannaway.com--ui-design-tips.md"
+        "howto/adhamdannaway.com--ui-design-tips.md",
+        "patterns/ui-specs--surface-and-control-craft.md"
       ]
     },
     {
@@ -1969,6 +1970,7 @@
         "s12"
       ],
       "articles": [
+        "patterns/ui-specs--workspace-progressive-disclosure.md",
         "patterns/nngroup.com--progressive-disclosure.md",
         "patterns/primer--progressive-disclosure.md"
       ],
@@ -1979,9 +1981,9 @@
           "cite": "content/patterns/nngroup.com--progressive-disclosure.md:24"
         },
         {
-          "q": "做渐进披露交互时，怎么避免让用户迷失焦点？",
-          "a": "Refrain from creating interactions that drastically disorient the user’s initial point of focus.",
-          "cite": "content/patterns/primer--progressive-disclosure.md:22"
+          "q": "桌面标准视口（1280×800）下，首屏主体面积应留给几个高频核心工件？",
+          "a": "在桌面标准视口（1280×800）下，首屏主体必须被最高频的 1–2 个核心工件占据（80% 面积给核心工件）。",
+          "cite": "content/patterns/ui-specs--workspace-progressive-disclosure.md:22"
         }
       ]
     },
@@ -3791,6 +3793,7 @@
         "s5"
       ],
       "articles": [
+        "patterns/ui-specs--surface-and-control-craft.md",
         "components/inclusive-components.design--toggle-button.md",
         "components/tdesign.tencent.com--button.md",
         "components/carbondesignsystem.com--button-usage.md",
@@ -3807,9 +3810,9 @@
           "cite": "content/components/carbondesignsystem.com--button-usage.md:101"
         },
         {
-          "q": "单选按钮组默认要不要预选一个选项？",
-          "a": "By default, no option will be preselected.",
-          "cite": "content/components/carbondesignsystem.com--radio-button-usage.md:174"
+          "q": "非文本控件边界与相邻背景的对比度底线是多少，桌面端与移动端控件尺寸怎么分档？",
+          "a": "非文本对比度不低于 3:1；桌面端贴合原生密度（32px–36px，不低于 24px），移动端（< 768px）扩展至 >= 44px。",
+          "cite": "content/patterns/ui-specs--surface-and-control-craft.md:38"
         }
       ]
     },

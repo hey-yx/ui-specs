@@ -33,8 +33,8 @@ export const BRIEFS_NOTE = [
   '开启后组件用与该站数值文章同体系的官方组件库。',
 ].join('')
 
-/** briefs/ 里的手册文件，不是需求 */
-const RESERVED = new Set(['layouts', 'README'])
+/** briefs/ 里的非需求说明文件 */
+const RESERVED = new Set(['README'])
 
 /**
  * 需求目录：构建时本模块被捆进 dist/.prerender，import.meta.url 不可靠，

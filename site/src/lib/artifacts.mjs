@@ -70,12 +70,12 @@ export function buildMetaJson() {
 const USAGE = {
   core: [
     '按需拉取优先：仓库外优先拉轻端点 /ai/routing.json、/ai/reference-screens.json，再按需拉 /ai/points/<id>.json 与原文 /md/<path>，避免一次性加载整包被截断。仓库内可直接读本地路径。',
-    '选型与骨架解耦：按产品同构从 /ai/routing.json 的 main_sources（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG）定唯一数值底座；结构层在仓库内由 Hallmark（对照 .hallmark/log.json 避重）加 briefs/layouts.md 决定，在仓库外参考 /ai/reference-screens.json 与 layouts/howto 设计点自由组合，不套用固定预制外壳。',
+    '选型与骨架解耦：按产品同构从 /ai/routing.json 的 main_sources（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG / Umami）定唯一数值底座；结构层在仓库内由 Hallmark（skills/hallmark/references/，对照 .hallmark/log.json 避重）决定，在仓库外参考 /ai/reference-screens.json 与 layouts/howto 设计点自由组合，不套用固定预制外壳。',
     '表面语法与外壳自由分化：brands-* 仅用于明确复刻某品牌或抽取局部手法，禁止拿英文品牌 DESIGN.md 硬套普通中文产品。页底色、顶栏形态、页脚形态与分隔方式必须从选中选型与产品品类长出来（如 0px 直角格栅、深色全局顶栏、品牌浅底带、半透明分栏、极简两极或报头导航），禁止把「#ffffff / #f3f3f3 白卡灰底 + 同一单行页脚」当默认通用皮肤；多站生成时确保同批顶栏不重复、页脚每种不超过 2 次、灰底不超过半数。',
     '反 AI Slop 底线：去掉 logo 和主色后仍能认出这是什么产品；首屏必须有真实业务物件或数据（数据型首屏给足行密度或核心指标），不做满屏居中空 hero 与三列图标卡片；强调色面积克制；文案写具体事实与动作，页面不写设计说明或「演示口径」自检词，标题与页脚不对仗、不喊生活方式口号。',
     '交互、动效与图表：有状态变化时必须覆盖空态、加载、错误、超长四态；入场先给初态，出场等过渡结束再隐藏，prefers-reduced-motion 关动画；悬停态包进 @media (hover: hover)；图表一律内联 SVG，不引外部图表库。',
     '可访问性底线高于任何风格：正文对比度 >= 4.5:1、大字与控件边界 >= 3:1、键盘路径完整且焦点环高对比可见、独立触控目标 >= 44px（桌面次要链接 >= 24px）；320 / 375 / 768 / 1280 四档无横向溢出。',
-    '两种交付模式：外部开发者默认模式只做首页（除非需求指定多页），适配用户项目技术栈（无工程则单文件 HTML），直接交付可运行代码与简短说明，不要求五件套文档；仓库内案例验收模式跑完整 6 步与评审底线 s17、scripts/score-case.py，交付 index.html、DECISIONS.md、FINDINGS.md、preview.png、meta.json 五件。',
+    '统一流程与两种交付物：所有项目统一按完整 6 步流程选型、读必读点、定骨架、落稿、过三重视觉复审并真点回炉；区分仅在最终交付物——业务项目默认只做首页（除非需求指定多页），适配项目技术栈（无工程则单文件 HTML）并直接交付可运行代码与简短说明；仓库内案例验收（examples/）或明确要求审计模式时，另跑 scripts/score-case.py 并交付 index.html、DECISIONS.md、FINDINGS.md、preview.png、meta.json 五件。',
     '原文端点 /md/<path>（path 即 articles[].path）；点带 method 的先读 method 方法篇，数值仍按裁决优先级从主源取；缺口按 guide 的「数值文章缺口与派生」回源或兜底。',
     '需求已有名字就沿用；没给名字才走 NameYouLike 口径（起名提示词与核验：https://github.com/hey-yx/NameYouLike）：英文产品名、绑产品事实、落一次真碰撞检索。',
   ],

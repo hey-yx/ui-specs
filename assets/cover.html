@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1600, initial-scale=1" />
-    <title>UISpecs Cover · Featured Cases</title>
+    <title>UISpecs Cover</title>
     <style>
       * {
         box-sizing: border-box;
@@ -15,185 +15,477 @@
         width: 1600px;
         height: 800px;
         overflow: hidden;
-        background: #f3f2f1;
-        color: #0b0c0c;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+        background: #0b0e14;
+        color: #f4f6fb;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto,
           'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
         -webkit-font-smoothing: antialiased;
       }
-      .top-bar {
-        width: 100%;
-        height: 10px;
-        background: #1a65a6;
-      }
-      .canvas {
+
+      .stage {
+        position: relative;
         width: 1600px;
-        height: 790px;
-        padding: 36px 40px 38px 40px;
+        height: 800px;
+        background:
+          radial-gradient(900px 620px at 78% 42%, rgba(45, 114, 210, 0.16), transparent 65%),
+          radial-gradient(640px 480px at 18% 85%, rgba(237, 129, 57, 0.11), transparent 60%),
+          linear-gradient(180deg, #0b0e14 0%, #0f141d 100%);
+        display: grid;
+        grid-template-columns: 640px 1fr;
+        padding: 56px 56px 52px 64px;
+        gap: 36px;
+      }
+
+      /* Subtle architectural grid */
+      .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.15) 100%);
+        pointer-events: none;
+      }
+
+      /* Top accent line */
+      .top-accent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ed8139 0%, #3b82f6 52%, #10b981 100%);
+      }
+
+      /* Left Column */
+      .left {
+        position: relative;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        height: 100%;
       }
-      .masthead {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 32px;
-        padding-bottom: 18px;
-        border-bottom: 1px solid #d0d3d6;
-      }
-      .title-block {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .brand-row {
-        display: flex;
+
+      .eyebrow {
+        display: inline-flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        width: fit-content;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #cbd5e1;
       }
-      .brand-mark {
-        width: 16px;
-        height: 16px;
-        background: #1a65a6;
-        border-radius: 2px;
-        flex-shrink: 0;
+
+      .eyebrow-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ed8139;
+        box-shadow: 0 0 10px rgba(237, 129, 57, 0.8);
       }
+
+      .hero-copy {
+        margin-top: 12px;
+      }
+
       h1 {
         margin: 0;
-        font-size: 36px;
-        line-height: 1.2;
+        font-size: 58px;
+        line-height: 1.16;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: #ffffff;
+      }
+
+      .strike-token {
+        display: inline-block;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 46px;
         font-weight: 700;
-        color: #0b0c0c;
-        letter-spacing: -0.02em;
-        white-space: nowrap;
+        color: #94a3b8;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 0 12px;
+        margin: 0 4px;
+        text-decoration: line-through;
+        text-decoration-color: #ef4444;
+        text-decoration-thickness: 3px;
+        vertical-align: baseline;
       }
-      .lede {
-        margin: 0;
-        font-size: 18px;
-        line-height: 1.4;
+
+      .accent-word {
+        color: #ff9852;
+      }
+
+      .subtitle {
+        margin: 22px 0 0 0;
+        font-size: 20px;
+        line-height: 1.55;
+        color: #a8b3c7;
         font-weight: 400;
-        color: #484949;
+        max-width: 580px;
       }
-      .scope-block {
-        text-align: right;
-        flex-shrink: 0;
+
+      .subtitle strong {
+        color: #f1f5f9;
+        font-weight: 600;
       }
-      .scope-rule {
-        width: 40px;
-        height: 3px;
-        background: #1a65a6;
-        margin: 0 0 10px auto;
-      }
-      .scope {
-        margin: 0;
-        font-size: 16px;
-        line-height: 1.4;
-        font-weight: 500;
-        color: #484949;
-        white-space: nowrap;
-      }
-      .wall {
+
+      /* 3-step mechanism flow */
+      .pipeline {
+        margin-top: 28px;
         display: grid;
-        grid-template-columns: repeat(4, 366px);
-        column-gap: 18px;
-        row-gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
       }
-      .tile {
-        width: 366px;
-        background: #ffffff;
-        border: 1px solid #c5c8cb;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0 4px 14px rgba(11, 12, 12, 0.06);
+
+      .pipe-step {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+
+      .pipe-num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        font-weight: 700;
+        color: #60a5fa;
+        letter-spacing: 0.06em;
+      }
+
+      .pipe-title {
+        margin-top: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #f8fafc;
+      }
+
+      .pipe-desc {
+        margin-top: 4px;
+        font-size: 12.5px;
+        line-height: 1.4;
+        color: #94a3b8;
+      }
+
+      /* Bottom 7 systems strip */
+      .systems-wrap {
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .systems-label {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+
+      .systems-list {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 8px;
       }
-      .tile-shot {
-        width: 366px;
-        height: 228px;
-        overflow: hidden;
-        background: #e8eaed;
+
+      .sys-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 13px;
+        font-weight: 500;
+        color: #e2e8f0;
       }
-      .tile-shot img {
-        width: 100%;
+
+      .sys-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+      }
+
+      /* Right Column: Staggered UI Showcase + Line Trace Callouts */
+      .right {
+        position: relative;
+        z-index: 2;
         height: 100%;
-        object-fit: cover;
-        object-position: left top;
-        display: block;
       }
-      .tile-cap {
-        height: 38px;
-        padding: 0 14px;
-        border-top: 1px solid #e4e6e8;
+
+      .shot-card {
+        position: absolute;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #161b22;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+      }
+
+      .shot-header {
+        height: 30px;
+        padding: 0 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-size: 13px;
-        line-height: 1;
-        background: #ffffff;
-      }
-      .tile-name {
+        font-size: 12px;
         font-weight: 600;
-        color: #0b0c0c;
+        background: #1c222d;
+        color: #cbd5e1;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
-      .tile-sys {
-        color: #484949;
-        font-weight: 500;
+
+      .shot-header .tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .shot-card img {
+        display: block;
+        width: 100%;
+        height: calc(100% - 30px);
+        object-fit: cover;
+        object-position: left top;
+      }
+
+      /* 1. NeedKnows (Carbon 0px editorial) - Top Right */
+      .shot-carbon {
+        top: 6px;
+        right: 0;
+        width: 530px;
+        height: 345px;
+        border-radius: 4px;
+        z-index: 1;
+        opacity: 0.96;
+      }
+
+      /* 2. HookPulse (Umami Dark) - Main Hero Front Left */
+      .shot-epdeck {
+        top: 128px;
+        left: 0;
+        width: 590px;
+        height: 392px;
+        z-index: 3;
+        border-color: rgba(48, 128, 255, 0.5);
+        box-shadow:
+          0 32px 72px rgba(0, 0, 0, 0.72),
+          0 0 0 1px rgba(48, 128, 255, 0.22);
+      }
+
+      /* 3. EthanWorks (TDesign Floating Pill) - Bottom Right */
+      .shot-hig {
+        bottom: 4px;
+        right: 14px;
+        width: 470px;
+        height: 290px;
+        z-index: 2;
+      }
+
+      /* Floating Line-Level Trace Cards */
+      .trace-card {
+        position: absolute;
+        z-index: 5;
+        background: rgba(15, 20, 29, 0.94);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        border-radius: 10px;
+        padding: 11px 14px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .trace-card.orange {
+        border-color: rgba(237, 129, 57, 0.55);
+      }
+
+      .trace-head {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 7px;
+      }
+
+      .trace-badge {
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        background: rgba(59, 130, 246, 0.2);
+        color: #93c5fd;
+      }
+
+      .trace-card.orange .trace-badge {
+        background: rgba(237, 129, 57, 0.2);
+        color: #fdba74;
+      }
+
+      .trace-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        line-height: 1.6;
+        color: #cbd5e1;
+      }
+
+      .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        flex-shrink: 0;
+      }
+
+      .trace-line {
+        color: #60a5fa;
+      }
+      .trace-card.orange .trace-line {
+        color: #ff9852;
+      }
+
+      .trace-top {
+        top: 14px;
+        left: -16px;
+      }
+
+      .trace-bottom {
+        bottom: 18px;
+        left: -16px;
       }
     </style>
   </head>
   <body>
-    <div class="top-bar"></div>
-    <main class="canvas">
-      <header class="masthead">
-        <div class="title-block">
-          <div class="brand-row">
-            <span class="brand-mark"></span>
-            <h1>UISpecs · UI 设计规范全文库</h1>
-          </div>
-          <p class="lede">给 AI 用的官方设计规范原文库，每个页面数值都能定位到文章具体行号。</p>
-        </div>
-        <div class="scope-block">
-          <div class="scope-rule"></div>
-          <p class="scope">7 套官方设计体系 · 精选实测案例首屏</p>
-        </div>
-      </header>
+    <div class="stage">
+      <div class="top-accent"></div>
+      <div class="grid-bg"></div>
 
-      <section class="wall" aria-label="精选实测案例">
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/epdeck/preview.png" alt="EpDeck" /></div>
-          <div class="tile-cap"><span class="tile-name">EpDeck · 追剧站</span><span class="tile-sys">TDesign Dark</span></div>
+      <section class="left">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>UISPECS · 给 AI 用的官方设计规范原文库</span>
+          </div>
+
+          <div class="hero-copy">
+            <h1>
+              不再让 AI 凭感觉<br />
+              写 <span class="strike-token">16px</span> 和 <span class="strike-token">10px</span>
+            </h1>
+            <p class="subtitle">
+              收录 <strong>7 套官方设计体系</strong>原文全文，每个字号、色值与间距都能<strong>定位到文章具体行号</strong>，按产品形态自动分流直出。
+            </p>
+          </div>
+
+          <div class="pipeline">
+            <div class="pipe-step">
+              <div class="pipe-num">01 / MATCH</div>
+              <div class="pipe-title">按产品同构分流</div>
+              <div class="pipe-desc">7 套体系平权匹配，不撞壳</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-num">02 / TRACE</div>
+              <div class="pipe-title">原文行号级溯源</div>
+              <div class="pipe-desc">所有 token 精确回溯规范出处</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-num">03 / SHIP</div>
+              <div class="pipe-title">零依赖单文件直出</div>
+              <div class="pipe-desc">四态完整，首屏直出核心工件</div>
+            </div>
+          </div>
         </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/rolerail/preview.png" alt="RoleRail" /></div>
-          <div class="tile-cap"><span class="tile-name">RoleRail · 职位索引</span><span class="tile-sys">TDesign</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/needknows/preview.png" alt="NeedKnows" /></div>
-          <div class="tile-cap"><span class="tile-name">NeedKnows · 情报终端</span><span class="tile-sys">IBM Carbon</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/pricelens/preview.png" alt="PriceLens" /></div>
-          <div class="tile-cap"><span class="tile-name">PriceLens · 模型比价</span><span class="tile-sys">Shopify Polaris</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/promptshelf/preview.png" alt="PromptShelf" /></div>
-          <div class="tile-cap"><span class="tile-name">PromptShelf · 提示词库</span><span class="tile-sys">GitHub Primer</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/allparse/preview.png" alt="ALLParse" /></div>
-          <div class="tile-cap"><span class="tile-name">ALLParse · 视频解析</span><span class="tile-sys">Adobe Spectrum</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/clinicdesk/preview.png" alt="ClinicDesk" /></div>
-          <div class="tile-cap"><span class="tile-name">ClinicDesk · 社区挂号</span><span class="tile-sys">Fluent 2</span></div>
-        </div>
-        <div class="tile">
-          <div class="tile-shot"><img src="../examples/chatcafe/preview.png" alt="ChatCafe" /></div>
-          <div class="tile-cap"><span class="tile-name">ChatCafe · AI 对话</span><span class="tile-sys">Apple HIG</span></div>
+
+        <div class="systems-wrap">
+          <div class="systems-label">Built-in Official Design Systems · 唯一数值源</div>
+          <div class="systems-list">
+            <span class="sys-pill"><span class="sys-dot" style="background:#ed8139"></span>TDesign</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#0f62fe"></span>IBM Carbon</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#2da44e"></span>GitHub Primer</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#008060"></span>Shopify Polaris</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#e1251b"></span>Adobe Spectrum</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#0078d4"></span>Fluent 2</span>
+            <span class="sys-pill"><span class="sys-dot" style="background:#a1a1aa"></span>Apple HIG</span>
+          </div>
         </div>
       </section>
-    </main>
+
+      <section class="right">
+        <!-- Carbon Top Right -->
+        <div class="shot-card shot-carbon">
+          <div class="shot-header">
+            <span>NeedKnows · 情报终端</span>
+            <span class="tag">IBM Carbon · 0px 直角</span>
+          </div>
+          <img src="../examples/needknows/preview.png" alt="NeedKnows IBM Carbon" />
+        </div>
+
+        <!-- EthanWorks Bottom Right -->
+        <div class="shot-card shot-hig">
+          <div class="shot-header">
+            <span></span>
+            <span class="tag">EthanWorks · TDesign 悬浮胶囊</span>
+          </div>
+          <img src="../examples/ethanworks/preview.png" alt="EthanWorks TDesign" />
+        </div>
+
+        <!-- HookPulse Front Hero -->
+        <div class="shot-card shot-epdeck">
+          <div class="shot-header">
+            <span>HookPulse · Webhook 监控台</span>
+            <span class="tag">Umami Dark · #171717 / #3080ff</span>
+          </div>
+          <img src="../examples/hookpulse/preview.png" alt="HookPulse Umami Dark" />
+        </div>
+
+        <!-- Line-level Trace Callouts -->
+        <div class="trace-card trace-top">
+          <div class="trace-head">
+            <span class="trace-badge">LINE TRACE</span>
+            <span>IBM Carbon 原文溯源</span>
+          </div>
+          <div class="trace-row">
+            <span class="swatch" style="background:#161616"></span>
+            <span>Gray 100 顶栏</span>
+            <span class="trace-line">carbon--color.md:131</span>
+          </div>
+          <div class="trace-row">
+            <span class="swatch" style="background:#0052d9"></span>
+            <span>2x Grid 1312px</span>
+            <span class="trace-line">carbon--2x-grid.md:138</span>
+          </div>
+        </div>
+
+        <div class="trace-card trace-bottom">
+          <div class="trace-head">
+            <span class="trace-badge">LINE TRACE</span>
+            <span>Umami Dark 原文溯源</span>
+          </div>
+          <div class="trace-row">
+            <span class="swatch" style="background:#171717"></span>
+            <span>Surface #171717</span>
+            <span class="trace-line">designmd--umami.md:43</span>
+          </div>
+          <div class="trace-row">
+            <span class="swatch" style="background:#3080ff"></span>
+            <span>Primary #3080ff</span>
+            <span class="trace-line">designmd--umami.md:33</span>
+          </div>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

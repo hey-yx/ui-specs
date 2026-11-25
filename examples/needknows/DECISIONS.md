@@ -2,15 +2,16 @@
 
 - 需求：`briefs/needknows.md`（每日 07:30 更新行业情报门户：融资、新产品、开源项目、政策变化、人事变动 5 类 36 条样本、90 天往期切换、14 类信源核对、邮件 08:00 与分品类 RSS 订阅）
 - 数值文章：**Carbon**（IBM），选型行 `project-carbon`
-- frame: nav=N13; footer=Ft3; base=#ffffff
+- frame: batch=2026-11-24-a; nav=N6; footer=Ft7; base=#ffffff
+- Hallmark 标记：`macrostructure: Index-First · nav: N6 · footer: Ft7 · theme: IBM Carbon`
 - 交付：`examples/needknows/index.html`（单文件，CSS 与 JS 内联，零外部请求）
 
 ---
 
-## 1. 选型理由与 0px 印刷情报终端语法
+## 1. 选型理由与 Index-First 主从情报流
 
-- 产品是产品、投资、运营人员早间 10 分钟扫完当日要闻的超高密度结构化索引流，与 IBM Carbon 的 `0px` 直角、48px `#161616` 全局顶栏、White/Gray 10 交替分层和严谨表格式数据流高度同构，故落选 `project-carbon`。
-- 彻底去掉此前圆角卡片与个人化杂乱边框，全页保持 `0px` 锐角与清晰单元格分割，提供当日 36 条完整结构化字段、内联行展开抽屉、90 天日期翻查与分类邮件 08:00/RSS 订阅。
+- 产品是产品、投资、运营人员早间 10 分钟扫完当日要闻的超高密度结构化索引流，与 IBM Carbon 的 `0px` 直角、`#161616` 全局工具条、White/Gray 10 分层高度同构，故选用 `project-carbon`。
+- 彻底去掉此前首屏被 4 个大 KPI 瓦片和大柱图挤占的报表结构，改为 **`Index-First` + `N6` 报头 + 主从分栏（Master-Detail）**：1280×800 首屏直接露出 5 条完整情报与右侧「结构化字段 + 原文核对」常驻面板，底部接 `Ft7` 08:00 邮件与分品类 RSS 订阅表单。
 
 ## 2. 色彩与实测对比度
 

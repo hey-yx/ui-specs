@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """外壳避重核对：跨站比对页头、页脚、页底色，补 check-ledger 不查的那一层。
 
-规则取自 briefs/layouts.md「分配时的硬规则」：
+规则取自项目外壳避重规范：
   1. 同一批 nav 件号不重复；footer 件号每种最多 2 次。
   2. 同一批里「灰底」站点不超过半数。
   3. 页脚 DOM 骨架（footer 标签与子孙 class 路径）全库相同的站点不超过 2 个。

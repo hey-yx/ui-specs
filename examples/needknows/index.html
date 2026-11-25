@@ -1,1218 +1,1515 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-<meta name="frame" content="nav=N13; footer=Ft3; base=#ffffff">
-<meta name="description" content="NeedKnows 必知日刊：每日 07:30 更新的行业情报门户，收齐融资、新产品、开源项目、政策变化与人事变动 5 类 36 条样本，支持 90 天往期切换、信源清单核对与分品类 08:00 邮件/RSS 订阅。">
-<title>NeedKnows 必知日刊 - 每日 07:30 行业情报终端</title>
-<style>
-/* 数值来源：project-carbon (IBM Carbon) + GAP_RULES 色彩与字阶回源 TDesign
- * Carbon 底座：content/color/carbondesignsystem.com--color.md:128-131 (#ffffff, #f4f4f4, #262626, #161616)
- * Carbon 间距/断点/动效：carbondesignsystem.com--spacing.md:47-55, 2x-grid.md:135-138, motion.md:194-198
- * 语义色与字阶回源 (GAP_RULES)：tdesign.tencent.com--color.md (#0052d9, #003cab, #f2f3ff, #006c45, #e3f9e9, #954500, #fff1e9, #ad352f, #fff0ed, #5e5e5e, #e8e8e8, #dddddd, #181818) & fonts.md (12/14/16/20/24/28/36)
- */
-:root {
-  --bg: #ffffff;
-  --layer-1: #f4f4f4;
-  --layer-2: #ffffff;
-  --header-bg: #161616;
-  --panel-dark: #262626;
-  --ink: #161616;
-  --ink-2: #5e5e5e;
-  --hair: #e8e8e8;
-  --hair-strong: #dddddd;
-  --accent: #0052d9;
-  --accent-hover: #003cab;
-  --accent-soft: #f2f3ff;
-  --ok: #006c45;
-  --ok-soft: #e3f9e9;
-  --warn: #954500;
-  --warn-soft: #fff1e9;
-  --err: #ad352f;
-  --err-soft: #fff0ed;
-  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --sp-2: 4px;
-  --sp-3: 8px;
-  --sp-4: 12px;
-  --sp-5: 16px;
-  --sp-6: 24px;
-  --sp-7: 32px;
-  --sp-8: 40px;
-  --sp-9: 48px;
-  --sp-10: 64px;
-  --r-none: 0px;
-  --dur-fast: 110ms;
-  --dur-mid: 150ms;
-  --ease-carbon: cubic-bezier(0.2, 0, 0.38, 0.9);
-  --shadow-modal: 0 12px 32px rgba(22, 22, 22, 0.24);
-}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="frame" content="batch=2026-11-24-a; nav=N6; footer=Ft7; base=#ffffff" />
+    <title>NeedKnows 必知日刊 · 每日 07:30 行业情报</title>
+    <style>
+      :root {
+        /* IBM Carbon surface & neutral tokens (carbondesignsystem.com--color.md:128-131) */
+        --nk-white: #ffffff;
+        --nk-gray-10: #f4f4f4;
+        --nk-gray-90: #262626;
+        --nk-gray-100: #161616;
 
-*, *::before, *::after { box-sizing: border-box; border-radius: var(--r-none); }
-[hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 22px;
-  font-variant-numeric: tabular-nums;
-  overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
-}
-h1, h2, h3, p, ul { margin: 0; }
-ul { padding: 0; list-style: none; }
-button, input, select { font-family: inherit; }
-a { color: var(--accent); text-decoration: none; }
-svg { display: block; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+        /* TDesign semantic & neutral fallback per GAP_RULES (tdesign.tencent.com--color.md) */
+        --nk-border: #e0e0e0;
+        --nk-border-strong: #8d8d8d;
+        --nk-text-primary: #161616;
+        --nk-text-secondary: #525252;
+        --nk-text-muted: #5e5e5e;
 
-.skip {
-  position: absolute; left: -9999px; top: 8px; z-index: 100;
-  background: var(--accent); color: #ffffff;
-  padding: 10px 16px; font-weight: 600;
-}
-.skip:focus { left: 16px; }
-.sr-only {
-  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
-  clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0;
-}
+        --nk-blue: #0052d9;
+        --nk-blue-hover: #003cab;
+        --nk-blue-bg: #f2f3ff;
 
-.wrap { max-width: 1312px; margin: 0 auto; padding-inline: var(--sp-6); }
+        --nk-green: #006c45;
+        --nk-green-bg: #e3f9e9;
 
-/* Carbon 48px 全局黑色顶栏 (#161616) */
-.c-header {
-  background: var(--header-bg);
-  color: #ffffff;
-  min-height: 48px;
-  border-bottom: 1px solid #393939;
-}
-.c-header-in {
-  min-height: 48px;
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-}
-.c-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-3);
-  color: #ffffff;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 600;
-  padding: 8px 0;
-}
-.c-brand-sub {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 20px;
-  color: #c6c6c6;
-  font-weight: 400;
-  padding-left: var(--sp-3);
-  border-left: 1px solid #525252;
-}
-.c-search-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  min-width: 240px;
-  min-height: 36px;
-  align-self: center;
-  padding: 0 var(--sp-4);
-  border: 1px solid #525252;
-  background: var(--panel-dark);
-  color: #e8e8e8;
-  font-size: 13px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-carbon), background-color var(--dur-fast) var(--ease-carbon);
-}
-.c-search-trigger kbd {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 16px;
-  padding: 1px 6px;
-  border: 1px solid #6f6f6f;
-  background: var(--header-bg);
-  color: #ffffff;
-}
-.c-header-controls {
-  display: flex;
-  align-items: stretch;
-  gap: 1px;
-  background: #393939;
-}
-.c-top-btn {
-  border: 0;
-  background: var(--header-bg);
-  color: #ffffff;
-  min-height: 48px;
-  padding: 0 var(--sp-5);
-  font-size: 14px;
-  line-height: 22px;
-  cursor: pointer;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background-color var(--dur-fast) var(--ease-carbon);
-}
-.c-top-btn[aria-pressed="true"] { background: var(--accent); font-weight: 600; }
-.c-top-btn--primary { background: var(--accent); font-weight: 600; }
-@media (hover: hover) {
-  .c-search-trigger:hover { border-color: #8d8d8d; background: #333333; }
-  .c-top-btn:hover { background: var(--panel-dark); }
-  .c-top-btn--primary:hover { background: var(--accent-hover); }
-}
+        --nk-amber: #954500;
+        --nk-amber-bg: #fff1e9;
 
-/* N13 命令面板弹窗（0px Carbon 语法） */
-.cmdk-panel {
-  background: var(--bg);
-  border: 1px solid var(--ink);
-  box-shadow: var(--shadow-modal);
-  width: min(600px, 100%);
-  max-height: 82vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-.cmdk-head {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
-  border-bottom: 1px solid var(--hair-strong);
-  background: var(--layer-1);
-}
-.cmdk-head input {
-  flex: 1;
-  min-width: 0;
-  min-height: 40px;
-  padding: 0 var(--sp-4);
-  border: 1px solid var(--ink-2);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
-}
-.cmdk-list { overflow-y: auto; max-height: 52vh; }
-.cmdk-item {
-  width: 100%;
-  text-align: left;
-  border: 0;
-  border-bottom: 1px solid var(--hair);
-  background: var(--bg);
-  padding: 10px var(--sp-4);
-  cursor: pointer;
-  display: grid;
-  gap: 2px;
-  min-height: 48px;
-}
-.cmdk-item.is-active, .cmdk-item:hover { background: var(--accent-soft); }
-.cmdk-item-top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink); }
-.cmdk-item-sub { font-size: 12px; line-height: 18px; color: var(--ink-2); }
-.cmdk-foot {
-  padding: var(--sp-3) var(--sp-4);
-  border-top: 1px solid var(--hair-strong);
-  background: var(--layer-1);
-  display: flex;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--ink-2);
-}
+        --nk-red: #ad352f;
+        --nk-red-bg: #fff0ed;
 
-/* 期刊标题带 & 90 天日期切换 */
-.issue-band {
-  background: var(--layer-1);
-  border-bottom: 1px solid var(--hair-strong);
-  padding: var(--sp-6) 0;
-}
-.issue-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--sp-5);
-  flex-wrap: wrap;
-}
-.issue-kicker {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--ink-2);
-}
-.issue-title {
-  margin-top: var(--sp-2);
-  font-size: clamp(24px, 3vw, 36px);
-  line-height: calc(1em + 8px);
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-}
-.issue-sub { margin-top: var(--sp-2); font-size: 14px; line-height: 22px; color: var(--ink-2); max-width: 48em; }
-.issue-picker {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  min-width: 260px;
-}
-.issue-picker label { font-size: 12px; line-height: 20px; font-weight: 600; color: var(--ink); }
-.c-select {
-  min-height: 40px;
-  padding: 0 32px 0 12px;
-  border: 1px solid var(--ink-2);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
-  line-height: 22px;
-  cursor: pointer;
-}
+        --nk-teal: #005d5d;
+        --nk-teal-bg: #e5f6f6;
 
-/* 4-Tile Carbon 指标概览条 */
-.tile-grid {
-  margin-top: var(--sp-5);
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--hair-strong);
-  border: 1px solid var(--hair-strong);
-}
-.c-tile {
-  background: var(--bg);
-  padding: var(--sp-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-}
-.c-tile-k { font-size: 12px; line-height: 20px; color: var(--ink-2); font-weight: 600; }
-.c-tile-v { font-size: 28px; line-height: 36px; font-weight: 600; color: var(--ink); font-family: var(--font-mono); }
-.c-tile-d { font-size: 12px; line-height: 20px; color: var(--ink-2); }
+        --nk-purple: #5610a4;
+        --nk-purple-bg: #fbf0ff;
 
-/* 数据分布与晨读清单条 */
-.analytics-row {
-  padding: var(--sp-6) 0 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
-  gap: var(--sp-5);
-}
-.c-box {
-  border: 1px solid var(--hair-strong);
-  background: var(--bg);
-  padding: var(--sp-5);
-}
-.c-box-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  flex-wrap: wrap;
-  margin-bottom: var(--sp-4);
-}
-.c-box-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink); }
-.c-box-meta { font-size: 12px; line-height: 20px; color: var(--ink-2); }
-.brief-bullets { display: grid; gap: var(--sp-3); }
-.brief-bullet {
-  padding: var(--sp-3);
-  background: var(--layer-1);
-  border-left: 3px solid var(--accent);
-  font-size: 14px;
-  line-height: 22px;
-  color: var(--ink);
-}
-.brief-bullet strong { display: block; font-size: 12px; color: var(--accent); margin-bottom: 2px; }
+        /* Carbon spacing scale ($spacing-02 to $spacing-09) */
+        --sp-2: 4px;
+        --sp-3: 8px;
+        --sp-4: 12px;
+        --sp-5: 16px;
+        --sp-6: 24px;
+        --sp-7: 32px;
+        --sp-8: 48px;
 
-/* 工具栏与 Carbon Content Switcher + 搜索 */
-.main-sec { padding: var(--sp-6) 0 var(--sp-10); }
-.toolbar {
-  background: var(--layer-1);
-  border: 1px solid var(--hair-strong);
-  border-bottom: 0;
-  padding: var(--sp-4) var(--sp-5);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-}
-.tabs { display: flex; flex-wrap: wrap; gap: 1px; background: var(--hair-strong); border: 1px solid var(--hair-strong); }
-.tab {
-  min-height: 36px;
-  padding: 0 14px;
-  border: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
-  line-height: 22px;
-  cursor: pointer;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.tab-cnt { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
-.tab[aria-pressed="true"] { background: var(--ink); color: #ffffff; font-weight: 600; }
-.tab[aria-pressed="true"] .tab-cnt { color: #e8e8e8; }
+        /* Carbon productive motion */
+        --ease-prod: cubic-bezier(0.2, 0, 0.38, 0.9);
+        --dur-fast: 110ms;
+        --dur-med: 150ms;
 
-.toolbar-right { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; flex: 1; justify-content: flex-end; min-width: 240px; }
-.c-input {
-  min-height: 38px;
-  padding: 6px 12px;
-  border: 1px solid var(--ink-2);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
-  line-height: 22px;
-  flex: 1;
-  min-width: 200px;
-  max-width: 340px;
-}
-.c-btn {
-  min-height: 38px;
-  padding: 0 16px;
-  border: 1px solid var(--ink-2);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.c-btn-primary { background: var(--accent); border-color: var(--accent); color: #ffffff; }
-.c-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #ffffff; }
-@media (hover: hover) {
-  .c-btn:hover { background: var(--hair); }
-  .c-btn-primary:hover { background: var(--accent-hover); }
-}
+        --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+          'Microsoft YaHei', 'Segoe UI', Roboto, sans-serif;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
 
-/* Carbon Structured Data Stream & Expandable Rows (36 条) */
-.feed-table {
-  border: 1px solid var(--hair-strong);
-  background: var(--bg);
-}
-.feed-head {
-  background: var(--layer-1);
-  border-bottom: 1px solid var(--hair-strong);
-  padding: 10px var(--sp-5);
-  display: grid;
-  grid-template-columns: 78px 94px minmax(0, 1fr) 230px 140px;
-  gap: var(--sp-4);
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.feed-item { border-bottom: 1px solid var(--hair); }
-.feed-item:last-child { border-bottom: 0; }
-.feed-row {
-  padding: var(--sp-4) var(--sp-5);
-  display: grid;
-  grid-template-columns: 78px 94px minmax(0, 1fr) 230px 140px;
-  gap: var(--sp-4);
-  align-items: start;
-  transition: background-color var(--dur-fast) var(--ease-carbon);
-}
-.feed-row.is-open { background: var(--layer-1); }
-.feed-id { font-family: var(--font-mono); font-size: 12px; line-height: 20px; color: var(--ink-2); padding-top: 2px; }
-.cat-tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 8px;
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: 600;
-}
-.cat-fin { background: var(--accent-soft); color: var(--accent); }
-.cat-prod { background: var(--ok-soft); color: var(--ok); }
-.cat-oss { background: var(--layer-1); color: var(--ink); border: 1px solid var(--hair-strong); }
-.cat-pol { background: var(--warn-soft); color: var(--warn); }
-.cat-hr { background: var(--err-soft); color: var(--err); }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
 
-.feed-headline { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
-.feed-summary { margin-top: 4px; font-size: 14px; line-height: 22px; color: var(--ink-2); overflow-wrap: anywhere; }
-.feed-kv-inline {
-  margin-top: 6px;
-  display: flex;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--ink);
-  font-family: var(--font-mono);
-}
-.feed-src { font-size: 12px; line-height: 20px; color: var(--ink-2); }
-.feed-src strong { display: block; color: var(--ink); font-size: 14px; font-weight: 600; }
-.feed-acts { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
-.row-btn {
-  min-height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--hair-strong);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.row-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #ffffff; }
-.row-btn[aria-expanded="true"] { background: var(--ink); border-color: var(--ink); color: #ffffff; }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--nk-white);
+        color: var(--nk-text-primary);
+        font-family: var(--font-sans);
+        font-size: 14px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
 
-.feed-drawer {
-  background: var(--layer-1);
-  border-top: 1px solid var(--hair-strong);
-  padding: var(--sp-4) var(--sp-5) var(--sp-5) 110px;
-  display: grid;
-  gap: var(--sp-3);
-}
-.drawer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-3);
-  background: var(--bg);
-  border: 1px solid var(--hair-strong);
-  padding: var(--sp-4);
-}
-.drawer-k { font-size: 12px; line-height: 20px; color: var(--ink-2); }
-.drawer-v { font-size: 14px; line-height: 22px; font-weight: 600; color: var(--ink); }
+      a {
+        color: var(--nk-blue);
+        text-decoration: none;
+      }
 
-/* 状态栏 */
-.status-bar {
-  border: 1px solid var(--hair-strong);
-  background: var(--layer-1);
-  padding: var(--sp-4);
-  margin-bottom: var(--sp-4);
-  font-weight: 600;
-}
-.alert-box {
-  border: 1px solid var(--err);
-  border-left: 4px solid var(--err);
-  background: var(--err-soft);
-  padding: var(--sp-5);
-  margin-bottom: var(--sp-4);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-}
-.empty-box {
-  border: 1px solid var(--hair-strong);
-  background: var(--layer-1);
-  padding: var(--sp-9) var(--sp-6);
-  text-align: center;
-}
+      button,
+      input,
+      select {
+        font-family: inherit;
+        font-size: inherit;
+        border-radius: 0;
+      }
 
-/* 弹窗 */
-.backdrop {
-  position: fixed; inset: 0; z-index: 70;
-  background: rgba(22, 22, 22, 0.52);
-  display: flex; align-items: center; justify-content: center; padding: 16px;
-}
-.dialog {
-  background: var(--bg);
-  border: 1px solid var(--ink);
-  box-shadow: var(--shadow-modal);
-  width: min(640px, 100%);
-  max-height: 86vh;
-  overflow-y: auto;
-  padding: var(--sp-6);
-}
-.dialog-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  padding-bottom: var(--sp-4);
-  border-bottom: 1px solid var(--hair-strong);
-}
-.dialog-title { font-size: 20px; line-height: 28px; font-weight: 600; color: var(--ink); }
-.dialog-body { padding-top: var(--sp-4); display: grid; gap: var(--sp-4); }
-.check-grid { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
-.check-chip {
-  display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 4px 12px;
-  border: 1px solid var(--ink-2); background: var(--layer-1); cursor: pointer; font-size: 14px;
-}
+      :focus-visible {
+        outline: 2px solid var(--nk-blue);
+        outline-offset: 2px;
+      }
 
-/* Ft3 三栏索引页脚（Carbon Layer-01 浅底加顶线） */
-.foot-index {
-  background: var(--layer-1);
-  border-top: 1px solid var(--hair-strong);
-  color: var(--ink);
-  padding: var(--sp-7) 0 var(--sp-6);
-}
-.foot-index__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-6);
-}
-.foot-index__col h3 {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 600;
-  color: var(--ink-2);
-  margin: 0 0 var(--sp-3);
-}
-.foot-index__col ul { display: grid; gap: 4px; }
-.foot-index__col a, .foot-index__btn {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  font-size: 13px;
-  line-height: 20px;
-  color: var(--ink);
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-}
-.foot-index__col a:hover, .foot-index__btn:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-.foot-index__base {
-  margin-top: var(--sp-6);
-  padding-top: var(--sp-4);
-  border-top: 1px solid var(--hair-strong);
-  display: flex;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--ink-2);
-}
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--nk-gray-100);
+        color: var(--nk-white);
+        padding: 8px 16px;
+        z-index: 1000;
+      }
+      .skip-link:focus {
+        left: 8px;
+        top: 8px;
+      }
 
-@media (max-width: 1056px) {
-  .tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .analytics-row { grid-template-columns: 1fr; }
-  .feed-head { display: none; }
-  .feed-row { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
-  .feed-acts { justify-content: flex-start; }
-  .feed-drawer { padding: var(--sp-4); }
-  .drawer-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 672px) {
-  .wrap { padding-inline: var(--sp-4); }
-  .tile-grid { grid-template-columns: 1fr; }
-  .c-search-trigger { min-width: 0; flex: 1; }
-  .c-header-controls { width: 100%; overflow-x: auto; }
-  .foot-index__grid { grid-template-columns: 1fr; gap: var(--sp-5); }
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { transition-duration: 0.01ms !important; }
-}
-</style>
-</head>
-<body>
-<a class="skip" href="#intelTable">跳到今日情报流</a>
+      /* Top Carbon Utility Bar (36px) */
+      .util-bar {
+        background: var(--nk-gray-100);
+        color: var(--nk-white);
+        border-bottom: 1px solid #333333;
+      }
+      .util-inner {
+        max-width: 1312px;
+        margin: 0 auto;
+        padding: 0 var(--sp-5);
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-4);
+        flex-wrap: wrap;
+        font-size: 12px;
+      }
+      .util-left {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-4);
+        flex-wrap: wrap;
+      }
+      .util-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #e0e0e0;
+        font-family: var(--font-mono);
+      }
+      .util-dot {
+        width: 7px;
+        height: 7px;
+        background: #42be65;
+        display: inline-block;
+      }
+      .util-right {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+      }
+      .util-btn {
+        background: transparent;
+        color: #f4f4f4;
+        border: 1px solid transparent;
+        height: 32px;
+        padding: 0 10px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        transition: background var(--dur-fast) var(--ease-prod);
+      }
+      .util-btn.primary {
+        background: var(--nk-blue);
+        color: var(--nk-white);
+        font-weight: 600;
+      }
+      .util-select {
+        background: var(--nk-gray-90);
+        color: var(--nk-white);
+        border: 1px solid #525252;
+        height: 26px;
+        padding: 0 8px;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        cursor: pointer;
+      }
 
-<header class="c-header">
-  <div class="wrap c-header-in">
-    <a class="c-brand" href="#top">
-      <span>NeedKnows 必知日刊</span>
-      <span class="c-brand-sub">每日 07:30 出刊 · 保留 90 天归档</span>
-    </a>
-    <button class="c-search-trigger" id="searchPillBtn" type="button" aria-label="快捷检索情报（⌘K）">
-      <span>搜 36 条情报或信源...</span>
-      <kbd>⌘K</kbd>
-    </button>
-    <div class="c-header-controls">
-      <button class="c-top-btn" id="sourcesBtn" type="button">收录信源 (14)</button>
-      <button class="c-top-btn" id="savedNavBtn" type="button" aria-pressed="false">收藏夹 (0)</button>
-      <button class="c-top-btn c-top-btn--primary" id="subNavBtn" type="button">邮件 08:00 / RSS 订阅</button>
-    </div>
-  </div>
-</header>
+      /* N6 Editorial Masthead */
+      .masthead {
+        background: var(--nk-white);
+        border-bottom: 2px solid var(--nk-gray-100);
+      }
+      .masthead-inner {
+        max-width: 1312px;
+        margin: 0 auto;
+        padding: 12px var(--sp-5);
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: var(--sp-4);
+      }
+      .mast-left {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        font-size: 12px;
+        color: var(--nk-text-secondary);
+      }
+      .mast-brand {
+        text-align: center;
+      }
+      .mast-title {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.2;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--nk-gray-100);
+      }
+      .mast-sub {
+        font-size: 12px;
+        color: var(--nk-text-secondary);
+        margin-top: 2px;
+      }
+      .mast-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--sp-3);
+      }
+      .search-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .search-input {
+        width: 240px;
+        height: 32px;
+        padding: 0 44px 0 10px;
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-gray-10);
+        color: var(--nk-text-primary);
+        font-size: 13px;
+      }
+      .search-input:focus {
+        background: var(--nk-white);
+      }
+      .kbd-hint {
+        position: absolute;
+        right: 8px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--nk-text-secondary);
+        border: 1px solid #c6c6c6;
+        background: var(--nk-white);
+        padding: 1px 5px;
+        pointer-events: none;
+      }
 
-<section class="issue-band" id="top">
-  <div class="wrap">
-    <div class="issue-head">
-      <div>
-        <div class="issue-kicker" id="issueKicker">第 142 期 · 更新时刻 07:30 · 日均 30 到 50 条核验动向</div>
-        <h1 class="issue-title" id="issueTitle">十分钟扫完今天的融资、新品、开源、政策与人事变化</h1>
-        <p class="issue-sub">收齐监管公告、仓库 Release 与一级投融资信源，所有转载条目标明原始发布媒体与时间戳。下方给出今日 36 条完整样本。</p>
-      </div>
-      <div class="issue-picker">
-        <label for="issueSelect">切换往期日刊（最近 90 天归档）</label>
-        <select class="c-select" id="issueSelect">
-          <option value="2026-11-21">2026-11-21（今日第 142 期 · 36 条）</option>
-          <option value="2026-11-20">2026-11-20（昨日第 141 期 · 34 条）</option>
-          <option value="2026-11-19">2026-11-19（前日第 140 期 · 42 条）</option>
-          <option value="2026-11-12">2026-11-12（7 天前第 133 期 · 38 条）</option>
-          <option value="2026-08-24">2026-08-24（90 天窗口最早一期 · 31 条）</option>
-        </select>
-      </div>
-    </div>
+      /* Status / Error / Loading Banner */
+      .status-banner {
+        max-width: 1312px;
+        margin: var(--sp-4) auto 0;
+        padding: 0 var(--sp-5);
+      }
+      .banner-inner {
+        padding: 10px 14px;
+        border-left: 3px solid var(--nk-red);
+        background: var(--nk-red-bg);
+        color: var(--nk-text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-4);
+        flex-wrap: wrap;
+      }
+      .banner-inner.loading {
+        border-left-color: var(--nk-blue);
+        background: var(--nk-blue-bg);
+      }
+      .btn-sm {
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-white);
+        color: var(--nk-text-primary);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-sm.solid {
+        background: var(--nk-blue);
+        border-color: var(--nk-blue);
+        color: var(--nk-white);
+      }
 
-    <div class="tile-grid" aria-label="当期情报指标摘要">
-      <div class="c-tile">
-        <span class="c-tile-k">当期已收录情报</span>
-        <span class="c-tile-v" id="kpiCount">36 条</span>
-        <span class="c-tile-d">每日 07:30 定点发布（标准区间 30-50 条）</span>
-      </div>
-      <div class="c-tile">
-        <span class="c-tile-k">一级官方与原文信源</span>
-        <span class="c-tile-v">14 家</span>
-        <span class="c-tile-d">含交易所、部委公告、GitHub 及一手媒体</span>
-      </div>
-      <div class="c-tile">
-        <span class="c-tile-k">分品类推送时间</span>
-        <span class="c-tile-v">08:00</span>
-        <span class="c-tile-d">邮件日报与分类 RSS Feed 同步送达</span>
-      </div>
-      <div class="c-tile">
-        <span class="c-tile-k">往期可追溯窗口</span>
-        <span class="c-tile-v">90 天</span>
-        <span class="c-tile-d">支持按日期翻查历史期次与对比异动</span>
-      </div>
-    </div>
+      /* Filter & Category Strip (1px hairline) */
+      .filter-bar {
+        border-bottom: 1px solid var(--nk-border);
+        background: var(--nk-white);
+      }
+      .filter-inner {
+        max-width: 1312px;
+        margin: 0 auto;
+        padding: 0 var(--sp-5);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-4);
+        flex-wrap: wrap;
+      }
+      .cat-tabs {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .cat-tab {
+        height: 40px;
+        padding: 0 14px;
+        border: none;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--nk-text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color var(--dur-fast) var(--ease-prod);
+      }
+      .cat-tab[aria-pressed='true'] {
+        color: var(--nk-gray-100);
+        font-weight: 700;
+        border-bottom-color: var(--nk-blue);
+      }
+      .cat-count {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--nk-text-secondary);
+      }
+      .filter-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        padding: 4px 0;
+      }
+      .toggle-saved {
+        height: 32px;
+        padding: 0 10px;
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-white);
+        color: var(--nk-text-primary);
+        font-size: 12.5px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .toggle-saved[aria-pressed='true'] {
+        background: var(--nk-gray-100);
+        border-color: var(--nk-gray-100);
+        color: var(--nk-white);
+      }
 
-    <div class="analytics-row">
-      <div class="c-box">
-        <div class="c-box-head">
-          <h2 class="c-box-title">五大情报分类分布（当前共 36 条）</h2>
-          <span class="c-box-meta">融资 8 · 新产品 8 · 开源项目 8 · 政策变化 6 · 人事变动 6</span>
+      /* Main Split Workspace: Index-First Feed + Sticky Verification Pane */
+      .workspace {
+        max-width: 1312px;
+        margin: 0 auto;
+        padding: 0 var(--sp-5) var(--sp-7);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 400px;
+        gap: var(--sp-6);
+        align-items: start;
+      }
+
+      .feed-col {
+        min-width: 0;
+        border-top: none;
+      }
+      .feed-meta-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--nk-border);
+        font-size: 12.5px;
+        color: var(--nk-text-secondary);
+        gap: var(--sp-3);
+        flex-wrap: wrap;
+      }
+      .feed-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .feed-item {
+        border-bottom: 1px solid var(--nk-border);
+        padding: 12px 10px;
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: background var(--dur-fast) var(--ease-prod);
+      }
+      .feed-item[data-active='true'] {
+        background: var(--nk-gray-10);
+        border-left-color: var(--nk-blue);
+      }
+      .item-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3);
+        margin-bottom: 4px;
+      }
+      .item-tags {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        min-width: 0;
+      }
+      .item-id {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--nk-text-muted);
+      }
+      .tag-cat {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 1px 7px;
+        display: inline-block;
+      }
+      .tag-融资 {
+        background: var(--nk-blue-bg);
+        color: var(--nk-blue);
+      }
+      .tag-新产品 {
+        background: var(--nk-green-bg);
+        color: var(--nk-green);
+      }
+      .tag-开源项目 {
+        background: var(--nk-teal-bg);
+        color: var(--nk-teal);
+      }
+      .tag-政策变化 {
+        background: var(--nk-amber-bg);
+        color: var(--nk-amber);
+      }
+      .tag-人事变动 {
+        background: var(--nk-red-bg);
+        color: var(--nk-red);
+      }
+      .fact-chip {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--nk-text-primary);
+        background: var(--nk-gray-10);
+        border: 1px solid var(--nk-border);
+        padding: 0 6px;
+      }
+      .feed-item[data-active='true'] .fact-chip {
+        background: var(--nk-white);
+      }
+      .item-title {
+        margin: 0 0 4px 0;
+        font-size: 15px;
+        line-height: 1.4;
+        font-weight: 600;
+        color: var(--nk-text-primary);
+      }
+      .item-summary {
+        margin: 0 0 6px 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--nk-text-secondary);
+      }
+      .item-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3);
+        font-size: 12px;
+        color: var(--nk-text-muted);
+        flex-wrap: wrap;
+      }
+      .item-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .mini-btn {
+        height: 28px;
+        padding: 0 8px;
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-white);
+        color: var(--nk-text-primary);
+        font-size: 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .mini-btn[aria-pressed='true'] {
+        background: var(--nk-gray-100);
+        border-color: var(--nk-gray-100);
+        color: var(--nk-white);
+      }
+
+      /* Right Sticky Detail & Source Verification Pane */
+      .detail-col {
+        position: sticky;
+        top: 12px;
+        padding-top: 10px;
+      }
+      .detail-card {
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-white);
+      }
+      .detail-head {
+        background: var(--nk-gray-10);
+        border-bottom: 1px solid var(--nk-border);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .detail-body {
+        padding: 16px;
+      }
+      .detail-title {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        line-height: 1.38;
+        font-weight: 700;
+        color: var(--nk-gray-100);
+      }
+      .detail-desc {
+        margin: 0 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--nk-text-secondary);
+      }
+      .kv-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+        font-size: 12.5px;
+      }
+      .kv-table th,
+      .kv-table td {
+        border-top: 1px solid var(--nk-border);
+        border-bottom: 1px solid var(--nk-border);
+        padding: 7px 6px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .kv-table th {
+        width: 88px;
+        color: var(--nk-text-secondary);
+        font-weight: 500;
+      }
+      .kv-table td {
+        color: var(--nk-text-primary);
+        font-weight: 500;
+      }
+      .source-box {
+        background: var(--nk-gray-10);
+        border-left: 3px solid var(--nk-blue);
+        padding: 10px 12px;
+        margin-bottom: 14px;
+        font-size: 12.5px;
+      }
+      .source-box-title {
+        font-weight: 700;
+        color: var(--nk-gray-100);
+        margin-bottom: 4px;
+      }
+      .detail-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .detail-actions .btn-sm {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* Compact Category Distribution Micro-Panel */
+      .dist-card {
+        margin-top: 12px;
+        border: 1px solid var(--nk-border);
+        background: var(--nk-white);
+        padding: 12px 16px;
+      }
+      .dist-title {
+        margin: 0 0 10px 0;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--nk-gray-100);
+        display: flex;
+        justify-content: space-between;
+      }
+      .dist-row {
+        display: grid;
+        grid-template-columns: 64px 1fr 34px;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .dist-row:last-child {
+        margin-bottom: 0;
+      }
+      .dist-track {
+        height: 8px;
+        background: var(--nk-gray-10);
+      }
+      .dist-fill {
+        height: 100%;
+      }
+
+      /* Empty State */
+      .empty-box {
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-gray-10);
+        padding: 36px 24px;
+        text-align: center;
+        margin-top: 16px;
+      }
+      .empty-box h2 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+      }
+      .empty-box p {
+        margin: 0 0 16px 0;
+        color: var(--nk-text-secondary);
+      }
+
+      /* Ft7 Subscription-Driven Footer */
+      .sub-footer {
+        background: var(--nk-gray-10);
+        border-top: 2px solid var(--nk-gray-100);
+        padding: var(--sp-7) var(--sp-5);
+      }
+      .sub-footer-inner {
+        max-width: 1312px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: var(--sp-7);
+        align-items: start;
+      }
+      .sub-title {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--nk-gray-100);
+      }
+      .sub-desc {
+        margin: 0 0 14px 0;
+        font-size: 13.5px;
+        color: var(--nk-text-secondary);
+        max-width: 520px;
+      }
+      .sub-checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+        margin-bottom: 14px;
+      }
+      .sub-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .sub-form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .sub-input {
+        flex: 1;
+        min-width: 220px;
+        height: 36px;
+        padding: 0 12px;
+        border: 1px solid var(--nk-border-strong);
+        background: var(--nk-white);
+        color: var(--nk-text-primary);
+      }
+      .sub-submit {
+        height: 36px;
+        padding: 0 18px;
+        border: none;
+        background: var(--nk-blue);
+        color: var(--nk-white);
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .sub-feedback {
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--nk-green);
+        font-weight: 600;
+        min-height: 20px;
+      }
+      .footer-meta {
+        border-left: 1px solid var(--nk-border-strong);
+        padding-left: var(--sp-6);
+        font-size: 12.5px;
+        color: var(--nk-text-secondary);
+      }
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        margin-bottom: 12px;
+      }
+      .footer-link-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--nk-blue);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      /* Modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(22, 22, 22, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: var(--sp-5);
+        z-index: 200;
+      }
+      .modal-backdrop[data-open='true'] {
+        display: flex;
+      }
+      .modal-panel {
+        width: 100%;
+        max-width: 680px;
+        max-height: 85vh;
+        overflow-y: auto;
+        background: var(--nk-white);
+        border: 1px solid var(--nk-gray-100);
+      }
+      .modal-head {
+        background: var(--nk-gray-100);
+        color: var(--nk-white);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .modal-close {
+        background: transparent;
+        border: 1px solid #6f6f6f;
+        color: var(--nk-white);
+        height: 28px;
+        padding: 0 10px;
+        cursor: pointer;
+      }
+      .modal-body {
+        padding: 16px;
+      }
+      .source-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .source-cell {
+        border: 1px solid var(--nk-border);
+        padding: 8px 10px;
+        font-size: 12.5px;
+      }
+
+      /* Mobile & Tablet Responsive */
+      @media (max-width: 980px) {
+        .masthead-inner {
+          grid-template-columns: 1fr;
+          text-align: left;
+        }
+        .mast-brand {
+          text-align: left;
+        }
+        .mast-right {
+          justify-content: flex-start;
+        }
+        .search-input {
+          width: 100%;
+        }
+        .search-box {
+          width: 100%;
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+        .detail-col {
+          position: static;
+        }
+        .sub-footer-inner {
+          grid-template-columns: 1fr;
+        }
+        .footer-meta {
+          border-left: none;
+          border-top: 1px solid var(--nk-border-strong);
+          padding-left: 0;
+          padding-top: var(--sp-5);
+        }
+      }
+
+      @media (max-width: 767px) {
+        .util-btn,
+        .btn-sm,
+        .mini-btn,
+        .toggle-saved,
+        .cat-tab,
+        .sub-submit,
+        .sub-input,
+        .search-input {
+          min-height: 44px;
+        }
+        .util-select {
+          min-height: 36px;
+        }
+        .source-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (hover: hover) {
+        .util-btn:hover:not(.primary) {
+          background: var(--nk-gray-90);
+        }
+        .util-btn.primary:hover,
+        .btn-sm.solid:hover,
+        .sub-submit:hover {
+          background: var(--nk-blue-hover);
+        }
+        .feed-item:hover {
+          background: var(--nk-gray-10);
+        }
+        .cat-tab:hover {
+          color: var(--nk-gray-100);
+        }
+        .btn-sm:hover:not(.solid),
+        .mini-btn:hover:not([aria-pressed='true']) {
+          background: var(--nk-gray-10);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-feed">跳到今日情报流</a>
+
+    <!-- Carbon Gray 100 Utility Strip -->
+    <div class="util-bar">
+      <div class="util-inner">
+        <div class="util-left">
+          <span class="util-badge">
+            <span class="util-dot" aria-hidden="true"></span>
+            <span>每日 07:30 出刊 · 保留 90 天归档</span>
+          </span>
+          <label for="issue-date" style="color: #d4d4d4">
+            期次：
+            <select id="issue-date" class="util-select" aria-label="切换往期日报日期">
+              <option value="2026-11-21">2026-11-21（今日第 142 期 · 36 条）</option>
+              <option value="2026-11-20">2026-11-20（第 141 期 · 42 条）</option>
+              <option value="2026-11-19">2026-11-19（第 140 期 · 34 条）</option>
+              <option value="2026-11-14">2026-11-14（第 135 期 · 38 条）</option>
+              <option value="2026-10-22">2026-10-22（30 天前 · 31 条）</option>
+              <option value="2026-08-24">2026-08-24（90 天归档边界 · 33 条）</option>
+            </select>
+          </label>
         </div>
-        <svg id="distChart" viewBox="0 0 640 132" role="img" aria-label="五大分类条数横向柱状图"></svg>
-      </div>
-      <div class="c-box">
-        <div class="c-box-head">
-          <h2 class="c-box-title">早间 10 分钟速读重点</h2>
-          <span class="c-box-meta">核心异动摘要</span>
+        <div class="util-right">
+          <button type="button" class="util-btn" id="open-sources-btn">收录信源 (14)</button>
+          <button type="button" class="util-btn" id="header-saved-btn">
+            收藏夹 (<span id="saved-count-top">0</span>)
+          </button>
+          <a href="#subscribe-section" class="util-btn primary" style="text-decoration: none">
+            邮件 08:00 / RSS
+          </a>
         </div>
-        <div class="brief-bullets">
-          <div class="brief-bullet">
-            <strong>融资与并购</strong>
-            算力调度与工业具身智能单日披露 8 笔融资，单笔最高 $120M B 轮。
+      </div>
+    </div>
+
+    <!-- N6 Editorial Masthead -->
+    <header class="masthead">
+      <div class="masthead-inner">
+        <div class="mast-left">
+          <span>面向产品、投资与运营</span>
+          <span>·</span>
+          <span>10 分钟扫完当天要闻</span>
+        </div>
+        <div class="mast-brand">
+          <h1 class="mast-title">NeedKnows · 必知日刊</h1>
+          <div class="mast-sub">融资 · 新产品 · 开源项目 · 政策变化 · 人事变动（演示口径）</div>
+        </div>
+        <div class="mast-right">
+          <div class="search-box">
+            <input
+              id="search-input"
+              class="search-input"
+              type="search"
+              placeholder="搜标题、公司、仓库或机关…"
+              aria-label="搜索今日情报"
+            />
+            <span class="kbd-hint" aria-hidden="true">⌘K</span>
           </div>
-          <div class="brief-bullet">
-            <strong>政策与合规</strong>
-            网信办与工信部今日生效 2 项算力与模型备案细则，关注 12 月截止窗口。
+        </div>
+      </div>
+    </header>
+
+    <!-- Status / Error / Loading Banner -->
+    <div id="status-banner" class="status-banner" hidden></div>
+
+    <!-- 1px Hairline Category Tabs -->
+    <nav class="filter-bar" aria-label="情报分类筛选">
+      <div class="filter-inner">
+        <div class="cat-tabs" id="cat-tabs" role="tablist" aria-label="按类别筛选">
+          <button type="button" class="cat-tab" data-cat="全部" aria-pressed="true">
+            全部 <span class="cat-count" data-count="全部">36</span>
+          </button>
+          <button type="button" class="cat-tab" data-cat="融资" aria-pressed="false">
+            融资 <span class="cat-count" data-count="融资">8</span>
+          </button>
+          <button type="button" class="cat-tab" data-cat="新产品" aria-pressed="false">
+            新产品 <span class="cat-count" data-count="新产品">8</span>
+          </button>
+          <button type="button" class="cat-tab" data-cat="开源项目" aria-pressed="false">
+            开源项目 <span class="cat-count" data-count="开源项目">8</span>
+          </button>
+          <button type="button" class="cat-tab" data-cat="政策变化" aria-pressed="false">
+            政策变化 <span class="cat-count" data-count="政策变化">6</span>
+          </button>
+          <button type="button" class="cat-tab" data-cat="人事变动" aria-pressed="false">
+            人事变动 <span class="cat-count" data-count="人事变动">6</span>
+          </button>
+        </div>
+
+        <div class="filter-actions">
+          <button type="button" class="toggle-saved" id="saved-only-btn" aria-pressed="false">
+            仅看已收藏 (<span id="saved-count-bar">0</span>)
+          </button>
+          <button type="button" class="btn-sm" id="reset-filters-btn">重置</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Index-First Split Workspace -->
+    <main id="main-feed" class="workspace">
+      <section class="feed-col" aria-label="当日情报条目">
+        <div class="feed-meta-row">
+          <span id="feed-summary-text">当前期次 2026-11-21 · 显示 36 / 36 条 · 按时间倒序</span>
+          <span>点击条目在右侧核对原文与结构化字段</span>
+        </div>
+
+        <ul class="feed-list" id="feed-list"></ul>
+
+        <div class="empty-box" id="empty-box" hidden>
+          <h2>当前筛选条件下暂无情报条目</h2>
+          <p>请调整关键词、切换分类标签，或恢复当日全部 36 条完整样本。</p>
+          <button type="button" class="btn-sm solid" id="empty-restore-btn">恢复当日全部条目</button>
+        </div>
+      </section>
+
+      <!-- Sticky Right Detail & Source Verification Pane -->
+      <aside class="detail-col" aria-label="原文核对与细节面板">
+        <div class="detail-card" id="detail-card">
+          <div class="detail-head">
+            <span class="item-id" id="detail-id">NK-01</span>
+            <span class="tag-cat tag-融资" id="detail-cat">融资</span>
           </div>
+          <div class="detail-body">
+            <h2 class="detail-title" id="detail-title">加载中…</h2>
+            <p class="detail-desc" id="detail-desc"></p>
+            <table class="kv-table" aria-label="结构化核心字段">
+              <tbody id="detail-kv"></tbody>
+            </table>
+            <div class="source-box">
+              <div class="source-box-title">来源与转载核对</div>
+              <div id="detail-source-text"></div>
+            </div>
+            <div class="detail-actions">
+              <button type="button" class="btn-sm solid" id="detail-verify-btn">核对原文摘要</button>
+              <button type="button" class="btn-sm" id="detail-save-btn">收藏此条</button>
+            </div>
+            <div
+              id="detail-verify-note"
+              style="margin-top: 10px; font-size: 12.5px; color: var(--nk-green); font-weight: 600"
+              hidden
+            ></div>
+          </div>
+        </div>
+
+        <div class="dist-card" aria-label="今日五类情报分布">
+          <div class="dist-title">
+            <span>今日分类分布（共 36 条）</span>
+            <span style="font-weight: 400; color: var(--nk-text-secondary)">点击筛选</span>
+          </div>
+          <div id="dist-bars"></div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Ft7 Subscription-Driven Footer -->
+    <footer id="subscribe-section" class="sub-footer">
+      <div class="sub-footer-inner">
+        <div>
+          <h2 class="sub-title">订阅每日 08:00 邮件或分品类 RSS</h2>
+          <p class="sub-desc">
+            每天 07:30 完成当日 30–50 条情报核对，08:00 按勾选类别投递邮件；也可复制分品类 RSS 链接到阅读器。
+          </p>
+          <div class="sub-checks" role="group" aria-label="选择订阅类别">
+            <label class="sub-check"><input type="checkbox" value="融资" checked /> 融资</label>
+            <label class="sub-check"><input type="checkbox" value="新产品" checked /> 新产品</label>
+            <label class="sub-check"><input type="checkbox" value="开源项目" checked /> 开源项目</label>
+            <label class="sub-check"><input type="checkbox" value="政策变化" /> 政策变化</label>
+            <label class="sub-check"><input type="checkbox" value="人事变动" /> 人事变动</label>
+          </div>
+          <form class="sub-form" id="sub-form">
+            <input
+              id="sub-email"
+              class="sub-input"
+              type="email"
+              placeholder="输入工作邮箱（如 pm@company.com）"
+              aria-label="订阅邮箱"
+              required
+            />
+            <button type="submit" class="sub-submit">订阅 08:00 邮件</button>
+            <button type="button" class="btn-sm" id="copy-rss-btn">复制分品类 RSS</button>
+          </form>
+          <div class="sub-feedback" id="sub-feedback" aria-live="polite"></div>
+        </div>
+
+        <div class="footer-meta">
+          <div class="footer-links">
+            <button type="button" class="footer-link-btn" id="footer-sources-btn">
+              查看 14 类信源清单
+            </button>
+            <button type="button" class="footer-link-btn" id="footer-top-btn">回到当日顶部</button>
+          </div>
+          <p style="margin: 0 0 8px 0">
+            NeedKnows 必知日刊 · 面向产品、投资与运营从业者的结构化行业情报门户。
+          </p>
+          <p style="margin: 0; color: var(--nk-text-muted)">
+            演示说明：本页面展示当日 36 条完整样本与 90 天归档交互，内容与推送时刻均为本地演示口径，不连接真实抓取与邮件网关。
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 14 Sources Modal -->
+    <div
+      class="modal-backdrop"
+      id="sources-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sources-modal-title"
+    >
+      <div class="modal-panel">
+        <div class="modal-head">
+          <strong id="sources-modal-title">收录信源与核对口径（14 类渠道）</strong>
+          <button type="button" class="modal-close" id="close-sources-btn">关闭</button>
+        </div>
+        <div class="modal-body">
+          <p style="margin: 0 0 12px 0; font-size: 13px; color: var(--nk-text-secondary)">
+            所有转载条目均标注原始发布媒体与时间戳；一级官方公告优先于二手编译。
+          </p>
+          <div class="source-grid" id="sources-grid"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<main class="main-sec wrap">
-  <div class="sr-only" id="liveMsg" role="status" aria-live="polite"></div>
+    <script>
+      (function () {
+        const CATEGORIES = [
+          { name: '融资', color: '#0052d9', count: 8 },
+          { name: '新产品', color: '#006c45', count: 8 },
+          { name: '开源项目', color: '#005d5d', count: 8 },
+          { name: '政策变化', color: '#954500', count: 6 },
+          { name: '人事变动', color: '#ad352f', count: 6 }
+        ];
 
-  <div class="status-bar" id="busyBar" aria-busy="true" hidden>正在按所选期刊日期与分类重构情报表格...</div>
+        const SOURCES_LIST = [
+          '交易所公告（上交所 / 深交所 / 港交所 / SEC）',
+          '国务院及工信部 / 网信办 / 发改委政策原文',
+          'GitHub Trending 与核心仓库 Release Notes',
+          'arXiv / 顶会官方论文与实验室博客',
+          '公司官方新闻室（Newsroom / Changelog）',
+          '晚点 LatePost（投融资与组织报道）',
+          '36 氪 / 虎嗅（一级创投快讯）',
+          'TechCrunch / The Information（海外融资）',
+          'Hacker News / Lobsters 一手工程讨论',
+          'Product Hunt / 官方定价更新页',
+          '工商变更与高管任命备案公告',
+          'CNCF / Linux Foundation 项目动态',
+          '欧委会 / 美国商务部监管公报',
+          '一线开源维护者个人博客与邮件列表'
+        ];
 
-  <div class="alert-box" id="errorBox" role="alert" hidden>
-    <div>
-      <strong style="color:var(--err);font-size:16px">今日情报流节点响应超时</strong>
-      <p style="margin-top:4px;font-size:14px">为防止呈现残缺数据，暂不显示部分缓存条目，请点击重新拉取。</p>
-    </div>
-    <button class="c-btn c-btn-primary" id="retryBtn" type="button">重新拉取今日 36 条</button>
-  </div>
+        const ITEMS = [
+          // 融资 (8)
+          { id: 'NK-01', cat: '融资', fact: '1.2 亿美元 · B 轮', title: '渊微算力完成 1.2 亿美元 B 轮融资，扩建异构推理集群', summary: '资金将用于华东液冷推理数据中心三期扩建及国产卡调度内核开源。', source: '一手公告 · 渊微官网（转载自 晚点 LatePost）', time: '07:15', kv: [['轮次与金额', 'B 轮 · 1.2 亿美元'], ['领投方', '启明创投、华兴新经济基金'], ['核心用途', '液冷推理集群与调度内核']] },
+          { id: 'NK-02', cat: '融资', fact: '3.8 亿元 · A+ 轮', title: '千机具身完成 3.8 亿元 A+ 轮，重点落地汽车总装线', summary: '本轮由制造业产业基金领投，已签约两家新能源整车厂百台级订单。', source: '36 氪（原始来源：公司官方公众号）', time: '07:10', kv: [['轮次与金额', 'A+ 轮 · 3.8 亿元'], ['投资方', '上汽尚颀、高瓴创投'], ['商业化进展', '签约两家整车厂百台订单']] },
+          { id: 'NK-03', cat: '融资', fact: '4,500 万美元 · A 轮', title: 'VectorPulse 获 4,500 万美元 A 轮，主打低延迟多模态检索', summary: '面向企业知识库的混合索引引擎，单节点支持十亿级向量毫秒召回。', source: 'TechCrunch（原始来源：VectorPulse Blog）', time: '06:55', kv: [['轮次与金额', 'A 轮 · 4,500 万美元'], ['投资方', 'Benchmark 领投'], ['产品定位', '十亿级多模态混合索引']] },
+          { id: 'NK-04', cat: '融资', fact: '2.1 亿元 · B1 轮', title: '云图芯片完成 2.1 亿元 B1 轮融资，推进车载 SerDes 量产', summary: '已完成车规 AEC-Q100 认证，明年一季度进入头部 Tier1 供应链。', source: '一手公告 · 工商变更与官网新闻室', time: '06:40', kv: [['轮次与金额', 'B1 轮 · 2.1 亿元'], ['投资方', '中芯聚源、元禾璞华'], ['量产节点', '明年 Q1 进入 Tier1 供应链']] },
+          { id: 'NK-05', cat: '融资', fact: '1,800 万美元 · 种子轮', title: 'CodeAudit AI 完成 1,800 万美元种子轮，自动验证 PR 安全边界', summary: '由前 GitHub 安全团队成员创立，已接入超过 1,400 个商业仓库。', source: 'The Information', time: '06:20', kv: [['轮次与金额', '种子轮 · 1,800 万美元'], ['投资方', 'Index Ventures'], ['接入规模', '1,400+ 商业代码库']] },
+          { id: 'NK-06', cat: '融资', fact: '1.5 亿元 · A 轮', title: '极光合成生物获 1.5 亿元 A 轮，量产高纯度酶制剂', summary: '自建发酵中试线已跑通连续流工艺，单位成本较传统路线下降 38%。', source: '虎嗅（原始来源：投资方新闻稿）', time: '05:50', kv: [['轮次与金额', 'A 轮 · 1.5 亿元'], ['投资方', '红杉中国、峰瑞资本'], ['技术指标', '单位成本下降 38%']] },
+          { id: 'NK-07', cat: '融资', fact: '6,200 万美元 · C 轮', title: 'FinLedger 完成 6,200 万美元 C 轮，发力跨境多币种实时清结算', summary: '新增东南亚与中东本地牌照覆盖，年化处理流水突破 180 亿美元。', source: 'Bloomberg（原始来源：FinLedger Press）', time: '05:30', kv: [['轮次与金额', 'C 轮 · 6,200 万美元'], ['投资方', 'Ribbit Capital'], ['业务体量', '年化流水 180 亿美元']] },
+          { id: 'NK-08', cat: '融资', fact: '8,000 万元 · 天使+轮', title: '声境声学获 8,000 万元天使+轮，研发端侧实时降噪 NPU IP', summary: '主打低功耗 TWS 与助听器芯片授权，已获两家头部音频厂商流片订单。', source: '36 氪', time: '05:10', kv: [['轮次与金额', '天使+轮 · 8,000 万元'], ['投资方', '顺为资本、线性资本'], ['落地形态', '端侧降噪 NPU IP 授权']] },
 
-  <div class="toolbar" aria-label="情报筛选工具栏">
-    <div class="tabs" id="catTabs" role="group" aria-label="按五大分类筛选"></div>
-    <div class="toolbar-right">
-      <label class="sr-only" for="kwInput">搜索标题、公司、仓库或机关名称</label>
-      <input class="c-input" id="kwInput" type="search" placeholder="搜标题、公司、仓库或发文机关">
-      <button class="c-btn" id="resetToolbarBtn" type="button">全部清空</button>
-    </div>
-  </div>
+          // 新产品 (8)
+          { id: 'NK-09', cat: '新产品', fact: 'SaaS · ¥199/月起', title: 'Linear 推出 Customer Requests 模块，打通工单与研发排期', summary: '支持从 Zendesk、Intercom 自动聚合同类需求并按客户 ARR 权重排序。', source: 'Linear Changelog（一手官方更新）', time: '07:12', kv: [['发布方', 'Linear'], ['产品形态', '工作流模块（含 API）'], ['定价口径', 'Plus 档位 ¥199/席位·月起']] },
+          { id: 'NK-10', cat: '新产品', fact: '桌面端 · 免费/Pro', title: 'Raycast 发布 Windows 公测版，内置本地剪贴板与脚本扩展', summary: '首批开放窗口管理、文件快搜与 TypeScript 插件运行环境。', source: 'Raycast Blog', time: '07:02', kv: [['发布方', 'Raycast'], ['产品形态', 'Windows 原生客户端'], ['定价口径', '基础免费，Pro $8/月']] },
+          { id: 'NK-11', cat: '新产品', fact: 'API · $0.4/M tokens', title: 'Anthropic 上线 Batch Prompt Caching 2.0，批处理缓存再降 60%', summary: '长上下文知识库检索场景下缓存命中有效期延长至 2 小时。', source: 'Anthropic Docs（一手更新日志）', time: '06:48', kv: [['发布方', 'Anthropic'], ['产品形态', 'API 计费与缓存能力'], ['定价口径', '缓存读取 $0.4 / 百万 tokens']] },
+          { id: 'NK-12', cat: '新产品', fact: '硬件 · ¥2,499', title: '大疆发布 Osmo Pocket Studio 扩展坞，支持双机位无线导播', summary: '内置时间码同步与 4K 低延迟监看输出，面向轻量化播客与评测团队。', source: 'DJI 官方新闻室', time: '06:35', kv: [['发布方', 'DJI 大疆'], ['产品形态', '桌面导播硬件扩展坞'], ['定价口径', '官方零售价 ¥2,499']] },
+          { id: 'NK-13', cat: '新产品', fact: 'B2B · 按量计费', title: '飞书多维表格上线 10 万行级实时仪表盘与跨表权限视图', summary: '支持字段级脱敏与外部供应商免登录只读填报。', source: '飞书官方产品公告', time: '06:15', kv: [['发布方', '飞书'], ['产品形态', '企业协作 SaaS 功能'], ['定价口径', '企业版与旗舰版包含']] },
+          { id: 'NK-14', cat: '新产品', fact: 'SDK · 开源免费', title: 'Cloudflare 推出 Agents SDK，原生支持 Durable Objects 状态持久化', summary: '可在边缘节点保持长会话 WebSocket 与定时唤醒任务，无冷启动惩罚。', source: 'Cloudflare Blog', time: '05:58', kv: [['发布方', 'Cloudflare'], ['产品形态', 'Workers 边缘 Agent SDK'], ['定价口径', '按 Workers 请求量计费']] },
+          { id: 'NK-15', cat: '新产品', fact: 'SaaS · $29/月', title: 'Figma Slides 正式版发布交互式原型嵌入与投票控件', summary: '演示文稿内可直接操作设计稿组件状态，无需切回设计画布。', source: 'Figma Release Notes', time: '05:40', kv: [['发布方', 'Figma'], ['产品形态', '在线演示与原型工具'], ['定价口径', '包含于 Professional $15/月起']] },
+          { id: 'NK-16', cat: '新产品', fact: '插件 · 免费', title: 'PostgreSQL 18 Beta 新增原生异步 I/O 与 UUIDv7 内置函数', summary: '顺序扫描吞吐提升最高 2.4 倍，时间有序主键无需第三方扩展。', source: 'PostgreSQL Global Development Group', time: '05:18', kv: [['发布方', 'PostgreSQL 社区'], ['产品形态', '数据库大版本 Beta'], ['许可协议', 'PostgreSQL License']] },
 
-  <section id="intelTable" aria-label="当期情报列表">
-    <div class="feed-head" aria-hidden="true">
-      <span>编号</span>
-      <span>类别</span>
-      <span>标题与结构化核心指标</span>
-      <span>来源媒体与发布时间</span>
-      <span style="text-align:right">操作</span>
-    </div>
-    <div class="feed-table" id="feedSlot"></div>
-  </section>
-</main>
+          // 开源项目 (8)
+          { id: 'NK-17', cat: '开源项目', fact: '★ 18.4k · Apache-2.0', title: 'vLLM v0.7.2 发布：支持多机 PD 分离调度与 FP8 KV-Cache', summary: '在 8×H100 集群上首字延迟（TTFT）降低 34%，吞吐提升 1.6 倍。', source: 'GitHub vllm-project/vllm Releases', time: '07:08', kv: [['仓库', 'vllm-project/vllm'], ['Star 数', '18.4k（本周 +1.2k）'], ['协议', 'Apache-2.0']] },
+          { id: 'NK-18', cat: '开源项目', fact: '★ 9.6k · MIT', title: 'TanStack Form 1.0 正式发布，全类型安全且零外部运行时依赖', summary: '同时支持 React、Vue、Solid 与 Angular，表单字段级重渲染隔离。', source: 'GitHub TanStack/form', time: '06:50', kv: [['仓库', 'TanStack/form'], ['Star 数', '9.6k'], ['协议', 'MIT']] },
+          { id: 'NK-19', cat: '开源项目', fact: '★ 14.2k · MIT', title: 'DuckDB 1.2 发布：原生支持 Parquet 增量写入与 Iceberg 事务读', summary: '单机列式分析性能进一步逼近分布式数仓，新增 CSV 自动容错解析。', source: 'GitHub duckdb/duckdb', time: '06:30', kv: [['仓库', 'duckdb/duckdb'], ['Star 数', '14.2k'], ['协议', 'MIT']] },
+          { id: 'NK-20', cat: '开源项目', fact: '★ 6.8k · Apache-2.0', title: 'OpenTelemetry Browser SDK 2.0 重构：包体积缩减至 11KB gzip', summary: '默认采样 Web Vitals 与 Fetch 链路追踪，零阻塞主线程。', source: 'GitHub open-telemetry/opentelemetry-js', time: '06:10', kv: [['仓库', 'open-telemetry/opentelemetry-js'], ['Star 数', '6.8k'], ['协议', 'Apache-2.0']] },
+          { id: 'NK-21', cat: '开源项目', fact: '★ 11.3k · MIT', title: 'Biome 2.0 Beta 引入跨文件类型推断 Lint，速度仍为 ESLint 15 倍', summary: '原生 Rust 实现无须启动 tsc，即可检查未处理的 Promise 与导入环。', source: 'GitHub biomejs/biome', time: '05:45', kv: [['仓库', 'biomejs/biome'], ['Star 数', '11.3k'], ['协议', 'MIT']] },
+          { id: 'NK-22', cat: '开源项目', fact: '★ 5.4k · BSD-3', title: 'Tailscale 开源轻量化自建控制面测试工具链 ts-net-sim', summary: '可在单台 Linux 宿主机模拟 500 节点 NAT 穿透与 DERP 中继切换。', source: 'GitHub tailscale/tailscale', time: '05:25', kv: [['仓库', 'tailscale/tailscale'], ['Star 数', '5.4k'], ['协议', 'BSD-3-Clause']] },
+          { id: 'NK-23', cat: '开源项目', fact: '★ 7.9k · MIT', title: 'Pagefind 1.3 发布：静态站百万词条客户端模糊搜索索引缩水 40%', summary: '纯 Rust 构建索引并输出 WASM 分片，中文分词准确率显著提升。', source: 'GitHub CloudCannon/pagefind', time: '05:05', kv: [['仓库', 'CloudCannon/pagefind'], ['Star 数', '7.9k'], ['协议', 'MIT']] },
+          { id: 'NK-24', cat: '开源项目', fact: '★ 4.2k · Apache-2.0', title: 'Valkey 8.1 实测吞吐突破单节点 140 万 QPS，内存碎片率降 22%', summary: 'Linux Foundation 托管的 Redis 开源分支首个大特性版本。', source: 'GitHub valkey-io/valkey', time: '04:50', kv: [['仓库', 'valkey-io/valkey'], ['Star 数', '4.2k'], ['协议', 'BSD / Apache-2.0']] },
 
-<footer class="foot-index">
-  <div class="wrap">
-    <div class="foot-index__grid">
-      <div class="foot-index__col">
-        <h3>今日分类索引（36 条）</h3>
-        <ul>
-          <li><a href="#intelTable" data-foot-cat="融资">融资（8 条）</a></li>
-          <li><a href="#intelTable" data-foot-cat="新产品">新产品（8 条）</a></li>
-          <li><a href="#intelTable" data-foot-cat="开源项目">开源项目（8 条）</a></li>
-          <li><a href="#intelTable" data-foot-cat="政策变化">政策变化（6 条）</a></li>
-          <li><a href="#intelTable" data-foot-cat="人事变动">人事变动（6 条）</a></li>
-        </ul>
-      </div>
-      <div class="foot-index__col">
-        <h3>90 天往期归档</h3>
-        <ul>
-          <li><a href="#top" data-foot-issue="2026-11-21">2026-11-21（第 142 期 · 36 条）</a></li>
-          <li><a href="#top" data-foot-issue="2026-11-20">2026-11-20（第 141 期 · 34 条）</a></li>
-          <li><a href="#top" data-foot-issue="2026-11-12">2026-11-12（第 133 期 · 38 条）</a></li>
-          <li><a href="#top" data-foot-issue="2026-08-24">2026-08-24（90 天窗口最早一期）</a></li>
-        </ul>
-      </div>
-      <div class="foot-index__col">
-        <h3>信源核对与推送</h3>
-        <ul>
-          <li><button class="foot-index__btn" type="button" id="footSourcesBtn">14 家一级官方与原文信源</button></li>
-          <li><button class="foot-index__btn" type="button" id="footSubBtn">每日 08:00 邮件 / RSS 订阅</button></li>
-          <li><a href="#intelTable">今日情报流表格</a></li>
-          <li><a href="#top">回到顶部</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="foot-index__base">
-      <span>NeedKnows 必知日刊（IBM Carbon 选型方案 · project-carbon）</span>
-      <span>每日 07:30 更新、36 条当日样本、90 天归档与邮件 08:00 推送均为本地演示口径，不接真实资讯流与邮件网关。</span>
-    </div>
-  </div>
-</footer>
+          // 政策变化 (6)
+          { id: 'NK-25', cat: '政策变化', fact: '12 月 1 日生效', title: '网信办与工信部联合印发《生成式算力与模型备案细则（2026 修订）》', summary: '明确垂直行业微调模型走快速通道，算力租赁节点需保留 180 天调用审计日志。', source: '国家网信办官网（一手公报）', time: '07:05', kv: [['发文机关', '国家网信办、工信部'], ['生效时间', '2026 年 12 月 1 日'], ['核心影响', '行业微调走快审；日志留存 180 天']] },
+          { id: 'NK-26', cat: '政策变化', fact: '即日起实施', title: '国家数据局公布首批公共数据授权运营定价指引', summary: '对科研公益与中小企业普惠调用设定费率上限，禁止排他性垄断协议。', source: '国家数据局官网', time: '06:42', kv: [['发文机关', '国家数据局、发改委'], ['生效时间', '即日起实施'], ['核心影响', '明确公共数据调用费率上限']] },
+          { id: 'NK-27', cat: '政策变化', fact: '2027 年 1 月生效', title: '欧盟 AI 法案高风险系统透明度模板定稿，涵盖训练数据摘要格式', summary: '面向通用模型提供方要求披露受版权保护语料的合规清洗声明。', source: 'European Commission Official Journal', time: '06:18', kv: [['发文机关', '欧盟委员会 AI Office'], ['生效时间', '2027 年 1 月 1 日'], ['核心影响', '统一高风险 AI 训练数据摘要表']] },
+          { id: 'NK-28', cat: '政策变化', fact: '公开征求意见', title: '央行发布跨境电商人民币直连结算便利化试点征求意见稿', summary: '支持合规独立站 SaaS 平台直接对接持牌清结算机构，缩短 T+1 到账周期。', source: '中国人民银行官网', time: '05:55', kv: [['发文机关', '中国人民银行'], ['生效时间', '征求意见至 12 月 15 日'], ['核心影响', '独立站跨境收款 T+1 提速']] },
+          { id: 'NK-29', cat: '政策变化', fact: '明年 Q2 生效', title: '证监会明确硬科技企业未盈利上市研发投入占比硬性核查标准', summary: '要求最近三年累计研发投入占营收比不低于 15% 或绝对额超 3 亿元。', source: '中国证监会公告', time: '05:32', kv: [['发文机关', '中国证监会'], ['生效时间', '2027 年 Q2'], ['核心影响', '细化硬科技 IPO 研发核查口径']] },
+          { id: 'NK-30', cat: '政策变化', fact: '12 月 15 日生效', title: '工信部更新 App SDK 最小权限采集清单，新增剪贴板读频次限制', summary: '非用户主动粘贴触发的后台静默读取剪贴板行为将纳入应用商店下架红线。', source: '工信部官网', time: '05:00', kv: [['发文机关', '工业和信息化部'], ['生效时间', '2026 年 12 月 15 日'], ['核心影响', '严禁后台静默读取剪贴板']] },
 
-<div class="backdrop" id="cmdkBackdrop" hidden role="dialog" aria-modal="true" aria-label="快捷检索情报">
-  <div class="cmdk-panel">
-    <div class="cmdk-head">
-      <label class="sr-only" for="cmdkInput">输入关键词检索 36 条情报</label>
-      <input id="cmdkInput" type="search" placeholder="搜索融资、新产品、开源仓库、发文机关或人名...">
-      <button class="c-btn" id="cmdkCloseBtn" type="button">Esc 关闭</button>
-    </div>
-    <div class="cmdk-list" id="cmdkList"></div>
-    <div class="cmdk-foot">
-      <span>↑ ↓ 选择条目</span>
-      <span>Enter 定位并展开抽屉</span>
-      <span>Esc 关闭</span>
-    </div>
-  </div>
-</div>
+          // 人事变动 (6)
+          { id: 'NK-31', cat: '人事变动', fact: '出任 CTO', title: '前阿里云基础架构负责人周明出任某头部智驾公司 CTO', summary: '将统筹车载端到端大模型训练平台与仿真数据闭环团队。', source: '晚点 LatePost', time: '07:00', kv: [['变动人物', '周明'], ['新任职务', 'CTO（首席技术官）'], ['业务方向', '端到端智驾训练与仿真平台']] },
+          { id: 'NK-32', cat: '人事变动', fact: '联合创始人离职', title: '开源数据库初创公司 Neon 联合创始人退居顾问，专注基础研究', summary: '日常产品与商业化事务由现任 CEO 全面接管，组织架构保持稳定。', source: 'Neon 官方博客', time: '06:38', kv: [['变动人物', '联合创始人'], ['职务变化', '退出日常管理，转任顾问'], ['公司表态', '产品与商业化路线不变']] },
+          { id: 'NK-33', cat: '人事变动', fact: '新设副总裁', title: '某跨境支付平台新设企业级风控副总裁，原蚂蚁国际风控专家履新', summary: '重点补强欧洲与拉美本地收单反欺诈与合规审计能力。', source: '36 氪', time: '06:05', kv: [['变动人物', '原蚂蚁国际风控专家'], ['新任职务', '企业级风控副总裁'], ['核心职责', '欧洲及拉美收单反欺诈']] },
+          { id: 'NK-34', cat: '人事变动', fact: 'VP 晋升', title: 'GitHub 任命资深工程总监负责 Copilot Workspace 独立产品线', summary: '该产品线将从原有编辑器插件团队拆出，获得独立算力与预算配额。', source: 'The Verge（原始来源：内部备忘录）', time: '05:42', kv: [['变动主体', 'GitHub'], ['组织调整', 'Copilot Workspace 独立成线'], ['目标', '加速多文件 Agent 工作流落地']] },
+          { id: 'NK-35', cat: '人事变动', fact: '加盟红杉', title: '原某明星 AI 视频应用产品负责人加入红杉中国担任 EIR', summary: '将重点关注消费级多模态工具与创作者工作流早期项目。', source: '投资界', time: '05:22', kv: [['变动人物', '前 AI 视频产品负责人'], ['新任职务', '红杉中国 EIR'], ['关注赛道', '多模态工具与创作者工作流']] },
+          { id: 'NK-36', cat: '人事变动', fact: '董事变更', title: '某上市工业软件企业公告独董换届，引入两位智能制造产线专家', summary: '配合公司明年启动的制造业 MES 云化改造与海外并购计划。', source: '上交所上市公司公告', time: '04:45', kv: [['变动主体', '上市工业软件公司'], ['变动类型', '独立董事换届'], ['来源依据', '上交所正式公告']] }
+        ];
 
-<div class="backdrop" id="modalBackdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="dialog">
-    <div class="dialog-head">
-      <h2 class="dialog-title" id="modalTitle">弹窗</h2>
-      <button class="c-btn" id="modalCloseBtn" type="button">关闭</button>
-    </div>
-    <div class="dialog-body" id="modalBody"></div>
-  </div>
-</div>
+        const params = new URLSearchParams(window.location.search);
+        const isEmptyMode = params.get('empty') === '1';
+        const isFailMode = params.get('fail') === '1';
+        const isSlowMode = params.get('slow') === '1';
+        const isLongMode = params.get('long') === '1';
 
-<script>
-(function () {
-  var params = new URLSearchParams(location.search);
-  var $ = function (id) { return document.getElementById(id); };
+        const state = {
+          cat: '全部',
+          query: '',
+          savedOnly: false,
+          savedIds: new Set(['NK-01', 'NK-17']),
+          activeId: 'NK-01',
+          issueDate: '2026-11-21'
+        };
 
-  var CATS = [
-    { id: "全部", label: "全部", cls: "" },
-    { id: "融资", label: "融资", cls: "cat-fin" },
-    { id: "新产品", label: "新产品", cls: "cat-prod" },
-    { id: "开源项目", label: "开源项目", cls: "cat-oss" },
-    { id: "政策变化", label: "政策变化", cls: "cat-pol" },
-    { id: "人事变动", label: "人事变动", cls: "cat-hr" }
-  ];
+        const els = {
+          feedList: document.getElementById('feed-list'),
+          emptyBox: document.getElementById('empty-box'),
+          feedSummary: document.getElementById('feed-summary-text'),
+          statusBanner: document.getElementById('status-banner'),
+          searchInput: document.getElementById('search-input'),
+          savedOnlyBtn: document.getElementById('saved-only-btn'),
+          savedCountTop: document.getElementById('saved-count-top'),
+          savedCountBar: document.getElementById('saved-count-bar'),
+          issueDate: document.getElementById('issue-date'),
+          detailId: document.getElementById('detail-id'),
+          detailCat: document.getElementById('detail-cat'),
+          detailTitle: document.getElementById('detail-title'),
+          detailDesc: document.getElementById('detail-desc'),
+          detailKv: document.getElementById('detail-kv'),
+          detailSourceText: document.getElementById('detail-source-text'),
+          detailSaveBtn: document.getElementById('detail-save-btn'),
+          detailVerifyBtn: document.getElementById('detail-verify-btn'),
+          detailVerifyNote: document.getElementById('detail-verify-note'),
+          distBars: document.getElementById('dist-bars'),
+          sourcesModal: document.getElementById('sources-modal'),
+          sourcesGrid: document.getElementById('sources-grid'),
+          subForm: document.getElementById('sub-form'),
+          subEmail: document.getElementById('sub-email'),
+          subFeedback: document.getElementById('sub-feedback')
+        };
 
-  var ITEMS = [
-    { id: "NK-01", cat: "融资", title: "渊微算力完成 1.2 亿美元 B 轮融资，扩建异构推理集群", meta: "金额：1.2 亿美元 | 轮次：B 轮 | 投资方：启明创投、深创投", summary: "资金将用于华东液冷推理数据中心三期扩建及国产卡调度内核开源。", src: "一手公告 · 渊微官网（转载自 晚点 LatePost）", time: "07:22", link: "news.example/nk-01" },
-    { id: "NK-02", cat: "融资", title: "清帆工业具身完成 3.4 亿元 A+ 轮融资", meta: "金额：3.4 亿人民币 | 轮次：A+ 轮 | 投资方：经纬中国、高瓴", summary: "专注重工焊接双臂协作机器人，已进驻 14 家船舶制造基地。", src: "36氪一级市场", time: "07:18", link: "news.example/nk-02" },
-    { id: "NK-03", cat: "融资", title: "边界数据库获得 4,800 万美元 A 轮投资", meta: "金额：4,800 万美元 | 轮次：A 轮 | 投资方：红杉、Index", summary: "推出混合向量与时序列存引擎，主打边缘 IoT 现场查询零延迟。", src: "TechCrunch（中文编译）", time: "07:15", link: "news.example/nk-03" },
-    { id: "NK-04", cat: "融资", title: "极昼生物计算披露 1.8 亿元天使轮", meta: "金额：1.8 亿人民币 | 轮次：天使轮 | 投资方：峰瑞资本、源码", summary: "聚焦小分子结晶预测平台，已在杭州建成自动化湿实验验证线。", src: "动脉网一级情报", time: "07:10", link: "news.example/nk-04" },
-    { id: "NK-05", cat: "融资", title: "云栈清结算获 2,200 万美元 Pre-B 轮", meta: "金额：2,200 万美元 | 轮次：Pre-B | 投资方：GSR Ventures", summary: "覆盖东南亚与中东本地实时清分通道，支持 28 种当地币种。", src: "一手新闻稿 · PRWire", time: "07:05", link: "news.example/nk-05" },
-    { id: "NK-06", cat: "融资", title: "北冥光通信完成 5.5 亿元战略融资", meta: "金额：5.5 亿人民币 | 轮次：战略融资 | 投资方：中科创星等", summary: "扩产 1.6T 硅光模块封装产线，2026 Q4 进入批量出货阶段。", src: "证券时报产业版", time: "06:58", link: "news.example/nk-06" },
-    { id: "NK-07", cat: "融资", title: "南风声学芯片获数千万元 Pre-A+ 轮", meta: "金额：8,000 万人民币 | 轮次：Pre-A+ | 投资方：同创伟业", summary: "低功耗骨传导降噪 DSP 已在两家消费品牌TWS新品量产。", src: "芯榜公告汇总", time: "06:52", link: "news.example/nk-07" },
-    { id: "NK-08", cat: "融资", title: "松果农机无人系统获 1.1 亿元 B1 轮", meta: "金额：1.1 亿人民币 | 轮次：B1 轮 | 投资方：农银投资、元禾", summary: "丘陵地区丘块自动规划收割方案累计作业超 420 万亩。", src: "创业邦早报", time: "06:48", link: "news.example/nk-08" },
+        function getFilteredItems() {
+          if (isEmptyMode) return [];
+          const q = state.query.trim().toLowerCase();
+          return ITEMS.filter((item) => {
+            if (state.cat !== '全部' && item.cat !== state.cat) return false;
+            if (state.savedOnly && !state.savedIds.has(item.id)) return false;
+            if (!q) return true;
+            return (
+              item.title.toLowerCase().includes(q) ||
+              item.summary.toLowerCase().includes(q) ||
+              item.source.toLowerCase().includes(q) ||
+              item.fact.toLowerCase().includes(q) ||
+              item.id.toLowerCase().includes(q)
+            );
+          });
+        }
 
-    { id: "NK-09", cat: "新产品", title: "LinearBench 发布本地毫秒级 SQL 与 DuckDB 分析桌面端", meta: "公司：LinearBench | 形态：桌面客户端 | 定价：$12/月或买断 $99", summary: "无需上传云端即可直接查询本地 2GB Parquet 与 CSV 文件并生成交互图。", src: "产品官网发布 · LinearBench", time: "07:25", link: "news.example/nk-09" },
-    { id: "NK-10", cat: "新产品", title: "飞书多维表格上线自动化 API 巡检与异常回调节点", meta: "公司：飞书 | 形态：SaaS 工作流节点 | 定价：专业版内包含", summary: "支持每小时巡检外部 Webhook 状态并自动往指定群组派发值班工单。", src: "飞书官方更新日志", time: "07:20", link: "news.example/nk-10" },
-    { id: "NK-11", cat: "新产品", title: "Cloudflare 推出 Workers Zero-Cold Edge KV Tier", meta: "公司：Cloudflare | 形态：边缘存储层 | 定价：$0.50/百万读", summary: "针对全球 300 节点的热点只读配置提供亚毫秒级内存缓存穿透。", src: "Cloudflare Changelog", time: "07:14", link: "news.example/nk-11" },
-    { id: "NK-12", cat: "新产品", title: "有道词典笔推出高校工程文献双语公式拍译款", meta: "公司：网易有道 | 形态：智能硬件 | 定价：¥1,199 首发", summary: "离线识别 LaTeX 矩阵与化学分子式并给出本地文献对照标注。", src: "品玩硬件观察", time: "07:08", link: "news.example/nk-12" },
-    { id: "NK-13", cat: "新产品", title: "Raycast Teams 新增共享终端脚本与团队 Prompt 命令板", meta: "公司：Raycast | 形态：团队协同套件 | 定价：$12/席位/月", summary: "允许研发团队用 Git 同步内部排障命令和通用上下文提示词模板。", src: "Raycast Blog", time: "07:01", link: "news.example/nk-13" },
-    { id: "NK-14", cat: "新产品", title: "阿里云百炼上线长上下文文档缓存与批处理半价通道", meta: "公司：阿里云 | 形态：API 服务 | 定价：输入成本降 50%", summary: "面向非实时夜间批量清洗与财报摘要任务推出 24 小时异步推理池。", src: "阿里云产品通告", time: "06:54", link: "news.example/nk-14" },
-    { id: "NK-15", cat: "新产品", title: "Figma Dev Mode 开放自定义 Design Token Linter API", meta: "公司：Figma | 形态：插件平台能力 | 定价：随企业席位免费开放", summary: "团队可在交付面板直接拦截未绑定变量名的散写色值与圆角。", src: "Figma Release Notes", time: "06:44", link: "news.example/nk-15" },
-    { id: "NK-16", cat: "新产品", title: "月之暗面开放多模态文档页码精准引用检索插件", meta: "公司：月之暗面 | 形态：Web 工作区特性 | 定价：免费向注册用户开放", summary: "回答财报与标书提问时高亮原文 PDF 页码与具体表格所在行。", src: "官方更新日志", time: "06:35", link: "news.example/nk-16" },
+        function updateSavedCounts() {
+          const n = state.savedIds.size;
+          els.savedCountTop.textContent = String(n);
+          els.savedCountBar.textContent = String(n);
+        }
 
-    { id: "NK-17", cat: "开源项目", title: "tiny-ledger v0.9 发布：纯 TypeScript 单文件复式记账引擎", meta: "仓库：ledger-hq/tiny-ledger | Star：6,420", summary: "零外部运行依赖，原生支持多币种汇率重估与严谨双精度小数校验。", src: "GitHub Trending", time: "07:26", link: "news.example/nk-17" },
-    { id: "NK-18", cat: "开源项目", title: "DuckPGQ 正式合入 DuckDB 官方扩展，图谱路径秒级可查", meta: "仓库：cwida/duckpgq | Star：3,890", summary: "允许在常规分析表上直接执行 SQL/PGQ 最短路径与关系环路查找。", src: "GitHub Releases", time: "07:19", link: "news.example/nk-18" },
-    { id: "NK-19", cat: "开源项目", title: "oxidized-pdf：基于 Rust 的零内存泄露矢量表格提取库", meta: "仓库：rust-docs/oxidized-pdf | Star：5,140", summary: "解析百页上市年报速度比纯 Python 方案快 11 倍且保留精确坐标框。", src: "GitHub Trending", time: "07:12", link: "news.example/nk-19" },
-    { id: "NK-20", cat: "开源项目", title: "mini-a11y-scanner 发布无头浏览器对比度全树巡检 CLI", meta: "仓库：a11y-tools/mini-a11y | Star：4,230", summary: "自动按元素祖先背景 alpha 合成实际颜色，精准拦截假达标灰字。", src: "Hacker News 首页", time: "07:03", link: "news.example/nk-20" },
-    { id: "NK-21", cat: "开源项目", title: "vLLM 0.8.4 新增异构 KV Cache 分级卸载策略", meta: "仓库：vllm-project/vllm | Star：39,600", summary: "长文本并发场景下将显存峰值再压低 28%，吞吐几乎零损耗。", src: "GitHub Releases", time: "06:56", link: "news.example/nk-21" },
-    { id: "NK-22", cat: "开源项目", title: "Chronicle-Diff：结构化 JSON 与 OpenAPI 接口破坏性变更比对器", meta: "仓库：apidevs/chronicle-diff | Star：2,780", summary: "集成至 PR 门禁，直接标红字段删减、枚举收窄与分页结构变化。", src: "GitHub Trending", time: "06:49", link: "news.example/nk-22" },
-    { id: "NK-23", cat: "开源项目", title: "Astro 5.4 实验性支持纯静态内容岛零水合输出校验", meta: "仓库：withastro/astro | Star：48,900", summary: "在构建期拦截不必要引入前端框架运行时的大型文章页模板。", src: "GitHub Releases", time: "06:40", link: "news.example/nk-23" },
-    { id: "NK-24", cat: "开源项目", title: "PGlite-Sync 发布浏览器端 IndexedDB 与 Postgres 双向增量同步", meta: "仓库：electric-sql/pglite | Star：11,200", summary: "支持本地离线复杂查询写入，网络恢复后按事务版本号自动合入服务端。", src: "Hacker News 首页", time: "06:30", link: "news.example/nk-24" },
+        function renderDetail(item) {
+          if (!item) {
+            els.detailId.textContent = '--';
+            els.detailCat.textContent = '无条目';
+            els.detailCat.className = 'tag-cat';
+            els.detailTitle.textContent = '当前筛选下没有可核对的条目';
+            els.detailDesc.textContent = '请恢复全部条目或清空搜索关键词。';
+            els.detailKv.innerHTML = '';
+            els.detailSourceText.textContent = '—';
+            els.detailSaveBtn.disabled = true;
+            els.detailVerifyBtn.disabled = true;
+            els.detailVerifyNote.hidden = true;
+            return;
+          }
+          els.detailSaveBtn.disabled = false;
+          els.detailVerifyBtn.disabled = false;
+          els.detailVerifyNote.hidden = true;
 
-    { id: "NK-25", cat: "政策变化", title: "两部门联合发布绿电直供大型智算中心并网核算试行办法", meta: "发文机关：国家发改委、国家能源局 | 生效时间：2026-12-01", summary: "明确新建千卡以上园区直购绿电比例下限与跨省过网费减免口径。", src: "中国政府网政策公报", time: "07:24", link: "news.example/nk-25" },
-    { id: "NK-26", cat: "政策变化", title: "医疗器械软件（AI 辅助诊断类）变更审批简化清单印发", meta: "发文机关：国家药监局器械审评中心 | 生效时间：2026-12-15", summary: "不改变预期用途的性能微调免走全新三类证周期，改为季度备案复核。", src: "NMPA 官方公告", time: "07:11", link: "news.example/nk-26" },
-    { id: "NK-27", cat: "政策变化", title: "粤港澳大湾区跨境数据标准合同第二批白名单字段扩围", meta: "发文机关：广东省网信办 | 生效时间：2026-11-25", summary: "供应链履约单证与跨境研发测试日志纳入简化出境评估通道。", src: "网信广东政务微信号", time: "06:59", link: "news.example/nk-27" },
-    { id: "NK-28", cat: "政策变化", title: "证监会修订科创属性研发费用资本化披露专项指引", meta: "发文机关：中国证监会 | 生效时间：2027-01-01", summary: "要求在招股与年报附注拆单算力租赁、标注外采与自研人力占比。", src: "证监会网站要闻", time: "06:47", link: "news.example/nk-28" },
-    { id: "NK-29", cat: "政策变化", title: "EU AI Act 通用模型透明度摘要模板正式定稿开放下载", meta: "发文机关：欧盟 AI 办公室 | 生效时间：2026-12-20", summary: "规定面向欧洲用户服务的合规基座模型须披露训练语料版权合规清单。", src: "EU Official Journal（编译）", time: "06:38", link: "news.example/nk-29" },
-    { id: "NK-30", cat: "政策变化", title: "北京市发布自动驾驶无人测试主路夜间编队运行细则", meta: "发文机关：北京市高精尖园区示范区 | 生效时间：2026-12-01", summary: "允许干线物流编队在指定环线 23:00 至 05:00 开展商业试运营。", src: "首都之窗政务发布", time: "06:28", link: "news.example/nk-30" },
+          const titleText = isLongMode
+            ? `${item.title} ——（超长文本折行验证：含多方投资机构联合披露口径、跨区算力节点调度指标及原文核对补充说明）`
+            : item.title;
 
-    { id: "NK-31", cat: "人事变动", title: "陆屿加入深帆云担任基础架构首席科学家，统筹分布式调度", meta: "人物：陆屿 | 原任：海外某公有云首席工程师 | 新任：深帆云首席科学家", summary: "曾主导跨洲多活流量调度系统，此次将带队攻关超大规模推理弹性池。", src: "深帆云官方内部信（转载自 界面新闻）", time: "07:21", link: "news.example/nk-31" },
-    { id: "NK-32", cat: "人事变动", title: "安恒数科任命苏敏为首席合规官兼数据安全委员会主席", meta: "人物：苏敏 | 原任：资深合伙人律师 | 新任：安恒数科 CCO", summary: "负责公司全球金融客户产品合规体系建设与安全认证。", src: "企业新闻稿", time: "07:09", link: "news.example/nk-32" },
-    { id: "NK-33", cat: "人事变动", title: "某头部开源容器项目维护者陈思远卸任 PMC 主席转任顾问", meta: "人物：陈思远 | 变动类型：交接卸任 | 继任：由核心委员联合轮值", summary: "表示未来将专注基础存储硬件加速方向的个人研究项目。", src: "GitHub 社区公告", time: "07:00", link: "news.example/nk-33" },
-    { id: "NK-34", cat: "人事变动", title: "北辰汽车智能化软件副总裁周铭调任海外研发中心负责人", meta: "人物：周铭 | 变动原因：加速欧洲本土智能座舱法规适配 | 生效：即日", summary: "驻慕尼黑团队将在未来半年扩编至 120 人。", src: "第一财经汽车版", time: "06:51", link: "news.example/nk-34" },
-    { id: "NK-35", cat: "人事变动", title: "前跨境支付风控VP林致远联合创立中小企业贸易合规科技公司", meta: "人物：林致远 | 动向：联合创业 | 方向：自动报关与制裁名单实时核验", summary: "新项目已获种子轮支持并上线首个 API 测试环境。", src: "36氪创投动向", time: "06:42", link: "news.example/nk-35" },
-    { id: "NK-36", cat: "人事变动", title: "南方算力研究院新聘三位开源编译器方向专职研究员", meta: "团队：编译工具链组 | 方向：MLIR 与跨芯片算子降维生成 | 人数：3 人", summary: "今年面向高校与工业界已连续吸纳 11 位全职底层软件专家。", src: "研究院官网公告", time: "06:33", link: "news.example/nk-36" }
-  ];
+          els.detailId.textContent = item.id;
+          els.detailCat.textContent = item.cat;
+          els.detailCat.className = `tag-cat tag-${item.cat}`;
+          els.detailTitle.textContent = titleText;
+          els.detailDesc.textContent = item.summary;
 
-  var SOURCES = [
-    { name: "中国政府网 / 部委公报", cat: "政策变化", mode: "一级官方直抓（每日 06:00-07:20）" },
-    { name: "证监会 / 上交所 / 港交所公告", cat: "融资 / 政策", mode: "一手披露直抓" },
-    { name: "GitHub Releases / Trending", cat: "开源项目", mode: "仓库 Tag 与 Star 增量直算" },
-    { name: "科技厂商官方博客与 Changelog", cat: "新产品", mode: "RSS + 官方发布页核对" },
-    { name: "晚点 LatePost / 36氪 / 动脉网", cat: "融资 / 人事", mode: "标注原发媒体与发布时间" },
-    { name: "Hacker News / TechCrunch / EU Official Journal", cat: "国际一线", mode: "保留原文时间与中文摘译标明出处" }
-  ];
+          els.detailKv.innerHTML = item.kv
+            .map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`)
+            .join('');
 
-  var state = {
-    issue: "2026-11-21",
-    cat: "全部",
-    kw: "",
-    savedOnly: false,
-    saved: {},
-    expanded: {},
-    subCats: ["融资", "新产品", "开源项目", "政策变化", "人事变动"],
-    failed: params.get("fail") === "1",
-    forceEmpty: params.get("empty") === "1",
-    slow: params.get("slow") === "1",
-    longMode: params.get("long") === "1"
-  };
+          els.detailSourceText.textContent = `${item.source} · 发布于 ${state.issueDate} ${item.time}`;
+          const saved = state.savedIds.has(item.id);
+          els.detailSaveBtn.textContent = saved ? '已收藏（点击取消）' : '收藏此条';
+        }
 
-  function getItems() {
-    var subset = ITEMS;
-    if (state.issue === "2026-11-20") subset = ITEMS.slice(0, 34);
-    else if (state.issue === "2026-11-19") subset = ITEMS;
-    else if (state.issue === "2026-11-12") subset = ITEMS.slice(1, 35);
-    else if (state.issue === "2026-08-24") subset = ITEMS.slice(0, 31);
+        function renderDistBars() {
+          const max = 8;
+          els.distBars.innerHTML = CATEGORIES.map((c) => {
+            const pct = Math.round((c.count / max) * 100);
+            return `
+              <div class="dist-row" data-dist-cat="${c.name}" role="button" tabindex="0" aria-label="筛选 ${c.name} 共 ${c.count} 条">
+                <span>${c.name}</span>
+                <div class="dist-track"><div class="dist-fill" style="width:${pct}%;background:${c.color}"></div></div>
+                <span style="text-align:right;font-family:var(--font-mono)">${c.count}条</span>
+              </div>
+            `;
+          }).join('');
+        }
 
-    return subset.map(function (it, idx) {
-      if (state.longMode && idx === 0) {
-        return Object.assign({}, it, {
-          title: "渊微算力完成 1.2 亿美元 B 轮大型异构智算推理集群融资并同步开放多租户调度核心代码仓库",
-          summary: "本次资金全部用于华东高密度液冷智算园区三期建设、多芯片统一通信协议优化以及面向行业伙伴的开源调度内核交付与文档健全。",
-          src: "一手官方新闻公告 · 渊微科技（同步核对自 晚点 LatePost 与交易所问询回复全文）"
+        function renderFeed() {
+          const list = getFilteredItems();
+          updateSavedCounts();
+
+          if (list.length === 0) {
+            els.feedList.innerHTML = '';
+            els.emptyBox.hidden = false;
+            els.feedSummary.textContent = `当前期次 ${state.issueDate} · 显示 0 / ${ITEMS.length} 条`;
+            renderDetail(null);
+            return;
+          }
+
+          els.emptyBox.hidden = true;
+          if (!list.some((i) => i.id === state.activeId)) {
+            state.activeId = list[0].id;
+          }
+
+          els.feedSummary.textContent = `当前期次 ${state.issueDate} · 显示 ${list.length} / ${ITEMS.length} 条 · ${state.cat === '全部' ? '全部分类' : state.cat}`;
+
+          els.feedList.innerHTML = list
+            .map((item) => {
+              const active = item.id === state.activeId;
+              const saved = state.savedIds.has(item.id);
+              const title = isLongMode
+                ? `${item.title} ——（超长标题折行测试：含多方联合披露与原始信源核对附注）`
+                : item.title;
+              return `
+                <li class="feed-item" data-id="${item.id}" data-active="${active}">
+                  <div class="item-top">
+                    <div class="item-tags">
+                      <span class="item-id">${item.id}</span>
+                      <span class="tag-cat tag-${item.cat}">${item.cat}</span>
+                      <span class="fact-chip">${item.fact}</span>
+                    </div>
+                    <span class="item-id">${item.time}</span>
+                  </div>
+                  <h3 class="item-title">${title}</h3>
+                  <p class="item-summary">${item.summary}</p>
+                  <div class="item-foot">
+                    <span>${item.source}</span>
+                    <div class="item-actions">
+                      <button type="button" class="mini-btn" data-action="save" data-id="${item.id}" aria-pressed="${saved}">
+                        ${saved ? '★ 已收藏' : '☆ 收藏'}
+                      </button>
+                      <button type="button" class="mini-btn" data-action="select" data-id="${item.id}">
+                        核对细节
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              `;
+            })
+            .join('');
+
+          const activeItem = list.find((i) => i.id === state.activeId) || list[0];
+          renderDetail(activeItem);
+        }
+
+        function showBanner(kind, message, withRetry) {
+          els.statusBanner.hidden = false;
+          els.statusBanner.innerHTML = `
+            <div class="banner-inner ${kind === 'loading' ? 'loading' : ''}" role="${kind === 'error' ? 'alert' : 'status'}">
+              <span>${message}</span>
+              ${withRetry ? '<button type="button" class="btn-sm" id="retry-fetch-btn">重新拉取期次</button>' : ''}
+            </div>
+          `;
+          const retryBtn = document.getElementById('retry-fetch-btn');
+          if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+              showBanner('loading', '正在重新拉取 2026-11-21 情报归档…', false);
+              setTimeout(() => {
+                els.statusBanner.hidden = true;
+              }, 600);
+            });
+          }
+        }
+
+        function setCategory(catName) {
+          state.cat = catName;
+          document.querySelectorAll('.cat-tab').forEach((btn) => {
+            btn.setAttribute('aria-pressed', btn.dataset.cat === catName ? 'true' : 'false');
+          });
+          renderFeed();
+        }
+
+        document.getElementById('cat-tabs').addEventListener('click', (e) => {
+          const btn = e.target.closest('.cat-tab');
+          if (btn) setCategory(btn.dataset.cat);
         });
-      }
-      return it;
-    });
-  }
 
-  function filterItems() {
-    if (state.forceEmpty) return [];
-    var kw = state.kw.trim().toLowerCase();
-    return getItems().filter(function (it) {
-      if (state.cat !== "全部" && it.cat !== state.cat) return false;
-      if (state.savedOnly && !state.saved[it.id]) return false;
-      if (kw) {
-        var hay = (it.id + " " + it.title + " " + it.meta + " " + it.summary + " " + it.src).toLowerCase();
-        if (hay.indexOf(kw) === -1) return false;
-      }
-      return true;
-    });
-  }
+        els.distBars.addEventListener('click', (e) => {
+          const row = e.target.closest('.dist-row');
+          if (row) setCategory(row.dataset.distCat);
+        });
 
-  function renderDistChart(all) {
-    var counts = CATS.slice(1).map(function (c) {
-      return { name: c.label, count: all.filter(function (x) { return x.cat === c.id; }).length };
-    });
-    var maxC = Math.max.apply(null, counts.map(function (c) { return c.count; }).concat([10]));
-    var fills = ["#0052d9", "#006c45", "#262626", "#954500", "#ad352f"];
-    $("distChart").innerHTML = counts.map(function (c, idx) {
-      var y = 6 + idx * 24;
-      var w = Math.max(12, Math.round((c.count / maxC) * 430));
-      return '<text x="0" y="' + (y + 13) + '" font-size="12" font-weight="600" fill="#161616">' + c.name + '</text>' +
-        '<rect x="86" y="' + (y + 2) + '" width="450" height="14" fill="#f4f4f4"/>' +
-        '<rect x="86" y="' + (y + 2) + '" width="' + w + '" height="14" fill="' + fills[idx] + '"/>' +
-        '<text x="' + (94 + w) + '" y="' + (y + 13) + '" font-size="12" font-weight="600" fill="#161616">' + c.count + ' 条</text>';
-    }).join("");
-  }
+        els.feedList.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-action]');
+          if (btn) {
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            if (btn.dataset.action === 'save') {
+              if (state.savedIds.has(id)) state.savedIds.delete(id);
+              else state.savedIds.add(id);
+              renderFeed();
+            } else {
+              state.activeId = id;
+              renderFeed();
+            }
+            return;
+          }
+          const li = e.target.closest('.feed-item');
+          if (li) {
+            state.activeId = li.dataset.id;
+            renderFeed();
+          }
+        });
 
-  function renderTabs(all) {
-    $("catTabs").innerHTML = CATS.map(function (c) {
-      var cnt = c.id === "全部" ? all.length : all.filter(function (x) { return x.cat === c.id; }).length;
-      var active = state.cat === c.id;
-      return '<button class="tab" type="button" data-cat="' + c.id + '" aria-pressed="' + active + '">' +
-        '<span>' + c.label + '</span><span class="tab-cnt">' + cnt + '</span>' +
-      '</button>';
-    }).join("");
-  }
+        els.detailSaveBtn.addEventListener('click', () => {
+          if (!state.activeId) return;
+          if (state.savedIds.has(state.activeId)) state.savedIds.delete(state.activeId);
+          else state.savedIds.add(state.activeId);
+          renderFeed();
+        });
 
-  function catClass(cat) {
-    var found = CATS.find(function (c) { return c.id === cat; });
-    return found ? found.cls : "cat-oss";
-  }
+        els.detailVerifyBtn.addEventListener('click', () => {
+          els.detailVerifyNote.textContent = `已定位至 ${state.activeId} 原始信源归档摘要（本地演示口径，不外跳外部站点）。`;
+          els.detailVerifyNote.hidden = false;
+        });
 
-  function renderFeed() {
-    var all = getItems();
-    renderTabs(all);
-    renderDistChart(all);
-    $("kpiCount").textContent = all.length + " 条";
-    $("issueKicker").textContent = "刊期 " + state.issue + " · 每日 07:30 更新 · 共收录 " + all.length + " 条（标准日均 30 到 50 条）";
+        els.searchInput.addEventListener('input', (e) => {
+          state.query = e.target.value;
+          renderFeed();
+        });
 
-    var savedCnt = Object.keys(state.saved).filter(function (k) { return state.saved[k]; }).length;
-    $("savedNavBtn").textContent = "收藏夹 (" + savedCnt + ")";
-    $("savedNavBtn").setAttribute("aria-pressed", String(state.savedOnly));
+        els.savedOnlyBtn.addEventListener('click', () => {
+          state.savedOnly = !state.savedOnly;
+          els.savedOnlyBtn.setAttribute('aria-pressed', state.savedOnly ? 'true' : 'false');
+          renderFeed();
+        });
 
-    if (state.failed) {
-      $("errorBox").hidden = false;
-      $("feedSlot").innerHTML = "";
-      return;
-    }
-    $("errorBox").hidden = true;
+        document.getElementById('header-saved-btn').addEventListener('click', () => {
+          state.savedOnly = !state.savedOnly;
+          els.savedOnlyBtn.setAttribute('aria-pressed', state.savedOnly ? 'true' : 'false');
+          renderFeed();
+        });
 
-    var list = filterItems();
-    if (!list.length) {
-      $("feedSlot").innerHTML = '<div class="empty-box">' +
-        '<h3 style="font-size:18px">当前筛选条件下没有情报条目</h3>' +
-        '<p style="margin-top:6px;color:var(--ink-2)">可切换全部分类或清空关键词，恢复当日全量情报。</p>' +
-        '<div style="margin-top:16px"><button class="c-btn c-btn-primary" id="emptyResetBtn" type="button">恢复当日全部条目</button></div>' +
-      '</div>';
-      var erb = $("emptyResetBtn");
-      if (erb) erb.addEventListener("click", resetFilters);
-      return;
-    }
+        function resetAll() {
+          state.cat = '全部';
+          state.query = '';
+          state.savedOnly = false;
+          els.searchInput.value = '';
+          els.savedOnlyBtn.setAttribute('aria-pressed', 'false');
+          setCategory('全部');
+        }
 
-    $("feedSlot").innerHTML = list.map(function (it) {
-      var open = !!state.expanded[it.id];
-      var saved = !!state.saved[it.id];
-      return '<article class="feed-item">' +
-        '<div class="feed-row' + (open ? ' is-open' : '') + '">' +
-          '<div class="feed-id">' + it.id + '</div>' +
-          '<div><span class="cat-tag ' + catClass(it.cat) + '">' + it.cat + '</span></div>' +
-          '<div>' +
-            '<h3 class="feed-headline">' + it.title + '</h3>' +
-            '<p class="feed-summary">' + it.summary + '</p>' +
-            '<div class="feed-kv-inline">' + it.meta + '</div>' +
-          '</div>' +
-          '<div class="feed-src"><strong>' + it.src + '</strong>更新时刻 ' + it.time + '</div>' +
-          '<div class="feed-acts">' +
-            '<button class="row-btn" type="button" data-save="' + it.id + '" aria-pressed="' + saved + '">' + (saved ? '已收藏' : '收藏') + '</button>' +
-            '<button class="row-btn" type="button" data-expand="' + it.id + '" aria-expanded="' + open + '">' + (open ? '收起核对' : '核对原文') + '</button>' +
-          '</div>' +
-        '</div>' +
-        (open ? '<div class="feed-drawer">' +
-          '<div class="drawer-grid">' +
-            '<div><div class="drawer-k">结构化要素</div><div class="drawer-v">' + it.meta + '</div></div>' +
-            '<div><div class="drawer-k">来源渠道（含转载口径）</div><div class="drawer-v">' + it.src + '</div></div>' +
-            '<div><div class="drawer-k">原文快照链接（演示）</div><div class="drawer-v" style="font-family:var(--font-mono)">https://' + it.link + '</div></div>' +
-          '</div>' +
-          '<p style="font-size:14px;color:var(--ink)">编辑部校验备注：已按 ' + it.cat + ' 类核心核验要素交叉对照原始披露文件，本条目仅作本地演示归档。</p>' +
-        '</div>' : '') +
-      '</article>';
-    }).join("");
-  }
+        document.getElementById('reset-filters-btn').addEventListener('click', resetAll);
+        document.getElementById('empty-restore-btn').addEventListener('click', () => {
+          if (isEmptyMode) {
+            window.location.search = '';
+            return;
+          }
+          resetAll();
+        });
 
-  function resetFilters() {
-    state.cat = "全部";
-    state.kw = "";
-    state.savedOnly = false;
-    state.forceEmpty = false;
-    $("kwInput").value = "";
-    renderFeed();
-  }
+        els.issueDate.addEventListener('change', (e) => {
+          state.issueDate = e.target.value;
+          showBanner('loading', `正在切换至 ${state.issueDate} 历史期次归档…`, false);
+          setTimeout(() => {
+            els.statusBanner.hidden = true;
+            renderFeed();
+          }, 260);
+        });
 
-  var lastModalFocus = null;
-  function openModal(title, html) {
-    lastModalFocus = document.activeElement;
-    $("modalTitle").textContent = title;
-    $("modalBody").innerHTML = html;
-    $("modalBackdrop").hidden = false;
-    $("modalCloseBtn").focus();
-  }
-  function closeModal() {
-    $("modalBackdrop").hidden = true;
-    if (lastModalFocus) lastModalFocus.focus();
-  }
+        // 14 Sources Modal
+        els.sourcesGrid.innerHTML = SOURCES_LIST.map(
+          (s, i) => `<div class="source-cell"><strong>#${String(i + 1).padStart(2, '0')}</strong> ${s}</div>`
+        ).join('');
 
-  $("sourcesBtn").addEventListener("click", function () {
-    var rows = SOURCES.map(function (s) {
-      return '<div style="padding:10px 0;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">' +
-        '<div><strong>' + s.name + '</strong><div style="font-size:12px;color:var(--ink-2)">覆盖类别：' + s.cat + '</div></div>' +
-        '<span style="font-size:12px;font-family:var(--font-mono);color:var(--ink)">' + s.mode + '</span>' +
-      '</div>';
-    }).join("");
-    openModal("收录媒体与官方渠道清单（14 类核心信源）",
-      '<p style="font-size:14px;color:var(--ink-2)">所有转载或二次归纳消息均在行内强制标明第一信源机构与发布时间。</p>' + rows
-    );
-  });
+        function toggleSourcesModal(open) {
+          els.sourcesModal.setAttribute('data-open', open ? 'true' : 'false');
+        }
+        document.getElementById('open-sources-btn').addEventListener('click', () => toggleSourcesModal(true));
+        document.getElementById('footer-sources-btn').addEventListener('click', () => toggleSourcesModal(true));
+        document.getElementById('close-sources-btn').addEventListener('click', () => toggleSourcesModal(false));
+        els.sourcesModal.addEventListener('click', (e) => {
+          if (e.target === els.sourcesModal) toggleSourcesModal(false);
+        });
 
-  $("subNavBtn").addEventListener("click", function () {
-    var checks = CATS.slice(1).map(function (c) {
-      var chk = state.subCats.indexOf(c.id) > -1 ? " checked" : "";
-      return '<label class="check-chip"><input type="checkbox" value="' + c.id + '"' + chk + '> <span>' + c.label + '</span></label>';
-    }).join("");
-    openModal("每日 08:00 邮件推送与分类 RSS 订阅",
-      '<p style="font-size:14px">可单独勾选只收与你业务相关的分类，邮箱每天 08:00 定时发送；RSS 源支持增量过滤。</p>' +
-      '<div><strong style="font-size:12px">选择订阅分类（至少 1 项）：</strong><div class="check-grid" style="margin-top:8px" id="subCheckGrid">' + checks + '</div></div>' +
-      '<div><label for="subEmailInput" style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">接收工作邮箱</label>' +
-      '<input id="subEmailInput" class="c-input" style="max-width:100%;width:100%" type="email" placeholder="analyst@company.com"></div>' +
-      '<div style="background:var(--layer-1);padding:10px 12px;font-family:var(--font-mono);font-size:12px" id="rssPreview">RSS 订阅地址：https://needknows.example/rss?cats=' + encodeURIComponent(state.subCats.join(",")) + '</div>' +
-      '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">' +
-        '<button class="c-btn" id="copyRssBtn" type="button">复制分类 RSS</button>' +
-        '<button class="c-btn c-btn-primary" id="saveSubBtn" type="button">保存 08:00 邮件订阅</button>' +
-      '</div>' +
-      '<p id="subMsg" style="font-size:14px;color:var(--ok);font-weight:600;min-height:22px"></p>'
-    );
+        document.getElementById('footer-top-btn').addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-    $("subCheckGrid").addEventListener("change", function () {
-      state.subCats = Array.from($("subCheckGrid").querySelectorAll("input:checked")).map(function (i) { return i.value; });
-      $("rssPreview").textContent = "RSS 订阅地址：https://needknows.example/rss?cats=" + encodeURIComponent(state.subCats.join(",") || "none");
-    });
-    $("copyRssBtn").addEventListener("click", function () {
-      $("subMsg").style.color = "var(--ok)";
-      $("subMsg").textContent = "已生成并复制所选 " + state.subCats.length + " 类的专用 RSS 地址。";
-    });
-    $("saveSubBtn").addEventListener("click", function () {
-      var em = $("subEmailInput").value.trim();
-      if (!state.subCats.length) {
-        $("subMsg").style.color = "var(--err)";
-        $("subMsg").textContent = "请至少勾选 1 个情报分类后再保存订阅。";
-        return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) {
-        $("subMsg").style.color = "var(--err)";
-        $("subMsg").textContent = "请输入有效邮箱地址（如 analyst@company.com）。";
-        return;
-      }
-      $("subMsg").style.color = "var(--ok)";
-      $("subMsg").textContent = "已为 " + em + " 设置每日 08:00 发送「" + state.subCats.join("、") + "」订阅日报（演示模式）。";
-    });
-  });
+        // Ft7 Subscription Form
+        els.subForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const checked = Array.from(document.querySelectorAll('.sub-check input:checked')).map((i) => i.value);
+          if (checked.length === 0) {
+            els.subFeedback.style.color = 'var(--nk-red)';
+            els.subFeedback.textContent = '请至少勾选一个订阅类别。';
+            return;
+          }
+          els.subFeedback.style.color = 'var(--nk-green)';
+          els.subFeedback.textContent = `已登记 ${els.subEmail.value}：每日 08:00 推送「${checked.join('、')}」（演示口径）。`;
+        });
 
-  $("issueSelect").addEventListener("change", function () {
-    state.issue = $("issueSelect").value;
-    $("busyBar").hidden = false;
-    setTimeout(function () { $("busyBar").hidden = true; renderFeed(); }, state.slow ? 1200 : 140);
-  });
+        document.getElementById('copy-rss-btn').addEventListener('click', () => {
+          const checked = Array.from(document.querySelectorAll('.sub-check input:checked')).map((i) => i.value);
+          const feedUrl = `https://needknows.example/rss?cats=${encodeURIComponent(checked.join(',') || 'all')}`;
+          els.subFeedback.style.color = 'var(--nk-blue)';
+          els.subFeedback.textContent = `已生成分品类 RSS 地址：${feedUrl}`;
+        });
 
-  $("catTabs").addEventListener("click", function (e) {
-    var b = e.target.closest("[data-cat]");
-    if (!b) return;
-    state.cat = b.getAttribute("data-cat");
-    state.forceEmpty = false;
-    renderFeed();
-  });
+        // Keyboard shortcuts: Cmd/Ctrl+K search, Escape close modal
+        window.addEventListener('keydown', (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            els.searchInput.focus();
+          } else if (e.key === 'Escape' && els.sourcesModal.getAttribute('data-open') === 'true') {
+            toggleSourcesModal(false);
+          }
+        });
 
-  $("kwInput").addEventListener("input", function (e) { state.kw = e.target.value; state.forceEmpty = false; renderFeed(); });
-  $("resetToolbarBtn").addEventListener("click", resetFilters);
-  $("savedNavBtn").addEventListener("click", function () { state.savedOnly = !state.savedOnly; state.forceEmpty = false; renderFeed(); });
+        if (isFailMode) {
+          showBanner('error', '归档节点拉取超时（HTTP 504），当前展示本地缓存期次。', true);
+        } else if (isSlowMode) {
+          showBanner('loading', '正在同步 90 天归档索引与 14 类信源校验状态…', false);
+        }
 
-  document.addEventListener("click", function (e) {
-    var sb = e.target.closest("[data-save]");
-    if (sb) {
-      var id = sb.getAttribute("data-save");
-      state.saved[id] = !state.saved[id];
-      renderFeed();
-      return;
-    }
-    var eb = e.target.closest("[data-expand]");
-    if (eb) {
-      var eid = eb.getAttribute("data-expand");
-      state.expanded[eid] = !state.expanded[eid];
-      renderFeed();
-    }
-  });
-
-  $("retryBtn").addEventListener("click", function () {
-    state.failed = false;
-    $("busyBar").hidden = false;
-    setTimeout(function () { $("busyBar").hidden = true; renderFeed(); }, 200);
-  });
-
-  var cmdkIndex = 0;
-  var lastCmdkFocus = null;
-  function getCmdkMatches() {
-    var q = ($("cmdkInput") ? $("cmdkInput").value : "").trim().toLowerCase();
-    return ITEMS.filter(function (it) {
-      return !q || (it.id + " " + it.cat + " " + it.title + " " + it.meta + " " + it.src).toLowerCase().indexOf(q) > -1;
-    }).slice(0, 10);
-  }
-  function renderCmdk() {
-    var matches = getCmdkMatches();
-    if (cmdkIndex >= matches.length) cmdkIndex = Math.max(0, matches.length - 1);
-    $("cmdkList").innerHTML = matches.length
-      ? matches.map(function (it, i) {
-          return '<button type="button" class="cmdk-item' + (i === cmdkIndex ? ' is-active' : '') + '" data-cmdk-id="' + it.id + '">' +
-            '<span class="cmdk-item-top"><span>' + it.id + ' · ' + it.title + '</span><span>' + it.cat + '</span></span>' +
-            '<span class="cmdk-item-sub">' + it.meta + ' · ' + it.src + '</span>' +
-          '</button>';
-        }).join("")
-      : '<div style="padding:20px 16px;font-size:13px;color:var(--ink-2)">没有匹配的情报条目，可换关键词重试。</div>';
-  }
-  function openCmdk() {
-    lastCmdkFocus = document.activeElement;
-    cmdkIndex = 0;
-    $("cmdkBackdrop").hidden = false;
-    renderCmdk();
-    $("cmdkInput").focus();
-  }
-  function closeCmdk() {
-    $("cmdkBackdrop").hidden = true;
-    if (lastCmdkFocus) lastCmdkFocus.focus();
-  }
-  function pickCmdk(id) {
-    state.cat = "全部";
-    state.kw = "";
-    state.savedOnly = false;
-    state.forceEmpty = false;
-    state.expanded[id] = true;
-    $("kwInput").value = "";
-    closeCmdk();
-    renderFeed();
-    var target = document.querySelector('[data-expand="' + id + '"]');
-    if (target) target.scrollIntoView({ block: "center" });
-  }
-
-  $("searchPillBtn").addEventListener("click", openCmdk);
-  $("cmdkCloseBtn").addEventListener("click", closeCmdk);
-  $("cmdkBackdrop").addEventListener("click", function (e) { if (e.target === $("cmdkBackdrop")) closeCmdk(); });
-  $("cmdkInput").addEventListener("input", function () { cmdkIndex = 0; renderCmdk(); });
-  $("cmdkInput").addEventListener("keydown", function (e) {
-    var matches = getCmdkMatches();
-    if (e.key === "ArrowDown" && matches.length) { e.preventDefault(); cmdkIndex = (cmdkIndex + 1) % matches.length; renderCmdk(); }
-    else if (e.key === "ArrowUp" && matches.length) { e.preventDefault(); cmdkIndex = (cmdkIndex - 1 + matches.length) % matches.length; renderCmdk(); }
-    else if (e.key === "Enter" && matches[cmdkIndex]) { e.preventDefault(); pickCmdk(matches[cmdkIndex].id); }
-  });
-  $("cmdkList").addEventListener("click", function (e) {
-    var b = e.target.closest("[data-cmdk-id]");
-    if (b) pickCmdk(b.getAttribute("data-cmdk-id"));
-  });
-
-  document.querySelectorAll("[data-foot-cat]").forEach(function (el) {
-    el.addEventListener("click", function () {
-      state.cat = el.getAttribute("data-foot-cat");
-      state.forceEmpty = false;
-      renderFeed();
-    });
-  });
-  document.querySelectorAll("[data-foot-issue]").forEach(function (el) {
-    el.addEventListener("click", function () {
-      state.issue = el.getAttribute("data-foot-issue");
-      $("issueSelect").value = state.issue;
-      renderFeed();
-    });
-  });
-  $("footSourcesBtn").addEventListener("click", function () { $("sourcesBtn").click(); });
-  $("footSubBtn").addEventListener("click", function () { $("subNavBtn").click(); });
-
-  $("modalCloseBtn").addEventListener("click", closeModal);
-  $("modalBackdrop").addEventListener("click", function (e) { if (e.target === $("modalBackdrop")) closeModal(); });
-  document.addEventListener("keydown", function (e) {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-      e.preventDefault();
-      if ($("cmdkBackdrop").hidden) openCmdk();
-      else closeCmdk();
-    } else if (e.key === "Escape") {
-      if (!$("cmdkBackdrop").hidden) closeCmdk();
-      else if (!$("modalBackdrop").hidden) closeModal();
-    }
-  });
-
-  renderFeed();
-})();
-</script>
-</body>
+        renderDistBars();
+        renderFeed();
+      })();
+    </script>
+  </body>
 </html>

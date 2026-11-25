@@ -28,7 +28,7 @@ const site = siteUrl.origin
 // 站名清单直接扫 briefs/ 目录，加站不用改这里，也没有别的配置文件。
 const SITE_ROOT = fileURLToPath(new URL('.', import.meta.url))
 const BRIEFS_DIR = join(SITE_ROOT, '..', 'briefs')
-const BRIEF_MANUALS = new Set(['layouts.md', 'README.md'])
+const BRIEF_MANUALS = new Set(['README.md'])
 const briefSlugs = readdirSync(BRIEFS_DIR)
   .filter((name) => name.endsWith('.md') && !BRIEF_MANUALS.has(name))
   .map((name) => name.slice(0, -3))

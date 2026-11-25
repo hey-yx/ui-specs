@@ -20,7 +20,7 @@
 1. 单站生成先读 `briefs/<slug>.md`；项目级方向看 `design.md`。
 2. 读本文件，确认这次用哪个 skill。
 3. 读 `content/` 里选中的选型行与方法篇；数值和表面语言只从选中选型行取。
-4. 读 `.hallmark/log.json` 与 `briefs/layouts.md`，按产品动作独立挑 `macrostructure`、`nav`、`footer` 与页底色，批内避重不套固定外壳。
+4. 读 `.hallmark/log.json` 与 `hallmark/references/`（`macrostructures.md`、`layout.md`、`flow.md`），按产品动作独立挑版式、导航、页脚与页底色，批内避重不套固定外壳。
 5. 由 Hallmark 结合产品动作生成页面形状与版式件；不拿预制外壳硬套所有品类。
 6. 状态、ARIA、空态、错误态按 `ui-ux-design` 的清单过。
 7. 落稿后要评审时走 `interfaces` 的 better-interface，量规与底线按 `impeccable` 的两份参考。
@@ -32,7 +32,7 @@
 - Hallmark 的 Floor 与项目实用密度或品牌语法冲突时，不整包照单。本项目同样禁用英文大写装饰眉题；仅列表/页脚的紧凑中点元信息（如 `云梯云 · 深圳`）或明确复刻海外品牌语境在冲突登记放行，项目只取 app 分支与可用的门禁。
 - Impeccable 的 craft-floor 与项目规则冲突时以项目为准；本项目同样禁用装饰眉题，只取其中可机判的底线（对比度、层次、状态、浏览器表面）。
 - 评审层的证据标准是「path:line 加现状」，风格偏好不算 finding；评审发现要修时，修完只复测受影响项。
-- 不把项目规则写进 `skills/` 下四个 skill 的文件里。项目规则写 `AGENTS.md`、本文件与 `briefs/layouts.md`，升级 skill 时才不会被覆盖。
+- 不把项目规则写进 `skills/` 下四个 skill 的文件里。项目规则写 `AGENTS.md`、本文件与 `content/PROJECT-SELECTION.md`，升级 skill 时才不会被覆盖。
 - Hallmark 的 50 张主题照片没有入库，避免把 CC BY 与 CC BY-SA 素材带进公开仓库。项目视觉与数值来源是项目选型行（如 TDesign）及按语境指定的 `content/brands`，不用 Hallmark 的图片主题。需要完整 theme deal 时用本机安装或上游仓库。
 
 ## 目录

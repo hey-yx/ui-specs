@@ -43,30 +43,30 @@ export type MainSource = {
 /** 按常用程度排序：中文产品 UI 置顶，原生应用在末位。顺序同时决定设计地图「项目选型方案」组、/ai/guide.md 对照表与 /ai/guide.json 的 main_sources。 */
 export const MAIN_SOURCES: MainSource[] = [
   {
-    context: "中文产品 UI（中后台 / 工具 / 内容 / 协作）",
+    context: "中文通用业务中后台 / 官网（表单 / 审批 / 目录 / 协作）",
     id: "project-tdesign",
     scenario: {
-      use: "中文通用中后台、职位目录、SaaS 官网与协作工作台；React 或 Vue 都有官方组件库。",
-      switchTo: "商家/课程后台换 Polaris；开发者/代码/提示词工具换 Primer；高密度数据与情报流换 Carbon；创意/媒体解析换 Spectrum；日程/医疗门户换 Fluent 2；消费级多角色对话壳换 Apple HIG。",
+      use: "中文通用业务中后台、多表单录入与审批流、职位/内容目录、SaaS 协作平台及常规中文企业/SaaS 官网；React 或 Vue 都有官方组件库。",
+      switchTo: "现代极简技术向 SaaS 官网与轻量看板/开关台换 Umami；工程控台、设备/硬件调试台、运维监控与实时轨迹表换 Carbon；代码协作/仓库/PR/CLI 文档换 Primer；商家/课程后台换 Polaris；创意/媒体解析换 Spectrum；Windows/M365 门户换 Fluent 2；消费级原生/多角色对话壳换 Apple HIG。",
     },
-    short: "中文产品 UI（TDesign）",
+    short: "中文业务中后台与官网（TDesign）",
     source: "TDesign（腾讯）",
     stacks: [{ framework: 'react', pkg: 'tdesign-react' }, { framework: 'vue', pkg: 'tdesign-vue-next' }],
     files: ["content/color/tdesign.tencent.com--color.md", "content/type/tdesign.tencent.com--fonts.md", "content/layout/tdesign.tencent.com--layout.md", "content/icons/tdesign.tencent.com--icon.md", "content/motion/tdesign.tencent.com--motion.md", "content/color/tdesign.tencent.com--dark.md", "content/patterns/tdesign.tencent.com--backoffice-tasks.md", "content/principles/tdesign.tencent.com--values.md", "content/components/tdesign.tencent.com--input.md", "content/components/tdesign.tencent.com--select.md", "content/components/tdesign.tencent.com--checkbox.md", "content/components/tdesign.tencent.com--radio.md", "content/components/tdesign.tencent.com--switch.md", "content/components/tdesign.tencent.com--table.md", "content/components/tdesign.tencent.com--dialog.md", "content/components/tdesign.tencent.com--message.md", "content/components/tdesign.tencent.com--tabs.md", "content/components/tdesign.tencent.com--pagination.md", "content/components/tdesign.tencent.com--date-picker.md", "content/components/tdesign.tencent.com--form.md", "content/components/tdesign.tencent.com--upload.md", "content/components/tdesign.tencent.com--tag.md", "content/components/tdesign.tencent.com--tooltip.md", "content/components/tdesign.tencent.com--button.md", "content/components/tdesign.tencent.com--cascader.md", "content/components/tdesign.tencent.com--divider.md", "content/components/tdesign.tencent.com--drawer.md", "content/components/tdesign.tencent.com--dropdown.md", "content/components/tdesign.tencent.com--icon.md", "content/components/tdesign.tencent.com--input-number.md", "content/components/tdesign.tencent.com--layout.md", "content/components/tdesign.tencent.com--list.md", "content/components/tdesign.tencent.com--loading.md", "content/components/tdesign.tencent.com--menu.md", "content/components/tdesign.tencent.com--popconfirm.md", "content/components/tdesign.tencent.com--search.md", "content/components/tdesign.tencent.com--slider.md", "content/components/tdesign.tencent.com--steps.md", "content/components/tdesign.tencent.com--textarea.md", "content/components/tdesign.tencent.com--tree.md"],
-    note: "token 级，数值全在正文。用于中文通用中后台、目录与官网，与其他 6 套官方选型按产品同构平权分流（不把它强行当全站唯一默认皮肤）；价值观篇 principles/tdesign.tencent.com--values.md 只作气质参照，不取数值",
+    note: "token 级，数值全在正文。用于中文通用业务中后台（8px 栅格 + 侧栏/顶栏多表单与表格组合），与其他 6 套官方选型按产品同构平权分流（不以「中文工具」为由强行默认）；实时设备控台与监控运维台应分流至 Carbon；价值观篇 principles/tdesign.tencent.com--values.md 只作气质参照，不取数值",
   },
   {
-    context: "企业产品 / 数据密集界面",
+    context: "工程控台 / 监控运维 / 数据密集界面",
     id: "project-carbon",
     scenario: {
-      use: "企业数据密集界面、监控与运维台、多维复杂表格；需要 IBM 直角与 Blue 60 语言的 React 产品。",
-      switchTo: "中文通用后台换 TDesign；轻量 KPI 看板或需要原生 1px 细边框亮暗双主题的工具台换 Umami；代码/仓库类开发者工具换 Primer；没有 React 时只能按 Carbon CSS 做 CSS-only。",
+      use: "工程控制室、设备/硬件调试台、监控与运维台、实时执行流水线、多维复杂数据表（不限企业规模；无 React 时直接用原生 HTML/CSS 落 Carbon 48px 顶栏、分层与 0px 语法）。",
+      switchTo: "中文通用多表单业务后台换 TDesign；轻量 KPI 看板或需要 12px 圆角与亮暗双主题的开关/密钥台换 Umami；代码仓库/PR/CLI 文档类开发者产品换 Primer。",
     },
-    short: "企业数据密集（IBM Carbon）",
+    short: "工程控台与数据密集（IBM Carbon）",
     source: "Carbon（IBM）",
     stacks: [{ framework: 'react', pkg: '@carbon/react' }],
     files: ["content/color/carbondesignsystem.com--color.md", "content/type/carbondesignsystem.com--typography.md", "content/layout/carbondesignsystem.com--spacing.md", "content/motion/carbondesignsystem.com--motion.md", "content/layout/carbondesignsystem.com--2x-grid.md", "content/layout/carbondesignsystem.com--2x-grid-usage.md", "content/motion/carbondesignsystem.com--motion-choreography.md", "content/color/carbondesignsystem.com--themes.md", "content/icons/carbondesignsystem.com--iconography.md", "content/components/carbondesignsystem.com--select-usage.md", "content/components/carbondesignsystem.com--text-input-usage.md", "content/components/carbondesignsystem.com--checkbox-usage.md", "content/components/carbondesignsystem.com--radio-button-usage.md", "content/components/carbondesignsystem.com--toggle-usage.md", "content/components/carbondesignsystem.com--dropdown-usage.md", "content/components/carbondesignsystem.com--notification-usage.md", "content/components/carbondesignsystem.com--tooltip-usage.md", "content/components/carbondesignsystem.com--progress-bar-usage.md", "content/components/carbondesignsystem.com--pagination-usage.md", "content/components/carbondesignsystem.com--breadcrumb-usage.md", "content/components/carbondesignsystem.com--tag-usage.md", "content/components/carbondesignsystem.com--search-usage.md", "content/components/carbondesignsystem.com--menu-usage.md", "content/components/carbondesignsystem.com--list-usage.md", "content/components/carbondesignsystem.com--link-usage.md", "content/components/carbondesignsystem.com--accordion-usage.md", "content/components/carbondesignsystem.com--date-picker-usage.md", "content/components/carbondesignsystem.com--slider-usage.md", "content/components/carbondesignsystem.com--tile-usage.md", "content/components/carbondesignsystem.com--loading-usage.md", "content/a11y/carbondesignsystem.com--a11y-color.md", "content/a11y/carbondesignsystem.com--a11y-keyboard.md", "content/a11y/carbondesignsystem.com--a11y-overview.md", "content/components/carbondesignsystem.com--button-usage.md", "content/components/carbondesignsystem.com--data-table-usage.md", "content/components/carbondesignsystem.com--modal-usage.md", "content/components/carbondesignsystem.com--tabs-usage.md", "content/patterns/carbon--common-actions.md", "content/patterns/carbon--dialog-pattern.md", "content/patterns/carbon--disabled-states.md", "content/patterns/carbon--disclosures-pattern.md", "content/patterns/carbon--empty-states-pattern.md", "content/patterns/carbon--filtering.md", "content/patterns/carbon--fluid-styles.md", "content/patterns/carbon--forms-pattern.md", "content/patterns/carbon--global-header.md", "content/patterns/carbon--loading-pattern.md", "content/patterns/carbon--login-pattern.md", "content/patterns/carbon--notification-pattern.md", "content/patterns/carbon--overflow-content.md", "content/patterns/carbon--read-only-states-pattern.md", "content/patterns/carbon--search-pattern.md", "content/patterns/carbon--status-indicator-pattern.md", "content/patterns/carbon--text-toolbar-pattern.md", "content/dataviz/carbondesignsystem.com--data-visualization-axes-and-labels.md", "content/dataviz/carbondesignsystem.com--data-visualization-chart-anatomy.md", "content/dataviz/carbondesignsystem.com--data-visualization-color-palettes.md", "content/dataviz/carbondesignsystem.com--data-visualization-dashboards.md", "content/dataviz/carbondesignsystem.com--data-visualization-flow-charts.md", "content/dataviz/carbondesignsystem.com--data-visualization-gantt-charts.md", "content/dataviz/carbondesignsystem.com--data-visualization-legends.md", "content/dataviz/carbondesignsystem.com--data-visualization-spatial-charts.md"],
-    note: "招牌语法为 48px #161616 全局顶栏 + Inline Notification + 0px 直角 1px 齐平指标带与 DataTable（忌双层框套框）；原文仅含黑白灰底色与字阶公式，语义色与字阶按 GAP_RULES 整套回源",
+    note: "招牌语法为 48px #161616 Global Shell + 视图 Tab / Content Switcher + 0px 直角通铺分栏、1px 齐平指标带与 DataTable（忌圆角白卡墙、双层框套框与抽屉堆叠；无 React 时直接用原生 HTML/CSS 落地）；原文仅含黑白灰底色与字阶公式，语义色与字阶按 GAP_RULES 整套回源",
   },
 
 
@@ -84,17 +84,17 @@ export const MAIN_SOURCES: MainSource[] = [
     note: "文章只给原则，数值取同版本官方 CSS token 快照 tokens/polaris.shopify.com--tokens.md（@shopify/polaris@13.9.5）；#F7F7F7 浅灰画布托举 #FFFFFF 圆角 12px 索引卡与 IndexFilters + IndexTable（忌把过滤胶囊散堆表外，按钮高 32px / 圆角 8px）；官方不支持暗色模式，要暗色换行或按缺口兜底",
   },
   {
-    context: "开发者工具 / 代码协作",
+    context: "代码协作 / 仓库 / CLI 文档与提示词工具",
     id: "project-primer",
     scenario: {
-      use: "开发者工具、代码协作、仓库、CLI 与 Pull Request 类产品，GitHub 风格明确时。",
-      switchTo: "轻量指标看板与开关/密钥配置台换 Umami；高密度运维监控与复杂表格换 Carbon；普通中文企业后台换 TDesign。",
+      use: "代码协作、Git 仓库、Issue/PR 工单流、CLI 文档与提示词索引等偏阅读与研发协作的产品。",
+      switchTo: "实时设备/硬件控制台、运维监控与执行轨迹表换 Carbon；轻量指标看板与开关/密钥配置台换 Umami；普通中文业务表单后台换 TDesign。",
     },
-    short: "开发者工具（GitHub Primer）",
+    short: "代码协作与文档（GitHub Primer）",
     source: "Primer（GitHub）",
     stacks: [{ framework: 'react', pkg: '@primer/react' }],
     files: ["content/color/primer.style--color.md", "content/color/primer.style--color-overview.md", "content/color/primer.style--base-scales.md", "content/color/primer.style--theming.md", "content/tokens/primer.style--color-themes.md", "content/type/primer.style--typography.md", "content/icons/primer.style--octicons-guidelines.md", "content/layout/primer.style--layout.md", "content/patterns/primer--notification-messaging.md", "content/layout/primer.style--responsive.md", "content/patterns/primer--data-visualization.md", "content/patterns/primer--degraded-experiences.md", "content/patterns/primer--empty-states.md", "content/patterns/primer--feature-onboarding.md", "content/patterns/primer--forms-overview.md", "content/patterns/primer--loading.md", "content/patterns/primer--navigation.md", "content/patterns/primer--progressive-disclosure.md", "content/patterns/primer--saving.md", "content/tokens/primer.style--primitives-token-names.md", "content/components/primer--action-bar.md", "content/components/primer--action-list.md", "content/components/primer--action-menu.md", "content/components/primer--autocomplete.md", "content/components/primer--avatar-pair.md", "content/components/primer--avatar-stack.md", "content/components/primer--avatar.md", "content/components/primer--banner.md", "content/components/primer--blankslate.md", "content/components/primer--box.md", "content/components/primer--branch-name.md", "content/components/primer--breadcrumbs.md", "content/components/primer--button-group.md", "content/components/primer--button.md", "content/components/primer--checkbox-group.md", "content/components/primer--checkbox.md", "content/components/primer--comment-box.md", "content/components/primer--data-table.md", "content/components/primer--dialog.md", "content/components/primer--form-control.md", "content/components/primer--heading.md", "content/components/primer--icon-button.md", "content/components/primer--icon.md", "content/components/primer--inline-message.md", "content/components/primer--label.md", "content/components/primer--link.md", "content/components/primer--nav-list.md", "content/components/primer--overlay.md", "content/components/primer--page-header.md", "content/components/primer--pagehead.md", "content/components/primer--pagination.md", "content/components/primer--popover.md", "content/components/primer--progress-bar.md", "content/components/primer--radio-group.md", "content/components/primer--radio.md", "content/components/primer--relative-time.md", "content/components/primer--segmented-control.md", "content/components/primer--select.md", "content/components/primer--selectpanel.md", "content/components/primer--skeleton-box.md", "content/components/primer--skeleton-text.md", "content/components/primer--spinner.md", "content/components/primer--split-page-layout.md", "content/components/primer--state-label.md", "content/components/primer--subnav.md", "content/components/primer--tab-nav.md", "content/components/primer--tab-panels.md", "content/components/primer--text-input-with-tokens.md", "content/components/primer--text-input.md", "content/components/primer--text.md", "content/components/primer--textarea.md", "content/components/primer--timeline.md", "content/components/primer--toggle-switch.md", "content/components/primer--tooltip.md", "content/components/primer--tree-view.md", "content/components/primer--truncate.md", "content/components/primer--underline-nav.md", "content/components/primer--underline-panels.md"],
-    note: "控制台走 PageHeader + UnderlineNav + 单行 hairline 指标带 + SplitLayout 紧凑列表/表（32px 控件，忌大块方框墙）；字阶、间距、动效按 GAP_RULES 成套补齐",
+    note: "看板/仓库类走 PageHeader + UnderlineNav + 单行 hairline 指标带 + 紧凑 Box 列表/表（32px 控件，忌大块方框墙）；实时硬件/监控控制室不选 Primer 而转 Carbon；字阶、间距、动效按 GAP_RULES 成套补齐",
   },
   {
     context: "创意与内容工具",
@@ -260,17 +260,17 @@ export const MAIN_SOURCES: MainSource[] = [
     note: "Apple HIG 分栏应用采用半透明材质顶栏与分组分层；原文缺十六进制色板、px 间距与 ms 动效表，这三项按 GAP_RULES 成套回源并记账",
   },
   {
-    context: "复刻 Umami 风格（轻量数据看板 / 工具后台）",
+    context: "轻量看板 / 开关与配置面板 / 极简 SaaS 官网（Umami）",
     id: "project-umami",
     scenario: {
-      use: "轻量流量与业务分析看板、API/Webhook 密钥与配置台、Feature Flag 开关面板，以及需要原生亮/暗双主题与 1px 细边框卡片语言的工具后台（版式不绑定原站侧栏，由 Hallmark 灵活调配）。",
-      switchTo: "高密度运维表格与企业监控换 Carbon；代码协作/仓库/CLI 类开发者工具换 Primer；中文多表单通用中后台换 TDesign；营销官网换品牌规范。",
+      use: "轻量流量与业务分析看板、API/Webhook 密钥与配置台、Feature Flag 开关面板、现代极简技术向 SaaS 官网，以及需要原生亮/暗双主题、1px 细边框与 12px 圆角卡片的工具台。",
+      switchTo: "重型多视图工程控台、设备调试台与高密度执行轨迹表换 Carbon；代码协作/仓库/文档类开发者工具换 Primer；中文多表单通用业务中后台与稳健型企业官网换 TDesign；明确复刻特定品牌官网换品牌规范。",
     },
-    short: "轻量看板（Umami）",
+    short: "轻量看板与开关台（Umami）",
     source: "Umami（站点抽取）",
     stacks: [{ framework: 'react', pkg: '@umami/react-zen' }],
     files: ["content/brands/designmd--umami.md"],
-    note: "只取表面语言与数值（#3080ff 主色、Light/Dark 双色板、Inter 字阶、6px/12px 圆角、150ms 微交互及 300ms 弹簧弹窗/加载动效）；React 项目可直接选用 MIT 开源组件库 @umami/react-zen；页面版式与外壳结构不锁定原站，按 briefs/layouts.md 自由选配",
+    note: "只取表面语言与数值（#3080ff 主色、Light/Dark 双色板、Inter 字阶、6px/12px 圆角、150ms 微交互及 300ms 弹簧弹窗/加载动效，配连体 KPI 条与 Modal 渐进披露）；React 项目可直接选用 MIT 开源组件库 @umami/react-zen；页面版式与外壳结构不锁定原站，由 Hallmark 与 layouts 设计点自由选配",
   }
 ]
 
@@ -403,11 +403,11 @@ export const REQUIRED_RULES: RequiredRule[] = [
 /** 必读点：场景命中就全读，由本库判定，AI 不许自己减。points 里的 id 必须能在设计地图找到，check-map 会校验 */
 export const REQUIRED_SCENARIOS: { id: string; when: string; why: string; points: string[] }[] = [
   { id: 's2', when: '所有项目', why: '骨架、栅格、信息架构与留白决定主画布克制与数值落地', points: ['flow-layout-basics', 'howto-visual-hierarchy', 'howto-ui-polish', 'patterns-progressive-disclosure'] },
-  { id: 's3', when: '所有项目', why: '色字距动效的取值口径与色板原文，缺一项就会出现裸值', points: ['flow-values', 'type-hierarchy-recipe', 'layout-spacing-values'] },
+  { id: 's3', when: '所有项目', why: '色字距动效的取值口径与色板原文，缺一项就会出现裸值', points: ['flow-values', 'type-hierarchy-recipe', 'layout-spacing-values', 'motion-duration'] },
   { id: 's16', when: '有界面就要验', why: '对比度、焦点与键盘是可访问性底线，高于任何风格', points: ['flow-a11y', 'a11y-wcag-checklist', 'a11y-contrast-threshold'] },
   { id: 's4', when: '有文案', why: '语气与微文案决定空态、报错、按钮说不说得清', points: ['flow-copywriting', 'markdown-cn-copywriting'] },
   { id: 's17', when: '所有项目', why: '评审底线是交付前最后一道逐条走查', points: ['flow-review', 'patterns-review-checklist'] },
-  { id: 's8', when: '有状态变化的功能', why: '空态、加载、错误、成功要逐态造出来看', points: ['flow-states', 'patterns-feedback-criteria'] },
+  { id: 's8', when: '有状态变化的功能', why: '空态、加载、错误、成功与过渡反馈要逐态造出来看', points: ['flow-states', 'patterns-feedback-criteria', 'motion-implementation'] },
   { id: 's9', when: '有表单或提交', why: '校验时机、报错文案与错误恢复不能临场编', points: ['flow-form', 'components-form', 'a11y-form-structure'] },
   { id: 's5', when: '用了组件库或自建控件', why: '控件形态与组件库默认样式要按点对齐，不许留默认皮肤', points: ['flow-components', 'components-button-hierarchy'] },
   { id: 's7', when: '多页面或多分区', why: '导航层级与当前位置决定用户找不找得到', points: ['flow-navigation', 'patterns-global-nav'] },
@@ -447,74 +447,49 @@ export const USAGE_STEPS: UsageStep[] = [
   {
     n: 1,
     title: '拉包与定语境',
-    prompt: '先拉 `<站点地址>/ai/routing.json` 与 `<站点地址>/ai/reference-screens.json`（仓库内直接读本库源码与 `briefs/layouts.md`；完整包在 `/ai/design-points.json`）。写三句：产品是什么、谁在用、他这次要完成的一件事；价格、时效、资质以常规行内文字标 `[待确认]`（不套彩色徽标），不编。再按产品同构从「项目选型方案」7 套体系里挑一行作为唯一数值源并写理由（禁止拿英文品牌 `DESIGN.md` 硬套普通中文产品，也不预设必须落 TDesign）。点名主场景 `sX` 与附加场景并写理由。',
-    desc: '先拉总路由与首屏参考；写产品、用户、主任务三句；按产品同构定选型行与命中场景；硬事实缺的标 [待确认]。',
-    gate: '包拿到手；产品、用户、主任务三句齐全；选型行已定且写了理由；主场景与附加场景已点名并写了命中理由；补全项有标记。',
+    prompt: '先拉 `<站点地址>/ai/routing.json` 与 `<站点地址>/ai/reference-screens.json`（仓库内直接读本库源码与 `skills/hallmark/references/`；完整包在 `/ai/design-points.json`）。写三句：产品是什么、谁在用、他这次要完成的一件事；价格、时效、资质等未给硬事实以常规行内文字标 `[待确认]`（不套彩色徽标），不编。按产品同构从 `routing.json` 的 `main_sources`（7 套官方选型 TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG 与 Umami 平权分流，禁止拿英文品牌 `DESIGN.md` 硬套普通中文产品，也不预设默认落 TDesign）确定唯一选型行并写理由，真实读取该行 `files` 核心 token 原文（仓库外按需拉 `/md/<path>`）；点名主场景 `sX` 与附加场景。',
+    desc: '先拉总路由与首屏参考；写产品、用户、主任务三句；按产品同构定选型行、读核心 token 原文并点名命中场景；硬事实缺的标 [待确认]。',
+    gate: '包拿到手；产品、用户、主任务三句齐全；选型行已定、已读核心原文并写了理由；主场景与附加场景已点名并写了命中理由；补全项有标记。',
   },
   {
     n: 2,
     title: '定方向与选点',
-    prompt: '先定语气：编辑、技术、克制、活泼、奢华、粗野，选一个极端。再从 `brands-*` 挑两个和产品内容同源的腔调锚（只借手法与气质，不拿英文品牌皮肤硬套中文产品），各写一句它给什么手法，选一个并写另一个为什么不合身。摘 3 个可见手法，逐条写落在首屏哪一处：至少 1 个改变主数据形状（分组、行解剖、价尺、账本），至少 1 个承担产品动作（价签、票据、排班格、队列、时间轴）。设计点不由你挑：按 guide 的「场景必选」表，命中的必读点全读（仓库外按需拉 `<站点地址>/ai/points/<id>.json` 与原文 `<站点地址>/md/<path>`），`points` 列出的 id 一个不漏，读完写一句每点给的约束。读点要出表，一行一条：`点 id | 约束一句 | 落点件位`；这一页用不上的写 `不适用 + 理由`，不许空着跳过。',
-    desc: '语气选一个极端；两个同源腔调锚，写各自手法与取舍（不硬套英文皮肤）；3 个手法有首屏落点，1 个改数据形状、1 个承担产品动作；必读点按场景表全读，不自选点。',
-    gate: '语气是一个极端；两个腔调锚同源且有取舍；3 个手法有首屏落点，其中 1 个改数据形状、1 个承担产品动作；场景命中的必读点全部读到，约束表逐行有落点或不适用理由；数值主源已定。',
+    prompt: '按 `routing.json` 的 `method_required` 与 `required_scenarios`（场景必选表），命中的必读点全部拉取点详情（仓库外按需拉 `<站点地址>/ai/points/<id>.json`）并核对 `select` 与 `checks` 自测题，`points` 列出的 id 一个不漏，不自选删减；带 `method` 的点先读方法篇。读取点内 `articles` 原文（`/md/<path>`）时：必读本库原创合成篇（`ui-specs--*`）、通用研究/实操篇（`howto/`、`nngroup`、`learnui`、`uisdc`、`inclusive-components`）及属于第 1 步所选选型行的官方篇目；其余 6 套未选中选型的专属篇目跳过不读，W3C 长标准与百条速查表按需查验条款，不整篇灌入上下文。读完按 `点 id | 约束一句 | 落点件位` 对齐到本页（用不上的写 `不适用 + 理由`）。需要借鉴局部手法时定一个语气极端并从 `brands-*` 挑两个同源腔调锚比选（只借手法与气质，不硬套皮肤），至少 1 个手法改变主数据形状、至少 1 个承担产品动作。',
+    desc: '按 `method_required` 与 `required_scenarios` 全拉命中必读点并核对 `checks`；精读原创合成篇、通用研究实操与选中选型篇目（跳过其余 6 套未选体系），逐条对齐页面落点。',
+    gate: '方法篇与场景命中的必读点全部拉取并核对 `checks`，已按所选选型过滤精读原文，约束逐条有落点或不适用理由；如借用品牌手法则同源且有取舍与动作落点；数值主源已定。',
   },
   {
     n: 3,
     title: '定版式与灰模',
-    prompt: '版式完全按产品形态与选型自由组合，不套预制外壳：仓库内走 Hallmark 流程（读 `references/macrostructures.md` 与 `briefs/layouts.md`），按产品动作独立选 `macro`、`nav`、`footer` 与页底处理，避开最近 3 条 `macrostructure`（读 `.hallmark/log.json`）；仓库外拉 `/ai/reference-screens.json`（只借件位与密度）加 `routing.json` 的 `recent_macrostructures` 与 `layouts` 设计点定三件。控制台、看板与比价表必须在 `1280×800` 首屏直接露出主图表或前 8-10 行主表（禁止用大标题与三排筛选胶囊把主工件挤出首屏）。多站批必须同时声明 `<meta name="frame" content="batch=...; nav=...; footer=...; base=#xxxxxx">` 并满足同批避重（`nav` 不重复、`footer` 每种 ≤ 2 次、灰底 ≤ 半数，页脚 DOM 骨架全库不撞车）。灰模 3 张：真数据、无颜色、只分区块、480px 宽，各写一句骨架和产品动作落点；选一张并写另外两张的淘汰理由，灰模没选定不写 CSS。多页项目在灰模阶段定共用件；多站批先出方向表。',
-    desc: '按产品形态与选型自由定 `macro`、`nav`、`footer`、`base` 并避重；控制台/看板/比价表必须在 1280×800 首屏直接露出主图表或主表行；出 3 张灰模选定后再写 CSS。',
-    gate: '已定 `batch`/`macro`/`nav`/`footer` 与页底 `base` 且避开最近 3 条记录；同批 `nav` 无重复、`footer` ≤ 2 次、页脚骨架全库不撞车；核心工件首屏直出；3 张灰模有骨架描述与产品动作落点；选定与淘汰理由都有。',
+    prompt: '按 `hallmark` skill 流程（读 `references/macrostructures.md`、`references/layout.md` 与 `references/flow.md`，仓库外拉 `/ai/reference-screens.json`、`routing.json` 的 `recent_macrostructures` 与 `layouts` 点）按产品动作与选中选型的招牌拓扑独立选 `macro`、`nav`、`footer` 与页底 `base`，避开最近 3 条 `macrostructure`（改版已有工具/控制台时禁止沿用旧卡片骨架只换皮肤，须按所选体系重构壳层与信息拓扑）。遵循渐进披露：在 `1280×800` 首屏直接露出核心舞台或主图/主表，低频配置与次级筛选按渐进披露点收进次级容器或视图标签页。做 3 套结构方案比选（审计模式出 3 张 480px 真数据无色灰模并记入 `DECISIONS.md`；业务项目在内部完成 2–3 套首屏结构比选，明确淘汰全页平铺表单方案），选定后再写 CSS。多站批声明 `<meta name="frame" content="batch=...; nav=...; footer=...; base=#xxxxxx">` 并满足同批避重。',
+    desc: '按 `hallmark` 自由定 `macro`、`nav`、`footer`、`base` 并避重；改版重构壳层拓扑不留旧皮；1280×800 首屏直出核心工件并做渐进披露；完成 3 套结构比选后再写 CSS。',
+    gate: '已定 `macro`/`nav`/`footer` 与页底 `base` 且避开最近 3 条记录（多站批另含 `batch` 且 `nav`/`footer` 满足同批避重）；核心工件首屏直出；3 套结构比选有选定与淘汰理由。',
   },
   {
     n: 4,
     title: '取值与落稿',
-    prompt: '数值一律只从第 1 步选中的选型行 `files` 取，同一 token 只落一篇原文、不跨源拼值（缺失维度按 `GAP_RULES` 回源）。数值逐条记 `content/完整路径:行号`；其他文章只取原则与反例。先落原始字阶、间距、色板、栅格，再表面 token，最后语义 token；颜色和字体进命名 token，组件里不写裸值。表面语法与明暗极性随选型与产品形态自由分化（禁止把「白底压 `#f3f3f3` 圆角灰卡 + 通用单行页脚」当默认皮肤，也禁止「框套框」与超过 5 项的满屏胶囊墙——多指标用单条 1px 齐平分割带，长筛选项收进下拉或单一 Tab 工具条）：Spectrum 可用浅色带与清晰边框，Carbon 用 `48px #161616` 全局头、`0px` 直角与 1px 齐平指标带，Polaris 用 `#303030` 深栏 + `#F7F7F7` 托举 `IndexTable` 单卡，Primer 用 `PageHeader + UnderlineNav + 单层 Box/ActionList`，Fluent 2 可用品牌浅蓝底与报头/存根，Apple HIG 用半透明分栏，TDesign 亦可选暗色表或彩色浅带。文案只写产品真实事实，不在正文贴「演示口径」自检词；a11y 与四态（空/错/加载/超长）写进初稿。',
-    desc: '按选中选型行唯一主源取值并记 `content/完整路径:行号`；表面语法、顶栏、页脚与明暗极性随选型和产品自由分化（多指标用 1px 齐平分割带，禁框套框与满屏胶囊墙，桌面贴合 32-36px 控件密度）；a11y 与四态进初稿。',
-    gate: '每个值有行号；同一 token 一篇原文，跨源拼值为零；裸值为零；表面与外壳贴合选型和品类且无自检演示腔；首屏数据或操作区够实；a11y 在初稿；第 2 步约束表每一行都能在稿子里指到落点。',
+    prompt: '数值一律只从第 1 步选中选型行 `files` 取，同一 token 只落一篇原文、不跨源拼值（缺失维度按 `GAP_RULES` 回源；审计模式逐条记 `content/完整路径:行号`）。先落原始字阶、间距、色板、圆角，再表面 token（`canvas / sheet / raised / inverse`），最后语义 token，组件不写裸值。表面语法、边界分层、控件三级层次与图标规范随选型和必读点分化（禁止把「白底压 `#f3f3f3` 圆角灰卡 + 通用单行页脚」当默认皮肤，禁框套框与满屏胶囊墙）。按 `ui-ux-design` skill 与场景必读点把主流程可点态、四态（空/错/加载/超长）、ARIA 无障碍与克制的状态过渡动效写进初稿；文案只写产品真实事实，不贴「演示口径」自检词。',
+    desc: '按选中选型行唯一主源取值（审计模式记 `content/完整路径:行号`）；按选型与必读点分化表面分层、控件三级与图标质感；a11y、四态与克制过渡进初稿。',
+    gate: '同一 token 只认一篇原文，裸值为零（审计模式每个值有行号）；表面与控件层次贴合选型和必读点且无自检演示腔；a11y、四态与状态过渡在初稿；第 2 步必读约束均能指到落点。',
   },
   {
     n: 5,
     title: '验收',
-    prompt: '四档 320 / 375 / 768 / 1280 无横向溢出；正文对比度 4.5:1、大字 3:1；键盘顺序与焦点可见；空态、加载、错误、成功逐态造出来；桌面控件贴合原生 32-36px 密度（>= 24px），移动端 `< 768px` 触控目标 >= 44px；`prefers-reduced-motion` 下无动画；未开框架外部请求为 0。读数写进 FINDINGS，不写「已检查」。仓库内跑 `check-ledger.py` 与 `check-frame.py`，有 Hallmark 就跑 slop 自查 critical 项；没有就用硬指标加去 logo、主色复判，还像通用后台的回炉。',
-    desc: '四档无溢出；对比度、键盘、逐态、桌面 >=24px/移动 >=44px 目标、减少动效、外部请求各有读数并写进 FINDINGS；仓库内过 `check-ledger` 与 `check-frame`，用硬指标与去 logo、主色复判。',
-    gate: '四档与对比度、键盘、逐态、触控、减少动效、外部请求都有读数；`check-ledger` 与 `check-frame`（或去 logo 主色复判）有结果；回炉项已复测。',
+    prompt: '四档 320 / 375 / 768 / 1280 无横向溢出、无控制台报错；正文对比度 ≥ 4.5:1、大字与控件边界 ≥ 3:1；键盘顺序完整且焦点环高对比瞬时可见；桌面控件贴合原生 32–36px 密度（≥ 24px），移动端 `< 768px` 触控目标 ≥ 44px；`prefers-reduced-motion` 下无动画；未开框架外部请求为 0。交付前按 `hallmark`（`sloplint`）、`interfaces`（`better-interface` 七域评审）与 `impeccable`（`craft-floor` / `critique-rubric`）完整复审一轮，并用去 logo 与主色复判是否仍认得出产品，不过线直接回炉重修（审计模式将各项实测读数写进 `FINDINGS.md`，仓库内跑 `check-ledger.py` 与 `check-frame.py`）。',
+    desc: '四档无溢出；对比度、键盘、逐态、桌面 >=24px/移动 >=44px 目标、减少动效、外部请求逐项实测；过 hallmark / interfaces / impeccable 复审与去 logo 主色复判（审计模式记入 FINDINGS 并跑 `check-ledger` / `check-frame`）。',
+    gate: '四档与对比度、键盘、逐态、触控、减少动效、外部请求均有实测验证；4-skill 复审与去 logo 主色复判通过（审计模式另有 `FINDINGS.md`、`check-ledger` 与 `check-frame` 结果）。',
   },
   {
     n: 6,
     title: '回炉与定稿',
-    prompt: '逐个真点主流程（筛选、排序、认领、提交、撤销），记前后状态，改完复测受影响项。多页项目加一项跨页检查：页头、页脚、编号、线型与字阶同形，换页不改字号与间距；只改颜色占位不算对齐。定稿做评审底线 s17；仓库内跑 `scripts/score-case.py <案例目录>` 评分并把新站记入 `.hallmark/log.json`，仓库外用四档读数与评审底线替代；再开一轮新上下文复核，不过线回炉，不改设计点硬凑。案例交五件（仓库内放 `examples/`）：`index.html`、`DECISIONS.md`、`FINDINGS.md`、`preview.png`、`meta.json`。',
-    desc: '逐个真点主流程并记前后状态；定稿做评审底线、评分（仓库内补写 `.hallmark/log.json`）与新上下文复核；案例交付五件。',
-    gate: '主流程每步有前后状态；多页项目跨页一致；评审、评分、log 记录与新上下文复核都有结果；不过线有回炉记录；五件交付物齐全且字段有值。',
+    prompt: '逐个真点主流程（筛选、排序、切换、提交、撤销、抽屉/弹窗显隐），核对操作前后状态与过渡，改完复测受影响项；多页项目加跨页一致性检查（页头、页脚、编号、线型与字阶同形）。定稿过评审底线 `s17`：普通业务项目默认直接交付可运行代码 + 5 行以内简短说明（所用选型行、必读点与 4 个 skill 执行情况、外壳 `nav/footer/base`、渐进披露收纳项、待确认项），不在业务仓库生成五件套过程文档；本库 `examples/` 或需求明确要求「审计模式」时，跑 `scripts/score-case.py <案例目录>` 并记入 `.hallmark/log.json`，交付 `index.html`、`DECISIONS.md`、`FINDINGS.md`、`preview.png`、`meta.json` 五件套。',
+    desc: '逐个真点主流程并记前后状态；定稿过评审底线 s17，业务项目直接交付代码与简短说明，审计模式（examples/）跑评分记 `.hallmark/log.json` 并交付五件套。',
+    gate: '主流程每步交互与过渡实测通过；多页项目跨页一致；评审底线通过；业务项目交付可运行代码与简短说明，审计模式五件套齐全且有评分与 log 记录。',
   },
 ]
 
-/** 开发者默认模式（4 步）：走完整选型读原文、多方案比选、渐进披露与自检重修流程，但不向业务仓库强写五件套文档 */
-export const DEV_STEPS: { n: number; title: string; prompt: string }[] = [
-  {
-    n: 1,
-    title: '定选型与读原文',
-    prompt:
-      '先拉 `<站点地址>/ai/routing.json` 与 `<站点地址>/ai/reference-screens.json`（仓库内直接读本库与 `briefs/layouts.md`）。按产品同构从 `routing.json` 的 `main_sources` 确定唯一项目选型行（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG 及 Umami 平权分流，不默认强落 TDesign；`brands/` 仅在明确要复刻某品牌时当皮肤），并真实读取该选型行 `files` 中的核心 token 原文（仓库外按需拉 `/md/<path>`，不凭记忆猜值）。动笔写代码前先在内部或用 5 行锁定「选型行 + 选型理由 + 明暗极性」，同页不跨源拼值。',
-  },
-  {
-    n: 2,
-    title: '构图比选与渐进披露',
-    prompt:
-      '必须按已安装的 `hallmark` skill 流程做 2–3 套首屏结构比选（独立选 `macro`、`nav`、`footer` 与页底色，参考 `reference-screens` 密度骨架和 `howto`/`layouts` 点，避开 `recent_macrostructures`），明确淘汰“全页平铺配置表单”的方案后再写 CSS。强渐进披露：`1280×800` 首屏主画布只保留最高频的 1–2 个核心工件（如实时舞台、主表/主图、核心指令流）；API Key、Base URL、连接地址、步数/超时阈值等低频配置超过 2 项时，必须收进「设置」Drawer 或 Modal；顶栏右侧控件总数 ≤ 3 项，禁止把一排输入框塞进顶栏导致折行。明确产品、用户与首屏一件事，未给出的价格/时效/资质以常规行内文字标 `[待确认]`，不瞎编。',
-  },
-  {
-    n: 3,
-    title: '按 Token 落稿与控件质感',
-    prompt:
-      '颜色、字阶、间距、圆角全部按选中选型行原文进命名 token，不写裸值；按选型边界语言分层（避免框套框与满屏筛选胶囊墙，多指标用连体 1px 齐平分割带）。区分控件视觉层级：禁止给所有输入框和按钮统一套深灰实线边框，按钮必须区分 Primary（实色主操作）/ Secondary（浅底弱边框或无边框）/ Ghost（透明辅助）三级；操作按钮与空态配 16px 内联 SVG 线性图标，禁用 `▶`/`■` 等符号凑数；设备/画布类预览舞台需带比例外框与状态角标，禁用死黑大矩形。必须按 `ui-ux-design` skill 清单把主流程可点态、空态、加载态、错误态、超长折行与 ARIA 写进初稿（正文 ≥ 4.5:1、大字与控件边界 ≥ 3:1、焦点环可见、桌面控件 32–36px、移动端 `< 768px` ≥ 44px、`:hover` 包进 `@media (hover: hover)`、`prefers-reduced-motion` 关闭动画）；图表用内联 SVG 或选型配套库。',
-  },
-  {
-    n: 4,
-    title: '视觉复审并交付',
-    prompt:
-      '在 320 / 375 / 768 / 1280 四档确认无横向溢出、无控制台报错。交付前必须先按 `hallmark`（`sloplint` / 防模板化检查）、`interfaces`（`better-interface` 七域评审）与 `impeccable`（`craft-floor` / `critique-rubric`）完整复审一轮，并对照底线自检：「首屏是否沦为配置表单墙、控件描边是否过重、核心舞台与字阶对比是否突出、去掉 logo 和主色后是否仍认得出产品」，不过线直接回炉重修构图与样式后再交付。默认直接交付可运行代码 + 5 行以内简短说明（所用选型行、4 个 skill 执行情况、外壳 `nav/footer/base`、Drawer 收纳项、待确认项），不在业务仓库生成五件套过程文档；仅当需求明确要求「审计模式」时，才按 `<站点地址>/ai/guide.md` 走完整 6 步并落盘五件套。',
-  },
-]
+/** 兼容导出别名：统一走 USAGE_STEPS（6 步唯一流程真源） */
+export const DEV_STEPS: { n: number; title: string; prompt: string }[] = USAGE_STEPS
 
 /** 信息类型：不同信息给 AI 的导向不同，按分区归五类（进 /ai/design-points.json 的 usage） */
 export type InfoType = 'values' | 'patterns' | 'layouts' | 'styles' | 'cases'
@@ -539,17 +514,17 @@ export const TYPE_BY_DOMAIN: Record<string, InfoType> = {
   cases: 'cases',
 }
 
-/** 公开 AI 提示词（默认开发者模式）：首页「复制提示词」直接复制这份，走完整推演流程但不强写五件套文件 */
+/** 公开 AI 提示词（统一 6 步流程真源）：首页「复制提示词」直接复制这份 */
 export const AI_PROMPT = [
   '【前置硬门禁 · 必须先过（禁止降级跳过）】开始任何设计、读规范或写代码之前，必须先检查当前环境（如 `~/.agents/skills/`、`~/.claude/skills/`、`~/.codex/skills/`、项目 `.agents/skills/` 或 UISpecs 仓库 `skills/`）是否已齐备并可读取 `hallmark`、`ui-ux-design`、`interfaces`、`impeccable` 这 4 个 skill 的 `SKILL.md`。**只要缺少任意一个，或未实际读取其 `SKILL.md`，立即停止并结束本轮回复：只列出缺失的 skill 名称，并提示用户从 UISpecs 仓库 `skills/` 目录复制/软链到全局 skill 目录（如 `cp -R <UISpecs>/skills/{hallmark,ui-ux-design,interfaces,impeccable} ~/.agents/skills/`）或从上游安装；严禁以“改读文档替代”继续执行后续步骤或写任何代码。**',
-  '按 UISpecs 完整设计流程生成生产级界面（先选型读原文 → Hallmark 多方案比选定骨架 → 按 Token 落稿并过 `ui-ux-design` 四态与 ARIA → 用 `interfaces` 与 `impeccable` 视觉复审重修，禁止跳过任意 skill 阶段直接套模板写代码）。默认范围：未指定多页时只做网站首页；优先适配当前项目技术栈（React / Vue / Next.js / Tailwind 等），无现有工程时产出零外部请求的单文件 HTML。',
-  '视觉与防固化硬律（六条）：1. 按产品同构在 7 套官方选型（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG）及 Umami 轻量看板间择其一并真实读取其 token 原文，禁止把「白纸压 `#f3f3f4`/`#f3f3f3` 灰卡 + 通用单行页脚」当全站唯一皮肤；2. 顶栏、页脚、页底色随产品动作与选型分化（顶栏右侧控件 ≤ 3 项，禁止塞一排输入框导致折行），多站/多页保持外观轮换不撞壳；3. 核心工件首屏直出与强渐进披露（`1280×800` 首屏只留最高频 1–2 个核心工件，API Key / Base URL / 连接配置 / 步数阈值等低频参数超过 2 项必须收进「设置」Drawer 或 Modal，禁止用配置表单墙、框套框或三排胶囊墙堆砌首屏）；4. 控件层次与图标质感（禁止给所有输入框和按钮统一套深灰实线边框，必须区分 Primary / Secondary / Ghost 三级按钮并配 16px 内联 SVG 线性图标，禁用 `▶`/`■` 等符号凑数，设备/画布舞台禁用死黑大矩形）；5. 标题与真实业务主语（官网可用大字主张，工具/对话直接让操作区顶格进首屏，禁用中文标题上挂 `01 / SECTION` 英文装饰眉题，禁用黑底 JSON 终端、三列大图标卡或抽象占位色块）；6. 真实产品口吻（去掉 logo 与主色后仍认得出产品，不在正文到处挂「演示口径」自检词）。',
-  ...DEV_STEPS.map((s) => `${s.n}. ${s.title}：${s.prompt}`),
+  '按 UISpecs 完整 6 步流程生成生产级界面（拉包定选型 → 按 `required_scenarios` 读必读点 → Hallmark 比选骨架与渐进披露 → 按 Token 与必读点落稿 → 三重视觉复审验收 → 真点回炉交付，禁止跳过必读点或任意 skill 阶段直接套模板写代码）。默认范围：未指定多页时只做网站首页；优先适配当前项目技术栈（React / Vue / Next.js / Tailwind 等），无现有工程时产出零外部请求的单文件 HTML；常规业务项目直接交付可运行代码与简短说明，仅当需求明确要求「审计模式」或产出本库 `examples/` 时落盘五件套与行号台账。',
+  '防固化底线（四条）：1. 唯一数值源与多选型平权（按产品同构在 7 套官方选型 TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG 及 Umami 间择其一并真实读取 token 原文，不默认单一皮肤）；2. 外壳随品类分化（顶栏、页脚、页底色按产品动作与选型分化，多站避重不撞壳）；3. 结构、质感与动效走必读点路由（核心工件直出与渐进披露、表面分层与控件层级、图标规范与克制过渡动效均按 `method_required` 与命中的 `required_scenarios` 原文落地，不凭记忆硬套）；4. 真实产品口吻（去掉 logo 与主色后仍认得出产品，不在正文贴「演示口径」自检词）。',
+  ...USAGE_STEPS.map((s) => `${s.n}. ${s.title}：${s.prompt}`),
 ].join('\n\n')
 
 /** 仓库审计提示词（6 步严格模式）：用于 UISpecs 案例验收与行号溯源 */
 export const AUDIT_PROMPT = [
-  '按 UISpecs 审计模式出界面稿（交五件套与行号台账）。选中选型行是唯一数值源并逐条记 `content/完整路径:行号`，禁止拿英文品牌 DESIGN.md 硬套中文产品；外壳（`nav`/`footer`/`base`）按 `briefs/layouts.md` 轮换并由 `check-frame.py` 验重。',
+  '按 UISpecs 审计模式出界面稿（交五件套与行号台账）。选中选型行是唯一数值源并逐条记 `content/完整路径:行号`，禁止拿英文品牌 DESIGN.md 硬套中文产品；外壳（`nav`/`footer`/`base`）按 `skills/hallmark/references/` 轮换并由 `check-frame.py` 验重。',
   '运行环境：仓库内按本地路径读；仓库外按需拉 `<站点地址>/ai/routing.json`、`/ai/points/<id>.json`、`/ai/reference-screens.json` 与原文 `/md/<path>`，不读本地文件、不跑本地脚本。',
   ...USAGE_STEPS.map((s) => `${s.n}. ${s.title}：${s.prompt}`),
 ].join('\n\n')
@@ -619,7 +594,7 @@ export function buildGuideMarkdown(
   lines.push('结构与数值解耦、7 套选型平权分流：按产品语境从项目选型方案确定唯一数值底座（TDesign / Carbon / Primer / Polaris / Spectrum / Fluent 2 / Apple HIG，不把任一体系或 `#ffffff/#f3f3f3` 当默认通用外壳，也不拿英文品牌 `DESIGN.md` 硬套中文产品）。结构与外壳在仓库内走 Hallmark 件库（`macro`、`nav`、`footer` 配合 `.hallmark/log.json` 与 `check-frame.py` 避重），在仓库外参考 `/ai/reference-screens.json` 与 `howto`/`layouts` 设计点自由组合；控制台、看板、比价表在 1280×800 首屏直接露出主图表或主表行，多指标用 1px 齐平分割带且桌面保留 32-36px 原生控件密度（移动端 < 768px 扩至 ≥ 44px）。')
   lines.push('')
   lines.push('## 一次生成多个站怎么挑版式与配色')
-  lines.push('一次生成多个站时，需求写产品、用户、主任务与关键内容，缺的事实标 [待确认] 或演示口径；版式与强调色在开批前按表分配，每站一份版式骨架与一个强调色，并写一句为什么是这组，选完直接用在这次生成里，不写进项目文件。挑件的依据是 `briefs/layouts.md`：先按产品形态定位（营销页、应用页、文档、内容发现、流程、叙事），再从版式库里挑合适的件，件名按 Hallmark 的叫法，不强行凑件数。强调色只在该站色彩点的色板原文里取，挑完写一句为什么。单站生成不按这条批量流程走；版式交给 Hallmark，强调色按色彩点的色板当场挑。')
+  lines.push('一次生成多个站时，需求写产品、用户、主任务与关键内容，缺的事实标 [待确认] 或演示口径；版式与强调色在开批前按表分配，每站一份版式骨架与一个强调色，并写一句为什么是这组，选完直接用在这次生成里，不写进项目文件。挑件依据是 Hallmark 版式与布局规范（`skills/hallmark/references/macrostructures.md` 与 `layout.md`）：先按产品形态定位，再挑合适的结构与壳层，不强行凑件数。强调色只在该站色彩点的色板原文里取，挑完写一句为什么。单站生成不按这条批量流程走；版式交给 Hallmark，强调色按色彩点的色板当场挑。')
   lines.push('')
   lines.push('## 场景必选')
   lines.push('按项目实际功能判：表里的场景对得上就走完对应设计点，对不上就跳过，不硬凑；命中但本期决定不做，写一句理由。标「所有项目」的三行（S2、S3、S17）是所有项目都要过的底子。')
