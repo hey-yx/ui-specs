@@ -33,11 +33,4 @@ AI 凭记忆写界面时，字号随手 16px、间距随手 10px，交付前查�
 
 ## License
 
-本项目基于 [Apache-2.0](LICENSE) 协议开源，`content/` 中收录的第三方设计规范原文版权归原发布方所有。
-
-基于本项目二次开发或分发时，请保留 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)，也可直接复制以下归属声明到你的项目文档或 `NOTICE` 中：
-
-```text
-Based on UISpecs (https://github.com/hey-yx/ui-specs)
-Copyright 2026 Yongxin Zhang, licensed under the Apache License, Version 2.0.
-```
+本项目基于 [MIT](LICENSE) 协议开源，`content/` 中收录的第三方设计规范原文版权归原发布方所有；`skills/` 中引入的第三方 skill 保留其各自原协议声明（见 [skills/SOURCES.md](skills/SOURCES.md)）。
